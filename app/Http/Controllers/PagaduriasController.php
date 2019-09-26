@@ -1,0 +1,96 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class PagaduriasController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $lista = \App\Pagadurias::all();
+        return view("pagadurias/index")->with(["lista" => $lista]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('pagadurias/crear');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+		$pagaduria = new \App\Pagadurias;
+		$pagaduria->codigo = strtoupper(str_replace(" ", "_", $request->input('pagaduria')));
+		$pagaduria->pagaduria = strtoupper($request->input('pagaduria'));
+		$pagaduria->save();
+		
+		return redirect('pagadurias');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $pagaduria = \App\Pagadurias::find($id);
+		return view("pagadurias/editar")->with(["pagaduria" => $pagaduria]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $pagaduria = \App\Pagadurias::find($id);
+		$pagaduria->pagaduria = strtoupper($request->input('pagaduria'));
+		$pagaduria->save();
+		
+		return redirect('pagadurias');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        \App\Pagadurias::find($id)->delete();		
+		return redirect('pagadurias');
+    }
+}

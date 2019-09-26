@@ -1,0 +1,269 @@
+<?php
+
+if(!function_exists('insertOrUpdate')) {
+	function insertOrUpdate($table, array $rows){
+        
+		$first = reset($rows);
+        
+        $columns = implode( ',',
+            array_map( function( $value ) { return "$value"; } , array_keys($first) )
+        );
+        
+        $values = implode( ',', array_map( function( $row ) {
+                return '('.implode( ',',
+                    array_map( function( $value ) { return '"'.str_replace('"', '""', $value).'"'; } , $row )
+                ).')';
+            } , $rows )
+        );
+        
+        $updates = implode( ',',
+            array_map( function( $value ) { return "$value = VALUES($value)"; } , array_keys($first) )
+        );
+        
+        $sql = "INSERT INTO {$table}({$columns}) VALUES {$values} ON DUPLICATE KEY UPDATE {$updates}";
+        
+        return $sql;
+        // return \DB::statement( $sql );
+	}
+}
+
+if(!function_exists('planos')) {
+	function planos()
+	{
+		return array(
+			'BAS' => 'Datos Basicos',
+			'APL' => 'Descuentos Aplicados',
+			'NAP' => 'Descuentos No Aplicados',
+			'EMB' => 'Embargos',
+		);
+	}
+}
+
+if(!function_exists('format')) {
+	function format($number)
+	{
+		return number_format($number, 0, ',', '.');
+	}
+}
+
+if (!function_exists('consultas')) {
+	function consultas()
+	{
+		return array(
+			'BAS' => 'BASIC',
+			'PLU' => 'PLUS',
+			'PRE' => 'PREMIUM',
+			'PPL' => 'PREMIUM PLUS',
+			'ELI' => 'ELITE',
+			'EPR' => 'ELITE PREMIUM',
+		);
+	}
+}
+
+
+if (!function_exists('calcularCapacidad')) {
+	function calcularCapacidad($vinculacion, $ingresos, $valor_aportes, $asignacion_adicional, $total_dctos, $smlv)
+	{
+		
+		
+		// "PENS, 1000000, 0, 0, 96000, 790000"
+		if($vinculacion == 'PENS')
+		{			
+			$compraCartera 	= 	( $ingresos + $asignacion_adicional - $valor_aportes ) / 2;
+			$libreInversion = ( ( $ingresos + $asignacion_adicional - $valor_aportes ) / 2 ) - $total_dctos +  $valor_aportes;
+			
+			// echo ("( $ingresos + $asignacion_adicional - $valor_aportes ) / 2 = array('compraCartera' => $compraCartera, 'libreInversion' => $libreInversion)");
+		}
+		else
+		{
+			$base = ( $ingresos - $valor_aportes ) / 2;
+			
+			if($base > $smlv)
+			{
+				$compraCartera 	= 	$base;
+				$libreInversion = ( ( $ingresos + $asignacion_adicional - $valor_aportes ) / 2 ) - $total_dctos +  $valor_aportes;
+			}
+			else
+			{
+				$compraCartera 	= $ingresos + $asignacion_adicional - $valor_aportes - $smlv;
+				$libreInversion = $ingresos + $asignacion_adicional - $smlv - $total_dctos;
+			}			
+		}
+		
+		
+		return array('compraCartera' => $compraCartera, 'libreInversion' => $libreInversion);
+	}
+}
+
+if (!function_exists('getMessage')) {
+	function getMessage()
+	{
+		if(\Session::has('mensaje')){
+			return \Session::pull('mensaje');
+			\Session::forget('mensaje');
+		}
+	}
+}
+
+if (!function_exists('setMessage')) {
+	function setMessage($message, $class)
+	{
+		\Session::flash('mensaje', '<div class="alert alert-'.$class.'" role="alert">
+										<h4 class="alert-heading">Mensaje!</h4>
+										<hr />
+										<p>'.$message.'</p>
+									</div>');
+	}
+}
+
+if (!function_exists('estados_civiles')) {
+	function estados_civiles()
+	{
+		return array(
+			'SOL' => 'SOLTERO',
+			'CAS' => 'CASADO',
+			'UNI' => 'UNION LIBRE',
+			'SEP' => 'SEPARADO',
+			'DIV' => 'DIVORCIADO',
+			'VIU' => 'VIUDO',
+		);
+		
+	}
+}
+
+if (!function_exists('decisiones_capacidades')) {
+	function decisiones_capacidades()
+	{
+		return array(
+			'COMP' => 'COMPRA DE CARTERA',
+			'LIBR' => 'LIBRE INVERSION',
+		);
+		
+	}
+}
+
+if (!function_exists('decisiones_estudios')) {
+	function decisiones_estudios()
+	{
+		return array(
+			'APRO' => 'APROBADO',
+			'NEGA' => 'NEGADO',
+			'ESTU' => 'ESTUDIO',
+			'AVCH' => 'PTE. APROBACION VCH',
+			'SALD' => 'PTE. SALDO CARTERA',
+		);
+		
+	}
+}
+
+if (!function_exists('decisiones_aliados')) {
+	function decisiones_aliados()
+	{
+		return array(
+			'VIAB' => 'VIABLE',
+			'NOVI' => 'NO VIABLE',
+		);
+		
+	}
+}
+
+if (!function_exists('estados_cargos')) {
+	function estados_cargos()
+	{
+		return array(
+			'ACTI' => 'ACTIVO',
+			'PENS' => 'PENSIONADO',
+		);
+		
+	}
+}
+
+if (!function_exists('estados_aliados')) {
+	function estados_aliados()
+	{
+		return array(
+			'A' => 'ACTIVO',
+			'I' => 'INACTIVO',
+		);
+		
+	}
+}
+
+if (!function_exists('estados_solicitudes')) {
+	function estados_solicitudes()
+	{
+		return array(
+			'S' => 'SOLICITADO',
+			'E' => 'EVALUADO',
+		);
+		
+	}
+}
+
+if (!function_exists('sexos')) {
+	function sexos()
+	{
+		return array(
+			'F' => 'FEMENINO',
+			'M' => 'MASCULINO',
+		);
+		
+	}
+}
+
+if (!function_exists('tipos_documento')) {
+	function tipos_documento()
+	{
+		return array(
+			'CC' => 'CEDULA DE CIUDADAN&Iacute;A',
+			'CE' => 'CEDULA DE EXTRANJER&Iacute;A',
+		);
+		
+	}
+}
+
+if (!function_exists('meses')) {
+	function meses()
+	{
+		return array(
+			'ENE' => 'ENERO',
+			'FEB' => 'FEBRERO',
+			'MAR' => 'MARZO',
+			'ABR' => 'ABRIL',
+			'MAY' => 'MAYO',
+			'JUN' => 'JUNIO',
+			'JUL' => 'JULIO',
+			'AGO' => 'AGOSTO',
+			'SEP' => 'SEPTIEMBRE',
+			'OCT' => 'OCTUBRE',
+			'NOV' => 'NOVIEMBRE',
+			'DIC' => 'DICIEMBRE',
+		);
+		
+	}
+}
+
+if (!function_exists('calificaciones')) {
+	function calificaciones()
+	{
+		return array(
+			'A' => 'A',
+			'B' => 'B',
+			'C' => 'C',
+		);
+		
+	}
+}
+
+if (!function_exists('compradores')) {
+	function compradores()
+	{
+		return array(
+			'CK' => 'CK',
+			'ALIA' => 'ALIADO',
+		);
+		
+	}
+}
+
+?>
