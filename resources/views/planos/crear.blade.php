@@ -22,36 +22,34 @@
 			<div class="panel-body">
 				<form action="{{url('planos/store')}}" method="post" enctype="multipart/form-data">
 					{!! Form::token() !!}
-					<div class="form-row">
+					<div class="form-row" id="panel-pagaduria">
 						<div class="form-group col-md-12">
-							<label for="pagaduria">Pagadur&iacute;a</label>
-							<select class="form-control" name="pagaduria" id="pagaduria">
-								<option value="">-Seleccione-</option>
+							<label for="pagaduria">Pagaduría</label>
+							<select class="form-control" name="pagaduria" id="pagaduria" required>
+								<option value="">-- Seleccione --</option>
 								@foreach($pagadurias as $pagad)
 									<option value="{{$pagad->id}}">{{$pagad->pagaduria}}</option>
 								@endforeach
 							</select>
 						</div>
 					</div>
-					<div class="form-row">
-						<div class="form-group col-md-6">
-							<label for="basicos">Datos B&aacute;sicos</label>
-							<input type="file" class="form-control-file" id="basicos" name="basicos" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .txt">
+					<div class="form-row hidden" id="panel-tipo-archivo">
+						<div class="form-group col-md-12">
+							<label for="tipo_archivo">Tipo de archivo</label>
+							<select class="form-control" name="tipo-archivo" id="tipo-archivo" required>
+								<option value="">-- Seleccione --</option>
+								<option value="basicos">Datos Básicos</option>
+								<option value="aplicados">Descuentos Aplicados</option>
+								<option value="no_aplicados">Descuentos No Aplicados</option>
+								<option value="embargos">Embargos</option>
+							</select>
 						</div>
-						<div class="form-group col-md-6">
-							<label for="aplicados">Descuentos Aplicados</label>
-							<input type="file" class="form-control-file" id="aplicados" name="aplicados" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .txt">
-						</div>						
 					</div>
-					<div class="form-row">
+					<div class="form-row hidden" id="archivos">
 						<div class="form-group col-md-6">
-							<label for="no_aplicados">Descuentos No Aplicados</label>
-							<input type="file" class="form-control-file" id="no_aplicados" name="no_aplicados" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .txt">
+							<label class="label-archivos" for="basicos"></label>
+							<input class="input-archivos" type="file" class="form-control-file" id="input-archivos" name="" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .txt" required>
 						</div>
-						<div class="form-group col-md-6">
-							<label for="embargos">Embargos</label>
-							<input type="file" class="form-control-file" id="embargos" name="embargos" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .txt">
-						</div>						
 					</div>
 					
 					<button type="submit" class="btn btn-primary">Guardar</button>

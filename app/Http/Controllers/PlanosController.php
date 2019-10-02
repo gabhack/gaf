@@ -42,14 +42,14 @@ class PlanosController extends Controller
 		{
 			$plano = new \App\Planos;		
 			$plano->pagadurias_id = $request->input("pagaduria");		
-			$plano->plano = ""; // \File::get( $request->file('basicos') );
+			$plano->plano = "";
 			$plano->tipo = 'BAS';
 			$plano->save();
 		}
 		
 		if($request->file('aplicados') != "")
 		{
-			$plano = new \App\Planos;		
+			$plano = new \App\Planos;
 			$plano->pagadurias_id = $request->input("pagaduria");		
 			$plano->plano = \File::get( $request->file('aplicados') );
 			$plano->tipo = 'APL';
@@ -59,7 +59,7 @@ class PlanosController extends Controller
 		if($request->file('no_aplicados') != "")
 		{
 			$plano = new \App\Planos;		
-			$plano->pagadurias_id = $request->input("pagaduria");		
+			$plano->pagadurias_id = $request->input("pagaduria");
 			$plano->plano = \File::get( $request->file('no_aplicados') );
 			$plano->tipo = 'NAP';
 			$plano->save();
@@ -78,6 +78,10 @@ class PlanosController extends Controller
 		if($pagaduria->codigo == "SEM_POPAYAN")
 		{
 			\App\Http\Resources\Popayan::base($request);
+		} 
+		elseif ($pagaduria->codigo == "FOPEP") 
+		{
+			\App\Http\Resources\Fopep::base($request);
 		}
     }
 

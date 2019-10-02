@@ -52,3 +52,7 @@ table.dataTable.no-footer{
 .form-control{
     font-size: 12px !important;
 }
+
+.hidden{
+	display: none;
+}
