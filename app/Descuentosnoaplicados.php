@@ -9,7 +9,7 @@ class Descuentosnoaplicados extends Model
 {
     use SoftDeletes;
     
-	protected $table = 'Descuentosnoaplicados';
+	protected $table = 'descuentosnoaplicados';
 	
 	public function cliente()
 	{

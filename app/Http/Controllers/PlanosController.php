@@ -37,6 +37,8 @@ class PlanosController extends Controller
     public function store(Request $request)
     {
 		ini_set('memory_limit', '-1');
+
+		$response = array();
 		
 		if($request->file('basicos') != "")
 		{
@@ -51,7 +53,7 @@ class PlanosController extends Controller
 		{
 			$plano = new \App\Planos;
 			$plano->pagadurias_id = $request->input("pagaduria");		
-			$plano->plano = \File::get( $request->file('aplicados') );
+			$plano->plano = "";
 			$plano->tipo = 'APL';
 			$plano->save();
 		}
@@ -60,7 +62,7 @@ class PlanosController extends Controller
 		{
 			$plano = new \App\Planos;		
 			$plano->pagadurias_id = $request->input("pagaduria");
-			$plano->plano = \File::get( $request->file('no_aplicados') );
+			$plano->plano = "";
 			$plano->tipo = 'NAP';
 			$plano->save();
 		}
@@ -81,8 +83,22 @@ class PlanosController extends Controller
 		} 
 		elseif ($pagaduria->codigo == "FOPEP") 
 		{
-			\App\Http\Resources\Fopep::base($request);
+			switch ($plano->tipo) {
+				case 'BAS':
+					$response = \App\Http\Resources\Fopep::base($request);
+					break;
+				case 'APL':
+					$response = \App\Http\Resources\Fopep::descuentos_aplicados($request);
+					break;
+				case 'NAP':
+					$response = \App\Http\Resources\Fopep::descuentos_no_aplicados($request);
+					break;
+				case 'EMB':
+					break;
+			}
 		}
+
+        return view('planos/response')->with(['response' => $response]);
     }
 
 }
