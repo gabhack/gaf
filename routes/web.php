@@ -313,6 +313,12 @@ Route::group(["prefix" => "planos"], function(){
 	Route::get('/delete/{id}', 'PlanosController@destroy');
 });
 
+// Consultas
+Route::group(["prefix" => "consultas"], function(){
+	Route::get('/', 'ConsultasController@index');
+
+	Route::post('/{id}', 'ConsultasController@consultar');
+});
 
 Auth::routes();
 

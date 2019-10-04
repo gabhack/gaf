@@ -28,4 +28,14 @@ class Clientes extends Model
 	{
 		return $this->hasOne('\App\Ciudades', 'id', 'ciudades_id');
 	}
+
+    public function descuentosaplicados()
+    {
+        return $this->hasMany('App\Descuentosaplicados');
+    }
+
+    public function descuentosnoaplicados()
+    {
+        return $this->hasMany('App\Descuentosnoaplicados');
+    }
 }

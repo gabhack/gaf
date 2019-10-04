@@ -40,16 +40,18 @@ class Fopep
 					$nuevoCliente->correo			= $row['correo_electronico'];
 					$nuevoCliente->save();
 				} else {
-					$cliente->ciudades_id		= $ciudad['id'];
-					$cliente->tipodocumento		= $row['td_documento'];
-					$cliente->documento 		= $row['documento'];
-					$cliente->nombres 			= $row['pensionado_apellidos_y_nombres'];
-					$cliente->fechanto 			= date('Y-m-d', strtotime($row['fecha_de_nacimiento']));
-					$cliente->sexo 				= "";
-					$cliente->telefono			= $row['telefono'];
-					$cliente->direccion			= $row['direccion'];
-					$cliente->correo			= $row['correo_electronico'];
-					$cliente->save();
+					if ($cliente->apellidos = '') {
+						$cliente->ciudades_id		= $ciudad['id'];
+						$cliente->tipodocumento		= $row['td_documento'];
+						$cliente->documento 		= $row['documento'];
+						$cliente->nombres 			= $row['pensionado_apellidos_y_nombres'];
+						$cliente->fechanto 			= date('Y-m-d', strtotime($row['fecha_de_nacimiento']));
+						$cliente->sexo 				= "";
+						$cliente->telefono			= $row['telefono'];
+						$cliente->direccion			= $row['direccion'];
+						$cliente->correo			= $row['correo_electronico'];
+						$cliente->save();
+					}
 				}
 			}
 			$response = array(

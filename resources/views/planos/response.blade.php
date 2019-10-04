@@ -17,7 +17,7 @@
 		<br />
 		<h4>Archivos Planos</h4>
 		
-		<div class="panel panel-{{ $response['cod'] == 200 ? 'success' : ($response['cod'] == 400 ? 'danger' : 'default') }}">
+		<div class="panel panel-{{ $response['cod'] == 200 ? 'success' : ($response['cod'] == 400 ? 'danger' : ($response['cod'] == 300 ? 'warning' : 'default')) }}">
 			<div class="panel-heading">{{$response['mensaje']}}</div>
 			<div class="panel-body">
 				<a href="{{url('planos/crear')}}" class="btn btn-default">Volver</a>

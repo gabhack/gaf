@@ -71,7 +71,7 @@ class PlanosController extends Controller
 		{
 			$plano = new \App\Planos;		
 			$plano->pagadurias_id = $request->input("pagaduria");		
-			$plano->plano = \File::get( $request->file('embargos') );
+			$plano->plano = "";
 			$plano->tipo = 'EMB';
 			$plano->save();
 		}
@@ -94,6 +94,36 @@ class PlanosController extends Controller
 					$response = \App\Http\Resources\Fopep::descuentos_no_aplicados($request);
 					break;
 				case 'EMB':
+					$response = array(
+						'cod' => '300',
+						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
+					);
+					break;
+			}
+		}
+		elseif ($pagaduria->codigo == "FIDUPREVISORA")
+		{
+			switch ($plano->tipo) {
+				case 'BAS':
+					$response = \App\Http\Resources\Fiduprevisora::base($request);
+					break;
+				case 'APL':
+					$response = array(
+						'cod' => '300',
+						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
+					);
+					break;
+				case 'NAP':
+					$response = array(
+						'cod' => '300',
+						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
+					);
+					break;
+				case 'EMB':
+					$response = array(
+						'cod' => '300',
+						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
+					);
 					break;
 			}
 		}

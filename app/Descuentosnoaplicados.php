@@ -20,4 +20,9 @@ class Descuentosnoaplicados extends Model
 	{
 		return $this->hasOne('\App\Pagadurias', 'id', 'pagadurias_id');
 	}
+	
+	public function tercero()
+	{
+		return $this->hasOne('\App\Entidades', 'id', 'entidades_id');
+	}
 }

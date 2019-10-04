@@ -266,4 +266,11 @@ if (!function_exists('compradores')) {
 	}
 }
 
+if (!function_exists('getentidad')) {
+	function getentidad($id)
+	{
+		return App\Entidades::find($id)->entidad;	
+	}
+}
+
 ?>
