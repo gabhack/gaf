@@ -46,6 +46,13 @@ if(!function_exists('format')) {
 	}
 }
 
+if(!function_exists('mneyformat')) {
+	function mneyformat($number)
+	{
+		return '$ ' . number_format($number, 0, ',', '.');
+	}
+}
+
 if (!function_exists('consultas')) {
 	function consultas()
 	{
@@ -270,6 +277,13 @@ if (!function_exists('getentidad')) {
 	function getentidad($id)
 	{
 		return App\Entidades::find($id)->entidad;	
+	}
+}
+
+if (!function_exists('getciudad')) {
+	function getciudad($id)
+	{
+		return App\Ciudades::find($id)->ciudad;	
 	}
 }
 

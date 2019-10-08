@@ -60,3 +60,11 @@ table.dataTable.no-footer{
 .btn{
 	font-size: 0.9rem;
 }
+
+.pad{
+	font-weight: normal;
+}
+
+.label-consulta{
+	font-weight: bold;
+}

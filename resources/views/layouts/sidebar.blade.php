@@ -34,7 +34,8 @@
 			</li>
 			
 			<li><a href="{{url('planos')}}"><i class="fa fa-file-text-o"></i> <span>Carga de Archivos</span></a></li>			
-			<li><a href="{{url('comerciales')}}"><i class="fa fa-user"></i> <span>Comerciales</span></a></li>
+			<li><a href="{{url('consultas')}}"><i class="fa fa-user"></i> <span>Consultar persona</span></a></li>			
+			{{-- <li><a href="{{url('comerciales')}}"><i class="fa fa-user"></i> <span>Comerciales</span></a></li> --}}
 			<li><a href="{{url('terecuperamos')}}"><i class="fa fa-handshake-o"></i> <span>T-Recuperamos</span></a></li>
 			<li><a href="{{url('reportes')}}"><i class="fa fa-bar-chart-o"></i> <span>Reportes</span></a></li>
 			<li><a href="{{url('logout')}}"><i class="fa fa-sign-out"></i> <span>Salir</span></a></li>			
