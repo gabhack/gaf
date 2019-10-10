@@ -68,3 +68,42 @@ table.dataTable.no-footer{
 .label-consulta{
 	font-weight: bold;
 }
+
+.login-footer {
+    background: #fff;
+    padding: 15px;
+    color: #444;
+    border-top: 1px solid #d2d6de;
+}
+
+.container.login{
+	height: calc(100% - 52px);
+}
+
+.container.login>.container{
+	height: 100%;
+}
+
+.container.login>.container>.row{
+	height: 100%;
+}
+
+.container.login .btn-primary{
+	background: #3097D1;
+	border: 1px solid #3097D1;
+}
+
+.container.login .btn-outline-primary{
+	color: #3097D1;
+	border: 1px solid #3097D1;
+}
+	
+.container.login .btn-primary:hover{
+	background: #257fb1;
+}
+
+
+.container.login .btn-outline-primary:hover{
+	background: #3097D1;
+	color:white;
+}

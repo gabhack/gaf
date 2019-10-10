@@ -17,14 +17,9 @@ Route::get('/clear-cache', function() {
     return "Cache is cleared";
 });
 
+Auth::routes(['register' => false]);
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/', 'HomeController@index')->name('home');
 Route::get('/logout', 'Auth\LoginController@logout');
 
 Route::group(["prefix" => "profile"], function(){

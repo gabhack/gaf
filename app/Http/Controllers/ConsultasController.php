@@ -8,6 +8,16 @@ use Illuminate\Http\Request;
 class ConsultasController extends Controller
 {
     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
+    /**
      * Display the consult resource.
      *
      * @return \Illuminate\Http\Response
