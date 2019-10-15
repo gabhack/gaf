@@ -26,32 +26,32 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">Crear Usuarios</div>
 			<div class="panel-body">
-				<form action="{{url('usuarios/store')}}" method="post">
-					{!! Form::token() !!}
+				<form method="POST" action="{{url('usuarios/store')}}">
+					{{ csrf_field() }}
 					<div class="form-row">
 						<div class="form-group">
 							<label for="name">Nombre</label>
-							<input type="text" class="form-control" name="name" id="name" placeholder="Nombre">
+							<input type="text" class="form-control" name="name" id="name" placeholder="Nombre" value="{{ old('name') }}" required>
 						</div>
 						<div class="form-group col-md-6">
 							<label for="email">Email</label>
-							<input type="email" class="form-control" name="email" id="email" placeholder="Email">
+							<input type="email" class="form-control" name="email" id="email" placeholder="Email" required>
 						</div>
 					</div>
 					<div class="form-row">
 						<div class="form-group col-md-6">
 							<label for="passwd">Password</label>
-							<input type="password" class="form-control" name="passwd" id="passwd" placeholder="Password">
+							<input type="password" class="form-control" name="passwd" id="passwd" placeholder="Password" required>
 						</div>
 						<div class="form-group col-md-6">
 							<label for="clave">Repetir Password</label>
-							<input type="password" class="form-control" name="clave" id="clave" placeholder="clave">
+							<input type="password" class="form-control" name="clave" id="clave" placeholder="clave" required>
 						</div>
 					</div>
 					<div class="form-row">
 						<div class="form-group col-md-6">
 							<label for="rol">Rol</label>
-							<select class="form-control" name="rol" id="rol">
+							<select class="form-control" name="rol" id="rol" required>
 								<option value="">-Seleccione-</option>
 								@foreach($roles as $rol)
 									<option value="{{$rol->id}}">{{$rol->rol}}</option>
@@ -77,8 +77,11 @@
 						</div>
 						<div class="form-group col-md-6">
 							<label for="oficina">Oficina</label>
-							<select class="form-control" name="oficina" id="oficina">
-								<option value="">-Seleccione-</option>								
+							<select class="form-control" name="oficina" id="oficina" required>
+								<option value="">-Seleccione-</option>	
+								@foreach($oficinas as $oficina)
+									<option value="{{$oficina->id}}">{{$oficina->oficina}}</option>
+								@endforeach							
 							</select>
 						</div>
 					</div>

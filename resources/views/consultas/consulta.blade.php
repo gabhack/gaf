@@ -132,6 +132,7 @@
                                     <th class="text-center">Valor pagado</th>
                                     <th class="text-center">Valor total</th>
                                     <th class="text-center">Saldo pendiente</th>
+                                    <th class="text-center">Inconsistencia</th>
                                     <th class="text-center">Fecha</th>
                                 </tr>
                             </thead>
@@ -143,7 +144,8 @@
                                         <td class="text-center">{{mneyformat($descuento->valor_pagado)}}</td>
                                         <td class="text-center">{{mneyformat($descuento->valor_total)}}</td>
                                         <td class="text-center">{{mneyformat($descuento->saldo)}}</td>
-                                        <td class="text-center">{{$descuento->fecha}}</td>                                            
+                                        <td class="text-center">{{$descuento->inconsistencia}}</td>
+                                        <td class="text-center">{{$descuento->fecha}}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

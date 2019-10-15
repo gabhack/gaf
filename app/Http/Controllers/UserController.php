@@ -14,6 +14,7 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('superadmin');
     }
     
     /**
@@ -35,8 +36,13 @@ class UserController extends Controller
     public function create()
     {
         $dptos = \App\Departamentos::all();
+        $oficinas = \App\Oficinas::all();
 		$roles = \App\Roles::OrderBy('rol')->get();
-        return view('usuarios/crear')->with(["roles" => $roles, 'dptos' => $dptos]);
+        return view('usuarios/crear')->with([
+            'roles' => $roles, 
+            'dptos' => $dptos,
+            'oficinas' => $oficinas
+        ]);
     }
 
     /**
@@ -48,7 +54,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $usuario = new \App\User;
-		$usuario->name = strtoupper($request->input('name'));
+		$usuario->name = $request->input('name');
 		$usuario->email = $request->input('email');
 		$usuario->password = bcrypt($request->input('password'));
 		$usuario->roles_id = $request->input('rol');
