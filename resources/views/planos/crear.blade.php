@@ -42,13 +42,14 @@
 								<option value="aplicados">Descuentos Aplicados</option>
 								<option value="no_aplicados">Descuentos No Aplicados</option>
 								<option value="embargos">Embargos</option>
+								<option value="comppago">Comprobantes de pago</option>
 							</select>
 						</div>
 					</div>
 					<div class="form-row hidden" id="archivos">
 						<div class="form-group col-md-6">
-							<label class="label-archivos" for="basicos"></label>
-							<input class="input-archivos" type="file" class="form-control-file" id="input-archivos" name="" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .txt" required>
+							<label class="label-archivos"></label>
+							<input class="input-archivos" type="file" class="form-control-file" id="input-archivos" name="" required>
 						</div>
 					</div>
 					

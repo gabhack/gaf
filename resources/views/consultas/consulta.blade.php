@@ -4,11 +4,12 @@
 
     <div class="row">
         <div class="col-md-12">
-        <a class="btn btn-primary" href="{{url('consultas')}}"><< Atrás</a><h3>Información de: {{$cliente->nombres}}</h3>
+            <a class="btn btn-primary" href="{{url('consultas')}}"><< Atrás</a>
+            <h3>Información de: {{$cliente->nombres}}</h3>
         </div>
         <div class="col-md-8">
             <div class="panel panel-default">
-                <div class="panel-heading">Información general</div>
+                <div class="panel-heading"><b>Información general</b></div>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-6">
@@ -57,7 +58,7 @@
         </div>
         <div class="col-md-4">
             <div class="panel panel-default">
-                <div class="panel-heading">Información de contacto</div>
+                <div class="panel-heading"><b>Información de contacto</b></div>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-12">
@@ -84,42 +85,74 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">Descuentos aplicados</div>
-                <div class="panel-body">
-                    @if ($cliente->descuentosaplicados->first())
-                    <table class="table table-hover table-striped table-condensed table-bordered">
-                            <thead>
-                                <tr>
-                                    <th class="text-center">Entidad</th>
-                                    <th class="text-center">Cuota mensual</th>
-                                    <th class="text-center">Valor pagado</th>
-                                    <th class="text-center">Valor total</th>
-                                    <th class="text-center">Saldo pendiente</th>
-                                    <th class="text-center">Fecha</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($cliente->descuentosaplicados as $descuento)
+
+        @php
+            $ultimoregistro = $cliente->registrosfinancieros->first();
+        @endphp
+
+
+        @if ($ultimoregistro)   
+            <div class="col-md-12">
+                <h3>Información de Comprobante pago (Periodo {{$ultimoregistro->periodo}})</h3>
+            </div>
+
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><b>Ingresos aplicados</b></div>
+                    <div class="panel-body">
+                        @if (ingresos_por_registro($ultimoregistro->id))
+                            <table class="table table-hover table-striped table-condensed table-bordered">
+                                <thead>
                                     <tr>
-                                        <td>{{getentidad($descuento->entidades_id)}}</td>
-                                        <td class="text-center">{{mneyformat($descuento->valor)}}</td>
-                                        <td class="text-center">{{mneyformat($descuento->valor_pagado)}}</td>
-                                        <td class="text-center">{{mneyformat($descuento->valor_total)}}</td>
-                                        <td class="text-center">{{mneyformat($descuento->saldo)}}</td>
-                                        <td class="text-center">{{$descuento->fecha}}</td>                                            
+                                        <th class="text-center">Concepto</th>
+                                        <th class="text-center">Valor</th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    @else
-                        <p>No hay registros</p>
-                    @endif
+                                </thead>
+                                <tbody>
+                                    @foreach (ingresos_por_registro($ultimoregistro->id) as $ingreso)
+                                        <tr>
+                                            <td>{{$ingreso->concepto}}</td>
+                                            <td class="text-center">{{mneyformat($ingreso->valor)}}</td>                                          
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        @else
+                            <p>No hay registros</p>
+                        @endif  
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-12">
+
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><b>Descuentos aplicados</b></div>
+                    <div class="panel-body">
+                        @if ($ultimoregistro)
+                            <table class="table table-hover table-striped table-condensed table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Concepto</th>
+                                        <th class="text-center">Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (descuentos_por_registro($ultimoregistro->id) as $descuento)
+                                        <tr>
+                                            <td>{{$descuento->concepto}}</td>
+                                            <td class="text-center">{{mneyformat($descuento->valor)}}</td>                                          
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        @else
+                            <p>No hay registros</p>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        @endif
+        {{-- <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading">Descuentos no aplicados</div>
                 <div class="panel-body">
@@ -155,7 +188,7 @@
                     @endif
                 </div>
             </div>
-        </div>
+        </div> --}}
     </div>
 
 @endsection

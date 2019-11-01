@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 
 class PlanosController extends Controller
 {
@@ -16,7 +17,7 @@ class PlanosController extends Controller
         $this->middleware('auth');
         $this->middleware('superadmin');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -48,51 +49,84 @@ class PlanosController extends Controller
     public function store(Request $request)
     {
 		ini_set('memory_limit', '-1');
-
 		$response = array();
-		
+
 		if($request->file('basicos') != "")
 		{
-			$plano = new \App\Planos;		
-			$plano->pagadurias_id = $request->input("pagaduria");		
+			$plano = new \App\Planos;
+			$plano->pagadurias_id = $request->input("pagaduria");
 			$plano->plano = "";
 			$plano->tipo = 'BAS';
 			$plano->save();
 		}
-		
+
 		if($request->file('aplicados') != "")
 		{
 			$plano = new \App\Planos;
-			$plano->pagadurias_id = $request->input("pagaduria");		
+			$plano->pagadurias_id = $request->input("pagaduria");
 			$plano->plano = "";
 			$plano->tipo = 'APL';
 			$plano->save();
 		}
-		
+
 		if($request->file('no_aplicados') != "")
 		{
-			$plano = new \App\Planos;		
+			$plano = new \App\Planos;
 			$plano->pagadurias_id = $request->input("pagaduria");
 			$plano->plano = "";
 			$plano->tipo = 'NAP';
 			$plano->save();
 		}
-		
+
 		if($request->file('embargos') != "")
 		{
-			$plano = new \App\Planos;		
-			$plano->pagadurias_id = $request->input("pagaduria");		
+			$plano = new \App\Planos;
+			$plano->pagadurias_id = $request->input("pagaduria");
 			$plano->plano = "";
 			$plano->tipo = 'EMB';
 			$plano->save();
 		}
-		
+
+		if($request->file('comppago'))
+		{
+			$plano = new \App\Planos;
+			$plano->pagadurias_id = $request->input("pagaduria");
+			$plano->plano = "";
+			$plano->tipo = 'COM';
+			$plano->save();
+		}
+
         $pagaduria = \App\Pagadurias::find($request->input("pagaduria"));
 		if($pagaduria->codigo == "SEM_POPAYAN")
 		{
-			\App\Http\Resources\Popayan::base($request);
-		} 
-		elseif ($pagaduria->codigo == "FOPEP") 
+			switch ($plano->tipo) {
+				case 'BAS':
+					\App\Http\Resources\Popayan::base($request);
+					break;
+				case 'APL':
+					$response = array(
+						'cod' => '300',
+						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
+					);
+					break;
+				case 'NAP':
+					$response = array(
+						'cod' => '300',
+						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
+					);
+					break;
+				case 'EMB':
+					$response = array(
+						'cod' => '300',
+						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
+					);
+					break;
+				case 'COM':
+					$response = \App\Http\Resources\Popayan::comprobante_pago($request);
+					break;
+			}
+		}
+		elseif ($pagaduria->codigo == "FOPEP")
 		{
 			switch ($plano->tipo) {
 				case 'BAS':
@@ -105,6 +139,12 @@ class PlanosController extends Controller
 					$response = \App\Http\Resources\Fopep::descuentos_no_aplicados($request);
 					break;
 				case 'EMB':
+					$response = array(
+						'cod' => '300',
+						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
+					);
+					break;
+				case 'COMP':
 					$response = array(
 						'cod' => '300',
 						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
@@ -131,6 +171,12 @@ class PlanosController extends Controller
 					);
 					break;
 				case 'EMB':
+					$response = array(
+						'cod' => '300',
+						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
+					);
+					break;
+				case 'COMP':
 					$response = array(
 						'cod' => '300',
 						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',

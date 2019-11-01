@@ -16,9 +16,9 @@ class Descuentosaplicados extends Model
 		return $this->hasOne('\App\Clientes', 'id', 'clientes_id');
 	}
 	
-	public function pagaduria()
+	public function registro()
 	{
-		return $this->hasOne('\App\Pagadurias', 'id', 'pagadurias_id');
+		return $this->hasOne('\App\Registrosfinancieros', 'id', 'registros_id');
 	}
 	
 	public function tercero()

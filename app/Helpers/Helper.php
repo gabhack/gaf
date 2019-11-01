@@ -35,6 +35,7 @@ if(!function_exists('planos')) {
 			'APL' => 'Descuentos Aplicados',
 			'NAP' => 'Descuentos No Aplicados',
 			'EMB' => 'Embargos',
+			'COM' => 'Comprobantes de pago',
 		);
 	}
 }
@@ -284,6 +285,35 @@ if (!function_exists('getciudad')) {
 	function getciudad($id)
 	{
 		return App\Ciudades::find($id)->ciudad;	
+	}
+}
+
+if (!function_exists('limpiarCaracteresEspeciales')) {
+	function limpiarCaracteresEspeciales($string){
+        $string = str_replace(' ', '', $string);
+        $string = htmlentities($string);
+        $string = preg_replace('/\&(.)[^;]*;/', '\\1', $string);
+        return $string;
+    }
+}
+
+if(!function_exists('descuentos_por_registro')) {
+	function descuentos_por_registro($id_registro){
+		try {
+			return App\Descuentosaplicados::where("registros_id", "=", $id_registro)->get();
+		} catch (\Exception $ex) {
+			return $ex-getMessage();
+		}	
+	}
+}
+
+if(!function_exists('ingresos_por_registro')) {
+	function ingresos_por_registro($id_registro){
+		try {
+			return App\Ingresosaplicados::where("registros_id", "=", $id_registro)->get();
+		} catch (\Exception $ex) {
+			return $ex-getMessage();
+		}	
 	}
 }
 

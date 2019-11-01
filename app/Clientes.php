@@ -19,9 +19,17 @@ class Clientes extends Model
 							'apellidos',
 							'fechanto',							
 							'sexo',
-							'telefono',
+							'estado_civil',
 							'direccion',
+							'centro_costo',
+							'cargo',
+							'tipo_contratacion',
+							'grado',
+							'celular',
+							'telefono',
 							'correo',
+							'estado',
+							'ingresos',
 						];
 	
 	public function ciudad()
@@ -29,13 +37,8 @@ class Clientes extends Model
 		return $this->hasOne('\App\Ciudades', 'id', 'ciudades_id');
 	}
 
-    public function descuentosaplicados()
-    {
-        return $this->hasMany('App\Descuentosaplicados');
-    }
-
-    public function descuentosnoaplicados()
-    {
-        return $this->hasMany('App\Descuentosnoaplicados');
-    }
+	public function registrosfinancieros()
+	{
+		return $this->hasMany('App\Registrosfinancieros', 'clientes_id', 'id');
+	}
 }
