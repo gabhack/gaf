@@ -11,11 +11,6 @@ class Descuentosaplicados extends Model
     
 	protected $table = 'descuentosaplicados';
 	
-	public function cliente()
-	{
-		return $this->hasOne('\App\Clientes', 'id', 'clientes_id');
-	}
-	
 	public function registro()
 	{
 		return $this->hasOne('\App\Registrosfinancieros', 'id', 'registros_id');

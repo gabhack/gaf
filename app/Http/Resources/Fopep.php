@@ -108,26 +108,34 @@ class Fopep
 						$entidad->save();
 					}
 
-					$descuento = \App\Descuentosaplicados::where("periodo", "=", $row['periodo'])
-						->where("entidades_id", "=", $row['tercero'])
+					$registro = \App\Registrosfinancieros::where("periodo", "=", $row['periodo'])
+						->where("pagadurias_id", "=", $pagaduria->id)
 						->where("clientes_id", "=", $cliente->id)
 						->first();
 
-					
-					
+					if ($registro === null) {
+						$registro = new \App\Registrosfinancieros;
+						$registro->clientes_id		= $cliente->id;
+						$registro->pagadurias_id	= $pagaduria->id;
+						$registro->periodo			= $row['periodo'];
+						$registro->save();
+					}
+
+					$descuento = \App\Descuentosaplicados::where("registros_id", "=", $registro->id)
+						->where("entidades_id", "=", $entidad->id)
+						->first();
+
 					if ($descuento === null) {
 						$nuevoDescuentoA = new \App\Descuentosaplicados;
-						$nuevoDescuentoA->clientes_id		= $cliente->id;
 						$nuevoDescuentoA->entidades_id 		= $entidad->id;
-						$nuevoDescuentoA->pagadurias_id		= $pagaduria->id;
+						$nuevoDescuentoA->registros_id 		= $registro->id;
+						$nuevoDescuentoA->concepto 			= $entidad->entidad;
 						$nuevoDescuentoA->valor				= money_format('%.0n', $row['valor_aplicado']);
 						$nuevoDescuentoA->pagare			= $row['pagare'];
-						$nuevoDescuentoA->periodo			= $row['periodo'];
 						$nuevoDescuentoA->saldo				= money_format('%.0n', $row['saldo']);
 						$nuevoDescuentoA->valor_total		= money_format('%.0n', $row['valor_total']);
 						$nuevoDescuentoA->valor_pagado		= money_format('%.0n', $row['valor_pagado']);
 						$nuevoDescuentoA->porcentaje		= $row['porcentaje'];
-						$nuevoDescuentoA->fecha				= $row['fecha_grabacion'];
 						$nuevoDescuentoA->save();
 					}
 				}

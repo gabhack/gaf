@@ -28,11 +28,6 @@ class Registrosfinancieros extends Model
 		return $this-hasMany('App\Descuentosaplicados');
 	}
 
-	public function descuentosnoaplicados()
-	{
-		return $this-hasMany('App\Descuentosnoaplicados');
-	}
-
 	public function ingresosaplicados()
 	{
 		return $this-hasMany('App\Ingresosaplicados');
