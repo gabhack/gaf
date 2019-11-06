@@ -44,7 +44,7 @@
                         </div>
                         <div class="col-md-6">
                             <label class="label-consulta" for="pad">Ciudad:
-                                <p class="pad">{{ $cliente->ciudad->ciudad == '' ? 'No proporcionado' : $cliente->ciudad->ciudad }}</p>
+                                <p class="pad">{{ $cliente->ciudad == '' ? 'No proporcionado' : $cliente->ciudad->ciudad }}</p>
                             </label>
                         </div>
                         <div class="col-md-6">
@@ -152,7 +152,7 @@
                 </div>
             </div>
         @endif
-        {{-- <div class="col-md-12">
+        <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading">Descuentos no aplicados</div>
                 <div class="panel-body">
@@ -188,7 +188,7 @@
                     @endif
                 </div>
             </div>
-        </div> --}}
+        </div>
     </div>
 
 @endsection

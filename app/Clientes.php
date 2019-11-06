@@ -41,4 +41,9 @@ class Clientes extends Model
 	{
 		return $this->hasMany('App\Registrosfinancieros', 'clientes_id', 'id');
 	}
+
+	public function descuentosnoaplicados()
+	{
+		return $this->hasMany('App\Descuentosnoaplicados', 'clientes_id', 'id');
+	}
 }
