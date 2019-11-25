@@ -21,4 +21,8 @@ class Embargos extends Model
 		return $this->hasOne('\App\Pagadurias', 'id', 'pagadurias_id');
 	}
 	
+	public function motivo_embargo()
+	{
+		return $this->hasOne('\App\Motivosembargos', 'id', 'motivos_id');
+	}
 }

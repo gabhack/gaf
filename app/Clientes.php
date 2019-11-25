@@ -46,4 +46,14 @@ class Clientes extends Model
 	{
 		return $this->hasMany('App\Descuentosnoaplicados', 'clientes_id', 'id');
 	}
+
+	public function mensajesprecaucion()
+	{
+		return $this->hasMany('App\Mensajesprecaucion', 'clientes_id', 'id');
+	}
+
+	public function embargos()
+	{
+		return $this->hasMany('App\Embargos', 'clientes_id', 'id');
+	}
 }

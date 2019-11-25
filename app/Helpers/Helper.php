@@ -36,6 +36,7 @@ if(!function_exists('planos')) {
 			'NAP' => 'Descuentos No Aplicados',
 			'EMB' => 'Embargos',
 			'COM' => 'Comprobantes de pago',
+			'MLQ' => 'Mensajes de liquidación',
 		);
 	}
 }

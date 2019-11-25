@@ -43,6 +43,7 @@
 								<option value="no_aplicados">Descuentos No Aplicados</option>
 								<option value="embargos">Embargos</option>
 								<option value="comppago">Comprobantes de pago</option>
+								<option value="mens_liquidacion">Mensajes de liquidación</option>
 							</select>
 						</div>
 					</div>

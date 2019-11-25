@@ -96,6 +96,15 @@ class PlanosController extends Controller
 			$plano->save();
 		}
 
+		if($request->file('mens_liquidacion'))
+		{
+			$plano = new \App\Planos;
+			$plano->pagadurias_id = $request->input("pagaduria");
+			$plano->plano = "";
+			$plano->tipo = 'MLQ';
+			$plano->save();
+		}
+
         $pagaduria = \App\Pagadurias::find($request->input("pagaduria"));
 		if($pagaduria->codigo == "SEM_POPAYAN")
 		{
@@ -116,13 +125,13 @@ class PlanosController extends Controller
 					);
 					break;
 				case 'EMB':
-					$response = array(
-						'cod' => '300',
-						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
-					);
+					$response = \App\Http\Resources\Popayan::embargos($request);
 					break;
 				case 'COM':
 					$response = \App\Http\Resources\Popayan::comprobante_pago($request);
+					break;
+				case 'MLQ':
+					$response = \App\Http\Resources\Popayan::mensajes_liquidacion($request);
 					break;
 			}
 		}

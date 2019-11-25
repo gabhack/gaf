@@ -160,31 +160,85 @@
                         <table class="table table-hover table-striped table-condensed table-bordered">
                             <thead>
                                 <tr>
-                                    <th class="text-center">Entidad</th>
-                                    <th class="text-center">Cuota mensual</th>
-                                    <th class="text-center">Valor pagado</th>
-                                    <th class="text-center">Valor total</th>
-                                    <th class="text-center">Saldo pendiente</th>
+                                    <th class="text-center">Periodo</th>
+                                    <th class="text-center">Valor cuota</th>
                                     <th class="text-center">Inconsistencia</th>
-                                    <th class="text-center">Fecha</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($cliente->descuentosnoaplicados as $descuento)
                                     <tr>
-                                        <td>{{getentidad($descuento->entidades_id)}}</td>
+                                        <td class="text-center">{{$descuento->periodo}}</td>
                                         <td class="text-center">{{mneyformat($descuento->valor_fijo)}}</td>
-                                        <td class="text-center">{{mneyformat($descuento->valor_pagado)}}</td>
-                                        <td class="text-center">{{mneyformat($descuento->valor_total)}}</td>
-                                        <td class="text-center">{{mneyformat($descuento->saldo)}}</td>
                                         <td class="text-center">{{$descuento->inconsistencia}}</td>
-                                        <td class="text-center">{{$descuento->fecha}}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     @else
                         <p>No hay registros</p>
+                    @endif
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">Embargos</div>
+                <div class="panel-body">
+                        @if ($cliente->embargos->first())
+                        <table class="table table-hover table-striped table-condensed table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Fecha Embargo</th>
+                                    <th class="text-center">Doc. Demandante</th>
+                                    <th class="text-center">Demandante</th>
+                                    <th class="text-center">Motivo</th>
+                                    <th class="text-center">Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($cliente->embargos as $embargo)
+                                    <tr>
+                                        <td class="text-center">{{$embargo->fecha_embargo}}</td>
+                                        <td class="text-center">{{$embargo->documento_demandante}}</td>
+                                        <td class="text-center">{{$embargo->nombres_demandante}}</td>
+                                        <td class="text-center">{{$embargo->motivo_embargo->motivo}}</td>
+                                        <td class="text-center">{{mneyformat($embargo->valor)}}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @else
+                        <p>No hay mensajes de liquidación</p>
+                    @endif
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">Mensajes de liquidación</div>
+                <div class="panel-body">
+                        @if ($cliente->mensajesprecaucion->first())
+                        <table class="table table-hover table-striped table-condensed table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Periodo</th>
+                                    <th class="text-center">Tipo de mensaje</th>
+                                    <th class="text-center">Mensaje</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($cliente->mensajesprecaucion as $mensaje)
+                                    <tr>
+                                        <td class="text-center">{{$mensaje->periodo}}</td>
+                                        <td class="text-center">{{$mensaje->tipo_mensaje}}</td>
+                                        <td class="text-center">{{$mensaje->mensaje}}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @else
+                        <p>No hay mensajes de liquidación</p>
                     @endif
                 </div>
             </div>
