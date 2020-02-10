@@ -44,6 +44,7 @@
 								<option value="embargos">Embargos</option>
 								<option value="comppago">Comprobantes de pago</option>
 								<option value="mens_liquidacion">Mensajes de liquidación</option>
+								<option value="concep_liquid">Conceptos liquidados</option>
 							</select>
 						</div>
 					</div>

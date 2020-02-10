@@ -105,12 +105,21 @@ class PlanosController extends Controller
 			$plano->save();
 		}
 
+		if($request->file('concep_liquid'))
+		{
+			$plano = new \App\Planos;
+			$plano->pagadurias_id = $request->input("pagaduria");
+			$plano->plano = "";
+			$plano->tipo = 'CLQ';
+			$plano->save();
+		}
+
         $pagaduria = \App\Pagadurias::find($request->input("pagaduria"));
 		if($pagaduria->codigo == "SEM_POPAYAN")
 		{
 			switch ($plano->tipo) {
 				case 'BAS':
-					\App\Http\Resources\Popayan::base($request);
+					$response = \App\Http\Resources\Popayan::base($request);
 					break;
 				case 'APL':
 					$response = array(
@@ -133,6 +142,9 @@ class PlanosController extends Controller
 				case 'MLQ':
 					$response = \App\Http\Resources\Popayan::mensajes_liquidacion($request);
 					break;
+				case 'CLQ':
+					$response = \App\Http\Resources\Popayan::conceptos_liquidacion($request);
+					break;
 			}
 		}
 		elseif ($pagaduria->codigo == "FOPEP")
@@ -153,7 +165,7 @@ class PlanosController extends Controller
 						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
 					);
 					break;
-				case 'COMP':
+				case 'COM':
 					$response = array(
 						'cod' => '300',
 						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
@@ -185,7 +197,39 @@ class PlanosController extends Controller
 						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
 					);
 					break;
-				case 'COMP':
+				case 'COM':
+					$response = array(
+						'cod' => '300',
+						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
+					);
+					break;
+			}
+		}
+		elseif ($pagaduria->codigo == "COLPENSIONES")
+		{
+			switch ($plano->tipo) {
+				case 'BAS':
+					$response = \App\Http\Resources\Colpensiones::base($request);
+					break;
+				case 'APL':
+					$response = array(
+						'cod' => '300',
+						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
+					);
+					break;
+				case 'NAP':
+					$response = array(
+						'cod' => '300',
+						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
+					);
+					break;
+				case 'EMB':
+					$response = array(
+						'cod' => '300',
+						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
+					);
+					break;
+				case 'COM':
 					$response = array(
 						'cod' => '300',
 						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',

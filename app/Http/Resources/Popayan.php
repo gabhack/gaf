@@ -10,54 +10,123 @@ class Popayan
 	
 	public static function base(Request $request)
 	{
-		ini_set('memory_limit', '-1');
-		
-		$file = \File::get( $request->file('basicos') );
-		
-		$titulos 	= array();
-		$tmpDatos 	= array();
-		$datos 		= array();
-		$array 		= array();
-		
-		foreach (explode("\n", $file) as $key => $line){
-			if($key == 0)
-			{
-				$r = preg_replace(
-								  '/
-									^
-									[\pZ\p{Cc}\x{feff}]+
-									|
-									[\pZ\p{Cc}\x{feff}]+$
-								   /ux',
-								  '', 
-								  $line);
-				$titulos = preg_split("/[\t]/", $r);				
-			}
-			else if($line == "" )
-				continue;
-			else
-			{
-				$tmpDatos = preg_split("/[\t]/", $line);
-				$i = 0;
-				foreach($titulos as $k => $titulo)
-				{
-					$datos[trim(strtolower($titulo))] = $tmpDatos[$i];
-					$datos['created_at'] = \Carbon\Carbon::now();
-					$datos['updated_at'] = \Carbon\Carbon::now();
-					$i++;
-				}
-				
-				$array[] = $datos;				
-			}
+		try {
+			ini_set('memory_limit', '-1');
 			
-			 if($key % 1500 == 0 && count($array) != 0)
-			{				
-				$plano = \DB::table('tmp_base_secretarias')->insert($array);
-				$array = array();
-			}
-		}
+			$file = \File::get( $request->file('basicos') );
+			
+			$titulos 	= array();
+			$tmpDatos 	= array();
+			$datos 		= array();
+			$array 		= array();
+
+			$personas 	= array();
 		
-		$plano = \DB::table('tmp_base_secretarias')->insert($array);
+			foreach (explode("\n", $file) as $key => $line){
+				if($key == 0)
+				{
+					$r = preg_replace(
+									  '/
+										^
+										[\pZ\p{Cc}\x{feff}]+
+										|
+										[\pZ\p{Cc}\x{feff}]+$
+									   /ux',
+									  '', 
+									  $line);
+					$titulos = preg_split("/[\t]/", $r);				
+				}
+				else if($line == "" )
+					continue;
+				else
+				{
+					$tmpDatos = preg_split("/[\t]/", $line);
+					$i = 0;
+					foreach($titulos as $k => $titulo)
+					{
+						$datos[trim(strtolower($titulo))] = $tmpDatos[$k];
+					}
+					
+					// Guardar en BD
+					$personas[] = $datos;
+					
+					preg_match('#\((.*?)\)#', $datos['ciudad'], $match);
+					$ciudadstr = strtoupper(trim(str_replace($match[0], '', $datos['ciudad'])));
+					
+					$cliente = \App\Clientes::where("documento", "=", $datos['numvinculacion'])->first();
+					$ciudad = \App\Ciudades::where('ciudad', $ciudadstr)->first();
+
+					//Cliente crear-actualizar existente
+					if ($cliente === null) 
+					{
+						$cliente = new \App\Clientes;
+						$cliente->users_id				= \Auth::user()->id;
+						$cliente->ciudades_id 			= $ciudad['id'];
+						$cliente->tipodocumento			= 'CC';
+						$cliente->documento 			= $datos['numvinculacion'];
+						$cliente->sexo 					= $datos['genero'];
+						$cliente->direccion 			= $datos['direccion'];
+						$cliente->nombres 				= $datos['empleado'];
+						$cliente->centro_costo 			= $datos['centrocosto'];
+						$cliente->cargo 				= $datos['cargoempresa'];
+						$cliente->tipo_contratacion 	= $datos['nivelcontratacion'];
+						$cliente->grado 				= $datos['grado'];
+						$cliente->telefono 				= $datos['telefono'];
+						$cliente->correo				= $datos['email'];
+						$cliente->save();
+					} 
+					else 
+					{
+						if ($cliente->ciudades_id == '') {
+							$cliente->ciudades_id 			= $ciudad['id'];
+						}
+						if ($cliente->sexo == '') {
+							$cliente->sexo 					= $datos['genero'];
+						}
+						if ($cliente->direccion == '') {
+							$cliente->direccion 			= $datos['direccion'];
+						}
+						if ($cliente->nombres == '') {
+							$cliente->nombres 				= $datos['empleado'];
+						}
+						if ($cliente->centro_costo == '') {
+							$cliente->centro_costo 			= $datos['centrocosto'];
+						}
+						if ($cliente->cargo == '') {
+							$cliente->cargo 				= $datos['cargoempresa'];
+						}
+						if ($cliente->tipo_contratacion == '') {
+							$cliente->tipo_contratacion 	= $datos['nivelcontratacion'];
+						}
+						if ($cliente->grado == '') {
+							$cliente->grado 				= $datos['grado'];
+						}
+						if ($cliente->telefono == '') {
+							$cliente->telefono 				= $datos['telefono'];
+						}
+						if ($cliente->correo == '') {
+							$cliente->correo				= $datos['email'];
+						}
+
+						//Guardamos en caso de que haya cambios
+						if (count($cliente->getDirty()) > 0)
+						{
+							$cliente->save();
+						}
+					}
+				}
+			}
+			$response = array(
+				'cod' => '200',
+				'mensaje' => 'Se han actualizado los datos correctamente.',
+			);
+		} catch (Exception $e) {
+			$response = array(
+				'cod' => '400',
+				'mensaje' => $e->getMessage(),
+			);
+		}
+		return $response;
 	}
 
 	public static function comprobante_pago(Request $request)
@@ -599,6 +668,97 @@ class Popayan
 			\Storage::disk('archivos')->delete($nombreArchivoTmp . "." . $extension);
 		}
 		return $response;
+	}
+
+	public static function conceptos_liquidacion(Request $request)
+	{
+		try {
+			$pagaduria = \App\Pagadurias::find($request->input("pagaduria"));
+
+			//Obtener el archivo y guardarlo en la carpeta temporal
+
+			ini_set('memory_limit', '-1');
+			$archivo = $request->file('concep_liquid');
+
+			$nombre_original = $archivo->getClientOriginalName();
+			$extension = $archivo->getClientOriginalExtension();
+			$nombreArchivoTmp = rand ( 0 , 99999 );
+
+			$re = \Storage::disk('archivos')->put($nombreArchivoTmp . "." . $extension, \File::get($archivo));
+			$ruta = storage_path('archivos') . "/" . $nombreArchivoTmp . "." . $extension;
+
+			//----------------------------------------
+			//Tratar el archivo para recibir los datos
+
+			$parseador = new \Smalot\PdfParser\Parser();
+			$documento = $parseador->parseFile($ruta);
+
+			$text = $documento->getText();
+			$grupoconceptos = explode("TOTAL POR CONCEPTO", $text);
+
+			$conceptos = array();
+			
+			//Extraer datos
+			foreach ($grupoconceptos as $key => $concepto) {
+				$lineasconcepto = explode("\n", $concepto);
+				$det_concepto = '';
+
+				if ($key == 0) {
+					$det_concepto = $lineasconcepto[9];
+					foreach ($lineasconcepto as $i => $linea) {
+						$datoslinea = explode("	", $linea);
+						if (sizeof($datoslinea)>= 4) {
+							if ((strpos($datoslinea[2], '0') !== false)) {
+								$conceptos[] = array(
+									'concepto' => $det_concepto,
+									'documento' => trim(intval(preg_replace('/[^0-9]+/', '', $datoslinea[0]), 10)),
+									'nombres' => $datoslinea[1],
+									'valor_desc' => $datoslinea[2]
+								);
+							}
+						}
+					}
+				} else {
+					$det_concepto = $lineasconcepto[1];
+					foreach ($lineasconcepto as $i => $linea) {
+						$datoslinea = explode("	", $linea);
+						if (sizeof($datoslinea)>= 4) {
+							if ((strpos($datoslinea[2], '0') !== false)) {
+								$conceptos[] = array(
+									'concepto' => $det_concepto,
+									'documento' => trim(intval(preg_replace('/[^0-9]+/', '', $datoslinea[0]), 10)),
+									'nombres' => $datoslinea[1],
+									'valor_desc' => $datoslinea[2]
+								);
+							}
+						}
+					}
+				}
+			}
+
+			//Guardar en BD
+			echo '<pre>';
+			print_r($conceptos);
+			echo '</pre>';
+			
+			//----------------------------------------
+			//Eliminar archivo temporal
+			\Storage::disk('archivos')->delete($nombreArchivoTmp . "." . $extension);
+			
+			$response = array(
+				'cod' => '200',
+				'mensaje' => 'Se ha registrado la información correctamente',
+			);
+		} catch (Exception $e) {
+			$response = array(
+				'cod' => '400',
+				'mensaje' => $e->getMessage(),
+			);
+
+			//Eliminar archivo temporal
+			\Storage::disk('archivos')->delete($nombreArchivoTmp . "." . $extension);
+		}
+		// return $response;
 	}
 	
 }

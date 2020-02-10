@@ -37,6 +37,7 @@ if(!function_exists('planos')) {
 			'EMB' => 'Embargos',
 			'COM' => 'Comprobantes de pago',
 			'MLQ' => 'Mensajes de liquidación',
+			'CLQ' => 'Conceptos de liquidación',
 		);
 	}
 }
@@ -315,6 +316,77 @@ if(!function_exists('ingresos_por_registro')) {
 		} catch (\Exception $ex) {
 			return $ex-getMessage();
 		}	
+	}
+}
+
+if(!function_exists('get_string_between')) {
+	function get_string_between($string, $start, $end){
+        $string = ' ' . $string;
+        $ini = strpos($string, $start);
+        if ($ini == 0) return '';
+        $ini += strlen($start);
+        $len = strpos($string, $end, $ini) - $ini;
+        return substr($string, $ini, $len);
+    }
+}
+
+if (!function_exists('mes_esp_a_ing')) {
+	function mes_esp_a_ing($mes)
+	{
+		$mesingles = '';
+		switch ($mes) {
+			case 'Enero':
+				$mesingles = 'Jan';
+				break;
+
+			case 'Febrero':
+				$mesingles = 'Feb';
+				break;
+
+			case 'Marzo':
+				$mesingles = 'Mar';
+				break;
+
+			case 'Abril':
+				$mesingles = 'Apr';
+				break;
+
+			case 'Mayo':
+				$mesingles = 'May';
+				break;
+				
+			case 'Junio':
+				$mesingles = 'Jun';
+				break;
+
+			case 'Julio':
+				$mesingles = 'Jul';
+				break;
+
+			case 'Agosto':
+				$mesingles = 'Aug';
+				break;
+				
+			case 'Septiembre':
+				$mesingles = 'Sep';
+				break;
+
+			case 'Octubre':
+				$mesingles = 'Oct';
+				break;
+			
+			case 'Noviembre':
+				$mesingles = 'Nov';
+				break;
+				
+			case 'Diciembre':
+				$mesingles = 'Dec';
+				break;
+			
+			default:
+				break;
+		}
+		return $mesingles;
 	}
 }
 

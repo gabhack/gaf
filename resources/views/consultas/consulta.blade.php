@@ -87,7 +87,7 @@
         </div>
 
         @php
-            $ultimoregistro = $cliente->registrosfinancieros->first();
+            $ultimoregistro = $cliente->registrosfinancieros->last();
         @endphp
 
 
