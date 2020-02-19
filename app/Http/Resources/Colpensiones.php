@@ -31,17 +31,19 @@ class Colpensiones
 
 			$text = $documento->getText();
             $lineas = explode("\n", $text);
+
+            $textprocesado = str_replace("\n", ' ', $text);
             
             //Extraer datos basicos
             //Nombres
-            $posinitnombre = strpos($text, 'señor(a)')+8;
-            $posfinnombre = strpos($text, 'identificado(a)');
-            $nombres = trim(get_string_between($text, 'señor(a)', 'identificado(a)'));
+            $posinitnombre = strpos($textprocesado, 'señor(a)')+8;
+            $posfinnombre = strpos($textprocesado, 'identificado(a)');
+            $nombres = trim(get_string_between($textprocesado, 'señor(a)', 'identificado(a)'));
             //cedula
-            $cedula = trim(get_string_between($text, 'No. ', ', con Número de Afiliación'));
+            $cedula = trim(get_string_between($textprocesado, 'No. ', ', con Número de Afiliación'));
             //periodo
             setlocale (LC_ALL, "es_ES");
-            $periodosinproc = trim(get_string_between($text, 'NOMINA de ', 'en la Entidad'));
+            $periodosinproc = trim(get_string_between($textprocesado, 'NOMINA de ', 'en la Entidad'));
             $periodoarray = explode(" de ", $periodosinproc);
             $mes = mes_esp_a_ing($periodoarray[0]);
             $ano = $periodoarray[1] . '';

@@ -390,4 +390,15 @@ if (!function_exists('mes_esp_a_ing')) {
 	}
 }
 
+if (!function_exists('totalizar_concepto')) {
+	function totalizar_concepto($data)
+	{
+		$total = 0;
+		foreach ($data as $key => $concepto) {
+			$total += $concepto->valor;
+		}
+		return $total;
+	}
+}
+
 ?>

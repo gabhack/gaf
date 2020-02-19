@@ -52,6 +52,26 @@
                                 <p class="pad">{{ $cliente->estado_civil == '' ? 'No proporcionado' : $cliente->estado_civil }}</p>
                             </label>
                         </div>
+                        <div class="col-md-6">
+                            <label class="label-consulta" for="pad">Centro de Costo:
+                                <p class="pad">{{ $cliente->centro_costo == '' ? 'No proporcionado' : $cliente->centro_costo }}</p>
+                            </label>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="label-consulta" for="pad">Cargo:
+                                <p class="pad">{{ $cliente->cargo == '' ? 'No proporcionado' : $cliente->cargo }}</p>
+                            </label>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="label-consulta" for="pad">Tipo de Contratación:
+                                <p class="pad">{{ $cliente->tipo_contratacion == '' ? 'No proporcionado' : $cliente->tipo_contratacion }}</p>
+                            </label>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="label-consulta" for="pad">Grado:
+                                <p class="pad">{{ $cliente->grado == '' ? 'No proporcionado' : $cliente->grado }}</p>
+                            </label>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -116,6 +136,12 @@
                                         </tr>
                                     @endforeach
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td><b>TOTAL</b></td>
+                                        <td style="text-align: center;"><b>{{mneyformat(totalizar_concepto(ingresos_por_registro($ultimoregistro->id)))}}</b></td>
+                                    </tr>
+                                </tfoot>
                             </table>
                         @else
                             <p>No hay registros</p>
@@ -144,6 +170,12 @@
                                         </tr>
                                     @endforeach
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td><b>TOTAL</b></td>
+                                        <td style="text-align: center;"><b>{{mneyformat(totalizar_concepto(descuentos_por_registro($ultimoregistro->id)))}}</b></td>
+                                    </tr>
+                                </tfoot>
                             </table>
                         @else
                             <p>No hay registros</p>
