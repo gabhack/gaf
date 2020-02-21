@@ -1108,7 +1108,6 @@ class Popayan
 			$pagaduria = \App\Pagadurias::find($request->input("pagaduria"));
 
 			//Obtener el archivo y guardarlo en la carpeta temporal
-
 			ini_set('memory_limit', '-1');
 			$archivo = $request->file('concep_liquid');
 
@@ -1126,11 +1125,18 @@ class Popayan
 			$documento = $parseador->parseFile($ruta);
 
 			$text = $documento->getText();
+			$lineas = explode("\n", $text);
 			$grupoconceptos = explode("TOTAL POR CONCEPTO", $text);
 
 			$conceptos = array();
 			
 			//Extraer datos
+			// $fecha = 
+			$keyfecha = (array_search('LISTADO DE CONCEPTOS	', $lineas))+1;
+			$lineafecha = explode("	", $lineas[$keyfecha]);
+			$periodo = strftime("%Y%m", strtotime(trim($lineafecha[1])));
+
+			//Extraer conceptos liquidados
 			foreach ($grupoconceptos as $key => $concepto) {
 				$lineasconcepto = explode("\n", $concepto);
 				$det_concepto = '';
@@ -1169,9 +1175,53 @@ class Popayan
 			}
 
 			//Guardar en BD
-			echo '<pre>';
-			print_r($conceptos);
-			echo '</pre>';
+			foreach ($conceptos as $indice => $concepto) {
+				$cliente = \App\Clientes::where("documento", "=", $concepto['documento'])->first();
+				$ciudad = \App\Ciudades::where('ciudad', 'POPAYAN' )->first();
+
+				try {
+					//Cliente crear-actualizar existente
+					if ($cliente !== null && $indice < 100) {
+						echo '<pre>';
+						print_r($concepto);
+						echo '</pre>';
+
+						//creación de registro
+						/*$registro = \App\Registrosfinancieros::where("periodo", "=", $periodo)
+							->where("pagadurias_id", "=", $pagaduria->id)
+							->where("clientes_id", "=", $cliente->id)
+							->first();
+					
+						if ($registro === null) {
+							$registro = new \App\Registrosfinancieros;
+							$registro->clientes_id		= $cliente->id;
+							$registro->pagadurias_id	= $pagaduria->id;
+							$registro->periodo			= $periodo;
+							$registro->save();
+						}
+						
+						// Descuentos
+						foreach ($concepto as $key => $egreso) {
+							$descuentoAplicado = \App\Descuentosaplicados::where("registros_id", "=", $registro->id)
+								->where("concepto", "=", $egreso['concepto'])
+								->first();
+							
+							if ($descuentoAplicado === null) {
+								$descuentoAplicado = new \App\Descuentosaplicados;
+								$descuentoAplicado->registros_id		= $registro->id;
+								$descuentoAplicado->concepto			= $egreso['concepto'];
+								$descuentoAplicado->valor				= $egreso['valor_desc'];
+								$descuentoAplicado->save();
+							}
+						}*/
+					}
+				} catch(Exception $ex) {
+					//----------------------------------------
+					//Eliminar archivo temporal
+					\Storage::disk('archivos')->delete($nombreArchivoTmp . "." . $extension);
+					throw new Exception("Error: No fue posible actualizar el registro #" . ($indice+1) . ". - Mensaje de error:" . $ex->getMessage());
+				}
+			}
 			
 			//----------------------------------------
 			//Eliminar archivo temporal
@@ -1190,7 +1240,7 @@ class Popayan
 			//Eliminar archivo temporal
 			\Storage::disk('archivos')->delete($nombreArchivoTmp . "." . $extension);
 		}
-		// return $response;
+		return $response;
 	}
 	
 }
