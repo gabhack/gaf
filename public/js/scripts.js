@@ -70,3 +70,19 @@ $( "#pagaduria" ).change(function() {
 	}
 
 });
+
+$( "#asesor" ).change(function() {
+
+	if ($( "#asesor" ).val() !== 'nuevo') {
+		//Ocultar
+		if ( !document.getElementById("asesor_custom").classList.contains('hidden') ){
+			document.getElementById("asesor_custom").classList.add('hidden');
+			document.getElementById("asesor_custom").required = false;
+		}
+
+	} else {
+		document.getElementById("asesor_custom").classList.remove('hidden');
+		document.getElementById("asesor_custom").required = true;
+	}
+
+});

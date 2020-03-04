@@ -241,7 +241,7 @@ Route::group(["prefix" => "ciudades"], function(){
 });
 
 
-// Te Recuperamos
+// Estudios de clientes
 Route::group(["prefix" => "terecuperamos"], function(){
 	Route::get('/', 'TerecuperamosController@index');
 	
@@ -313,6 +313,21 @@ Route::group(["prefix" => "consultas"], function(){
 	Route::get('/', 'ConsultasController@index');
 
 	Route::post('/{id}', 'ConsultasController@consultar');
+});
+
+// Estudios
+Route::group(["prefix" => "estudios"], function(){
+
+	Route::get('/', 'EstudiosController@index');
+
+	Route::get('/nuevoestudio', 'EstudiosController@paso1');
+	Route::post('/iniciar', 'EstudiosController@iniciar');
+	Route::post('/guardar', 'EstudiosController@guardar');
+
+	Route::get('/editar/{id}', 'EstudiosController@editar');
+	Route::post('/actualizar', 'EstudiosController@actualizar');
+
+	Route::get('/borrar/{id}', 'EstudiosController@eliminar');
 });
 
 Auth::routes();

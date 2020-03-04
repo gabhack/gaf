@@ -107,3 +107,22 @@ table.dataTable.no-footer{
 	background: #3097D1;
 	color:white;
 }
+
+.panel-heading{
+	font-size: 1.2em;
+}
+
+.input-verde{
+	background-color: #7dd47d;
+	border: 1px solid #2e822e;
+}
+
+.input-amarillo{
+	background-color: #efdc68;
+	border: 1px solid #ab9a30;
+}
+
+.input-rojo{
+	background-color: #d47d7d;
+	border: 1px solid #822e2e;
+}

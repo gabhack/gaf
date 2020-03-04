@@ -16,11 +16,6 @@ class Estudiostr extends Model
 		return $this->hasOne('\App\Clientes', 'id', 'clientes_id');
 	}
 	
-	public function base()
-	{
-		return $this->hasOne('\App\Bases', 'id', 'bases_id');
-	}
-	
 	public function capacidad()
 	{
 		return $this->hasOne('\App\Capacidades', 'estudios_id', 'id');
@@ -49,5 +44,15 @@ class Estudiostr extends Model
 	public function condicionaf()
 	{
 		return $this->hasOne('\App\Condicionesaf', 'estudios_id', 'id');
+	}
+	
+	public function asesor()
+	{
+		return $this->hasOne('\App\Asesores', 'id', 'asesores_id');
+	}
+
+	public function registro()
+	{
+		return $this->hasOne('\App\Registrosfinancieros', 'id', 'registros_id');
 	}
 }

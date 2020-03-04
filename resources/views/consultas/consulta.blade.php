@@ -4,12 +4,12 @@
 
     <div class="row">
         <div class="col-md-12">
-            <a class="btn btn-primary" href="{{url('consultas')}}"><< Atrás</a>
+            <a class="btn btn-primary" href="{{url()->previous()}}"><< Atrás</a>
             <h3>Información de: {{$cliente->nombres}}</h3>
         </div>
         <div class="col-md-8">
             <div class="panel panel-default">
-                <div class="panel-heading"><b>Información general</b></div>
+                <div class="panel-heading"><b>Información básica</b></div>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-6">
@@ -113,7 +113,7 @@
 
         @if ($ultimoregistro)   
             <div class="col-md-12">
-                <h3>Información de Comprobante pago (Periodo {{$ultimoregistro->periodo}})</h3>
+                <h3>Información de Comprobante de pago (Periodo {{$ultimoregistro->periodo}})</h3>
             </div>
 
             <div class="col-md-6">

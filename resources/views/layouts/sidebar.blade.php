@@ -46,6 +46,7 @@
 
 			@if (Auth::user()->roles_id == 4)
 				<li><a href="{{url('consultas')}}"><i class="fa fa-user"></i> <span>Consultar persona</span></a></li>
+				<li><a href="{{url('estudios')}}"><i class="fa fa-handshake-o"></i> <span>Estudios</span></a></li>
 			@endif
 
 			<li><a href="{{url('logout')}}"><i class="fa fa-sign-out"></i> <span>Salir</span></a></li>

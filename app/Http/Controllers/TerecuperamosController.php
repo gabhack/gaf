@@ -35,7 +35,7 @@ class TerecuperamosController extends Controller
      */
     public function create()
     {
-		return view('terecuperamos/crear');
+		return view('terecuperamos/create');
     }
 
     /**
@@ -76,8 +76,7 @@ class TerecuperamosController extends Controller
         $tipo_embargos = \App\Tiposembargos::OrderBy('tipo')->get();
 		
 		$periodo = date('Ym', strtotime(date('Y-m'). " -1 month"));
-		$dctos_aplicados = \App\Descuentosaplicados::where('periodo', $periodo)
-							->where('clientes_id', $estudio->cliente->id)
+		$dctos_aplicados = \App\Descuentosaplicados::where('clientes_id', $estudio->cliente->id)
 							->where('pagadurias_id', $estudio->base->pagaduria->id)
 							->count();
 							
@@ -151,18 +150,31 @@ class TerecuperamosController extends Controller
 		
 		$maxCupo = $cupoMaximo + $comprasAliado;
 		
-		
 		$observaciones = \App\Observaciones::where('estudios_id', $estudio->id)->orderBy('created_at', 'DESC')->get();
 		
-		return view("terecuperamos/editar")->with(["estudio" => $estudio, "tipo_embargos" => $tipo_embargos, 
-													"dctos_aplicados" => $dctos_aplicados, "otros_ingresos" => $otros_ingresos,
-													"aliados" => $aliados, "sectores" => $sectores, "estados_cartera" => $estados_cartera,
-													"carteras" => $carteras, 'tasa_ck' => $tasa_ck, "totalCarteras" => $totalCarteras, 
-													"iva" => $iva, 'cupoMaximo' => $cupoMaximo, 'valor_juridico' => $valor_juridico,
-													"costos" => $costos, "anticipo" => $anticipo, "gmf" => $gmf, "seguro" => $seguro,
-													"maxCupo" => $maxCupo, "saldoNegociado" => $saldoNegociado, "tasaAf" => $tasaAf,
-													"observaciones" => $observaciones, 
-												]);
+		return view("terecuperamos/editar")->with([
+            "estudio" => $estudio,
+            "tipo_embargos" => $tipo_embargos,
+            "dctos_aplicados" => $dctos_aplicados,
+            "otros_ingresos" => $otros_ingresos,
+            "aliados" => $aliados,
+            "sectores" => $sectores,
+            "estados_cartera" => $estados_cartera,
+            "carteras" => $carteras,
+            "tasa_ck" => $tasa_ck,
+            "totalCarteras" => $totalCarteras,
+            "iva" => $iva,
+            "cupoMaximo" => $cupoMaximo,
+            'valor_juridico' => $valor_juridico,
+            "costos" => $costos,
+            "anticipo" => $anticipo,
+            "gmf" => $gmf,
+            "seguro" => $seguro,
+            "maxCupo" => $maxCupo,
+            "saldoNegociado" => $saldoNegociado,
+            "tasaAf" => $tasaAf,
+            "observaciones" => $observaciones,
+        ]);
     }
 
     /**

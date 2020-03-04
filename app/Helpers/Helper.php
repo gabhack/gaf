@@ -101,7 +101,16 @@ if (!function_exists('calcularCapacidad')) {
 		}
 		
 		
-		return array('compraCartera' => $compraCartera, 'libreInversion' => $libreInversion);
+		return array(
+			'compraCartera' => array(
+				'valor' => $compraCartera,
+				'color' => ($compraCartera > 0 ? 'verde' : ($compraCartera == 0 ? 'amarillo' : 'rojo'))
+			), 
+			'libreInversion' => array(
+				'valor' => $libreInversion,
+				'color' => ($libreInversion > 0 ? 'verde' : ($libreInversion == 0 ? 'amarillo' : 'rojo'))
+			)
+		);
 	}
 }
 
@@ -398,6 +407,32 @@ if (!function_exists('totalizar_concepto')) {
 			$total += $concepto->valor;
 		}
 		return $total;
+	}
+}
+
+if (!function_exists('sueldobasico')) {
+	function sueldobasico($data)
+	{
+		$res = 0;
+		foreach ($data as $key => $concepto) {
+			if ($concepto->cod_concepto == 'SUEBA') {
+				$res = $concepto->valor;
+			}
+		}
+		return $res;
+	}
+}
+
+if (!function_exists('sueldoadicional')) {
+	function sueldoadicional($data)
+	{
+		$res = 0;
+		foreach ($data as $key => $concepto) {
+			if (strpos($concepto->concepto, 'AA-Asignacion Adicional Rector') !== false || strpos($concepto->concepto, 'AA-Asignacion Adicional Coordinador') !== false) {
+				$res = $concepto->valor;
+			}
+		}
+		return $res;
 	}
 }
 
