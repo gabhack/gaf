@@ -17,7 +17,8 @@
 		<link href="{{asset('css/bootstrap-4.3.1/dist/css/bootstrap.min.css')}}" rel="stylesheet">
 		<link href="{{asset('css/simple-sidebar.css')}}" rel="stylesheet">    
 		<link href="{{asset('css/font-awesome-4.7.0/css/font-awesome.min.css')}}" rel="stylesheet">
-		<link href="{{asset('css/styles.css')}}" rel="stylesheet">    
+		<link href="{{asset('css/styles.css')}}" rel="stylesheet">
+		@yield('css')  
 	</head>
 	<body class="skin-blue sidebar-mini">
 		<!-- Loader -->
@@ -48,9 +49,12 @@
 		</div>
 			
 		<!-- Scripts -->
+		<!-- Scripts para funcionalidad global -->
 		<script src="{{asset('js/app.js')}}"></script>
 		<script src="{{asset('css/bootstrap-4.3.1/dist/js/bootstrap.bundle.min.js')}}"></script>
-		<script src="{{asset('js/scripts.js')}}"></script>		
-				
+		<!-- Scripts de aplicación -->
+		<script src="{{asset('js/scripts.js')}}"></script>
+		@yield('js')
+
 	</body>
 </html>

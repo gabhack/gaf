@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('css')
+    <link href="{{asset('css/gijgo-combined-1.9.13/css/gijgo.min.css')}}" rel="stylesheet">
+@endsection
+
 @section('content')
     <form id="form_guardar" action="/estudios/actualizar" method="POST" enctype="multipart/form-data">
         {!! Form::token() !!}
@@ -241,6 +245,43 @@
                     </div>
                 </div>
             @endif
+            
+            <div class="col-md-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading"><b>Carteras por comprar</b></div>
+                        <div class="panel-body">
+                            <button type="button" id="btnAgregarFila" class="btn btn-primary">Agregar cartera</button>
+                            <table id="grid" onsubmit="return false;" class="table table-hover table-striped table-condensed table-bordered">
+                                <!-- <th class="text-center">ID</th> -->
+                                <!-- <th class="text-center">Entidad</th> -->
+                            </table>
+
+                            <!-- <table class="table table-hover table-striped table-condensed table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Concepto</th>
+                                        <th class="text-center">Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (ingresos_por_registro($registro->id) as $ingreso)
+                                        <tr>
+                                            <td>{{$ingreso->concepto}}</td>
+                                            <td class="text-center">{{mneyformat($ingreso->valor)}}</td>                                          
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td><b>TOTAL</b></td>
+                                        <td style="text-align: center;"><b>{{mneyformat(totalizar_concepto(ingresos_por_registro($registro->id)))}}</b></td>
+                                    </tr>
+                                </tfoot>
+                            </table> -->
+                        </div>
+                    </div>
+                </div>
+
             <div class="col-md-12">
                 <div class="panel panel-primary">
                     <div class="panel-heading">Descuentos no aplicados</div>
@@ -335,4 +376,10 @@
         </div>
     </form>
 
+@endsection
+
+@section('js')
+    <script src="{{asset('js/jquery-3.4.1.min.js')}}"></script>
+    <script src="{{asset('css/gijgo-combined-1.9.13/js/gijgo.min.js')}}"></script>
+    <script src="{{asset('js/TablaCarteras.js')}}"></script>
 @endsection
