@@ -269,6 +269,13 @@ if (!function_exists('calificaciones')) {
 			'A' => 'A',
 			'B' => 'B',
 			'C' => 'C',
+			'D' => 'D',
+			'F' => 'F',
+			'G' => 'G',
+			'H' => 'H',
+			'I' => 'I',
+			'J' => 'J',
+			'K' => 'K',
 		);
 		
 	}

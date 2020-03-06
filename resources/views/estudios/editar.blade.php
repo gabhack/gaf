@@ -14,7 +14,7 @@
                 </div>
                 <h3>Cliente: {{$cliente->nombres}}</h3>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-7">
                 <div class="panel panel-primary">
                     <div class="panel-heading"><b>Información básica</b></div>
                     <div class="panel-body">
@@ -83,12 +83,15 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <div class="panel panel-primary">
-                    <div class="panel-heading"><b>Asesor asignado</b></div>
+                    <div class="panel-heading"><b>Te Recuperamos</b></div>
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-5">
+                                <label class="label-consulta">Asesor asignado</label>
+                            </div>
+                            <div class="col-md-7">
                                 <select name="asesor_id" class="custom-select form-control" required>
                                     <option disabled value="">Seleccione uno...</option>
                                     @foreach ($asesores as $asesorgen)
@@ -96,9 +99,28 @@
                                     @endforeach
                                     <option value="nuevo">--Nuevo Asesor</option>
                                 </select>
-                            </div>
-                            <div class="col-md-12">
                                 <input id="asesor_custom" class="hidden form-control" type="text" name="nuevo_asesor" id="nuevo_asesor">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <label class="label-consulta">Desición TR</label>
+                            </div>
+                            <div class="col-md-7">
+                                <select name="desiciones" class="custom-select form-control" required>
+                                    <option disabled value="">Seleccione uno...</option>
+                                    @foreach(decisiones_estudios() as $key => $decision)
+                                        <option value="{{$key}}" {{$estudio->decision == $key ? 'selected="selected"' : '' }} >{{$decision}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <label class="label-consulta">Observaciones</label>
+                            </div>
+                            <div class="col-md-7">
+                                <textarea class="form-control" type="text" name="observaciones" id="observaciones" maxlength="100">{{$estudio->observaciones}}</textarea>
                             </div>
                         </div>
                     </div>
@@ -161,6 +183,37 @@
                             <div class="col-md-3">
                                 <label class="label-consulta" for="pad">Correo electrónico:
                                     <p class="pad">{{ $cliente->correo == '' ? 'No proporcionado' : $cliente->correo }}</p>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading"><b>Centrales de riesgo</b></div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <label class="label-consulta" for="pad">Calificación/WAB:
+                                    <select name="calif_wab" class="custom-select form-control" required>
+                                        <option selected disabled value="">Seleccione uno...</option>
+                                        <option disabled value="">Seleccione uno...</option>
+                                        @foreach(calificaciones() as $key => $calificacion)
+                                            <option value="{{$key}}" {{$estudio->central->calificacion_data == $key ? 'selected="selected"' : '' }} >{{$calificacion}}</option>
+                                        @endforeach
+                                    </select>
+                                </label>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <label class="label-consulta" for="pad">Puntaje Datacredito:
+                                    <input type="text" name="puntaje_datacredito" id="puntaje_datacredito" required value="{{$estudio->central->puntaje_data}}">
+                                </label>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <label class="label-consulta" for="pad">Procesos en contra:
+                                    <input type="number" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="{{$estudio->central->proc_en_contra}}" min="1" max="99">
                                 </label>
                             </div>
                         </div>
@@ -241,7 +294,7 @@
                     </div>
                 </div>
             @endif
-            <div class="col-md-12">
+            <div class="col-md-4">
                 <div class="panel panel-primary">
                     <div class="panel-heading">Descuentos no aplicados</div>
                     <div class="panel-body">
@@ -270,7 +323,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-12">
+            <div class="col-md-4">
                 <div class="panel panel-primary">
                     <div class="panel-heading">Embargos</div>
                     <div class="panel-body">
@@ -298,12 +351,12 @@
                                 </tbody>
                             </table>
                         @else
-                            <p>No hay mensajes de liquidación</p>
+                            <p>No hay embargos</p>
                         @endif
                     </div>
                 </div>
             </div>
-            <div class="col-md-12">
+            <div class="col-md-4">
                 <div class="panel panel-primary">
                     <div class="panel-heading">Mensajes de liquidación</div>
                     <div class="panel-body">
@@ -329,6 +382,52 @@
                         @else
                             <p>No hay mensajes de liquidación</p>
                         @endif
+                    </div>
+                </div>
+            </div>
+
+            @php
+                $total_carteras = 5000000;
+                $total_servicio = $total_carteras*$estudio->condicion->costoservicios/100;
+                $total_total = $total_carteras+$total_servicio;
+            @endphp
+
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Condiciones Te Recuperamos</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <div class="row">
+                                    <div class="col-md-7 text-right">
+                                        <label class="label-consulta" for="pad">Total Carteras a comprar:</label>
+                                    </div>
+                                    <div class="col-md">
+                                        <input class="w-100 text-center" disabled type="text" name="carteras_comprar" id="carteras_comprar" required value="{{mneyformat($total_carteras)}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="row">
+                                    <div class="col-md-7 text-right">
+                                        <label class="label-consulta" for="pad">Total Servicio({{number_format($estudio->condicion->costoservicios, 0, ',', ' ')}}%):</label>
+                                    </div>
+                                    <div class="col-md">
+                                        <input class="w-100 text-center" disabled type="text" name="carteras_comprar" id="carteras_comprar" required value="{{mneyformat($total_servicio)}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="row">
+                                    <div class="col-md-7 text-right">
+                                        <label class="label-consulta" for="pad">Total Servicio + Impuestos:</label>
+                                    </div>
+                                    <div class="col-md">
+                                        <input class="w-100 text-center" disabled type="text" name="carteras_comprar" id="carteras_comprar" required value="{{mneyformat($total_total)}}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

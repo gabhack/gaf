@@ -7,6 +7,8 @@ use App\Asesores as Asesores;
 use App\Estudiostr as Estudios;
 use App\Registrosfinancieros as Registrosfinancieros;
 use App\Parametros as Parametros;
+use App\Centrales as Centrales;
+use App\Condicionestr as Condicionestr;
 use Illuminate\Http\Request;
 
 class EstudiosController extends Controller
@@ -54,6 +56,8 @@ class EstudiosController extends Controller
     {
         // Parámetros
         $smlv = Parametros::where('llave', 'SMLV')->first();
+        $iva = Parametros::where('llave', 'IVA')->first()->valor;
+        $tasack = Parametros::where('llave', 'TASA_CK')->first()->valor;
 
         $cliente = Clientes::where("documento", "=", $request->documento)->first();
         $asesores = Asesores::all();
@@ -104,7 +108,9 @@ class EstudiosController extends Controller
             "sueldocompleto" => $sueldocompleto,
             "aportes" => $aportes,
             "totaldescuentos" => $totaldescuentos,
-            "cupos" => $cupos
+            "cupos" => $cupos,
+            "iva" => $iva,
+            "tasack" => $tasack
         ]);
     }
 
@@ -115,11 +121,18 @@ class EstudiosController extends Controller
      */
     public function guardar(Request $request)
     {
+        //Parametros
+        $tasack = Parametros::where('llave', 'TASA_CK')->first()->valor;
+
+        //Nuevo estudio
         $newestudio = new Estudios;
         $newestudio->clientes_id = $request->cliente_id;
         $newestudio->user_id = \Auth::user()->id;
         $newestudio->registros_id = $request->registro_id;
-
+        $newestudio->decision = strtoupper($request->desiciones);
+        if ($request->observaciones !== '') {
+            $newestudio->observaciones = $request->observaciones;
+        }
         if ($request->asesor_id == 'nuevo') {
             $newasesor = new Asesores;
             $newasesor->nombres = $request->nuevo_asesor;
@@ -128,11 +141,25 @@ class EstudiosController extends Controller
         } else {
             $newestudio->asesores_id = $request->asesor_id;
         }
-
         $newestudio->fecha = date("Y-m-d");
         $newestudio->periodo_estudio = date("Ym");
-
         $newestudio->save();
+
+        //Nuevo registro de centrales
+        $newcentrales = new Centrales;
+        $newcentrales->estudios_id = $newestudio->id;
+        $newcentrales->calificacion_data = $request->calif_wab;
+        $newcentrales->puntaje_data = $request->puntaje_datacredito;
+        if ($request->proc_en_contra !== '') {
+            $newcentrales->proc_en_contra = $request->proc_en_contra;
+        }
+        $newcentrales->save();
+
+        //Registro de Condiciones
+        $condicionestr = new Condicionestr;
+        $condicionestr->estudios_id = $newestudio->id;
+        $condicionestr->costoservicios = $tasack;
+        $condicionestr->save();
 
         return redirect('estudios');
     }
@@ -147,6 +174,7 @@ class EstudiosController extends Controller
     {
         // Parámetros
         $smlv = Parametros::where('llave', 'SMLV')->first();
+        $iva = Parametros::where('llave', 'IVA')->first()->valor;
 
         $estudio = Estudios::find($id);
         $registro = Registrosfinancieros::find($estudio->registros_id);
@@ -166,7 +194,7 @@ class EstudiosController extends Controller
         }
 
         $aportes = 0;
-        $vinculacion = '';		
+        $vinculacion = '';
 		if($estudio->registro->pagaduria->de_pensiones)
 		{
             $vinculacion = 'PENS';
@@ -200,7 +228,8 @@ class EstudiosController extends Controller
             "sueldocompleto" => $sueldocompleto,
             "aportes" => $aportes,
             "totaldescuentos" => $totaldescuentos,
-            "cupos" => $cupos
+            "cupos" => $cupos,
+            "iva" => $iva
         ]);
     }
 
@@ -214,7 +243,8 @@ class EstudiosController extends Controller
     public function actualizar(Request $request)
     {
         $estudio = Estudios::find($request->estudio_id);
-
+        $estudio->decision = strtoupper($request->desiciones);
+        $estudio->observaciones = $request->observaciones;
         if ($request->asesor_id == 'nuevo') {
             $newasesor = new Asesores;
             $newasesor->nombres = $request->nuevo_asesor;
@@ -224,6 +254,13 @@ class EstudiosController extends Controller
             $estudio->asesores_id = $request->asesor_id;
         }
         $estudio->save();
+        
+        //Registro de centrales
+        $central = $estudio->central;
+        $central->calificacion_data = $request->calif_wab;
+        $central->puntaje_data = $request->puntaje_datacredito;
+        $central->proc_en_contra = $request->proc_en_contra;
+        $central->save();
 		
 		return redirect('estudios');
     }

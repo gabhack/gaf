@@ -69,6 +69,8 @@ table.dataTable.no-footer{
 	font-weight: bold;
 }
 
+.label-consulta>select{width: auto;}
+
 .login-footer {
     background: #fff;
     padding: 15px;
