@@ -1,11 +1,13 @@
 var grid;
 
 //Datos para pruebas
-const data = [
+const dataOriginal = [
   {
-    ID: 1,
+    ID: "1",
     Entidad: "BBVA 0261",
-    Sector: "FINAN/DATA Y CIFIN",
+    Data: "FINANCIERO",
+    Cifin: "FINANCIERO",
+    // Sector: "FINAN/DATA Y CIFIN",
     Estado: "AL DIA",
     CompraTR: "NO",
     CompraCKoAliado: "CK",
@@ -19,9 +21,11 @@ const data = [
     FechaVencimiento: ""
   },
   {
-    ID: 2,
+    ID: "2",
     Entidad: "EMBARGO - ANA CARLINA MONTOYA",
-    Sector: "",
+    Data: "",
+    Cifin: "",
+    // Sector: "",
     Estado: "",
     CompraTR: "SI",
     CompraCKoAliado: "CK",
@@ -36,10 +40,13 @@ const data = [
   }
 ];
 
+var data = dataOriginal;
+
 const dataEstructura = {
-  ID: 0,
+  ID: "0",
   Entidad: "",
-  Sector: "",
+  Data: "",
+  Cifin: "",
   Estado: "",
   CompraTR: "",
   CompraCKoAliado: "",
@@ -53,13 +60,18 @@ const dataEstructura = {
   FechaVencimiento: ""
 };
 
+var IDfilaTotales;
+
+//Funciones auxiliares
+borrarElementoData = elemID => data.filter(e => e.ID !== elemID);
+
 calcularTotales = () => {
   return data.reduce(
     (acum, currentValue, index, arr) => {
       //Le asigna el último ID disponible
       if (index === arr.length - 1) {
-        acum.ID = currentValue.ID + 1;
-        lastID = acum.ID;
+        acum.ID = `${parseInt(currentValue.ID) + 1}`;
+        IDfilaTotales = acum.ID;
       }
       acum.Cuota += currentValue.Cuota;
       acum.SaldoCarteraCentrales += currentValue.SaldoCarteraCentrales;
@@ -72,21 +84,34 @@ calcularTotales = () => {
   );
 };
 
-obtenerUltimoRegistro = grid => grid.get(grid.count(true));
+// TODO: Borrar esta función obtenerUltimoRegistro
+// obtenerUltimoRegistro = () => grid.get(grid.count(true));
 
-asignarSiguienteID = (grid, dataEstructura) => {
-  let ultimoRegistro = obtenerUltimoRegistro(grid);
-  dataEstructura.ID = ultimoRegistro.ID + 1;
+asignarSiguienteID = dataEstructura => {
+  dataEstructura.ID = `${parseInt(data[data.length - 1].ID) + 1}`;
   return dataEstructura;
 };
 
-eliminarTotales = grid => {
-  let ultimoRegistro = obtenerUltimoRegistro(grid);
-  grid.removeRow(`${ultimoRegistro.ID}`);
+eliminarTotales = (blnRenderGrid = false) => {
+  data.pop(); //Elimina el último elemento, el cual siempre son los totales
+  if (blnRenderGrid) grid.render();
 };
 
 //Opciones para los dropdown (o select)
 const SI_NO_Opts = ["SI", "NO"];
+
+const Data_Cifin_Opts = ["REAL", "FINANCIERO", "COOPERATIVO"];
+
+const EstadoOpts = [
+  "AL DIA",
+  "MORA 30-60",
+  "MORA 60-90",
+  "MORA 90-120",
+  "MORA 120-180",
+  "MORA >180",
+  "DUDOSO RECAUDO",
+  "CARTERA CASTIGADA"
+];
 
 const CompraCKoAliadoOpts = ["No", "CK", "Aliado 1", "Aliado 2"];
 
@@ -116,13 +141,9 @@ const render_convertirNumberAPorcentaje = (
   $cell,
   $displayEl
 ) => {
-  let porcentajeCalculado = 0;
-
-  porcentajeCalculado = record.DescuentoLogrado / record.VlrInicioNegociacion;
-
   //Formatear resultado
   $cell.css("font-style", "italic");
-  return porcentajeFormatter.format(porcentajeCalculado);
+  return porcentajeFormatter.format(value);
 };
 
 //Renders para calculos de opreaciones
@@ -130,39 +151,63 @@ const render_calcularSaldoCarteraNegociada = (
   value,
   record,
   $cell,
-  $displayEl
+  $displayEl,
+  id
 ) => {
-  //TODO: Validar que si es un total no haga el cálculo
-
-  value = record.VlrInicioNegociacion - record.DescuentoLogrado; //Cálculo del campo
+  if (id !== IDfilaTotales) {
+    //Si no es una fila totales se calcula el dato
+    value = record.VlrInicioNegociacion - record.DescuentoLogrado; //Cálculo del campo
+  }
   return render_convertirNumberAMoney(value, record, $cell, $displayEl);
 };
 
-const render_calcularPorcentaje = (value, record, $cell, $displayEl) => {
-  value = record.DescuentoLogrado / record.VlrInicioNegociacion; //Cálculo del campo
-  return render_convertirNumberAPorcentaje(value, record, $cell, $displayEl);
+const render_calcularPorcentaje = (value, record, $cell, $displayEl, id) => {
+  if (id !== IDfilaTotales) {
+    //Si no es una fila totales se calcula el dato
+    if (record.VlrInicioNegociacion !== 0) {
+      value = record.DescuentoLogrado / record.VlrInicioNegociacion; //Cálculo del campo
+    }
+    return render_convertirNumberAPorcentaje(value, record, $cell, $displayEl);
+  }
+};
+
+const render_activarIcono = (value, record, $cell, $displayEl, id) => {
+  if (id !== IDfilaTotales) {
+    $displayEl.html(`<span class="fa fa-remove"></span>`);
+  }
 };
 
 //Funciones para CRUD de la grilla
 btnAgregarFila_clickHandler = () => {
-  eliminarTotales(grid);
-  var nuevaFila = asignarSiguienteID(grid, { ...dataEstructura });
-  grid.addRow(nuevaFila);
-  grid.addRow(calcularTotales());
+  eliminarTotales();
+  var nuevaFila = asignarSiguienteID({ ...dataEstructura });
+  data.push(nuevaFila);
+  data.push(calcularTotales());
+  grid.render(data);
 };
 
-Delete = e => {
-  if (confirm("Are you sure?")) {
-    grid.removeRow(e.data.id);
+deleteRow_ClickHandler = e => {
+  if (e.data.id !== IDfilaTotales) {
+    if (confirm("Seguro que desea eliminar esta cartera?")) {
+      data = borrarElementoData(e.data.id);
+      grid.removeRow(e.data.id);
+      grid.render(data);
+    }
   }
 };
 
 // Declaración de las columnas
 const columnas = [
-  { field: "ID", width: 25, hidden: true },
+  {
+    field: "ID",
+    width: 25,
+    title: "ID        ",
+    mode: "ReadOnly",
+    hidden: true
+  },
   {
     field: "Entidad",
-    editField: "",
+    editField: "Entidad",
     width: 150,
     type: "text",
     title: "Entidad",
@@ -170,22 +215,35 @@ const columnas = [
     mode: "EditOnly"
   },
   {
-    field: "Sector",
-    type: "text",
-    title: "Sector",
-    editor: true,
+    field: "Data",
+    editField: "Data",
+    type: "dropdown",
+    width: 50,
+    title: "DATA",
+    editor: { dataSource: Data_Cifin_Opts },
+    mode: "EditOnly"
+  },
+  {
+    field: "Cifin",
+    editField: "Cifin",
+    type: "dropdown",
+    width: 50,
+    title: "CIFIN",
+    editor: { dataSource: Data_Cifin_Opts },
     mode: "EditOnly"
   },
   {
     field: "Estado",
-    type: "text",
+    editField: "Estado",
+    type: "dropdown",
     width: 60,
     title: "Estado",
-    editor: true,
+    editor: { dataSource: EstadoOpts },
     mode: "EditOnly"
   },
   {
     field: "CompraTR",
+    editField: "CompraTR",
     type: "dropdown",
     width: 55,
     title: "Compra TR",
@@ -194,13 +252,17 @@ const columnas = [
   },
   {
     field: "CompraCKoAliado",
+    editField: "CompraCKoAliado",
     type: "dropdown",
+    width: 40,
     title: "Compra CK o Aliado",
     editor: { dataSource: CompraCKoAliadoOpts },
     mode: "EditOnly"
   },
   {
     field: "CalificacionWAB",
+    editField: "CalificacionWAB",
+    width: 50,
     type: "dropdown",
     title: "Calificacion WAB",
     editor: { dataSource: CalificacionWABOpts },
@@ -208,6 +270,7 @@ const columnas = [
   },
   {
     field: "Cuota",
+    editField: "Cuota",
     type: "text",
     title: "Cuota",
     align: "rigth",
@@ -217,6 +280,7 @@ const columnas = [
   },
   {
     field: "SaldoCarteraCentrales",
+    editField: "SaldoCarteraCentrales",
     type: "text",
     title: "Saldo Cartera Centrales",
     align: "rigth",
@@ -226,6 +290,7 @@ const columnas = [
   },
   {
     field: "VlrInicioNegociacion",
+    editField: "VlrInicioNegociacion",
     type: "text",
     title: "Vlr. inicio negociación",
     align: "rigth",
@@ -235,6 +300,7 @@ const columnas = [
   },
   {
     field: "DescuentoLogrado",
+    editField: "DescuentoLogrado",
     type: "text",
     title: "Descuento logrado",
     align: "rigth",
@@ -244,15 +310,16 @@ const columnas = [
   },
   {
     field: "SaldoCarteraNegociada",
+    editField: "SaldoCarteraNegociada",
     type: "text",
     title: "Saldo cartera negociada",
     align: "rigth",
     renderer: render_calcularSaldoCarteraNegociada,
-    editor: true,
-    mode: "EditOnly"
+    mode: "ReadOnly"
   },
   {
     field: "PctjeNegociacion",
+    editField: "PctjeNegociacion",
     width: 60,
     type: "text",
     title: "% Neg",
@@ -260,6 +327,7 @@ const columnas = [
   },
   {
     field: "FechaVencimiento",
+    editField: "FechaVencimiento",
     type: "date",
     title: "Fecha Ven.",
     editor: true,
@@ -268,29 +336,29 @@ const columnas = [
   {
     width: 25,
     align: "center",
-    type: "icon",
-    icon: "fa fa-remove",
+    // type: "icon",
+    // icon: "fa fa-remove",
+    // tmpl: '<span class="fa fa-remove"></span>',
     tooltip: "Delete",
-    events: { click: Delete }
+    renderer: render_activarIcono,
+    events: { click: deleteRow_ClickHandler }
   }
 ];
 
 $(document).ready(function() {
   data.push(calcularTotales());
   grid = $("#grid").grid({
+    primaryKey: "ID",
     dataSource: data,
     uiLibrary: "bootstrap4",
     iconsLibrary: "fontawesome",
-    primaryKey: "ID",
     resizableColumns: true,
     inlineEditing: true,
     columns: columnas
   });
   grid.on("rowDataChanged", (e, id, record) => {
-    console.log(e.data);
-
-    // // Clone the record in new object where you can format the data to format that is supported by the backend.
-    // var data = $.extend(true, {}, record);
+    // Clone the record in new object where you can format the data to format that is supported by the backend.
+    var gridData = $.extend(true, {}, record);
     // // Format the date to format that is supported by the backend.
     // data.DateOfBirth = gj.core
     //   .parseDate(record.DateOfBirth, "mm/dd/yyyy")

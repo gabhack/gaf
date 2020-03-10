@@ -250,34 +250,14 @@
                     <div class="panel panel-primary">
                         <div class="panel-heading"><b>Carteras por comprar</b></div>
                         <div class="panel-body">
-                            <button type="button" id="btnAgregarFila" class="btn btn-primary">Agregar cartera</button>
-                            <table id="grid" onsubmit="return false;" class="table table-hover table-striped table-condensed table-bordered">
-                                <!-- <th class="text-center">ID</th> -->
-                                <!-- <th class="text-center">Entidad</th> -->
+                            <button type="button" id="btnAgregarFila" class="btn btn-primary">Agregar cartera</button><br><br>
+                            <table id="grid" class="table table-hover table-condensed table-bordered">
+                                <style>
+                                    th{
+                                        background-color:darkgrey;
+                                    }
+                                </style>
                             </table>
-
-                            <!-- <table class="table table-hover table-striped table-condensed table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">Concepto</th>
-                                        <th class="text-center">Valor</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (ingresos_por_registro($registro->id) as $ingreso)
-                                        <tr>
-                                            <td>{{$ingreso->concepto}}</td>
-                                            <td class="text-center">{{mneyformat($ingreso->valor)}}</td>                                          
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td><b>TOTAL</b></td>
-                                        <td style="text-align: center;"><b>{{mneyformat(totalizar_concepto(ingresos_por_registro($registro->id)))}}</b></td>
-                                    </tr>
-                                </tfoot>
-                            </table> -->
                         </div>
                     </div>
                 </div>
