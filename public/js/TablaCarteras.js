@@ -5,7 +5,7 @@ const dataOriginal = [
   {
     ID: "1",
     Entidad: "BBVA 0261",
-    SoloEfectivo: "",
+    SoloEfectivo: false,
     Data: "FINANCIERO",
     Cifin: "FINANCIERO",
     Estado: "AL DIA",
@@ -20,28 +20,28 @@ const dataOriginal = [
     PctjeNegociacion: 0,
     FechaVencimiento: ""
   },
+  // {
+  //   ID: "2",
+  //   Entidad: "EMBARGO - ANA CARLINA MONTOYA",
+  //   SoloEfectivo: "",
+  //   Data: "",
+  //   Cifin: "",
+  //   Estado: "",
+  //   CompraTR: "SI",
+  //   CompraCKoAliado: "CK",
+  //   CalificacionWAB: "A",
+  //   Cuota: 562785,
+  //   SaldoCarteraCentrales: 6000000,
+  //   VlrInicioNegociacion: 6000000,
+  //   DescuentoLogrado: 0,
+  //   SaldoCarteraNegociada: 0,
+  //   PctjeNegociacion: 0,
+  //   FechaVencimiento: ""
+  // },
   {
     ID: "2",
-    Entidad: "EMBARGO - ANA CARLINA MONTOYA",
-    SoloEfectivo: "",
-    Data: "",
-    Cifin: "",
-    Estado: "",
-    CompraTR: "SI",
-    CompraCKoAliado: "CK",
-    CalificacionWAB: "A",
-    Cuota: 562785,
-    SaldoCarteraCentrales: 6000000,
-    VlrInicioNegociacion: 6000000,
-    DescuentoLogrado: 0,
-    SaldoCarteraNegociada: 0,
-    PctjeNegociacion: 0,
-    FechaVencimiento: ""
-  },
-  {
-    ID: "3",
     Entidad: "COOPSERV 0656-6217-6347-6427-6479-6628-68",
-    SoloEfectivo: 1,
+    SoloEfectivo: true,
     Data: "FINANCIERO",
     Cifin: "FINANCIERO",
     Estado: "AL DIA",
@@ -58,14 +58,15 @@ const dataOriginal = [
   }
 ];
 
-var tipoCliente; //A,AA,AAA,B1,B2,B3,C
-
 var data = dataOriginal;
+
+var IDfilaTotales;
+var tipoCliente; //A,AA,AAA,B1,B2,B3,C
 
 const dataEstructura = {
   ID: "0",
   Entidad: "",
-  SoloEfectivo: 0,
+  SoloEfectivo: false,
   Data: "",
   Cifin: "",
   Estado: "",
@@ -81,32 +82,93 @@ const dataEstructura = {
   FechaVencimiento: ""
 };
 
-var IDfilaTotales;
-
 //Funciones auxiliares
 borrarElementoData = elemID => data.filter(e => e.ID !== elemID);
 
+/**
+ * Se asume que cuando se ejecuta calcular totales en 'data', no se encuentra la fila totales
+ */
 calcularTotales = () => {
-  return data.reduce(
+  let filaTotalesCalculada;
+  let cantCarteras = 0;
+  let cantCarterasEnMora = 0;
+  let cantCarterasSoloEfectivo = 0;
+  let cantCarterasCastigadas = 0;
+  let cantEmbargos = 0;
+
+  filaTotalesCalculada = data.reduce(
     (acum, currentValue, index, arr) => {
+      //CÁLCULO DE TOTALES
       //Le asigna el último ID disponible
       if (index === arr.length - 1) {
         acum.ID = `${parseInt(currentValue.ID) + 1}`;
         IDfilaTotales = acum.ID;
       }
+
       acum.Cuota += currentValue.Cuota;
       acum.SaldoCarteraCentrales += currentValue.SaldoCarteraCentrales;
       acum.VlrInicioNegociacion += currentValue.VlrInicioNegociacion;
       acum.DescuentoLogrado += currentValue.DescuentoLogrado;
       acum.SaldoCarteraNegociada += currentValue.SaldoCarteraNegociada;
+
+      //CÁLCULO DE INFORMACIÓN ADICIONAL
+      cantCarteras = arr.length;
+      cantCarterasSoloEfectivo = currentValue.SoloEfectivo
+        ? cantCarterasSoloEfectivo + 1
+        : cantCarterasSoloEfectivo;
+      cantCarterasEnMora = currentValue.Estado.includes("MORA")
+        ? cantCarterasEnMora + 1
+        : cantCarterasEnMora;
+      cantCarterasCastigadas =
+        currentValue.Estado === "CARTERA CASTIGADA"
+          ? cantCarterasCastigadas + 1
+          : cantCarterasCastigadas;
+      cantEmbargos =
+        currentValue.Estado === "EMBARGO" ? cantEmbargos + 1 : cantEmbargos;
       return acum;
     },
     { ...dataEstructura }
   );
+
+  //Cálculo de tipo de cliente
+  // Cliente tipo A   : No tiene NINGUNA deuda
+  // Cliente tipo AA  : TIENE deudas, NINGUNA en mora y en NINGUNA deuda manejan solo efectivo
+  // Cliente tipo AAA : TIENE deudas, NINGUNA en mora y al menos UNA deuda SOLO maneja efectivo
+  // Cliente tipo B1  : TIENE deudas, SOLO UNA está en mora
+  // Cliente tipo B2  : TIENE deudas, MAS DE UNA está en mora
+  // Cliente tipo B3  : TIENE deudas, MAS DE UNA está en mora y SOLO UNA en cartera castigada
+  // Cliente tipo C   : TIENE deudas, MÁS DE UNA en cartera castigada...   O...  AL MENOS UN embargo
+  if (cantCarteras === 0) {
+    tipoCliente = "AAA";
+  } else {
+    if (cantCarterasCastigadas > 1 || cantEmbargos >= 1) {
+      tipoCliente = "C";
+    } else {
+      if (cantCarterasEnMora === 0) {
+        if (cantCarterasSoloEfectivo === 0) {
+          tipoCliente = "AA";
+        } else {
+          tipoCliente = "A";
+        }
+      } else {
+        if (cantCarterasEnMora === 1) {
+          tipoCliente = "B1";
+        } else {
+          tipoCliente = "B2";
+          if (cantCarterasCastigadas === 1) {
+            tipoCliente = "B3";
+          }
+        }
+      }
+    }
+  }
+
+  return filaTotalesCalculada;
 };
 
 asignarSiguienteID = dataEstructura => {
-  dataEstructura.ID = `${parseInt(data[data.length - 1].ID) + 1}`;
+  let ultimoID = data.length === 0 ? 0 : parseInt(data[data.length - 1].ID);
+  dataEstructura.ID = `${ultimoID + 1}`;
   return dataEstructura;
 };
 
@@ -117,8 +179,11 @@ eliminarTotales = (blnRenderGrid = false) => {
 
 refrescarTotales = () => {
   eliminarTotales();
-  data.push(calcularTotales());
-  grid.render(data);
+  if (data.length !== 0) {
+    //Si no hay datos para refrescar el calculo de los totales, no se pone total
+    data.push(calcularTotales());
+    grid.render(data);
+  }
 };
 
 //Función para cambiar los campos numéricos que quedan como string y pasarlos nuevamente a numericos
@@ -147,7 +212,8 @@ const EstadoOpts = [
   "MORA 120-180",
   "MORA >180",
   "DUDOSO RECAUDO",
-  "CARTERA CASTIGADA"
+  "CARTERA CASTIGADA",
+  "EMBARGO"
 ];
 
 const CompraCKoAliadoOpts = ["No", "CK", "Aliado 1", "Aliado 2"];
@@ -288,7 +354,9 @@ const editManager = (value, record, $cell, $displayEl, id, $grid) => {
 };
 //Funciones para CRUD de la grilla
 btnAgregarFila_clickHandler = () => {
-  eliminarTotales();
+  if (data.length !== 0) {
+    eliminarTotales();
+  }
   var nuevaFila = asignarSiguienteID({ ...dataEstructura });
   data.push(nuevaFila);
   data.push(calcularTotales());
@@ -298,6 +366,7 @@ btnAgregarFila_clickHandler = () => {
 deleteRow_ClickHandler = id => {
   if (confirm("Seguro que desea eliminar esta cartera?")) {
     data = borrarElementoData(id);
+    refrescarTotales();
     grid.removeRow(id);
     grid.render(data);
   }
@@ -461,7 +530,10 @@ $(document).ready(function() {
     columns: columnas
   });
   grid.on("rowDataChanged", rowDataChanged_handler);
-  data.push(calcularTotales());
+  if (data.length !== 0) {
+    //Si no hay datos no se calcula total
+    data.push(calcularTotales());
+  }
   grid.render(data); //Necesario para hacer un binding entre grid y data
 
   $("#btnAgregarFila").on("click", btnAgregarFila_clickHandler);
