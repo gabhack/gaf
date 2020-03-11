@@ -5,9 +5,9 @@ const dataOriginal = [
   {
     ID: "1",
     Entidad: "BBVA 0261",
+    SoloEfectivo: "",
     Data: "FINANCIERO",
     Cifin: "FINANCIERO",
-    // Sector: "FINAN/DATA Y CIFIN",
     Estado: "AL DIA",
     CompraTR: "NO",
     CompraCKoAliado: "CK",
@@ -15,17 +15,17 @@ const dataOriginal = [
     Cuota: 918033,
     SaldoCarteraCentrales: 34158000,
     VlrInicioNegociacion: 34158000,
-    DescuentoLogrado: 3415800,
-    SaldoCarteraNegociada: 34158000,
+    DescuentoLogrado: 0,
+    SaldoCarteraNegociada: 0,
     PctjeNegociacion: 0,
     FechaVencimiento: ""
   },
   {
     ID: "2",
     Entidad: "EMBARGO - ANA CARLINA MONTOYA",
+    SoloEfectivo: "",
     Data: "",
     Cifin: "",
-    // Sector: "",
     Estado: "",
     CompraTR: "SI",
     CompraCKoAliado: "CK",
@@ -34,17 +34,38 @@ const dataOriginal = [
     SaldoCarteraCentrales: 6000000,
     VlrInicioNegociacion: 6000000,
     DescuentoLogrado: 0,
-    SaldoCarteraNegociada: 6000000,
+    SaldoCarteraNegociada: 0,
+    PctjeNegociacion: 0,
+    FechaVencimiento: ""
+  },
+  {
+    ID: "3",
+    Entidad: "COOPSERV 0656-6217-6347-6427-6479-6628-68",
+    SoloEfectivo: 1,
+    Data: "FINANCIERO",
+    Cifin: "FINANCIERO",
+    Estado: "AL DIA",
+    CompraTR: "SI",
+    CompraCKoAliado: "NO",
+    CalificacionWAB: "A",
+    Cuota: 652088,
+    SaldoCarteraCentrales: 16427000,
+    VlrInicioNegociacion: 16427000,
+    DescuentoLogrado: 355925,
+    SaldoCarteraNegociada: 0,
     PctjeNegociacion: 0,
     FechaVencimiento: ""
   }
 ];
+
+var tipoCliente; //A,AA,AAA,B1,B2,B3,C
 
 var data = dataOriginal;
 
 const dataEstructura = {
   ID: "0",
   Entidad: "",
+  SoloEfectivo: 0,
   Data: "",
   Cifin: "",
   Estado: "",
@@ -84,9 +105,6 @@ calcularTotales = () => {
   );
 };
 
-// TODO: Borrar esta función obtenerUltimoRegistro
-// obtenerUltimoRegistro = () => grid.get(grid.count(true));
-
 asignarSiguienteID = dataEstructura => {
   dataEstructura.ID = `${parseInt(data[data.length - 1].ID) + 1}`;
   return dataEstructura;
@@ -95,6 +113,25 @@ asignarSiguienteID = dataEstructura => {
 eliminarTotales = (blnRenderGrid = false) => {
   data.pop(); //Elimina el último elemento, el cual siempre son los totales
   if (blnRenderGrid) grid.render();
+};
+
+refrescarTotales = () => {
+  eliminarTotales();
+  data.push(calcularTotales());
+  grid.render(data);
+};
+
+//Función para cambiar los campos numéricos que quedan como string y pasarlos nuevamente a numericos
+formatearCamposParaIntegridadDATA = id => {
+  data.map(value => {
+    if (parseInt(value.ID) === id) {
+      value.Cuota = parseInt(value.Cuota);
+      value.SaldoCarteraCentrales = parseInt(value.SaldoCarteraCentrales);
+      value.VlrInicioNegociacion = parseInt(value.VlrInicioNegociacion);
+      value.DescuentoLogrado = parseInt(value.DescuentoLogrado);
+      value.SaldoCarteraNegociada = parseInt(value.SaldoCarteraNegociada);
+    }
+  });
 };
 
 //Opciones para los dropdown (o select)
@@ -115,7 +152,19 @@ const EstadoOpts = [
 
 const CompraCKoAliadoOpts = ["No", "CK", "Aliado 1", "Aliado 2"];
 
-const CalificacionWABOpts = ["A", "B", "C", "D", "E", "F", "G", "K"];
+const CalificacionWABOpts = [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
+  "H",
+  "I",
+  "J",
+  "K"
+];
 
 //Renders para que convertir los valores numéricos en cadenas de moneda o de tasa
 const moneyFormatter = new Intl.NumberFormat("es-CO", {
@@ -157,6 +206,9 @@ const render_calcularSaldoCarteraNegociada = (
   if (id !== IDfilaTotales) {
     //Si no es una fila totales se calcula el dato
     value = record.VlrInicioNegociacion - record.DescuentoLogrado; //Cálculo del campo
+    data.map(dataRow => {
+      if (dataRow.ID === id) dataRow.SaldoCarteraNegociada = value;
+    });
   }
   return render_convertirNumberAMoney(value, record, $cell, $displayEl);
 };
@@ -166,6 +218,9 @@ const render_calcularPorcentaje = (value, record, $cell, $displayEl, id) => {
     //Si no es una fila totales se calcula el dato
     if (record.VlrInicioNegociacion !== 0) {
       value = record.DescuentoLogrado / record.VlrInicioNegociacion; //Cálculo del campo
+      data.map(dataRow => {
+        if (dataRow.ID === id) dataRow.PctjeNegociacion = value;
+      });
     }
     return render_convertirNumberAPorcentaje(value, record, $cell, $displayEl);
   }
@@ -177,6 +232,60 @@ const render_activarIcono = (value, record, $cell, $displayEl, id) => {
   }
 };
 
+const editManager = (value, record, $cell, $displayEl, id, $grid) => {
+  if (id !== IDfilaTotales) {
+    let inlineBtnStyle =
+      "background-color: transparent; border-color: transparent; box-shadow: none; padding: 0";
+    var data = $grid.data(),
+      $edit = $(
+        `<button class="btn bg-transparent" style="${inlineBtnStyle}"> <span class="fa fa-pencil"></span> </button>`
+      ).attr("data-key", id),
+      $delete = $(
+        `<button class="btn bg-transparent" style="${inlineBtnStyle}"> <span class="fa fa-remove"></span> </button>`
+      ).attr("data-key", id),
+      $update = $(
+        `<button class="btn bg-transparent" style="${inlineBtnStyle}"> <span class="fa fa-check-circle"></span> </button>`
+      )
+        .attr("data-key", id)
+        .hide(),
+      $cancel = $(
+        `<button class="btn bg-transparent" style="${inlineBtnStyle}"> <span class="fa fa-times-circle"></span> </button>`
+      )
+        .attr("data-key", id)
+        .hide();
+    $edit.on("click", function(e) {
+      $grid.edit($(this).data("key"));
+      $edit.hide();
+      $delete.hide();
+      $update.show();
+      $cancel.show();
+    });
+    $delete.on("click", function(e) {
+      // $grid.removeRow($(this).data("key"));
+      deleteRow_ClickHandler($(this).data("key") + "");
+    });
+    $update.on("click", function(e) {
+      $grid.update($(this).data("key"));
+      $edit.show();
+      $delete.show();
+      $update.hide();
+      $cancel.hide();
+    });
+    $cancel.on("click", function(e) {
+      $grid.cancel($(this).data("key"));
+      $edit.show();
+      $delete.show();
+      $update.hide();
+      $cancel.hide();
+    });
+    $displayEl
+      .empty()
+      .append($edit)
+      .append($delete)
+      .append($update)
+      .append($cancel);
+  }
+};
 //Funciones para CRUD de la grilla
 btnAgregarFila_clickHandler = () => {
   eliminarTotales();
@@ -186,14 +295,32 @@ btnAgregarFila_clickHandler = () => {
   grid.render(data);
 };
 
-deleteRow_ClickHandler = e => {
-  if (e.data.id !== IDfilaTotales) {
-    if (confirm("Seguro que desea eliminar esta cartera?")) {
-      data = borrarElementoData(e.data.id);
-      grid.removeRow(e.data.id);
-      grid.render(data);
-    }
+deleteRow_ClickHandler = id => {
+  if (confirm("Seguro que desea eliminar esta cartera?")) {
+    data = borrarElementoData(id);
+    grid.removeRow(id);
+    grid.render(data);
   }
+};
+
+//Event Handlers
+rowDataChanged_handler = (e, id, record) => {
+  // let columnasTotalizables = [
+  //   "Cuota",
+  //   "SaldoCarteraCentrales",
+  //   "VlrInicioNegociacion",
+  //   "DescuentoLogrado",
+  //   "SaldoCarteraNegociada"
+  // ];
+
+  //Se requiere llamar una función para que los campos numéricos que quedaron como string, vuelvan a estar como numéricos
+  //esto ocurre porque en el grid de GIJGO no tienen un campo tipo number
+  formatearCamposParaIntegridadDATA(id);
+
+  //TO DO: Agregar validación para que esta función solo se llame cuando se ha modificado una columna totalizable
+  //       descomentar también la variable columnasTotalizables
+  // if (columnasTotalizables.includes(column.field)) { //código };
+  refrescarTotales();
 };
 
 // Declaración de las columnas
@@ -202,120 +329,105 @@ const columnas = [
     field: "ID",
     width: 25,
     title: "ID        ",
-    mode: "ReadOnly",
-    hidden: true
+    mode: "ReadOnly"
+    // hidden: true
   },
   {
     field: "Entidad",
-    editField: "Entidad",
-    width: 150,
+    width: 100,
     type: "text",
     title: "Entidad",
+    editor: true
+  },
+  {
+    field: "SoloEfectivo",
+    title: "Solo Efectivo?",
+    type: "checkbox",
     editor: true,
-    mode: "EditOnly"
+    width: 60,
+    align: "center"
   },
   {
     field: "Data",
-    editField: "Data",
     type: "dropdown",
     width: 50,
     title: "DATA",
-    editor: { dataSource: Data_Cifin_Opts },
-    mode: "EditOnly"
+    editor: { dataSource: Data_Cifin_Opts }
   },
   {
     field: "Cifin",
-    editField: "Cifin",
     type: "dropdown",
     width: 50,
     title: "CIFIN",
-    editor: { dataSource: Data_Cifin_Opts },
-    mode: "EditOnly"
+    editor: { dataSource: Data_Cifin_Opts }
   },
   {
     field: "Estado",
-    editField: "Estado",
     type: "dropdown",
     width: 60,
     title: "Estado",
-    editor: { dataSource: EstadoOpts },
-    mode: "EditOnly"
+    editor: { dataSource: EstadoOpts }
   },
   {
     field: "CompraTR",
-    editField: "CompraTR",
     type: "dropdown",
     width: 55,
     title: "Compra TR",
-    editor: { dataSource: SI_NO_Opts },
-    mode: "EditOnly"
+    editor: { dataSource: SI_NO_Opts }
   },
   {
     field: "CompraCKoAliado",
-    editField: "CompraCKoAliado",
     type: "dropdown",
     width: 40,
     title: "Compra CK o Aliado",
-    editor: { dataSource: CompraCKoAliadoOpts },
-    mode: "EditOnly"
+    editor: { dataSource: CompraCKoAliadoOpts }
   },
   {
     field: "CalificacionWAB",
-    editField: "CalificacionWAB",
     width: 50,
     type: "dropdown",
     title: "Calificacion WAB",
-    editor: { dataSource: CalificacionWABOpts },
-    mode: "EditOnly"
+    editor: { dataSource: CalificacionWABOpts }
   },
   {
     field: "Cuota",
-    editField: "Cuota",
     type: "text",
     title: "Cuota",
     align: "rigth",
     renderer: render_convertirNumberAMoney,
-    editor: true,
-    mode: "EditOnly"
+    editor: true
   },
   {
     field: "SaldoCarteraCentrales",
-    editField: "SaldoCarteraCentrales",
     type: "text",
     title: "Saldo Cartera Centrales",
     align: "rigth",
     renderer: render_convertirNumberAMoney,
-    editor: true,
-    mode: "EditOnly"
+    editor: true
   },
   {
     field: "VlrInicioNegociacion",
-    editField: "VlrInicioNegociacion",
     type: "text",
     title: "Vlr. inicio negociación",
     align: "rigth",
     renderer: render_convertirNumberAMoney,
-    editor: true,
-    mode: "EditOnly"
+    editor: true
   },
   {
     field: "DescuentoLogrado",
-    editField: "DescuentoLogrado",
     type: "text",
     title: "Descuento logrado",
     align: "rigth",
     renderer: render_convertirNumberAMoney,
-    editor: true,
-    mode: "EditOnly"
+    editor: true
   },
   {
     field: "SaldoCarteraNegociada",
-    editField: "SaldoCarteraNegociada",
     type: "text",
     title: "Saldo cartera negociada",
     align: "rigth",
     renderer: render_calcularSaldoCarteraNegociada,
-    mode: "ReadOnly"
+    mode: "readOnly"
   },
   {
     field: "PctjeNegociacion",
@@ -327,51 +439,30 @@ const columnas = [
   },
   {
     field: "FechaVencimiento",
-    editField: "FechaVencimiento",
     type: "date",
     title: "Fecha Ven.",
-    editor: true,
-    mode: "EditOnly"
+    editor: true
   },
   {
-    width: 25,
+    width: 35,
     align: "center",
-    // type: "icon",
-    // icon: "fa fa-remove",
-    // tmpl: '<span class="fa fa-remove"></span>',
-    tooltip: "Delete",
-    renderer: render_activarIcono,
-    events: { click: deleteRow_ClickHandler }
+    renderer: editManager
   }
 ];
 
 $(document).ready(function() {
-  data.push(calcularTotales());
   grid = $("#grid").grid({
     primaryKey: "ID",
     dataSource: data,
     uiLibrary: "bootstrap4",
     iconsLibrary: "fontawesome",
     resizableColumns: true,
-    inlineEditing: true,
+    inlineEditing: { mode: "command", managementColumn: false },
     columns: columnas
   });
-  grid.on("rowDataChanged", (e, id, record) => {
-    // Clone the record in new object where you can format the data to format that is supported by the backend.
-    var gridData = $.extend(true, {}, record);
-    // // Format the date to format that is supported by the backend.
-    // data.DateOfBirth = gj.core
-    //   .parseDate(record.DateOfBirth, "mm/dd/yyyy")
-    //   .toISOString();
-    // // Post the data to the server
-    // $.ajax({
-    //   url: "/Players/Save",
-    //   data: { record: data },
-    //   method: "POST"
-    // }).fail(function() {
-    //   alert("Failed to save.");
-    // });
-  });
+  grid.on("rowDataChanged", rowDataChanged_handler);
+  data.push(calcularTotales());
+  grid.render(data); //Necesario para hacer un binding entre grid y data
 
   $("#btnAgregarFila").on("click", btnAgregarFila_clickHandler);
 

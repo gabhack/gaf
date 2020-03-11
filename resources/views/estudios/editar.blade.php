@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <form id="form_guardar" action="/estudios/actualizar" method="POST" enctype="multipart/form-data">
+    <form id="form_guardar" action="/estudios/actualizar" method="POST" enctype="multipart/form-data" onSubmit="return false;">
         {!! Form::token() !!}
         <input type="hidden" class="form-control" name="cliente_id" id="cliente_id" value="<?php echo $cliente->id ?>">
         <input type="hidden" class="form-control" name="registro_id" id="registro_id" value="<?php echo $registro->id ?>">
@@ -252,11 +252,6 @@
                         <div class="panel-body">
                             <button type="button" id="btnAgregarFila" class="btn btn-primary">Agregar cartera</button><br><br>
                             <table id="grid" class="table table-hover table-condensed table-bordered">
-                                <style>
-                                    th{
-                                        background-color:darkgrey;
-                                    }
-                                </style>
                             </table>
                         </div>
                     </div>
