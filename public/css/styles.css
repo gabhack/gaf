@@ -128,3 +128,15 @@ table.dataTable.no-footer{
 	background-color: #d47d7d;
 	border: 1px solid #822e2e;
 }
+
+.tipo-cliente{
+	font-weight: 600;
+}
+
+.valor-tipo-cliente{
+	font-weight: 900;
+    color: #3197d1;
+    background-color: white;
+    padding: 3px 5px 4px 5px;
+    border-radius: 5px;
+}

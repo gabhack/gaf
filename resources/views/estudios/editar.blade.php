@@ -1,6 +1,100 @@
 @extends('layouts.app')
 
 @section('content')
+    <script type="text/javascript">
+        Array.prototype.unique=function(a){
+            return function(){return this.filter(a)}}(function(a,b,c){return c.indexOf(a,b+1)<0
+        });
+
+        // var aliados= <?php echo json_encode($aliados); ?>;
+        // var tiposcliente= <?php echo json_encode($tiposcliente); ?>;
+
+        const dataOriginal = [
+            {
+                ID: "1",
+                Entidad: "BBVA 0261",
+                Data: "FINANCIERO",
+                Cifin: "FINANCIERO",
+                // Sector: "FINAN/DATA Y CIFIN",
+                Estado: "AL DIA",
+                CompraTR: "NO",
+                CompraCKoAliadoID: "2",
+                CompraCKoAliado: "CK",
+                CalificacionWAB: "A",
+                Cuota: 918033,
+                SaldoCarteraCentrales: 34158000,
+                VlrInicioNegociacion: 34158000,
+                DescuentoLogrado: 3415800,
+                SaldoCarteraNegociada: 34158000,
+                PctjeNegociacion: 0,
+                FechaVencimiento: ""
+            },
+            {
+                ID: "2",
+                Entidad: "EMBARGO - ANA CARLINA MONTOYA",
+                Data: "",
+                Cifin: "",
+                // Sector: "",
+                Estado: "",
+                CompraTR: "SI",
+                CompraCKoAliadID: "7",
+                CompraCKoAliado: "SUDAMERIS",
+                CalificacionWAB: "A",
+                Cuota: 562785,
+                SaldoCarteraCentrales: 6000000,
+                VlrInicioNegociacion: 6000000,
+                DescuentoLogrado: 0,
+                SaldoCarteraNegociada: 6000000,
+                PctjeNegociacion: 0,
+                FechaVencimiento: ""
+            },
+            {
+                ID: "3",
+                Entidad: "DAVIVIENDA",
+                Data: "",
+                Cifin: "",
+                // Sector: "",
+                Estado: "",
+                CompraTR: "SI",
+                CompraCKoAliadID: "7",
+                CompraCKoAliado: "SUDAMERIS",
+                CalificacionWAB: "A",
+                Cuota: 562785,
+                SaldoCarteraCentrales: 6000000,
+                VlrInicioNegociacion: 6000000,
+                DescuentoLogrado: 0,
+                SaldoCarteraNegociada: 6000000,
+                PctjeNegociacion: 0,
+                FechaVencimiento: ""
+            },
+            {
+                ID: "4",
+                Entidad: "",
+                Data: "",
+                Cifin: "",
+                Estado: "",
+                CompraTR: "",
+                CompraCKoAliado: "",
+                CalificacionWAB: "",
+                Cuota: 1480818,
+                SaldoCarteraCentrales: 40158000,
+                VlrInicioNegociacion: 40158000,
+                DescuentoLogrado: 3415800,
+                SaldoCarteraNegociada: 40158000,
+                PctjeNegociacion: 0,
+                FechaVencimiento: ""
+            }
+        ];
+        
+        var tipocliente = 'AA';
+        var aliados_usados = new Array(2,2,2,7,7,7);
+        aliados_usados = aliados_usados.unique();
+
+        console.log(aliados_usados);
+
+        // $('#label-aliado-financiero').innerHTML(aliados[1]);
+    </script>
+
     <form id="form_guardar" action="/estudios/actualizar" method="POST" enctype="multipart/form-data">
         {!! Form::token() !!}
         <input type="hidden" class="form-control" name="cliente_id" id="cliente_id" value="<?php echo $cliente->id ?>">
@@ -92,14 +186,14 @@
                                 <label class="label-consulta">Asesor asignado</label>
                             </div>
                             <div class="col-md-7">
-                                <select name="asesor_id" class="custom-select form-control" required>
+                                <select name="asesor_id" id="asesor" class="custom-select form-control" required>
                                     <option disabled value="">Seleccione uno...</option>
                                     @foreach ($asesores as $asesorgen)
                                         <option value="{{$asesorgen->id}}"<?php echo ($asesorgen->id == $asesor->id ? ' selected' : '') ?>>{{$asesorgen->nombres}}</option>
                                     @endforeach
                                     <option value="nuevo">--Nuevo Asesor</option>
                                 </select>
-                                <input id="asesor_custom" class="hidden form-control" type="text" name="nuevo_asesor" id="nuevo_asesor">
+                                <input id="asesor_custom" class="hidden form-control" type="text" name="nuevo_asesor">
                             </div>
                         </div>
                         <div class="row">
@@ -387,45 +481,72 @@
             </div>
 
             @php
-                $total_carteras = 5000000;
-                $total_servicio = $total_carteras*$estudio->condicion->costoservicios/100;
-                $total_total = $total_carteras+$total_servicio;
+                $total_carteras = 54258900;
+                $total_servicio = $total_carteras*$estudio->condicion->tipocliente->costoservicios/100;
+                $total_total = $total_carteras+$total_servicio+$estudio->condicion->costocertificados;
             @endphp
 
             <div class="col-md-12">
                 <div class="panel panel-primary">
-                    <div class="panel-heading">Condiciones Te Recuperamos</div>
+                <div class="panel-heading">Condiciones Te Recuperamos <span class="tipo-cliente pull-right">Tipo de cliente: <span class="valor-tipo-cliente">{{$estudio->condicion->tipocliente->tipo}}</span></span> </div>
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-md-4 text-center">
+                            <div class="col-md-6 text-center">
+                                <div class="row">
+                                    <div class="col-md-7 text-right">
+                                        <label class="label-consulta" for="pad">Costo certificados:</label>
+                                    </div>
+                                    <div class="col-md">
+                                        <input class="w-100 text-center" type="text" name="costo_certificados" id="costo_certificados" required value="{{$estudio->condicion->costocertificados}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 text-center">
                                 <div class="row">
                                     <div class="col-md-7 text-right">
                                         <label class="label-consulta" for="pad">Total Carteras a comprar:</label>
                                     </div>
                                     <div class="col-md">
-                                        <input class="w-100 text-center" disabled type="text" name="carteras_comprar" id="carteras_comprar" required value="{{mneyformat($total_carteras)}}">
+                                        <input class="w-100 text-center" disabled type="text" name="carteras_comprar" id="carteras_comprar" value="{{mneyformat($total_carteras)}}">
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4 text-center">
+                            <div class="col-md-6 text-center">
                                 <div class="row">
                                     <div class="col-md-7 text-right">
-                                        <label class="label-consulta" for="pad">Total Servicio({{number_format($estudio->condicion->costoservicios, 0, ',', ' ')}}%):</label>
+                                        <label class="label-consulta" for="pad">Total Servicio({{number_format($estudio->condicion->tipocliente->costoservicios, 0, ',', ' ')}}%):</label>
                                     </div>
                                     <div class="col-md">
-                                        <input class="w-100 text-center" disabled type="text" name="carteras_comprar" id="carteras_comprar" required value="{{mneyformat($total_servicio)}}">
+                                        <input class="w-100 text-center" disabled type="text" name="total_servicio" id="total_servicio" value="{{mneyformat($total_servicio)}}">
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4 text-center">
+                            <div class="col-md-6 text-center">
                                 <div class="row">
                                     <div class="col-md-7 text-right">
                                         <label class="label-consulta" for="pad">Total Servicio + Impuestos:</label>
                                     </div>
                                     <div class="col-md">
-                                        <input class="w-100 text-center" disabled type="text" name="carteras_comprar" id="carteras_comprar" required value="{{mneyformat($total_total)}}">
+                                        <input class="w-100 text-center" disabled type="text" name="servicio_impuestos" id="servicio_impuestos" value="{{mneyformat($total_total)}}">
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Seccion Condiciones Aliados --}}
+            <div class="col-md-12 panel-aliados">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Condiciones Aiados financieros</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6 text-center ck-panel">
+                                <h4>CK Comercializadora</h4>
+                            </div>
+                            <div class="col-md-6 text-center aliado-panel">
+                                <h4 id="label-aliado-financiero"></h4>
                             </div>
                         </div>
                     </div>

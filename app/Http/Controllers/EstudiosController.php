@@ -9,6 +9,8 @@ use App\Registrosfinancieros as Registrosfinancieros;
 use App\Parametros as Parametros;
 use App\Centrales as Centrales;
 use App\Condicionestr as Condicionestr;
+use App\Aliados as Aliados;
+use App\TiposCliente as TiposCliente;
 use Illuminate\Http\Request;
 
 class EstudiosController extends Controller
@@ -159,6 +161,7 @@ class EstudiosController extends Controller
         $condicionestr = new Condicionestr;
         $condicionestr->estudios_id = $newestudio->id;
         $condicionestr->costoservicios = $tasack;
+        $condicionestr->costocertificados = $request->costo_certificados;
         $condicionestr->save();
 
         return redirect('estudios');
@@ -175,6 +178,8 @@ class EstudiosController extends Controller
         // Parámetros
         $smlv = Parametros::where('llave', 'SMLV')->first();
         $iva = Parametros::where('llave', 'IVA')->first()->valor;
+        $tiposcliente = TiposCliente::all();
+        $aliados = Aliados::all();
 
         $estudio = Estudios::find($id);
         $registro = Registrosfinancieros::find($estudio->registros_id);
@@ -229,7 +234,9 @@ class EstudiosController extends Controller
             "aportes" => $aportes,
             "totaldescuentos" => $totaldescuentos,
             "cupos" => $cupos,
-            "iva" => $iva
+            "iva" => $iva,
+            "tiposcliente" => $tiposcliente,
+            "aliados" => $aliados
         ]);
     }
 
@@ -261,6 +268,11 @@ class EstudiosController extends Controller
         $central->puntaje_data = $request->puntaje_datacredito;
         $central->proc_en_contra = $request->proc_en_contra;
         $central->save();
+
+        //Registro condiciones
+        $condicionestr = $estudio->condicion;
+        $condicionestr->costocertificados = $request->costo_certificados;
+        $condicionestr->save();
 		
 		return redirect('estudios');
     }

@@ -1,6 +1,64 @@
 @extends('layouts.app')
 
 @section('content')
+    <script>
+        const dataOriginal = [
+            {
+                ID: "1",
+                Entidad: "BBVA 0261",
+                Data: "FINANCIERO",
+                Cifin: "FINANCIERO",
+                // Sector: "FINAN/DATA Y CIFIN",
+                Estado: "AL DIA",
+                CompraTR: "NO",
+                CompraCKoAliado: "CK",
+                CalificacionWAB: "A",
+                Cuota: 918033,
+                SaldoCarteraCentrales: 34158000,
+                VlrInicioNegociacion: 34158000,
+                DescuentoLogrado: 3415800,
+                SaldoCarteraNegociada: 34158000,
+                PctjeNegociacion: 0,
+                FechaVencimiento: ""
+            },
+            {
+                ID: "2",
+                Entidad: "EMBARGO - ANA CARLINA MONTOYA",
+                Data: "",
+                Cifin: "",
+                // Sector: "",
+                Estado: "",
+                CompraTR: "SI",
+                CompraCKoAliado: "CK",
+                CalificacionWAB: "A",
+                Cuota: 562785,
+                SaldoCarteraCentrales: 6000000,
+                VlrInicioNegociacion: 6000000,
+                DescuentoLogrado: 0,
+                SaldoCarteraNegociada: 6000000,
+                PctjeNegociacion: 0,
+                FechaVencimiento: ""
+            },
+            {
+                ID: "3",
+                Entidad: "",
+                Data: "",
+                Cifin: "",
+                Estado: "",
+                CompraTR: "",
+                CompraCKoAliado: "",
+                CalificacionWAB: "",
+                Cuota: 1480818,
+                SaldoCarteraCentrales: 40158000,
+                VlrInicioNegociacion: 40158000,
+                DescuentoLogrado: 3415800,
+                SaldoCarteraNegociada: 40158000,
+                PctjeNegociacion: 0,
+                FechaVencimiento: ""
+            }
+        ];
+    </script>
+    
     <form id="form_guardar" action="/estudios/guardar" method="POST" enctype="multipart/form-data">
         {!! Form::token() !!}
         <input type="hidden" class="form-control" name="cliente_id" id="cliente_id" value="<?php echo $cliente->id ?>">
@@ -98,9 +156,7 @@
                                     @endforeach
                                     <option value="nuevo">--Nuevo Asesor</option>
                                 </select>
-                            </div>
-                            <div class="col-md-12">
-                                <input id="asesor_custom" class="hidden form-control" type="text" name="nuevo_asesor" id="nuevo_asesor">
+                                <input id="asesor_custom" class="hidden form-control" type="text" name="nuevo_asesor">
                             </div>
                         </div>
                         <div class="row">
@@ -392,40 +448,65 @@
                 $total_total = $total_carteras+$total_servicio;
             @endphp
 
+            {{-- Seccion Condiciones Te Recuperamos --}}
             <div class="col-md-12">
                 <div class="panel panel-primary">
                     <div class="panel-heading">Condiciones Te Recuperamos</div>
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-md-4 text-center">
+                            <div class="col-md-6 text-center">
+                                <div class="row">
+                                    <div class="col-md-7 text-right">
+                                        <label class="label-consulta" for="pad">Costo certificados:</label>
+                                    </div>
+                                    <div class="col-md">
+                                        <input class="w-100 text-center" type="text" name="costo_certificados" id="costo_certificados" value="{{$estudio->condicion->costocertificados}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 text-center">
                                 <div class="row">
                                     <div class="col-md-7 text-right">
                                         <label class="label-consulta" for="pad">Total Carteras a comprar:</label>
                                     </div>
                                     <div class="col-md">
-                                        <input class="w-100 text-center" disabled type="text" name="carteras_comprar" id="carteras_comprar" required value="{{mneyformat($total_carteras)}}">
+                                        <input class="w-100 text-center" disabled type="text" name="carteras_comprar" id="carteras_comprar" value="{{$total_carteras}}">
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4 text-center">
+                            <div class="col-md-6 text-center">
                                 <div class="row">
                                     <div class="col-md-7 text-right">
                                         <label class="label-consulta" for="pad">Total Servicio({{number_format($tasack, 0, ',', ' ')}}%):</label>
                                     </div>
                                     <div class="col-md">
-                                        <input class="w-100 text-center" disabled type="text" name="carteras_comprar" id="carteras_comprar" required value="{{mneyformat($total_servicio)}}">
+                                        <input class="w-100 text-center" disabled type="text" name="total_servicio" id="total_servicio" value="{{mneyformat($total_servicio)}}">
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4 text-center">
+                            <div class="col-md-6 text-center">
                                 <div class="row">
                                     <div class="col-md-7 text-right">
                                         <label class="label-consulta" for="pad">Total Servicio + Impuestos:</label>
                                     </div>
                                     <div class="col-md">
-                                        <input class="w-100 text-center" disabled type="text" name="carteras_comprar" id="carteras_comprar" required value="{{mneyformat($total_total)}}">
+                                        <input class="w-100 text-center" disabled type="text" name="servicio_impuestos" id="servicio_impuestos" value="{{mneyformat($total_total)}}">
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Seccion Condiciones Aliados --}}
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Condiciones Aiados financieros</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6 text-center">
+                                
                             </div>
                         </div>
                     </div>

@@ -9,6 +9,11 @@ class Condicionestr extends Model
 {
     use SoftDeletes;
     
-	protected $table = 'condicionestr';
+    protected $table = 'condicionestr';
+    
 	
+	public function tipocliente()
+	{
+		return $this->hasOne('\App\TiposCliente', 'id', 'tiposcliente_id');
+	}
 }
