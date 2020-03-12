@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('css')
+    <link href="{{asset('css/gijgo-combined-1.9.13/css/gijgo.min.css')}}" rel="stylesheet">
+@endsection
+
 @section('content')
     <form id="form_guardar" action="/estudios/guardar" method="POST" enctype="multipart/form-data">
         {!! Form::token() !!}
@@ -240,6 +244,19 @@
                     </div>
                 </div>
             @endif
+            
+            <!-- AAA -->
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading"><b>Carteras por comprar</b></div>
+                    <div class="panel-body">
+                        <button type="button" id="btnAgregarFila" class="btn btn-primary">Agregar cartera</button><br><br>
+                        <table id="grid" class="table table-hover table-condensed table-bordered">
+                        </table>
+                    </div>
+                </div>
+            </div>
+
             <div class="col-md-12">
                 <div class="panel panel-primary">
                     <div class="panel-heading">Descuentos no aplicados</div>
@@ -334,4 +351,10 @@
         </div>
     </form>
 
+@endsection
+
+@section('js')
+    <script src="{{asset('js/jquery-3.4.1.min.js')}}"></script>
+    <script src="{{asset('css/gijgo-combined-1.9.13/js/gijgo.min.js')}}"></script>
+    <script src="{{asset('js/TablaCarteras.js')}}"></script>
 @endsection

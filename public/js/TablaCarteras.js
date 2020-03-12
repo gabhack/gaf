@@ -63,6 +63,8 @@ var data = dataOriginal;
 var IDfilaTotales;
 var tipoCliente; //A,AA,AAA,B1,B2,B3,C
 
+var inputJsonCarteras;
+
 const dataEstructura = {
   ID: "0",
   Entidad: "",
@@ -304,18 +306,18 @@ const editManager = (value, record, $cell, $displayEl, id, $grid) => {
       "background-color: transparent; border-color: transparent; box-shadow: none; padding: 0";
     var data = $grid.data(),
       $edit = $(
-        `<button class="btn bg-transparent" style="${inlineBtnStyle}"> <span class="fa fa-pencil"></span> </button>`
+        `<button class="btn bg-transparent" type="button" style="${inlineBtnStyle}"> <span class="fa fa-pencil"></span> </button>`
       ).attr("data-key", id),
       $delete = $(
-        `<button class="btn bg-transparent" style="${inlineBtnStyle}"> <span class="fa fa-remove"></span> </button>`
+        `<button class="btn bg-transparent" type="button" style="${inlineBtnStyle}"> <span class="fa fa-remove"></span> </button>`
       ).attr("data-key", id),
       $update = $(
-        `<button class="btn bg-transparent" style="${inlineBtnStyle}"> <span class="fa fa-check-circle"></span> </button>`
+        `<button class="btn bg-transparent" type="button" style="${inlineBtnStyle}"> <span class="fa fa-check-circle"></span> </button>`
       )
         .attr("data-key", id)
         .hide(),
       $cancel = $(
-        `<button class="btn bg-transparent" style="${inlineBtnStyle}"> <span class="fa fa-times-circle"></span> </button>`
+        `<button class="btn bg-transparent" type="button" style="${inlineBtnStyle}"> <span class="fa fa-times-circle"></span> </button>`
       )
         .attr("data-key", id)
         .hide();
@@ -361,6 +363,7 @@ btnAgregarFila_clickHandler = () => {
   data.push(nuevaFila);
   data.push(calcularTotales());
   grid.render(data);
+  inputJsonCarteras.val(JSON.stringify(data.slice(0, data.length - 1)));
 };
 
 deleteRow_ClickHandler = id => {
@@ -369,6 +372,7 @@ deleteRow_ClickHandler = id => {
     refrescarTotales();
     grid.removeRow(id);
     grid.render(data);
+    inputJsonCarteras.val(JSON.stringify(data.slice(0, data.length - 1)));
   }
 };
 
@@ -390,6 +394,7 @@ rowDataChanged_handler = (e, id, record) => {
   //       descomentar también la variable columnasTotalizables
   // if (columnasTotalizables.includes(column.field)) { //código };
   refrescarTotales();
+  inputJsonCarteras.val(JSON.stringify(data.slice(0, data.length - 1)));
 };
 
 // Declaración de las columnas
@@ -530,6 +535,9 @@ $(document).ready(function() {
     columns: columnas
   });
   grid.on("rowDataChanged", rowDataChanged_handler);
+
+  inputJsonCarteras = $("#json_carteras");
+  inputJsonCarteras.val(JSON.stringify(data));
   if (data.length !== 0) {
     //Si no hay datos no se calcula total
     data.push(calcularTotales());
