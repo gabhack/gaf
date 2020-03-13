@@ -58,7 +58,7 @@ const dataOriginal = [
   }
 ];
 
-var data = dataOriginal;
+var data = dataDB;
 
 var IDfilaTotales;
 var tipoCliente; //A,AA,AAA,B1,B2,B3,C
@@ -203,36 +203,10 @@ formatearCamposParaIntegridadDATA = id => {
 
 //Opciones para los dropdown (o select)
 const SI_NO_Opts = ["SI", "NO"];
-
-const Data_Cifin_Opts = ["REAL", "FINANCIERO", "COOPERATIVO"];
-
-const EstadoOpts = [
-  "AL DIA",
-  "MORA 30-60",
-  "MORA 60-90",
-  "MORA 90-120",
-  "MORA 120-180",
-  "MORA >180",
-  "DUDOSO RECAUDO",
-  "CARTERA CASTIGADA",
-  "EMBARGO"
-];
-
-const CompraCKoAliadoOpts = ["No", "CK", "Aliado 1", "Aliado 2"];
-
-const CalificacionWABOpts = [
-  "A",
-  "B",
-  "C",
-  "D",
-  "E",
-  "F",
-  "G",
-  "H",
-  "I",
-  "J",
-  "K"
-];
+const Data_Cifin_Opts = data_cifin_opts;
+const EstadoOpts = estado_opts;
+const CompraCKoAliadoOpts = compra_ck_o_aliado_opts;
+const CalificacionWABOpts = calificacion_wab_opts;
 
 //Renders para que convertir los valores numéricos en cadenas de moneda o de tasa
 const moneyFormatter = new Intl.NumberFormat("es-CO", {
@@ -403,8 +377,8 @@ const columnas = [
     field: "ID",
     width: 25,
     title: "ID        ",
-    mode: "ReadOnly"
-    // hidden: true
+    mode: "ReadOnly",
+    hidden: true
   },
   {
     field: "Entidad",
