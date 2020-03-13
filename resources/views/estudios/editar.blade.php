@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('css')
+    <link href="{{asset('css/gijgo-combined-1.9.13/css/gijgo.min.css')}}" rel="stylesheet">
+@endsection
+
 @section('content')
     <script type="text/javascript">
         Array.prototype.unique=function(a){
@@ -8,83 +12,6 @@
 
         // var aliados= <?php echo json_encode($aliados); ?>;
         // var tiposcliente= <?php echo json_encode($tiposcliente); ?>;
-
-        const dataOriginal = [
-            {
-                ID: "1",
-                Entidad: "BBVA 0261",
-                Data: "FINANCIERO",
-                Cifin: "FINANCIERO",
-                // Sector: "FINAN/DATA Y CIFIN",
-                Estado: "AL DIA",
-                CompraTR: "NO",
-                CompraCKoAliadoID: "2",
-                CompraCKoAliado: "CK",
-                CalificacionWAB: "A",
-                Cuota: 918033,
-                SaldoCarteraCentrales: 34158000,
-                VlrInicioNegociacion: 34158000,
-                DescuentoLogrado: 3415800,
-                SaldoCarteraNegociada: 34158000,
-                PctjeNegociacion: 0,
-                FechaVencimiento: ""
-            },
-            {
-                ID: "2",
-                Entidad: "EMBARGO - ANA CARLINA MONTOYA",
-                Data: "",
-                Cifin: "",
-                // Sector: "",
-                Estado: "",
-                CompraTR: "SI",
-                CompraCKoAliadID: "7",
-                CompraCKoAliado: "SUDAMERIS",
-                CalificacionWAB: "A",
-                Cuota: 562785,
-                SaldoCarteraCentrales: 6000000,
-                VlrInicioNegociacion: 6000000,
-                DescuentoLogrado: 0,
-                SaldoCarteraNegociada: 6000000,
-                PctjeNegociacion: 0,
-                FechaVencimiento: ""
-            },
-            {
-                ID: "3",
-                Entidad: "DAVIVIENDA",
-                Data: "",
-                Cifin: "",
-                // Sector: "",
-                Estado: "",
-                CompraTR: "SI",
-                CompraCKoAliadID: "7",
-                CompraCKoAliado: "SUDAMERIS",
-                CalificacionWAB: "A",
-                Cuota: 562785,
-                SaldoCarteraCentrales: 6000000,
-                VlrInicioNegociacion: 6000000,
-                DescuentoLogrado: 0,
-                SaldoCarteraNegociada: 6000000,
-                PctjeNegociacion: 0,
-                FechaVencimiento: ""
-            },
-            {
-                ID: "4",
-                Entidad: "",
-                Data: "",
-                Cifin: "",
-                Estado: "",
-                CompraTR: "",
-                CompraCKoAliado: "",
-                CalificacionWAB: "",
-                Cuota: 1480818,
-                SaldoCarteraCentrales: 40158000,
-                VlrInicioNegociacion: 40158000,
-                DescuentoLogrado: 3415800,
-                SaldoCarteraNegociada: 40158000,
-                PctjeNegociacion: 0,
-                FechaVencimiento: ""
-            }
-        ];
         
         var tipocliente = 'AA';
         var aliados_usados = new Array(2,2,2,7,7,7);
@@ -92,14 +19,15 @@
 
         console.log(aliados_usados);
 
-        // $('#label-aliado-financiero').innerHTML(aliados[1]);
+        var dataBD = @json($data);
     </script>
 
     <form id="form_guardar" action="/estudios/actualizar" method="POST" enctype="multipart/form-data">
         {!! Form::token() !!}
-        <input type="hidden" class="form-control" name="cliente_id" id="cliente_id" value="<?php echo $cliente->id ?>">
-        <input type="hidden" class="form-control" name="registro_id" id="registro_id" value="<?php echo $registro->id ?>">
-        <input type="hidden" class="form-control" name="estudio_id" id="estudio_id" value="<?php echo $estudio->id ?>">
+        <input type="hidden" class="form-control" name="cliente_id" id="cliente_id" value="{{$cliente->id}}">
+        <input type="hidden" class="form-control" name="registro_id" id="registro_id" value="{{$registro->id}}">
+        <input type="hidden" class="form-control" name="estudio_id" id="estudio_id" value="{{$estudio->id}}">
+        <input type="hidden" class="form-control" name="json_carteras" id="json_carteras" value='[{"ID":"1","Entidad":"BBVA 0261","SoloEfectivo":false,"Data":"FINANCIERO","Cifin":"FINANCIERO","Estado":"AL DIA","CompraTR":"NO","CompraCKoAliado":"CK","CalificacionWAB":"A","Cuota":918033,"SaldoCarteraCentrales":34158000,"VlrInicioNegociacion":34158000,"DescuentoLogrado":0,"SaldoCarteraNegociada":34158000,"PctjeNegociacion":0,"FechaVencimiento":""},{"ID":"2","Entidad":"COOPSERV 0656-6217-6347-6427-6479-6628-68","SoloEfectivo":true,"Data":"FINANCIERO","Cifin":"FINANCIERO","Estado":"AL DIA","CompraTR":"SI","CompraCKoAliado":"NO","CalificacionWAB":"A","Cuota":652088,"SaldoCarteraCentrales":16427000,"VlrInicioNegociacion":16427000,"DescuentoLogrado":355925,"SaldoCarteraNegociada":16071075,"PctjeNegociacion":0.021667072502587204,"FechaVencimiento":""}]'>
         <div class="row">
             <div class="col-md-12">
                 <div class="btn-group mr-2 float-right" role="group">
@@ -388,6 +316,18 @@
                     </div>
                 </div>
             @endif
+            
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading"><b>Carteras por comprar</b></div>
+                    <div class="panel-body">
+                        <button type="button" id="btnAgregarFila" class="btn btn-primary">Agregar cartera</button><br><br>
+                        <table id="grid" class="table table-hover table-condensed table-bordered">
+                        </table>
+                    </div>
+                </div>
+            </div>
+
             <div class="col-md-4">
                 <div class="panel panel-primary">
                     <div class="panel-heading">Descuentos no aplicados</div>
@@ -555,4 +495,10 @@
         </div>
     </form>
 
+@endsection
+
+@section('js')
+    <script src="{{asset('js/jquery-3.4.1.min.js')}}"></script>
+    <script src="{{asset('css/gijgo-combined-1.9.13/js/gijgo.min.js')}}"></script>
+    <script src="{{asset('js/TablaCarteras.js')}}"></script>
 @endsection

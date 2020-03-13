@@ -11,6 +11,9 @@ use App\Centrales as Centrales;
 use App\Condicionestr as Condicionestr;
 use App\Aliados as Aliados;
 use App\TiposCliente as TiposCliente;
+use App\Sectores as Sectores;
+use App\Estadoscartera as Estadoscartera;
+use App\EntidadesCentrales as EntidadesCentrales;
 use Illuminate\Http\Request;
 
 class EstudiosController extends Controller
@@ -249,32 +252,39 @@ class EstudiosController extends Controller
      */
     public function actualizar(Request $request)
     {
-        $estudio = Estudios::find($request->estudio_id);
-        $estudio->decision = strtoupper($request->desiciones);
-        $estudio->observaciones = $request->observaciones;
-        if ($request->asesor_id == 'nuevo') {
-            $newasesor = new Asesores;
-            $newasesor->nombres = $request->nuevo_asesor;
-            $newasesor->save();
-            $estudio->asesores_id = $newasesor->id;
-        } else {
-            $estudio->asesores_id = $request->asesor_id;
-        }
-        $estudio->save();
-        
-        //Registro de centrales
-        $central = $estudio->central;
-        $central->calificacion_data = $request->calif_wab;
-        $central->puntaje_data = $request->puntaje_datacredito;
-        $central->proc_en_contra = $request->proc_en_contra;
-        $central->save();
+        //info de carteras
+        $carteras = json_decode($request->json_carteras);
 
-        //Registro condiciones
-        $condicionestr = $estudio->condicion;
-        $condicionestr->costocertificados = $request->costo_certificados;
-        $condicionestr->save();
+        echo '<pre>';
+        print_r($carteras);
+        echo '<pre>';
+
+        // $estudio = Estudios::find($request->estudio_id);
+        // $estudio->decision = strtoupper($request->desiciones);
+        // $estudio->observaciones = $request->observaciones;
+        // if ($request->asesor_id == 'nuevo') {
+        //     $newasesor = new Asesores;
+        //     $newasesor->nombres = $request->nuevo_asesor;
+        //     $newasesor->save();
+        //     $estudio->asesores_id = $newasesor->id;
+        // } else {
+        //     $estudio->asesores_id = $request->asesor_id;
+        // }
+        // $estudio->save();
+        
+        // //Registro de centrales
+        // $central = $estudio->central;
+        // $central->calificacion_data = $request->calif_wab;
+        // $central->puntaje_data = $request->puntaje_datacredito;
+        // $central->proc_en_contra = $request->proc_en_contra;
+        // $central->save();
+
+        // //Registro condiciones
+        // $condicionestr = $estudio->condicion;
+        // $condicionestr->costocertificados = $request->costo_certificados;
+        // $condicionestr->save();
 		
-		return redirect('estudios');
+		// return redirect('estudios');
     }
 
     /**
