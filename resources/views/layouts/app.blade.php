@@ -20,7 +20,7 @@
 		<link href="{{asset('css/styles.css')}}" rel="stylesheet">
 		@yield('css')  
 	</head>
-	<body class="skin-blue sidebar-mini">
+	<body class="skin-blue sidebar-mini sidebar-collapse">
 		<!-- Loader -->
 		<div class="loader">
 			<div class="text-center">

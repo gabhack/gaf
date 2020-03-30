@@ -90,13 +90,13 @@ if (!function_exists('calcularCapacidad')) {
 			
 			if($base > $smlv)
 			{
-				$compraCartera 	= 	$base;
-				$libreInversion = ( ( $ingresos + $asignacion_adicional - $valor_aportes ) / 2 ) - $total_dctos +  $valor_aportes;
+				$libreInversion = ( ( $ingresos + $asignacion_adicional - $valor_aportes ) / 2 ) - $total_dctos + $valor_aportes;
+				$compraCartera 	= 	$base - $total_dctos + $valor_aportes;
 			}
 			else
 			{
-				$compraCartera 	= $ingresos + $asignacion_adicional - $valor_aportes - $smlv;
 				$libreInversion = $ingresos + $asignacion_adicional - $smlv - $total_dctos;
+				$compraCartera 	= $ingresos + $asignacion_adicional - $valor_aportes - $smlv;
 			}			
 		}
 		

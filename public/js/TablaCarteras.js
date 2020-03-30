@@ -1,77 +1,51 @@
 var grid;
 
-//Datos para pruebas
-const dataOriginal = [
-  {
-    ID: "1",
-    Entidad: "BBVA 0261",
-    SoloEfectivo: false,
-    Data: "FINANCIERO",
-    Cifin: "FINANCIERO",
-    Estado: "AL DIA",
-    CompraTR: "NO",
-    CompraCKoAliado: "CK",
-    CalificacionWAB: "A",
-    Cuota: 918033,
-    SaldoCarteraCentrales: 34158000,
-    VlrInicioNegociacion: 34158000,
-    DescuentoLogrado: 0,
-    SaldoCarteraNegociada: 0,
-    PctjeNegociacion: 0,
-    FechaVencimiento: ""
-  },
-  // {
-  //   ID: "2",
-  //   Entidad: "EMBARGO - ANA CARLINA MONTOYA",
-  //   SoloEfectivo: "",
-  //   Data: "",
-  //   Cifin: "",
-  //   Estado: "",
-  //   CompraTR: "SI",
-  //   CompraCKoAliado: "CK",
-  //   CalificacionWAB: "A",
-  //   Cuota: 562785,
-  //   SaldoCarteraCentrales: 6000000,
-  //   VlrInicioNegociacion: 6000000,
-  //   DescuentoLogrado: 0,
-  //   SaldoCarteraNegociada: 0,
-  //   PctjeNegociacion: 0,
-  //   FechaVencimiento: ""
-  // },
-  {
-    ID: "2",
-    Entidad: "COOPSERV 0656-6217-6347-6427-6479-6628-68",
-    SoloEfectivo: true,
-    Data: "FINANCIERO",
-    Cifin: "FINANCIERO",
-    Estado: "AL DIA",
-    CompraTR: "SI",
-    CompraCKoAliado: "NO",
-    CalificacionWAB: "A",
-    Cuota: 652088,
-    SaldoCarteraCentrales: 16427000,
-    VlrInicioNegociacion: 16427000,
-    DescuentoLogrado: 355925,
-    SaldoCarteraNegociada: 0,
-    PctjeNegociacion: 0,
-    FechaVencimiento: ""
-  }
-];
-
-var data = dataOriginal;
+var data = dataDB;
 
 var IDfilaTotales;
 var tipoCliente; //A,AA,AAA,B1,B2,B3,C
 
+var inputJsonCarteras;
+
+//Campos del front que se requieren cambiar en tiempo real
+var spantipocliente = $('span#valor-tipo-cliente');
+var inputcosto_certificadosTR = document.getElementById("costo_certificados");
+var spancostoservicio = $('span#costo-servicio-tr');
+var inputcarteras_comprarTR = $('input#carteras_comprar');
+var inputtotal_servicioTR = $('input#total_servicio');
+var inputservicio_impuestosTR = $('input#servicio_impuestos');
+
+var inputAF1_tasa = document.getElementById("AF1_tasa");
+var inputAF1_plazo = document.getElementById("AF1_plazo");
+var inputAF1_costos = document.getElementById("AF1_costos");
+var inputcarteras_a_comprar_af1 = $('input#carteras_a_comprar_af1');
+var inputAF1_costos_valor = $('input#AF1_costos_valor');
+var inputAF1_seguro = $('input#AF1_seguro');
+var inputAF1_GMF = $('input#AF1_GMF');
+var inputAF1_iva = $('input#AF1_iva');
+var inputAF1_valor_credito = $('input#AF1_valor_credito');
+var inputAF1_cupo_max = $('input#AF1_cupo_max');
+var inputAF1_cuota = $('input#AF1_cuota');
+
+var inputAF2_factor_x_millon = document.getElementById("AF2_factor_x_millon");
+var inputAF2_plazo = document.getElementById("AF2_plazo");
+var inputcarteras_a_comprar_af2 = $('input#carteras_a_comprar_af2');
+var inputAF2_cuota = document.getElementById("AF2_cuota");
+var inputAF2_cupo_max = $('input#AF2_cupo_max');
+var inputAF2_monto_prestar = $('input#AF2_monto_prestar');
+var inputAF2_monto_max = $('input#AF2_monto_max');
+var inputAF2_saldo = $('input#AF2_saldo');
+
 const dataEstructura = {
   ID: "0",
+  EnDesprendible: false,
   Entidad: "",
   SoloEfectivo: false,
   Data: "",
   Cifin: "",
   Estado: "",
-  CompraTR: "",
-  CompraCKoAliado: "",
+  CompraAF1: "",
+  CompraAF2: "",
   CalificacionWAB: "",
   Cuota: 0,
   SaldoCarteraCentrales: 0,
@@ -95,6 +69,19 @@ calcularTotales = () => {
   let cantCarterasSoloEfectivo = 0;
   let cantCarterasCastigadas = 0;
   let cantEmbargos = 0;
+  //
+  let cuotasDuplicadas = 0;
+  //
+  let carterasTR = 0;
+  let costoservicioTR = 0;
+  //
+  let totalCarteraAF1 = 0;
+  let totalCarteraAF2 = 0;
+  let totalCarteraSinComprar = 0;
+  //
+  let cuotaCarteraAF1 = 0;
+  let cuotaCarteraAF2 = 0;
+  let cuotaCarteraSinComprar = 0;
 
   filaTotalesCalculada = data.reduce(
     (acum, currentValue, index, arr) => {
@@ -120,12 +107,29 @@ calcularTotales = () => {
         ? cantCarterasEnMora + 1
         : cantCarterasEnMora;
       cantCarterasCastigadas =
-        currentValue.Estado === "CARTERA CASTIGADA"
+        currentValue.Estado === "CASTIGADA"
           ? cantCarterasCastigadas + 1
           : cantCarterasCastigadas;
       cantEmbargos =
         currentValue.Estado === "EMBARGO" ? cantEmbargos + 1 : cantEmbargos;
-      return acum;
+      //
+      cuotasDuplicadas = 
+        currentValue.EnDesprendible === true ? cuotasDuplicadas + currentValue.Cuota : cuotasDuplicadas;
+      //
+      totalCarteraAF1 =
+        currentValue.CompraAF1 === "SI" ? totalCarteraAF1 + currentValue.SaldoCarteraNegociada : totalCarteraAF1;
+      totalCarteraAF2 =
+        currentValue.CompraAF2 === "SI" ? totalCarteraAF2 + currentValue.SaldoCarteraNegociada : totalCarteraAF2;
+      totalCarteraSinComprar =
+        (currentValue.CompraAF1 === "NO" && currentValue.CompraAF2 === "NO") ? totalCarteraSinComprar + currentValue.SaldoCarteraNegociada : totalCarteraSinComprar;
+      //
+      cuotaCarteraAF1 =
+        currentValue.CompraAF1 === "SI" ? cuotaCarteraAF1 + currentValue.Cuota : cuotaCarteraAF1;
+      cuotaCarteraAF2 =
+        currentValue.CompraAF2 === "SI" ? cuotaCarteraAF2 + currentValue.Cuota : cuotaCarteraAF2;
+      cuotaCarteraSinComprar =
+        (currentValue.CompraAF1 === "NO" && currentValue.CompraAF2 === "NO") ? cuotaCarteraSinComprar + currentValue.Cuota : cuotaCarteraSinComprar;
+        return acum;
     },
     { ...dataEstructura }
   );
@@ -144,7 +148,7 @@ calcularTotales = () => {
     if (cantCarterasCastigadas > 1 || cantEmbargos >= 1) {
       tipoCliente = "C";
     } else {
-      if (cantCarterasEnMora === 0) {
+      if (cantCarterasEnMora === 0 && cantCarterasCastigadas === 0) {
         if (cantCarterasSoloEfectivo === 0) {
           tipoCliente = "AA";
         } else {
@@ -163,6 +167,151 @@ calcularTotales = () => {
     }
   }
 
+  //Aliados:
+  if (totalCarteraAF1 > 0) {
+    carterasTR = totalCarteraAF1;
+  } else {
+    carterasTR = totalCarteraAF2;
+  }
+
+  //Extraer los valores de servicio dependiendo del tipo de cliente
+  tiposcliente.forEach(function(entry) {
+    if (entry.tipo === tipoCliente) {
+      costoservicioTR = parseFloat(entry.costoservicios).toFixed(0);
+    }
+  }, this);
+  //Capacidad de pago
+  cupolibreinversion = parseInt(cupos.libreInversion.valor);
+  //TR
+  costo_certificados = parseInt(inputcosto_certificadosTR.value, 10);
+  totalservicio = (carterasTR*costoservicioTR/100)+costo_certificados;
+  servicioimpuestoscalc = carterasTR+(totalservicio*1.19);
+  servicioimpuestos = (parseFloat(servicioimpuestoscalc).toFixed(0));
+  //AF1
+  carteras_comprar_base = carterasTR;
+  costos_af1 = parseInt(inputAF1_costos.value, 10);
+  costos_af1_valor = Math.trunc(carterasTR*costos_af1/100);
+  seguro_calc = p_x_millon*(1.+(extraprima)/100);
+  seguro_af1_valor = parseFloat(((Math.trunc(servicioimpuestos)+costos_af1_valor)/1000000)*seguro_calc).toFixed(0);
+  masseguro = parseInt(carterasTR, 10)+parseInt(costos_af1_valor, 10)+parseInt(seguro_af1_valor, 10);
+  cuatroxmil = parseFloat((4/1000)*carterasTR).toFixed(0);
+  ivacalc = parseInt(costos_af1_valor*(0.+iva)/100, 10);
+  if (totalCarteraAF1 === 0) {
+    valorcreditocalc = 0;
+  } else {
+    valorcreditocalc = parseInt(servicioimpuestos)+parseInt(costos_af1_valor)+parseInt(cuatroxmil)+parseInt(ivacalc);
+  }
+  tasa_af1 = parseFloat(inputAF1_tasa.value);
+  perdiodos_af1 = parseInt(inputAF1_plazo.value);
+  cupomaxAF1 = cupolibreinversion-filaTotalesCalculada.Cuota+cuotaCarteraAF1+cuotasDuplicadas;
+  seguro_cuota = parseInt(seguro_calc*(valorcreditocalc/1000000));
+  cuotacalc = getValorDeCuotaFija(valorcreditocalc,tasa_af1,perdiodos_af1);
+  cuotafinal = (parseInt(cuotacalc)+seguro_cuota).toFixed(0);
+  //AF2
+  total_carteras_aliado_2 = (parseFloat(totalCarteraAF2+servicioimpuestoscalc)).toFixed(0);
+  cupomaxAF2 = cupomaxAF1+cuotaCarteraAF2;
+  monto_maxAF2 = (parseInt(inputAF2_cuota.value)/parseFloat(inputAF2_factor_x_millon.value)).toFixed(0);
+  monto_prestarAF2 = valorcreditocalc+totalCarteraAF2;
+  saldo_AF2 = monto_maxAF2-monto_prestarAF2;
+
+  //Asignación de variables en el frontend
+  //AF1
+  spantipocliente.text(tipoCliente);
+  spancostoservicio.text(costoservicioTR);
+  inputcarteras_comprarTR.val(moneyFormatter.format(carterasTR));
+  inputtotal_servicioTR.val(moneyFormatter.format(totalservicio));
+  inputservicio_impuestosTR.val(moneyFormatter.format(servicioimpuestos));
+  inputcarteras_a_comprar_af1.val(moneyFormatter.format(servicioimpuestos));
+  inputAF1_costos_valor.val(moneyFormatter.format(costos_af1_valor));
+  inputAF1_seguro.val(moneyFormatter.format(seguro_cuota));
+  inputAF1_GMF.val(moneyFormatter.format(cuatroxmil));
+  inputAF1_iva.val(moneyFormatter.format(ivacalc));
+  inputAF1_valor_credito.val(moneyFormatter.format(valorcreditocalc));
+  inputAF1_cupo_max.val(moneyFormatter.format(cupomaxAF1));
+  inputAF1_cuota.val(moneyFormatter.format(cuotafinal));
+  //AF2
+  inputcarteras_a_comprar_af2.val(moneyFormatter.format(total_carteras_aliado_2));
+  inputAF2_cupo_max.val(moneyFormatter.format(cupomaxAF2));
+  inputAF2_monto_prestar.val(moneyFormatter.format(monto_prestarAF2));
+  inputAF2_monto_max.val(moneyFormatter.format(monto_maxAF2));
+  inputAF2_saldo.val(moneyFormatter.format(saldo_AF2));
+  
+  /////// Mostrar y ocultar datos y panales
+  //Panel TR
+  if (totalCarteraSinComprar === filaTotalesCalculada.SaldoCarteraNegociada) {
+    //Ocultar
+		if ( !document.getElementById("panel-aliados").classList.contains('hidden') ){
+			document.getElementById("panel-aliados").classList.add('hidden');
+		}
+  } else {
+    document.getElementById("panel-aliados").classList.remove('hidden');
+  }
+  //Panel aliados
+  if (cantCarteras === 0) {
+    //Ocultar
+		if ( !document.getElementById("panel_tr").classList.contains('hidden') ){
+			document.getElementById("panel_tr").classList.add('hidden');
+		}
+  } else {
+    document.getElementById("panel_tr").classList.remove('hidden');
+  }
+  //Aliado 1
+  if (totalCarteraAF1 > 0) {
+    document.getElementById("panel-AF1").classList.remove('hidden');
+    document.getElementById("aliadof1").required = true;
+    document.getElementById("AF1_tasa").required = true;
+    document.getElementById("AF1_plazo").required = true;
+    document.getElementById("AF1_costos").required = true;
+  } else {
+    //Ocultar
+		if ( !document.getElementById("panel-AF1").classList.contains('hidden') ){
+			document.getElementById("panel-AF1").classList.add('hidden');
+    }
+    document.getElementById("aliadof1").value = "";
+    document.getElementById("aliadof1").required = false;
+    document.getElementById("AF1_tasa").required = false;
+    document.getElementById("AF1_plazo").required = false;
+    document.getElementById("AF1_costos").required = false;
+  }
+  document.getElementById("AF1_cuota").classList.remove('input-verde');
+  document.getElementById("AF1_cuota").classList.remove('input-amarillo');
+  document.getElementById("AF1_cuota").classList.remove('input-rojo');
+  if (cupomaxAF1 === 0) {
+		document.getElementById("AF1_cuota").classList.add('input-amarillo');
+  } else if (cupomaxAF1 > 0) {
+		document.getElementById("AF1_cuota").classList.add('input-verde');
+  } else if (cupomaxAF1 < 0) {
+		document.getElementById("AF1_cuota").classList.add('input-rojo');
+  }
+  //Aliado 2
+  if (totalCarteraAF2 > 0) {
+    document.getElementById("panel-AF2").classList.remove('hidden');
+    document.getElementById("aliadof2").required = true;
+    document.getElementById("AF2_factor_x_millon").required = true;
+    document.getElementById("AF2_plazo").required = true;
+    document.getElementById("AF2_cuota").required = true;
+  } else {
+    //Ocultar
+		if ( !document.getElementById("panel-AF2").classList.contains('hidden') ){
+			document.getElementById("panel-AF2").classList.add('hidden');
+    }
+    document.getElementById("aliadof2").value = "";
+    document.getElementById("aliadof2").required = false;
+    document.getElementById("AF2_factor_x_millon").required = false;
+    document.getElementById("AF2_plazo").required = false;
+    document.getElementById("AF2_cuota").required = false;
+  }
+  document.getElementById("AF2_saldo").classList.remove('input-verde');
+  document.getElementById("AF2_saldo").classList.remove('input-amarillo');
+  document.getElementById("AF2_saldo").classList.remove('input-rojo');
+  if (saldo_AF2 === 0) {
+		document.getElementById("AF2_saldo").classList.add('input-amarillo');
+  } else if (saldo_AF2 > 0) {
+		document.getElementById("AF2_saldo").classList.add('input-verde');
+  } else if (saldo_AF2 < 0) {
+		document.getElementById("AF2_saldo").classList.add('input-rojo');
+  }
+  
   return filaTotalesCalculada;
 };
 
@@ -186,6 +335,12 @@ refrescarTotales = () => {
   }
 };
 
+getValorDeCuotaFija = (monto, tasa, cuotas) => {
+  tasa = tasa/100;
+  valor = monto *( (tasa * Math.pow(1 + tasa, cuotas)) / (Math.pow(1 + tasa, cuotas) - 1) );
+  return valor.toFixed(0);
+}
+
 //Función para cambiar los campos numéricos que quedan como string y pasarlos nuevamente a numericos
 formatearCamposParaIntegridadDATA = id => {
   data.map(value => {
@@ -201,36 +356,10 @@ formatearCamposParaIntegridadDATA = id => {
 
 //Opciones para los dropdown (o select)
 const SI_NO_Opts = ["SI", "NO"];
-
-const Data_Cifin_Opts = ["REAL", "FINANCIERO", "COOPERATIVO"];
-
-const EstadoOpts = [
-  "AL DIA",
-  "MORA 30-60",
-  "MORA 60-90",
-  "MORA 90-120",
-  "MORA 120-180",
-  "MORA >180",
-  "DUDOSO RECAUDO",
-  "CARTERA CASTIGADA",
-  "EMBARGO"
-];
-
-const CompraCKoAliadoOpts = ["No", "CK", "Aliado 1", "Aliado 2"];
-
-const CalificacionWABOpts = [
-  "A",
-  "B",
-  "C",
-  "D",
-  "E",
-  "F",
-  "G",
-  "H",
-  "I",
-  "J",
-  "K"
-];
+const Data_Cifin_Opts = data_cifin_opts;
+const EstadoOpts = estado_opts;
+const CompraCKoAliadoOpts = compra_ck_o_aliado_opts;
+const CalificacionWABOpts = calificacion_wab_opts;
 
 //RENDERS
 //Renders para que convertir los valores numéricos en cadenas de moneda o de tasa
@@ -306,18 +435,18 @@ const editManager = (value, record, $cell, $displayEl, id, $grid) => {
       "background-color: transparent; border-color: transparent; box-shadow: none; padding: 0";
     var data = $grid.data(),
       $edit = $(
-        `<button class="btn bg-transparent" style="${inlineBtnStyle}"> <span class="fa fa-pencil"></span> </button>`
+        `<button class="btn bg-transparent" type="button" style="${inlineBtnStyle}"> <span class="fa fa-pencil"></span> </button>`
       ).attr("data-key", id),
       $delete = $(
-        `<button class="btn bg-transparent" style="${inlineBtnStyle}"> <span class="fa fa-remove"></span> </button>`
+        `<button class="btn bg-transparent" type="button" style="${inlineBtnStyle}"> <span class="fa fa-remove"></span> </button>`
       ).attr("data-key", id),
       $update = $(
-        `<button class="btn bg-transparent" style="${inlineBtnStyle}"> <span class="fa fa-check-circle"></span> </button>`
+        `<button class="btn bg-transparent" type="button" style="${inlineBtnStyle}"> <span class="fa fa-check-circle"></span> </button>`
       )
         .attr("data-key", id)
         .hide(),
       $cancel = $(
-        `<button class="btn bg-transparent" style="${inlineBtnStyle}"> <span class="fa fa-times-circle"></span> </button>`
+        `<button class="btn bg-transparent" type="button" style="${inlineBtnStyle}"> <span class="fa fa-times-circle"></span> </button>`
       )
         .attr("data-key", id)
         .hide();
@@ -338,6 +467,7 @@ const editManager = (value, record, $cell, $displayEl, id, $grid) => {
       $delete.show();
       $update.hide();
       $cancel.hide();
+      refrescarTotales();
     });
     $cancel.on("click", function(e) {
       $grid.cancel($(this).data("key"));
@@ -363,6 +493,7 @@ btnAgregarFila_clickHandler = () => {
   data.push(nuevaFila);
   data.push(calcularTotales());
   grid.render(data);
+  inputJsonCarteras.val(JSON.stringify(data.slice(0, data.length - 1)));
 };
 
 deleteRow_ClickHandler = id => {
@@ -371,27 +502,18 @@ deleteRow_ClickHandler = id => {
     refrescarTotales();
     grid.removeRow(id);
     grid.render(data);
+    inputJsonCarteras.val(JSON.stringify(data.slice(0, data.length - 1)));
   }
 };
 
 //Event Handlers
 rowDataChanged_handler = (e, id, record) => {
-  // let columnasTotalizables = [
-  //   "Cuota",
-  //   "SaldoCarteraCentrales",
-  //   "VlrInicioNegociacion",
-  //   "DescuentoLogrado",
-  //   "SaldoCarteraNegociada"
-  // ];
-
   //Se requiere llamar una función para que los campos numéricos que quedaron como string, vuelvan a estar como numéricos
   //esto ocurre porque en el grid de GIJGO no tienen un campo tipo number
   formatearCamposParaIntegridadDATA(id);
 
-  //TO DO: Agregar validación para que esta función solo se llame cuando se ha modificado una columna totalizable
-  //       descomentar también la variable columnasTotalizables
-  // if (columnasTotalizables.includes(column.field)) { //código };
   refrescarTotales();
+  inputJsonCarteras.val(JSON.stringify(data.slice(0, data.length - 1)));
 };
 
 // Declaración de las columnas
@@ -400,19 +522,28 @@ const columnas = [
     field: "ID",
     width: 25,
     title: "ID        ",
-    mode: "ReadOnly"
-    // hidden: true
+    mode: "ReadOnly",
+    hidden: true
+  },
+  {
+    field: "EnDesprendible",
+    title: "En desp.",
+    type: "checkbox",
+    editor: true,
+    width: 60,
+    align: "center",
+    tooltip: "¿Se encuentra en desprendible de pago?"
   },
   {
     field: "Entidad",
-    width: 100,
+    width: 80,
     type: "text",
     title: "Entidad",
     editor: true
   },
   {
     field: "SoloEfectivo",
-    title: "Solo Efectivo?",
+    title: "Efectivo",
     type: "checkbox",
     editor: true,
     width: 60,
@@ -440,24 +571,24 @@ const columnas = [
     editor: { dataSource: EstadoOpts }
   },
   {
-    field: "CompraTR",
+    field: "CompraAF1",
     type: "dropdown",
-    width: 55,
-    title: "Compra TR",
+    width: 40,
+    title: "AF1",
     editor: { dataSource: SI_NO_Opts }
   },
   {
-    field: "CompraCKoAliado",
+    field: "CompraAF2",
     type: "dropdown",
     width: 40,
-    title: "Compra CK o Aliado",
-    editor: { dataSource: CompraCKoAliadoOpts }
+    title: "AF2",
+    editor: { dataSource: SI_NO_Opts }
   },
   {
     field: "CalificacionWAB",
-    width: 50,
+    width: 40,
     type: "dropdown",
-    title: "Calificacion WAB",
+    title: "WAB",
     editor: { dataSource: CalificacionWABOpts }
   },
   {
@@ -515,7 +646,7 @@ const columnas = [
     editor: true
   },
   {
-    width: 35,
+    width: 25,
     align: "center",
     renderer: editManager
   }
@@ -532,6 +663,9 @@ $(document).ready(function() {
     columns: columnas
   });
   grid.on("rowDataChanged", rowDataChanged_handler);
+
+  inputJsonCarteras = $("#json_carteras");
+  inputJsonCarteras.val(JSON.stringify(data));
   if (data.length !== 0) {
     //Si no hay datos no se calcula total
     data.push(calcularTotales());
@@ -546,5 +680,35 @@ $(document).ready(function() {
       e.preventDefault();
       return false;
     }
+  });
+
+  $("input#costo_certificados").change(function() {
+    inputJsonCarteras.val(JSON.stringify(data.slice(0, data.length - 1)));
+    refrescarTotales();
+  });
+
+  $("#AF1_tasa").change(function() {
+    inputJsonCarteras.val(JSON.stringify(data.slice(0, data.length - 1)));
+    refrescarTotales();
+  });
+
+  $("#AF1_plazo").change(function() {
+    inputJsonCarteras.val(JSON.stringify(data.slice(0, data.length - 1)));
+    refrescarTotales();
+  });
+
+  $("#AF1_costos").change(function() {
+    inputJsonCarteras.val(JSON.stringify(data.slice(0, data.length - 1)));
+    refrescarTotales();
+  });
+
+  $("#AF2_cuota").change(function() {
+    inputJsonCarteras.val(JSON.stringify(data.slice(0, data.length - 1)));
+    refrescarTotales();
+  });
+
+  $("#AF2_factor_x_millon").change(function() {
+    inputJsonCarteras.val(JSON.stringify(data.slice(0, data.length - 1)));
+    refrescarTotales();
   });
 });

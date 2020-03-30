@@ -41,9 +41,9 @@ class Estudiostr extends Model
 		return $this->hasOne('\App\Condicionesck', 'estudios_id', 'id');
 	}
 	
-	public function condicionaf()
+	public function condicionesaf()
 	{
-		return $this->hasOne('\App\Condicionesaf', 'estudios_id', 'id');
+		return $this->hasMany('\App\Condicionesaf', 'estudios_id', 'id');
 	}
 	
 	public function asesor()
@@ -54,5 +54,10 @@ class Estudiostr extends Model
 	public function registro()
 	{
 		return $this->hasOne('\App\Registrosfinancieros', 'id', 'registros_id');
+	}
+
+	public function carteras()
+	{
+		return $this->hasMany('\App\Carteras', 'estudios_id', 'id');
 	}
 }

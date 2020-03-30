@@ -15,9 +15,14 @@ class Carteras extends Model
 		return $this->hasOne('\App\Estudiostr', 'id', 'estudios_id');
 	}
 
-	public function sector()
+	public function sectordata()
 	{
-		return $this->hasOne('\App\Sectores', 'id', 'sectores_id');
+		return $this->hasOne('\App\Sectores', 'id', 'sector_data');
+	}
+
+	public function sectorcifin()
+	{
+		return $this->hasOne('\App\Sectores', 'id', 'sector_cifin');
 	}
 	
 	public function entidad()
@@ -28,5 +33,10 @@ class Carteras extends Model
 	public function estado()
 	{
 		return $this->hasOne('\App\Estadoscartera', 'id', 'estadoscarteras_id');
+	}
+	
+	public function aliado()
+	{
+		return $this->hasOne('\App\Aliados', 'id', 'aliadocompra_id');
 	}
 }

@@ -11,4 +11,9 @@ class Condicionesaf extends Model
     
 	protected $table = 'condicionesaf';
 	
+	public function aliado()
+	{
+		return $this->hasOne('\App\Aliados', 'id', 'aliados_id');
+	}
+	
 }

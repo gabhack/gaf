@@ -5,29 +5,60 @@
 @endsection
 
 @section('content')
-    <script type="text/javascript">
-        Array.prototype.unique=function(a){
-            return function(){return this.filter(a)}}(function(a,b,c){return c.indexOf(a,b+1)<0
-        });
-
-        // var aliados= <?php echo json_encode($aliados); ?>;
-        // var tiposcliente= <?php echo json_encode($tiposcliente); ?>;
+    <script>
+        //data
+        var carteras = @json($carteras);
+        var dataDB = [...carteras];
         
-        var tipocliente = 'AA';
-        var aliados_usados = new Array(2,2,2,7,7,7);
-        aliados_usados = aliados_usados.unique();
+        //params
+        var tiposcliente = @json($tiposcliente);
+        var cupos = @json($cupos);
 
-        console.log(aliados_usados);
+        var extraprima = @json($extraprima);
+        var p_x_millon = @json($p_x_millon);
+        var iva = @json($iva);
 
-        var dataBD = @json($data);
+        var sectores = @json($sectores);
+        var data_cifin_opts = [...sectores];
+
+        var estado = @json($estadoscartera);
+        var estado_opts = [...estado];
+
+        var aliados = @json($aliados);
+        var compra_ck_o_aliado_opts = ["NO", ...aliados];
+
+        var calificacion_wab_opts = ["A","B","C","D","E","F","G","H","I","J","K"];
     </script>
+
+    @if (isset($error))
+        <div class="modal fade" id="modal-default" style="display: block;">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">Información de carteras incompleta</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{{$error}}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    @endif
 
     <form id="form_guardar" action="/estudios/actualizar" method="POST" enctype="multipart/form-data">
         {!! Form::token() !!}
         <input type="hidden" class="form-control" name="cliente_id" id="cliente_id" value="{{$cliente->id}}">
         <input type="hidden" class="form-control" name="registro_id" id="registro_id" value="{{$registro->id}}">
         <input type="hidden" class="form-control" name="estudio_id" id="estudio_id" value="{{$estudio->id}}">
-        <input type="hidden" class="form-control" name="json_carteras" id="json_carteras" value='[{"ID":"1","Entidad":"BBVA 0261","SoloEfectivo":false,"Data":"FINANCIERO","Cifin":"FINANCIERO","Estado":"AL DIA","CompraTR":"NO","CompraCKoAliado":"CK","CalificacionWAB":"A","Cuota":918033,"SaldoCarteraCentrales":34158000,"VlrInicioNegociacion":34158000,"DescuentoLogrado":0,"SaldoCarteraNegociada":34158000,"PctjeNegociacion":0,"FechaVencimiento":""},{"ID":"2","Entidad":"COOPSERV 0656-6217-6347-6427-6479-6628-68","SoloEfectivo":true,"Data":"FINANCIERO","Cifin":"FINANCIERO","Estado":"AL DIA","CompraTR":"SI","CompraCKoAliado":"NO","CalificacionWAB":"A","Cuota":652088,"SaldoCarteraCentrales":16427000,"VlrInicioNegociacion":16427000,"DescuentoLogrado":355925,"SaldoCarteraNegociada":16071075,"PctjeNegociacion":0.021667072502587204,"FechaVencimiento":""}]'>
+        <input type="hidden" class="form-control" name="json_carteras" id="json_carteras" value=''>
         <div class="row">
             <div class="col-md-12">
                 <div class="btn-group mr-2 float-right" role="group">
@@ -155,7 +186,7 @@
                                 <table class="table table-borderless">
                                     <tbody>
                                         <tr>
-                                            <th scope="row">Ingresos</th>
+                                            <th scope="row">Ingresos Base {{ $asignacionadicional > 0 ? '(+' . mneyformat($asignacionadicional) . ' de AA)' : '' }}</th>
                                             <td><input class="text-center" type="text" disabled name="ingresos_base" id="ingresos_base" value="<?php echo mneyformat($sueldocompleto) ?>"></td>
                                         </tr>
                                         <tr>
@@ -167,12 +198,8 @@
                                             <td><input class="text-center" type="text" disabled name="descuentos" id="descuentos" value="<?php echo mneyformat($totaldescuentos) ?>"></td>
                                         </tr>
                                         <tr>
-                                            <th scope="row">Cupo Libre inversión</th>
+                                            <th scope="row">Cupo Libre inversión potencial</th>
                                             <td><input class="text-center input-{{$cupos['libreInversion']['color']}}" type="text" disabled name="cupo_inversion" id="cupo_inversion" value="<?php echo mneyformat($cupos['libreInversion']['valor']) ?>"></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Cupo compra de cartera</th>
-                                            <td><input class="text-center input-{{$cupos['compraCartera']['color']}}" type="text" disabled name="cupo_compra_cartera" id="cupo_compra_cartera" value="<?php echo mneyformat($cupos['compraCartera']['valor']) ?>"></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -220,7 +247,6 @@
                             <div class="col-md-4 text-center">
                                 <label class="label-consulta" for="pad">Calificación/WAB:
                                     <select name="calif_wab" class="custom-select form-control" required>
-                                        <option selected disabled value="">Seleccione uno...</option>
                                         <option disabled value="">Seleccione uno...</option>
                                         @foreach(calificaciones() as $key => $calificacion)
                                             <option value="{{$key}}" {{$estudio->central->calificacion_data == $key ? 'selected="selected"' : '' }} >{{$calificacion}}</option>
@@ -316,17 +342,6 @@
                     </div>
                 </div>
             @endif
-            
-            <div class="col-md-12">
-                <div class="panel panel-primary">
-                    <div class="panel-heading"><b>Carteras por comprar</b></div>
-                    <div class="panel-body">
-                        <button type="button" id="btnAgregarFila" class="btn btn-primary">Agregar cartera</button><br><br>
-                        <table id="grid" class="table table-hover table-condensed table-bordered">
-                        </table>
-                    </div>
-                </div>
-            </div>
 
             <div class="col-md-4">
                 <div class="panel panel-primary">
@@ -419,16 +434,22 @@
                     </div>
                 </div>
             </div>
-
-            @php
-                $total_carteras = 54258900;
-                $total_servicio = $total_carteras*$estudio->condicion->tipocliente->costoservicios/100;
-                $total_total = $total_carteras+$total_servicio+$estudio->condicion->costocertificados;
-            @endphp
-
+            
             <div class="col-md-12">
                 <div class="panel panel-primary">
-                <div class="panel-heading">Condiciones Te Recuperamos <span class="tipo-cliente pull-right">Tipo de cliente: <span class="valor-tipo-cliente">{{$estudio->condicion->tipocliente->tipo}}</span></span> </div>
+                    <div class="panel-heading"><b>Carteras por comprar</b></div>
+                    <div class="panel-body">
+                        <button type="button" id="btnAgregarFila" class="btn btn-primary">Agregar cartera</button><br><br>
+                        <table id="grid" class="table table-hover table-condensed table-bordered">
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Seccion Condiciones Te Recuperamos --}}
+            <div id="panel_tr" class="col-md-12 hidden">
+                <div class="panel panel-primary">
+                <div class="panel-heading">Condiciones Te Recuperamos <span class="tipo-cliente pull-right">Tipo de cliente: <span id="valor-tipo-cliente"></span></span> </div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-6 text-center">
@@ -437,7 +458,7 @@
                                         <label class="label-consulta" for="pad">Costo certificados:</label>
                                     </div>
                                     <div class="col-md">
-                                        <input class="w-100 text-center" type="text" name="costo_certificados" id="costo_certificados" required value="{{$estudio->condicion->costocertificados}}">
+                                        <input class="form-control w-100 text-center" type="text" name="costo_certificados" id="costo_certificados" required value="{{$estudio->condicion->costocertificados}}">
                                     </div>
                                 </div>
                             </div>
@@ -447,27 +468,27 @@
                                         <label class="label-consulta" for="pad">Total Carteras a comprar:</label>
                                     </div>
                                     <div class="col-md">
-                                        <input class="w-100 text-center" disabled type="text" name="carteras_comprar" id="carteras_comprar" value="{{mneyformat($total_carteras)}}">
+                                        <input class="form-control w-100 text-center" disabled type="text" name="carteras_comprar" id="carteras_comprar" value="">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6 text-center">
                                 <div class="row">
                                     <div class="col-md-7 text-right">
-                                        <label class="label-consulta" for="pad">Total Servicio({{number_format($estudio->condicion->tipocliente->costoservicios, 0, ',', ' ')}}%):</label>
+                                        <label class="label-consulta" for="pad">Total Servicio(<span id="costo-servicio-tr"></span>%):</label>
                                     </div>
                                     <div class="col-md">
-                                        <input class="w-100 text-center" disabled type="text" name="total_servicio" id="total_servicio" value="{{mneyformat($total_servicio)}}">
+                                        <input class="form-control w-100 text-center" disabled type="text" name="total_servicio" id="total_servicio" value="">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6 text-center">
                                 <div class="row">
                                     <div class="col-md-7 text-right">
-                                        <label class="label-consulta" for="pad">Total Servicio + Impuestos:</label>
+                                        <label class="label-consulta" for="pad">Total Servicio + Impuestos(19%):</label>
                                     </div>
                                     <div class="col-md">
-                                        <input class="w-100 text-center" disabled type="text" name="servicio_impuestos" id="servicio_impuestos" value="{{mneyformat($total_total)}}">
+                                        <input class="form-control w-100 text-center" disabled type="text" name="servicio_impuestos" id="servicio_impuestos" value="">
                                     </div>
                                 </div>
                             </div>
@@ -477,16 +498,256 @@
             </div>
 
             {{-- Seccion Condiciones Aliados --}}
-            <div class="col-md-12 panel-aliados">
+            <div id="panel-aliados" class="col-md-12 panel-aliados hidden">
                 <div class="panel panel-primary">
-                    <div class="panel-heading">Condiciones Aiados financieros</div>
+                    <div class="panel-heading">Condiciones Aliados Financieros</div>
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-md-6 text-center ck-panel">
-                                <h4>CK Comercializadora</h4>
+                            <div id="panel-AF1" class="col-md text-center hidden">
+                                <h4><b>Aliado 1</b></h4>
+                                <div class="row justify-content-center">
+                                    <div class="col-md-10">
+                                        <div class="row">
+                                            <div class="col-md-5 text-right">
+                                                <label class="label-consulta" for="pad">Aliado</label>
+                                            </div>
+                                            <div class="col-md">
+                                                <select class="form-control" name="AF1[id]" id="aliadof1">
+                                                    <option disabled value="">Seleccione uno...</option>
+                                                    @foreach ($aliadosCompleto as $aliadoCompleto)
+                                                        @if ($aliadoCompleto->tipo_aliado == 1)
+                                                            <option value="{{$aliadoCompleto->id}}"{{ isset($aliadosusados[1]) ? ($aliadoCompleto->id == $aliadosusados[1]['id'] ? ' selected' : '') : '' }}>{{$aliadoCompleto->aliado}}</option>                                               
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <div class="row">
+                                            <div class="col-md-5 text-right">
+                                                <label class="label-consulta" for="pad">Carteras a comprar</label>
+                                            </div>
+                                            <div class="col-md">
+                                                <input class="form-control text-right" type="text" name="carteras_a_comprar_af1" id="carteras_a_comprar_af1" value="" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <div class="row">
+                                            <div class="col-md-5 text-right">
+                                                <label class="label-consulta" for="pad">Tasa %</label>
+                                            </div>
+                                            <div class="col-md">
+                                                <select class="form-control" name="AF1[tasa]" id="AF1_tasa">
+                                                    <option value="" >Seleccione uno...</option>
+                                                    @for ($i = 1; $i <= 3; $i+=.1)
+                                                        <option value="{{ number_format($i, 3) }}"{{ isset($aliadosusados[1]) ? (number_format($i, 3) == $aliadosusados[1]['condiciones']->tasa ? ' selected' : '') : '' }}>{{ number_format($i, 3) }}</option>
+                                                    @endfor
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <div class="row">
+                                            <div class="col-md-5 text-right">
+                                                <label class="label-consulta" for="pad">Plazo</label>
+                                            </div>
+                                            <div class="col-md">
+                                                <input class="form-control" type="text" name="AF1[plazo]" id="AF1_plazo" value="{{ isset($aliadosusados[1]) ? $aliadosusados[1]['condiciones']->plazo : '60' }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <div class="row">
+                                            <div class="col-md-5 text-right">
+                                                <label class="label-consulta" for="pad">Costos (%)</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <select class="form-control" name="AF1[costos]" id="AF1_costos">
+                                                    <option value="" >Seleccione uno...</option>
+                                                    @for ($i = 5; $i <= 9; $i++)
+                                                        <option value="{{ $i }}"{{ isset($aliadosusados[1]) ? (number_format($i, 3) == $aliadosusados[1]['condiciones']->costo ? ' selected' : '') : '' }}>{{ $i }}</option>
+                                                    @endfor
+                                                </select>
+                                            </div>
+                                            <div class="col-md">
+                                                <input class="form-control text-right" type="text" name="AF1[costos_valor]" id="AF1_costos_valor" value="" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <div class="row">
+                                            <div class="col-md-5 text-right">
+                                                <label class="label-consulta" for="pad">Seguro</label>
+                                            </div>
+                                            <div class="col-md">
+                                                <input class="form-control text-right" type="text" name="AF1_seguro" id="AF1_seguro" value="" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <div class="row">
+                                            <div class="col-md-5 text-right">
+                                                <label class="label-consulta" for="pad">GMF</label>
+                                            </div>
+                                            <div class="col-md">
+                                                <input class="form-control text-right" type="text" name="AF1_GMF" id="AF1_GMF" value="" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <div class="row">
+                                            <div class="col-md-5 text-right">
+                                                <label class="label-consulta" for="pad">IVA</label>
+                                            </div>
+                                            <div class="col-md">
+                                                <input class="form-control text-right" type="text" name="AF1_iva" id="AF1_iva" value="" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md">
+                                        <div class="row">
+                                            <div class="col-md-12 text-center">
+                                                <label class="label-consulta" for="pad">Total Crédito</label>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <input class="form-control text-center font-weight-bold" type="text" name="AF1_valor_credito" id="AF1_valor_credito" value="" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <div class="row">
+                                            <div class="col-md-12 text-center">
+                                                <label class="label-consulta" for="pad">Cupo máx.</label>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <input class="form-control text-center font-weight-bold" type="text" name="AF1_cupo_max" id="AF1_cupo_max" value="" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <div class="row">
+                                            <div class="col-md-12 text-center">
+                                                <label class="label-consulta" for="pad">Cuota + Seguro</label>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <input class="form-control text-center font-weight-bold" type="text" name="AF1_cuota" id="AF1_cuota" value="" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-6 text-center aliado-panel">
-                                <h4 id="label-aliado-financiero"></h4>
+                            <div id="panel-AF2" class="col-md text-center hidden">
+                                <h4><b>Aliado 2</b></h4>
+                                <div class="row justify-content-center">
+                                    <div class="col-md-10">
+                                        <div class="row">
+                                            <div class="col-md text-right">
+                                                <label class="label-consulta" for="pad">Aliado</label>
+                                            </div>
+                                            <div class="col-md">
+                                                <select class="form-control" name="AF2[id]" id="aliadof2">
+                                                    <option disabled value="">Seleccione uno...</option>
+                                                    @foreach ($aliadosCompleto as $aliadoCompleto)
+                                                        @if ($aliadoCompleto->tipo_aliado == 2)
+                                                            <option value="{{$aliadoCompleto->id}}"{{ isset($aliadosusados[2]) ? ($aliadoCompleto->id == $aliadosusados[2]['id'] ? ' selected' : '') : '' }}>{{$aliadoCompleto->aliado}}</option>                                               
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <div class="row">
+                                            <div class="col-md text-right">
+                                                <label class="label-consulta" for="pad">Carteras a comprar</label>
+                                            </div>
+                                            <div class="col-md">
+                                                <input class="form-control" type="text" name="carteras_a_comprar_af2" id="carteras_a_comprar_af2" value="" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <div class="row">
+                                            <div class="col-md text-right">
+                                                <label class="label-consulta" for="pad">Factor x millón</label>
+                                            </div>
+                                            <div class="col-md">
+                                                <select class="form-control" name="AF2[factor_x_millon]" id="AF2_factor_x_millon">
+                                                    <option value="" >Seleccione uno...</option>
+                                                    @for ($i = 0.017; $i <= 0.027; $i+=.0005)
+                                                        <option value="{{ number_format($i, 4) }}"{{ isset($aliadosusados[2]) ? (number_format($i, 4) == $aliadosusados[2]['condiciones']->factor ? ' selected' : '') : '' }}>{{ number_format($i, 4) }}</option>
+                                                    @endfor
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <div class="row">
+                                            <div class="col-md text-right">
+                                                <label class="label-consulta" for="pad">Plazo</label>
+                                            </div>
+                                            <div class="col-md">
+                                                <input class="form-control" type="text" name="AF2[plazo]" id="AF2_plazo" value="{{ isset($aliadosusados[2]) ? $aliadosusados[2]['condiciones']->plazo : '120' }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <div class="row">
+                                            <div class="col-md text-right">
+                                                <label class="label-consulta" for="pad">Cupo Máximo</label>
+                                            </div>
+                                            <div class="col-md">
+                                                <input class="form-control" type="text" name="AF2_cupo_max" id="AF2_cupo_max" value="" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <div class="row">
+                                            <div class="col-md text-right">
+                                                <label class="label-consulta" for="pad">Cuota</label>
+                                            </div>
+                                            <div class="col-md">
+                                                <input class="form-control" type="text" name="AF2[cuota]" id="AF2_cuota" value="{{ isset($aliadosusados[1]) ? $aliadosusados[2]['condiciones']->cuota : '0' }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md">
+                                        <div class="row">
+                                            <div class="col-md-12 text-center">
+                                                <label class="label-consulta" for="pad">Monto a prestar</label>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <input class="form-control text-center font-weight-bold" type="text" name="AF2_monto_prestar" id="AF2_monto_prestar" value="" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <div class="row">
+                                            <div class="col-md-12 text-center">
+                                                <label class="label-consulta" for="pad">Monto Máx.</label>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <input class="form-control text-center font-weight-bold" type="text" name="AF2_monto_max" id="AF2_monto_max" value="" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <div class="row">
+                                            <div class="col-md-12 text-center">
+                                                <label class="label-consulta" for="pad">Saldo al cliente</label>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <input class="form-control text-center font-weight-bold" type="text" name="AF2_saldo" id="AF2_saldo" value="" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

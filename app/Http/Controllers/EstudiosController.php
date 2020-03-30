@@ -14,7 +14,10 @@ use App\TiposCliente as TiposCliente;
 use App\Sectores as Sectores;
 use App\Estadoscartera as Estadoscartera;
 use App\EntidadesCentrales as EntidadesCentrales;
+use App\Condicionesaf as Condicionesaf;
+use App\Carteras as Carteras;
 use Illuminate\Http\Request;
+use DateTime;
 
 class EstudiosController extends Controller
 {
@@ -63,21 +66,29 @@ class EstudiosController extends Controller
         $smlv = Parametros::where('llave', 'SMLV')->first();
         $iva = Parametros::where('llave', 'IVA')->first()->valor;
         $tasack = Parametros::where('llave', 'TASA_CK')->first()->valor;
+        $tiposcliente = TiposCliente::all();
+        $extraprima = Parametros::where('llave', 'SEGURO_EXTRAPRIMA')->first()->valor;
+        $p_x_millon = Parametros::where('llave', 'SEGURO_P_X_MILLON')->first()->valor;
+        $aliadosCompleto = Aliados::all();
 
         $cliente = Clientes::where("documento", "=", $request->documento)->first();
         $asesores = Asesores::all();
         $registro = $cliente->registrosfinancieros->last();
         $sueldobasico = sueldobasico(ingresos_por_registro($registro->id));
 
-        $sueldobasico = 0;
+        //Parametros para datagrid
+        $aliados = Aliados::all()->pluck('aliado')->toArray();
+        $estadoscartera = Estadoscartera::all()->pluck('estado')->toArray();
+        $sectores = Sectores::all()->pluck('sector')->toArray();
+
+        $sueldobasico = $cliente->ingresos;
         $adicional = 0;
         if ($cliente->cargo) {
-            if (strpos($cliente->cargo, 'Rector') !== false || strpos($cliente->cargo, 'Coordinador') !== false) {
-                $adicional = (int)sueldoadicional(ingresos_por_registro($registro->id));
+            if (strpos($cliente->cargo, 'Rector') !== false) {
+                $adicional = ($cliente->ingresos*.3);
+            } elseif (strpos($cliente->cargo, 'Coordinador') !== false) {
+                $adicional = ($cliente->ingresos*.2);
             }
-            $sueldobasico = (int)sueldobasico(ingresos_por_registro($registro->id));
-        } else {
-            $sueldobasico = (int)sueldobasico(ingresos_por_registro($registro->id));
         }
 
         $aportes = 0;
@@ -115,7 +126,14 @@ class EstudiosController extends Controller
             "totaldescuentos" => $totaldescuentos,
             "cupos" => $cupos,
             "iva" => $iva,
-            "tasack" => $tasack
+            "tasack" => $tasack,
+            "tiposcliente" => $tiposcliente,
+            "extraprima" => $extraprima,
+            "p_x_millon" => $p_x_millon,
+            "sectores" => $sectores,
+            "estadoscartera" => $estadoscartera,
+            "aliados" => $aliados,
+            "aliadosCompleto" => $aliadosCompleto
         ]);
     }
 
@@ -126,6 +144,8 @@ class EstudiosController extends Controller
      */
     public function guardar(Request $request)
     {
+        $tieneAF1 = false;
+        $tieneAF2 = false;
         //Parametros
         $tasack = Parametros::where('llave', 'TASA_CK')->first()->valor;
 
@@ -160,14 +180,80 @@ class EstudiosController extends Controller
         }
         $newcentrales->save();
 
-        //Registro de Condiciones
+        //Registro de Condiciones TR
         $condicionestr = new Condicionestr;
         $condicionestr->estudios_id = $newestudio->id;
-        $condicionestr->costoservicios = $tasack;
         $condicionestr->costocertificados = $request->costo_certificados;
         $condicionestr->save();
 
-        return redirect('estudios');
+        //Registro de Carteras
+        $carteras_json = json_decode($request->json_carteras);
+        if (sizeof($carteras_json) > 0) {
+            foreach ($carteras_json as $key => $cartera) {
+                $newcartera = new Carteras;
+                $newcartera->sector_data = Sectores::where('sector', $cartera->Data)->first()->id;
+                $newcartera->sector_cifin = Sectores::where('sector', $cartera->Cifin)->first()->id;
+                $newcartera->estadoscarteras_id = Estadoscartera::where('estado', $cartera->Estado)->first()->id;
+                $newcartera->nombre_obligacion = $cartera->Entidad;
+                $newcartera->calif_wab = $cartera->CalificacionWAB;
+                $newcartera->estudios_id = $estudio->id;
+                if ($cartera->CompraAF1 == 'SI') {
+                    $newcartera->compraAF1_id = $request->AF1['id'];
+                    $tieneAF1 = true;
+                } elseif ($cartera->CompraAF2 == 'SI') {
+                    $newcartera->compraAF2_id = $request->AF2['id'];
+                    $tieneAF2 = true;
+                }
+                if ($cartera->SoloEfectivo) {
+                    $newcartera->solo_efectivo = 1;
+                }
+                if ($cartera->EnDesprendible) {
+                    $newcartera->enDesprendible = 1;
+                }
+                $newcartera->cuota = $cartera->Cuota;
+                $newcartera->saldo = $cartera->SaldoCarteraCentrales;
+                $newcartera->valor_ini = $cartera->VlrInicioNegociacion;
+                $newcartera->dcto_logrado = $cartera->DescuentoLogrado;
+                if (strpos($cartera->FechaVencimiento, '/') !== false) {
+                    $fechaopt = explode('/', $cartera->FechaVencimiento);
+                    $fecha = $fechaopt[2] . '-' . $fechaopt[0] . '-' . $fechaopt[1];
+                } else {
+                    $fecha = $cartera->FechaVencimiento;
+                }
+                $newcartera->fecha_vence = $fecha;
+                $newcartera->save();
+            }
+        }
+
+        //Registro condiciones AF1 y AF2
+        if ($tieneAF1) {
+            $newcondicionAF1 = new Condicionesaf;
+            $newcondicionAF1->estudios_id = $newestudio->id;
+            $newcondicionAF1->aliados_id = $request->AF1['id'];
+            $newcondicionAF1->plazo = $request->AF1['plazo'];
+            $newcondicionAF1->tasa = $request->AF1['tasa'];
+            $newcondicionAF1->costo = $request->AF1['costos'];
+            $newcondicionAF1->save();
+        }
+        if ($tieneAF2) {
+            $newcondicionAF2 = new Condicionesaf;
+            $newcondicionAF2->estudios_id = $newestudio->id;
+            $newcondicionAF2->aliados_id = $request->AF2['id'];
+            $newcondicionAF2->plazo = $request->AF2['plazo'];
+            $newcondicionAF2->factor = $request->AF2['factor_x_millon'];
+            $newcondicionAF2->cuota = $request->AF2['cuota'];
+            $newcondicionAF2->save();
+        }
+
+        $lista = Estudios::all();
+        return view("estudios/index")->with([
+            "lista" => $lista,
+            "message" => array(
+                'tipo' => 'success',
+                'titulo' => 'Éxito',
+                'mensaje' => 'El estudio se ha creado correctamente',
+            )
+        ]);
     }
 
     /**
@@ -178,27 +264,75 @@ class EstudiosController extends Controller
      */
     public function editar($id)
     {
-        // Parámetros
-        $smlv = Parametros::where('llave', 'SMLV')->first();
-        $iva = Parametros::where('llave', 'IVA')->first()->valor;
-        $tiposcliente = TiposCliente::all();
-        $aliados = Aliados::all();
-
         $estudio = Estudios::find($id);
         $registro = Registrosfinancieros::find($estudio->registros_id);
         $asesor = Asesores::find($estudio->asesores_id);
         $asesores = Asesores::all();
         $cliente = Clientes::find($estudio->clientes_id);
+        $datacarteras = $estudio->carteras;
+        $carteras = array();
+        $aliadosusados = array();
 
-        $sueldobasico = 0;
+        // Parámetros
+        $smlv = Parametros::where('llave', 'SMLV')->first();
+        $iva = Parametros::where('llave', 'IVA')->first()->valor;
+        $extraprima = Parametros::where('llave', 'SEGURO_EXTRAPRIMA')->first()->valor;
+        $p_x_millon = Parametros::where('llave', 'SEGURO_P_X_MILLON')->first()->valor;
+        $tiposcliente = TiposCliente::all();
+        $aliadosCompleto = Aliados::all();
+        
+        if (sizeof($datacarteras) > 0) {
+            if (isset(array_values(array_unique(array_filter($datacarteras->pluck('compraAF1_id')->toArray(), "strlen")))[0])) {
+                $aliadosusados[1] = array(
+                    'id' => array_values(array_unique(array_filter($datacarteras->pluck('compraAF1_id')->toArray(), "strlen")))[0],
+                    'condiciones' => Condicionesaf::where('estudios_id', $estudio->id)->where('aliados_id', $aliado1)->first()
+                );
+            }
+            if (isset(array_values(array_unique(array_filter($datacarteras->pluck('compraAF2_id')->toArray(), "strlen")))[0])) {
+                $aliadosusados[2] = array(
+                    'id' => array_values(array_unique(array_filter($datacarteras->pluck('compraAF2_id')->toArray(), "strlen")))[0],
+                    'condiciones' => Condicionesaf::where('estudios_id', $estudio->id)->where('aliados_id', $aliado1)->first()
+                );
+            }
+        }
+
+        //Parametros para datagrid
+        $aliados = Aliados::all()->pluck('aliado')->toArray();
+        $estadoscartera = Estadoscartera::all()->pluck('estado')->toArray();
+        $sectores = Sectores::all()->pluck('sector')->toArray();
+
+        foreach ($datacarteras as $key => $cartera) {
+            
+            $date = new DateTime($cartera->fecha_vence);
+            $carteras[] = array(
+                "ID" => $cartera->id,
+                "EnDesprendible" => ($cartera->enDesprendible == 1 ? true : false),
+                "Entidad" => $cartera->nombre_obligacion,
+                "SoloEfectivo" => ($cartera->solo_efectivo == 1 ? true : false),
+                "Data" => $cartera->sectordata->sector,
+                "Cifin" => $cartera->sectorcifin->sector,
+                "Estado" => $cartera->estado->estado,
+                "CompraAF1" => ($cartera->compraAF1_id !== null ? "SI" : "NO"),
+                "CompraAF2" => ($cartera->compraAF2_id !== null ? "SI" : "NO"),
+                "CalificacionWAB" => $cartera->calif_wab,
+                "Cuota" => $cartera->cuota,
+                "SaldoCarteraCentrales" => $cartera->saldo,
+                "VlrInicioNegociacion" => $cartera->valor_ini,
+                "DescuentoLogrado" => $cartera->dcto_logrado,
+                "SaldoCarteraNegociada" => 0,
+                "PctjeNegociacion" => 0,
+                "FechaVencimiento" => $date->format('m/d/Y')
+            );
+        }
+
+        $sueldobasico = $cliente->ingresos;
         $adicional = 0;
         if ($cliente->cargo) {
-            if (strpos($cliente->cargo, 'Rector') !== false || strpos($cliente->cargo, 'Coordinador') !== false) {
-                $adicional = (int)sueldoadicional(ingresos_por_registro($registro->id));
+            if (strpos($cliente->cargo, 'Rector') !== false) {
+                $adicional = ($cliente->ingresos*.3);
+            } elseif (strpos($cliente->cargo, 'Coordinador') !== false) {
+                $adicional = ($cliente->ingresos*.2);
             }
-            $sueldobasico = (int)sueldobasico(ingresos_por_registro($registro->id));
-        } else {
-            $sueldobasico = (int)sueldobasico(ingresos_por_registro($registro->id));
         }
 
         $aportes = 0;
@@ -233,13 +367,21 @@ class EstudiosController extends Controller
             "asesor" => $asesor,
             "asesores" => $asesores,
             "cliente" => $cliente,
+            "asignacionadicional" => $adicional,
             "sueldocompleto" => $sueldocompleto,
             "aportes" => $aportes,
             "totaldescuentos" => $totaldescuentos,
             "cupos" => $cupos,
             "iva" => $iva,
             "tiposcliente" => $tiposcliente,
-            "aliados" => $aliados
+            "aliadosCompleto" => $aliadosCompleto,
+            "aliados" => $aliados,
+            "estadoscartera" => $estadoscartera,
+            "sectores" => $sectores,
+            "carteras" => $carteras,
+            "aliadosusados" => $aliadosusados,
+            "extraprima" => $extraprima,
+            "p_x_millon" => $p_x_millon
         ]);
     }
 
@@ -252,39 +394,130 @@ class EstudiosController extends Controller
      */
     public function actualizar(Request $request)
     {
-        //info de carteras
-        $carteras = json_decode($request->json_carteras);
-
-        echo '<pre>';
-        print_r($carteras);
-        echo '<pre>';
-
-        // $estudio = Estudios::find($request->estudio_id);
-        // $estudio->decision = strtoupper($request->desiciones);
-        // $estudio->observaciones = $request->observaciones;
-        // if ($request->asesor_id == 'nuevo') {
-        //     $newasesor = new Asesores;
-        //     $newasesor->nombres = $request->nuevo_asesor;
-        //     $newasesor->save();
-        //     $estudio->asesores_id = $newasesor->id;
-        // } else {
-        //     $estudio->asesores_id = $request->asesor_id;
-        // }
-        // $estudio->save();
+        $tieneAF1 = false;
+        $tieneAF2 = false;
+        $estudio = Estudios::find($request->estudio_id);
+        $estudio->decision = strtoupper($request->desiciones);
+        $estudio->observaciones = $request->observaciones;
+        if ($request->asesor_id == 'nuevo') {
+            $newasesor = new Asesores;
+            $newasesor->nombres = $request->nuevo_asesor;
+            $newasesor->save();
+            $estudio->asesores_id = $newasesor->id;
+        } else {
+            $estudio->asesores_id = $request->asesor_id;
+        }
+        $estudio->save();
         
-        // //Registro de centrales
-        // $central = $estudio->central;
-        // $central->calificacion_data = $request->calif_wab;
-        // $central->puntaje_data = $request->puntaje_datacredito;
-        // $central->proc_en_contra = $request->proc_en_contra;
-        // $central->save();
+        //Registro de centrales
+        $central = $estudio->central;
+        $central->calificacion_data = $request->calif_wab;
+        $central->puntaje_data = $request->puntaje_datacredito;
+        $central->proc_en_contra = $request->proc_en_contra;
+        $central->save();
 
-        // //Registro condiciones
-        // $condicionestr = $estudio->condicion;
-        // $condicionestr->costocertificados = $request->costo_certificados;
-        // $condicionestr->save();
-		
-		// return redirect('estudios');
+        //Registro de Carteras
+        $carteras_json = json_decode($request->json_carteras);
+        //Elimino carteras
+        if (sizeof($estudio->carteras) > 0) {
+            $resCart = Carteras::where('estudios_id', $estudio->id)->forceDelete();
+        }
+        //Creo de nuevo las carteras
+        if (sizeof($carteras_json) > 0) {
+            foreach ($carteras_json as $key => $cartera) {
+                $newcartera = new Carteras;
+                $newcartera->sector_data = Sectores::where('sector', $cartera->Data)->first()->id;
+                $newcartera->sector_cifin = Sectores::where('sector', $cartera->Cifin)->first()->id;
+                $newcartera->estadoscarteras_id = Estadoscartera::where('estado', $cartera->Estado)->first()->id;
+                $newcartera->nombre_obligacion = $cartera->Entidad;
+                $newcartera->calif_wab = $cartera->CalificacionWAB;
+                $newcartera->estudios_id = $estudio->id;
+                if ($cartera->CompraAF1 == 'SI') {
+                    $newcartera->compraAF1_id = $request->AF1['id'];
+                    $tieneAF1 = true;
+                } elseif ($cartera->CompraAF2 == 'SI') {
+                    $newcartera->compraAF2_id = $request->AF2['id'];
+                    $tieneAF2 = true;
+                }
+                if ($cartera->SoloEfectivo) {
+                    $newcartera->solo_efectivo = 1;
+                }
+                if ($cartera->EnDesprendible) {
+                    $newcartera->enDesprendible = 1;
+                }
+                $newcartera->cuota = $cartera->Cuota;
+                $newcartera->saldo = $cartera->SaldoCarteraCentrales;
+                $newcartera->valor_ini = $cartera->VlrInicioNegociacion;
+                $newcartera->dcto_logrado = $cartera->DescuentoLogrado;
+                if (strpos($cartera->FechaVencimiento, '/') !== false) {
+                    $fechaopt = explode('/', $cartera->FechaVencimiento);
+                    $fecha = $fechaopt[2] . '-' . $fechaopt[0] . '-' . $fechaopt[1];
+                } else {
+                    $fecha = $cartera->FechaVencimiento;
+                }
+                $newcartera->fecha_vence = $fecha;
+                $newcartera->save();
+            }
+        }
+
+        //Registro condiciones TR
+        $condicionestr = $estudio->condicion;
+        $condicionestr->costocertificados = $request->costo_certificados;
+        $condicionestr->save();
+
+        //Registro condiciones AF1 y AF2
+        $condicionesaf = $estudio->condicionesaf;
+        $condicionAF1 = array();
+        $condicionAF2 = array();
+        foreach ($condicionesaf as $key => $condicion) {
+            if ($condicion->aliado->tipo_aliado == 1) {
+                $condicionAF1 = $condicion;
+            } else {
+                $condicionAF2 = $condicion;
+            }
+        }
+        if ($tieneAF1) {
+            if ($condicionAF1) {
+                $condicionAF1->aliados_id = $request->AF1['id'];
+                $condicionAF1->plazo = $request->AF1['plazo'];
+                $condicionAF1->tasa = $request->AF1['tasa'];
+                $condicionAF1->costo = $request->AF1['costos'];
+                $condicionAF1->save();
+            } else {
+                $newcondicionAF1 = new Condicionesaf;
+                $newcondicionAF1->aliados_id = $request->AF1['id'];
+                $newcondicionAF1->plazo = $request->AF1['plazo'];
+                $newcondicionAF1->tasa = $request->AF1['tasa'];
+                $newcondicionAF1->costo = $request->AF1['costos'];
+                $newcondicionAF1->save();
+            }
+        }
+        if ($tieneAF2) {
+            if ($condicionAF2) {
+                $condicionAF2->aliados_id = $request->AF2['id'];
+                $condicionAF2->plazo = $request->AF2['plazo'];
+                $condicionAF2->factor = $request->AF2['factor_x_millon'];
+                $condicionAF2->cuota = $request->AF2['cuota'];
+                $condicionAF2->save();
+            } else {
+                $newcondicionAF2 = new Condicionesaf;
+                $newcondicionAF2->aliados_id = $request->AF2['id'];
+                $newcondicionAF2->plazo = $request->AF2['plazo'];
+                $newcondicionAF2->factor = $request->AF2['factor_x_millon'];
+                $newcondicionAF2->cuota = $request->AF2['cuota'];
+                $newcondicionAF2->save();
+            }
+        }
+
+        $lista = Estudios::all();
+        return view("estudios/index")->with([
+            "lista" => $lista,
+            "message" => array(
+                'tipo' => 'success',
+                'titulo' => 'Éxito',
+                'mensaje' => 'El estudio se ha actualizado correctamente',
+            )
+        ]);
     }
 
     /**
@@ -297,5 +530,27 @@ class EstudiosController extends Controller
     {
         Estudios::find($id)->delete();		
 		return redirect('estudios');
+    }
+
+    public function validarCarteras($carteras)
+    {
+        $carteras_json = json_decode($carteras);
+
+        foreach ($carteras_json as $key => $cartera) {
+            if (
+                $cartera->Entidad == '' ||
+                $cartera->Data == '' ||
+                $cartera->Cifin == '' ||
+                $cartera->Estado == '' ||
+                $cartera->CompraAF1 == '' ||
+                $cartera->CompraAF2 == '' ||
+                $cartera->CalificacionWAB == '' ||
+                $cartera->FechaVencimiento == ''
+            ) {
+                return false;
+            } else {
+                return true;
+            }
+        }
     }
 }
