@@ -293,15 +293,17 @@ class EstudiosController extends Controller
         
         if (sizeof($datacarteras) > 0) {
             if (isset(array_values(array_unique(array_filter($datacarteras->pluck('compraAF1_id')->toArray(), "strlen")))[0])) {
+                $aliado1 = array_values(array_unique(array_filter($datacarteras->pluck('compraAF1_id')->toArray(), "strlen")))[0];
                 $aliadosusados[1] = array(
-                    'id' => array_values(array_unique(array_filter($datacarteras->pluck('compraAF1_id')->toArray(), "strlen")))[0],
+                    'id' => $aliado1,
                     'condiciones' => Condicionesaf::where('estudios_id', $estudio->id)->where('aliados_id', $aliado1)->first()
                 );
             }
             if (isset(array_values(array_unique(array_filter($datacarteras->pluck('compraAF2_id')->toArray(), "strlen")))[0])) {
+                $aliado2 = array_values(array_unique(array_filter($datacarteras->pluck('compraAF2_id')->toArray(), "strlen")))[0];
                 $aliadosusados[2] = array(
-                    'id' => array_values(array_unique(array_filter($datacarteras->pluck('compraAF2_id')->toArray(), "strlen")))[0],
-                    'condiciones' => Condicionesaf::where('estudios_id', $estudio->id)->where('aliados_id', $aliado1)->first()
+                    'id' => $aliado2,
+                    'condiciones' => Condicionesaf::where('estudios_id', $estudio->id)->where('aliados_id', $aliado2)->first()
                 );
             }
         }
