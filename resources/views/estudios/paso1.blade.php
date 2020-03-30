@@ -7,7 +7,7 @@
                 <div class="col-md-4">
                         <div class="alert alert-{{ $message['tipo'] }} alert-dismissible">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                            <h4><i class="icon fa fa-check"></i> {{ $message['titulo'] }}</h4>
+                            <h4><i class="icon fa fa-exclamation"></i> {{ $message['titulo'] }}</h4>
                             {{ $message['mensaje'] }}
                         </div>
                 </div>
