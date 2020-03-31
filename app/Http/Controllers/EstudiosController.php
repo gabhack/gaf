@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth as Auth;
 use App\Clientes as Clientes;
 use App\Asesores as Asesores;
 use App\Estudiostr as Estudios;
@@ -38,7 +39,11 @@ class EstudiosController extends Controller
      */
     public function index()
     {
-        $lista = Estudios::all();
+        if (Auth::user()->rol->id == 1 || Auth::user()->rol->id == 5 ) {
+            $lista = Estudios::all();
+        } else {
+            $lista = Estudios::where('users_id', Auth::user()->rol->id);
+        }
         return view("estudios/index")->with([
             "lista" => $lista
             ]);
