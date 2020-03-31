@@ -29,7 +29,6 @@ class EstudiosController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('usuario');
     }
 
     /**
@@ -206,7 +205,7 @@ class EstudiosController extends Controller
                 $newcartera->estadoscarteras_id = Estadoscartera::where('estado', $cartera->Estado)->first()->id;
                 $newcartera->nombre_obligacion = $cartera->Entidad;
                 $newcartera->calif_wab = $cartera->CalificacionWAB;
-                $newcartera->estudios_id = $estudio->id;
+                $newcartera->estudios_id = $newestudio->id;
                 if ($cartera->CompraAF1 == 'SI') {
                     $newcartera->compraAF1_id = $request->AF1['id'];
                     $tieneAF1 = true;
