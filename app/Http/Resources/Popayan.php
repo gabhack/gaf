@@ -48,13 +48,19 @@ class Popayan
 					}
 					
 					// Guardar en BD
-					$personas[] = $datos;
-					
 					preg_match('#\((.*?)\)#', $datos['ciudad'], $match);
 					$ciudadstr = strtoupper(trim(str_replace($match[0], '', $datos['ciudad'])));
 					
 					$cliente = \App\Clientes::where("documento", "=", $datos['numvinculacion'])->first();
 					$ciudad = \App\Ciudades::where('ciudad', $ciudadstr)->first();
+					
+					//Crear ciudad
+                    if ($ciudad === null) {
+						$ciudad = new \App\Ciudades;
+						$ciudad->departamentos_id = 1;
+						$ciudad->ciudad = $ciudadstr;
+						$ciudad->save();
+                    }
 
 					//Cliente crear-actualizar existente
 					if ($cliente === null) 

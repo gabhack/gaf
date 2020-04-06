@@ -92,11 +92,11 @@ calcularTotales = () => {
         IDfilaTotales = acum.ID;
       }
 
-      acum.Cuota += currentValue.Cuota;
-      acum.SaldoCarteraCentrales += currentValue.SaldoCarteraCentrales;
-      acum.VlrInicioNegociacion += currentValue.VlrInicioNegociacion;
-      acum.DescuentoLogrado += currentValue.DescuentoLogrado;
-      acum.SaldoCarteraNegociada += currentValue.SaldoCarteraNegociada;
+      acum.Cuota += parseInt(currentValue.Cuota);
+      acum.SaldoCarteraCentrales += parseInt(currentValue.SaldoCarteraCentrales);
+      acum.VlrInicioNegociacion += parseInt(currentValue.VlrInicioNegociacion);
+      acum.DescuentoLogrado += parseInt(currentValue.DescuentoLogrado);
+      acum.SaldoCarteraNegociada += parseInt(currentValue.SaldoCarteraNegociada);
 
       //CÁLCULO DE INFORMACIÓN ADICIONAL
       cantCarteras = arr.length;
@@ -114,21 +114,21 @@ calcularTotales = () => {
         currentValue.Estado === "EMBARGO" ? cantEmbargos + 1 : cantEmbargos;
       //
       cuotasDuplicadas = 
-        currentValue.EnDesprendible === true ? cuotasDuplicadas + currentValue.Cuota : cuotasDuplicadas;
+        currentValue.EnDesprendible === true ? parseInt(cuotasDuplicadas) + parseInt(currentValue.Cuota) : parseInt(cuotasDuplicadas);
       //
       totalCarteraAF1 =
-        currentValue.CompraAF1 === "SI" ? totalCarteraAF1 + currentValue.SaldoCarteraNegociada : totalCarteraAF1;
+        currentValue.CompraAF1 === "SI" ? parseInt(totalCarteraAF1) + parseInt(currentValue.SaldoCarteraNegociada) : parseInt(totalCarteraAF1);
       totalCarteraAF2 =
-        currentValue.CompraAF2 === "SI" ? totalCarteraAF2 + currentValue.SaldoCarteraNegociada : totalCarteraAF2;
+        currentValue.CompraAF2 === "SI" ? parseInt(totalCarteraAF2) + parseInt(currentValue.SaldoCarteraNegociada) : parseInt(totalCarteraAF2);
       totalCarteraSinComprar =
-        (currentValue.CompraAF1 === "NO" && currentValue.CompraAF2 === "NO") ? totalCarteraSinComprar + currentValue.SaldoCarteraNegociada : totalCarteraSinComprar;
+        (currentValue.CompraAF1 === "NO" && currentValue.CompraAF2 === "NO") ? parseInt(totalCarteraSinComprar) + parseInt(currentValue.SaldoCarteraNegociada) : parseInt(totalCarteraSinComprar);
       //
       cuotaCarteraAF1 =
-        currentValue.CompraAF1 === "SI" ? cuotaCarteraAF1 + currentValue.Cuota : cuotaCarteraAF1;
+        currentValue.CompraAF1 === "SI" ? parseInt(cuotaCarteraAF1) + parseInt(currentValue.Cuota) : parseInt(cuotaCarteraAF1);
       cuotaCarteraAF2 =
-        currentValue.CompraAF2 === "SI" ? cuotaCarteraAF2 + currentValue.Cuota : cuotaCarteraAF2;
+        currentValue.CompraAF2 === "SI" ? parseInt(cuotaCarteraAF2) + parseInt(currentValue.Cuota) : parseInt(cuotaCarteraAF2);
       cuotaCarteraSinComprar =
-        (currentValue.CompraAF1 === "NO" && currentValue.CompraAF2 === "NO") ? cuotaCarteraSinComprar + currentValue.Cuota : cuotaCarteraSinComprar;
+        (currentValue.CompraAF1 === "NO" && currentValue.CompraAF2 === "NO") ? parseInt(cuotaCarteraSinComprar) + parseInt(currentValue.Cuota) : parseInt(cuotaCarteraSinComprar);
         return acum;
     },
     { ...dataEstructura }
@@ -499,8 +499,8 @@ btnAgregarFila_clickHandler = () => {
 deleteRow_ClickHandler = id => {
   if (confirm("Seguro que desea eliminar esta cartera?")) {
     data = borrarElementoData(id);
-    refrescarTotales();
     grid.removeRow(id);
+    refrescarTotales();
     grid.render(data);
     inputJsonCarteras.val(JSON.stringify(data.slice(0, data.length - 1)));
   }

@@ -42,7 +42,7 @@ class EstudiosController extends Controller
         if (Auth::user()->rol->id == 1 || Auth::user()->rol->id == 5 ) {
             $lista = Estudios::all();
         } else {
-            $lista = Estudios::where('users_id', Auth::user()->rol->id);
+            $lista = Estudios::where('user_id', Auth::user()->id)->get();
         }
         return view("estudios/index")->with([
             "lista" => $lista
@@ -259,7 +259,11 @@ class EstudiosController extends Controller
             $newcondicionAF2->save();
         }
 
-        $lista = Estudios::all();
+        if (Auth::user()->rol->id == 1 || Auth::user()->rol->id == 5 ) {
+            $lista = Estudios::all();
+        } else {
+            $lista = Estudios::where('user_id', Auth::user()->id)->get();
+        }
         return view("estudios/index")->with([
             "lista" => $lista,
             "message" => array(
@@ -316,12 +320,14 @@ class EstudiosController extends Controller
         $aliados = Aliados::all()->pluck('aliado')->toArray();
         $estadoscartera = Estadoscartera::all()->pluck('estado')->toArray();
         $sectores = Sectores::all()->pluck('sector')->toArray();
+        $cont = 0;
 
         foreach ($datacarteras as $key => $cartera) {
             
             $date = new DateTime($cartera->fecha_vence);
+            $cont++;
             $carteras[] = array(
-                "ID" => $cartera->id,
+                "ID" => $cont,
                 "EnDesprendible" => ($cartera->enDesprendible == 1 ? true : false),
                 "Entidad" => $cartera->nombre_obligacion,
                 "SoloEfectivo" => ($cartera->solo_efectivo == 1 ? true : false),
@@ -501,6 +507,7 @@ class EstudiosController extends Controller
                 $condicionAF1->save();
             } else {
                 $newcondicionAF1 = new Condicionesaf;
+                $newcondicionAF1->estudios_id = $estudio->id;
                 $newcondicionAF1->aliados_id = $request->AF1['id'];
                 $newcondicionAF1->plazo = $request->AF1['plazo'];
                 $newcondicionAF1->tasa = $request->AF1['tasa'];
@@ -517,6 +524,7 @@ class EstudiosController extends Controller
                 $condicionAF2->save();
             } else {
                 $newcondicionAF2 = new Condicionesaf;
+                $newcondicionAF2->estudios_id = $estudio->id;
                 $newcondicionAF2->aliados_id = $request->AF2['id'];
                 $newcondicionAF2->plazo = $request->AF2['plazo'];
                 $newcondicionAF2->factor = $request->AF2['factor_x_millon'];
@@ -525,7 +533,11 @@ class EstudiosController extends Controller
             }
         }
 
-        $lista = Estudios::all();
+        if (Auth::user()->rol->id == 1 || Auth::user()->rol->id == 5 ) {
+            $lista = Estudios::all();
+        } else {
+            $lista = Estudios::where('user_id', Auth::user()->id)->get();
+        }
         return view("estudios/index")->with([
             "lista" => $lista,
             "message" => array(

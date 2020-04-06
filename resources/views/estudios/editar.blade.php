@@ -711,7 +711,7 @@
                                                 <label class="label-consulta" for="pad">Cuota</label>
                                             </div>
                                             <div class="col-md">
-                                                <input class="form-control" type="text" name="AF2[cuota]" id="AF2_cuota" value="{{ isset($aliadosusados[1]) ? $aliadosusados[2]['condiciones']->cuota : '0' }}">
+                                                <input class="form-control" type="text" name="AF2[cuota]" id="AF2_cuota" value="{{ isset($aliadosusados[2]) ? $aliadosusados[2]['condiciones']->cuota : '0' }}">
                                             </div>
                                         </div>
                                     </div>
