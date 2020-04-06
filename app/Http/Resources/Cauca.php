@@ -726,7 +726,7 @@ class Cauca
 					}
 	
 					//Registrar nuevo cliente
-					/*foreach ($personas as $indice => $persona) {
+					foreach ($personas as $indice => $persona) {
 						$cliente = \App\Clientes::where("documento", "=", $persona['documento'])->first();
 						$ciudad = \App\Ciudades::where('ciudad', $persona['ciudad'] )->first();
 	
@@ -825,7 +825,7 @@ class Cauca
 							\Storage::disk('archivos')->delete($nombreArchivoTmp . "." . $extension);
 							throw new Exception("Error: No fue posible actualizar el registro #" . ($indice+1) . ". - Mensaje de error:" . $ex->getMessage());
 						}
-					}*/
+					}
 	
 					$response = array(
 						'cod' => '200',
@@ -849,7 +849,7 @@ class Cauca
 			//Eliminar archivo temporal
 			\Storage::disk('archivos')->delete($nombreArchivoTmp . "." . $extension);
 		}
-		// return $response;
+		return $response;
 	}
 
 	public static function mensajes_liquidacion(Request $request)
