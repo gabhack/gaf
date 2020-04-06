@@ -333,7 +333,7 @@ class PlanosController extends Controller
 			}
 		}
 
-        // return view('planos/response')->with(['response' => $response]);
+        return view('planos/response')->with(['response' => $response]);
     }
 
 }
