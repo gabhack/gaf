@@ -157,7 +157,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-5">
-                                <label class="label-consulta">Desición TR</label>
+                                <label class="label-consulta">Decisión TR</label>
                             </div>
                             <div class="col-md-7">
                                 <select name="desiciones" class="custom-select form-control" required>

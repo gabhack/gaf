@@ -78,3 +78,7 @@ Route::group(['prefix' => 'reportes'], function(){
 });
 
 
+//Api Worker
+Route::group(['prefix' => 'worker'], function(){
+    Route::post('/upload_comprobantes', 'WorkerController@uploadComprobantes');
+});
