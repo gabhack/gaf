@@ -17,7 +17,29 @@
 		<link href="{{asset('css/bootstrap-4.3.1/dist/css/bootstrap.min.css')}}" rel="stylesheet">
 		<link href="{{asset('css/simple-sidebar.css')}}" rel="stylesheet">    
 		<link href="{{asset('css/font-awesome-4.7.0/css/font-awesome.min.css')}}" rel="stylesheet">
-		<link href="{{asset('css/styles.css')}}" rel="stylesheet">    
+		<link href="{{asset('css/styles.css')}}" rel="stylesheet">
+
+		
+		<script type="text/javascript">
+			function callbackThen(response){
+				// read HTTP status
+				console.log(response.status);
+				
+				// read Promise object
+				response.json().then(function(data){
+					console.log(data);
+				});
+			}
+			function callbackCatch(error){
+				console.error('Error:', error)
+			}   
+		</script>  
+
+		{!! htmlScriptTagJsApi([
+            'action' => 'homepage',
+            'callback_then' => 'callbackThen',
+            'callback_catch' => 'callbackCatch'
+        ]) !!}
 	</head>
 	<body class="skin-blue sidebar-mini">
 		<!-- Loader -->
@@ -41,7 +63,7 @@
         </footer>
 			
 		<!-- Scripts -->
-		<script src="{{asset('js/app.js')}}"></script>
+		<script src="{{asset('js/jquery-3.5.1.min.js')}}"></script>
 		<script src="{{asset('css/bootstrap-4.3.1/dist/js/bootstrap.bundle.min.js')}}"></script>
 		<script src="{{asset('js/scripts.js')}}"></script>		
 				

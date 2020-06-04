@@ -333,3 +333,6 @@ Route::group(["prefix" => "estudios"], function(){
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/dataset', 'DatasetController@index');
+Route::get('/dataset/get', 'DatasetController@get');

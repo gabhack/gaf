@@ -1,6 +1,19 @@
 @extends('layouts.app')
 
 @section('content')
+    @if (isset($message))
+        <div id="toast-message" class="col-md-12">
+            <div class="row">
+                <div class="col-md-4">
+                        <div class="alert alert-{{ $message['tipo'] }} alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <h4><i class="icon fa fa-exclamation"></i> {{ $message['titulo'] }}</h4>
+                            {{ $message['mensaje'] }}
+                        </div>
+                </div>
+            </div>
+        </div>
+    @endif
 	<div class="col-md-12 col-md-offset-0">
 		<ul class="nav nav-tabs">
             <li class="nav-item">

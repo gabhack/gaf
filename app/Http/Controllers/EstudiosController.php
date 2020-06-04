@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth as Auth;
 use App\Clientes as Clientes;
 use App\Asesores as Asesores;
 use App\Estudiostr as Estudios;
@@ -29,7 +30,6 @@ class EstudiosController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('usuario');
     }
 
     /**
@@ -39,7 +39,11 @@ class EstudiosController extends Controller
      */
     public function index()
     {
-        $lista = Estudios::all();
+        if (Auth::user()->rol->id == 1 || Auth::user()->rol->id == 5 ) {
+            $lista = Estudios::all();
+        } else {
+            $lista = Estudios::where('user_id', Auth::user()->id)->get();
+        }
         return view("estudios/index")->with([
             "lista" => $lista
             ]);
@@ -62,79 +66,89 @@ class EstudiosController extends Controller
      */
     public function iniciar(Request $request)
     {
-        // Parámetros
-        $smlv = Parametros::where('llave', 'SMLV')->first();
-        $iva = Parametros::where('llave', 'IVA')->first()->valor;
-        $tasack = Parametros::where('llave', 'TASA_CK')->first()->valor;
-        $tiposcliente = TiposCliente::all();
-        $extraprima = Parametros::where('llave', 'SEGURO_EXTRAPRIMA')->first()->valor;
-        $p_x_millon = Parametros::where('llave', 'SEGURO_P_X_MILLON')->first()->valor;
-        $aliadosCompleto = Aliados::all();
-
         $cliente = Clientes::where("documento", "=", $request->documento)->first();
-        $asesores = Asesores::all();
-        $registro = $cliente->registrosfinancieros->last();
-        $sueldobasico = sueldobasico(ingresos_por_registro($registro->id));
+        if ($cliente) {
+            // Parámetros
+            $smlv = Parametros::where('llave', 'SMLV')->first();
+            $iva = Parametros::where('llave', 'IVA')->first()->valor;
+            $tasack = Parametros::where('llave', 'TASA_CK')->first()->valor;
+            $tiposcliente = TiposCliente::all();
+            $extraprima = Parametros::where('llave', 'SEGURO_EXTRAPRIMA')->first()->valor;
+            $p_x_millon = Parametros::where('llave', 'SEGURO_P_X_MILLON')->first()->valor;
+            $aliadosCompleto = Aliados::all();
 
-        //Parametros para datagrid
-        $aliados = Aliados::all()->pluck('aliado')->toArray();
-        $estadoscartera = Estadoscartera::all()->pluck('estado')->toArray();
-        $sectores = Sectores::all()->pluck('sector')->toArray();
+            $asesores = Asesores::all();
+            $registro = $cliente->registrosfinancieros->last();
+            $sueldobasico = sueldobasico(ingresos_por_registro($registro->id));
 
-        $sueldobasico = $cliente->ingresos;
-        $adicional = 0;
-        if ($cliente->cargo) {
-            if (strpos($cliente->cargo, 'Rector') !== false) {
-                $adicional = ($cliente->ingresos*.3);
-            } elseif (strpos($cliente->cargo, 'Coordinador') !== false) {
-                $adicional = ($cliente->ingresos*.2);
+            //Parametros para datagrid
+            $aliados = Aliados::all()->pluck('aliado')->toArray();
+            $estadoscartera = Estadoscartera::all()->pluck('estado')->toArray();
+            $sectores = Sectores::all()->pluck('sector')->toArray();
+
+            $sueldobasico = $cliente->ingresos;
+            $adicional = 0;
+            if ($cliente->cargo) {
+                if (strpos($cliente->cargo, 'Rector') !== false) {
+                    $adicional = ($cliente->ingresos*.3);
+                } elseif (strpos($cliente->cargo, 'Coordinador') !== false) {
+                    $adicional = ($cliente->ingresos*.2);
+                }
             }
+
+            $aportes = 0;
+            $vinculacion = '';		
+            if($registro->pagaduria->de_pensiones)
+            {
+                $vinculacion = 'PENS';
+                $aportes = Parametros::where('llave', 'APORTES_PENSIONADOS')->first();
+            }	
+            else
+            {
+                $aportes = Parametros::where('llave', 'APORTES_ACTIVOS')->first();
+            }
+            $aportes = $aportes->valor * ($sueldobasico + $adicional) ;
+            
+            $totaldescuentos = totalizar_concepto(descuentos_por_registro($registro->id));
+
+            $cupos = calcularCapacidad(
+                $vinculacion,
+                $sueldobasico,
+                $aportes,
+                $adicional,
+                $totaldescuentos,
+                $smlv->valor
+            );
+
+            $sueldocompleto = $sueldobasico+$adicional;
+
+            return view("estudios/iniciarestudio")->with([
+                "cliente" => $cliente,
+                "asesores" => $asesores,
+                "ultimoregistro" => $registro,
+                "sueldocompleto" => $sueldocompleto,
+                "aportes" => $aportes,
+                "totaldescuentos" => $totaldescuentos,
+                "cupos" => $cupos,
+                "iva" => $iva,
+                "tasack" => $tasack,
+                "tiposcliente" => $tiposcliente,
+                "extraprima" => $extraprima,
+                "p_x_millon" => $p_x_millon,
+                "sectores" => $sectores,
+                "estadoscartera" => $estadoscartera,
+                "aliados" => $aliados,
+                "aliadosCompleto" => $aliadosCompleto
+            ]);
+        } else {
+            return view("estudios/paso1")->with([
+                "message" => array(
+                    'tipo' => 'error',
+                    'titulo' => 'Error',
+                    'mensaje' => 'No se encontraron clientes con el documento suministrado',
+                )
+            ]);
         }
-
-        $aportes = 0;
-        $vinculacion = '';		
-		if($registro->pagaduria->de_pensiones)
-		{
-            $vinculacion = 'PENS';
-            $aportes = Parametros::where('llave', 'APORTES_PENSIONADOS')->first();
-		}	
-		else
-		{
-			$aportes = Parametros::where('llave', 'APORTES_ACTIVOS')->first();
-		}
-        $aportes = $aportes->valor * ($sueldobasico + $adicional) ;
-        
-        $totaldescuentos = totalizar_concepto(descuentos_por_registro($registro->id));
-
-        $cupos = calcularCapacidad(
-            $vinculacion,
-            $sueldobasico,
-            $aportes,
-            $adicional,
-            $totaldescuentos,
-            $smlv->valor
-        );
-
-        $sueldocompleto = $sueldobasico+$adicional;
-
-        return view("estudios/iniciarestudio")->with([
-            "cliente" => $cliente,
-            "asesores" => $asesores,
-            "ultimoregistro" => $registro,
-            "sueldocompleto" => $sueldocompleto,
-            "aportes" => $aportes,
-            "totaldescuentos" => $totaldescuentos,
-            "cupos" => $cupos,
-            "iva" => $iva,
-            "tasack" => $tasack,
-            "tiposcliente" => $tiposcliente,
-            "extraprima" => $extraprima,
-            "p_x_millon" => $p_x_millon,
-            "sectores" => $sectores,
-            "estadoscartera" => $estadoscartera,
-            "aliados" => $aliados,
-            "aliadosCompleto" => $aliadosCompleto
-        ]);
     }
 
     /**
@@ -196,7 +210,7 @@ class EstudiosController extends Controller
                 $newcartera->estadoscarteras_id = Estadoscartera::where('estado', $cartera->Estado)->first()->id;
                 $newcartera->nombre_obligacion = $cartera->Entidad;
                 $newcartera->calif_wab = $cartera->CalificacionWAB;
-                $newcartera->estudios_id = $estudio->id;
+                $newcartera->estudios_id = $newestudio->id;
                 if ($cartera->CompraAF1 == 'SI') {
                     $newcartera->compraAF1_id = $request->AF1['id'];
                     $tieneAF1 = true;
@@ -245,7 +259,11 @@ class EstudiosController extends Controller
             $newcondicionAF2->save();
         }
 
-        $lista = Estudios::all();
+        if (Auth::user()->rol->id == 1 || Auth::user()->rol->id == 5 ) {
+            $lista = Estudios::all();
+        } else {
+            $lista = Estudios::where('user_id', Auth::user()->id)->get();
+        }
         return view("estudios/index")->with([
             "lista" => $lista,
             "message" => array(
@@ -283,15 +301,17 @@ class EstudiosController extends Controller
         
         if (sizeof($datacarteras) > 0) {
             if (isset(array_values(array_unique(array_filter($datacarteras->pluck('compraAF1_id')->toArray(), "strlen")))[0])) {
+                $aliado1 = array_values(array_unique(array_filter($datacarteras->pluck('compraAF1_id')->toArray(), "strlen")))[0];
                 $aliadosusados[1] = array(
-                    'id' => array_values(array_unique(array_filter($datacarteras->pluck('compraAF1_id')->toArray(), "strlen")))[0],
+                    'id' => $aliado1,
                     'condiciones' => Condicionesaf::where('estudios_id', $estudio->id)->where('aliados_id', $aliado1)->first()
                 );
             }
             if (isset(array_values(array_unique(array_filter($datacarteras->pluck('compraAF2_id')->toArray(), "strlen")))[0])) {
+                $aliado2 = array_values(array_unique(array_filter($datacarteras->pluck('compraAF2_id')->toArray(), "strlen")))[0];
                 $aliadosusados[2] = array(
-                    'id' => array_values(array_unique(array_filter($datacarteras->pluck('compraAF2_id')->toArray(), "strlen")))[0],
-                    'condiciones' => Condicionesaf::where('estudios_id', $estudio->id)->where('aliados_id', $aliado1)->first()
+                    'id' => $aliado2,
+                    'condiciones' => Condicionesaf::where('estudios_id', $estudio->id)->where('aliados_id', $aliado2)->first()
                 );
             }
         }
@@ -300,12 +320,14 @@ class EstudiosController extends Controller
         $aliados = Aliados::all()->pluck('aliado')->toArray();
         $estadoscartera = Estadoscartera::all()->pluck('estado')->toArray();
         $sectores = Sectores::all()->pluck('sector')->toArray();
+        $cont = 0;
 
         foreach ($datacarteras as $key => $cartera) {
             
             $date = new DateTime($cartera->fecha_vence);
+            $cont++;
             $carteras[] = array(
-                "ID" => $cartera->id,
+                "ID" => $cont,
                 "EnDesprendible" => ($cartera->enDesprendible == 1 ? true : false),
                 "Entidad" => $cartera->nombre_obligacion,
                 "SoloEfectivo" => ($cartera->solo_efectivo == 1 ? true : false),
@@ -485,6 +507,7 @@ class EstudiosController extends Controller
                 $condicionAF1->save();
             } else {
                 $newcondicionAF1 = new Condicionesaf;
+                $newcondicionAF1->estudios_id = $estudio->id;
                 $newcondicionAF1->aliados_id = $request->AF1['id'];
                 $newcondicionAF1->plazo = $request->AF1['plazo'];
                 $newcondicionAF1->tasa = $request->AF1['tasa'];
@@ -501,6 +524,7 @@ class EstudiosController extends Controller
                 $condicionAF2->save();
             } else {
                 $newcondicionAF2 = new Condicionesaf;
+                $newcondicionAF2->estudios_id = $estudio->id;
                 $newcondicionAF2->aliados_id = $request->AF2['id'];
                 $newcondicionAF2->plazo = $request->AF2['plazo'];
                 $newcondicionAF2->factor = $request->AF2['factor_x_millon'];
@@ -509,7 +533,11 @@ class EstudiosController extends Controller
             }
         }
 
-        $lista = Estudios::all();
+        if (Auth::user()->rol->id == 1 || Auth::user()->rol->id == 5 ) {
+            $lista = Estudios::all();
+        } else {
+            $lista = Estudios::where('user_id', Auth::user()->id)->get();
+        }
         return view("estudios/index")->with([
             "lista" => $lista,
             "message" => array(

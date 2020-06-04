@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 use App\Helper;
 use Exception;
 
-class Popayan
+class Cauca
 {
 	
 	public static function base(Request $request)
@@ -48,7 +48,9 @@ class Popayan
 					}
 					
 					// Guardar en BD
-					preg_match('#\((.*?)\)#', $datos['ciudad'], $match);
+					if (is_numeric(strpos($datos['ciudad'], '('))) {
+						preg_match('#\((.*?)\)#', $datos['ciudad'], $match);
+					}
 					$ciudadstr = strtoupper(trim(str_replace($match[0], '', $datos['ciudad'])));
 					
 					$cliente = \App\Clientes::where("documento", "=", $datos['numvinculacion'])->first();
@@ -60,7 +62,7 @@ class Popayan
 						$ciudad->departamentos_id = 1;
 						$ciudad->ciudad = $ciudadstr;
 						$ciudad->save();
-                    }
+					}
 
 					//Cliente crear-actualizar existente
 					if ($cliente === null) 
@@ -131,9 +133,12 @@ class Popayan
 				'cod' => '400',
 				'mensaje' => $e->getMessage(),
 			);
+			echo '<pre>';
+			print_r($e->getMessage());
+			echo '</pre>';
 		}
 		return $response;
-	}
+    }
 
 	public static function comprobante_pago(Request $request)
 	{
@@ -165,7 +170,7 @@ class Popayan
 
 			if (sizeof($paginas) != 1) {
 				foreach ($paginas as $indice => $pagina) {
-					if ($indice > 0) {
+					if ($indice > 0 && $indice < 5) {
 						$lineas = explode("\n", $pagina);
 
 						// Extraer nombres
@@ -253,6 +258,11 @@ class Popayan
 							}
 						}
 
+						echo '<pre>';
+						print_r($documento);
+						echo '</pre>';
+
+
 						$personas[] = array(
 							'nombres' => $nombres,
 							'documento' => $documento,
@@ -278,6 +288,15 @@ class Popayan
 					$ciudad = \App\Ciudades::where('ciudad', $persona['ciudad'] )->first();
 
 					try {
+					
+						//Crear ciudad
+						if ($ciudad === null) {
+							$ciudad = new \App\Ciudades;
+							$ciudad->departamentos_id = 1;
+							$ciudad->ciudad = $persona['ciudad'];
+							$ciudad->save();
+						}
+						
 						//Cliente crear-actualizar existente
 						if ($cliente === null) {
 							$cliente = new \App\Clientes;
@@ -712,6 +731,15 @@ class Popayan
 						$ciudad = \App\Ciudades::where('ciudad', $persona['ciudad'] )->first();
 	
 						try {
+					
+							//Crear ciudad
+							if ($ciudad === null) {
+								$ciudad = new \App\Ciudades;
+								$ciudad->departamentos_id = 1;
+								$ciudad->ciudad = $persona['ciudad'];
+								$ciudad->save();
+							}
+
 							//Cliente crear-actualizar existente
 							if ($cliente === null) {
 								$cliente = new \App\Clientes;
@@ -1248,5 +1276,5 @@ class Popayan
 		}
 		return $response;
 	}
-	
+
 }
