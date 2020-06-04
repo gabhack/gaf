@@ -36,7 +36,7 @@
 		</script>  
 
 		{!! htmlScriptTagJsApi([
-            'action' => 'homepage',
+            'action' => 'login',
             'callback_then' => 'callbackThen',
             'callback_catch' => 'callbackCatch'
         ]) !!}
