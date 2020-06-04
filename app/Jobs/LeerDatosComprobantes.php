@@ -18,17 +18,19 @@ class LeerDatosComprobantes implements ShouldQueue
     protected $ruta;
     protected $pagaduria;
     protected $nombrearchivo;
+    protected $plano;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($ruta, $pagaduria, $nombrearchivo)
+    public function __construct($ruta, $pagaduria, $nombrearchivo, $plano)
     {
         $this->ruta = $ruta;
         $this->pagaduria = $pagaduria;
         $this->nombrearchivo = $nombrearchivo;
+        $this->plano = $plano;
     }
 
     /**
@@ -43,6 +45,10 @@ class LeerDatosComprobantes implements ShouldQueue
         $ruta = $this->ruta;
         $pagaduria = $this->pagaduria;
         $nombrearchivo = $this->nombrearchivo;
+        $plano = $this->plano;
+
+        $plano->proceso_final_id = $this->job->getJobId();;
+        $plano->save();
 
         $parseador = new \Smalot\PdfParser\Parser();
         $documento = $parseador->parseFile($ruta);
@@ -169,9 +175,11 @@ class LeerDatosComprobantes implements ShouldQueue
                         )
                     );
 
-                    CargarDatosComprobantes::dispatch($persona, $pagaduria)
-                        ->onConnection('database')
-                        ->onQueue('uploadingComprobantes');
+                    $job = (new CargarDatosComprobantes($persona, $pagaduria))->onConnection('database')->onQueue('uploadingComprobantes');
+                    $job->dispatch();
+                    // CargarDatosComprobantes::dispatch($persona, $pagaduria, $plano)
+                    //     ->onConnection('database')
+                    //     ->onQueue('uploadingComprobantes');
                 }
             }
 
@@ -179,7 +187,7 @@ class LeerDatosComprobantes implements ShouldQueue
                 'cod' => '200',
                 'mensaje' => 'Se han actualizado los registros encontrados en el archivo fuente.',
             );
-        } /*else {
+        } else {
             unset($paginas);
             $paginas = explode(" - Comprobante de Pago", $text);
             unset($paginas[sizeof($paginas)-1]);
@@ -373,9 +381,11 @@ class LeerDatosComprobantes implements ShouldQueue
                                 )
                             );
 
-                            CargarDatosComprobantes::dispatch($persona, $pagaduria)
-                                ->onConnection('database')
-                                ->onQueue('uploadingComprobantes');
+                            $job = (new CargarDatosComprobantes($persona, $pagaduria))->onConnection('database')->onQueue('uploadingComprobantes');
+                            $job->dispatch();
+                            // CargarDatosComprobantes::dispatch($persona, $pagaduria, $plano)
+                            //     ->onConnection('database')
+                            //     ->onQueue('uploadingComprobantes');
                         } else {
                             // Extraer nombres
                             $keynombres = (array_search('N. Contratacion:', $lineas))-1;
@@ -528,9 +538,11 @@ class LeerDatosComprobantes implements ShouldQueue
                                 )
                             );
 
-                            CargarDatosComprobantes::dispatch($persona, $pagaduria)
-                                ->onConnection('database')
-                                ->onQueue('uploadingComprobantes');
+                            $job = (new CargarDatosComprobantes($persona, $pagaduria))->onConnection('database')->onQueue('uploadingComprobantes');
+                            $job->dispatch();
+                            // CargarDatosComprobantes::dispatch($persona, $pagaduria, $plano)
+                            //     ->onConnection('database')
+                            //     ->onQueue('uploadingComprobantes');
                         }
                     }
                 }
@@ -545,7 +557,7 @@ class LeerDatosComprobantes implements ShouldQueue
                 \Storage::disk('archivos')->delete($nombreArchivoTmp . "." . $extension);
                 throw new Exception("Error: El archivo no es válido");
             }
-        }*/
+        }
 
         //----------------------------------------
         //Eliminar archivo temporal

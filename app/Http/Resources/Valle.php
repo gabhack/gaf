@@ -138,7 +138,7 @@ class Valle
 		return $response;
 	}
 
-	public static function comprobante_pago(Request $request)
+	public static function comprobante_pago(Request $request, $plano)
 	{
 		try {
 			set_time_limit(0);
@@ -159,9 +159,10 @@ class Valle
 
 			//----------------------------------------
 			//Tratar el archivo para recibir los datos
-			LeerDatosComprobantes::dispatch($ruta, $pagaduria, $nombreArchivoTmp . "." . $extension)
-				->onConnection('database')
-				->onQueue('processingComprobantes');
+			$job = LeerDatosComprobantes::dispatch($ruta, $pagaduria, $nombreArchivoTmp . "." . $extension, $plano)
+					->onConnection('database')
+					->onQueue('processingComprobantes');
+
 
 			$response = array(
 				'cod' => '200',

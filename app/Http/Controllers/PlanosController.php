@@ -136,7 +136,7 @@ class PlanosController extends Controller
 					$response = \App\Http\Resources\Popayan::embargos($request);
 					break;
 				case 'COM':
-					$response = \App\Http\Resources\Popayan::comprobante_pago($request);
+					$response = \App\Http\Resources\Popayan::comprobante_pago($request, $plano);
 					break;
 				case 'MLQ':
 					$response = \App\Http\Resources\Popayan::mensajes_liquidacion($request);
@@ -168,7 +168,7 @@ class PlanosController extends Controller
 					$response = \App\Http\Resources\Valle::embargos($request);
 					break;
 				case 'COM':
-					$response = \App\Http\Resources\Valle::comprobante_pago($request);
+					$response = \App\Http\Resources\Valle::comprobante_pago($request, $plano);
 					break;
 				case 'MLQ':
 					$response = \App\Http\Resources\Valle::mensajes_liquidacion($request);
@@ -200,7 +200,7 @@ class PlanosController extends Controller
 					$response = \App\Http\Resources\Cauca::embargos($request);
 					break;
 				case 'COM':
-					$response = \App\Http\Resources\Cauca::comprobante_pago($request);
+					$response = \App\Http\Resources\Cauca::comprobante_pago($request, $plano);
 					break;
 				case 'MLQ':
 					$response = \App\Http\Resources\Cauca::mensajes_liquidacion($request);
@@ -232,7 +232,7 @@ class PlanosController extends Controller
 					$response = \App\Http\Resources\Jamundi::embargos($request);
 					break;
 				case 'COM':
-					$response = \App\Http\Resources\Jamundi::comprobante_pago($request);
+					$response = \App\Http\Resources\Jamundi::comprobante_pago($request, $plano);
 					break;
 				case 'MLQ':
 					$response = \App\Http\Resources\Jamundi::mensajes_liquidacion($request);
