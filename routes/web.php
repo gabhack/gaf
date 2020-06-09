@@ -11,11 +11,11 @@
 |
 */
 
-Route::get('/clear-cache', function() {
-    $exitCode = Artisan::call('cache:clear');
-    $exitCode = Artisan::call('config:cache');
-    return "Cache is cleared";
-});
+// Route::get('/clear-cache', function() {
+//     $exitCode = Artisan::call('cache:clear');
+//     $exitCode = Artisan::call('config:cache');
+//     return "Cache is cleared";
+// });
 
 Auth::routes(['register' => false]);
 
