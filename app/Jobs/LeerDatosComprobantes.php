@@ -178,6 +178,7 @@ class LeerDatosComprobantes implements ShouldQueue
 
                     // $job = (new CargarDatosComprobantes($persona, $pagaduria))->onConnection('database')->onQueue('uploadingComprobantes');
                     // $job->dispatch();
+                    
                     $jobId = CargarDatosComprobantes::dispatch($persona, $pagaduria)
                         ->onConnection('database')
                         ->onQueue('uploadingComprobantes');
