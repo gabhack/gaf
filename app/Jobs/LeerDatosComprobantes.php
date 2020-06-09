@@ -10,6 +10,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Smalot\PdfParser\Parser as Parser;
 
 class LeerDatosComprobantes implements ShouldQueue
 {
@@ -47,10 +48,10 @@ class LeerDatosComprobantes implements ShouldQueue
         $nombrearchivo = $this->nombrearchivo;
         $plano = $this->plano;
 
-        $plano->proceso_final_id = $this->job->getJobId();;
-        $plano->save();
+        // $plano->proceso_final_id = $this->job->getJobId();
+        // $plano->save();
 
-        $parseador = new \Smalot\PdfParser\Parser();
+        $parseador = new Parser;
         $documento = $parseador->parseFile($ruta);
 
         $text = $documento->getText();
@@ -175,11 +176,11 @@ class LeerDatosComprobantes implements ShouldQueue
                         )
                     );
 
-                    $job = (new CargarDatosComprobantes($persona, $pagaduria))->onConnection('database')->onQueue('uploadingComprobantes');
-                    $job->dispatch();
-                    // CargarDatosComprobantes::dispatch($persona, $pagaduria, $plano)
-                    //     ->onConnection('database')
-                    //     ->onQueue('uploadingComprobantes');
+                    // $job = (new CargarDatosComprobantes($persona, $pagaduria))->onConnection('database')->onQueue('uploadingComprobantes');
+                    // $job->dispatch();
+                    $jobId = CargarDatosComprobantes::dispatch($persona, $pagaduria)
+                        ->onConnection('database')
+                        ->onQueue('uploadingComprobantes');
                 }
             }
 
@@ -381,11 +382,11 @@ class LeerDatosComprobantes implements ShouldQueue
                                 )
                             );
 
-                            $job = (new CargarDatosComprobantes($persona, $pagaduria))->onConnection('database')->onQueue('uploadingComprobantes');
-                            $job->dispatch();
-                            // CargarDatosComprobantes::dispatch($persona, $pagaduria, $plano)
-                            //     ->onConnection('database')
-                            //     ->onQueue('uploadingComprobantes');
+                            // $job = (new CargarDatosComprobantes($persona, $pagaduria))->onConnection('database')->onQueue('uploadingComprobantes');
+                            // $job->dispatch();
+                            CargarDatosComprobantes::dispatch($persona, $pagaduria)
+                                ->onConnection('database')
+                                ->onQueue('uploadingComprobantes');
                         } else {
                             // Extraer nombres
                             $keynombres = (array_search('N. Contratacion:', $lineas))-1;
@@ -538,11 +539,11 @@ class LeerDatosComprobantes implements ShouldQueue
                                 )
                             );
 
-                            $job = (new CargarDatosComprobantes($persona, $pagaduria))->onConnection('database')->onQueue('uploadingComprobantes');
-                            $job->dispatch();
-                            // CargarDatosComprobantes::dispatch($persona, $pagaduria, $plano)
-                            //     ->onConnection('database')
-                            //     ->onQueue('uploadingComprobantes');
+                            // $job = (new CargarDatosComprobantes($persona, $pagaduria))->onConnection('database')->onQueue('uploadingComprobantes');
+                            // $job->dispatch();
+                            CargarDatosComprobantes::dispatch($persona, $pagaduria)
+                                ->onConnection('database')
+                                ->onQueue('uploadingComprobantes');
                         }
                     }
                 }
