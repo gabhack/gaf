@@ -8,6 +8,8 @@ class Colpensiones
 	
 	public static function base(Request $request)
 	{
+		set_time_limit(0);
+		
 		try {
 			$pagaduria = \App\Pagadurias::find($request->input("pagaduria"));
 
