@@ -7,6 +7,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Exception;
 
 class CargarDatosComprobantes implements ShouldQueue
 {
@@ -14,16 +15,21 @@ class CargarDatosComprobantes implements ShouldQueue
 
     protected $persona;
     protected $pagaduria;
+    protected $plano;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($persona, $pagaduria)
+    public function __construct($persona, $pagaduria, $plano)
     {
         $this->persona = $persona;
         $this->pagaduria = $pagaduria;
+        $this->plano = $plano;
+
+        $plano->cont_procesos++;
+        $plano->save();
     }
 
     /**
@@ -37,6 +43,7 @@ class CargarDatosComprobantes implements ShouldQueue
 
         $persona = $this->persona;
         $pagaduria = $this->pagaduria;
+        $plano = $this->plano;
 
         $cliente = \App\Clientes::where("documento", "=", $persona['documento'])->first();
         $ciudad = \App\Ciudades::where('ciudad', $persona['ciudad'] )->first();
@@ -54,7 +61,7 @@ class CargarDatosComprobantes implements ShouldQueue
             //Cliente crear-actualizar existente
             if ($cliente === null) {
                 $cliente = new \App\Clientes;
-                $cliente->users_id				= \Auth::user()->id;
+                $cliente->users_id				= 1;
                 $cliente->ciudades_id 			= $ciudad['id'];
                 $cliente->tipodocumento			= 'CC';
                 $cliente->documento 			= $persona['documento'];
@@ -129,12 +136,17 @@ class CargarDatosComprobantes implements ShouldQueue
                     }
                 }
             }
+        
+            $plano->cont_procesos--;
+            $plano->save();
 
-        } catch(Exception $ex) {
+        } catch(\Exception $ex) {
             //----------------------------------------
             //Eliminar archivo temporal
             \Storage::disk('archivos')->delete($nombreArchivoTmp . "." . $extension);
-            throw new Exception("Error: No fue posible actualizar el registro #" . ($indice+1) . ". - Mensaje de error:" . $ex->getMessage());
+            $plano->cont_procesos = -1;
+            $plano->errors = "Error: " . $ex->getMessage();
+            $plano->save();
         }
 
     }

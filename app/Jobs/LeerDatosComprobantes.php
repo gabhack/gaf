@@ -32,6 +32,9 @@ class LeerDatosComprobantes implements ShouldQueue
         $this->pagaduria = $pagaduria;
         $this->nombrearchivo = $nombrearchivo;
         $this->plano = $plano;
+
+        $plano->cont_procesos++;
+        $plano->save();
     }
 
     /**
@@ -47,9 +50,6 @@ class LeerDatosComprobantes implements ShouldQueue
         $pagaduria = $this->pagaduria;
         $nombrearchivo = $this->nombrearchivo;
         $plano = $this->plano;
-
-        // $plano->proceso_final_id = $this->job->getJobId();
-        // $plano->save();
 
         $parseador = new Parser;
         $documento = $parseador->parseFile($ruta);
@@ -175,13 +175,11 @@ class LeerDatosComprobantes implements ShouldQueue
                             'detallado_conceptos' => $registros
                         )
                     );
-
-                    // $job = (new CargarDatosComprobantes($persona, $pagaduria))->onConnection('database')->onQueue('uploadingComprobantes');
-                    // $job->dispatch();
                     
-                    $jobId = CargarDatosComprobantes::dispatch($persona, $pagaduria)
+                    $jobId = CargarDatosComprobantes::dispatch($persona, $pagaduria, $plano)
                         ->onConnection('database')
                         ->onQueue('uploadingComprobantes');
+                        
                 }
             }
 
@@ -383,11 +381,10 @@ class LeerDatosComprobantes implements ShouldQueue
                                 )
                             );
 
-                            // $job = (new CargarDatosComprobantes($persona, $pagaduria))->onConnection('database')->onQueue('uploadingComprobantes');
-                            // $job->dispatch();
-                            CargarDatosComprobantes::dispatch($persona, $pagaduria)
+                            CargarDatosComprobantes::dispatch($persona, $pagaduria, $plano)
                                 ->onConnection('database')
                                 ->onQueue('uploadingComprobantes');
+                            
                         } else {
                             // Extraer nombres
                             $keynombres = (array_search('N. Contratacion:', $lineas))-1;
@@ -539,12 +536,11 @@ class LeerDatosComprobantes implements ShouldQueue
                                     'detallado_conceptos' => $registros
                                 )
                             );
-
-                            // $job = (new CargarDatosComprobantes($persona, $pagaduria))->onConnection('database')->onQueue('uploadingComprobantes');
-                            // $job->dispatch();
-                            CargarDatosComprobantes::dispatch($persona, $pagaduria)
+                            
+                            CargarDatosComprobantes::dispatch($persona, $pagaduria, $plano)
                                 ->onConnection('database')
                                 ->onQueue('uploadingComprobantes');
+                            
                         }
                     }
                 }
@@ -556,8 +552,10 @@ class LeerDatosComprobantes implements ShouldQueue
             } else {
                 //----------------------------------------
                 //Eliminar archivo temporal
-                \Storage::disk('archivos')->delete($nombreArchivoTmp . "." . $extension);
-                throw new Exception("Error: El archivo no es válido");
+                \Storage::disk('archivos')->delete($nombrearchivo);
+                $plano->cont_procesos = -1;
+                $plano->errors = "Error: El archivo no es válido";
+                $plano->save();
             }
         }
 
@@ -565,5 +563,7 @@ class LeerDatosComprobantes implements ShouldQueue
         //Eliminar archivo temporal
         \Storage::disk('archivos')->delete($nombrearchivo);
         
+        $plano->cont_procesos--;
+        $plano->save();
     }
 }

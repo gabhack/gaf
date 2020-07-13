@@ -114,11 +114,11 @@ class PlanosController extends Controller
 		}
 
         $pagaduria = \App\Pagadurias::find($request->input("pagaduria"));
-		if($pagaduria->codigo == "SEM_POPAYAN")
+		if($pagaduria->codigo == "SEM_POPAYAN" || $pagaduria->codigo == "SED_VALLE" || $pagaduria->codigo == "SED_CAUCA" || $pagaduria->codigo == "SEM_JAMUNDI")
 		{
 			switch ($plano->tipo) {
 				case 'BAS':
-					$response = \App\Http\Resources\Popayan::base($request);
+					$response = \App\Http\Resources\Secretarias::base($request, $plano);
 					break;
 				case 'APL':
 					$response = array(
@@ -133,126 +133,30 @@ class PlanosController extends Controller
 					);
 					break;
 				case 'EMB':
-					$response = \App\Http\Resources\Popayan::embargos($request);
+					$response = \App\Http\Resources\Secretarias::embargos($request, $plano);
 					break;
 				case 'COM':
-					$response = \App\Http\Resources\Popayan::comprobante_pago($request, $plano);
+					$response = \App\Http\Resources\Secretarias::comprobante_pago($request, $plano);
 					break;
 				case 'MLQ':
-					$response = \App\Http\Resources\Popayan::mensajes_liquidacion($request);
+					$response = \App\Http\Resources\Secretarias::mensajes_liquidacion($request, $plano);
 					break;
 				case 'CLQ':
-					$response = \App\Http\Resources\Popayan::conceptos_liquidacion($request);
+					$response = \App\Http\Resources\Secretarias::conceptos_liquidacion($request);
 					break;
 			}
 		} 
-		elseif ($pagaduria->codigo == "SED_VALLE")
-		{
-			switch ($plano->tipo) {
-				case 'BAS':
-					$response = \App\Http\Resources\Valle::base($request);
-					break;
-				case 'APL':
-					$response = array(
-						'cod' => '300',
-						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
-					);
-					break;
-				case 'NAP':
-					$response = array(
-						'cod' => '300',
-						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
-					);
-					break;
-				case 'EMB':
-					$response = \App\Http\Resources\Valle::embargos($request);
-					break;
-				case 'COM':
-					$response = \App\Http\Resources\Valle::comprobante_pago($request, $plano);
-					break;
-				case 'MLQ':
-					$response = \App\Http\Resources\Valle::mensajes_liquidacion($request);
-					break;
-				case 'CLQ':
-					$response = \App\Http\Resources\Valle::conceptos_liquidacion($request);
-					break;
-			}
-		}
-		elseif ($pagaduria->codigo == "SED_CAUCA")
-		{
-			switch ($plano->tipo) {
-				case 'BAS':
-					$response = \App\Http\Resources\Cauca::base($request);
-					break;
-				case 'APL':
-					$response = array(
-						'cod' => '300',
-						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
-					);
-					break;
-				case 'NAP':
-					$response = array(
-						'cod' => '300',
-						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
-					);
-					break;
-				case 'EMB':
-					$response = \App\Http\Resources\Cauca::embargos($request);
-					break;
-				case 'COM':
-					$response = \App\Http\Resources\Cauca::comprobante_pago($request, $plano);
-					break;
-				case 'MLQ':
-					$response = \App\Http\Resources\Cauca::mensajes_liquidacion($request);
-					break;
-				case 'CLQ':
-					$response = \App\Http\Resources\Cauca::conceptos_liquidacion($request);
-					break;
-			}
-		}
-		elseif ($pagaduria->codigo == "SEM_JAMUNDI")
-		{
-			switch ($plano->tipo) {
-				case 'BAS':
-					$response = \App\Http\Resources\Jamundi::base($request);
-					break;
-				case 'APL':
-					$response = array(
-						'cod' => '300',
-						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
-					);
-					break;
-				case 'NAP':
-					$response = array(
-						'cod' => '300',
-						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
-					);
-					break;
-				case 'EMB':
-					$response = \App\Http\Resources\Jamundi::embargos($request);
-					break;
-				case 'COM':
-					$response = \App\Http\Resources\Jamundi::comprobante_pago($request, $plano);
-					break;
-				case 'MLQ':
-					$response = \App\Http\Resources\Jamundi::mensajes_liquidacion($request);
-					break;
-				case 'CLQ':
-					$response = \App\Http\Resources\Jamundi::conceptos_liquidacion($request);
-					break;
-			}
-		}
 		elseif ($pagaduria->codigo == "FOPEP")
 		{
 			switch ($plano->tipo) {
 				case 'BAS':
-					$response = \App\Http\Resources\Fopep::base($request);
+					$response = \App\Http\Resources\Fopep::base($request, $plano);
 					break;
 				case 'APL':
-					$response = \App\Http\Resources\Fopep::descuentos_aplicados($request);
+					$response = \App\Http\Resources\Fopep::descuentos_aplicados($request, $plano);
 					break;
 				case 'NAP':
-					$response = \App\Http\Resources\Fopep::descuentos_no_aplicados($request);
+					$response = \App\Http\Resources\Fopep::descuentos_no_aplicados($request, $plano);
 					break;
 				case 'EMB':
 					$response = array(
@@ -261,6 +165,18 @@ class PlanosController extends Controller
 					);
 					break;
 				case 'COM':
+					$response = array(
+						'cod' => '300',
+						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
+					);
+					break;
+				case 'MLQ':
+					$response = array(
+						'cod' => '300',
+						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
+					);
+					break;
+				case 'CLQ':
 					$response = array(
 						'cod' => '300',
 						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
@@ -272,7 +188,7 @@ class PlanosController extends Controller
 		{
 			switch ($plano->tipo) {
 				case 'BAS':
-					$response = \App\Http\Resources\Fiduprevisora::base($request);
+					$response = \App\Http\Resources\Fiduprevisora::base($request, $plano);
 					break;
 				case 'APL':
 					$response = array(
@@ -293,6 +209,18 @@ class PlanosController extends Controller
 					);
 					break;
 				case 'COM':
+					$response = array(
+						'cod' => '300',
+						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
+					);
+					break;
+				case 'MLQ':
+					$response = array(
+						'cod' => '300',
+						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
+					);
+					break;
+				case 'CLQ':
 					$response = array(
 						'cod' => '300',
 						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
@@ -325,6 +253,18 @@ class PlanosController extends Controller
 					);
 					break;
 				case 'COM':
+					$response = array(
+						'cod' => '300',
+						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
+					);
+					break;
+				case 'MLQ':
+					$response = array(
+						'cod' => '300',
+						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
+					);
+					break;
+				case 'CLQ':
 					$response = array(
 						'cod' => '300',
 						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',

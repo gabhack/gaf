@@ -20,6 +20,7 @@
 		<thead>
 			<tr>
 				<th class="text-center">#</th>
+				<th class="text-center">Estado</th>
 				<th class="text-center">Fecha</th>
 				<th class="text-center">Pagadur&iacute;a</th>
 				<th class="text-center">Archivo</th>
@@ -29,6 +30,7 @@
 			@foreach($planos as $plano)
 				<tr>
 					<td>{{$plano->id}}</td>
+					<td title="{{$plano->cont_procesos < 0 ? $plano->errors : ''}}">{{$plano->cont_procesos < 0 ? 'Error' : ($plano->cont_procesos == 0 ? 'Completado' : 'Procesando' )}}<span class="process-status status-{{$plano->cont_procesos < 0 ? 'error' : ($plano->cont_procesos == 0 ? 'ok' : 'processing' )}}"></span></td>
 					<td>{{$plano->created_at}}</td>					
 					<td>{{$plano->pagaduria->pagaduria}}</td>
 					<td>{{planos()[$plano->tipo]}}</td>
