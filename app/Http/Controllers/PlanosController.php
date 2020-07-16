@@ -25,7 +25,11 @@ class PlanosController extends Controller
     public function index()
     {
 		$planos = \App\Planos::orderBy('created_at', 'desc')->get();
-        return view('planos/index')->with(['planos' => $planos]);
+		$pagadurias = \App\Pagadurias::orderBy('pagaduria')->get();
+		return view('planos/index')->with([
+			'planos' => $planos, 
+			'pagadurias' => $pagadurias
+		]);
     }
 
     /**
@@ -274,6 +278,50 @@ class PlanosController extends Controller
 		}
 
         return view('planos/response')->with(['response' => $response]);
+	}
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create_gcp()
+    {
+        return view('planos/crear-gcp');
     }
+	
+	/**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+	public function store_gcp(Request $request)
+	{
+		ini_set('memory_limit', '-1');
+		$response = array();
+
+		$archivo = $request->file('archivo');
+		$nombre_original = $archivo->getClientOriginalName();
+		$extension = $archivo->getClientOriginalExtension();
+
+		$disk = \Storage::disk('gcs');
+
+		$respond = $disk->put(date('m') . '_' . date('Y') . '/' . $nombre_original, \File::get($archivo));
+		
+		if ($respond == '1') {
+			$response = array(
+				'cod' => '200',
+				'mensaje' => 'El archivo se ha cargado correctamente.',
+			);
+		} else {
+			$response = array(
+				'cod' => '300',
+				'mensaje' => $respond,
+			);
+		}
+		
+        return view('planos/response')->with(['response' => $response]);
+	}
 
 }
