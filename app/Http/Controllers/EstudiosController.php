@@ -79,7 +79,6 @@ class EstudiosController extends Controller
 
             $asesores = Asesores::all();
             $registro = $cliente->registrosfinancieros->last();
-            $sueldobasico = sueldobasico(ingresos_por_registro($registro->id));
 
             //Parametros para datagrid
             $aliados = Aliados::all()->pluck('aliado')->toArray();

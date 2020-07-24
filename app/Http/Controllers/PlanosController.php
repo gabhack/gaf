@@ -261,10 +261,7 @@ class PlanosController extends Controller
 					);
 					break;
 				case 'COM':
-					$response = array(
-						'cod' => '300',
-						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
-					);
+					$response = \App\Http\Resources\Colpensiones::base($request);
 					break;
 				case 'MLQ':
 					$response = array(
