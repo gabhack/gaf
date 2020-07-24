@@ -76,9 +76,3 @@ Route::group(['prefix' => 'carteras'], function(){
 Route::group(['prefix' => 'reportes'], function(){
     Route::post('/consultas', 'JsonReportesController@consultas');
 });
-
-
-//Api Worker
-Route::group(['prefix' => 'worker'], function(){
-    Route::post('/upload_comprobantes', 'WorkerController@uploadComprobantes');
-});

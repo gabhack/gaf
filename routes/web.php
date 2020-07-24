@@ -301,6 +301,9 @@ Route::group(["prefix" => "planos"], function(){
 	
 	Route::get('/crear', 'PlanosController@create');
 	Route::post('/store', 'PlanosController@store');
+
+	Route::get('/crear_gcp', 'PlanosController@create_gcp');
+	Route::post('/store_gcp', 'PlanosController@store_gcp');
 	
 	Route::get('/edit/{id}', 'PlanosController@edit');
 	Route::post('/update/{id}', 'PlanosController@update');

@@ -9,11 +9,13 @@
         "bepsvpt/secure-headers": "^6.0",
         "biscolab/laravel-recaptcha": "^4.1",
         "box/spout": "^3.1",
+        "google/cloud-automl": "^1.1",
         "laravel/framework": "5.7.*",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "~5.0",
         "maatwebsite/excel": "~2.1.0",
-        "smalot/pdfparser": "*"
+        "smalot/pdfparser": "*",
+        "superbalist/flysystem-google-storage": "^7.2"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
