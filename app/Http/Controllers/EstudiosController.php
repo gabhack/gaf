@@ -66,85 +66,95 @@ class EstudiosController extends Controller
      */
     public function iniciar(Request $request)
     {
-        $cliente = Clientes::where("documento", "=", $request->documento)->first();
-        if ($cliente) {
-            // Parámetros
-            $smlv = Parametros::where('llave', 'SMLV')->first();
-            $iva = Parametros::where('llave', 'IVA')->first()->valor;
-            $tasack = Parametros::where('llave', 'TASA_CK')->first()->valor;
-            $tiposcliente = TiposCliente::all();
-            $extraprima = Parametros::where('llave', 'SEGURO_EXTRAPRIMA')->first()->valor;
-            $p_x_millon = Parametros::where('llave', 'SEGURO_P_X_MILLON')->first()->valor;
-            $aliadosCompleto = Aliados::all();
+        try {
+            $cliente = Clientes::where("documento", "=", $request->documento)->first();
+            if ($cliente) {
+                // Parámetros
+                $smlv = Parametros::where('llave', 'SMLV')->first();
+                $iva = Parametros::where('llave', 'IVA')->first()->valor;
+                $tasack = Parametros::where('llave', 'TASA_CK')->first()->valor;
+                $tiposcliente = TiposCliente::all();
+                $extraprima = Parametros::where('llave', 'SEGURO_EXTRAPRIMA')->first()->valor;
+                $p_x_millon = Parametros::where('llave', 'SEGURO_P_X_MILLON')->first()->valor;
+                $aliadosCompleto = Aliados::all();
 
-            $asesores = Asesores::all();
-            $registro = $cliente->registrosfinancieros->last();
+                $asesores = Asesores::all();
+                $registro = $cliente->registrosfinancieros->last();
 
-            //Parametros para datagrid
-            $aliados = Aliados::all()->pluck('aliado')->toArray();
-            $estadoscartera = Estadoscartera::all()->pluck('estado')->toArray();
-            $sectores = Sectores::all()->pluck('sector')->toArray();
+                //Parametros para datagrid
+                $aliados = Aliados::all()->pluck('aliado')->toArray();
+                $estadoscartera = Estadoscartera::all()->pluck('estado')->toArray();
+                $sectores = Sectores::all()->pluck('sector')->toArray();
 
-            $sueldobasico = $cliente->ingresos;
-            $adicional = 0;
-            if ($cliente->cargo) {
-                if (strpos($cliente->cargo, 'Rector') !== false) {
-                    $adicional = ($cliente->ingresos*.3);
-                } elseif (strpos($cliente->cargo, 'Coordinador') !== false) {
-                    $adicional = ($cliente->ingresos*.2);
+                $sueldobasico = $cliente->ingresos;
+                $adicional = 0;
+                if ($cliente->cargo) {
+                    if (strpos($cliente->cargo, 'Rector') !== false) {
+                        $adicional = ($cliente->ingresos*.3);
+                    } elseif (strpos($cliente->cargo, 'Coordinador') !== false) {
+                        $adicional = ($cliente->ingresos*.2);
+                    }
                 }
-            }
 
-            $aportes = 0;
-            $vinculacion = '';		
-            if($registro->pagaduria->de_pensiones)
-            {
-                $vinculacion = 'PENS';
-                $aportes = Parametros::where('llave', 'APORTES_PENSIONADOS')->first();
-            }	
-            else
-            {
-                $aportes = Parametros::where('llave', 'APORTES_ACTIVOS')->first();
-            }
-            $aportes = $aportes->valor * ($sueldobasico + $adicional) ;
-            
-            $totaldescuentos = totalizar_concepto(descuentos_por_registro($registro->id));
+                $aportes = 0;
+                $vinculacion = '';		
+                if($registro->pagaduria->de_pensiones)
+                {
+                    $vinculacion = 'PENS';
+                    $aportes = Parametros::where('llave', 'APORTES_PENSIONADOS')->first();
+                }	
+                else
+                {
+                    $aportes = Parametros::where('llave', 'APORTES_ACTIVOS')->first();
+                }
+                $aportes = $aportes->valor * ($sueldobasico + $adicional) ;
+                
+                $totaldescuentos = totalizar_concepto(descuentos_por_registro($registro->id));
 
-            $cupos = calcularCapacidad(
-                $vinculacion,
-                $sueldobasico,
-                $aportes,
-                $adicional,
-                $totaldescuentos,
-                $smlv->valor
-            );
+                $cupos = calcularCapacidad(
+                    $vinculacion,
+                    $sueldobasico,
+                    $aportes,
+                    $adicional,
+                    $totaldescuentos,
+                    $smlv->valor
+                );
 
-            $sueldocompleto = $sueldobasico+$adicional;
+                $sueldocompleto = $sueldobasico+$adicional;
 
-            return view("estudios/iniciarestudio")->with([
-                "cliente" => $cliente,
-                "asesores" => $asesores,
-                "ultimoregistro" => $registro,
-                "sueldocompleto" => $sueldocompleto,
-                "aportes" => $aportes,
-                "totaldescuentos" => $totaldescuentos,
-                "cupos" => $cupos,
-                "iva" => $iva,
-                "tasack" => $tasack,
-                "tiposcliente" => $tiposcliente,
-                "extraprima" => $extraprima,
-                "p_x_millon" => $p_x_millon,
-                "sectores" => $sectores,
-                "estadoscartera" => $estadoscartera,
-                "aliados" => $aliados,
-                "aliadosCompleto" => $aliadosCompleto
-            ]);
-        } else {
+                return view("estudios/iniciarestudio")->with([
+                    "cliente" => $cliente,
+                    "asesores" => $asesores,
+                    "ultimoregistro" => $registro,
+                    "sueldocompleto" => $sueldocompleto,
+                    "aportes" => $aportes,
+                    "totaldescuentos" => $totaldescuentos,
+                    "cupos" => $cupos,
+                    "iva" => $iva,
+                    "tasack" => $tasack,
+                    "tiposcliente" => $tiposcliente,
+                    "extraprima" => $extraprima,
+                    "p_x_millon" => $p_x_millon,
+                    "sectores" => $sectores,
+                    "estadoscartera" => $estadoscartera,
+                    "aliados" => $aliados,
+                    "aliadosCompleto" => $aliadosCompleto
+                ]);
+            } else {
+                return view("estudios/paso1")->with([
+                    "message" => array(
+                        'tipo' => 'error',
+                        'titulo' => 'Error',
+                        'mensaje' => 'No se encontraron clientes con el documento suministrado',
+                    )
+                ]);
+            }            
+        } catch (\Exception $e) {
             return view("estudios/paso1")->with([
                 "message" => array(
                     'tipo' => 'error',
                     'titulo' => 'Error',
-                    'mensaje' => 'No se encontraron clientes con el documento suministrado',
+                    'mensaje' => $e->get,
                 )
             ]);
         }
