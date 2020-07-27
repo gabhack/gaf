@@ -133,12 +133,14 @@ class PlanosController extends Controller
 						'cod' => '300',
 						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
 					);
+					\App\Planos::destroy($plano->id);
 					break;
 				case 'NAP':
 					$response = array(
 						'cod' => '300',
 						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
 					);
+					\App\Planos::destroy($plano->id);
 					break;
 				case 'EMB':
 					$response = \App\Http\Resources\Secretarias::embargos($request, $plano);
@@ -171,24 +173,28 @@ class PlanosController extends Controller
 						'cod' => '300',
 						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
 					);
+					\App\Planos::destroy($plano->id);
 					break;
 				case 'COM':
 					$response = array(
 						'cod' => '300',
 						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
 					);
+					\App\Planos::destroy($plano->id);
 					break;
 				case 'MLQ':
 					$response = array(
 						'cod' => '300',
 						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
 					);
+					\App\Planos::destroy($plano->id);
 					break;
 				case 'CLQ':
 					$response = array(
 						'cod' => '300',
 						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
 					);
+					\App\Planos::destroy($plano->id);
 					break;
 			}
 		}
@@ -203,36 +209,42 @@ class PlanosController extends Controller
 						'cod' => '300',
 						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
 					);
+					\App\Planos::destroy($plano->id);
 					break;
 				case 'NAP':
 					$response = array(
 						'cod' => '300',
 						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
 					);
+					\App\Planos::destroy($plano->id);
 					break;
 				case 'EMB':
 					$response = array(
 						'cod' => '300',
 						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
 					);
+					\App\Planos::destroy($plano->id);
 					break;
 				case 'COM':
 					$response = array(
 						'cod' => '300',
 						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
 					);
+					\App\Planos::destroy($plano->id);
 					break;
 				case 'MLQ':
 					$response = array(
 						'cod' => '300',
 						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
 					);
+					\App\Planos::destroy($plano->id);
 					break;
 				case 'CLQ':
 					$response = array(
 						'cod' => '300',
 						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
 					);
+					\App\Planos::destroy($plano->id);
 					break;
 			}
 		}
@@ -240,25 +252,32 @@ class PlanosController extends Controller
 		{
 			switch ($plano->tipo) {
 				case 'BAS':
-					$response = \App\Http\Resources\Colpensiones::base($request);
+					$response = array(
+						'cod' => '300',
+						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
+					);
+					\App\Planos::destroy($plano->id);
 					break;
 				case 'APL':
 					$response = array(
 						'cod' => '300',
 						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
 					);
+					\App\Planos::destroy($plano->id);
 					break;
 				case 'NAP':
 					$response = array(
 						'cod' => '300',
 						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
 					);
+					\App\Planos::destroy($plano->id);
 					break;
 				case 'EMB':
 					$response = array(
 						'cod' => '300',
 						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
 					);
+					\App\Planos::destroy($plano->id);
 					break;
 				case 'COM':
 					$response = \App\Http\Resources\Colpensiones::base($request);
@@ -268,12 +287,14 @@ class PlanosController extends Controller
 						'cod' => '300',
 						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
 					);
+					\App\Planos::destroy($plano->id);
 					break;
 				case 'CLQ':
 					$response = array(
 						'cod' => '300',
 						'mensaje' => 'Esta pagaduría no permite el tipo de archivos que seleccionó',
 					);
+					\App\Planos::destroy($plano->id);
 					break;
 			}
 		}

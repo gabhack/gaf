@@ -15,8 +15,10 @@ class Colpensiones
 
 			//Obtener el archivo y guardarlo en la carpeta temporal
 
-			ini_set('memory_limit', '-1');
-			$archivo = $request->file('basicos');
+            ini_set('memory_limit', '-1');
+            
+            $archivo = $request->file('comppago');
+
 
 			$nombre_original = $archivo->getClientOriginalName();
 			$extension = $archivo->getClientOriginalExtension();
