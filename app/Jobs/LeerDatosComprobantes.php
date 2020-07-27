@@ -44,504 +44,143 @@ class LeerDatosComprobantes implements ShouldQueue
      */
     public function handle()
     {
-        set_time_limit(0);
+        try {
+            set_time_limit(0);
 
-        $ruta = $this->ruta;
-        $pagaduria = $this->pagaduria;
-        $nombrearchivo = $this->nombrearchivo;
-        $plano = $this->plano;
+            $ruta = $this->ruta;
+            $pagaduria = $this->pagaduria;
+            $nombrearchivo = $this->nombrearchivo;
+            $plano = $this->plano;
 
-        $parseador = new Parser;
-        $documento = $parseador->parseFile($ruta);
+            $parseador = new Parser;
+            $documento = $parseador->parseFile($ruta);
 
-        $text = $documento->getText();
-        $paginas = explode("Comprobante de Pago	Periodo de pago", $text);
+            $text = $documento->getText();
+            $paginas = explode("Comprobante de Pago	Periodo de pago", $text);
 
-        $personas = array();
+            $personas = array();
 
-        if (sizeof($paginas) != 1) {
-            foreach ($paginas as $indice => $pagina) {
-                if ($indice > 0) {
-
-                    $lineas = explode("\n", $pagina);
-                    
-                    // Extraer nombres
-                    $keynombres = (array_search('Ingresos:	', $lineas))+2;
-                    $nombres = trim(preg_replace('/[0-9]+/', '', $lineas[$keynombres]));
-                    // Extraer documento
-                    $documento = trim(intval(preg_replace('/[^0-9]+/', '', $lineas[$keynombres]), 10));
-                    // Extraer cargo
-                    $cargo = trim($lineas[$keynombres+1]);
-                    // Extraer ingresos
-                    $ingresos = trim(intval(preg_replace('/[^0-9]+/', '', $lineas[$keynombres+2]), 10));
-                    // Extraer ciudad
-                    $lineas[$keynombres+3] = str_replace('Ciudad:', '', $lineas[$keynombres+3]);
-                    if ((strpos($lineas[$keynombres+3], '(') !== false)) {
-                        preg_match('#\((.*?)\)#', $lineas[$keynombres+3], $match);
-                        $ciudad = strtoupper(trim(str_replace($match[0], '', $lineas[$keynombres+3])));
-                    } else {
-                        $ciudad = $lineas[$keynombres+3];
-                    }
-                    // Extraer tipo contratación
-                    $keycontr = (array_search('Capacidad de', $lineas))-1;
-                    $linea_contr = explode('	', $lineas[$keycontr]);
-                    $tipo_contratacion = trim($linea_contr[3]);
-                    // Extraer centro de costos
-                    $keycentro = (array_search('Ingresos:	', $lineas))+1;
-                    $centro_costos = trim($lineas[$keycentro]);
-                    // Extraer grado
-                    $keygrado = (array_search('Endeudamiento:	', $lineas))+1;
-                    $grado = trim(str_replace('Grado:', '', $lineas[$keygrado]));
-                    // Extraer periodo
-                    $keyperiodo = (array_search('Centro de Costo:', $lineas))-1;
-                    setlocale (LC_TIME, "es_CO");
-                    $linea_periodo = explode('	', $lineas[$keyperiodo]);
-                    $periodo = strftime("%Y%m", strtotime(trim($linea_periodo[1])));
-                    // Extraer ingresos totales - egresos totales
-                    $keyinicio = array_search('Concepto	Ingresos	Egresos	Cuotas	Dias	CodConcepto	', $lineas);
-                    $keyfin = array_search('Firma	', $lineas);
-                    $ingresos_egresos = explode("	", $lineas[$keyfin+1]);
-                    $ingresos_totales = substr(trim(intval(preg_replace('/[^0-9]+/', '', $ingresos_egresos[0]), 10)), 0, -2);
-                    $egresos_totales = substr(trim(intval(preg_replace('/[^0-9]+/', '', $ingresos_egresos[1]), 10)), 0, -2);
-                    // Extracción de datos ingresos-egresos
-                    $registros = array();
-                    $tmp_casoespecial = array();
-                    $tmp_casoespecial['codConcepto'] = '';
-                    $tmp_casoespecial['concepto'] = '';
-                    $tmp_casoespecial['valor'] = '';
-                    $encasoespecial = false;
-                    $suma_temporal = 0;
-                    for ($i=$keyinicio+1; $i < $keyfin; $i++) {
-                        $datos_registro = explode("	", $lineas[$i]);
-                        if (isset($datos_registro[1])) {
-                            if((strpos($datos_registro[1], '0') !== false)){
-                                $valor_sin_formato = substr(trim(intval(preg_replace('/[^0-9]+/', '', $datos_registro[1]), 10)), 0, -2);
-                                $suma_temporal = $suma_temporal+(int)$valor_sin_formato;
-                                if (($ingresos_totales/$suma_temporal) >= 1) {
-                                    $registros['ingresos'][] = array(
-                                        'codConcepto' => $datos_registro[sizeof($datos_registro)-2],
-                                        'concepto' => $datos_registro[0],
-                                        'valor' => $valor_sin_formato,
-                                    );
-                                } else {
-                                    $registros['egresos'][] = array(
-                                        'codConcepto' => $datos_registro[2],
-                                        'concepto' => $datos_registro[0],
-                                        'valor' => $valor_sin_formato,
-                                    );
-                                }
-                            }
-                        } else {
-                            $encasoespecial = true;
-                        }
-
-                        if ($encasoespecial) {
-                            $stringcomparar = limpiarCaracteresEspeciales($datos_registro[0]);
-                            if (ctype_alnum($stringcomparar)) {
-                                $tmp_casoespecial['concepto'] .= ' ' . $datos_registro[0];
-                            } elseif ($stringcomparar !== '') {
-                                $encasoespecial = false;
-
-                                if (is_numeric($datos_registro[0][0])){
-                                    $valor_sin_formato = substr(trim(intval(preg_replace('/[^0-9]+/', '', $datos_registro[0]), 10)), 0, -2);
-                                    $suma_temporal = $suma_temporal+(int)$valor_sin_formato;
-                                    $tmp_casoespecial['codConcepto'] = $datos_registro[1];
-                                    $tmp_casoespecial['concepto'] = trim($tmp_casoespecial['concepto']);
-                                    $tmp_casoespecial['valor'] = $valor_sin_formato;
-                                }
-                                if (($ingresos_totales/$suma_temporal) >= 1) {
-                                    $registros['ingresos'][] = $tmp_casoespecial;
-                                } else {
-                                    $registros['egresos'][] = $tmp_casoespecial;
-                                }
-                                $tmp_casoespecial['concepto'] = '';
-                            }
-                        }
-                    }
-
-                    $persona = array(
-                        'nombres' => $nombres,
-                        'documento' => $documento,
-                        'cargo' => $cargo,
-                        'ciudad' => $ciudad,
-                        'centro_costos' => $centro_costos,
-                        'grado' => $grado,
-                        'tipo_contratacion' => $tipo_contratacion,
-                        'ingresos_base' => $ingresos,
-                        'periodo' => $periodo,
-                        'conceptos_financieros' => array(
-                            'ingresos_totales' => $ingresos_totales,
-                            'egresos_totales' => $egresos_totales,
-                            'detallado_conceptos' => $registros
-                        )
-                    );
-                    
-                    $jobId = CargarDatosComprobantes::dispatch($persona, $pagaduria, $plano)
-                        ->onConnection('database')
-                        ->onQueue('uploadingComprobantes');
-                        
-                }
-            }
-
-            $response = array(
-                'cod' => '200',
-                'mensaje' => 'Se han actualizado los registros encontrados en el archivo fuente.',
-            );
-        } else {
-            unset($paginas);
-            $paginas = explode(" - Comprobante de Pago", $text);
-            unset($paginas[sizeof($paginas)-1]);
             if (sizeof($paginas) != 1) {
-                //Archivo nuevo
-                $en2paginas = false;
                 foreach ($paginas as $indice => $pagina) {
-                    echo '<pre>';
-                    print_r($indice);
-                    echo '<pre>';
-                    
-                    $lineas = explode("\n", $pagina);
-                    $indice2 = $indice + 1;
-                    $lineas2 = array();
+                    if ($indice > 0) {
 
-                    if (isset($paginas[$indice2])) {
-                        $lineas2 = explode("\n", $paginas[$indice2]);
-
-                        // Validación 1 para verificar si el actual índice cuenta con 2da página
-                        if (!is_numeric(array_search('Comprobante de Pago', $lineas2))) {
-                            $en2paginas = true;
+                        $lineas = explode("\n", $pagina);
+                        
+                        // Extraer nombres
+                        $keynombres = (array_search('Ingresos:	', $lineas))+2;
+                        $nombres = trim(preg_replace('/[0-9]+/', '', $lineas[$keynombres]));
+                        // Extraer documento
+                        $documento = trim(intval(preg_replace('/[^0-9]+/', '', $lineas[$keynombres]), 10));
+                        // Extraer cargo
+                        $cargo = trim($lineas[$keynombres+1]);
+                        // Extraer ingresos
+                        $ingresos = trim(intval(preg_replace('/[^0-9]+/', '', $lineas[$keynombres+2]), 10));
+                        // Extraer ciudad
+                        $lineas[$keynombres+3] = str_replace('Ciudad:', '', $lineas[$keynombres+3]);
+                        if ((strpos($lineas[$keynombres+3], '(') !== false)) {
+                            preg_match('#\((.*?)\)#', $lineas[$keynombres+3], $match);
+                            $ciudad = strtoupper(trim(str_replace($match[0], '', $lineas[$keynombres+3])));
                         } else {
-                            $en2paginas = false;
+                            $ciudad = $lineas[$keynombres+3];
                         }
-                    }
-
-                    // Validación 2 para que cuando el índice esté en la 2da pagina no la lea
-                    if (!is_numeric(array_search('Comprobante de Pago', $lineas))) {
-                        $en2paginas = false;
-                        continue;
-                    } else {
-                        if ($en2paginas) {
-                            //Preparación de los datos
-                            $posfinal_pagina1 = sizeof($lineas)-1;
-                            unset($lineas2[0]);
-                            unset($lineas2[1]);
-                            $cont = $posfinal_pagina1;
-                            for ($i=2; $i < sizeof($lineas2)+2; $i++) {
-                                $lineas[$cont] = $lineas2[$i];
-                                $cont++;
-                            }
-                            //
-                            // Extraer nombres
-                            $keynombres = (array_search('N. Contratacion:', $lineas))-1;
-                            $nombres = trim($lineas[$keynombres]);
-                            // Extraer documento
-                            $lineadocumento = trim($lineas[$keynombres+3]);
-                            $documento = trim(intval(preg_replace('/[^0-9]+/', '', $lineadocumento), 10));
-                            // Extraer cargo
-                            $keycargo = (array_search('Cargo:', $lineas))+2;
-                            $cargo = trim($lineas[$keycargo]);
-                            // Extraer ingresos
-                            $keyingresos = (array_search('Cargo:', $lineas))+1;
-                            $ingresos = trim(intval(preg_replace('/[^0-9]+/', '', $lineas[$keyingresos]), 10));
-                            // Extraer ciudad
-                            $keyciudad = (array_search('Periodo de pago:', $lineas)-1);
-                            $lineas[$keyciudad] = str_replace('Ciudad:', '', $lineas[$keyciudad]);
-                            if ((strpos($lineas[$keynombres+3], '(') !== false)) {
-                                preg_match('#\((.*?)\)#', $lineas[$keynombres+3], $match);
-                                $ciudad = strtoupper(trim(str_replace($match[0], '', $lineas[$keynombres+3])));
-                            } else {
-                                $ciudad = $lineas[$keynombres+3];
-                            }
-                            // Extraer tipo contratación
-                            $linea_contr = explode('	', $lineas[$keyciudad-1]);
-                            $tipo_contratacion = trim($linea_contr[0]);
-                            // Extraer centro de costos
-                            $centro_costos = trim($lineas[$keynombres-1]);
-                            // Extraer grado
-                            $keygrado = (array_search('CodConcepto	Concepto	Cuotas	Dias	Ingresos	Egresos	', $lineas)-1);
-                            $grado = trim(str_replace('Grado:', '', $lineas[$keygrado]));
-                            // Extraer periodo
-                            setlocale (LC_TIME, "es_CO");
-                            $keyperiodo = $keygrado-3;
-                            $linea_periodo = explode('	', $lineas[$keyperiodo]);
-                            $periodo = strftime("%Y%m", strtotime(trim($linea_periodo[0])));
-                            // Extraer ingresos totales - egresos totales
-                            $keyinicio = array_search('CodConcepto	Concepto	Cuotas	Dias	Ingresos	Egresos	', $lineas);
-                            $keyfin = array_search('Firma', $lineas);
-                            $keying_egr = $keyfin+3;
-                            $validaring_egr = explode("	", $lineas[$keying_egr]);
-                            if (sizeof($validaring_egr) !== 4) {
-                                $keying_egr++;
-                            }
-                            $ingresos_egresos = explode("	", $lineas[$keying_egr]);
-                            $ingresos_totales = substr(trim(intval(preg_replace('/[^0-9]+/', '', $ingresos_egresos[1]), 10)), 0, -2);
-                            $egresos_totales = substr(trim(intval(preg_replace('/[^0-9]+/', '', $ingresos_egresos[2]), 10)), 0, -2);
-                            // Extracción de datos ingresos-egresos
-                            $registros = array();
-                            $tmp_casoespecial = array();
-                            $tmp_casoespecial['codConcepto'] = '';
-                            $tmp_casoespecial['concepto'] = '';
-                            $tmp_casoespecial['valor'] = '';
-                            $suma_temporal = 0;
-                            $encasoespecial = false;
-                            for ($i=$keyinicio+1; $i < $keyfin; $i++) {
-                                $datos_registro = str_replace("	", " ", $lineas[$i]);
-                                $datos_espaciados = preg_split('/\s+/', $datos_registro);
-                                // Valido si es un array completo
-                                $esvalido = false;
-                                for ($j=0; $j < sizeof($datos_espaciados); $j++) { 
-                                    if (is_numeric(strpos($datos_espaciados[$j], '.00'))) {
-                                        if (!is_numeric(strpos($datos_espaciados[$j], '%'))) {
-                                            $esvalido = true;
-                                            break;
-                                        }
-                                    }
-                                }
-
-                                if ($esvalido && !$encasoespecial) {
-                                    $concepto_completo_array = array();
-                                    $pos_valor = sizeof($datos_espaciados)-2;
-                                    for ($j=1; $j < $pos_valor; $j++) { 
-                                        array_push($concepto_completo_array, $datos_espaciados[$j]);
-                                    }
-                                    $concepto_completo = implode(' ', $concepto_completo_array);
-                                    $valor_sin_formato = substr(trim(intval(preg_replace('/[^0-9]+/', '', $datos_espaciados[$pos_valor]), 10)), 0, -2);
+                        // Extraer tipo contratación
+                        $keycontr = (array_search('Capacidad de', $lineas))-1;
+                        $linea_contr = explode('	', $lineas[$keycontr]);
+                        $tipo_contratacion = trim($linea_contr[3]);
+                        // Extraer centro de costos
+                        $keycentro = (array_search('Ingresos:	', $lineas))+1;
+                        $centro_costos = trim($lineas[$keycentro]);
+                        // Extraer grado
+                        $keygrado = (array_search('Endeudamiento:	', $lineas))+1;
+                        $grado = trim(str_replace('Grado:', '', $lineas[$keygrado]));
+                        // Extraer periodo
+                        $keyperiodo = (array_search('Centro de Costo:', $lineas))-1;
+                        setlocale (LC_TIME, "es_CO");
+                        $linea_periodo = explode('	', $lineas[$keyperiodo]);
+                        $periodo = strftime("%Y%m", strtotime(trim($linea_periodo[1])));
+                        // Extraer ingresos totales - egresos totales
+                        $keyinicio = array_search('Concepto	Ingresos	Egresos	Cuotas	Dias	CodConcepto	', $lineas);
+                        $keyfin = array_search('Firma	', $lineas);
+                        $ingresos_egresos = explode("	", $lineas[$keyfin+1]);
+                        $ingresos_totales = substr(trim(intval(preg_replace('/[^0-9]+/', '', $ingresos_egresos[0]), 10)), 0, -2);
+                        $egresos_totales = substr(trim(intval(preg_replace('/[^0-9]+/', '', $ingresos_egresos[1]), 10)), 0, -2);
+                        // Extracción de datos ingresos-egresos
+                        $registros = array();
+                        $tmp_casoespecial = array();
+                        $tmp_casoespecial['codConcepto'] = '';
+                        $tmp_casoespecial['concepto'] = '';
+                        $tmp_casoespecial['valor'] = '';
+                        $encasoespecial = false;
+                        $suma_temporal = 0;
+                        for ($i=$keyinicio+1; $i < $keyfin; $i++) {
+                            $datos_registro = explode("	", $lineas[$i]);
+                            if (isset($datos_registro[1])) {
+                                if((strpos($datos_registro[1], '0') !== false)){
+                                    $valor_sin_formato = substr(trim(intval(preg_replace('/[^0-9]+/', '', $datos_registro[1]), 10)), 0, -2);
                                     $suma_temporal = $suma_temporal+(int)$valor_sin_formato;
                                     if (($ingresos_totales/$suma_temporal) >= 1) {
                                         $registros['ingresos'][] = array(
-                                            'codConcepto' => $datos_espaciados[0],
-                                            'concepto' => $concepto_completo,
+                                            'codConcepto' => $datos_registro[sizeof($datos_registro)-2],
+                                            'concepto' => $datos_registro[0],
                                             'valor' => $valor_sin_formato,
                                         );
                                     } else {
                                         $registros['egresos'][] = array(
-                                            'codConcepto' => $datos_espaciados[0],
-                                            'concepto' => $concepto_completo,
+                                            'codConcepto' => $datos_registro[2],
+                                            'concepto' => $datos_registro[0],
                                             'valor' => $valor_sin_formato,
                                         );
                                     }
-                                } else {
-                                    $encasoespecial = true;
-                                    $keyinit_proc = 0;
-                                    if ($tmp_casoespecial['codConcepto'] == '') {
-                                        $tmp_casoespecial['codConcepto'] = $datos_espaciados[0];
-                                        for ($j=$keyinit_proc; $j < sizeof($datos_espaciados); $j++) { 
-                                            if (is_numeric(strpos($datos_espaciados[$j], '.00')) && !is_numeric(strpos($datos_espaciados[$j], '%'))) {
-                                                $encasoespecial = false;
-                                                $tmp_casoespecial['valor'] = substr(trim(intval(preg_replace('/[^0-9]+/', '', $datos_espaciados[$j]), 10)), 0, -2);
-                                                $suma_temporal = $suma_temporal+(int)$tmp_casoespecial['valor'];
-                                                if (($ingresos_totales/$suma_temporal) >= 1) {
-                                                    $registros['ingresos'][] = $tmp_casoespecial;
-                                                } else {
-                                                    $registros['egresos'][] = $tmp_casoespecial;
-                                                }
-                                                $tmp_casoespecial['codConcepto'] = '';
-                                                $tmp_casoespecial['concepto'] = '';
-                                                $tmp_casoespecial['valor'] = '';
-                                            } else {
-                                                $tmp_casoespecial['concepto'] .= ' ' . $datos_espaciados[$j];
-                                            }
-                                        }
-                                    } else {
-                                        for ($j=0; $j < sizeof($datos_espaciados); $j++) { 
-                                            if (is_numeric(strpos($datos_espaciados[$j], '.00')) && !is_numeric(strpos($datos_espaciados[$j], '%'))) {
-                                                $tmp_casoespecial['valor'] = $datos_espaciados[$j];
-                                                $encasoespecial = false;
-                                                $tmp_casoespecial['valor'] = substr(trim(intval(preg_replace('/[^0-9]+/', '', $datos_espaciados[$j]), 10)), 0, -2);
-                                                $suma_temporal = $suma_temporal+(int)$tmp_casoespecial['valor'];
-                                                if (($ingresos_totales/$suma_temporal) >= 1) {
-                                                    $registros['ingresos'][] = $tmp_casoespecial;
-                                                } else {
-                                                    $registros['egresos'][] = $tmp_casoespecial;
-                                                }
-                                                $tmp_casoespecial['codConcepto'] = '';
-                                                $tmp_casoespecial['concepto'] = '';
-                                                $tmp_casoespecial['valor'] = '';
-                                            } else {
-                                                $tmp_casoespecial['concepto'] .= ' ' . $datos_espaciados[$j];
-                                            }
-                                        }
-                                    }
                                 }
-                            }
-
-                            $personas[] = array(
-                                'nombres' => $nombres,
-                                'documento' => $documento,
-                                'cargo' => $cargo,
-                                'ciudad' => $ciudad,
-                                'centro_costos' => $centro_costos,
-                                'grado' => $grado,
-                                'tipo_contratacion' => $tipo_contratacion,
-                                'ingresos_base' => $ingresos,
-                                'periodo' => $periodo,
-                                'conceptos_financieros' => array(
-                                    'ingresos_totales' => $ingresos_totales,
-                                    'egresos_totales' => $egresos_totales,
-                                    'detallado_conceptos' => $registros
-                                )
-                            );
-
-                            CargarDatosComprobantes::dispatch($persona, $pagaduria, $plano)
-                                ->onConnection('database')
-                                ->onQueue('uploadingComprobantes');
-                            
-                        } else {
-                            // Extraer nombres
-                            $keynombres = (array_search('N. Contratacion:', $lineas))-1;
-                            $nombres = trim($lineas[$keynombres]);
-                            // Extraer documento
-                            $lineadocumento = trim($lineas[$keynombres+3]);
-                            $documento = trim(intval(preg_replace('/[^0-9]+/', '', $lineadocumento), 10));
-                            // Extraer cargo
-                            $keycargo = (array_search('Cargo:', $lineas))+2;
-                            $cargo = trim($lineas[$keycargo]);
-                            // Extraer ingresos
-                            $keyingresos = (array_search('Cargo:', $lineas))+1;
-                            $ingresos = trim(intval(preg_replace('/[^0-9]+/', '', $lineas[$keyingresos]), 10));
-                            // Extraer ciudad
-                            $keyciudad = (array_search('Periodo de pago:', $lineas)-1);
-                            $lineas[$keyciudad] = str_replace('Ciudad:', '', $lineas[$keyciudad]);
-                            if ((strpos($lineas[$keyciudad], '(') !== false)) {
-                                preg_match('#\((.*?)\)#', $lineas[$keyciudad], $match);
-                                $ciudad = strtoupper(trim(str_replace($match[0], '', $lineas[$keyciudad])));
                             } else {
-                                $ciudad = $lineas[$keyciudad];
+                                $encasoespecial = true;
                             }
-                            // Extraer tipo contratación
-                            $linea_contr = explode('	', $lineas[$keyciudad-1]);
-                            $tipo_contratacion = trim($linea_contr[0]);
-                            // Extraer centro de costos
-                            $centro_costos = trim($lineas[$keynombres-1]);
-                            // Extraer grado
-                            $keygrado = (array_search('CodConcepto	Concepto	Cuotas	Dias	Ingresos	Egresos	', $lineas)-1);
-                            $grado = trim(str_replace('Grado:', '', $lineas[$keygrado]));
-                            // Extraer periodo
-                            setlocale (LC_TIME, "es_CO");
-                            $keyperiodo = $keygrado-3;
-                            $linea_periodo = explode('	', $lineas[$keyperiodo]);
-                            $periodo = strftime("%Y%m", strtotime(trim($linea_periodo[0])));
-                            // Extraer ingresos totales - egresos totales
-                            $keyinicio = array_search('CodConcepto	Concepto	Cuotas	Dias	Ingresos	Egresos	', $lineas);
-                            $keyfin = array_search('Firma', $lineas);
-                            $keying_egr = $keyfin+3;
-                            $validaring_egr = explode("	", $lineas[$keying_egr]);
-                            if (sizeof($validaring_egr) !== 4) {
-                                $keying_egr++;
-                            }
-                            $ingresos_egresos = explode("	", $lineas[$keying_egr]);
-                            $ingresos_totales = substr(trim(intval(preg_replace('/[^0-9]+/', '', $ingresos_egresos[1]), 10)), 0, -2);
-                            $egresos_totales = substr(trim(intval(preg_replace('/[^0-9]+/', '', $ingresos_egresos[2]), 10)), 0, -2);
-                            // Extracción de datos ingresos-egresos
-                            $registros = array();
-                            $tmp_casoespecial = array();
-                            $tmp_casoespecial['codConcepto'] = '';
-                            $tmp_casoespecial['concepto'] = '';
-                            $tmp_casoespecial['valor'] = '';
-                            $suma_temporal = 0;
-                            $encasoespecial = false;
-                            for ($i=$keyinicio+1; $i < $keyfin; $i++) {
-                                $datos_registro = str_replace("	", " ", $lineas[$i]);
-                                $datos_espaciados = preg_split('/\s+/', $datos_registro);
-                                // Valido si es un array completo
-                                $esvalido = false;
-                                for ($j=0; $j < sizeof($datos_espaciados); $j++) { 
-                                    if (is_numeric(strpos($datos_espaciados[$j], '.00'))) {
-                                        if (!is_numeric(strpos($datos_espaciados[$j], '%'))) {
-                                            $esvalido = true;
-                                            break;
-                                        }
-                                    }
-                                }
 
-                                if ($esvalido && !$encasoespecial) {
-                                    $concepto_completo_array = array();
-                                    $pos_valor = sizeof($datos_espaciados)-2;
-                                    for ($j=1; $j < $pos_valor; $j++) { 
-                                        array_push($concepto_completo_array, $datos_espaciados[$j]);
+                            if ($encasoespecial) {
+                                $stringcomparar = limpiarCaracteresEspeciales($datos_registro[0]);
+                                if (ctype_alnum($stringcomparar)) {
+                                    $tmp_casoespecial['concepto'] .= ' ' . $datos_registro[0];
+                                } elseif ($stringcomparar !== '') {
+                                    $encasoespecial = false;
+
+                                    if (is_numeric($datos_registro[0][0])){
+                                        $valor_sin_formato = substr(trim(intval(preg_replace('/[^0-9]+/', '', $datos_registro[0]), 10)), 0, -2);
+                                        $suma_temporal = $suma_temporal+(int)$valor_sin_formato;
+                                        $tmp_casoespecial['codConcepto'] = $datos_registro[1];
+                                        $tmp_casoespecial['concepto'] = trim($tmp_casoespecial['concepto']);
+                                        $tmp_casoespecial['valor'] = $valor_sin_formato;
                                     }
-                                    $concepto_completo = implode(' ', $concepto_completo_array);
-                                    $valor_sin_formato = substr(trim(intval(preg_replace('/[^0-9]+/', '', $datos_espaciados[$pos_valor]), 10)), 0, -2);
-                                    $suma_temporal = $suma_temporal+(int)$valor_sin_formato;
                                     if (($ingresos_totales/$suma_temporal) >= 1) {
-                                        $registros['ingresos'][] = array(
-                                            'codConcepto' => $datos_espaciados[0],
-                                            'concepto' => $concepto_completo,
-                                            'valor' => $valor_sin_formato,
-                                        );
+                                        $registros['ingresos'][] = $tmp_casoespecial;
                                     } else {
-                                        $registros['egresos'][] = array(
-                                            'codConcepto' => $datos_espaciados[0],
-                                            'concepto' => $concepto_completo,
-                                            'valor' => $valor_sin_formato,
-                                        );
+                                        $registros['egresos'][] = $tmp_casoespecial;
                                     }
-                                } else {
-                                    $encasoespecial = true;
-                                    $keyinit_proc = 0;
-                                    if ($tmp_casoespecial['codConcepto'] == '') {
-                                        $tmp_casoespecial['codConcepto'] = $datos_espaciados[0];
-                                        for ($j=$keyinit_proc; $j < sizeof($datos_espaciados); $j++) { 
-                                            if (is_numeric(strpos($datos_espaciados[$j], '.00')) && !is_numeric(strpos($datos_espaciados[$j], '%'))) {
-                                                $encasoespecial = false;
-                                                $tmp_casoespecial['valor'] = substr(trim(intval(preg_replace('/[^0-9]+/', '', $datos_espaciados[$j]), 10)), 0, -2);
-                                                $suma_temporal = $suma_temporal+(int)$tmp_casoespecial['valor'];
-                                                if (($ingresos_totales/$suma_temporal) >= 1) {
-                                                    $registros['ingresos'][] = $tmp_casoespecial;
-                                                } else {
-                                                    $registros['egresos'][] = $tmp_casoespecial;
-                                                }
-                                                $tmp_casoespecial['codConcepto'] = '';
-                                                $tmp_casoespecial['concepto'] = '';
-                                                $tmp_casoespecial['valor'] = '';
-                                            } else {
-                                                $tmp_casoespecial['concepto'] .= ' ' . $datos_espaciados[$j];
-                                            }
-                                        }
-                                    } else {
-                                        for ($j=0; $j < sizeof($datos_espaciados); $j++) { 
-                                            if (is_numeric(strpos($datos_espaciados[$j], '.00')) && !is_numeric(strpos($datos_espaciados[$j], '%'))) {
-                                                $tmp_casoespecial['valor'] = $datos_espaciados[$j];
-                                                $encasoespecial = false;
-                                                $tmp_casoespecial['valor'] = substr(trim(intval(preg_replace('/[^0-9]+/', '', $datos_espaciados[$j]), 10)), 0, -2);
-                                                $suma_temporal = $suma_temporal+(int)$tmp_casoespecial['valor'];
-                                                if (($ingresos_totales/$suma_temporal) >= 1) {
-                                                    $registros['ingresos'][] = $tmp_casoespecial;
-                                                } else {
-                                                    $registros['egresos'][] = $tmp_casoespecial;
-                                                }
-                                                $tmp_casoespecial['codConcepto'] = '';
-                                                $tmp_casoespecial['concepto'] = '';
-                                                $tmp_casoespecial['valor'] = '';
-                                            } else {
-                                                $tmp_casoespecial['concepto'] .= ' ' . $datos_espaciados[$j];
-                                            }
-                                        }
-                                    }
+                                    $tmp_casoespecial['concepto'] = '';
                                 }
                             }
-
-                            $personas[] = array(
-                                'nombres' => $nombres,
-                                'documento' => $documento,
-                                'cargo' => $cargo,
-                                'ciudad' => $ciudad,
-                                'centro_costos' => $centro_costos,
-                                'grado' => $grado,
-                                'tipo_contratacion' => $tipo_contratacion,
-                                'ingresos_base' => $ingresos,
-                                'periodo' => $periodo,
-                                'conceptos_financieros' => array(
-                                    'ingresos_totales' => $ingresos_totales,
-                                    'egresos_totales' => $egresos_totales,
-                                    'detallado_conceptos' => $registros
-                                )
-                            );
-                            
-                            CargarDatosComprobantes::dispatch($persona, $pagaduria, $plano)
-                                ->onConnection('database')
-                                ->onQueue('uploadingComprobantes');
-                            
                         }
+
+                        $persona = array(
+                            'nombres' => $nombres,
+                            'documento' => $documento,
+                            'cargo' => $cargo,
+                            'ciudad' => $ciudad,
+                            'centro_costos' => $centro_costos,
+                            'grado' => $grado,
+                            'tipo_contratacion' => $tipo_contratacion,
+                            'ingresos_base' => $ingresos,
+                            'periodo' => $periodo,
+                            'conceptos_financieros' => array(
+                                'ingresos_totales' => $ingresos_totales,
+                                'egresos_totales' => $egresos_totales,
+                                'detallado_conceptos' => $registros
+                            )
+                        );
+                        
+                        $jobId = CargarDatosComprobantes::dispatch($persona, $pagaduria, $plano)
+                            ->onConnection('database')
+                            ->onQueue('uploadingComprobantes');
+                            
                     }
                 }
 
@@ -550,20 +189,387 @@ class LeerDatosComprobantes implements ShouldQueue
                     'mensaje' => 'Se han actualizado los registros encontrados en el archivo fuente.',
                 );
             } else {
-                //----------------------------------------
-                //Eliminar archivo temporal
-                \Storage::disk('archivos')->delete($nombrearchivo);
-                $plano->cont_procesos = -1;
-                $plano->errors = "Error: El archivo no es válido";
-                $plano->save();
-            }
-        }
+                unset($paginas);
+                $paginas = explode(" - Comprobante de Pago", $text);
+                unset($paginas[sizeof($paginas)-1]);
+                if (sizeof($paginas) != 1) {
+                    //Archivo nuevo
+                    $en2paginas = false;
+                    foreach ($paginas as $indice => $pagina) {
+                        
+                        $lineas = explode("\n", $pagina);
+                        $indice2 = $indice + 1;
+                        $lineas2 = array();
 
-        //----------------------------------------
-        //Eliminar archivo temporal
-        \Storage::disk('archivos')->delete($nombrearchivo);
-        
-        $plano->cont_procesos--;
-        $plano->save();
+                        if (isset($paginas[$indice2])) {
+                            $lineas2 = explode("\n", $paginas[$indice2]);
+
+                            // Validación 1 para verificar si el actual índice cuenta con 2da página
+                            if (!is_numeric(array_search('Comprobante de Pago', $lineas2))) {
+                                $en2paginas = true;
+                            } else {
+                                $en2paginas = false;
+                            }
+                        }
+
+                        // Validación 2 para que cuando el índice esté en la 2da pagina no la lea
+                        if (!is_numeric(array_search('Comprobante de Pago', $lineas))) {
+                            $en2paginas = false;
+                            continue;
+                        } else {
+                            if ($en2paginas) {
+                                //Preparación de los datos
+                                $posfinal_pagina1 = sizeof($lineas)-1;
+                                unset($lineas2[0]);
+                                unset($lineas2[1]);
+                                $cont = $posfinal_pagina1;
+                                for ($i=2; $i < sizeof($lineas2)+2; $i++) {
+                                    $lineas[$cont] = $lineas2[$i];
+                                    $cont++;
+                                }
+                                //
+                                // Extraer nombres
+                                $keynombres = (array_search('N. Contratacion:', $lineas))-1;
+                                $nombres = trim($lineas[$keynombres]);
+                                // Extraer documento
+                                $lineadocumento = trim($lineas[$keynombres+3]);
+                                $documento = trim(intval(preg_replace('/[^0-9]+/', '', $lineadocumento), 10));
+                                // Extraer cargo
+                                $keycargo = (array_search('Cargo:', $lineas))+2;
+                                $cargo = trim($lineas[$keycargo]);
+                                // Extraer ingresos
+                                $keyingresos = (array_search('Cargo:', $lineas))+1;
+                                $ingresos = trim(intval(preg_replace('/[^0-9]+/', '', $lineas[$keyingresos]), 10));
+                                // Extraer ciudad
+                                $keyciudad = (array_search('Periodo de pago:', $lineas)-1);
+                                $lineas[$keyciudad] = str_replace('Ciudad:', '', $lineas[$keyciudad]);
+                                if ((strpos($lineas[$keynombres+3], '(') !== false)) {
+                                    preg_match('#\((.*?)\)#', $lineas[$keynombres+3], $match);
+                                    $ciudad = strtoupper(trim(str_replace($match[0], '', $lineas[$keynombres+3])));
+                                } else {
+                                    $ciudad = $lineas[$keynombres+3];
+                                }
+                                // Extraer tipo contratación
+                                $linea_contr = explode('	', $lineas[$keyciudad-1]);
+                                $tipo_contratacion = trim($linea_contr[0]);
+                                // Extraer centro de costos
+                                $centro_costos = trim($lineas[$keynombres-1]);
+                                // Extraer grado
+                                $keygrado = (array_search('CodConcepto	Concepto	Cuotas	Dias	Ingresos	Egresos	', $lineas)-1);
+                                $grado = trim(str_replace('Grado:', '', $lineas[$keygrado]));
+                                // Extraer periodo
+                                setlocale (LC_TIME, "es_CO");
+                                $keyperiodo = $keygrado-3;
+                                $linea_periodo = explode('	', $lineas[$keyperiodo]);
+                                $periodo = strftime("%Y%m", strtotime(trim($linea_periodo[0])));
+                                // Extraer ingresos totales - egresos totales
+                                $keyinicio = array_search('CodConcepto	Concepto	Cuotas	Dias	Ingresos	Egresos	', $lineas);
+                                $keyfin = array_search('Firma', $lineas);
+                                $keying_egr = $keyfin+3;
+                                $validaring_egr = explode("	", $lineas[$keying_egr]);
+                                if (sizeof($validaring_egr) !== 4) {
+                                    $keying_egr++;
+                                }
+                                $ingresos_egresos = explode("	", $lineas[$keying_egr]);
+                                $ingresos_totales = substr(trim(intval(preg_replace('/[^0-9]+/', '', $ingresos_egresos[1]), 10)), 0, -2);
+                                $egresos_totales = substr(trim(intval(preg_replace('/[^0-9]+/', '', $ingresos_egresos[2]), 10)), 0, -2);
+                                // Extracción de datos ingresos-egresos
+                                $registros = array();
+                                $tmp_casoespecial = array();
+                                $tmp_casoespecial['codConcepto'] = '';
+                                $tmp_casoespecial['concepto'] = '';
+                                $tmp_casoespecial['valor'] = '';
+                                $suma_temporal = 0;
+                                $encasoespecial = false;
+                                for ($i=$keyinicio+1; $i < $keyfin; $i++) {
+                                    $datos_registro = str_replace("	", " ", $lineas[$i]);
+                                    $datos_espaciados = preg_split('/\s+/', $datos_registro);
+                                    // Valido si es un array completo
+                                    $esvalido = false;
+                                    for ($j=0; $j < sizeof($datos_espaciados); $j++) { 
+                                        if (is_numeric(strpos($datos_espaciados[$j], '.00'))) {
+                                            if (!is_numeric(strpos($datos_espaciados[$j], '%'))) {
+                                                $esvalido = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    if ($esvalido && !$encasoespecial) {
+                                        $concepto_completo_array = array();
+                                        $pos_valor = sizeof($datos_espaciados)-2;
+                                        for ($j=1; $j < $pos_valor; $j++) { 
+                                            array_push($concepto_completo_array, $datos_espaciados[$j]);
+                                        }
+                                        $concepto_completo = implode(' ', $concepto_completo_array);
+                                        $valor_sin_formato = substr(trim(intval(preg_replace('/[^0-9]+/', '', $datos_espaciados[$pos_valor]), 10)), 0, -2);
+                                        $suma_temporal = $suma_temporal+(int)$valor_sin_formato;
+                                        if (($ingresos_totales/$suma_temporal) >= 1) {
+                                            $registros['ingresos'][] = array(
+                                                'codConcepto' => $datos_espaciados[0],
+                                                'concepto' => $concepto_completo,
+                                                'valor' => $valor_sin_formato,
+                                            );
+                                        } else {
+                                            $registros['egresos'][] = array(
+                                                'codConcepto' => $datos_espaciados[0],
+                                                'concepto' => $concepto_completo,
+                                                'valor' => $valor_sin_formato,
+                                            );
+                                        }
+                                    } else {
+                                        $encasoespecial = true;
+                                        $keyinit_proc = 0;
+                                        if ($tmp_casoespecial['codConcepto'] == '') {
+                                            $tmp_casoespecial['codConcepto'] = $datos_espaciados[0];
+                                            for ($j=$keyinit_proc; $j < sizeof($datos_espaciados); $j++) { 
+                                                if (is_numeric(strpos($datos_espaciados[$j], '.00')) && !is_numeric(strpos($datos_espaciados[$j], '%'))) {
+                                                    $encasoespecial = false;
+                                                    $tmp_casoespecial['valor'] = substr(trim(intval(preg_replace('/[^0-9]+/', '', $datos_espaciados[$j]), 10)), 0, -2);
+                                                    $suma_temporal = $suma_temporal+(int)$tmp_casoespecial['valor'];
+                                                    if (($ingresos_totales/$suma_temporal) >= 1) {
+                                                        $registros['ingresos'][] = $tmp_casoespecial;
+                                                    } else {
+                                                        $registros['egresos'][] = $tmp_casoespecial;
+                                                    }
+                                                    $tmp_casoespecial['codConcepto'] = '';
+                                                    $tmp_casoespecial['concepto'] = '';
+                                                    $tmp_casoespecial['valor'] = '';
+                                                } else {
+                                                    $tmp_casoespecial['concepto'] .= ' ' . $datos_espaciados[$j];
+                                                }
+                                            }
+                                        } else {
+                                            for ($j=0; $j < sizeof($datos_espaciados); $j++) { 
+                                                if (is_numeric(strpos($datos_espaciados[$j], '.00')) && !is_numeric(strpos($datos_espaciados[$j], '%'))) {
+                                                    $tmp_casoespecial['valor'] = $datos_espaciados[$j];
+                                                    $encasoespecial = false;
+                                                    $tmp_casoespecial['valor'] = substr(trim(intval(preg_replace('/[^0-9]+/', '', $datos_espaciados[$j]), 10)), 0, -2);
+                                                    $suma_temporal = $suma_temporal+(int)$tmp_casoespecial['valor'];
+                                                    if (($ingresos_totales/$suma_temporal) >= 1) {
+                                                        $registros['ingresos'][] = $tmp_casoespecial;
+                                                    } else {
+                                                        $registros['egresos'][] = $tmp_casoespecial;
+                                                    }
+                                                    $tmp_casoespecial['codConcepto'] = '';
+                                                    $tmp_casoespecial['concepto'] = '';
+                                                    $tmp_casoespecial['valor'] = '';
+                                                } else {
+                                                    $tmp_casoespecial['concepto'] .= ' ' . $datos_espaciados[$j];
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                $persona = array(
+                                    'nombres' => $nombres,
+                                    'documento' => $documento,
+                                    'cargo' => $cargo,
+                                    'ciudad' => $ciudad,
+                                    'centro_costos' => $centro_costos,
+                                    'grado' => $grado,
+                                    'tipo_contratacion' => $tipo_contratacion,
+                                    'ingresos_base' => $ingresos,
+                                    'periodo' => $periodo,
+                                    'conceptos_financieros' => array(
+                                        'ingresos_totales' => $ingresos_totales,
+                                        'egresos_totales' => $egresos_totales,
+                                        'detallado_conceptos' => $registros
+                                    )
+                                );
+
+                                $jobId = CargarDatosComprobantes::dispatch($persona, $pagaduria, $plano)
+                                    ->onConnection('database')
+                                    ->onQueue('uploadingComprobantes');
+                                
+                            } else {
+                                // Extraer nombres
+                                $keynombres = (array_search('N. Contratacion:', $lineas))-1;
+                                $nombres = trim($lineas[$keynombres]);
+                                // Extraer documento
+                                $lineadocumento = trim($lineas[$keynombres+3]);
+                                $documento = trim(intval(preg_replace('/[^0-9]+/', '', $lineadocumento), 10));
+                                // Extraer cargo
+                                $keycargo = (array_search('Cargo:', $lineas))+2;
+                                $cargo = trim($lineas[$keycargo]);
+                                // Extraer ingresos
+                                $keyingresos = (array_search('Cargo:', $lineas))+1;
+                                $ingresos = trim(intval(preg_replace('/[^0-9]+/', '', $lineas[$keyingresos]), 10));
+                                // Extraer ciudad
+                                $keyciudad = (array_search('Periodo de pago:', $lineas)-1);
+                                $lineas[$keyciudad] = str_replace('Ciudad:', '', $lineas[$keyciudad]);
+                                if ((strpos($lineas[$keyciudad], '(') !== false)) {
+                                    preg_match('#\((.*?)\)#', $lineas[$keyciudad], $match);
+                                    $ciudad = strtoupper(trim(str_replace($match[0], '', $lineas[$keyciudad])));
+                                } else {
+                                    $ciudad = $lineas[$keyciudad];
+                                }
+                                // Extraer tipo contratación
+                                $linea_contr = explode('	', $lineas[$keyciudad-1]);
+                                $tipo_contratacion = trim($linea_contr[0]);
+                                // Extraer centro de costos
+                                $centro_costos = trim($lineas[$keynombres-1]);
+                                // Extraer grado
+                                $keygrado = (array_search('CodConcepto	Concepto	Cuotas	Dias	Ingresos	Egresos	', $lineas)-1);
+                                $grado = trim(str_replace('Grado:', '', $lineas[$keygrado]));
+                                // Extraer periodo
+                                setlocale (LC_TIME, "es_CO");
+                                $keyperiodo = $keygrado-3;
+                                $linea_periodo = explode('	', $lineas[$keyperiodo]);
+                                $periodo = strftime("%Y%m", strtotime(trim($linea_periodo[0])));
+                                // Extraer ingresos totales - egresos totales
+                                $keyinicio = array_search('CodConcepto	Concepto	Cuotas	Dias	Ingresos	Egresos	', $lineas);
+                                $keyfin = array_search('Firma', $lineas);
+                                $keying_egr = $keyfin+3;
+                                $validaring_egr = explode("	", $lineas[$keying_egr]);
+                                if (sizeof($validaring_egr) !== 4) {
+                                    $keying_egr++;
+                                }
+                                $ingresos_egresos = explode("	", $lineas[$keying_egr]);
+                                $ingresos_totales = substr(trim(intval(preg_replace('/[^0-9]+/', '', $ingresos_egresos[1]), 10)), 0, -2);
+                                $egresos_totales = substr(trim(intval(preg_replace('/[^0-9]+/', '', $ingresos_egresos[2]), 10)), 0, -2);
+                                // Extracción de datos ingresos-egresos
+                                $registros = array();
+                                $tmp_casoespecial = array();
+                                $tmp_casoespecial['codConcepto'] = '';
+                                $tmp_casoespecial['concepto'] = '';
+                                $tmp_casoespecial['valor'] = '';
+                                $suma_temporal = 0;
+                                $encasoespecial = false;
+                                for ($i=$keyinicio+1; $i < $keyfin; $i++) {
+                                    $datos_registro = str_replace("	", " ", $lineas[$i]);
+                                    $datos_espaciados = preg_split('/\s+/', $datos_registro);
+                                    // Valido si es un array completo
+                                    $esvalido = false;
+                                    for ($j=0; $j < sizeof($datos_espaciados); $j++) { 
+                                        if (is_numeric(strpos($datos_espaciados[$j], '.00'))) {
+                                            if (!is_numeric(strpos($datos_espaciados[$j], '%'))) {
+                                                $esvalido = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    if ($esvalido && !$encasoespecial) {
+                                        $concepto_completo_array = array();
+                                        $pos_valor = sizeof($datos_espaciados)-2;
+                                        for ($j=1; $j < $pos_valor; $j++) { 
+                                            array_push($concepto_completo_array, $datos_espaciados[$j]);
+                                        }
+                                        $concepto_completo = implode(' ', $concepto_completo_array);
+                                        $valor_sin_formato = substr(trim(intval(preg_replace('/[^0-9]+/', '', $datos_espaciados[$pos_valor]), 10)), 0, -2);
+                                        $suma_temporal = $suma_temporal+(int)$valor_sin_formato;
+                                        if (($ingresos_totales/$suma_temporal) >= 1) {
+                                            $registros['ingresos'][] = array(
+                                                'codConcepto' => $datos_espaciados[0],
+                                                'concepto' => $concepto_completo,
+                                                'valor' => $valor_sin_formato,
+                                            );
+                                        } else {
+                                            $registros['egresos'][] = array(
+                                                'codConcepto' => $datos_espaciados[0],
+                                                'concepto' => $concepto_completo,
+                                                'valor' => $valor_sin_formato,
+                                            );
+                                        }
+                                    } else {
+                                        $encasoespecial = true;
+                                        $keyinit_proc = 0;
+                                        if ($tmp_casoespecial['codConcepto'] == '') {
+                                            $tmp_casoespecial['codConcepto'] = $datos_espaciados[0];
+                                            for ($j=$keyinit_proc; $j < sizeof($datos_espaciados); $j++) { 
+                                                if (is_numeric(strpos($datos_espaciados[$j], '.00')) && !is_numeric(strpos($datos_espaciados[$j], '%'))) {
+                                                    $encasoespecial = false;
+                                                    $tmp_casoespecial['valor'] = substr(trim(intval(preg_replace('/[^0-9]+/', '', $datos_espaciados[$j]), 10)), 0, -2);
+                                                    $suma_temporal = $suma_temporal+(int)$tmp_casoespecial['valor'];
+                                                    if (($ingresos_totales/$suma_temporal) >= 1) {
+                                                        $registros['ingresos'][] = $tmp_casoespecial;
+                                                    } else {
+                                                        $registros['egresos'][] = $tmp_casoespecial;
+                                                    }
+                                                    $tmp_casoespecial['codConcepto'] = '';
+                                                    $tmp_casoespecial['concepto'] = '';
+                                                    $tmp_casoespecial['valor'] = '';
+                                                } else {
+                                                    $tmp_casoespecial['concepto'] .= ' ' . $datos_espaciados[$j];
+                                                }
+                                            }
+                                        } else {
+                                            for ($j=0; $j < sizeof($datos_espaciados); $j++) { 
+                                                if (is_numeric(strpos($datos_espaciados[$j], '.00')) && !is_numeric(strpos($datos_espaciados[$j], '%'))) {
+                                                    $tmp_casoespecial['valor'] = $datos_espaciados[$j];
+                                                    $encasoespecial = false;
+                                                    $tmp_casoespecial['valor'] = substr(trim(intval(preg_replace('/[^0-9]+/', '', $datos_espaciados[$j]), 10)), 0, -2);
+                                                    $suma_temporal = $suma_temporal+(int)$tmp_casoespecial['valor'];
+                                                    if (($ingresos_totales/$suma_temporal) >= 1) {
+                                                        $registros['ingresos'][] = $tmp_casoespecial;
+                                                    } else {
+                                                        $registros['egresos'][] = $tmp_casoespecial;
+                                                    }
+                                                    $tmp_casoespecial['codConcepto'] = '';
+                                                    $tmp_casoespecial['concepto'] = '';
+                                                    $tmp_casoespecial['valor'] = '';
+                                                } else {
+                                                    $tmp_casoespecial['concepto'] .= ' ' . $datos_espaciados[$j];
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                $persona = array(
+                                    'nombres' => $nombres,
+                                    'documento' => $documento,
+                                    'cargo' => $cargo,
+                                    'ciudad' => $ciudad,
+                                    'centro_costos' => $centro_costos,
+                                    'grado' => $grado,
+                                    'tipo_contratacion' => $tipo_contratacion,
+                                    'ingresos_base' => $ingresos,
+                                    'periodo' => $periodo,
+                                    'conceptos_financieros' => array(
+                                        'ingresos_totales' => $ingresos_totales,
+                                        'egresos_totales' => $egresos_totales,
+                                        'detallado_conceptos' => $registros
+                                    )
+                                );
+                                
+                                $jobId = CargarDatosComprobantes::dispatch($persona, $pagaduria, $plano)
+                                    ->onConnection('database')
+                                    ->onQueue('uploadingComprobantes');
+                                
+                            }
+                        }
+                    }
+
+                    $response = array(
+                        'cod' => '200',
+                        'mensaje' => 'Se han actualizado los registros encontrados en el archivo fuente.',
+                    );
+                } else {
+                    //----------------------------------------
+                    //Eliminar archivo temporal
+                    \Storage::disk('archivos')->delete($nombrearchivo);
+                    $plano->cont_procesos = -1;
+                    $plano->errors = "Error: El archivo no es válido";
+                    $plano->save();
+                }
+            }
+
+            //----------------------------------------
+            //Eliminar archivo temporal
+            \Storage::disk('archivos')->delete($nombrearchivo);
+            
+            $plano->cont_procesos--;
+            $plano->save();
+        } catch(\Exception $ex) {
+            //----------------------------------------
+            //Eliminar archivo temporal
+            \Storage::disk('archivos')->delete($nombrearchivo);
+            $plano->cont_procesos = -1;
+            $plano->errors = "Error: " . $ex->getMessage();
+            $plano->save();
+        }
     }
 }
