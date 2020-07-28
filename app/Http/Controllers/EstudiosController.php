@@ -145,16 +145,17 @@ class EstudiosController extends Controller
                     "message" => array(
                         'tipo' => 'error',
                         'titulo' => 'Error',
-                        'mensaje' => 'No se encontraron clientes con el documento suministrado',
+                        'mensaje' => 'No se encontraron clientes con el documento suministrado.',
                     )
                 ]);
             }            
         } catch (\Exception $e) {
             return view("estudios/paso1")->with([
                 "message" => array(
-                    'tipo' => 'error',
-                    'titulo' => 'Error',
-                    'mensaje' => $e->get,
+                    'tipo' => 'warning',
+                    'titulo' => 'Información incompleta del cliente',
+                    'mensaje' => 'El cliente que se está consultando no tiene la información suficiente para iniciar un estudio.
+                    Se necesitan datos de ingresos y descuentos aplicados como mínimo para su estudio. Error: ' . $e->getMessage(),
                 )
             ]);
         }
