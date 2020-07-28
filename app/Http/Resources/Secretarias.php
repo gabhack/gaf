@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 use Illuminate\Http\Request;
-use App\Jobs\LeerDatosComprobantes;
+use App\Jobs\CargarDatosComprobantes;
 use App\Jobs\CargarDatosMensajesLiquidacion;
 use App\Jobs\CargarDatosEmbargos;
 use App\Jobs\CargarDatosBase;
@@ -77,7 +77,7 @@ class Secretarias
 
 			//----------------------------------------
 			//Tratar el archivo para recibir los datos
-			$job = LeerDatosComprobantes::dispatch($ruta, $pagaduria, $nombreArchivoTmp . "." . $extension, $plano)
+			$job = CargarDatosComprobantes::dispatch($ruta, $pagaduria, $nombreArchivoTmp . "." . $extension, $plano)
 					->onConnection('database')
 					->onQueue('processingComprobantes');
 
