@@ -122,7 +122,7 @@ class PlanosController extends Controller
 		}
 
         $pagaduria = \App\Pagadurias::find($request->input("pagaduria"));
-		if($pagaduria->codigo == "SEM_POPAYAN" || $pagaduria->codigo == "SED_VALLE" || $pagaduria->codigo == "SED_CAUCA" || $pagaduria->codigo == "SEM_JAMUNDI")
+		if($pagaduria->codigo == "SEM_POPAYAN" || $pagaduria->codigo == "SED_VALLE" || $pagaduria->codigo == "SED_CAUCA" || $pagaduria->codigo == "SEM_JAMUNDI" || $pagaduria->codigo == "SEM_QUIBDO" || $pagaduria->codigo == "SED_CHOCO")
 		{
 			switch ($plano->tipo) {
 				case 'BAS':
