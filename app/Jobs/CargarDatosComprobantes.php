@@ -175,10 +175,6 @@ class CargarDatosComprobantes implements ShouldQueue
                                 'detallado_conceptos' => $registros
                             )
                         );
-                        
-                        // $jobId = CargarDatosComprobantes::dispatch($persona, $pagaduria, $plano)
-                        //     ->onConnection('database')
-                        //     ->onQueue('uploadingComprobantes');
 
                         //Cargar datos del cliente
                         $this->upload($persona);
@@ -381,10 +377,6 @@ class CargarDatosComprobantes implements ShouldQueue
                                     )
                                 );
 
-                                // $jobId = CargarDatosComprobantes::dispatch($persona, $pagaduria, $plano)
-                                //     ->onConnection('database')
-                                //     ->onQueue('uploadingComprobantes');
-
                                 //Cargar datos del cliente
                                 $this->upload($persona);
                                 
@@ -539,10 +531,6 @@ class CargarDatosComprobantes implements ShouldQueue
                                         'detallado_conceptos' => $registros
                                     )
                                 );
-                                
-                                // $jobId = CargarDatosComprobantes::dispatch($persona, $pagaduria, $plano)
-                                //     ->onConnection('database')
-                                //     ->onQueue('uploadingComprobantes');
                                 
                                 //Cargar datos del cliente
                                 $this->upload($persona);
