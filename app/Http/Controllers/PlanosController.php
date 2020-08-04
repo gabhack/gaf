@@ -316,7 +316,7 @@ class PlanosController extends Controller
 			"gs://ami_laravel/fiduprevisora_1.pdf",
 			"projects/55927814408/locations/us-central1/models/TCN6090768851320963072"
 		);
-		$response = shell_exec("python " . app_path() . "\predict_classdoc.py \"" . $args[0] . "\" \"" . $args[1] . "\" 2>&1");
+		$response = shell_exec("python " . app_path() . DIRECTORY_SEPARATOR . "predict_classdoc.py \"" . $args[0] . "\" \"" . $args[1] . "\" 2>&1");
 		$response_data = explode("|", $response);
 
 		echo '<pre>';
