@@ -60,8 +60,8 @@ def get_prediction(file_path, model_name):
   }
   
   #w = sobreescribe  #a=adiciona
-  with open('categoria_docs.json', 'w') as json_file:
-    json.dump(my_details, json_file)
+  # with open('categoria_docs.json', 'w') as json_file:
+  #   json.dump(my_details, json_file)
     
   #####  
   
