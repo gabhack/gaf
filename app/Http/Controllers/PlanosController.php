@@ -323,7 +323,7 @@ class PlanosController extends Controller
                 $py_version = "/usr/bin/venv_ami/bin/python";
 		}
 		
-        $response = shell_exec($py_version . " " . app_path() . DIRECTORY_SEPARATOR . "predict_classdoc.py \"" . $args[0] . "\" \"" . $arg[1] . "\"");
+        $response = shell_exec($py_version . " " . app_path() . DIRECTORY_SEPARATOR . "predict_classdoc.py \"" . $args[0] . "\" \"" . $args[1] . "\"");
         $response_data = explode("|", $response);
         echo '<pre>';
         echo print_r($response_data);
