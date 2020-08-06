@@ -312,17 +312,23 @@ class PlanosController extends Controller
      */
     public function create_gcp()
     {
-		$args = array(
-			"gs://ami_laravel/fiduprevisora_1.pdf",
-			"projects/55927814408/locations/us-central1/models/TCN6090768851320963072"
-		);
-		$response = shell_exec("python " . app_path() . DIRECTORY_SEPARATOR . "predict_classdoc.py \"" . $args[0] . "\" \"" . $args[1] . "\" 2>&1");
-		$response_data = explode("|", $response);
-
-		echo '<pre>';
-		echo print_r($response_data);
-		echo '</pre>';
+        $args = array(
+                "gs://ami_laravel/fiduprevisora_1.pdf",
+                "projects/55927814408/locations/us-central1/models/TCN6090768851320963072"
+        );
+        
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+                $py_version = "python";
+        } else {
+                $py_version = "/usr/bin/venv_ami/bin/python";
+		}
 		
+        $response = shell_exec($py_version . " " . app_path() . DIRECTORY_SEPARATOR . "predict_classdoc.py \"" . $args[0] . "\" \"" . $arg[1] . "\"");
+        $response_data = explode("|", $response);
+        echo '<pre>';
+        echo print_r($response_data);
+        echo '</pre>';
+                
         // return view('planos/crear-gcp');
     }
 	
