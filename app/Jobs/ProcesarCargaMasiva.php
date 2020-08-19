@@ -114,7 +114,7 @@ class ProcesarCargaMasiva implements ShouldQueue
             //Eliminar archivo temporal
             \Storage::disk('archivos')->deleteDirectory($ruta_pdfs); // Eliminar la carpeta en local
             $carga_archivo->cont_procesos = -1;
-            $carga_archivo->errors = "Error: " . $ex->getMessage();
+            $carga_archivo->errors = "Error: " . $e->getMessage();
             $carga_archivo->save();
         }
     }
