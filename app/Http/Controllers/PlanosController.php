@@ -12,6 +12,10 @@ use Google\Cloud\AutoMl\V1\TextSnippet;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
+//JOBS
+use App\Jobs\ProcesarCargaMasiva;
+use App\Jobs\ProcesarCargaPorCedula;
+
 class PlanosController extends Controller
 {
     /**
@@ -312,24 +316,10 @@ class PlanosController extends Controller
      */
     public function create_gcp()
     {
-        $args = array(
-                "gs://ami_laravel/fiduprevisora_1.pdf",
-                "projects/55927814408/locations/us-central1/models/TCN6090768851320963072"
-        );
-        
-        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-                $py_version = "python";
-        } else {
-                $py_version = "/usr/bin/venv_ami/bin/python";
-		}
-		
-        $response = shell_exec($py_version . " " . app_path() . DIRECTORY_SEPARATOR . "predict_classdoc.py \"" . $args[0] . "\" \"" . $args[1] . "\"");
-        $response_data = explode("|", $response);
-        echo '<pre>';
-        echo print_r($response_data);
-        echo '</pre>';
-                
-        // return view('planos/crear-gcp');
+		$archivos = \App\CargaArchivo::orderBy('created_at', 'desc')->get();
+		return view('planos/crear-gcp')->with([
+			'archivos' => $archivos
+		]);
     }
 	
 	/**
@@ -338,8 +328,111 @@ class PlanosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-	public function store_gcp(Request $request)
+	public function store_gcp_cedula(Request $request)
 	{
+		ini_set('memory_limit', '-1');
+		$response = array();
+		$archivos = $request->file('archivos');
+
+		$ruta_pdfs =  DIRECTORY_SEPARATOR . "tmp" . DIRECTORY_SEPARATOR . $request->input("cedula") . DIRECTORY_SEPARATOR;
+		$ruta_output =  DIRECTORY_SEPARATOR . "tmp_output";
+		
+		foreach ($archivos as $key => $archivo) {
+			$nombre_original = $archivo->getClientOriginalName();
+			$extension = $archivo->getClientOriginalExtension();
+
+			$re = \Storage::disk('archivos')->put( $ruta_pdfs . $nombre_original . "." . $extension, \File::get($archivo));
+			$ruta = storage_path('archivos') . $ruta_pdfs . $nombre_original . "." . $extension;
+		}
+
+		$this->dividir_pdf($ruta_pdfs, $ruta_output, $request->input("cedula"));
+
+		// return view('planos/response')->with(['response' => $response]);
+	}
+
+	/**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+	public function store_gcp_masivo(Request $request)
+	{
+		try {
+			ini_set('memory_limit', '-1');
+			$response = array();
+			$archivo = $request->file('archivo');
+			
+			$nombre_original = $archivo->getClientOriginalName();
+
+			$time = date("Ymd_His");
+
+			$ruta_pdfs =  DIRECTORY_SEPARATOR . "tmp" . DIRECTORY_SEPARATOR . $time . DIRECTORY_SEPARATOR;
+			$ruta_output =  DIRECTORY_SEPARATOR . "tmp_output";
+
+			$re = \Storage::disk('archivos')->put( $ruta_pdfs . $nombre_original, \File::get($archivo));
+			$ruta = storage_path('archivos') . $ruta_pdfs . $nombre_original;
+
+			// Guardo la Carga del Archivo
+			$carga_archivo = new \App\CargaArchivo;
+            $carga_archivo->nombre_archivo = $nombre_original;
+			$carga_archivo->save();
+			
+			//----------------------------------------
+			//Tratar el archivo para recibir los datos
+			$job = ProcesarCargaMasiva::dispatch($ruta, $nombre_original, $ruta_output, $ruta_pdfs, $time, $carga_archivo)
+				->onConnection('database')
+				->onQueue('processingComprobantes');
+
+			$response = array(
+				'cod' => '200',
+				'mensaje' => 'El archivo se ha subido correctamente y se estará procesando.',
+				'redirect' => 'crear_gcp',
+			);
+
+		} catch (\Exception $e) {
+			echo $e->getMessage();
+		}
+
+		return view('planos/response')->with(['response' => $response]);
+	}
+
+
+
+
+	public function dividir_pdf ($ruta_pdfs, $ruta_output, $cedula) {
+		$args = array(
+			storage_path('archivos') . $ruta_pdfs,
+			storage_path('archivos') . $ruta_output,
+			"docs_uploads/x_cedula/" . $cedula,
+			base_path() . DIRECTORY_SEPARATOR . "credentials.json"
+		);
+
+		echo '<pre>';
+		print_r($args);
+		echo '</pre>';
+		
+		if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+			$py_version = "python";
+		} else {
+			$py_version = "/usr/bin/venv_ami/bin/python";
+		}
+
+		$comand = $py_version . " " . app_path() . DIRECTORY_SEPARATOR . "dividir_pdf_pages_gcp.py --pdfs " . $args[0] . " --output " . $args[1] . " --cedula " . $args[2] . " --gcpfolder docs_uploads --gcp_credentials " . $args[3] . " 2>&1";
+		echo '<br>' . $comand;
+
+		$response = shell_exec($comand);
+		echo '<br>' . $response;
+
+		\Storage::disk('archivos')->deleteDirectory($ruta_pdfs); // Eliminar la carpeta en local
+	}
+
+}
+
+
+
+/*
+
 		ini_set('memory_limit', '-1');
 		$response = array();
 
@@ -364,6 +457,5 @@ class PlanosController extends Controller
 		}
 		
         return view('planos/response')->with(['response' => $response]);
-	}
 
-}
+*/
