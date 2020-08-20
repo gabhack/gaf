@@ -12,7 +12,7 @@
 					<!-- Nav tabs -->
 					<ul id="myTab" class="nav nav-tabs" role="tablist">
 						<li role="presentation"><a class="active" href="#carga-masiva" aria-controls="carga-masiva" role="tab" data-toggle="tab">Carga masiva</a></li>
-						<li role="presentation"><a href="#carga-cedula" aria-controls="carga-cedula" role="tab" data-toggle="tab">Carga por cédula</a></li>
+						{{-- <li role="presentation"><a href="#carga-cedula" aria-controls="carga-cedula" role="tab" data-toggle="tab">Carga por cédula</a></li> --}}
 					</ul>
 					<!-- Tab panes -->
 					<div class="tab-content">
