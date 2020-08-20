@@ -62,13 +62,6 @@ return [
             'region' => env('AWS_REGION'),
             'bucket' => env('AWS_BUCKET'),
         ],
-
-        'gcs' => [
-            'driver' => 'gcs',
-            'project_id' => env('GOOGLE_CLOUD_PROJECT_ID'),
-            'key_file' => env('GOOGLE_CLOUD_KEY_FILE'),
-            'bucket' => env('GOOGLE_CLOUD_STORAGE_BUCKET')
-        ],
 		
 		'archivos' => [
             'driver' => 'local',
