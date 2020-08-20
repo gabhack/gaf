@@ -54,42 +54,28 @@ class ProcesarCargaMasiva implements ShouldQueue
             $time = $this->time;
             $carga_archivo = $this->carga_archivo;
 
-            $ruta_gcp_pdf_original = 'docs_uploads/masivos/' . $time . '/' . $nombre_archivo;
+            //Variables generales
             $ruta_credentials = base_path() . DIRECTORY_SEPARATOR . "credentials.json";
-
-            // Subida a GCP archivo original
-            $disk = \Storage::disk('gcs');
-            $respond = $disk->put($ruta_gcp_pdf_original, \File::get($ruta_archivo));
-
-            if ($respond == '1') {
-                $response = array(
-                    'cod' => '200',
-                    'mensaje' => 'El archivo se ha cargado correctamente.',
-                );
-            } else {
-                $response = array(
-                    'cod' => '300',
-                    'mensaje' => $respond,
-                );
-            }
-
-            // División y subida a GCP 
-            $ruta_gcp = "docs_uploads/masivos/" . $time . "/divididos";
-
-            $args = array(
-                storage_path('archivos') . $ruta_pdfs,
-                storage_path('archivos') . $ruta_output,
-                $ruta_gcp,
-                $ruta_credentials
-            );
-
             if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
 				$py_version = "python";
             } else {
                 $py_version = "/usr/bin/venv_ami/bin/python";
             }
 
-            $comand = $py_version . " " . app_path() . DIRECTORY_SEPARATOR . "dividir_pdf_pages_gcp.py --pdfs " . $args[0] . " --output " . $args[1] . " --cedula " . $args[2] . " --gcpfolder docs_uploads --gcp_credentials " . $args[3] . " 2>&1";
+            // División y subida a GCP 
+            $ruta_gcp = "docs_uploads/masivos/" . $time . "/divididos";
+            $ruta_gcp_pdf_original = 'docs_uploads/masivos/' . $time;
+
+            $args = array(
+                storage_path('archivos') . $ruta_pdfs,
+                $ruta_gcp_pdf_original,
+                storage_path('archivos') . DIRECTORY_SEPARATOR . 'tmp',
+                storage_path('archivos') . DIRECTORY_SEPARATOR . 'tmp_output',
+                $ruta_gcp,
+                $ruta_credentials
+            );
+
+            $comand = $py_version . " " . app_path() . DIRECTORY_SEPARATOR . "dividir_pdf_pages_gcp_upload.py --localfolder " . $args[0] . " --gcpfolder " . $args[1] . " --pdfs " . $args[2] . " --output " . $args[3] . " --cedula " . $args[4] . " --gcp_credentials " . $args[5] . " 2>&1";
             $response = shell_exec($comand);
             // echo '<br>' . $response;
 

@@ -367,7 +367,7 @@ class PlanosController extends Controller
 
 			$time = date("Ymd_His");
 
-			$ruta_pdfs =  DIRECTORY_SEPARATOR . "tmp" . DIRECTORY_SEPARATOR . $time . DIRECTORY_SEPARATOR;
+			$ruta_pdfs =  DIRECTORY_SEPARATOR . "upload" . DIRECTORY_SEPARATOR . $time . DIRECTORY_SEPARATOR;
 			$ruta_output =  DIRECTORY_SEPARATOR . "tmp_output";
 
 			$re = \Storage::disk('archivos')->put( $ruta_pdfs . $nombre_original, \File::get($archivo));
