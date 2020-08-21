@@ -387,7 +387,11 @@ class PlanosController extends Controller
 			);
 
 		} catch (\Exception $e) {
-			echo $e->getMessage();
+			$response = array(
+				'cod' => '400',
+				'mensaje' => $e->getMessage(),
+				'redirect' => 'crear_gcp',
+			);
 		}
 
 		return view('planos/response')->with(['response' => $response]);
