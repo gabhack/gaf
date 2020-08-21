@@ -110,7 +110,13 @@ if __name__ == "__main__":
     for pdf in file_list_local:
         
         name=pdf
-        file_name=name.split("\\")
+        
+        if platform.system() == "Windows":
+            file_name=name.split("\\")
+            
+        else:
+            file_name=name.split("/")
+            
         array_size=len(file_name)-1
         filtered_file_name=file_name[array_size]
         print("Subiendo: " + filtered_file_name)
