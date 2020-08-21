@@ -5,10 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 
-use Google\Cloud\AutoMl\V1\ExamplePayload;
-use Google\Cloud\AutoMl\V1\PredictionServiceClient;
-use Google\Cloud\AutoMl\V1\TextSnippet;
-
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
