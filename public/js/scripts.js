@@ -86,3 +86,28 @@ $( "#asesor" ).change(function() {
 	}
 
 });
+
+function addRow() {
+	var cont_childs = document.getElementById("content-archivos").childElementCount;
+
+	const div = document.createElement('div');
+	div.className = 'form-row';
+  
+	div.innerHTML = `
+		<div class="form-group col-md-6">
+			<label class="label-archivos"></label>
+			<input class="input-archivos" type="file" class="form-control-file" id="archivos_`+ cont_childs +`" name="archivos[`+ cont_childs +`]" required>
+		</div>
+		<input type="button" value="-" onclick="removeRow(this)" />
+	`;
+	
+	if (cont_childs <= 30) {
+		document.getElementById('content-archivos').appendChild(div);
+	} else {
+		alert('No se puede agregar más de 30 archivos.');
+	}
+}
+
+function removeRow(input) {
+  	document.getElementById('content-archivos').removeChild(input.parentNode);
+}

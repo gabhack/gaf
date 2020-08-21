@@ -157,7 +157,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-5">
-                                <label class="label-consulta">Desición TR</label>
+                                <label class="label-consulta">Decisión TR</label>
                             </div>
                             <div class="col-md-7">
                                 <select name="desiciones" class="custom-select form-control" required>
@@ -711,7 +711,7 @@
                                                 <label class="label-consulta" for="pad">Cuota</label>
                                             </div>
                                             <div class="col-md">
-                                                <input class="form-control" type="text" name="AF2[cuota]" id="AF2_cuota" value="{{ isset($aliadosusados[1]) ? $aliadosusados[2]['condiciones']->cuota : '0' }}">
+                                                <input class="form-control" type="text" name="AF2[cuota]" id="AF2_cuota" value="{{ isset($aliadosusados[2]) ? $aliadosusados[2]['condiciones']->cuota : '0' }}">
                                             </div>
                                         </div>
                                     </div>

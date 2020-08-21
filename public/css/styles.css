@@ -133,6 +133,43 @@ table.dataTable.no-footer{
 	font-weight: 600;
 }
 
+.process-status{
+	width: 10px;
+	height: 10px;
+	display: block;
+	float: right;
+	margin: 5px 5px 0 0;
+	border-radius: 100px;
+}
+
+td:nth-child(2n) { 
+    width: 10%;
+}
+
+
+
+.process-status.status-processing{
+	animation: pulse 1s infinite;
+	animation-direction: alternate;
+}
+
+.process-status.status-ok{
+	background-color: #7df387;
+}
+
+.process-status.status-error{
+	background-color: #f37d7d;
+}
+
+@keyframes pulse {
+  0% {
+    background-color: #f3e07d;
+  }
+  100% {
+    background-color: #e4cf60;
+  }
+}
+
 #valor-tipo-cliente{
 	font-weight: 900;
     color: #3197d1;

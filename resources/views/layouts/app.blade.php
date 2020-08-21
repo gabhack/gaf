@@ -50,7 +50,7 @@
 			
 		<!-- Scripts -->
 		<!-- Scripts para funcionalidad global -->
-		<script src="{{asset('js/app.js')}}"></script>
+		<script src="{{asset('js/jquery-3.5.1.min.js')}}"></script>
 		<script src="{{asset('css/bootstrap-4.3.1/dist/js/bootstrap.bundle.min.js')}}"></script>
 		<!-- Scripts de aplicación -->
 		<script src="{{asset('js/scripts.js')}}"></script>

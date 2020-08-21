@@ -18,6 +18,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        \Bepsvpt\SecureHeaders\SecureHeadersMiddleware::class,
     ];
 
     /**
@@ -56,7 +57,8 @@ class Kernel extends HttpKernel
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'usuario' => \App\Http\Middleware\UsuarioMiddleware::class,
+        'analistatr' => \App\Http\Middleware\UsuarioMiddleware::class,
+        'directivoTR' => \App\Http\Middleware\DirectivoTRMiddleware::class,
         'superadmin' => \App\Http\Middleware\SuperAdminMiddleware::class,
     ];
 }

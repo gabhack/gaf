@@ -38,6 +38,7 @@ if(!function_exists('planos')) {
 			'COM' => 'Comprobantes de pago',
 			'MLQ' => 'Mensajes de liquidación',
 			'CLQ' => 'Conceptos de liquidación',
+			'GCP' => 'Detección GCP',
 		);
 	}
 }

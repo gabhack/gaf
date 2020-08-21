@@ -11,11 +11,11 @@
 |
 */
 
-Route::get('/clear-cache', function() {
-    $exitCode = Artisan::call('cache:clear');
-    $exitCode = Artisan::call('config:cache');
-    return "Cache is cleared";
-});
+// Route::get('/clear-cache', function() {
+//     $exitCode = Artisan::call('cache:clear');
+//     $exitCode = Artisan::call('config:cache');
+//     return "Cache is cleared";
+// });
 
 Auth::routes(['register' => false]);
 
@@ -301,6 +301,10 @@ Route::group(["prefix" => "planos"], function(){
 	
 	Route::get('/crear', 'PlanosController@create');
 	Route::post('/store', 'PlanosController@store');
+
+	Route::get('/crear_gcp', 'PlanosController@create_gcp');
+	Route::post('/store_gcp_cedula', 'PlanosController@store_gcp_cedula');
+	Route::post('/store_gcp_masivo', 'PlanosController@store_gcp_masivo');
 	
 	Route::get('/edit/{id}', 'PlanosController@edit');
 	Route::post('/update/{id}', 'PlanosController@update');
@@ -333,3 +337,6 @@ Route::group(["prefix" => "estudios"], function(){
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/dataset', 'DatasetController@index');
+Route::get('/dataset/get', 'DatasetController@get');

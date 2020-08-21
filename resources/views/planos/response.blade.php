@@ -20,7 +20,7 @@
 		<div class="panel panel-{{ $response['cod'] == 200 ? 'success' : ($response['cod'] == 400 ? 'danger' : ($response['cod'] == 300 ? 'warning' : 'default')) }}">
 			<div class="panel-heading">{{$response['mensaje']}}</div>
 			<div class="panel-body">
-				<a href="{{url('planos/crear')}}" class="btn btn-primary">Volver</a>
+				<a href="{{url('planos' . ($response['redirect'] ? '/' . $response['redirect'] : ''))}}" class="btn btn-primary">Volver</a>
 			</div>
 		</div>
 	</div>
