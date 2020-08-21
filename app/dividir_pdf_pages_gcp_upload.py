@@ -14,6 +14,7 @@ import datetime
 import sys
 import glob
 import shutil
+import platform
 # [START storage_upload_file]
 from google.cloud import storage
 
@@ -111,11 +112,14 @@ if __name__ == "__main__":
         
         name=pdf
         
+        
         if platform.system() == "Windows":
             file_name=name.split("\\")
+            slash = "/"
             
         else:
             file_name=name.split("/")
+            slash = "/"
             
         array_size=len(file_name)-1
         filtered_file_name=file_name[array_size]
@@ -137,6 +141,8 @@ if __name__ == "__main__":
     for document in files_names:
         
         print("Guardando Archivo: ", document)
+        
+
     
         file_name=document.split("/")
         array_size=len(file_name)-1
@@ -148,7 +154,7 @@ if __name__ == "__main__":
         download_blob(
             bucket_name="ami_laravel",
             source_blob_name=document,
-            destination_file_name=args["pdfs"]+"//"+filtered_file_name,
+            destination_file_name=args["pdfs"]+"/"+filtered_file_name,
         )
         print("Guardado con exito")
         
@@ -172,18 +178,26 @@ if __name__ == "__main__":
         for i in range(inputpdf.numPages):
             output = PdfFileWriter()
             output.addPage(inputpdf.getPage(i))
-            file_name=documento.split("\\")
+            if platform.system() == "Windows":
+                file_name=documento.split("\\")
+            
+            
+            else:
+                file_name=documento.split("/")
+                
+            
+            #file_name=documento.split("\\")
             array_size=len(file_name)-1
             filtered_file_name=file_name[array_size]
             new_file_name=filtered_file_name.replace(".pdf","")
-            with open(args["output"]+"//"+new_file_name+"_"+str(c)+"_"+hora+"_"+"page%s.pdf" % i, "wb") as outputStream:
+            with open(args["output"]+"/"+new_file_name+"_"+str(c)+"_"+hora+"_"+"page%s.pdf" % i, "wb") as outputStream:
                 output.write(outputStream)
             # [END storage_upload_file]
     
        
             upload_blob(
                 bucket_name="ami_laravel",
-                source_file_name=args["output"]+"//"+new_file_name+"_"+str(c)+"_"+hora+"_"+"page%s.pdf" % i,
+                source_file_name=args["output"]+"/"+new_file_name+"_"+str(c)+"_"+hora+"_"+"page%s.pdf" % i,
                 destination_blob_name=args["cedula"]+"/"+new_file_name+"_"+str(c)+"_"+hora+"_"+"page%s.pdf" % i
             )
         # Cerrando archivo PDF
