@@ -11,8 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import argparse
 import os
-import sys
 """Predict."""
 # [START automl_language_entity_extraction_predict]
 from google.cloud import automl
@@ -22,7 +22,17 @@ from google.cloud.automl_v1.proto import service_pb2
 from google.cloud import storage
 import json
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"]=sys.argv[3]
+ap = argparse.ArgumentParser()
+ap.add_argument("-b", "--bucket", type=str,
+	help="path to cedula folder")
+ap.add_argument("-f", "--folder", type=str,
+	help="path to input pdf")
+# ap.add_argument("-g", "--gcp_credentials", type=str,
+# 	help="path to credentials file")
+args = vars(ap.parse_args())
+
+# os.environ["GOOGLE_APPLICATION_CREDENTIALS"]=args["gcp_credentials"]
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="credentials.json"
 
 project_id = "warm-helix-277015"
 """
@@ -113,19 +123,19 @@ def get_prediction(file_path, model_name):
 
 if __name__ == '__main__':
     
-  bucket_name= sys.argv[1]
+  bucket_name= args["bucket"]
   #prefix carpeta en donde se encuentran todos los pdfs
-  prefix=sys.argv[2]
+  prefix=args["folder"]
   model_name = "TEN1795742181693063168"
   files_names=[]
   files=list_blobs_with_prefix(bucket_name, prefix)  
   c=0
   if len(files_names) <= 30:
       for documentos in files_names:
-          print("procesando: "+documentos)
+          # print("procesando: "+documentos)
           url = documentos
           gcs_url_file_prediction="gs://"+bucket_name+"/"+url
-          print(gcs_url_file_prediction)
+          # print(gcs_url_file_prediction)
           
           file_path=gcs_url_file_prediction
           ner_array=[]

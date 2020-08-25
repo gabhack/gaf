@@ -6,9 +6,6 @@ Created on Wed Jul  1 15:54:04 2020
 """
 #USO DEL SCRIPT
 #python predict_classdoc.py gs://ami_nlp/ami_documentos_clasificador/pruebas_class_1_jul/acuerdo_pago_embargo_26.pdf projects/55927814408/locations/us-central1/models/TCN6090768851320963072
-  
-
-import argparse
 import sys
 from google.api_core.client_options import ClientOptions
 from google.cloud import automl_v1
@@ -17,10 +14,68 @@ from google.cloud import storage
 import os
 import json
 import random
+import time
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]=sys.argv[3]
 
 
+def rename_blob(bucket_name, blob_name, new_name):
+    """Renames a blob."""
+    # bucket_name = "your-bucket-name"
+    # blob_name = "your-object-name"
+    # new_name = "new-object-name"
+
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(blob_name)
+
+    new_blob = bucket.rename_blob(blob, new_name)
+
+    #print("Blob {} has been renamed to {}".format(blob.name, new_blob.name))
+
+def delete_blob(bucket_name, blob_name):
+    """Deletes a blob from the bucket."""
+    # bucket_name = "your-bucket-name"
+    # blob_name = "your-object-name"
+
+    storage_client = storage.Client()
+
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(blob_name)
+    blob.delete()
+
+    #print("Blob {} deleted.".format(blob_name))
+
+
+
+def copy_blob(
+    bucket_name, blob_name, destination_bucket_name, destination_blob_name
+):
+    """Copies a blob from one bucket to another with a new name."""
+    # bucket_name = "your-bucket-name"
+    # blob_name = "your-object-name"
+    # destination_bucket_name = "destination-bucket-name"
+    # destination_blob_name = "destination-object-name"
+
+    storage_client = storage.Client()
+
+    source_bucket = storage_client.bucket(bucket_name)
+    source_blob = source_bucket.blob(blob_name)
+    destination_bucket = storage_client.bucket(destination_bucket_name)
+
+    blob_copy = source_bucket.copy_blob(
+        source_blob, destination_bucket, destination_blob_name
+    )
+    """
+    print(
+        "Blob {} in bucket {} copied to blob {} in bucket {}.".format(
+            source_blob.name,
+            source_bucket.name,
+            blob_copy.name,
+            destination_bucket.name,
+        )
+    )
+    """
 
 
 def list_blobs_with_prefix(bucket_name, prefix, delimiter=None):
@@ -85,7 +140,7 @@ def get_prediction(file_path, model_name):
     'porcentaje': porcentaje
   }
   
-  # print(my_details)
+  #print(my_details)
   
   """
   #w = sobreescribe  #a=adiciona
@@ -136,21 +191,48 @@ if __name__ == '__main__':
       
     for documentos in files_names_limited:
     
-        # print("procesando: "+documentos)
+        #print("procesando: "+documentos)
            
         file_path = documentos
         gcs_url_file_prediction="gs://"+bucket_name+"/"+file_path
         model_name = "projects/55927814408/locations/us-central1/models/TCN6090768851320963072"
         c=c+1
-        # print("Clasificando documento #: "+str(c))
+        #print("Clasificando documento #: "+str(c))
         
         prediccion= get_prediction(gcs_url_file_prediction, model_name)
         
         results.append(prediccion[1])
         
     if results[0] == results[1]:
+        
+        #print("Todos los documentos pertenecen a la categoria: "+results[0])
         print(results[0])
-    else:
-        print(results[0])
+        files_names_divididos=files_names
+        #files=list_blobs_with_prefix(bucket_name, prefix, delimiter=None)
+        #print(files_names_divididos)
+        
+        for names in files_names_divididos:
+            blob_name=names
+            new_name= names.split("/")
+            size_name_final= len(new_name)-1
+            size_name_initial=len(new_name)-2
+            initial_new_name=new_name[:size_name_initial]
+            final_new_name=new_name[size_name_final]
+            #print("initial name: " , new_name[:size_name_initial])
+            #print("final name: " , new_name[size_name_final])
+            folder_name_init=""
+            for i in range(len(initial_new_name)):
+                folder_name_init += initial_new_name[i] + "/"
+            #print(folder_name_init)
+            folder_name_mid=folder_name_init + results[0]
+            folder_name_final= folder_name_mid + "/"+ final_new_name
+     
+            rename_blob(bucket_name, blob_name, folder_name_final)
 
-  #print (get_prediction(file_path, model_name))
+            
+    else:
+        print("0")
+        
+    
+        
+     

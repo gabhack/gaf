@@ -312,32 +312,10 @@ class PlanosController extends Controller
      */
     public function create_gcp()
     {
-		//Variables generales
-		$ruta_credentials = base_path() . DIRECTORY_SEPARATOR . "credentials.json";
-		if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-			$py_version = "python";
-		} else {
-			$py_version = "/usr/bin/venv_ami/bin/python";
-		}
-
-		// Extracción de entidades
-		$args2 = array(
-			"ami_laravel",
-			"docs_uploads/masivos/20200821_180506/divididos",
-			$ruta_credentials
-		);
-
-		$response_clas = shell_exec($py_version . " " . app_path() . DIRECTORY_SEPARATOR . "predict_ner_gcp_ami_folder.py \"" . $args2[0] . "\" \"" . $args2[1] . "\" \"" . $args2[2] . "\" 2>&1");
-		$res = json_decode($response_clas);
-
-		echo '<pre>';
-		print_r($res);
-		echo '</pre>';
-
-		// $archivos = \App\CargaArchivo::orderBy('created_at', 'desc')->get();
-		// return view('planos/crear-gcp')->with([
-		// 	'archivos' => $archivos
-		// ]);
+		$archivos = \App\CargaArchivo::orderBy('created_at', 'desc')->get();
+		return view('planos/crear-gcp')->with([
+			'archivos' => $archivos
+		]);
     }
 	
 	/**
