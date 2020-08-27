@@ -28,11 +28,11 @@ ap.add_argument("-b", "--bucket", type=str,
 ap.add_argument("-f", "--folder", type=str,
 	help="path to input pdf")
 # ap.add_argument("-g", "--gcp_credentials", type=str,
-# 	help="path to credentials file")
+#	help="path to credentials file")
 args = vars(ap.parse_args())
 
 # os.environ["GOOGLE_APPLICATION_CREDENTIALS"]=args["gcp_credentials"]
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="credentials.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="/var/www/html/ami/app/credentials.json"
 
 project_id = "warm-helix-277015"
 

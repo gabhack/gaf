@@ -447,9 +447,8 @@ if (!function_exists('sueldoadicional')) {
 if (!function_exists('upload_persona')) {
 	function upload_persona($persona)
 	{
-		set_time_limit(0);
 
-		$pagaduria = $this->pagaduria;
+		// $pagaduria = $this->pagaduria;
 		$cliente = \App\Clientes::where("documento", "=", $persona['documento'])->first();
 		$ciudad = \App\Ciudades::where('ciudad', $persona['ciudad'] )->first();
 
@@ -493,7 +492,7 @@ if (!function_exists('upload_persona')) {
 			}
 
 			//creación de registro
-			$registro = \App\Registrosfinancieros::where("periodo", "=", $persona['periodo'])
+			/*$registro = \App\Registrosfinancieros::where("periodo", "=", $persona['periodo'])
 				->where("pagadurias_id", "=", $pagaduria->id)
 				->where("clientes_id", "=", $cliente->id)
 				->first();
@@ -540,15 +539,11 @@ if (!function_exists('upload_persona')) {
 						$descuentoAplicado->save();
 					}
 				}
-			}
-
+			}*/
+			return ('Carga con éxito. Registro actualizado: ' . $persona['documento']);
 		} catch(\Exception $ex) {
-			//----------------------------------------
-			//Eliminar archivo temporal
-			\Storage::disk('archivos')->delete($nombreArchivoTmp . "." . $extension);
-			$plano->cont_procesos = -1;
-			$plano->errors = "Error: " . $ex->getMessage();
-			$plano->save();
+			//-------------------
+			return ('Error. Documento #' . $persona['documento'] . ': ' . $ex->getMessage());
 		}
 	}
 }

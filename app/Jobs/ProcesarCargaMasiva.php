@@ -96,14 +96,15 @@ class ProcesarCargaMasiva implements ShouldQueue
             );
 
             // $response_extract = shell_exec($py_version . " " . app_path() . DIRECTORY_SEPARATOR . "predict_ner_gcp_ami_folder.py --bucket " . $args3[0] . " --folder " . $args3[1] . " 2>&1");
-            $response_extract = shell_exec($py_version . " " . app_path() . DIRECTORY_SEPARATOR . "predict_ner_gcp_ami_folder.py --bucket " . $args3[0] . " --folder " . $args3[1] . " 2>&1");
+            $response_extract = shell_exec($py_version . " " . app_path() . DIRECTORY_SEPARATOR . "predict_ner_gcp_ami_folder_provisional.py --bucket " . $args3[0] . " --folder " . $args3[1] . " 2>&1");
             echo 'Extracción de entidades completada.';
 
-            // $res = json_decode($response_extract);
+            $res = json_decode($response_extract);
+	    $respuesta_upload = upload_persona($res);
 
             //Termino el proceso
             $carga_archivo->tipo = $response_clas;
-            $carga_archivo->entidades = $response_extract;
+            $carga_archivo->entidades = 'Esto es una prueba';
             $carga_archivo->cont_procesos = 0;
             $carga_archivo->save();
             
