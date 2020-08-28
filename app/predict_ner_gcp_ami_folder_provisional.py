@@ -32,7 +32,8 @@ ap.add_argument("-f", "--folder", type=str,
 args = vars(ap.parse_args())
 
 # os.environ["GOOGLE_APPLICATION_CREDENTIALS"]=args["gcp_credentials"]
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="/var/www/html/ami/app/credentials.json"
+# os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="/var/www/html/ami/app/credentials.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="D:/Documentos/ami_project/ami/credentials.json"
 
 project_id = "warm-helix-277015"
 
@@ -436,6 +437,7 @@ if __name__ == '__main__':
   prefix=args["folder"]
   model_name = "TEN1795742181693063168"
   files_names=[]
+  personas=[]
   list_blobs_with_prefix(bucket_name, prefix)  
   c=0
   
@@ -467,9 +469,13 @@ if __name__ == '__main__':
           c_grados = []
           ner_resultado_provisional=[]
           get_prediction(file_path, model_name)
+          personas.append(ner_resultado_provisional)
           #print(ner_array)
           #print(ner_result_ami)
-          print(ner_resultado_provisional)
+          # print(json.dumps(ner_resultado_provisional, ensure_ascii=False))
+          # json_name="ejemplo"+".json"
+          # with open(json_name, 'w') as json_file:
+          #   json.dump(ner_resultado_provisional, json_file, ensure_ascii=False)
           
           """
           final_provisional=[]
@@ -535,6 +541,11 @@ if __name__ == '__main__':
           #print(ner_conceptos_egreso)
           """
       
+      # json_name="ejemplo"+".json"
+      # with open(json_name, 'w', encoding='utf-8') as json_file:
+      #   json.dump(personas, json_file, ensure_ascii=False, indent=4)
+      data_string = json.dumps(personas, indent=4)
+      print (data_string)
   else:
       print("0")
   

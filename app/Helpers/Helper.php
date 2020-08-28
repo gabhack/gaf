@@ -450,43 +450,78 @@ if (!function_exists('upload_persona')) {
 
 		// $pagaduria = $this->pagaduria;
 		$cliente = \App\Clientes::where("documento", "=", $persona['documento'])->first();
-		$ciudad = \App\Ciudades::where('ciudad', $persona['ciudad'] )->first();
 
 		try {
-		
-			//Crear ciudad
-			if ($ciudad === null) {
-				$ciudad = new \App\Ciudades;
-				$ciudad->departamentos_id = 1;
-				$ciudad->ciudad = $persona['ciudad'];
-				$ciudad->save();
+			
+			if ($persona['ciudad'] !== '') {
+				echo $persona['ciudad'];
+				$ciudad = \App\Ciudades::where('ciudad', $persona['ciudad'] )->first();
+				//Crear ciudad
+				if ($ciudad === null) {
+					$ciudad = new \App\Ciudades;
+					$ciudad->departamentos_id = 1;
+					$ciudad->ciudad = $persona['ciudad'];
+					$ciudad->save();
+				}
 			}
 			
 			//Cliente crear-actualizar existente
 			if ($cliente === null) {
 				$cliente = new \App\Clientes;
 				$cliente->users_id				= 1;
-				$cliente->ciudades_id 			= $ciudad['id'];
+				if ($persona['id'] !== '') {
+					$cliente->ciudades_id 			= $ciudad['id'];					
+				}
 				$cliente->tipodocumento			= 'CC';
-				$cliente->documento 			= $persona['documento'];
-				$cliente->nombres 				= $persona['nombres'];
-				$cliente->centro_costo 			= $persona['centro_costos'];
-				$cliente->cargo 				= $persona['cargo'];
-				$cliente->tipo_contratacion 	= $persona['tipo_contratacion'];
-				$cliente->grado 				= $persona['grado'];
-				$cliente->ingresos 				= $persona['ingresos_base'];
+				if ($persona['documento'] !== '') {
+					$cliente->documento 			= $persona['documento'];					
+				}
+				if ($persona['nombres'] !== '') {
+					$cliente->nombres 				= $persona['nombres'];					
+				}
+				if ($persona['apellidos'] !== '') {
+					$cliente->apellidos 			= $persona['apellidos'];					
+				}
+				if ($persona['centro_costos'] !== '') {
+					$cliente->centro_costo 			= $persona['centro_costos'];					
+				}
+				if ($persona['cargo'] !== '') {
+					$cliente->cargo 				= $persona['cargo'];					
+				}
+				if ($persona['tipo_contratacion'] !== '') {
+					$cliente->tipo_contratacion 	= $persona['tipo_contratacion'];					
+				}
+				if ($persona['grado'] !== '') {
+					$cliente->grado 				= $persona['grado'];					
+				}
+				if ($persona['ingresos_base'] !== '') {
+					$cliente->ingresos 				= $persona['ingresos_base'];					
+				}
+				
 				$cliente->save();
 			} else {
-				if (!$cliente['apellidos']) {
+			
+				if ($persona['nombres'] !== '') {
 					$cliente->nombres 				= $persona['nombres'];
 				}
-
-				$cliente->nombres 				= $persona['nombres'];
-				$cliente->centro_costo 			= $persona['centro_costos'];
-				$cliente->cargo 				= $persona['cargo'];
-				$cliente->tipo_contratacion 	= $persona['tipo_contratacion'];
-				$cliente->grado 				= $persona['grado'];
-				$cliente->ingresos 				= $persona['ingresos_base'];
+				if ($persona['apellidos'] !== '') {
+					$cliente->apellidos 			= $persona['apellidos'];
+				}
+				if ($persona['centro_costos'] !== '') {
+					$cliente->centro_costo 			= $persona['centro_costos'];
+				}
+				if ($persona['cargo'] !== '') {
+					$cliente->cargo 				= $persona['cargo'];
+				}
+				if ($persona['tipo_contratacion'] !== '') {
+					$cliente->tipo_contratacion 	= $persona['tipo_contratacion'];
+				}
+				if ($persona['grado'] !== '') {
+					$cliente->grado 				= $persona['grado'];
+				}
+				if ($persona['ingresos_base'] !== '') {
+					$cliente->ingresos 				= $persona['ingresos_base'];
+				}
 
 				$cliente->save();
 			}
