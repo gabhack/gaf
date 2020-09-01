@@ -77,7 +77,6 @@ class ProcesarCargaMasiva implements ShouldQueue
 
             $comand = $py_version . " " . app_path() . DIRECTORY_SEPARATOR . "dividir_pdf_pages_gcp_upload.py --localfolder " . $args[0] . " --gcpfolder " . $args[1] . " --pdfs " . $args[2] . " --output " . $args[3] . " --cedula " . $args[4] . " --gcp_credentials " . $args[5] . " 2>&1";
             $response = shell_exec($comand);
-            // echo 'Archivo dividido - Respuesta:' . $response;
 
             // Clasificación
             $args2 = array(
@@ -87,7 +86,6 @@ class ProcesarCargaMasiva implements ShouldQueue
             );
 
             $response_clas = shell_exec($py_version . " " . app_path() . DIRECTORY_SEPARATOR . "predict_classdoc_folder_masivo.py \"" . $args2[0] . "\" \"" . $args2[1] . "\" \"" . $args2[2] . "\" 2>&1");
-            // echo 'Archivo clasificado - Respuesta:' . $response_clas;
 
             // Extracción de entidades
             $args3 = array(
@@ -97,13 +95,28 @@ class ProcesarCargaMasiva implements ShouldQueue
 
             $response_extract = shell_exec($py_version . " " . app_path() . DIRECTORY_SEPARATOR . "predict_ner_gcp_ami_folder_full.py --bucket " . $args3[0] . " --folder " . $args3[1] . " 2>&1");
             $personas = json_decode($response_extract);
+            $personas_upload = array();
 
-            print_r($personas);
-	        // $respuesta_upload = upload_persona($res);
+            foreach ($personas as $key => $persona) {
+                $personas_upload[] = array(
+                    'nombres' => ( isset($persona[0]->nombres) ? $persona[0]->nombres : '' ),
+                    'apellidos' => ( isset($persona[0]->apellidos) ? $persona[0]->apellidos : '' ),
+                    'documento' => ( isset($persona[0]->documento) ? $persona[0]->documento : '' ),
+                    'cargo' => ( isset($persona[0]->cargo) ? $persona[0]->cargo : '' ),
+                    'ciudad' => ( isset($persona[0]->ciudad) ? $persona[0]->ciudad : '' ),
+                    'centro_costos' => ( isset($persona[0]->centro_costos) ? $persona[0]->centro_costos : '' ),
+                    'grado' => ( isset($persona[0]->grado) ? $persona[0]->grado : '' ),
+                    'tipo_contratacion' => ( isset($persona[0]->tipo_contratacion) ? $persona[0]->tipo_contratacion : '' ),
+                    'periodo' => ( isset($persona[0]->periodo) ? $persona[0]->periodo : '' ),
+                    'secretaria' => ( isset($persona[0]->Secretaria_Educacion) ? $persona[0]->Secretaria_Educacion : '' ),
+                    'conceptos_financieros' => ( isset($persona[0]->conceptos_financieros[0]) ? $persona[0]->conceptos_financieros[0] : '' )
+                );
+            }
+	        $respuesta_upload = upload_personas($personas_upload);
 
             //Termino el proceso
             $carga_archivo->tipo = $response_clas;
-            // $carga_archivo->entidades = var_dump($personas);
+            $carga_archivo->logs = $respuesta_upload;
             $carga_archivo->cont_procesos = 0;
             $carga_archivo->save();
             
@@ -115,7 +128,7 @@ class ProcesarCargaMasiva implements ShouldQueue
             //Eliminar archivo temporal
             \Storage::disk('archivos')->deleteDirectory($ruta_pdfs); // Eliminar la carpeta en local
             $carga_archivo->cont_procesos = -1;
-            $carga_archivo->errors = "Error: " . $e->getMessage();
+            $carga_archivo->logs = "Error: " . $e->getMessage();
             $carga_archivo->save();
         }
     }
