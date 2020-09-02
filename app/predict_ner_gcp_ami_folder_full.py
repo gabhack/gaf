@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import os
-import argparse
+import sys
 """Predict."""
 # [START automl_language_entity_extraction_predict]
 from google.cloud import automl
@@ -22,17 +22,18 @@ from google.cloud.automl_v1.proto import service_pb2
 from google.cloud import storage
 import json
 import re
+import argparse
 
 ap = argparse.ArgumentParser()
 ap.add_argument("-b", "--bucket", type=str,
-	help="path to cedula folder")
-ap.add_argument("-f", "--folder", type=str,
 	help="path to input pdf")
-# ap.add_argument("-g", "--gcp_credentials", type=str,
-#	help="path to credentials file")
+ap.add_argument("-f", "--folder", type=str,
+	help="path folder pdfs in gcp")
+# ap.add_argument("-c", "--credentials", type=str,
+# 	help="path folder pdfs in gcp")
 args = vars(ap.parse_args())
 
-# os.environ["GOOGLE_APPLICATION_CREDENTIALS"]=args["gcp_credentials"]
+# os.environ["GOOGLE_APPLICATION_CREDENTIALS"]=args["credentials"]
 # os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="/var/www/html/ami/app/credentials.json"
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="D:/Documentos/ami_project/ami/credentials.json"
 
@@ -445,6 +446,14 @@ def get_prediction(file_path, model_name):
   sizes_ingresos = [size_valores_ingresos, size_conceptos_ingresos, size_cod_conceptos_ingresos]
       
   valor_minimo_ingresos = my_min_function(sizes_ingresos)
+  
+  if size_valores_ingresos == 0:
+      ner_conceptos_valor_ingreso.append("$0.00")
+      
+      size_valores_ingresos=len(ner_conceptos_valor_ingreso)
+      
+      sizes_ingresos = [size_valores_ingresos, size_conceptos_ingresos, size_cod_conceptos_ingresos]
+      valor_minimo_ingresos = my_min_function(sizes_ingresos)
       
   for i in range(valor_minimo_ingresos):
 
@@ -473,32 +482,53 @@ def get_prediction(file_path, model_name):
   size_cod_conceptos_egresos= len(ner_cod_conceptos_egreso)
 
   sizes_egresos = [size_valores_egresos, size_conceptos_egresos, size_cod_conceptos_egresos]
+  
+  #print(sizes_egresos)
+  #print(ner_conceptos_valor_egreso)
 
   valor_minimo_egresos = my_min_function(sizes_egresos)
+  
+  if size_valores_egresos == 0:
+      ner_conceptos_valor_egreso.append("$0.00")
+      
+      size_valores_egresos=len(ner_conceptos_valor_egreso)
+      
+      sizes_egresos = [size_valores_egresos, size_conceptos_egresos, size_cod_conceptos_egresos]
+      valor_minimo_egresos = my_min_function(sizes_egresos)
+  
 
   for i in range(valor_minimo_egresos):
-        
+      
       
         
-        codigo_concepto_egreso=ner_cod_conceptos_egreso[i]
-        conceptos_egresos=ner_conceptos_egreso[i]
-        valor_concepto_egreso=ner_conceptos_valor_egreso[i]
+      
+      codigo_concepto_egreso=ner_cod_conceptos_egreso[i]
+            #print(codigo_concepto_egreso)
+      
+      conceptos_egresos=ner_conceptos_egreso[i]
+            #print(conceptos_egresos)
+     
+        #print("ner conceptos valor egreso", ner_conceptos_valor_egreso)
+      valor_concepto_egreso=ner_conceptos_valor_egreso[i]
+        #print(valor_concepto_egreso)
         
-        valor_concepto_egreso_filtro_1=valor_concepto_egreso.replace('.00', '')
-        valor_concepto_egreso_filtro_2=valor_concepto_egreso_filtro_1.replace(",", '')
-        valor_concepto_egreso_filtro_3=valor_concepto_egreso_filtro_2.replace("$", '')
+            
         
-        
-        
-        my_details_todo_conceptos_detallados_egresos = {
+      valor_concepto_egreso_filtro_1=valor_concepto_egreso.replace('.00', '')
+      valor_concepto_egreso_filtro_2=valor_concepto_egreso_filtro_1.replace(",", '')
+      valor_concepto_egreso_filtro_3=valor_concepto_egreso_filtro_2.replace("$", '')
+    
+    
+    
+      my_details_todo_conceptos_detallados_egresos = {
         
             'codConcepto': codigo_concepto_egreso,
             'concepto': conceptos_egresos,
             'valor': valor_concepto_egreso_filtro_3
-
+    
         }
-        
-        ner_resultado_provisional_conceptos_detallado_egresos.append(my_details_todo_conceptos_detallados_egresos)
+    
+      ner_resultado_provisional_conceptos_detallado_egresos.append(my_details_todo_conceptos_detallados_egresos)
         
         
   my_details_todo_conceptos_especificos = {
@@ -547,12 +577,12 @@ def get_prediction(file_path, model_name):
 
 if __name__ == '__main__':
     
-    bucket_name=args["bucket"]
+    bucket_name= args["bucket"]
     #prefix carpeta en donde se encuentran todos los pdfs
     prefix=args["folder"]
     model_name = "TEN1795742181693063168"
-    files_names=[]
     personas=[]
+    files_names=[]
     files=list_blobs_with_prefix(bucket_name, prefix)  
     c=0
   
@@ -581,17 +611,6 @@ if __name__ == '__main__':
           
         data_string = json.dumps(personas, indent=4)
         print (data_string)
-
-          
       
     else:
         print("0")
-  
-
-
-
-
-
-        
-
-

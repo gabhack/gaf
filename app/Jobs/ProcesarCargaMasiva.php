@@ -45,6 +45,7 @@ class ProcesarCargaMasiva implements ShouldQueue
      */
     public function handle()
     {
+        $log = '';
         try {
             set_time_limit(0);
             $ruta_archivo = $this->ruta_archivo;
@@ -77,6 +78,7 @@ class ProcesarCargaMasiva implements ShouldQueue
 
             $comand = $py_version . " " . app_path() . DIRECTORY_SEPARATOR . "dividir_pdf_pages_gcp_upload.py --localfolder " . $args[0] . " --gcpfolder " . $args[1] . " --pdfs " . $args[2] . " --output " . $args[3] . " --cedula " . $args[4] . " --gcp_credentials " . $args[5] . " 2>&1";
             $response = shell_exec($comand);
+            $log .= '*****Proceso de división: ' . $response;
 
             // Clasificación
             $args2 = array(
@@ -86,6 +88,7 @@ class ProcesarCargaMasiva implements ShouldQueue
             );
 
             $response_clas = shell_exec($py_version . " " . app_path() . DIRECTORY_SEPARATOR . "predict_classdoc_folder_masivo.py \"" . $args2[0] . "\" \"" . $args2[1] . "\" \"" . $args2[2] . "\" 2>&1");
+            $log .= '*****Proceso de Clasificación: ' . $response_clas;
 
             // Extracción de entidades
             $args3 = array(
@@ -96,6 +99,7 @@ class ProcesarCargaMasiva implements ShouldQueue
             $response_extract = shell_exec($py_version . " " . app_path() . DIRECTORY_SEPARATOR . "predict_ner_gcp_ami_folder_full.py --bucket " . $args3[0] . " --folder " . $args3[1] . " 2>&1");
             $personas = json_decode($response_extract);
             $personas_upload = array();
+            $log .= '*****Proceso de Extracción de entidades: ' . $response_extract;
 
             foreach ($personas as $key => $persona) {
                 $personas_upload[] = array(
@@ -113,10 +117,11 @@ class ProcesarCargaMasiva implements ShouldQueue
                 );
             }
 	        $respuesta_upload = upload_personas($personas_upload);
+            $log .= '*****Proceso de ingreso a BD: ' . $response;
 
             //Termino el proceso
             $carga_archivo->tipo = $response_clas;
-            $carga_archivo->logs = $respuesta_upload;
+            $carga_archivo->logs = $log;
             $carga_archivo->cont_procesos = 0;
             $carga_archivo->save();
             
@@ -129,6 +134,7 @@ class ProcesarCargaMasiva implements ShouldQueue
             \Storage::disk('archivos')->deleteDirectory($ruta_pdfs); // Eliminar la carpeta en local
             $carga_archivo->cont_procesos = -1;
             $carga_archivo->logs = "Error: " . $e->getMessage();
+            $carga_archivo->logs .= "Logs: " . $log;
             $carga_archivo->save();
         }
     }
