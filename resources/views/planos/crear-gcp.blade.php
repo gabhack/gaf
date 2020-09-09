@@ -12,7 +12,7 @@
 					<!-- Nav tabs -->
 					<ul id="myTab" class="nav nav-tabs" role="tablist">
 						<li role="presentation"><a class="active" href="#carga-masiva" aria-controls="carga-masiva" role="tab" data-toggle="tab">Carga masiva</a></li>
-						{{-- <li role="presentation"><a href="#carga-cedula" aria-controls="carga-cedula" role="tab" data-toggle="tab">Carga por cédula</a></li> --}}
+						<li role="presentation"><a href="#carga-cedula" aria-controls="carga-cedula" role="tab" data-toggle="tab">Carga por cédula</a></li>
 					</ul>
 					<!-- Tab panes -->
 					<div class="tab-content">
@@ -35,7 +35,7 @@
 							<form action="{{url('planos/store_gcp_cedula')}}" method="post" enctype="multipart/form-data">
 								{!! Form::token() !!}
 								<br>
-								<input placeholder="Cedula" type="number" name="cedula" id="input-cedula">
+								<input required placeholder="Cedula" type="number" name="cedula" id="input-cedula">
 								<br>
 								<br>
 								<input type="button" value="+" onclick="addRow()">
@@ -73,7 +73,11 @@
 		<tbody>
 			@foreach($archivos as $archivo)
 				<tr>
-					<td>{{$archivo->id}}</td>
+					@if (isset($archivo->clases_detectadas))
+						<td>{{$archivo->id}} <a href="{{ route('ver_archivo', ['id' => $archivo->id]) }}">(Ver detalle)</a></td>
+					@else
+						<td>{{$archivo->id}}</td>
+					@endif
 					<td title="{{$archivo->cont_procesos < 0 ? $archivo->logs : ''}}">{{$archivo->cont_procesos < 0 ? 'Error' : ($archivo->cont_procesos == 0 ? 'Completado' : 'Procesando' )}}<span class="process-status status-{{$archivo->cont_procesos < 0 ? 'error' : ($archivo->cont_procesos == 0 ? 'ok' : 'processing' )}}"></span></td>
 					<td>{{$archivo->tipo ? $archivo->tipo : '--'}}</td>	
 					<td>{{$archivo->nombre_archivo ? $archivo->nombre_archivo : '--'}}</td>	

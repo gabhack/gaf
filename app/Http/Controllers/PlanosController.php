@@ -326,24 +326,55 @@ class PlanosController extends Controller
      */
 	public function store_gcp_cedula(Request $request)
 	{
-		ini_set('memory_limit', '-1');
-		$response = array();
-		$archivos = $request->file('archivos');
+		try {
+			ini_set('memory_limit', '-1');
+			$response = array();
+			$archivos = $request->file('archivos');
 
-		$ruta_pdfs =  DIRECTORY_SEPARATOR . "tmp" . DIRECTORY_SEPARATOR . $request->input("cedula") . DIRECTORY_SEPARATOR;
-		$ruta_output =  DIRECTORY_SEPARATOR . "tmp_output";
-		
-		foreach ($archivos as $key => $archivo) {
-			$nombre_original = $archivo->getClientOriginalName();
-			$extension = $archivo->getClientOriginalExtension();
+			$ruta_pdfs =  DIRECTORY_SEPARATOR . "upload" . DIRECTORY_SEPARATOR . $request->input("cedula") . DIRECTORY_SEPARATOR;
+			$ruta_output =  DIRECTORY_SEPARATOR . "tmp_output";
 
-			$re = \Storage::disk('archivos')->put( $ruta_pdfs . $nombre_original . "." . $extension, \File::get($archivo));
-			$ruta = storage_path('archivos') . $ruta_pdfs . $nombre_original . "." . $extension;
+			$time = date("Ymd_His");
+			
+			// Guardo la Carga del Archivo
+			$carga_archivo = new \App\CargaArchivo;
+
+			foreach ($archivos as $key => $archivo) {
+				$nombre_original = $archivo->getClientOriginalName();
+				$extension = $archivo->getClientOriginalExtension();
+
+				$re = \Storage::disk('archivos')->put( $ruta_pdfs . $nombre_original . "." . $extension, \File::get($archivo));
+				$ruta = storage_path('archivos') . $ruta_pdfs . $nombre_original . "." . $extension;
+
+				if ($key == 0) {
+					$carga_archivo->nombre_archivo = $nombre_original;
+				} else {
+					$carga_archivo->nombre_archivo .= " - " . $nombre_original;
+				}
+			}
+			$carga_archivo->save();
+
+			//----------------------------------------
+			//Tratar el archivo para recibir los datos
+			$job = ProcesarCargaPorCedula::dispatch($ruta_pdfs, $ruta_output, $request->input("cedula"), $carga_archivo, $time)
+				->onConnection('database')
+				->onQueue('processingComprobantes');
+
+			$response = array(
+				'cod' => '200',
+				'mensaje' => 'Los archivos se han subido correctamente y se estarán procesando.',
+				'redirect' => 'crear_gcp',
+			);
+
+		} catch (\Exception $e) {
+			$response = array(
+				'cod' => '400',
+				'mensaje' => $e->getMessage(),
+				'redirect' => 'crear_gcp',
+			);
 		}
 
-		$this->dividir_pdf($ruta_pdfs, $ruta_output, $request->input("cedula"));
-
-		// return view('planos/response')->with(['response' => $response]);
+		return view('planos/response')->with(['response' => $response]);
 	}
 
 	/**
@@ -397,36 +428,20 @@ class PlanosController extends Controller
 		return view('planos/response')->with(['response' => $response]);
 	}
 
-	public function isJson($string) {
-		json_decode($string);
-		return (json_last_error() == JSON_ERROR_NONE);
-	}
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function ver_gcp($id)
+    {
+		$archivo = \App\CargaArchivo::find($id);
+		$detalle_archivos = json_decode($archivo->clases_detectadas);
 
-	public function dividir_pdf ($ruta_pdfs, $ruta_output, $cedula) {
-		$args = array(
-			storage_path('archivos') . $ruta_pdfs,
-			storage_path('archivos') . $ruta_output,
-			"docs_uploads/x_cedula/" . $cedula,
-			base_path() . DIRECTORY_SEPARATOR . "credentials.json"
-		);
-
-		echo '<pre>';
-		print_r($args);
-		echo '</pre>';
-		
-		if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-			$py_version = "python";
-		} else {
-			$py_version = "/usr/bin/venv_ami/bin/python";
-		}
-
-		$comand = $py_version . " " . app_path() . DIRECTORY_SEPARATOR . "dividir_pdf_pages_gcp.py --pdfs " . $args[0] . " --output " . $args[1] . " --cedula " . $args[2] . " --gcpfolder docs_uploads --gcp_credentials " . $args[3] . " 2>&1";
-		echo '<br>' . $comand;
-
-		$response = shell_exec($comand);
-		echo '<br>' . $response;
-
-		\Storage::disk('archivos')->deleteDirectory($ruta_pdfs); // Eliminar la carpeta en local
-	}
+		return view("planos/ver_gcp")->with([
+			"archivo" => $archivo,
+			"detalle_archivos" => $detalle_archivos
+		]);
+    }
 
 }

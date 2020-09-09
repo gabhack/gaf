@@ -303,6 +303,7 @@ Route::group(["prefix" => "planos"], function(){
 	Route::post('/store', 'PlanosController@store');
 
 	Route::get('/crear_gcp', 'PlanosController@create_gcp');
+	Route::get('/ver_gcp/{id}', 'PlanosController@ver_gcp')->name('ver_archivo');
 	Route::post('/store_gcp_cedula', 'PlanosController@store_gcp_cedula');
 	Route::post('/store_gcp_masivo', 'PlanosController@store_gcp_masivo');
 	

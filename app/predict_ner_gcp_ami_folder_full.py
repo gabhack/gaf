@@ -29,13 +29,13 @@ ap.add_argument("-b", "--bucket", type=str,
 	help="path to input pdf")
 ap.add_argument("-f", "--folder", type=str,
 	help="path folder pdfs in gcp")
-# ap.add_argument("-c", "--credentials", type=str,
-# 	help="path folder pdfs in gcp")
 args = vars(ap.parse_args())
 
-# os.environ["GOOGLE_APPLICATION_CREDENTIALS"]=args["credentials"]
+# Servidor:
 # os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="/var/www/html/ami/app/credentials.json"
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="D:/Documentos/ami_project/ami/credentials.json"
+
+# Entorno local de desarrollo Linux:
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="/opt/lampp/htdocs/ami/credentials.json"
 
 project_id = "warm-helix-277015"
 
