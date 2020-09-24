@@ -6,7 +6,10 @@ Created on Wed Jul  1 15:54:04 2020
 """
 #USO DEL SCRIPT
 #python predict_classdoc.py gs://ami_nlp/ami_documentos_clasificador/pruebas_class_1_jul/acuerdo_pago_embargo_26.pdf projects/55927814408/locations/us-central1/models/TCN6090768851320963072
+  
+
 import sys
+
 from google.api_core.client_options import ClientOptions
 from google.cloud import automl_v1
 from google.cloud.automl_v1.proto import service_pb2
@@ -120,15 +123,7 @@ def get_prediction(file_path, model_name):
   
   for annotation_payload in request.payload:
       
-      clase = annotation_payload.display_name
-      porcentaje = annotation_payload.classification.score
-    
-      clases.append(clase)
-      
-      porcentajes.append(float(porcentaje))  
-      
-      """
-      
+        """
         print(
             u"Predicted class name: {}".format(annotation_payload.display_name)
         )
@@ -137,21 +132,27 @@ def get_prediction(file_path, model_name):
                 annotation_payload.classification.score
             )
         )
-        
         """
+        clase = annotation_payload.display_name
+        porcentaje = annotation_payload.classification.score
+            
+        clases.append(clase)
+              
+        porcentajes.append(float(porcentaje))
+        
   max_porcentaje_pos = porcentajes.index(max(porcentajes))
   max_porcentaje = porcentajes[max_porcentaje_pos]
   #print("clase: ", clases[max_porcentaje_pos])
   #print("porcentaje: ", max_porcentaje)
   clase = clases[max_porcentaje_pos]
-   
   
+
   
   """
   clase=str(request.payload[0].display_name)
   porcentaje=str(request.payload[0].classification.score)
-  #print("Clase Detectada: "+clase)
-  #print("Porcentaje de Afinidad: "+porcentaje)
+  print("Clase Detectada: "+clase)
+  print("Porcentaje de Afinidad: "+porcentaje)
   
   my_details = {
     'tipo_documento': clase,
@@ -159,6 +160,7 @@ def get_prediction(file_path, model_name):
   }
   
   #print(my_details)
+  
   """
   
   """
@@ -170,20 +172,7 @@ def get_prediction(file_path, model_name):
   
   return request , clase  # waits until request is returned
 
-def aleatorio(files_names):
-    
-    files_names_size = len(files_names) - 1
-    #print(str(files_names_size))
-    rand_1= random.randint(0, files_names_size)
-    rand_2= random.randint(0, files_names_size)
-    #print(str(rand_1))
-    #print(str(rand_2))
-    
-    
-    file_1=files_names[rand_1]
-    file_2=files_names[rand_2]
-    
-    return(file_1, file_2)
+
     
 
 if __name__ == '__main__':
@@ -195,72 +184,64 @@ if __name__ == '__main__':
     #print(files_names)
     #print(files)
     c=0
-    files_names_limited=[]
-    #file_1=0
-    #file_2=0
-    vectores=aleatorio(files_names)
-    while vectores[0] == vectores[1]:
-        vectores=aleatorio(files_names)
-        
-    files_names_limited.append(vectores[0])
-    files_names_limited.append(vectores[1])
+
+    results=""
     
-    results=[]
     json_array=[]
  
       
-    for documentos in files_names_limited:
+    for documentos in files_names:
     
         #print("procesando: "+documentos)
         
-        file_path = documentos
         clases=[]
         porcentajes=[]
+           
+        file_path = documentos
         gcs_url_file_prediction="gs://"+bucket_name+"/"+file_path
         model_name = "projects/55927814408/locations/us-central1/models/TCN6090768851320963072"
         c=c+1
         #print("Clasificando documento #: "+str(c))
         
-        prediccion= get_prediction(gcs_url_file_prediction, model_name)
-        
-        results.append(prediccion[1])
-        
-    #print(results[0]) 
-    #print(results[1])
-    if results[0] == results[1]:
+        results = get_prediction(gcs_url_file_prediction, model_name)
         
         #print("Todos los documentos pertenecen a la categoria: "+results[0])
-        #print(results[0])
-        clase=results[0]
+        clase = results[1]
+        files_names_divididos=file_path
         
-        files_names_divididos=files_names
+        #print(files_names_divididos)
         #files=list_blobs_with_prefix(bucket_name, prefix, delimiter=None)
         #print(files_names_divididos)
+       
+        blob_name=files_names_divididos
+        new_name= files_names_divididos.split("/")
+        size_name_final= len(new_name)-1
+        size_name_initial=len(new_name)-2
+        initial_new_name=new_name[:size_name_initial]
+        final_new_name=new_name[size_name_final]
+        #print("initial name: " , new_name[:size_name_initial])
+        #print("final name: " , new_name[size_name_final])
+        folder_name_init=""
+        for i in range(len(initial_new_name)):
+            folder_name_init += initial_new_name[i] + "/"
+        #print(folder_name_init)
+        folder_name_mid=folder_name_init + results[1]
+        folder_name_final= folder_name_mid + "/"+ final_new_name
         
-        for names in files_names_divididos:
-            blob_name=names
-            new_name= names.split("/")
-            size_name_final= len(new_name)-1
-            size_name_initial=len(new_name)-2
-            initial_new_name=new_name[:size_name_initial]
-            final_new_name=new_name[size_name_final]
-            #print("initial name: " , new_name[:size_name_initial])
-            #print("final name: " , new_name[size_name_final])
-            folder_name_init=""
-            for i in range(len(initial_new_name)):
-                folder_name_init += initial_new_name[i] + "/"
-            #print(folder_name_init)
-            folder_name_mid=folder_name_init + results[0]
-            folder_name_final= folder_name_mid + "/"+ final_new_name
-     
-            rename_blob(bucket_name, blob_name, folder_name_final)
-        print(clase)
+        my_details = {
+            'nombre_archivo': final_new_name,
+            'url_gcs': folder_name_final,  
+            'tipo_documento': clase
+          }
+          
+        json_array.append(my_details)
+        
+        #print(folder_name_final)
+ 
+        rename_blob(bucket_name, blob_name, folder_name_final)
+        
+    data_string = json.dumps(json_array, indent=4)
+    print (data_string)
         
 
             
-    else:
-        print("0")
-        
-    
-        
-     

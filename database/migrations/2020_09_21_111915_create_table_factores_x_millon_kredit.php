@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCargaArchivoTable extends Migration
+class CreateTableFactoresXMillonKredit extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,14 @@ class CreateCargaArchivoTable extends Migration
      */
     public function up()
     {
-        Schema::create('carga_archivo', function (Blueprint $table) {
+        Schema::create('factores_x_millon_kredit', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->char('tipo', 30)->nullable();
-            $table->longText('clases_detectadas')->nullable();
-            $table->char('nombre_archivo', 200)->nullable();
-            $table->bigInteger('cont_procesos')->default(0);
-            $table->longText('logs')->nullable();
+            $table->char('llave', 200)->nullable();
+            $table->char('valor', 200)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
     }
-
     /**
      * Reverse the migrations.
      *
@@ -32,6 +28,8 @@ class CreateCargaArchivoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('carga_archivo');
+        Schema::table('factores_x_millon_kredit', function (Blueprint $table) {
+            Schema::dropIfExists('factores_x_millon_kredit');
+        });
     }
 }

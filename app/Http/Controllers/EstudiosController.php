@@ -17,6 +17,7 @@ use App\Estadoscartera as Estadoscartera;
 use App\EntidadesCentrales as EntidadesCentrales;
 use App\Condicionesaf as Condicionesaf;
 use App\Carteras as Carteras;
+use App\FactorXMillonKredit as FactorXMillonKredit;
 use Illuminate\Http\Request;
 use DateTime;
 
@@ -77,6 +78,11 @@ class EstudiosController extends Controller
                 $extraprima = Parametros::where('llave', 'SEGURO_EXTRAPRIMA')->first()->valor;
                 $p_x_millon = Parametros::where('llave', 'SEGURO_P_X_MILLON')->first()->valor;
                 $aliadosCompleto = Aliados::all();
+                $factores_x_millon_kredit = array();
+                $factores_kredit = FactorXMillonKredit::all();
+                foreach ($factores_kredit as $key => $factor) {
+                    $factores_x_millon_kredit[$factor->llave] = $factor->valor;
+                }
 
                 $asesores = Asesores::all();
                 $registro = $cliente->registrosfinancieros->last();
@@ -138,7 +144,9 @@ class EstudiosController extends Controller
                     "sectores" => $sectores,
                     "estadoscartera" => $estadoscartera,
                     "aliados" => $aliados,
-                    "aliadosCompleto" => $aliadosCompleto
+                    "aliadosCompleto" => $aliadosCompleto,
+                    "p_x_millon" => $p_x_millon,
+                    "factores_x_millon_kredit" => $factores_x_millon_kredit
                 ]);
             } else {
                 return view("estudios/paso1")->with([
@@ -208,6 +216,7 @@ class EstudiosController extends Controller
         $condicionestr = new Condicionestr;
         $condicionestr->estudios_id = $newestudio->id;
         $condicionestr->costocertificados = $request->costo_certificados;
+        $condicionestr->costo_servicio = $request->costo_servicio_tr_ptg;
         $condicionestr->save();
 
         //Registro de Carteras
@@ -256,6 +265,9 @@ class EstudiosController extends Controller
             $newcondicionAF1->aliados_id = $request->AF1['id'];
             $newcondicionAF1->plazo = $request->AF1['plazo'];
             $newcondicionAF1->tasa = $request->AF1['tasa'];
+            $newcondicionAF1->cuota = $request->AF1['cuota_mensual'];
+            $newcondicionAF1->saldo_refinanciacion = $request->AF1['saldo_refinanciacion'];
+            $newcondicionAF1->intereses_anticipados = $request->AF1['intereses_anticipados'];
             $newcondicionAF1->costo = $request->AF1['costos'];
             $newcondicionAF1->save();
         }
@@ -308,6 +320,11 @@ class EstudiosController extends Controller
         $p_x_millon = Parametros::where('llave', 'SEGURO_P_X_MILLON')->first()->valor;
         $tiposcliente = TiposCliente::all();
         $aliadosCompleto = Aliados::all();
+        $factores_x_millon_kredit = array();
+        $factores_kredit = FactorXMillonKredit::all();
+        foreach ($factores_kredit as $key => $factor) {
+            $factores_x_millon_kredit[$factor->llave] = $factor->valor;
+        }
         
         if (sizeof($datacarteras) > 0) {
             if (isset(array_values(array_unique(array_filter($datacarteras->pluck('compraAF1_id')->toArray(), "strlen")))[0])) {
@@ -413,7 +430,8 @@ class EstudiosController extends Controller
             "carteras" => $carteras,
             "aliadosusados" => $aliadosusados,
             "extraprima" => $extraprima,
-            "p_x_millon" => $p_x_millon
+            "p_x_millon" => $p_x_millon,
+            "factores_x_millon_kredit" => $factores_x_millon_kredit
         ]);
     }
 
@@ -495,6 +513,7 @@ class EstudiosController extends Controller
         //Registro condiciones TR
         $condicionestr = $estudio->condicion;
         $condicionestr->costocertificados = $request->costo_certificados;
+        $condicionestr->costo_servicio = $request->costo_servicio_tr_ptg;
         $condicionestr->save();
 
         //Registro condiciones AF1 y AF2
@@ -513,6 +532,9 @@ class EstudiosController extends Controller
                 $condicionAF1->aliados_id = $request->AF1['id'];
                 $condicionAF1->plazo = $request->AF1['plazo'];
                 $condicionAF1->tasa = $request->AF1['tasa'];
+                $condicionAF1->cuota = $request->AF1['cuota_mensual'];
+                $condicionAF1->saldo_refinanciacion = $request->AF1['saldo_refinanciacion'];
+                $condicionAF1->intereses_anticipados = $request->AF1['intereses_anticipados'];
                 $condicionAF1->costo = $request->AF1['costos'];
                 $condicionAF1->save();
             } else {
@@ -521,6 +543,9 @@ class EstudiosController extends Controller
                 $newcondicionAF1->aliados_id = $request->AF1['id'];
                 $newcondicionAF1->plazo = $request->AF1['plazo'];
                 $newcondicionAF1->tasa = $request->AF1['tasa'];
+                $newcondicionAF1->cuota = $request->AF1['cuota_mensual'];
+                $newcondicionAF1->saldo_refinanciacion = $request->AF1['saldo_refinanciacion'];
+                $newcondicionAF1->intereses_anticipados = $request->AF1['intereses_anticipados'];
                 $newcondicionAF1->costo = $request->AF1['costos'];
                 $newcondicionAF1->save();
             }

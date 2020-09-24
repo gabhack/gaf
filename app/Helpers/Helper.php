@@ -444,112 +444,148 @@ if (!function_exists('sueldoadicional')) {
 	}
 }
 
-if (!function_exists('upload_persona')) {
-	function upload_persona($persona)
+if (!function_exists('upload_personas')) {
+	function upload_personas($personas)
 	{
-		set_time_limit(0);
+		$resp = "";
+		foreach ($personas as $key => $persona) {
+			try {
+				$secretaria = explode(' ', $persona['secretaria']);
 
-		$pagaduria = $this->pagaduria;
-		$cliente = \App\Clientes::where("documento", "=", $persona['documento'])->first();
-		$ciudad = \App\Ciudades::where('ciudad', $persona['ciudad'] )->first();
-
-		try {
-		
-			//Crear ciudad
-			if ($ciudad === null) {
-				$ciudad = new \App\Ciudades;
-				$ciudad->departamentos_id = 1;
-				$ciudad->ciudad = $persona['ciudad'];
-				$ciudad->save();
-			}
-			
-			//Cliente crear-actualizar existente
-			if ($cliente === null) {
-				$cliente = new \App\Clientes;
-				$cliente->users_id				= 1;
-				$cliente->ciudades_id 			= $ciudad['id'];
-				$cliente->tipodocumento			= 'CC';
-				$cliente->documento 			= $persona['documento'];
-				$cliente->nombres 				= $persona['nombres'];
-				$cliente->centro_costo 			= $persona['centro_costos'];
-				$cliente->cargo 				= $persona['cargo'];
-				$cliente->tipo_contratacion 	= $persona['tipo_contratacion'];
-				$cliente->grado 				= $persona['grado'];
-				$cliente->ingresos 				= $persona['ingresos_base'];
-				$cliente->save();
-			} else {
-				if (!$cliente['apellidos']) {
-					$cliente->nombres 				= $persona['nombres'];
-				}
-
-				$cliente->nombres 				= $persona['nombres'];
-				$cliente->centro_costo 			= $persona['centro_costos'];
-				$cliente->cargo 				= $persona['cargo'];
-				$cliente->tipo_contratacion 	= $persona['tipo_contratacion'];
-				$cliente->grado 				= $persona['grado'];
-				$cliente->ingresos 				= $persona['ingresos_base'];
-
-				$cliente->save();
-			}
-
-			//creación de registro
-			$registro = \App\Registrosfinancieros::where("periodo", "=", $persona['periodo'])
-				->where("pagadurias_id", "=", $pagaduria->id)
-				->where("clientes_id", "=", $cliente->id)
-				->first();
-			
-			if ($registro === null) {
-				$registro = new \App\Registrosfinancieros;
-				$registro->clientes_id		= $cliente->id;
-				$registro->pagadurias_id	= $pagaduria->id;
-				$registro->periodo			= $persona['periodo'];
-				$registro->save();
-			}
-
-			//Ingresos
-			if (isset($persona['conceptos_financieros']['detallado_conceptos']['ingresos'])) {
-				foreach ($persona['conceptos_financieros']['detallado_conceptos']['ingresos'] as $key => $ingreso) {
-					$ingresoN = \App\Ingresosaplicados::where("registros_id", "=", $registro->id)
-						->where("cod_concepto", "=", $ingreso['codConcepto'])
-						->first();
-					
-					if ($ingresoN === null) {
-						$ingresoN = new \App\Ingresosaplicados;
-						$ingresoN->registros_id		= $registro->id;
-						$ingresoN->cod_concepto		= $ingreso['codConcepto'];
-						$ingresoN->concepto			= $ingreso['concepto'];
-						$ingresoN->valor			= $ingreso['valor'];
-						$ingresoN->save();
+				$pagaduria = \App\Pagadurias::query()
+					->where('pagaduria', 'LIKE', "%{$secretaria[count($secretaria)-1]}%")
+					->first();
+				
+				$ciudad = \App\Ciudades::where('ciudad', $persona['ciudad'] )->first();
+				if ($persona['ciudad'] !== '') {
+					//Crear ciudad
+					if ($ciudad === null) {
+						$ciudad = new \App\Ciudades;
+						$ciudad->ciudad = $persona['ciudad'];
+						$ciudad->save();
 					}
 				}
-			}
 
-			//Descuentos
-			if (isset($persona['conceptos_financieros']['detallado_conceptos']['egresos'])) {
-				foreach ($persona['conceptos_financieros']['detallado_conceptos']['egresos'] as $key => $egreso) {
-					$descuentoAplicado = \App\Descuentosaplicados::where("registros_id", "=", $registro->id)
-						->where("cod_concepto", "=", $egreso['codConcepto'])
-						->first();
+				$cliente = \App\Clientes::where("documento", "=", $persona['documento'])->first();
+				//Cliente crear-actualizar existente
+				if ($cliente === null) {
+					$cliente = new \App\Clientes;
+					$cliente->users_id				= 1;
+					if ($cliente !== null) {
+						$cliente->ciudades_id 			= $ciudad['id'];					
+					}
+					$cliente->tipodocumento			= 'CC';
+					if ($persona['documento'] !== '') {
+						$cliente->documento 			= $persona['documento'];					
+					}
+					if ($persona['nombres'] !== '') {
+						$cliente->nombres 				= $persona['nombres'];					
+					}
+					if ($persona['apellidos'] !== '') {
+						$cliente->apellidos 			= $persona['apellidos'];					
+					}
+					if ($persona['centro_costos'] !== '') {
+						$cliente->centro_costo 			= $persona['centro_costos'];					
+					}
+					if ($persona['cargo'] !== '') {
+						$cliente->cargo 				= $persona['cargo'];					
+					}
+					if ($persona['tipo_contratacion'] !== '') {
+						$cliente->tipo_contratacion 	= $persona['tipo_contratacion'];					
+					}
+					if ($persona['grado'] !== '') {
+						$cliente->grado 				= $persona['grado'];					
+					}
+					if ($persona['conceptos_financieros']->ingresos_base !== '') {
+						$cliente->ingresos 				= $persona['conceptos_financieros']->ingresos_base;
+					}
 					
-					if ($descuentoAplicado === null) {
-						$descuentoAplicado = new \App\Descuentosaplicados;
-						$descuentoAplicado->registros_id		= $registro->id;
-						$descuentoAplicado->cod_concepto		= $egreso['codConcepto'];
-						$descuentoAplicado->concepto			= $egreso['concepto'];
-						$descuentoAplicado->valor				= $egreso['valor'];
-						$descuentoAplicado->save();
+					$cliente->save();
+				} else {
+					
+					if ($persona['nombres'] !== '') {
+						$cliente->nombres 				= $persona['nombres'];
+					}
+					if ($persona['apellidos'] !== '') {
+						$cliente->apellidos 			= $persona['apellidos'];
+					}
+					if ($persona['centro_costos'] !== '') {
+						$cliente->centro_costo 			= $persona['centro_costos'];
+					}
+					if ($persona['cargo'] !== '') {
+						$cliente->cargo 				= $persona['cargo'];
+					}
+					if ($persona['tipo_contratacion'] !== '') {
+						$cliente->tipo_contratacion 	= $persona['tipo_contratacion'];
+					}
+					if ($persona['grado'] !== '') {
+						$cliente->grado 				= $persona['grado'];
+					}
+					if ($persona['conceptos_financieros']->ingresos_base !== '') {
+						$cliente->ingresos 				= $persona['conceptos_financieros']->ingresos_base;
+					}
+					
+					$cliente->save();
+				}
+				
+				//creación de registro
+				$registro = \App\Registrosfinancieros::where("periodo", "=", $persona['periodo'])
+					->where("pagadurias_id", "=", $pagaduria->id)
+					->where("clientes_id", "=", $cliente->id)
+					->first();
+				
+				if ($registro === null) {
+					$registro = new \App\Registrosfinancieros;
+					$registro->clientes_id		= $cliente->id;
+					$registro->pagadurias_id	= $pagaduria->id;
+					$registro->periodo			= $persona['periodo'];
+					$registro->save();
+				}
+
+				
+				//Ingresos
+				if (isset($persona['conceptos_financieros']->detallado_conceptos->ingresos)) {
+					foreach ($persona['conceptos_financieros']->detallado_conceptos->ingresos as $key => $ingreso) {
+						$ingresoN = \App\Ingresosaplicados::where("registros_id", "=", $registro->id)
+							->where("cod_concepto", "=", $ingreso->codConcepto)
+							->first();
+						
+						if ($ingresoN === null) {
+							$ingresoN = new \App\Ingresosaplicados;
+							$ingresoN->registros_id		= $registro->id;
+							$ingresoN->cod_concepto		= $ingreso->codConcepto;
+							$ingresoN->concepto			= $ingreso->concepto;
+							$ingresoN->valor			= $ingreso->valor;
+							$ingresoN->save();
+						}
 					}
 				}
+			
+				//Descuentos
+				if (isset($persona['conceptos_financieros']->detallado_conceptos->egresos)) {
+					foreach ($persona['conceptos_financieros']->detallado_conceptos->egresos as $key => $egreso) {
+						$descuentoAplicado = \App\Descuentosaplicados::where("registros_id", "=", $registro->id)
+							->where("cod_concepto", "=", $egreso->codConcepto)
+							->first();
+						
+						if ($descuentoAplicado === null) {
+							$descuentoAplicado = new \App\Descuentosaplicados;
+							$descuentoAplicado->registros_id		= $registro->id;
+							$descuentoAplicado->cod_concepto		= $egreso->codConcepto;
+							$descuentoAplicado->concepto			= $egreso->concepto;
+							$descuentoAplicado->valor				= $egreso->valor;
+							$descuentoAplicado->save();
+						}
+					}
+				}
+				//-------------------
+				$resp .= 'Carga con éxito. Registro actualizado: ' . $persona['documento'] . ".";
+			} catch(\Exception $ex) {
+				//-------------------
+				$resp .= 'Error. Documento #' . $persona['documento'] . ': ' . $ex->getMessage() . ".";
 			}
-
-		} catch(\Exception $ex) {
-			//----------------------------------------
-			//Eliminar archivo temporal
-			\Storage::disk('archivos')->delete($nombreArchivoTmp . "." . $extension);
-			$plano->cont_procesos = -1;
-			$plano->errors = "Error: " . $ex->getMessage();
-			$plano->save();
 		}
+		return $resp;
 	}
 }
 

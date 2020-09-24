@@ -71,6 +71,20 @@ Route::group(["prefix" => "parametros"], function(){
 });
 
 
+// Factores x millon Kredit
+Route::group(["prefix" => "factorxmillonkredit"], function(){
+	Route::get('/', 'FactoresXMillonKreditController@index');
+	
+	Route::get('/crear', 'FactoresXMillonKreditController@create');
+	Route::post('/store', 'FactoresXMillonKreditController@store');
+	
+	Route::get('/edit/{id}', 'FactoresXMillonKreditController@edit');
+	Route::post('/update/{id}', 'FactoresXMillonKreditController@update');
+	
+	Route::get('/delete/{id}', 'FactoresXMillonKreditController@destroy');
+});
+
+
 // Demandantes
 Route::group(["prefix" => "demandantes"], function(){
 	Route::get('/', 'DemandantesController@index');
@@ -303,6 +317,7 @@ Route::group(["prefix" => "planos"], function(){
 	Route::post('/store', 'PlanosController@store');
 
 	Route::get('/crear_gcp', 'PlanosController@create_gcp');
+	Route::get('/ver_gcp/{id}', 'PlanosController@ver_gcp')->name('ver_archivo');
 	Route::post('/store_gcp_cedula', 'PlanosController@store_gcp_cedula');
 	Route::post('/store_gcp_masivo', 'PlanosController@store_gcp_masivo');
 	
