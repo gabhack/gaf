@@ -10,21 +10,16 @@ var inputJsonCarteras;
 //Campos del front que se requieren cambiar en tiempo real
 var spantipocliente = $('span#valor-tipo-cliente');
 var inputcosto_certificadosTR = document.getElementById("costo_certificados");
-var selectcostoservicio = document.getElementById('costo_servicio_tr_ptg');
+var spancostoservicio = $('span#costo-servicio-tr');
 var inputcarteras_comprarTR = $('input#carteras_comprar');
 var inputtotal_servicioTR = $('input#total_servicio');
 var inputservicio_impuestosTR = $('input#servicio_impuestos');
 
-var inputaliadof1 = document.getElementById("aliadof1");
 var inputAF1_tasa = document.getElementById("AF1_tasa");
 var inputAF1_plazo = document.getElementById("AF1_plazo");
 var inputAF1_costos = document.getElementById("AF1_costos");
-var inputAF1_intereses_anticipados = document.getElementById("AF1_intereses_anticipados");
-var inputAF1_saldo_refinanciacion = document.getElementById("AF1_saldo_refinanciacion");
-var inputAF1_cuota_mensual = document.getElementById("AF1_cuota_mensual");
 var inputcarteras_a_comprar_af1 = $('input#carteras_a_comprar_af1');
 var inputAF1_costos_valor = $('input#AF1_costos_valor');
-var inputAF1_intereses_anticipados_valor = $('input#AF1_intereses_anticipados_valor');
 var inputAF1_seguro = $('input#AF1_seguro');
 var inputAF1_GMF = $('input#AF1_GMF');
 var inputAF1_iva = $('input#AF1_iva');
@@ -79,8 +74,6 @@ calcularTotales = () => {
   //
   let carterasTR = 0;
   let costoservicioTR = 0;
-  var costoservicioTR_min = 0;
-  var costoservicioTR_max = 0;
   //
   let totalCarteraAF1 = 0;
   let totalCarteraAF2 = 0;
@@ -150,24 +143,24 @@ calcularTotales = () => {
   // Cliente tipo B3  : TIENE deudas, MAS DE UNA está en mora y SOLO UNA en cartera castigada
   // Cliente tipo C   : TIENE deudas, MÁS DE UNA en cartera castigada...   O...  AL MENOS UN embargo
   if (cantCarteras === 0) {
-    tipoCliente = "A";
+    tipoCliente = "AAA";
   } else {
     if (cantCarterasCastigadas > 1 || cantEmbargos >= 1) {
       tipoCliente = "C";
     } else {
       if (cantCarterasEnMora === 0 && cantCarterasCastigadas === 0) {
         if (cantCarterasSoloEfectivo === 0) {
-          tipoCliente = "A";
+          tipoCliente = "AA";
         } else {
           tipoCliente = "A";
         }
       } else {
         if (cantCarterasEnMora === 1) {
-          tipoCliente = "B";
+          tipoCliente = "B1";
         } else {
-          tipoCliente = "B";
+          tipoCliente = "B2";
           if (cantCarterasCastigadas === 1) {
-            tipoCliente = "B";
+            tipoCliente = "B3";
           }
         }
       }
@@ -184,29 +177,9 @@ calcularTotales = () => {
   //Extraer los valores de servicio dependiendo del tipo de cliente
   tiposcliente.forEach(function(entry) {
     if (entry.tipo === tipoCliente) {
-      costoservicioTR_min = parseFloat(entry.range_min).toFixed(0);
-      costoservicioTR_max = parseFloat(entry.range_max).toFixed(0);
+      costoservicioTR = parseFloat(entry.range_min).toFixed(0);
     }
   }, this);
-  //Actualización de opciones de costos de servicios
-  var length = selectcostoservicio.options.length;
-  for (i = 1; i < length; i++) {
-    if (parseInt(selectcostoservicio.options[i].text , 10) >= costoservicioTR_min && parseInt(selectcostoservicio.options[i].text , 10) <= costoservicioTR_max) {
-      selectcostoservicio.options[i].disabled = false;
-    } else {
-      selectcostoservicio.options[i].disabled = true;
-    }
-  }
-  if (selectcostoservicio.value !== '') { 
-    if (document.getElementById('costo_s_tr_option_'+selectcostoservicio.value).disabled) {
-      selectcostoservicio.value = '';
-      costoservicioTR = 0;
-    } else {
-      costoservicioTR = selectcostoservicio.value;
-    }
-  } else {
-    costoservicioTR = selectcostoservicio.value;
-  }
   //Capacidad de pago
   cupolibreinversion = parseInt(cupos.libreInversion.valor);
   //TR
@@ -215,75 +188,25 @@ calcularTotales = () => {
   servicioimpuestoscalc = carterasTR+(totalservicio*1.19);
   servicioimpuestos = (parseFloat(servicioimpuestoscalc).toFixed(0));
   //AF1
-  console.log(inputaliadof1.value);
-  let aliado_seleccionado = aliadosCompleto.find(aliado => aliado.id == inputaliadof1.value);
-  if (aliado_seleccionado.aliado == 'CK COMERCIALIZADORA') {
-    // Habilitar/Deshabilitar funciones del aliado
-    if ( !document.getElementById("item-desembolso-cliente").classList.contains('hidden') ){
-      document.getElementById("item-desembolso-cliente").classList.add('hidden');
-      document.getElementById("item-cuota-mensual").classList.add('hidden');
-      inputAF1_cuota_mensual.required = false;
-    }
-    document.getElementById("item-saldo-ref").classList.remove('hidden');
-    document.getElementById("item-cuota-seguro").classList.remove('hidden');
-    inputAF1_saldo_refinanciacion.required = true;
-    // Cálculos
-    carteras_comprar_base = servicioimpuestos;
-    intereses_anticipados_af1 = parseInt(inputAF1_intereses_anticipados.value, 10);
-    intereses_anticipados_af1_valor = Math.trunc(carteras_comprar_base*intereses_anticipados_af1/100);
-    costos_af1 = parseInt(inputAF1_costos.value, 10);
-    costos_af1_valor = Math.trunc(carteras_comprar_base*costos_af1/100);
-    seguro_calc = p_x_millon*(1.+(extraprima)/100);
-    seguro_af1_valor = parseFloat(((Math.trunc(servicioimpuestos)+costos_af1_valor)/1000000)*seguro_calc).toFixed(0);
-    masseguro = parseInt(carteras_comprar_base, 10)+parseInt(costos_af1_valor, 10)+parseInt(seguro_af1_valor, 10);
-    cuatroxmil = parseFloat((4/1000)*carteras_comprar_base).toFixed(0);
-    ivacalc = parseInt(costos_af1_valor*(0.+iva)/100, 10);
-    if (totalCarteraAF1 === 0) {
-      valorcreditocalc = 0;
-    } else {
-      valorcreditocalc = parseInt(servicioimpuestos)+parseInt(costos_af1_valor)+parseInt(inputAF1_saldo_refinanciacion.value, 10)+parseInt(cuatroxmil)+parseInt(ivacalc);
-    }
-    tasa_af1 = parseFloat(inputAF1_tasa.value);
-    periodos_af1 = parseInt(inputAF1_plazo.value);
-    cupomaxAF1 = cupolibreinversion-filaTotalesCalculada.Cuota+cuotaCarteraAF1+cuotasDuplicadas;
-    seguro_cuota = parseInt(seguro_calc*(valorcreditocalc/1000000));
-    cuotacalc = getValorDeCuotaFija(valorcreditocalc,tasa_af1,periodos_af1);
-    cuotafinal = (parseInt(cuotacalc)+seguro_cuota).toFixed(0);
+  carteras_comprar_base = carterasTR;
+  costos_af1 = parseInt(inputAF1_costos.value, 10);
+  costos_af1_valor = Math.trunc(carterasTR*costos_af1/100);
+  seguro_calc = p_x_millon*(1.+(extraprima)/100);
+  seguro_af1_valor = parseFloat(((Math.trunc(servicioimpuestos)+costos_af1_valor)/1000000)*seguro_calc).toFixed(0);
+  masseguro = parseInt(carterasTR, 10)+parseInt(costos_af1_valor, 10)+parseInt(seguro_af1_valor, 10);
+  cuatroxmil = parseFloat((4/1000)*carterasTR).toFixed(0);
+  ivacalc = parseInt(costos_af1_valor*(0.+iva)/100, 10);
+  if (totalCarteraAF1 === 0) {
+    valorcreditocalc = 0;
   } else {
-    // Habilitar/Deshabilitar funciones del aliado
-    if ( !document.getElementById("item-saldo-ref").classList.contains('hidden') ){
-      document.getElementById("item-saldo-ref").classList.add('hidden');
-      document.getElementById("item-cuota-seguro").classList.add('hidden');
-      inputAF1_saldo_refinanciacion.required = false;
-    }
-    document.getElementById("item-desembolso-cliente").classList.remove('hidden');
-    document.getElementById("item-cuota-mensual").classList.remove('hidden');
-    inputAF1_cuota_mensual.required = true;
-    // Cálculos
-    carteras_comprar_base = servicioimpuestos;
-    intereses_anticipados_af1 = parseFloat(inputAF1_intereses_anticipados.value);
-    cuota_mensual_af1 = parseInt(inputAF1_cuota_mensual.value, 10);
-    periodos_af1 = parseInt(inputAF1_plazo.value);
-    costos_af1 = parseInt(inputAF1_costos.value, 10);
-    seguro_calc = p_x_millon*(1.+(extraprima)/100);
-    if (totalCarteraAF1 === 0) {
-      valorcreditocalc = 0;
-    } else {
-      valorcreditocalc = parseInt(cuota_mensual_af1/factores_x_millon_kredit[periodos_af1]);
-    }
-    costos_af1_valor = Math.trunc(valorcreditocalc*(costos_af1/100));
-    intereses_anticipados_af1_valor = Math.trunc(valorcreditocalc*(intereses_anticipados_af1/100));
-    ivacalc = parseInt(costos_af1_valor*(0.+iva)/100, 10);
-    cuatroxmil = parseFloat((4/1000)*valorcreditocalc).toFixed(0);
-    costos_total = parseInt(costos_af1_valor)+parseInt(intereses_anticipados_af1_valor)+parseInt(ivacalc)+parseInt(cuatroxmil);
-    seguro_cuota = parseInt(seguro_calc*(valorcreditocalc/1000000));
-    cupomaxAF1 = cupolibreinversion-filaTotalesCalculada.Cuota+cuotaCarteraAF1+cuotasDuplicadas;
-    if (valorcreditocalc === 0) {
-      cuotafinal = 0;
-    } else {
-      cuotafinal = parseInt(valorcreditocalc)-parseInt(carteras_comprar_base)-parseInt(costos_total);
-    }
+    valorcreditocalc = parseInt(servicioimpuestos)+parseInt(costos_af1_valor)+parseInt(cuatroxmil)+parseInt(ivacalc);
   }
+  tasa_af1 = parseFloat(inputAF1_tasa.value);
+  perdiodos_af1 = parseInt(inputAF1_plazo.value);
+  cupomaxAF1 = cupolibreinversion-filaTotalesCalculada.Cuota+cuotaCarteraAF1+cuotasDuplicadas;
+  seguro_cuota = parseInt(seguro_calc*(valorcreditocalc/1000000));
+  cuotacalc = getValorDeCuotaFija(valorcreditocalc,tasa_af1,perdiodos_af1);
+  cuotafinal = (parseInt(cuotacalc)+seguro_cuota).toFixed(0);
   //AF2
   total_carteras_aliado_2 = (parseFloat(totalCarteraAF2+servicioimpuestoscalc)).toFixed(0);
   cupomaxAF2 = cupomaxAF1+cuotaCarteraAF2;
@@ -292,14 +215,13 @@ calcularTotales = () => {
   saldo_AF2 = monto_maxAF2-monto_prestarAF2;
 
   //Asignación de variables en el frontend
-  //TR
+  //AF1
   spantipocliente.text(tipoCliente);
+  spancostoservicio.text(costoservicioTR);
   inputcarteras_comprarTR.val(moneyFormatter.format(carterasTR));
   inputtotal_servicioTR.val(moneyFormatter.format(totalservicio));
   inputservicio_impuestosTR.val(moneyFormatter.format(servicioimpuestos));
-  //AF1
   inputcarteras_a_comprar_af1.val(moneyFormatter.format(servicioimpuestos));
-  inputAF1_intereses_anticipados_valor.val(moneyFormatter.format(intereses_anticipados_af1_valor));
   inputAF1_costos_valor.val(moneyFormatter.format(costos_af1_valor));
   inputAF1_seguro.val(moneyFormatter.format(seguro_cuota));
   inputAF1_GMF.val(moneyFormatter.format(cuatroxmil));
@@ -329,11 +251,9 @@ calcularTotales = () => {
     //Ocultar
 		if ( !document.getElementById("panel_tr").classList.contains('hidden') ){
 			document.getElementById("panel_tr").classList.add('hidden');
-      document.getElementById("costo_servicio_tr_ptg").required = false;
 		}
   } else {
     document.getElementById("panel_tr").classList.remove('hidden');
-    document.getElementById("costo_servicio_tr_ptg").required = true;
   }
   //Aliado 1
   if (totalCarteraAF1 > 0) {
@@ -347,6 +267,7 @@ calcularTotales = () => {
 		if ( !document.getElementById("panel-AF1").classList.contains('hidden') ){
 			document.getElementById("panel-AF1").classList.add('hidden');
     }
+    document.getElementById("aliadof1").value = "";
     document.getElementById("aliadof1").required = false;
     document.getElementById("AF1_tasa").required = false;
     document.getElementById("AF1_plazo").required = false;
@@ -355,22 +276,12 @@ calcularTotales = () => {
   document.getElementById("AF1_cuota").classList.remove('input-verde');
   document.getElementById("AF1_cuota").classList.remove('input-amarillo');
   document.getElementById("AF1_cuota").classList.remove('input-rojo');
-  if (aliado_seleccionado.aliado == 'CK COMERCIALIZADORA') {
-    if (cuotafinal === cupomaxAF1) {
-      document.getElementById("AF1_cuota").classList.add('input-amarillo');
-    } else if (cuotafinal < cupomaxAF1) {
-      document.getElementById("AF1_cuota").classList.add('input-verde');
-    } else if (cuotafinal > cupomaxAF1) {
-      document.getElementById("AF1_cuota").classList.add('input-rojo');
-    }
-  } else {
-    if (cuotafinal === 0) {
-      document.getElementById("AF1_cuota").classList.add('input-amarillo');
-    } else if (cuotafinal > 0) {
-      document.getElementById("AF1_cuota").classList.add('input-verde');
-    } else if (cuotafinal < 0) {
-      document.getElementById("AF1_cuota").classList.add('input-rojo');
-    }
+  if (cupomaxAF1 === 0) {
+		document.getElementById("AF1_cuota").classList.add('input-amarillo');
+  } else if (cupomaxAF1 > 0) {
+		document.getElementById("AF1_cuota").classList.add('input-verde');
+  } else if (cupomaxAF1 < 0) {
+		document.getElementById("AF1_cuota").classList.add('input-rojo');
   }
   //Aliado 2
   if (totalCarteraAF2 > 0) {
@@ -776,37 +687,12 @@ $(document).ready(function() {
     refrescarTotales();
   });
 
-  $("#costo_servicio_tr_ptg").change(function() {
-    inputJsonCarteras.val(JSON.stringify(data.slice(0, data.length - 1)));
-    refrescarTotales();
-  });
-
-  $("#aliadof1").change(function() {
-    inputJsonCarteras.val(JSON.stringify(data.slice(0, data.length - 1)));
-    refrescarTotales();
-  });
-
   $("#AF1_tasa").change(function() {
     inputJsonCarteras.val(JSON.stringify(data.slice(0, data.length - 1)));
     refrescarTotales();
   });
 
   $("#AF1_plazo").change(function() {
-    inputJsonCarteras.val(JSON.stringify(data.slice(0, data.length - 1)));
-    refrescarTotales();
-  });
-
-  $("#AF1_intereses_anticipados").change(function() {
-    inputJsonCarteras.val(JSON.stringify(data.slice(0, data.length - 1)));
-    refrescarTotales();
-  });
-
-  $("#AF1_saldo_refinanciacion").change(function() {
-    inputJsonCarteras.val(JSON.stringify(data.slice(0, data.length - 1)));
-    refrescarTotales();
-  });
-
-  $("#AF1_cuota_mensual").change(function() {
     inputJsonCarteras.val(JSON.stringify(data.slice(0, data.length - 1)));
     refrescarTotales();
   });

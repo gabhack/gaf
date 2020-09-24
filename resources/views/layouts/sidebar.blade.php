@@ -13,6 +13,8 @@
 						<li><a href="{{url('usuarios')}}"><i class="fa fa-user"></i> <span>Usuarios</span></a></li>											
 						<li><a href="{{url('oficinas')}}"><i class="fa fa-building-o"></i> <span>Oficinas</span></a></li>					
 						<li><a href="{{url('parametros')}}"><i class="fa fa-wrench"></i> <span>Par&aacute;metros</span></a></li>
+						<li><a href="{{url('factorxmillonkredit')}}"><i class="fa fa-wrench"></i> <span>Factores X Millón Kredit</span></a></li>
+						
 					</ul>
 				</li>
 			@endif

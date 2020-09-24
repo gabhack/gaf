@@ -13,6 +13,7 @@
         //params
         var tiposcliente = @json($tiposcliente);
         var cupos = @json($cupos);
+        var factores_x_millon_kredit = @json($factores_x_millon_kredit);
 
         var extraprima = @json($extraprima);
         var p_x_millon = @json($p_x_millon);
@@ -25,6 +26,7 @@
         var estado_opts = [...estado];
 
         var aliados = @json($aliados);
+        var aliadosCompleto = @json($aliadosCompleto);
         var compra_ck_o_aliado_opts = ["NO", ...aliados];
 
         var calificacion_wab_opts = ["A","B","C","D","E","F","G","H","I","J","K"];
@@ -475,7 +477,15 @@
                             <div class="col-md-6 text-center">
                                 <div class="row">
                                     <div class="col-md-7 text-right">
-                                        <label class="label-consulta" for="pad">Total Servicio(<span id="costo-servicio-tr"></span>%):</label>
+                                        <label class="label-consulta" for="pad">Total Servicio(%):</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select class="form-control" name="costo_servicio_tr_ptg" id="costo_servicio_tr_ptg">
+                                            <option value="" >Seleccione uno...</option>
+                                            @for ($i = 9; $i <= 28; $i++)
+                                            <option id="costo_s_tr_option_{{ number_format($i, 0) }}" value="{{ number_format($i, 0) }}"{{ (number_format($i, 3) == $estudio->condicion->costo_servicio ? ' selected' : '') }}>{{ number_format($i, 0) }}</option>
+                                            @endfor
+                                        </select>
                                     </div>
                                     <div class="col-md">
                                         <input class="form-control w-100 text-center" disabled type="text" name="total_servicio" id="total_servicio" value="">
@@ -533,6 +543,16 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-md-10" id="item-cuota-mensual">
+                                        <div class="row">
+                                            <div class="col-md-5 text-right">
+                                                <label class="label-consulta" for="pad">Cuota mensual</label>
+                                            </div>
+                                            <div class="col-md">
+                                                <input class="form-control" type="text" name="AF1[cuota_mensual]" id="AF1_cuota_mensual" value="{{ isset($aliadosusados[1]) ?  (( $aliadosusados[1]['condiciones']->cuota !== null) ? $aliadosusados[1]['condiciones']->cuota : '0') : '0' }}">
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="col-md-10">
                                         <div class="row">
                                             <div class="col-md-5 text-right">
@@ -558,10 +578,33 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-md-10" id="item-saldo-ref">
+                                        <div class="row">
+                                            <div class="col-md-5 text-right">
+                                                <label class="label-consulta" for="pad">Saldo de Refinanciación</label>
+                                            </div>
+                                            <div class="col-md">
+                                                <input class="form-control" type="text" name="AF1[saldo_refinanciacion]" id="AF1_saldo_refinanciacion" value="{{ isset($aliadosusados[1]) ?  (( $aliadosusados[1]['condiciones']->saldo_refinanciacion !== null) ? $aliadosusados[1]['condiciones']->saldo_refinanciacion : '0') : '0' }}">
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="col-md-10">
                                         <div class="row">
                                             <div class="col-md-5 text-right">
-                                                <label class="label-consulta" for="pad">Costos (%)</label>
+                                                <label class="label-consulta" for="pad">Intereses anticipados (%)</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input class="form-control" type="text" name="AF1[intereses_anticipados]" id="AF1_intereses_anticipados" value="{{ isset($aliadosusados[1]) ? $aliadosusados[1]['condiciones']->intereses_anticipados : '2.000' }}">
+                                            </div>
+                                            <div class="col-md">
+                                                <input class="form-control text-right" type="text" name="AF1[intereses_anticipados_valor]" id="AF1_intereses_anticipados_valor" value="" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <div class="row">
+                                            <div class="col-md-5 text-right">
+                                                <label class="label-consulta" for="pad">Gastos Administrativos (%)</label>
                                             </div>
                                             <div class="col-md-3">
                                                 <select class="form-control" name="AF1[costos]" id="AF1_costos">
@@ -630,8 +673,11 @@
                                     </div>
                                     <div class="col-md">
                                         <div class="row">
-                                            <div class="col-md-12 text-center">
+                                            <div class="col-md-12 text-center" id="item-cuota-seguro">
                                                 <label class="label-consulta" for="pad">Cuota + Seguro</label>
+                                            </div>
+                                            <div class="col-md-12 text-center" id="item-desembolso-cliente">
+                                                <label class="label-consulta" for="pad">Desembolso al Cliente</label>
                                             </div>
                                             <div class="col-md-12">
                                                 <input class="form-control text-center font-weight-bold" type="text" name="AF1_cuota" id="AF1_cuota" value="" disabled>
@@ -759,7 +805,6 @@
 @endsection
 
 @section('js')
-    <script src="{{asset('js/jquery-3.4.1.min.js')}}"></script>
     <script src="{{asset('css/gijgo-combined-1.9.13/js/gijgo.min.js')}}"></script>
     <script src="{{asset('js/TablaCarteras.js')}}"></script>
 @endsection

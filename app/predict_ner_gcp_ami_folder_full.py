@@ -44,12 +44,7 @@ model_name = ""
 
 
 def my_min_function(somelist):
-    min_value = None
-    for value in somelist:
-        if not min_value:
-            min_value = value
-        elif value < min_value:
-            min_value = value
+    min_value = min(somelist)
     return min_value
 
 def list_blobs_with_prefix(bucket_name, prefix, delimiter=None):
@@ -444,37 +439,59 @@ def get_prediction(file_path, model_name):
   size_cod_conceptos_ingresos= len(ner_cod_conceptos_ingreso)
       
   sizes_ingresos = [size_valores_ingresos, size_conceptos_ingresos, size_cod_conceptos_ingresos]
+
+  
+  #print(sizes_ingresos)
+  
+  
       
   valor_minimo_ingresos = my_min_function(sizes_ingresos)
   
-  if size_valores_ingresos == 0:
-      ner_conceptos_valor_ingreso.append("$0.00")
+  if valor_minimo_ingresos !=0:
       
-      size_valores_ingresos=len(ner_conceptos_valor_ingreso)
+      #print(valor_minimo_ingresos)
       
-      sizes_ingresos = [size_valores_ingresos, size_conceptos_ingresos, size_cod_conceptos_ingresos]
-      valor_minimo_ingresos = my_min_function(sizes_ingresos)
+      if size_valores_ingresos == 0:
+          ner_conceptos_valor_ingreso.append("$0.00")
+          
+          size_valores_ingresos=len(ner_conceptos_valor_ingreso)
+          
+          sizes_ingresos = [size_valores_ingresos, size_conceptos_ingresos, size_cod_conceptos_ingresos]
+          valor_minimo_ingresos = my_min_function(sizes_ingresos)
+          
+      for i in range(valor_minimo_ingresos):
+    
+            
+            codigo_concepto_ingreso=ner_cod_conceptos_ingreso[i]
+            conceptos_ingresos=ner_conceptos_ingreso[i]
+            valor_concepto_ingreso=ner_conceptos_valor_ingreso[i]
+            
+            valor_concepto_ingreso_filtro_1=valor_concepto_ingreso.replace('.00', '')
+            valor_concepto_ingreso_filtro_2=valor_concepto_ingreso_filtro_1.replace(",", '')
+            valor_concepto_ingreso_filtro_3=valor_concepto_ingreso_filtro_2.replace("$", '')
+            
+            my_details_todo_conceptos_detallados_ingresos = {
+            
+                'codConcepto': codigo_concepto_ingreso,
+                'concepto': conceptos_ingresos,
+                'valor': valor_concepto_ingreso_filtro_3
+    
+            }
+            
+            ner_resultado_provisional_conceptos_detallado_ingresos.append(my_details_todo_conceptos_detallados_ingresos)
+  else:
       
-  for i in range(valor_minimo_ingresos):
-
-        
-        codigo_concepto_ingreso=ner_cod_conceptos_ingreso[i]
-        conceptos_ingresos=ner_conceptos_ingreso[i]
-        valor_concepto_ingreso=ner_conceptos_valor_ingreso[i]
-        
-        valor_concepto_ingreso_filtro_1=valor_concepto_ingreso.replace('.00', '')
-        valor_concepto_ingreso_filtro_2=valor_concepto_ingreso_filtro_1.replace(",", '')
-        valor_concepto_ingreso_filtro_3=valor_concepto_ingreso_filtro_2.replace("$", '')
         
         my_details_todo_conceptos_detallados_ingresos = {
-        
-            'codConcepto': codigo_concepto_ingreso,
-            'concepto': conceptos_ingresos,
-            'valor': valor_concepto_ingreso_filtro_3
-
-        }
+           
+           'codConcepto': "NaN",
+           'concepto': "NaN",
+           'valor': "NaN"
+           
+           }
         
         ner_resultado_provisional_conceptos_detallado_ingresos.append(my_details_todo_conceptos_detallados_ingresos)
+        
           
           
   size_valores_egresos= len(ner_conceptos_valor_egreso)
@@ -484,52 +501,68 @@ def get_prediction(file_path, model_name):
   sizes_egresos = [size_valores_egresos, size_conceptos_egresos, size_cod_conceptos_egresos]
   
   #print(sizes_egresos)
-  #print(ner_conceptos_valor_egreso)
-
+  
   valor_minimo_egresos = my_min_function(sizes_egresos)
   
-  if size_valores_egresos == 0:
-      ner_conceptos_valor_egreso.append("$0.00")
-      
-      size_valores_egresos=len(ner_conceptos_valor_egreso)
-      
-      sizes_egresos = [size_valores_egresos, size_conceptos_egresos, size_cod_conceptos_egresos]
-      valor_minimo_egresos = my_min_function(sizes_egresos)
   
+  if valor_minimo_egresos !=0:
 
-  for i in range(valor_minimo_egresos):
+      #print(valor_minimo_egresos)
       
+      if size_valores_egresos == 0:
+          ner_conceptos_valor_egreso.append("$0.00")
+          
+          size_valores_egresos=len(ner_conceptos_valor_egreso)
+          
+          sizes_egresos = [size_valores_egresos, size_conceptos_egresos, size_cod_conceptos_egresos]
+          valor_minimo_egresos = my_min_function(sizes_egresos)
       
-        
-      
-      codigo_concepto_egreso=ner_cod_conceptos_egreso[i]
-            #print(codigo_concepto_egreso)
-      
-      conceptos_egresos=ner_conceptos_egreso[i]
-            #print(conceptos_egresos)
-     
-        #print("ner conceptos valor egreso", ner_conceptos_valor_egreso)
-      valor_concepto_egreso=ner_conceptos_valor_egreso[i]
-        #print(valor_concepto_egreso)
-        
+    
+      for i in range(valor_minimo_egresos):
+          
+          
             
+          
+          codigo_concepto_egreso=ner_cod_conceptos_egreso[i]
+                #print(codigo_concepto_egreso)
+          
+          conceptos_egresos=ner_conceptos_egreso[i]
+                #print(conceptos_egresos)
+         
+            #print("ner conceptos valor egreso", ner_conceptos_valor_egreso)
+          valor_concepto_egreso=ner_conceptos_valor_egreso[i]
+            #print(valor_concepto_egreso)
+            
+                
+            
+          valor_concepto_egreso_filtro_1=valor_concepto_egreso.replace('.00', '')
+          valor_concepto_egreso_filtro_2=valor_concepto_egreso_filtro_1.replace(",", '')
+          valor_concepto_egreso_filtro_3=valor_concepto_egreso_filtro_2.replace("$", '')
         
-      valor_concepto_egreso_filtro_1=valor_concepto_egreso.replace('.00', '')
-      valor_concepto_egreso_filtro_2=valor_concepto_egreso_filtro_1.replace(",", '')
-      valor_concepto_egreso_filtro_3=valor_concepto_egreso_filtro_2.replace("$", '')
-    
-    
-    
-      my_details_todo_conceptos_detallados_egresos = {
         
-            'codConcepto': codigo_concepto_egreso,
-            'concepto': conceptos_egresos,
-            'valor': valor_concepto_egreso_filtro_3
-    
-        }
-    
-      ner_resultado_provisional_conceptos_detallado_egresos.append(my_details_todo_conceptos_detallados_egresos)
         
+          my_details_todo_conceptos_detallados_egresos = {
+            
+                'codConcepto': codigo_concepto_egreso,
+                'concepto': conceptos_egresos,
+                'valor': valor_concepto_egreso_filtro_3
+        
+            }
+        
+          ner_resultado_provisional_conceptos_detallado_egresos.append(my_details_todo_conceptos_detallados_egresos)
+          
+  
+  else:
+          my_details_todo_conceptos_detallados_egresos = {
+            
+                'codConcepto': "NaN",
+                'concepto': "NaN",
+                'valor': "NaN"
+        
+            }
+        
+          ner_resultado_provisional_conceptos_detallado_egresos.append(my_details_todo_conceptos_detallados_egresos)
+              
         
   my_details_todo_conceptos_especificos = {
       
@@ -580,7 +613,7 @@ if __name__ == '__main__':
     bucket_name= args["bucket"]
     #prefix carpeta en donde se encuentran todos los pdfs
     prefix=args["folder"]
-    model_name = "TEN1795742181693063168"
+    model_name = "TEN4409114195149193216"
     personas=[]
     files_names=[]
     files=list_blobs_with_prefix(bucket_name, prefix)  

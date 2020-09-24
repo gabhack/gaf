@@ -71,6 +71,20 @@ Route::group(["prefix" => "parametros"], function(){
 });
 
 
+// Factores x millon Kredit
+Route::group(["prefix" => "factorxmillonkredit"], function(){
+	Route::get('/', 'FactoresXMillonKreditController@index');
+	
+	Route::get('/crear', 'FactoresXMillonKreditController@create');
+	Route::post('/store', 'FactoresXMillonKreditController@store');
+	
+	Route::get('/edit/{id}', 'FactoresXMillonKreditController@edit');
+	Route::post('/update/{id}', 'FactoresXMillonKreditController@update');
+	
+	Route::get('/delete/{id}', 'FactoresXMillonKreditController@destroy');
+});
+
+
 // Demandantes
 Route::group(["prefix" => "demandantes"], function(){
 	Route::get('/', 'DemandantesController@index');
