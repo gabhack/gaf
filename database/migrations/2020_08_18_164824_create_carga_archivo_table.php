@@ -16,9 +16,10 @@ class CreateCargaArchivoTable extends Migration
         Schema::create('carga_archivo', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->char('tipo', 30)->nullable();
+            $table->longText('entidades')->nullable();
             $table->char('nombre_archivo', 200)->nullable();
             $table->bigInteger('cont_procesos')->default(0);
-            $table->longText('errors')->nullable();
+            $table->longText('logs')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

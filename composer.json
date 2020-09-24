@@ -14,8 +14,7 @@
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "~5.0",
         "maatwebsite/excel": "~2.1.0",
-        "smalot/pdfparser": "*",
-        "superbalist/flysystem-google-storage": "^7.2"
+        "smalot/pdfparser": "*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

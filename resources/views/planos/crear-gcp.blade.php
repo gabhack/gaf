@@ -65,6 +65,7 @@
 				<th class="text-center">#</th>
 				<th class="text-center">Estado</th>
 				<th class="text-center">Clase Detectada</th>
+				<th class="text-center">Entidades</th>
 				<th class="text-center">Nombre Archivo</th>
 				<th class="text-center">Fecha</th>
 			</tr>
@@ -75,6 +76,7 @@
 					<td>{{$archivo->id}}</td>
 					<td title="{{$archivo->cont_procesos < 0 ? $archivo->errors : ''}}">{{$archivo->cont_procesos < 0 ? 'Error' : ($archivo->cont_procesos == 0 ? 'Completado' : 'Procesando' )}}<span class="process-status status-{{$archivo->cont_procesos < 0 ? 'error' : ($archivo->cont_procesos == 0 ? 'ok' : 'processing' )}}"></span></td>
 					<td>{{$archivo->tipo ? $archivo->tipo : '--'}}</td>				
+					<td>{{$archivo->entidades ? $archivo->entidades : '--'}}</td>				
 					<td>{{$archivo->nombre_archivo ? $archivo->nombre_archivo : '--'}}</td>
 					<td>{{$archivo->created_at}}</td>
 				</tr>

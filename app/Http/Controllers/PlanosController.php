@@ -5,10 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 
-use Google\Cloud\AutoMl\V1\ExamplePayload;
-use Google\Cloud\AutoMl\V1\PredictionServiceClient;
-use Google\Cloud\AutoMl\V1\TextSnippet;
-
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
@@ -391,7 +387,11 @@ class PlanosController extends Controller
 			);
 
 		} catch (\Exception $e) {
-			echo $e->getMessage();
+			$response = array(
+				'cod' => '400',
+				'mensaje' => $e->getMessage(),
+				'redirect' => 'crear_gcp',
+			);
 		}
 
 		return view('planos/response')->with(['response' => $response]);
@@ -428,34 +428,3 @@ class PlanosController extends Controller
 	}
 
 }
-
-
-
-/*
-
-		ini_set('memory_limit', '-1');
-		$response = array();
-
-		$archivo = $request->file('archivo');
-		$nombre_original = $archivo->getClientOriginalName();
-		$extension = $archivo->getClientOriginalExtension();
-
-		$disk = \Storage::disk('gcs');
-
-		$respond = $disk->put(date('m') . '_' . date('Y') . '/' . $nombre_original, \File::get($archivo));
-		
-		if ($respond == '1') {
-			$response = array(
-				'cod' => '200',
-				'mensaje' => 'El archivo se ha cargado correctamente.',
-			);
-		} else {
-			$response = array(
-				'cod' => '300',
-				'mensaje' => $respond,
-			);
-		}
-		
-        return view('planos/response')->with(['response' => $response]);
-
-*/

@@ -13,3 +13,5 @@ yarn-error.log
 .env
 /bootstrap/cache
 .htaccess
+/.htaccess
+/storage/*
