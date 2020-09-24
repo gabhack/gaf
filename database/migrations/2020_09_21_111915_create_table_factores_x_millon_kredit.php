@@ -21,7 +21,6 @@ class CreateTableFactoresXMillonKredit extends Migration
             $table->softDeletes();
         });
     }
-
     /**
      * Reverse the migrations.
      *
