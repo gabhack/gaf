@@ -608,8 +608,12 @@ class CargarDatosComprobantes implements ShouldQueue
 
                 $cliente->nombres 				= $persona['nombres'];
                 $cliente->centro_costo 			= $persona['centro_costos'];
-                $cliente->cargo 				= $persona['cargo'];
-                $cliente->tipo_contratacion 	= $persona['tipo_contratacion'];
+                if ($cliente->cargo !== '') {
+                    $cliente->cargo 			= $persona['cargo'];
+                }
+                if ($cliente->tipo_contratacion !== '') {
+                    $cliente->tipo_contratacion = $persona['tipo_contratacion'];
+                }
                 $cliente->grado 				= $persona['grado'];
                 $cliente->ingresos 				= $persona['ingresos_base'];
 

@@ -91,35 +91,39 @@ class ProcesarCargaMasiva implements ShouldQueue
             $response_clas = shell_exec($py_version . " " . app_path() . DIRECTORY_SEPARATOR . "predict_classdoc_folder_masivo.py \"" . $args2[0] . "\" \"" . $args2[1] . "\" \"" . $args2[2] . "\" 2>&1");
             $log .= '*****Proceso de Clasificación: ' . $response_clas;
             
-
-            // Extracción de entidades
-            $args3 = array(
-                "ami_laravel",
-                "docs_uploads/masivos/" . $time . "/" . $response_clas
-            );
-
-            $response_extract = shell_exec($py_version . " " . app_path() . DIRECTORY_SEPARATOR . "predict_ner_gcp_ami_folder_full.py --bucket " . $args3[0] . " --folder " . $args3[1] . " 2>&1");
-            $personas = json_decode($response_extract);
-            $personas_upload = array();
-            $log .= '*****Proceso de Extracción de entidades: ' . count($personas);
-
-            foreach ($personas as $key => $persona) {
-                $personas_upload[] = array(
-                    'nombres' => ( isset($persona[0]->nombres) ? $persona[0]->nombres : '' ),
-                    'apellidos' => ( isset($persona[0]->apellidos) ? $persona[0]->apellidos : '' ),
-                    'documento' => ( isset($persona[0]->documento) ? $persona[0]->documento : '' ),
-                    'cargo' => ( isset($persona[0]->cargo) ? $persona[0]->cargo : '' ),
-                    'ciudad' => ( isset($persona[0]->ciudad) ? $persona[0]->ciudad : '' ),
-                    'centro_costos' => ( isset($persona[0]->centro_costos) ? $persona[0]->centro_costos : '' ),
-                    'grado' => ( isset($persona[0]->grado) ? $persona[0]->grado : '' ),
-                    'tipo_contratacion' => ( isset($persona[0]->tipo_contratacion) ? $persona[0]->tipo_contratacion : '' ),
-                    'periodo' => ( isset($persona[0]->periodo) ? $persona[0]->periodo : '' ),
-                    'secretaria' => ( isset($persona[0]->Secretaria_Educacion) ? $persona[0]->Secretaria_Educacion : '' ),
-                    'conceptos_financieros' => ( isset($persona[0]->conceptos_financieros[0]) ? $persona[0]->conceptos_financieros[0] : '' )
+            if(strlen(trim($response_clas)) > 1) {
+                // Extracción de entidades
+                $args3 = array(
+                    "ami_laravel",
+                    "docs_uploads/masivos/" . $time . "/" . $response_clas
                 );
-            }
-	        $respuesta_upload = upload_personas($personas_upload);
-            $log .= '*****Proceso de ingreso a BD: ' . $response;
+
+                $response_extract = shell_exec($py_version . " " . app_path() . DIRECTORY_SEPARATOR . "predict_ner_gcp_ami_folder_full.py --bucket " . $args3[0] . " --folder " . $args3[1] . " 2>&1");
+                $personas = json_decode($response_extract);
+                $personas_upload = array();
+                $log .= '*****Proceso de Extracción de entidades: ' . count($personas);
+
+                foreach ($personas as $key => $persona) {
+                    $personas_upload[] = array(
+                        'nombres' => ( isset($persona[0]->nombres) ? $persona[0]->nombres : '' ),
+                        'apellidos' => ( isset($persona[0]->apellidos) ? $persona[0]->apellidos : '' ),
+                        'documento' => ( isset($persona[0]->documento) ? $persona[0]->documento : '' ),
+                        'cargo' => ( isset($persona[0]->cargo) ? $persona[0]->cargo : '' ),
+                        'ciudad' => ( isset($persona[0]->ciudad) ? $persona[0]->ciudad : '' ),
+                        'centro_costos' => ( isset($persona[0]->centro_costos) ? $persona[0]->centro_costos : '' ),
+                        'grado' => ( isset($persona[0]->grado) ? utf8_encode($persona[0]->grado ."") : '' ),
+                        'tipo_contratacion' => ( isset($persona[0]->tipo_contratacion) ? $persona[0]->tipo_contratacion : '' ),
+                        'periodo' => ( isset($persona[0]->periodo) ? $persona[0]->periodo : '' ),
+                        'secretaria' => ( isset($persona[0]->Secretaria_Educacion) ? $persona[0]->Secretaria_Educacion : '' ),
+                        'conceptos_financieros' => ( isset($persona[0]->conceptos_financieros[0]) ? $persona[0]->conceptos_financieros[0] : '' )
+                    );
+                }
+                $respuesta_upload = upload_personas($personas_upload);
+                $log .= '*****Proceso de ingreso a BD: ' . $respuesta_upload;
+            } else {
+                $response_clas = 'No es archivo masivo.';
+                $log = 'El archivo no cumple con las condiciones para extraer entidades: Contiene diferentes tipos de documentos y no es masivo.';
+            } 
 
             //Termino el proceso
             $carga_archivo->tipo = $response_clas;
