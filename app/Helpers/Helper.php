@@ -448,6 +448,7 @@ if (!function_exists('upload_personas')) {
 	function upload_personas($personas)
 	{
 		$resp = "";
+		$advertencias = "";
 		foreach ($personas as $key => $persona) {
 			try {
 				$secretaria = explode(' ', $persona['secretaria']);
@@ -542,21 +543,25 @@ if (!function_exists('upload_personas')) {
 					$registro->save();
 				}
 
-				
+				$conceptos_nan = 0;
 				//Ingresos
 				if (isset($persona['conceptos_financieros']->detallado_conceptos->ingresos)) {
 					foreach ($persona['conceptos_financieros']->detallado_conceptos->ingresos as $key => $ingreso) {
-						$ingresoN = \App\Ingresosaplicados::where("registros_id", "=", $registro->id)
-							->where("cod_concepto", "=", $ingreso->codConcepto)
-							->first();
-						
-						if ($ingresoN === null) {
-							$ingresoN = new \App\Ingresosaplicados;
-							$ingresoN->registros_id		= $registro->id;
-							$ingresoN->cod_concepto		= $ingreso->codConcepto;
-							$ingresoN->concepto			= $ingreso->concepto;
-							$ingresoN->valor			= $ingreso->valor;
-							$ingresoN->save();
+						if ($ingreso->valor !== 'NaN') {
+							$ingresoN = \App\Ingresosaplicados::where("registros_id", "=", $registro->id)
+								->where("cod_concepto", "=", $ingreso->codConcepto)
+								->first();
+							
+							if ($ingresoN === null) {
+								$ingresoN = new \App\Ingresosaplicados;
+								$ingresoN->registros_id		= $registro->id;
+								$ingresoN->cod_concepto		= $ingreso->codConcepto;
+								$ingresoN->concepto			= $ingreso->concepto;
+								$ingresoN->valor			= $ingreso->valor;
+								$ingresoN->save();
+							}
+						} else {
+							$conceptos_nan++;
 						}
 					}
 				}
@@ -564,22 +569,26 @@ if (!function_exists('upload_personas')) {
 				//Descuentos
 				if (isset($persona['conceptos_financieros']->detallado_conceptos->egresos)) {
 					foreach ($persona['conceptos_financieros']->detallado_conceptos->egresos as $key => $egreso) {
-						$descuentoAplicado = \App\Descuentosaplicados::where("registros_id", "=", $registro->id)
-							->where("cod_concepto", "=", $egreso->codConcepto)
-							->first();
-						
-						if ($descuentoAplicado === null) {
-							$descuentoAplicado = new \App\Descuentosaplicados;
-							$descuentoAplicado->registros_id		= $registro->id;
-							$descuentoAplicado->cod_concepto		= $egreso->codConcepto;
-							$descuentoAplicado->concepto			= $egreso->concepto;
-							$descuentoAplicado->valor				= $egreso->valor;
-							$descuentoAplicado->save();
+						if ($egreso->valor !== 'Nan') {
+							$descuentoAplicado = \App\Descuentosaplicados::where("registros_id", "=", $registro->id)
+								->where("cod_concepto", "=", $egreso->codConcepto)
+								->first();
+							
+							if ($descuentoAplicado === null) {
+								$descuentoAplicado = new \App\Descuentosaplicados;
+								$descuentoAplicado->registros_id		= $registro->id;
+								$descuentoAplicado->cod_concepto		= $egreso->codConcepto;
+								$descuentoAplicado->concepto			= $egreso->concepto;
+								$descuentoAplicado->valor				= $egreso->valor;
+								$descuentoAplicado->save();
+							}
+						} else {
+							$conceptos_nan++;
 						}
 					}
 				}
 				//-------------------
-				$resp .= 'Carga con éxito. Registro actualizado: ' . $persona['documento'] . ".";
+				$resp .= 'Carga con éxito. Registro actualizado: ' . $persona['documento'] . "." . ($conceptos_nan !== 0 ? (' - Advertencias: Conceptos sin procesar por falta de datos: ' . $conceptos_nan . '.') : '');
 			} catch(\Exception $ex) {
 				//-------------------
 				$resp .= 'Error. Documento #' . $persona['documento'] . ': ' . $ex->getMessage() . ".";
@@ -588,5 +597,11 @@ if (!function_exists('upload_personas')) {
 		return $resp;
 	}
 }
+
+/*if (!function_exists('calcula_plazo_max')) {
+	function calcula_plazo_max($persona) {
+
+	}
+}*/
 
 ?>

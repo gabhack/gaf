@@ -81,7 +81,7 @@
 					<td title="{{$archivo->cont_procesos < 0 ? $archivo->logs : ''}}">{{$archivo->cont_procesos < 0 ? 'Error' : ($archivo->cont_procesos == 0 ? 'Completado' : 'Procesando' )}}<span class="process-status status-{{$archivo->cont_procesos < 0 ? 'error' : ($archivo->cont_procesos == 0 ? 'ok' : 'processing' )}}"></span></td>
 					<td>{{$archivo->tipo ? $archivo->tipo : '--'}}</td>	
 					<td>{{$archivo->nombre_archivo ? $archivo->nombre_archivo : '--'}}</td>	
-					<td title="{{$archivo->logs ? $archivo->logs : ''}}">{{$archivo->logs ? mb_strimwidth($archivo->logs, 0, 30, "...") : '--'}}</td>
+					<td><textarea style="width: 100%;" height="30">{{$archivo->logs ? $archivo->logs : ''}}</textarea></td>
 					<td>{{$archivo->created_at}}</td>
 				</tr>
 			@endforeach
