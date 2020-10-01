@@ -14,7 +14,7 @@ class AlterTableCondicionestrAddColumns extends Migration
     public function up()
     {
         Schema::table('condicionestr', function (Blueprint $table) {
-            $table->decimal('costo_servicio', 11, 3)->after('costocertificados');
+            $table->decimal('costo_servicio', 11, 3)->nullable()->after('costocertificados');
         });
     }
 
