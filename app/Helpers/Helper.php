@@ -598,8 +598,23 @@ if (!function_exists('upload_personas')) {
 	}
 }
 
-/*if (!function_exists('calcula_plazo_max')) {
-	function calcula_plazo_max($persona) {
+/*if (!function_exists('calcula_plazo_viabilidad')) {
+	function calcula_plazo_viabilidad($persona) {
+		//Parámetros
+        $edadmax_admin_hombre = \App\Parametros::where('llave', 'EDADMAX_ADMIN_H')->first()->valor;
+        $edadmax_admin_mujer = \App\Parametros::where('llave', 'EDADMAX_ADMIN_M')->first()->valor;
+        $edadmax_docentes = \App\Parametros::where('llave', 'EDADMAX_DOCENTES')->first()->valor;
+		$edadmax_pensionados = \App\Parametros::where('llave', 'EDADMAX_PENSIONADOS')->first()->valor;
+		$plazo_max_permitido = 0;
+
+		//Datos del cliente
+		if (tipo_contratacion == 'Propiedad') {
+			$plazo_max_permitido = 144;
+		} elseif (tipo_contratacion == 'Provisional Vacante Definitiva') {
+			$plazo_max_permitido = 60;
+		}
+		$estado_cliente = 'pensionado|activo';
+		$tipo_cargo = $persona
 
 	}
 }*/
