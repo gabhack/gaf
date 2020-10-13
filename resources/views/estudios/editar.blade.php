@@ -14,6 +14,9 @@
         var tiposcliente = @json($tiposcliente);
         var cupos = @json($cupos);
         var factores_x_millon_kredit = @json($factores_x_millon_kredit);
+        var factores_x_millon_gnb = @json($factores_x_millon_gnb);
+        var viabilidad = @json($viabilidad);
+        var pagaduria = @json($registro->pagaduria->pagaduria);
 
         var extraprima = @json($extraprima);
         var p_x_millon = @json($p_x_millon);
@@ -101,7 +104,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="label-consulta" for="pad">Fecha de nacimiento:
-                                    <p class="pad">{{ $cliente->fechanto == '' ? 'No proporcionado' : $cliente->fechanto }}</p>
+                                    <p class="pad">{{ $cliente->fechanto == '' ? 'No proporcionado' : $cliente->fechanto }} (<b>{{ $viabilidad['edad'] }} años</b>)</p>
                                 </label>
                             </div>
                             <div class="col-md-4">
@@ -178,6 +181,31 @@
                                 <textarea class="form-control" type="text" name="observaciones" id="observaciones" maxlength="100">{{$estudio->observaciones}}</textarea>
                             </div>
                         </div>
+                        @if ($viabilidad['analisis'] !== 'Sin datos suficientes para hallar viabilidad preliminar')
+                            <div class="row">
+                                <div class="col-md-5 text-center">
+                                    <label class="label-consulta">Análisis preliminar HEGO</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <input disabled class="form-control {{ $viabilidad['plazomax'] > 0 ? 'input-verde' : 'input-rojo' }}" type="text" value="{{ $viabilidad['plazomax'] > 0 ? 'Viable' : 'No viable' }}">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5 text-center">
+                                    <label class="label-consulta">Máximo plazo posible</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <input disabled class="form-control {{ $viabilidad['plazomax'] > 0 ? 'input-verde' : 'input-rojo' }}" type="text" value="{{ $viabilidad['plazomax'] }}">
+                                </div>
+                            </div>
+                        @endif
+                        @if ($viabilidad['plazomax']<= 0)
+                            <div class="row">
+                                <div class="col-md-12 text-center">
+                                    <label class="label-consulta advertencia">{{ $viabilidad['plazomax'] <= 0 ? $viabilidad['analisis'] : '' }}</label>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
                 <div class="panel panel-primary">
@@ -719,15 +747,16 @@
                                     <div class="col-md-10">
                                         <div class="row">
                                             <div class="col-md text-right">
-                                                <label class="label-consulta" for="pad">Factor x millón</label>
+                                                <label class="label-consulta" for="pad">Factor x millón <span class="hidden" id="label-saneamiento">(saneamiento)</span></label>
                                             </div>
                                             <div class="col-md">
-                                                <select class="form-control" name="AF2[factor_x_millon]" id="AF2_factor_x_millon">
+                                                <input class="form-control" type="text" name="AF2[factor_x_millon]" id="AF2_factor_x_millon" value="0" readonly="readonly">
+                                                {{-- <select class="form-control" name="AF2[factor_x_millon]" id="AF2_factor_x_millon">
                                                     <option value="" >Seleccione uno...</option>
                                                     @for ($i = 0.017; $i <= 0.027; $i+=.0005)
                                                         <option value="{{ number_format($i, 4) }}"{{ isset($aliadosusados[2]) ? (number_format($i, 4) == $aliadosusados[2]['condiciones']->factor ? ' selected' : '') : '' }}>{{ number_format($i, 4) }}</option>
                                                     @endfor
-                                                </select>
+                                                </select> --}}
                                             </div>
                                         </div>
                                     </div>

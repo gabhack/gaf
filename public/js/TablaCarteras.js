@@ -32,7 +32,9 @@ var inputAF1_valor_credito = $('input#AF1_valor_credito');
 var inputAF1_cupo_max = $('input#AF1_cupo_max');
 var inputAF1_cuota = $('input#AF1_cuota');
 
+var inputaliadof2 = document.getElementById("aliadof2");
 var inputAF2_factor_x_millon = document.getElementById("AF2_factor_x_millon");
+var inputAF2_factor_x_millon_valor = $('input#AF2_factor_x_millon');
 var inputAF2_plazo = document.getElementById("AF2_plazo");
 var inputcarteras_a_comprar_af2 = $('input#carteras_a_comprar_af2');
 var inputAF2_cuota = document.getElementById("AF2_cuota");
@@ -69,6 +71,7 @@ borrarElementoData = elemID => data.filter(e => e.ID !== elemID);
  */
 calcularTotales = () => {
   let filaTotalesCalculada;
+  let es_saneamiento = false;
   let cantCarteras = 0;
   let cantCarterasEnMora = 0;
   let cantCarterasSoloEfectivo = 0;
@@ -106,6 +109,20 @@ calcularTotales = () => {
       acum.SaldoCarteraNegociada += parseInt(currentValue.SaldoCarteraNegociada);
 
       //CÁLCULO DE INFORMACIÓN ADICIONAL
+      if (!es_saneamiento) {
+        es_saneamiento =
+          (
+            currentValue.Estado === "MORA 60 A 90" || 
+            currentValue.Estado === "MORA 90 A 120" || 
+            currentValue.Estado === "MORA 120 A 150" || 
+            currentValue.Estado === "MORA 150 A 180" || 
+            currentValue.Estado === "MORA > 180" ||
+            currentValue.Estado === "CASTIGADA" ||
+            currentValue.Estado === "EMBARGO"
+          )
+            ? true
+            : false;
+      }
       cantCarteras = arr.length;
       cantCarterasSoloEfectivo = currentValue.SoloEfectivo
         ? cantCarterasSoloEfectivo + 1
@@ -152,24 +169,13 @@ calcularTotales = () => {
   if (cantCarteras === 0) {
     tipoCliente = "A";
   } else {
-    if (cantCarterasCastigadas > 1 || cantEmbargos >= 1) {
+    if (cantCarterasCastigadas >= 1 || cantEmbargos >= 1) {
       tipoCliente = "C";
     } else {
       if (cantCarterasEnMora === 0 && cantCarterasCastigadas === 0) {
-        if (cantCarterasSoloEfectivo === 0) {
           tipoCliente = "A";
-        } else {
-          tipoCliente = "A";
-        }
       } else {
-        if (cantCarterasEnMora === 1) {
-          tipoCliente = "B";
-        } else {
-          tipoCliente = "B";
-          if (cantCarterasCastigadas === 1) {
-            tipoCliente = "B";
-          }
-        }
+        tipoCliente = "B";
       }
     }
   }
@@ -215,22 +221,22 @@ calcularTotales = () => {
   servicioimpuestoscalc = carterasTR+(totalservicio*1.19);
   servicioimpuestos = (parseFloat(servicioimpuestoscalc).toFixed(0));
   //AF1
-  console.log(inputaliadof1.value);
   let aliado_seleccionado = aliadosCompleto.find(aliado => aliado.id == inputaliadof1.value);
   if (aliado_seleccionado.aliado == 'CK COMERCIALIZADORA') {
     // Habilitar/Deshabilitar funciones del aliado
     if ( !document.getElementById("item-desembolso-cliente").classList.contains('hidden') ){
       document.getElementById("item-desembolso-cliente").classList.add('hidden');
       document.getElementById("item-cuota-mensual").classList.add('hidden');
-      inputAF1_cuota_mensual.required = false;
     }
+    inputAF1_cuota_mensual.required = false;
     document.getElementById("item-saldo-ref").classList.remove('hidden');
     document.getElementById("item-cuota-seguro").classList.remove('hidden');
     inputAF1_saldo_refinanciacion.required = true;
+    inputAF1_tasa.required = true;
     // Cálculos
     carteras_comprar_base = servicioimpuestos;
     intereses_anticipados_af1 = parseInt(inputAF1_intereses_anticipados.value, 10);
-    intereses_anticipados_af1_valor = Math.trunc(carteras_comprar_base*intereses_anticipados_af1/100);
+    intereses_anticipados_af1_valor = Math.trunc(carteras_compcupomaxAF2rar_base*intereses_anticipados_af1/100);
     costos_af1 = parseInt(inputAF1_costos.value, 10);
     costos_af1_valor = Math.trunc(carteras_comprar_base*costos_af1/100);
     seguro_calc = p_x_millon*(1.+(extraprima)/100);
@@ -254,8 +260,10 @@ calcularTotales = () => {
     if ( !document.getElementById("item-saldo-ref").classList.contains('hidden') ){
       document.getElementById("item-saldo-ref").classList.add('hidden');
       document.getElementById("item-cuota-seguro").classList.add('hidden');
-      inputAF1_saldo_refinanciacion.required = false;
+      document.getElementById("item-cuota-seguro").classList.add('hidden');
     }
+    inputAF1_saldo_refinanciacion.required = false;
+    inputAF1_tasa.required = false;
     document.getElementById("item-desembolso-cliente").classList.remove('hidden');
     document.getElementById("item-cuota-mensual").classList.remove('hidden');
     inputAF1_cuota_mensual.required = true;
@@ -285,9 +293,35 @@ calcularTotales = () => {
     }
   }
   //AF2
+  console.log(inputaliadof2.value);
+  let aliado_seleccionado2 = aliadosCompleto.find(aliado => aliado.id == inputaliadof2.value);
+  af2_factor_x_millon = 0;
+  pagaduria_text = 'ACTIVOS';
+  if (pagaduria == 'COLPENSIONES' || pagaduria == 'FIDUPREVISORA' || pagaduria == 'FOPEP' || pagaduria == 'CASUR' || pagaduria == 'CREMIL') {
+    pagaduria_text = pagaduria;
+  }
+  console.log(aliado_seleccionado2);
+  if (aliado_seleccionado2.aliado == 'GNB SUDAMERIS') {
+    inputAF2_factor_x_millon.readOnly = true;
+    if (es_saneamiento) {
+      //FRONT
+      document.getElementById("label-saneamiento").classList.remove('hidden');
+      //DATA
+      af2_factor_x_millon = factores_x_millon_gnb[pagaduria_text][inputAF2_plazo.value]['saneamiento'];
+    } else {
+      //FRONT
+      if ( !document.getElementById("label-saneamiento").classList.contains('hidden') ){
+        document.getElementById("label-saneamiento").classList.add('hidden');
+      }
+      //DATA
+      af2_factor_x_millon = factores_x_millon_gnb[pagaduria_text][inputAF2_plazo.value]['normal'];
+    }
+  } else {
+    inputAF2_factor_x_millon.readOnly = false;
+  }
   total_carteras_aliado_2 = (parseFloat(totalCarteraAF2+servicioimpuestoscalc)).toFixed(0);
   cupomaxAF2 = cupomaxAF1+cuotaCarteraAF2;
-  monto_maxAF2 = (parseInt(inputAF2_cuota.value)/parseFloat(inputAF2_factor_x_millon.value)).toFixed(0);
+  monto_maxAF2 = (parseInt(inputAF2_cuota.value)/parseFloat(af2_factor_x_millon)).toFixed(0);
   monto_prestarAF2 = valorcreditocalc+totalCarteraAF2;
   saldo_AF2 = monto_maxAF2-monto_prestarAF2;
 
@@ -313,6 +347,7 @@ calcularTotales = () => {
   inputAF2_monto_prestar.val(moneyFormatter.format(monto_prestarAF2));
   inputAF2_monto_max.val(moneyFormatter.format(monto_maxAF2));
   inputAF2_saldo.val(moneyFormatter.format(saldo_AF2));
+  inputAF2_factor_x_millon_valor.val(af2_factor_x_millon);
   
   /////// Mostrar y ocultar datos y panales
   //Panel TR
@@ -384,7 +419,6 @@ calcularTotales = () => {
 		if ( !document.getElementById("panel-AF2").classList.contains('hidden') ){
 			document.getElementById("panel-AF2").classList.add('hidden');
     }
-    document.getElementById("aliadof2").value = "";
     document.getElementById("aliadof2").required = false;
     document.getElementById("AF2_factor_x_millon").required = false;
     document.getElementById("AF2_plazo").required = false;
@@ -816,12 +850,22 @@ $(document).ready(function() {
     refrescarTotales();
   });
 
+  $("#aliadof2").change(function() {
+    inputJsonCarteras.val(JSON.stringify(data.slice(0, data.length - 1)));
+    refrescarTotales();
+  });
+
   $("#AF2_cuota").change(function() {
     inputJsonCarteras.val(JSON.stringify(data.slice(0, data.length - 1)));
     refrescarTotales();
   });
 
   $("#AF2_factor_x_millon").change(function() {
+    inputJsonCarteras.val(JSON.stringify(data.slice(0, data.length - 1)));
+    refrescarTotales();
+  });
+
+  $("#AF2_plazo").change(function() {
     inputJsonCarteras.val(JSON.stringify(data.slice(0, data.length - 1)));
     refrescarTotales();
   });
