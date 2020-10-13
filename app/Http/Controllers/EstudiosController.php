@@ -18,6 +18,7 @@ use App\EntidadesCentrales as EntidadesCentrales;
 use App\Condicionesaf as Condicionesaf;
 use App\Carteras as Carteras;
 use App\FactorXMillonKredit as FactorXMillonKredit;
+use App\FactorXMillonGnb as FactorXMillonGnb;
 use Illuminate\Http\Request;
 use DateTime;
 
@@ -47,7 +48,7 @@ class EstudiosController extends Controller
         }
         return view("estudios/index")->with([
             "lista" => $lista
-            ]);
+        ]);
     }
     
     /**
@@ -83,6 +84,14 @@ class EstudiosController extends Controller
                 foreach ($factores_kredit as $key => $factor) {
                     $factores_x_millon_kredit[$factor->llave] = $factor->valor;
                 }
+                $factores_x_millon_gnb = array();
+                $factores_gnb = FactorXMillonGnb::all();
+                foreach ($factores_gnb as $key => $factor) {
+                    $factores_x_millon_gnb[$factor->pagaduria][$factor->plazo]['normal'] = $factor->normal;
+                    $factores_x_millon_gnb[$factor->pagaduria][$factor->plazo]['saneamiento'] = $factor->saneamiento;
+                }
+                $viabilidad = calcula_viabilidad_inicial($cliente);
+                $viabilidad = calcula_viabilidad_inicial($cliente);
 
                 $asesores = Asesores::all();
                 $registro = $cliente->registrosfinancieros->last();
@@ -146,7 +155,9 @@ class EstudiosController extends Controller
                     "aliados" => $aliados,
                     "aliadosCompleto" => $aliadosCompleto,
                     "p_x_millon" => $p_x_millon,
-                    "factores_x_millon_kredit" => $factores_x_millon_kredit
+                    "factores_x_millon_kredit" => $factores_x_millon_kredit,
+                    "factores_x_millon_gnb" => $factores_x_millon_gnb,
+                    "viabilidad" => $viabilidad
                 ]);
             } else {
                 return view("estudios/paso1")->with([
@@ -325,6 +336,13 @@ class EstudiosController extends Controller
         foreach ($factores_kredit as $key => $factor) {
             $factores_x_millon_kredit[$factor->llave] = $factor->valor;
         }
+        $factores_x_millon_gnb = array();
+        $factores_gnb = FactorXMillonGnb::all();
+        foreach ($factores_gnb as $key => $factor) {
+            $factores_x_millon_gnb[$factor->pagaduria][$factor->plazo]['normal'] = $factor->normal;
+            $factores_x_millon_gnb[$factor->pagaduria][$factor->plazo]['saneamiento'] = $factor->saneamiento;
+        }
+        $viabilidad = calcula_viabilidad_inicial($cliente);
         
         if (sizeof($datacarteras) > 0) {
             if (isset(array_values(array_unique(array_filter($datacarteras->pluck('compraAF1_id')->toArray(), "strlen")))[0])) {
@@ -431,7 +449,9 @@ class EstudiosController extends Controller
             "aliadosusados" => $aliadosusados,
             "extraprima" => $extraprima,
             "p_x_millon" => $p_x_millon,
-            "factores_x_millon_kredit" => $factores_x_millon_kredit
+            "factores_x_millon_kredit" => $factores_x_millon_kredit,
+            "factores_x_millon_gnb" => $factores_x_millon_gnb,
+            "viabilidad" => $viabilidad
         ]);
     }
 

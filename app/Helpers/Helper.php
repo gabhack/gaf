@@ -598,25 +598,85 @@ if (!function_exists('upload_personas')) {
 	}
 }
 
-/*if (!function_exists('calcula_plazo_viabilidad')) {
-	function calcula_plazo_viabilidad($persona) {
+if (!function_exists('calcula_viabilidad_inicial')) {
+	function calcula_viabilidad_inicial($persona, $fecha_estudio = NULL) {
+		//Variables
+		$plazomax = 0;
+		$analisis = "";
+		$viable = true;
+		$limite_cupo = 0;
+		if (!$fecha_estudio) {
+			$fecha_estudio = new DateTime(date("Y") . "-" . date("m") . "-" . date("d"));
+		}
 		//Parámetros
-        $edadmax_admin_hombre = \App\Parametros::where('llave', 'EDADMAX_ADMIN_H')->first()->valor;
-        $edadmax_admin_mujer = \App\Parametros::where('llave', 'EDADMAX_ADMIN_M')->first()->valor;
-        $edadmax_docentes = \App\Parametros::where('llave', 'EDADMAX_DOCENTES')->first()->valor;
-		$edadmax_pensionados = \App\Parametros::where('llave', 'EDADMAX_PENSIONADOS')->first()->valor;
+        $edadmax_admin_hombre = (\App\Parametros::where('llave', 'EDADMAX_ADMIN_H')->first()->valor)*12;
+        $edadmax_admin_mujer = (\App\Parametros::where('llave', 'EDADMAX_ADMIN_M')->first()->valor)*12;
+        $edadmax_docentes = (\App\Parametros::where('llave', 'EDADMAX_DOCENTES')->first()->valor)*12;
+		$edadmax_pensionados = (\App\Parametros::where('llave', 'EDADMAX_PENSIONADOS')->first()->valor)*12;
+		$cupomax_vacantedef = \App\Parametros::where('llave', 'CUPOMAX_VACANTEDEF')->first()->valor;
 		$plazo_max_permitido = 0;
 
 		//Datos del cliente
-		if (tipo_contratacion == 'Propiedad') {
+		$fechanac = new DateTime($persona->fechanto);
+		$edad = $fecha_estudio->diff($fechanac);
+		$meses_edad = ($edad->y*12)+$edad->m;
+		$es_pensionado = $persona->registrosfinancieros->last()->pagaduria->de_pensiones;
+		if ($persona->tipo_contratacion == 'Propiedad') {
 			$plazo_max_permitido = 144;
-		} elseif (tipo_contratacion == 'Provisional Vacante Definitiva') {
+		} elseif ($persona->tipo_contratacion == 'Provisional Vacante Definitiva') {
 			$plazo_max_permitido = 60;
+			$limite_cupo = $cupomax_vacantedef;
+		} else {
+			$analisis = "No es viable: tipo de contrato inviable";
+			$viable = false;
 		}
-		$estado_cliente = 'pensionado|activo';
-		$tipo_cargo = $persona
 
+		//Cálculos
+		if ($viable) {
+			if ($es_pensionado) {
+				if ($meses_edad < $edadmax_pensionados) {
+					$plazomax = $plazo_max_permitido;
+				}
+			} else {
+				if ($persona->docente == '1') {
+					if ($edadmax_docentes-$meses_edad <= $plazo_max_permitido) {
+						$plazomax = $edadmax_docentes-$meses_edad; //Medida en meses
+					} elseif ($edadmax_docentes-$meses_edad > $plazo_max_permitido) {
+						$plazomax = $plazo_max_permitido;
+					} else {
+						$analisis = "No es viable: Edad inviable";
+					}
+				} else {
+					if ($persona->sexo == 'M') {
+						if ($edadmax_admin_hombre-$meses_edad <= $plazo_max_permitido) {
+							$plazomax = $edadmax_admin_hombre-$meses_edad; //Medida en meses
+						} elseif ($edadmax_admin_hombre-$meses_edad > $plazo_max_permitido) {
+							$plazomax = $plazo_max_permitido;
+						} elseif ($edadmax_admin_hombre-$meses_edad <= 0) {
+							$analisis = "No es viable: Edad inviable";
+						}
+					} elseif ($persona->sexo == 'F') {
+						if ($edadmax_admin_mujer-$meses_edad <= $plazo_max_permitido) {
+							$plazomax = $edadmax_admin_mujer-$meses_edad; //Medida en meses
+						} elseif ($edadmax_admin_mujer-$meses_edad > $plazo_max_permitido) {
+							$plazomax = $plazo_max_permitido;
+						} elseif ($edadmax_admin_mujer-$meses_edad <= 0) {
+							$analisis = "No es viable: Edad inviable";
+						}
+					} else {
+						$analisis = "Sin datos suficientes para hallar viabilidad preliminar";
+					}
+				}
+			}
+		}
+
+		return array(
+			"plazomax" => $plazomax,
+			"analisis" => $analisis,
+			"edad" => $edad->y,
+			"limite_cupo" => $limite_cupo
+		);
 	}
-}*/
+}
 
 ?>
