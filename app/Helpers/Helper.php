@@ -459,7 +459,6 @@ if (!function_exists('upload_personas')) {
 					if ($pagaduria->nit == '') {
 						$pagaduria->nit = $persona['nit'];
 						$pagaduria->save();
-						print_r('Entró en el segundo');
 					}
 				}
 				
