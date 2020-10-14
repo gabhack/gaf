@@ -591,6 +591,8 @@ def get_prediction(file_path, model_name):
         'nombres': nombres,
         'apellidos': apellidos,
         'documento': documento,
+        'cargo_docente': cargo_docente,
+        'cargo_administrativo': cargo_administrativo,
         'grado': grado,
         'tipo_contratacion': tipo_contratacion,
         'ciudad': ciudad,
@@ -613,7 +615,7 @@ if __name__ == '__main__':
     bucket_name= args["bucket"]
     #prefix carpeta en donde se encuentran todos los pdfs
     prefix=args["folder"]
-    model_name = "TEN745717373260005376"
+    model_name = "TEN8154560972749537280"
     personas=[]
     files_names=[]
     files=list_blobs_with_prefix(bucket_name, prefix)  

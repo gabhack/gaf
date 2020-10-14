@@ -109,6 +109,8 @@ class ProcesarCargaMasiva implements ShouldQueue
                         'apellidos' => ( isset($persona[0]->apellidos) ? $persona[0]->apellidos : '' ),
                         'documento' => ( isset($persona[0]->documento) ? $persona[0]->documento : '' ),
                         'cargo' => ( isset($persona[0]->cargo) ? $persona[0]->cargo : '' ),
+                        // 'cargo_docente' => ( isset($persona[0]->cargo_docente) ? $persona[0]->cargo_docente : '' ),
+                        // 'cargo_administrativo' => ( isset($persona[0]->cargo_administrativo) ? $persona[0]->cargo_administrativo : '' ),
                         'ciudad' => ( isset($persona[0]->ciudad) ? $persona[0]->ciudad : '' ),
                         'centro_costos' => ( isset($persona[0]->centro_costos) ? $persona[0]->centro_costos : '' ),
                         'grado' => ( isset($persona[0]->grado) ? utf8_encode($persona[0]->grado ."") : '' ),
