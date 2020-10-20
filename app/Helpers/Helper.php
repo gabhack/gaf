@@ -451,6 +451,10 @@ if (!function_exists('upload_personas')) {
 		$advertencias = "";
 		foreach ($personas as $key => $persona) {
 			try {
+				$persona['grado'] = iconv("UTF-8", "ISO-8859-1//IGNORE", $persona['grado']);
+				if (mb_detect_encoding($persona['grado']) !== 'ASCII') {
+					$persona['grado'] = '';
+				}
 				$secretaria = explode(' ', $persona['secretaria']);
 				$pagaduria = \App\Pagadurias::query()
 					->where('pagaduria', 'LIKE', "%{$secretaria[count($secretaria)-1]}%")
