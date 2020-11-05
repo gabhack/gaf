@@ -78,62 +78,62 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-4">
-                                <label class="label-consulta" for="pad">Nombres:
+                                <label class="label-consulta{{ $cliente->nombres == '' ? ' label-warning' : '' }}" for="pad">Nombres:
                                     <p class="pad">{{ $cliente->nombres == '' ? 'No proporcionado' : $cliente->nombres }}</p>
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                <label class="label-consulta" for="pad">Apellidos:
+                                <label class="label-consulta{{ $cliente->apellidos == '' ? ' label-warning' : '' }}" for="pad">Apellidos:
                                     <p class="pad">{{ $cliente->apellidos == '' ? 'No proporcionado' : $cliente->apellidos }}</p>
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                <label class="label-consulta" for="pad">Tipo de Documento:
+                                <label class="label-consulta{{ $cliente->tipodocumento == '' ? ' label-warning' : '' }}" for="pad">Tipo de Documento:
                                     <p class="pad">{{ $cliente->tipodocumento == '' ? 'No proporcionado' : $cliente->tipodocumento }}</p>
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                <label class="label-consulta" for="pad">Documento:
+                                <label class="label-consulta{{ $cliente->documento == '' ? ' label-warning' : '' }}" for="pad">Documento:
                                     <p class="pad">{{ $cliente->documento == '' ? 'No proporcionado' : $cliente->documento }}</p>
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                <label class="label-consulta" for="pad">Sexo:
+                                <label class="label-consulta{{ $cliente->sexo == '' ? ' label-warning' : '' }}" for="pad">Sexo:
                                     <p class="pad">{{ $cliente->sexo == 'F' ? 'Femenino' : 'Masculino' }}</p>
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                <label class="label-consulta" for="pad">Fecha de nacimiento:
+                                <label class="label-consulta{{ $cliente->fechanto == '' ? ' label-warning' : '' }}" for="pad">Fecha de nacimiento:
                                     <p class="pad">{{ $cliente->fechanto == '' ? 'No proporcionado' : $cliente->fechanto }} (<b>{{ $viabilidad['edad'] }} años</b>)</p>
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                <label class="label-consulta" for="pad">Ciudad:
+                                <label class="label-consulta{{ $cliente->ciudad == '' ? ' label-warning' : '' }}" for="pad">Ciudad:
                                     <p class="pad">{{ $cliente->ciudad == '' ? 'No proporcionado' : $cliente->ciudad->ciudad }}</p>
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                <label class="label-consulta" for="pad">Estado Civil:
+                                <label class="label-consulta{{ $cliente->estado_civil == '' ? ' label-warning' : '' }}" for="pad">Estado Civil:
                                     <p class="pad">{{ $cliente->estado_civil == '' ? 'No proporcionado' : $cliente->estado_civil }}</p>
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                <label class="label-consulta" for="pad">Centro de Costo:
+                                <label class="label-consulta{{ $cliente->centro_costo == '' ? ' label-warning' : '' }}" for="pad">Centro de Costo:
                                     <p class="pad">{{ $cliente->centro_costo == '' ? 'No proporcionado' : $cliente->centro_costo }}</p>
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                <label class="label-consulta" for="pad">Cargo:
+                                <label class="label-consulta{{ $cliente->cargo == '' ? ' label-warning' : '' }}" for="pad">Cargo:
                                     <p class="pad">{{ $cliente->cargo == '' ? 'No proporcionado' : $cliente->cargo }}</p>
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                <label class="label-consulta" for="pad">Tipo de Contratación:
+                                <label class="label-consulta{{ $cliente->tipo_contratacion == '' ? ' label-warning' : '' }}" for="pad">Tipo de Contratación:
                                     <p class="pad">{{ $cliente->tipo_contratacion == '' ? 'No proporcionado' : $cliente->tipo_contratacion }}</p>
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                <label class="label-consulta" for="pad">Grado:
+                                <label class="label-consulta{{ $cliente->grado == '' ? ' label-warning' : '' }}" for="pad">Grado:
                                     <p class="pad">{{ $cliente->grado == '' ? 'No proporcionado' : $cliente->grado }}</p>
                                 </label>
                             </div>
@@ -245,22 +245,22 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-3">
-                                <label class="label-consulta" for="pad">Teléfono:
+                                <label class="label-consulta{{ $cliente->telefono == '' ? ' label-warning' : '' }}" for="pad">Teléfono:
                                     <p class="pad">{{ $cliente->telefono == '' ? 'No proporcionado' : $cliente->telefono }}</p>
                                 </label>
                             </div>
                             <div class="col-md-3">
-                                <label class="label-consulta" for="pad">Celular:
+                                <label class="label-consulta{{ $cliente->celular == '' ? ' label-warning' : '' }}" for="pad">Celular:
                                     <p class="pad">{{ $cliente->celular == '' ? 'No proporcionado' : $cliente->celular }}</p>
                                 </label>
                             </div>
                             <div class="col-md-3">
-                                <label class="label-consulta" for="pad">Dirección:
+                                <label class="label-consulta{{ $cliente->direccion == '' ? ' label-warning' : '' }}" for="pad">Dirección:
                                     <p class="pad">{{ $cliente->direccion == '' ? 'No proporcionado' : $cliente->direccion }}</p>
                                 </label>
                             </div>
                             <div class="col-md-3">
-                                <label class="label-consulta" for="pad">Correo electrónico:
+                                <label class="label-consulta{{ $cliente->correo == '' ? ' label-warning' : '' }}" for="pad">Correo electrónico:
                                     <p class="pad">{{ $cliente->correo == '' ? 'No proporcionado' : $cliente->correo }}</p>
                                 </label>
                             </div>
@@ -465,6 +465,7 @@
                 </div>
             </div>
             
+            {{-- Panel de Carteras --}}
             <div class="col-md-12">
                 <div class="panel panel-primary">
                     <div class="panel-heading"><b>Carteras por comprar</b></div>
@@ -488,7 +489,7 @@
                                         <label class="label-consulta" for="pad">Costo certificados:</label>
                                     </div>
                                     <div class="col-md">
-                                        <input class="form-control w-100 text-center" type="text" name="costo_certificados" id="costo_certificados" required value="{{$estudio->condicion->costocertificados}}">
+                                        <input class="auto form-control w-100 text-center" data-a-sep="." data-a-dec="," data-a-sign="$ " type="text" name="costo_certificados" id="costo_certificados" required value="{{$estudio->condicion->costocertificados}}">
                                     </div>
                                 </div>
                             </div>
@@ -571,13 +572,23 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-md-10">
+                                        <div class="row">
+                                            <div class="col-md-5 text-right">
+                                                <label class="label-consulta" for="pad">Cupo máx.</label>
+                                            </div>
+                                            <div class="col-md">
+                                                <input class="form-control text-right font-weight-bold" type="text" name="AF1_cupo_max" id="AF1_cupo_max" value="" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="col-md-10" id="item-cuota-mensual">
                                         <div class="row">
                                             <div class="col-md-5 text-right">
                                                 <label class="label-consulta" for="pad">Cuota mensual</label>
                                             </div>
                                             <div class="col-md">
-                                                <input class="form-control" type="text" name="AF1[cuota_mensual]" id="AF1_cuota_mensual" value="{{ isset($aliadosusados[1]) ?  (( $aliadosusados[1]['condiciones']->cuota !== null) ? $aliadosusados[1]['condiciones']->cuota : '0') : '0' }}">
+                                                <input class="auto form-control text-right" data-a-sep="." data-a-dec=","    data-a-sign="$ " type="text" name="AF1[cuota_mensual]" id="AF1_cuota_mensual" value="{{ isset($aliadosusados[1]) ?  (( $aliadosusados[1]['condiciones']->cuota !== null) ? $aliadosusados[1]['condiciones']->cuota : '0') : '0' }}">
                                             </div>
                                         </div>
                                     </div>
@@ -691,16 +702,6 @@
                                     </div>
                                     <div class="col-md">
                                         <div class="row">
-                                            <div class="col-md-12 text-center">
-                                                <label class="label-consulta" for="pad">Cupo máx.</label>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <input class="form-control text-center font-weight-bold" type="text" name="AF1_cupo_max" id="AF1_cupo_max" value="" disabled>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md">
-                                        <div class="row">
                                             <div class="col-md-12 text-center" id="item-cuota-seguro">
                                                 <label class="label-consulta" for="pad">Cuota + Seguro</label>
                                             </div>
@@ -786,7 +787,7 @@
                                                 <label class="label-consulta" for="pad">Cuota</label>
                                             </div>
                                             <div class="col-md">
-                                                <input class="form-control" type="text" name="AF2[cuota]" id="AF2_cuota" value="{{ isset($aliadosusados[2]) ? $aliadosusados[2]['condiciones']->cuota : '0' }}">
+                                                <input class="auto form-control" data-a-sep="." data-a-dec=","   data-a-sign="$ " type="text" name="AF2[cuota]" id="AF2_cuota" value="{{ isset($aliadosusados[2]) ? $aliadosusados[2]['condiciones']->cuota : '0' }}">
                                             </div>
                                         </div>
                                     </div>
@@ -834,6 +835,7 @@
 @endsection
 
 @section('js')
+    <script src="{{asset('js/autoNumeric.js')}}"></script>
     <script src="{{asset('css/gijgo-combined-1.9.13/js/gijgo.min.js')}}"></script>
     <script src="{{asset('js/TablaCarteras.js')}}"></script>
 @endsection

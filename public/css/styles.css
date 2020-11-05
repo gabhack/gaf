@@ -69,6 +69,24 @@ table.dataTable.no-footer{
 	font-weight: bold;
 }
 
+.label-consulta.label-warning {
+    background-color: transparent !important;
+    color: #212529 !important;
+}
+
+.label-consulta.label-warning::before{
+	content: '!';
+	color: white;
+	padding: 2px 9px;
+	margin-right: 5px;
+	background-color: #f39c12;
+	border-radius: 100px;
+}
+
+.label-consulta.label-warning>.pad {
+    color: #f39c12 !important;
+}
+
 .label-consulta>select{width: auto;}
 
 .login-footer {

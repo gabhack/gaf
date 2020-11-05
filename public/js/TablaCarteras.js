@@ -216,7 +216,7 @@ calcularTotales = () => {
   //Capacidad de pago
   cupolibreinversion = parseInt(cupos.libreInversion.valor);
   //TR
-  costo_certificados = parseInt(inputcosto_certificadosTR.value, 10);
+  costo_certificados = parseInt($('input#costo_certificados').autoNumeric('get'), 10);
   totalservicio = (carterasTR*costoservicioTR/100)+costo_certificados;
   servicioimpuestoscalc = carterasTR+(totalservicio*1.19);
   servicioimpuestos = (parseFloat(servicioimpuestoscalc).toFixed(0));
@@ -234,9 +234,10 @@ calcularTotales = () => {
     inputAF1_saldo_refinanciacion.required = true;
     inputAF1_tasa.required = true;
     // Cálculos
+    cupomaxAF1 = cupolibreinversion-filaTotalesCalculada.Cuota+cuotaCarteraAF1+cuotasDuplicadas;
     carteras_comprar_base = servicioimpuestos;
     intereses_anticipados_af1 = parseInt(inputAF1_intereses_anticipados.value, 10);
-    intereses_anticipados_af1_valor = Math.trunc(carteras_compcupomaxAF2rar_base*intereses_anticipados_af1/100);
+    intereses_anticipados_af1_valor = Math.trunc(carteras_comprar_base*intereses_anticipados_af1/100);
     costos_af1 = parseInt(inputAF1_costos.value, 10);
     costos_af1_valor = Math.trunc(carteras_comprar_base*costos_af1/100);
     seguro_calc = p_x_millon*(1.+(extraprima)/100);
@@ -251,7 +252,6 @@ calcularTotales = () => {
     }
     tasa_af1 = parseFloat(inputAF1_tasa.value);
     periodos_af1 = parseInt(inputAF1_plazo.value);
-    cupomaxAF1 = cupolibreinversion-filaTotalesCalculada.Cuota+cuotaCarteraAF1+cuotasDuplicadas;
     seguro_cuota = parseInt(seguro_calc*(valorcreditocalc/1000000));
     cuotacalc = getValorDeCuotaFija(valorcreditocalc,tasa_af1,periodos_af1);
     cuotafinal = (parseInt(cuotacalc)+seguro_cuota).toFixed(0);
@@ -268,16 +268,25 @@ calcularTotales = () => {
     document.getElementById("item-cuota-mensual").classList.remove('hidden');
     inputAF1_cuota_mensual.required = true;
     // Cálculos
+    cupomaxAF1 = cupolibreinversion-filaTotalesCalculada.Cuota+cuotaCarteraAF1+cuotasDuplicadas;
+    if ($('input#AF1_cuota_mensual').autoNumeric('get') > cupomaxAF1) {
+      if (parseInt(cupomaxAF1) > 0) {
+        $('input#AF1_cuota_mensual').autoNumeric('set', cupomaxAF1);
+      } else {
+        $('input#AF1_cuota_mensual').autoNumeric('set', 0);
+      }
+    }
     carteras_comprar_base = servicioimpuestos;
     intereses_anticipados_af1 = parseFloat(inputAF1_intereses_anticipados.value);
-    cuota_mensual_af1 = parseInt(inputAF1_cuota_mensual.value, 10);
+    cuota_mensual_af1 = parseInt($('input#AF1_cuota_mensual').autoNumeric('get'), 10);
     periodos_af1 = parseInt(inputAF1_plazo.value);
+    periodos = Math.round(periodos_af1/12)*12;
     costos_af1 = parseInt(inputAF1_costos.value, 10);
     seguro_calc = p_x_millon*(1.+(extraprima)/100);
     if (totalCarteraAF1 === 0) {
       valorcreditocalc = 0;
     } else {
-      valorcreditocalc = parseInt(cuota_mensual_af1/factores_x_millon_kredit[periodos_af1]);
+      valorcreditocalc = parseInt(cuota_mensual_af1/factores_x_millon_kredit[periodos]);
     }
     costos_af1_valor = Math.trunc(valorcreditocalc*(costos_af1/100));
     intereses_anticipados_af1_valor = Math.trunc(valorcreditocalc*(intereses_anticipados_af1/100));
@@ -285,7 +294,6 @@ calcularTotales = () => {
     cuatroxmil = parseFloat((4/1000)*valorcreditocalc).toFixed(0);
     costos_total = parseInt(costos_af1_valor)+parseInt(intereses_anticipados_af1_valor)+parseInt(ivacalc)+parseInt(cuatroxmil);
     seguro_cuota = parseInt(seguro_calc*(valorcreditocalc/1000000));
-    cupomaxAF1 = cupolibreinversion-filaTotalesCalculada.Cuota+cuotaCarteraAF1+cuotasDuplicadas;
     if (valorcreditocalc === 0) {
       cuotafinal = 0;
     } else {
@@ -293,14 +301,12 @@ calcularTotales = () => {
     }
   }
   //AF2
-  console.log(inputaliadof2.value);
   let aliado_seleccionado2 = aliadosCompleto.find(aliado => aliado.id == inputaliadof2.value);
   af2_factor_x_millon = 0;
   pagaduria_text = 'ACTIVOS';
   if (pagaduria == 'COLPENSIONES' || pagaduria == 'FIDUPREVISORA' || pagaduria == 'FOPEP' || pagaduria == 'CASUR' || pagaduria == 'CREMIL') {
     pagaduria_text = pagaduria;
   }
-  console.log(aliado_seleccionado2);
   if (aliado_seleccionado2.aliado == 'GNB SUDAMERIS') {
     inputAF2_factor_x_millon.readOnly = true;
     if (es_saneamiento) {
@@ -321,7 +327,7 @@ calcularTotales = () => {
   }
   total_carteras_aliado_2 = (parseFloat(totalCarteraAF2+servicioimpuestoscalc)).toFixed(0);
   cupomaxAF2 = cupomaxAF1+cuotaCarteraAF2;
-  monto_maxAF2 = (parseInt(inputAF2_cuota.value)/parseFloat(af2_factor_x_millon)).toFixed(0);
+  monto_maxAF2 = (parseInt($('input#AF2_cuota').autoNumeric('get'))/parseFloat(af2_factor_x_millon)).toFixed(0);
   monto_prestarAF2 = valorcreditocalc+totalCarteraAF2;
   saldo_AF2 = monto_maxAF2-monto_prestarAF2;
 
@@ -408,7 +414,7 @@ calcularTotales = () => {
     }
   }
   //Aliado 2
-  if (totalCarteraAF2 > 0) {
+  if (totalCarteraAF1 > 0 || totalCarteraAF2 > 0) {
     document.getElementById("panel-AF2").classList.remove('hidden');
     document.getElementById("aliadof2").required = true;
     document.getElementById("AF2_factor_x_millon").required = true;
