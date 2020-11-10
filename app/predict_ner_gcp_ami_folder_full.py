@@ -615,7 +615,7 @@ if __name__ == '__main__':
     bucket_name= args["bucket"]
     #prefix carpeta en donde se encuentran todos los pdfs
     prefix=args["folder"]
-    model_name = "TEN4499995428254646272"
+    model_name = "TEN1915984773306646528"
     personas=[]
     files_names=[]
     files=list_blobs_with_prefix(bucket_name, prefix)  

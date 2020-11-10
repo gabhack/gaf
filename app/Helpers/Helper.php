@@ -71,7 +71,6 @@ if (!function_exists('consultas')) {
 	}
 }
 
-
 if (!function_exists('calcularCapacidad')) {
 	function calcularCapacidad($vinculacion, $ingresos, $valor_aportes, $asignacion_adicional, $total_dctos, $smlv)
 	{
@@ -657,6 +656,7 @@ if (!function_exists('upload_personas')) {
 if (!function_exists('calcula_viabilidad_inicial')) {
 	function calcula_viabilidad_inicial($persona, $fecha_estudio = NULL) {
 		//Variables
+		$faltantes = array();
 		$plazomax = 0;
 		$analisis = "";
 		$viable = true;
@@ -685,6 +685,17 @@ if (!function_exists('calcula_viabilidad_inicial')) {
 		} else {
 			$analisis = "No es viable: tipo de contrato inviable";
 			$viable = false;
+		}
+
+		//Validación de datos
+		if ($persona->fechanto == '') {
+			$faltantes[] = 'Fecha de nacimiento';
+		}
+		if ($persona->tipo_contratacion == '') {
+			$faltantes[] = 'Tipo de contratación';
+		}
+		if ($persona->cargo == '') {
+			$faltantes[] = 'Cargo';
 		}
 
 		//Cálculos
@@ -730,7 +741,8 @@ if (!function_exists('calcula_viabilidad_inicial')) {
 			"plazomax" => $plazomax,
 			"analisis" => $analisis,
 			"edad" => $edad->y,
-			"limite_cupo" => $limite_cupo
+			"limite_cupo" => $limite_cupo,
+			"faltantes" => $faltantes
 		);
 	}
 }
