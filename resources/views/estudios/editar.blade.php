@@ -203,6 +203,14 @@
                             <div class="row">
                                 <div class="col-md-12 text-center">
                                     <label class="label-consulta advertencia">{{ $viabilidad['plazomax'] <= 0 ? $viabilidad['analisis'] : '' }}</label>
+                                    @if (count($viabilidad['faltantes']) > 0)
+                                    <h4 class="label-consulta advertencia">Datos Faltantes:</h4>
+                                        <ul>
+                                            @foreach ($viabilidad['faltantes'] as $item)
+                                            <li>{{ $item }}</li>
+                                            @endforeach
+                                        </ul>
+                                    @endif
                                 </div>
                             </div>
                         @endif
