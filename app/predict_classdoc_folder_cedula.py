@@ -199,7 +199,7 @@ if __name__ == '__main__':
            
         file_path = documentos
         gcs_url_file_prediction="gs://"+bucket_name+"/"+file_path
-        model_name = "projects/55927814408/locations/us-central1/models/TCN6090768851320963072"
+        model_name = "projects/55927814408/locations/us-central1/models/TCN4546676293923504128"
         c=c+1
         #print("Clasificando documento #: "+str(c))
         
