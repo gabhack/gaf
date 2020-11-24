@@ -74,7 +74,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="label-consulta{{ $cliente->sexo == '' ? ' label-warning' : '' }}" for="pad">Sexo:
-                                    <p class="pad">{{ $cliente->sexo == 'F' ? 'Femenino' : 'Masculino' }}</p>
+                                    <p class="pad">{{ $cliente->sexo == 'F' ? 'Femenino' : ( $cliente->sexo == 'M' ? 'Masculino' : 'No proporcionado') }}</p>
                                 </label>
                             </div>
                             <div class="col-md-4">

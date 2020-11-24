@@ -81,6 +81,9 @@
                                 <label class="label-consulta{{ $cliente->nombres == '' ? ' label-warning' : '' }}" for="pad">Nombres:
                                     <p class="pad">{{ $cliente->nombres == '' ? 'No proporcionado' : $cliente->nombres }}</p>
                                 </label>
+                                @if ($cliente->nombres == '')
+                                    <a class="" href="">+</a>
+                                @endif
                             </div>
                             <div class="col-md-4">
                                 <label class="label-consulta{{ $cliente->apellidos == '' ? ' label-warning' : '' }}" for="pad">Apellidos:
@@ -99,7 +102,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="label-consulta{{ $cliente->sexo == '' ? ' label-warning' : '' }}" for="pad">Sexo:
-                                    <p class="pad">{{ $cliente->sexo == 'F' ? 'Femenino' : 'Masculino' }}</p>
+                                    <p class="pad">{{ $cliente->sexo == 'F' ? 'Femenino' : ( $cliente->sexo == 'M' ? 'Masculino' : 'No proporcionado') }}</p>
                                 </label>
                             </div>
                             <div class="col-md-4">
