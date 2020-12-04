@@ -13,3 +13,4 @@ yarn-error.log
 /bootstrap/cache
 /.htaccess
 /storage/*
+/app/Python-laravel
