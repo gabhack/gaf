@@ -20,6 +20,7 @@ use App\Carteras as Carteras;
 use App\FactorXMillonKredit as FactorXMillonKredit;
 use App\FactorXMillonGnb as FactorXMillonGnb;
 use Illuminate\Http\Request;
+use App\Helper;
 use DateTime;
 
 class EstudiosController extends Controller
@@ -187,6 +188,9 @@ class EstudiosController extends Controller
      */
     public function guardar(Request $request)
     {
+        //Deformateo
+        $request->costo_certificados = deformat_autonumeric($request->costo_certificados);
+
         $tieneAF1 = false;
         $tieneAF2 = false;
         //Parametros
@@ -218,6 +222,7 @@ class EstudiosController extends Controller
         $newcentrales->estudios_id = $newestudio->id;
         $newcentrales->calificacion_data = $request->calif_wab;
         $newcentrales->puntaje_data = $request->puntaje_datacredito;
+        $newcentrales->puntaje_sifin = $request->puntaje_sifin;
         if ($request->proc_en_contra !== '') {
             $newcentrales->proc_en_contra = $request->proc_en_contra;
         }
@@ -271,24 +276,26 @@ class EstudiosController extends Controller
 
         //Registro condiciones AF1 y AF2
         if ($tieneAF1) {
+            $cuota_mensual = deformat_autonumeric($request->AF1['cuota_mensual']);
             $newcondicionAF1 = new Condicionesaf;
             $newcondicionAF1->estudios_id = $newestudio->id;
             $newcondicionAF1->aliados_id = $request->AF1['id'];
             $newcondicionAF1->plazo = $request->AF1['plazo'];
             $newcondicionAF1->tasa = $request->AF1['tasa'];
-            $newcondicionAF1->cuota = $request->AF1['cuota_mensual'];
+            $newcondicionAF1->cuota = $cuota_mensual;
             $newcondicionAF1->saldo_refinanciacion = $request->AF1['saldo_refinanciacion'];
             $newcondicionAF1->intereses_anticipados = $request->AF1['intereses_anticipados'];
             $newcondicionAF1->costo = $request->AF1['costos'];
             $newcondicionAF1->save();
-        }
-        if ($tieneAF2) {
+            
+            //AF2
+            $cuota = deformat_autonumeric($request->AF2['cuota']);
             $newcondicionAF2 = new Condicionesaf;
             $newcondicionAF2->estudios_id = $newestudio->id;
             $newcondicionAF2->aliados_id = $request->AF2['id'];
             $newcondicionAF2->plazo = $request->AF2['plazo'];
             $newcondicionAF2->factor = $request->AF2['factor_x_millon'];
-            $newcondicionAF2->cuota = $request->AF2['cuota'];
+            $newcondicionAF2->cuota = $cuota;
             $newcondicionAF2->save();
         }
 
@@ -345,7 +352,7 @@ class EstudiosController extends Controller
         $viabilidad = calcula_viabilidad_inicial($cliente);
         
         if (sizeof($datacarteras) > 0) {
-            if (isset(array_values(array_unique(array_filter($datacarteras->pluck('compraAF1_id')->toArray(), "strlen")))[0])) {
+            /*if (isset(array_values(array_unique(array_filter($datacarteras->pluck('compraAF1_id')->toArray(), "strlen")))[0])) {
                 $aliado1 = array_values(array_unique(array_filter($datacarteras->pluck('compraAF1_id')->toArray(), "strlen")))[0];
                 $aliadosusados[1] = array(
                     'id' => $aliado1,
@@ -358,7 +365,19 @@ class EstudiosController extends Controller
                     'id' => $aliado2,
                     'condiciones' => Condicionesaf::where('estudios_id', $estudio->id)->where('aliados_id', $aliado2)->first()
                 );
-            }
+            }*/
+
+            $aliadosenestudio = Condicionesaf::where('estudios_id', $estudio->id)->get();
+
+            $aliadosusados[1] = array(
+                'id' => $aliadosenestudio[0]->aliados_id,
+                'condiciones' => $aliadosenestudio[0]
+            );
+
+            $aliadosusados[2] = array(
+                'id' => $aliadosenestudio[1]->aliados_id,
+                'condiciones' => $aliadosenestudio[1]
+            );
         }
 
         //Parametros para datagrid
@@ -464,6 +483,9 @@ class EstudiosController extends Controller
      */
     public function actualizar(Request $request)
     {
+        //Deformateo
+        $request->costo_certificados = deformat_autonumeric($request->costo_certificados);
+
         $tieneAF1 = false;
         $tieneAF2 = false;
         $estudio = Estudios::find($request->estudio_id);
@@ -483,6 +505,7 @@ class EstudiosController extends Controller
         $central = $estudio->central;
         $central->calificacion_data = $request->calif_wab;
         $central->puntaje_data = $request->puntaje_datacredito;
+        $central->puntaje_sifin = $request->puntaje_sifin;
         $central->proc_en_contra = $request->proc_en_contra;
         $central->save();
 
@@ -548,11 +571,12 @@ class EstudiosController extends Controller
             }
         }
         if ($tieneAF1) {
+            $cuota_mensual = deformat_autonumeric($request->AF1['cuota_mensual']);
             if ($condicionAF1) {
                 $condicionAF1->aliados_id = $request->AF1['id'];
                 $condicionAF1->plazo = $request->AF1['plazo'];
                 $condicionAF1->tasa = $request->AF1['tasa'];
-                $condicionAF1->cuota = $request->AF1['cuota_mensual'];
+                $condicionAF1->cuota = $cuota_mensual;
                 $condicionAF1->saldo_refinanciacion = $request->AF1['saldo_refinanciacion'];
                 $condicionAF1->intereses_anticipados = $request->AF1['intereses_anticipados'];
                 $condicionAF1->costo = $request->AF1['costos'];
@@ -569,13 +593,14 @@ class EstudiosController extends Controller
                 $newcondicionAF1->costo = $request->AF1['costos'];
                 $newcondicionAF1->save();
             }
-        }
-        if ($tieneAF2) {
+
+            //AF2
+            $cuota = deformat_autonumeric($request->AF2['cuota']);
             if ($condicionAF2) {
                 $condicionAF2->aliados_id = $request->AF2['id'];
                 $condicionAF2->plazo = $request->AF2['plazo'];
                 $condicionAF2->factor = $request->AF2['factor_x_millon'];
-                $condicionAF2->cuota = $request->AF2['cuota'];
+                $condicionAF2->cuota = $cuota;
                 $condicionAF2->save();
             } else {
                 $newcondicionAF2 = new Condicionesaf;
@@ -583,7 +608,7 @@ class EstudiosController extends Controller
                 $newcondicionAF2->aliados_id = $request->AF2['id'];
                 $newcondicionAF2->plazo = $request->AF2['plazo'];
                 $newcondicionAF2->factor = $request->AF2['factor_x_millon'];
-                $newcondicionAF2->cuota = $request->AF2['cuota'];
+                $newcondicionAF2->cuota = $cuota;
                 $newcondicionAF2->save();
             }
         }

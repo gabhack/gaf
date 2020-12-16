@@ -747,4 +747,13 @@ if (!function_exists('calcula_viabilidad_inicial')) {
 	}
 }
 
+if (!function_exists('deformat_autonumeric')) {
+	function deformat_autonumeric($value){
+		$value = str_replace("$", "", $value);
+		$value = str_replace(",00", "", $value);
+		$value = str_replace(".", "", $value);
+		return trim($value);
+	}
+}
+
 ?>

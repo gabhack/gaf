@@ -87,7 +87,9 @@ table.dataTable.no-footer{
     color: #f39c12 !important;
 }
 
-.label-consulta>select{width: auto;}
+.label-consulta>select{
+	width: 100%;
+}
 
 .login-footer {
     background: #fff;

@@ -77,22 +77,23 @@ class CargarDatosFOPEP_base implements ShouldQueue
                         $cliente = \App\Clientes::where("documento", "=", $datos[$keys['documento']])->first();
 
                         if ($cliente === null) {
-                            $nuevoCliente = new \App\Clientes;
-                            $nuevoCliente->users_id			= 1;
+                            $cliente = new \App\Clientes;
+                            $cliente->users_id			= 1;
                             if ( $datos[$keys['mnpionombremunicipioderesidenciadelpensionado']] !== '') {
-                                $nuevoCliente->ciudades_id		= $ciudad['id'];
+                                $cliente->ciudades_id		= $ciudad['id'];
                             }
-                            $nuevoCliente->tipodocumento	= $datos[$keys['tddocumento']];
-                            $nuevoCliente->documento 		= $datos[$keys['documento']];
-                            $nuevoCliente->nombres 			= $datos[$keys['pensionadoapellidosynombres']];
-                            $nuevoCliente->fechanto 		= date_format($datos[$keys['fechadenacimiento']], 'Y-m-d');
-                            $nuevoCliente->sexo 			= "";
-                            $nuevoCliente->telefono			= $datos[$keys['telfono']];
-                            $nuevoCliente->direccion		= $datos[$keys['direccion']];
-                            $nuevoCliente->correo			= $datos[$keys['correoelectrnico']];
-                            $nuevoCliente->save();
+                            $cliente->tipodocumento	= $datos[$keys['tddocumento']];
+                            $cliente->documento 		= $datos[$keys['documento']];
+                            $cliente->nombres 			= $datos[$keys['pensionadoapellidosynombres']];
+                            $cliente->fechanto 		= date_format($datos[$keys['fechadenacimiento']], 'Y-m-d');
+                            $cliente->sexo 			= "";
+                            $cliente->telefono			= $datos[$keys['telfono']];
+                            $cliente->direccion		= $datos[$keys['direccion']];
+                            $cliente->correo			= $datos[$keys['correoelectrnico']];
+                            $cliente->ingresos         = $datos[$keys['valorpensiones']];
+                            $cliente->save();
                         } else {
-                            if ($cliente->apellidos = '') {
+                            // if ($cliente->apellidos = '') {
                                 if ( $datos[$keys['mnpionombremunicipioderesidenciadelpensionado']] !== '') {
                                     $cliente->ciudades_id		= $ciudad['id'];
                                 }
@@ -104,7 +105,49 @@ class CargarDatosFOPEP_base implements ShouldQueue
                                 $cliente->telefono			= $datos[$keys['telfono']];
                                 $cliente->direccion			= $datos[$keys['direccion']];
                                 $cliente->correo			= $datos[$keys['correoelectrnico']];
+                                $cliente->ingresos          = $datos[$keys['valorpensiones']];
                                 $cliente->save();
+                            // }
+                        }
+
+                        if ($datos[$keys['valorembargos']] != '0') {
+                            print_r(array(
+                                'cliente' => $datos[$keys['documento']],
+                                'embargos' => $datos[$keys['valorembargos']]
+                            ));
+
+                            $motivo_embargo = \App\Motivosembargos::where('motivo', 'GENERAL REPORTE EN FOPEP' )->first();
+                            if ($motivo_embargo === null) {
+                                $motivo_embargo = new \App\Motivosembargos;
+                                $motivo_embargo->motivo = 'GENERAL REPORTE EN FOPEP';
+                                $motivo_embargo->save();
+                            }
+
+                            //creación de embargo genérico
+                            $embargo = \App\Embargos::where("motivos_id", "=", $motivo_embargo->id)
+                                ->where("clientes_id", "=", $cliente->id)
+                                ->where("pagadurias_id", "=", $pagaduria->id)
+                                ->where("valor", "=", $datos[$keys['valorembargos']])
+                                ->where("fecha", "=", date('Y-m-d'))
+                                ->first();
+
+                            
+                            print_r(array(
+                                'embargo' => $embargo
+                            ));
+
+                            if ($embargo === null) {
+                                $nuevoEmbargo = new \App\Embargos;
+                                $nuevoEmbargo->motivos_id       = $motivo_embargo->id;
+                                $nuevoEmbargo->clientes_id      = $cliente->id;
+                                $nuevoEmbargo->pagadurias_id    = $pagaduria->id;
+                                $nuevoEmbargo->valor            = $datos[$keys['valorembargos']];
+                                $nuevoEmbargo->fecha            = date('Y-m-d');
+                                $nuevoEmbargo->save();
+                            
+                                print_r(array(
+                                    'nuevoEmbargo' => $nuevoEmbargo
+                                ));
                             }
                         }
                     }
