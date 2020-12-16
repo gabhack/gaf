@@ -178,6 +178,14 @@
                             <div class="row">
                                 <div class="col-md-12 text-center">
                                     <label class="label-consulta advertencia">{{ $viabilidad['plazomax'] <= 0 ? $viabilidad['analisis'] : '' }}</label>
+                                    @if (count($viabilidad['faltantes']) > 0)
+                                    <h4 class="label-consulta advertencia">Datos Faltantes:</h4>
+                                        <ul>
+                                            @foreach ($viabilidad['faltantes'] as $item)
+                                            <li>{{ $item }}</li>
+                                            @endforeach
+                                        </ul>
+                                    @endif
                                 </div>
                             </div>
                         @endif
@@ -249,8 +257,8 @@
                     <div class="panel-heading"><b>Centrales de riesgo</b></div>
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-md-4 text-center">
-                                <label class="label-consulta" for="pad">Calificación/WAB:
+                            <div class="col-md-3 text-center">
+                                <label class="label-consulta col-12" for="pad">Calificación/WAB:
                                     <select name="calif_wab" class="custom-select form-control" required>
                                         <option disabled value="">Seleccione uno...</option>
                                         @foreach(calificaciones() as $key => $calificacion)
@@ -259,14 +267,19 @@
                                     </select>
                                 </label>
                             </div>
-                            <div class="col-md-4 text-center">
-                                <label class="label-consulta" for="pad">Puntaje Datacredito:
-                                    <input type="text" name="puntaje_datacredito" id="puntaje_datacredito" required value="">
+                            <div class="col-md-3 text-center">
+                                <label class="label-consulta col-12" for="pad">Pt. Datacredito:
+                                    <input class="form-control" type="text" name="puntaje_datacredito" id="puntaje_datacredito" required value="">
                                 </label>
                             </div>
-                            <div class="col-md-4 text-center">
-                                <label class="label-consulta" for="pad">Procesos en contra:
-                                    <input type="number" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="" min="1" max="99">
+                            <div class="col-md-3 text-center">
+                                <label class="label-consulta col-12" for="pad">Pt. Cifín:
+                                    <input class="form-control" type="text" name="puntaje_sifin" id="puntaje_sifin" required value="">
+                                </label>
+                            </div>
+                            <div class="col-md-3 text-center">
+                                <label class="label-consulta col-12" for="pad">Procesos en contra:
+                                    <input class="form-control" type="number" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="" min="1" max="99">
                                 </label>
                             </div>
                         </div>
@@ -385,8 +398,8 @@
                             <table class="table table-hover table-striped table-condensed table-bordered">
                                 <thead>
                                     <tr>
+                                        <th class="text-center">Reporte</th>
                                         <th class="text-center">Fecha Embargo</th>
-                                        <th class="text-center">Doc. Demandante</th>
                                         <th class="text-center">Demandante</th>
                                         <th class="text-center">Motivo</th>
                                         <th class="text-center">Valor</th>
@@ -394,9 +407,9 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($cliente->embargos as $embargo)
-                                        <tr>
+                                    <tr class="table-danger">
+                                            <td class="text-center">{{$embargo->fecha}}</td>
                                             <td class="text-center">{{$embargo->fecha_embargo}}</td>
-                                            <td class="text-center">{{$embargo->documento_demandante}}</td>
                                             <td class="text-center">{{$embargo->nombres_demandante}}</td>
                                             <td class="text-center">{{$embargo->motivo_embargo->motivo}}</td>
                                             <td class="text-center">{{mneyformat($embargo->valor)}}</td>

@@ -16,3 +16,5 @@ yarn-error.log
 /.htaccess
 /storage/*
 public/.htaccess
+/app/Python-laravel
+.gitignore
