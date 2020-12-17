@@ -309,18 +309,26 @@ calcularTotales = () => {
   }
   if (aliado_seleccionado2.aliado == 'GNB SUDAMERIS') {
     inputAF2_factor_x_millon.readOnly = true;
+    var plazo = 0;
+    if (inputAF2_plazo.value%12 == 0) {
+      plazo = inputAF2_plazo.value;
+      console.log(plazo);
+    } else {
+      plazo = Math.round(inputAF2_plazo.value/12)*12;
+      console.log(plazo);
+    }
     if (es_saneamiento) {
       //FRONT
       document.getElementById("label-saneamiento").classList.remove('hidden');
       //DATA
-      af2_factor_x_millon = factores_x_millon_gnb[pagaduria_text][inputAF2_plazo.value]['saneamiento'];
+      af2_factor_x_millon = factores_x_millon_gnb[pagaduria_text][plazo]['saneamiento'];
     } else {
       //FRONT
       if ( !document.getElementById("label-saneamiento").classList.contains('hidden') ){
         document.getElementById("label-saneamiento").classList.add('hidden');
       }
       //DATA
-      af2_factor_x_millon = factores_x_millon_gnb[pagaduria_text][inputAF2_plazo.value]['normal'];
+      af2_factor_x_millon = factores_x_millon_gnb[pagaduria_text][plazo]['normal'];
     }
   } else {
     inputAF2_factor_x_millon.readOnly = false;
