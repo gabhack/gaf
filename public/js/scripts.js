@@ -111,5 +111,3 @@ function addRow() {
 function removeRow(input) {
   	document.getElementById('content-archivos').removeChild(input.parentNode);
 }
-
-$('.auto').autoNumeric('init');

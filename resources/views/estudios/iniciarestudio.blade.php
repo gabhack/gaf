@@ -34,6 +34,20 @@
         var calificacion_wab_opts = ["A","B","C","D","E","F","G","H","I","J","K"];
     </script>
     
+    @if (isset($message))
+        <div id="toast-message" class="col-md-12">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="alert alert-{{ $message['tipo'] }} alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h4><i class="icon fa fa-exclamation"></i> {{ $message['titulo'] }}</h4>
+                        {{ $message['mensaje'] }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+    
     <form id="form_guardar" action="/estudios/guardar" method="POST" enctype="multipart/form-data">
         {!! Form::token() !!}
         <input type="hidden" class="form-control" name="cliente_id" id="cliente_id" value="<?php echo $cliente->id ?>">
@@ -45,7 +59,13 @@
                     <a type="button" class="btn btn-secondary" href="{{url()->previous()}}"><i class="fa fa-arrow-left"></i> Atrás</a>
                     <input class="btn btn-success" type="submit" value="Guardar">
                 </div>
-                <h3>Cliente: {{$cliente->nombres}}</h3>
+                <h3>Cliente: {{$cliente->nombres}} 
+                    <span>
+                        <a class="btn btn-link editar-cliente" type="button" href="{{ url('clientes/editar', ['id' => $cliente->id]) }}">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                    </span>
+                </h3>
             </div>
             <div class="col-md-7">
                 <div class="panel panel-primary">
@@ -828,4 +848,5 @@
     <script src="{{asset('js/autoNumeric.js')}}"></script>
     <script src="{{asset('css/gijgo-combined-1.9.13/js/gijgo.min.js')}}"></script>
     <script src="{{asset('js/TablaCarteras.js')}}"></script>
+    <script src="{{asset('js/init_autoNumeric.js')}}"></script>
 @endsection

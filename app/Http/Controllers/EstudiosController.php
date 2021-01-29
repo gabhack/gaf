@@ -138,7 +138,7 @@ class EstudiosController extends Controller
 
                 $sueldocompleto = $sueldobasico+$adicional;
 
-                return view("estudios/iniciarestudio")->with([
+                $options = array(
                     "cliente" => $cliente,
                     "asesores" => $asesores,
                     "ultimoregistro" => $registro,
@@ -159,13 +159,18 @@ class EstudiosController extends Controller
                     "factores_x_millon_kredit" => $factores_x_millon_kredit,
                     "factores_x_millon_gnb" => $factores_x_millon_gnb,
                     "viabilidad" => $viabilidad
-                ]);
+                );
+                if (isset($request->message)) {
+                    $options["message"] = $request->message;
+                }
+                return view("estudios/iniciarestudio")->with($options);
             } else {
-                return view("estudios/paso1")->with([
+                return view("clientes/nuevocliente")->with([
+                    "documento" => $request->documento,
                     "message" => array(
-                        'tipo' => 'error',
-                        'titulo' => 'Error',
-                        'mensaje' => 'No se encontraron clientes con el documento suministrado.',
+                        'tipo' => 'warning',
+                        'titulo' => 'Cliente no se encuentra en la base de datos',
+                        'mensaje' => 'Por favor ingrese la información del cliente para iniciar un estudio.',
                     )
                 ]);
             }            

@@ -30,7 +30,7 @@
 					{!! Form::token() !!}
 					<div class="form-row" id="panel-pagaduria">
 						<div class="form-group col-md-4">
-							<input type="number" class="form-control" name="documento" id="documento" placeholder="Documento">
+                            <input type="number" class="form-control" name="documento" id="documento" placeholder="Documento" value="{{ isset($documento) ? $documento : '' }}">
                         </div>
                         <div class="form-group-col-md-2">
                             <button type="submit" class="btn btn-primary">Siguiente</button>

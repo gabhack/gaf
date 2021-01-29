@@ -166,7 +166,16 @@ td:nth-child(2n) {
     width: 10%;
 }
 
+.form-check>label{
+	margin-left: 20px;
+}
 
+.btn.eliminar-registro {
+	font-size: 1em;
+    padding: 0 5px;
+    margin-top: -4px;
+    color: #c54c4c !important;
+}
 
 .process-status.status-processing{
 	animation: pulse 1s infinite;

@@ -76,3 +76,10 @@ Route::group(['prefix' => 'carteras'], function(){
 Route::group(['prefix' => 'reportes'], function(){
     Route::post('/consultas', 'JsonReportesController@consultas');
 });
+
+// Clientes
+Route::group(['prefix' => 'clientes'], function(){
+    Route::post('/getPagaduriasXPeriodo', 'JsonClientesController@getPagaduriasXPeriodo');
+    Route::post('/getRegistrosXPagaduriayPeriodo', 'JsonClientesController@getRegistrosXPagaduriayPeriodo');
+    Route::post('/actualizarRegistro', 'JsonClientesController@actualizarRegistro');
+});
