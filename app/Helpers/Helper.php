@@ -306,6 +306,20 @@ if (!function_exists('getciudad')) {
 	}
 }
 
+if (!function_exists('ciudades')) {
+	function ciudades()
+	{
+		return App\Ciudades::all();	
+	}
+}
+
+if (!function_exists('pagadurias')) {
+	function pagadurias()
+	{
+		return App\Pagadurias::all();	
+	}
+}
+
 if (!function_exists('limpiarCaracteresEspeciales')) {
 	function limpiarCaracteresEspeciales($string){
         $string = str_replace(' ', '', $string);
@@ -449,33 +463,35 @@ if (!function_exists('upload_personas')) {
 		$resp = "";
 		$advertencias = "";
 		foreach ($personas as $key => $persona) {
+			$arraypersona = (array) $persona;
 			try {
-				$persona['grado'] = iconv("UTF-8", "ISO-8859-1//IGNORE", $persona['grado']);
-				if (mb_detect_encoding($persona['grado']) !== 'ASCII') {
-					$persona['grado'] = '';
+				$arraypersona['grado'] = iconv("UTF-8", "ISO-8859-1//IGNORE", $arraypersona['grado']);
+				if (mb_detect_encoding($arraypersona['grado']) !== 'ASCII') {
+					$arraypersona['grado'] = '';
 				}
-				$secretaria = explode(' ', $persona['secretaria']);
+				$secretaria = explode(' ', $arraypersona['secretaria']);
 				$pagaduria = \App\Pagadurias::query()
 					->where('pagaduria', 'LIKE', "%{$secretaria[count($secretaria)-1]}%")
 					->first();
-				if ($persona['nit'] !== '') {
+
+				if ($arraypersona['nit'] !== '') {
 					if ($pagaduria->nit == '') {
-						$pagaduria->nit = $persona['nit'];
+						$pagaduria->nit = $arraypersona['nit'];
 						$pagaduria->save();
 					}
 				}
 				
-				$ciudad = \App\Ciudades::where('ciudad', $persona['ciudad'] )->first();
-				if ($persona['ciudad'] !== '') {
+				$ciudad = \App\Ciudades::where('ciudad', $arraypersona['ciudad'] )->first();
+				if ($arraypersona['ciudad'] !== '') {
 					//Crear ciudad
 					if ($ciudad === null) {
 						$ciudad = new \App\Ciudades;
-						$ciudad->ciudad = $persona['ciudad'];
+						$ciudad->ciudad = $arraypersona['ciudad'];
 						$ciudad->save();
 					}
 				}
 
-				$cliente = \App\Clientes::where("documento", "=", $persona['documento'])->first();
+				$cliente = \App\Clientes::where("documento", "=", $arraypersona['documento'])->first();
 				//Cliente crear-actualizar existente
 				if ($cliente === null) {
 					$cliente = new \App\Clientes;
@@ -484,99 +500,135 @@ if (!function_exists('upload_personas')) {
 						$cliente->ciudades_id 			= $ciudad['id'];
 					}
 					$cliente->tipodocumento			= 'CC';
-					if ($persona['documento'] !== '') {
-						$cliente->documento 			= $persona['documento'];
+					if ($arraypersona['documento'] !== '') {
+						$cliente->documento 			= $arraypersona['documento'];
 					}
-					if ($persona['nombres'] !== '') {
-						$cliente->nombres 				= $persona['nombres'];
+					if ($arraypersona['nombres'] !== '') {
+						$cliente->nombres 				= $arraypersona['nombres'];
 					}
-					if ($persona['apellidos'] !== '') {
-						$cliente->apellidos 			= $persona['apellidos'];
+					if ($arraypersona['apellidos'] !== '') {
+						$cliente->apellidos 			= $arraypersona['apellidos'];
 					}
-					if ($persona['centro_costos'] !== '') {
-						$cliente->centro_costo 			= $persona['centro_costos'];
+					if ($arraypersona['centro_costos'] !== '') {
+						$cliente->centro_costo 			= $arraypersona['centro_costos'];
 					}
-					if ($persona['cargo_docente'] !== '') {
-						$cliente->cargo 				= $persona['cargo_docente'];
+					if ($arraypersona['cargo_docente'] !== '') {
+						$cliente->cargo 				= $arraypersona['cargo_docente'];
 						$cliente->docente 				= '1';
-					} elseif ($persona['cargo_administrativo'] !== '') {
-						$cliente->cargo 				= $persona['cargo_administrativo'];
+					} elseif ($arraypersona['cargo_administrativo'] !== '') {
+						$cliente->cargo 				= $arraypersona['cargo_administrativo'];
 						$cliente->docente 				= null;
 					}
-					if ($persona['banco'] !== '') {
-						$cliente->banco 			= $persona['banco'];
+					if ($arraypersona['banco'] !== '') {
+						$cliente->banco 			= $arraypersona['banco'];
 					}
-					if ($persona['cuenta'] !== '') {
-						$cliente->cuenta 			= $persona['cuenta'];
+					if ($arraypersona['cuenta'] !== '') {
+						$cliente->cuenta 			= $arraypersona['cuenta'];
 					}
-					if ($persona['caja_compensacion'] !== '') {
-						$cliente->caja_compensacion 			= $persona['caja_compensacion'];
+					if ($arraypersona['caja_compensacion'] !== '') {
+						$cliente->caja_compensacion 			= $arraypersona['caja_compensacion'];
 					}
-					if ($persona['cesantias'] !== '') {
-						$cliente->cesantias 			= $persona['cesantias'];
+					if ($arraypersona['cesantias'] !== '') {
+						$cliente->cesantias 			= $arraypersona['cesantias'];
 					}
-					if ($persona['pension'] !== '') {
-						$cliente->pension 			= $persona['pension'];
+					if ($arraypersona['pension'] !== '') {
+						$cliente->pension 			= $arraypersona['pension'];
 					}
-					if ($persona['tipo_contratacion'] !== '') {
-						$cliente->tipo_contratacion 	= $persona['tipo_contratacion'];
+					if ($arraypersona['tipo_contratacion'] !== '') {
+						$cliente->tipo_contratacion 	= $arraypersona['tipo_contratacion'];
 					}
-					if ($persona['grado'] !== '') {
-						$cliente->grado 				= $persona['grado'];
+					if ($arraypersona['grado'] !== '') {
+						$cliente->grado 				= $arraypersona['grado'];
 					}
-					if ($persona['conceptos_financieros']->ingresos_base !== '') {
-						$cliente->ingresos 				= $persona['conceptos_financieros']->ingresos_base;
+					if ($arraypersona['ingresos_base'] !== '') {
+						$cliente->ingresos 				= $arraypersona['ingresos_base'];
+					}
+					if ($arraypersona['sexo'] !== '') {
+						$cliente->sexo 				= $arraypersona['sexo'];
+					}
+					if ($arraypersona['fechanto'] !== '') {
+						$cliente->fechanto 				= $arraypersona['fechanto'];
+					}
+					if ($arraypersona['direccion'] !== '') {
+						$cliente->direccion 				= $arraypersona['direccion'];
+					}
+					if ($arraypersona['celular'] !== '') {
+						$cliente->celular 				= $arraypersona['celular'];
+					}
+					if ($arraypersona['telefono'] !== '') {
+						$cliente->telefono 				= $arraypersona['telefono'];
+					}
+					if ($arraypersona['correo'] !== '') {
+						$cliente->correo 				= $arraypersona['correo'];
 					}
 					
 					$cliente->save();
 				} else {
 					
-					if ($persona['nombres'] !== '') {
-						$cliente->nombres 				= $persona['nombres'];
+					if ($arraypersona['nombres'] !== '') {
+						$cliente->nombres 				= $arraypersona['nombres'];
 					}
-					if ($persona['apellidos'] !== '') {
-						$cliente->apellidos 			= $persona['apellidos'];
+					if ($arraypersona['apellidos'] !== '') {
+						$cliente->apellidos 			= $arraypersona['apellidos'];
 					}
-					if ($persona['centro_costos'] !== '') {
-						$cliente->centro_costo 			= $persona['centro_costos'];
+					if ($arraypersona['centro_costos'] !== '') {
+						$cliente->centro_costo 			= $arraypersona['centro_costos'];
 					}
-					if ($persona['cargo_docente'] !== '') {
-						$cliente->cargo 				= $persona['cargo_docente'];
+					if ($arraypersona['cargo_docente'] !== '') {
+						$cliente->cargo 				= $arraypersona['cargo_docente'];
 						$cliente->docente 				= '1';
-					} elseif ($persona['cargo_administrativo'] !== '') {
-						$cliente->cargo 				= $persona['cargo_administrativo'];
+					} elseif ($arraypersona['cargo_administrativo'] !== '') {
+						$cliente->cargo 				= $arraypersona['cargo_administrativo'];
 						$cliente->docente 				= null;
 					}
-					if ($persona['banco'] !== '') {
-						$cliente->banco 			= $persona['banco'];
+					if ($arraypersona['banco'] !== '') {
+						$cliente->banco 			= $arraypersona['banco'];
 					}
-					if ($persona['cuenta'] !== '') {
-						$cliente->cuenta 			= $persona['cuenta'];
+					if ($arraypersona['cuenta'] !== '') {
+						$cliente->cuenta 			= $arraypersona['cuenta'];
 					}
-					if ($persona['caja_compensacion'] !== '') {
-						$cliente->caja_compensacion 			= $persona['caja_compensacion'];
+					if ($arraypersona['caja_compensacion'] !== '') {
+						$cliente->caja_compensacion 			= $arraypersona['caja_compensacion'];
 					}
-					if ($persona['cesantias'] !== '') {
-						$cliente->cesantias 			= $persona['cesantias'];
+					if ($arraypersona['cesantias'] !== '') {
+						$cliente->cesantias 			= $arraypersona['cesantias'];
 					}
-					if ($persona['pension'] !== '') {
-						$cliente->pension 			= $persona['pension'];
+					if ($arraypersona['pension'] !== '') {
+						$cliente->pension 			= $arraypersona['pension'];
 					}
-					if ($persona['tipo_contratacion'] !== '') {
-						$cliente->tipo_contratacion 	= $persona['tipo_contratacion'];
+					if ($arraypersona['tipo_contratacion'] !== '') {
+						$cliente->tipo_contratacion 	= $arraypersona['tipo_contratacion'];
 					}
-					if ($persona['grado'] !== '') {
-						$cliente->grado 				= $persona['grado'];
+					if ($arraypersona['grado'] !== '') {
+						$cliente->grado 				= $arraypersona['grado'];
 					}
-					if ($persona['conceptos_financieros']->ingresos_base !== '') {
-						$cliente->ingresos 				= $persona['conceptos_financieros']->ingresos_base;
+					if ($arraypersona['ingresos_base'] !== '') {
+						$cliente->ingresos 				= $arraypersona['ingresos_base'];
+					}
+					if ($arraypersona['sexo'] !== '') {
+						$cliente->sexo 				= $arraypersona['sexo'];
+					}
+					if ($arraypersona['fechanto'] !== '') {
+						$cliente->fechanto 				= $arraypersona['fechanto'];
+					}
+					if ($arraypersona['direccion'] !== '') {
+						$cliente->direccion 				= $arraypersona['direccion'];
+					}
+					if ($arraypersona['celular'] !== '') {
+						$cliente->celular 				= $arraypersona['celular'];
+					}
+					if ($arraypersona['telefono'] !== '') {
+						$cliente->telefono 				= $arraypersona['telefono'];
+					}
+					if ($arraypersona['correo'] !== '') {
+						$cliente->correo 				= $arraypersona['correo'];
 					}
 					
 					$cliente->save();
 				}
 				
 				//creación de registro
-				$registro = \App\Registrosfinancieros::where("periodo", "=", $persona['periodo'])
+				$registro = \App\Registrosfinancieros::where("periodo", "=", $arraypersona['periodo'])
 					->where("pagadurias_id", "=", $pagaduria->id)
 					->where("clientes_id", "=", $cliente->id)
 					->first();
@@ -584,35 +636,35 @@ if (!function_exists('upload_personas')) {
 				if ($registro === null) {
 					$registro = new \App\Registrosfinancieros;
 					$registro->clientes_id		= $cliente->id;
-					if ($persona['dias_laborados'] !== '') {
-						$registro->dias_laborados = $persona['dias_laborados'];
+					if ($arraypersona['dias_laborados'] !== '') {
+						$registro->dias_laborados = $arraypersona['dias_laborados'];
 					}
-					if ($persona['conceptos_financieros']->ingresos_totales !== '') {
-						$registro->ingresos_totales = $persona['conceptos_financieros']->ingresos_totales;
+					if ($arraypersona['conceptos_financieros']['ingresos_totales'] !== '') {
+						$registro->ingresos_totales = $arraypersona['conceptos_financieros']['ingresos_totales'];
 					}
-					if ($persona['conceptos_financieros']->egresos_totales !== '') {
-						$registro->egresos_totales = $persona['conceptos_financieros']->egresos_totales;
+					if ($arraypersona['conceptos_financieros']['egresos_totales'] !== '') {
+						$registro->egresos_totales = $arraypersona['conceptos_financieros']['egresos_totales'];
 					}
 					$registro->pagadurias_id	= $pagaduria->id;
-					$registro->periodo			= $persona['periodo'];
+					$registro->periodo			= $arraypersona['periodo'];
 					$registro->save();
 				}
 
 				$conceptos_nan = 0;
 				//Ingresos
-				if (isset($persona['conceptos_financieros']->detallado_conceptos->ingresos)) {
-					foreach ($persona['conceptos_financieros']->detallado_conceptos->ingresos as $key => $ingreso) {
-						if ($ingreso->valor !== 'NaN') {
+				if (isset($arraypersona['conceptos_financieros']['detallado_conceptos']['ingresos'])) {
+					foreach ($arraypersona['conceptos_financieros']['detallado_conceptos']['ingresos'] as $key => $ingreso) {
+						if ($ingreso['valor'] !== 'NaN') {
 							$ingresoN = \App\Ingresosaplicados::where("registros_id", "=", $registro->id)
-								->where("cod_concepto", "=", $ingreso->codConcepto)
+								->where("concepto", "=", $ingreso['concepto'])
+								->where("valor", "=", $ingreso['valor'])
 								->first();
-							
 							if ($ingresoN === null) {
 								$ingresoN = new \App\Ingresosaplicados;
 								$ingresoN->registros_id		= $registro->id;
-								$ingresoN->cod_concepto		= $ingreso->codConcepto;
-								$ingresoN->concepto			= $ingreso->concepto;
-								$ingresoN->valor			= $ingreso->valor;
+								$ingresoN->cod_concepto		= $ingreso['codConcepto'];
+								$ingresoN->concepto			= $ingreso['concepto'];
+								$ingresoN->valor			= $ingreso['valor'];
 								$ingresoN->save();
 							}
 						} else {
@@ -622,19 +674,19 @@ if (!function_exists('upload_personas')) {
 				}
 			
 				//Descuentos
-				if (isset($persona['conceptos_financieros']->detallado_conceptos->egresos)) {
-					foreach ($persona['conceptos_financieros']->detallado_conceptos->egresos as $key => $egreso) {
-						if ($egreso->valor !== 'Nan') {
+				if (isset($arraypersona['conceptos_financieros']['detallado_conceptos']['egresos'])) {
+					foreach ($arraypersona['conceptos_financieros']['detallado_conceptos']['egresos'] as $key => $egreso) {
+						if ($egreso['valor'] !== 'Nan') {
 							$descuentoAplicado = \App\Descuentosaplicados::where("registros_id", "=", $registro->id)
-								->where("cod_concepto", "=", $egreso->codConcepto)
+								->where("concepto", "=", $egreso['concepto'])
+								->where("valor", "=", $ingreso['valor'])
 								->first();
-							
 							if ($descuentoAplicado === null) {
 								$descuentoAplicado = new \App\Descuentosaplicados;
 								$descuentoAplicado->registros_id		= $registro->id;
-								$descuentoAplicado->cod_concepto		= $egreso->codConcepto;
-								$descuentoAplicado->concepto			= $egreso->concepto;
-								$descuentoAplicado->valor				= $egreso->valor;
+								$descuentoAplicado->cod_concepto		= $egreso['codConcepto'];
+								$descuentoAplicado->concepto			= $egreso['concepto'];
+								$descuentoAplicado->valor				= $egreso['valor'];
 								$descuentoAplicado->save();
 							}
 						} else {
@@ -643,10 +695,190 @@ if (!function_exists('upload_personas')) {
 					}
 				}
 				//-------------------
-				$resp .= 'Carga con éxito. Registro actualizado: ' . $persona['documento'] . "." . ($conceptos_nan !== 0 ? (' - Advertencias: Conceptos sin procesar por falta de datos: ' . $conceptos_nan . '.') : '');
+				$resp .= 'Carga con éxito. Registro actualizado: ' . $arraypersona['documento'] . "." . ($conceptos_nan !== 0 ? (' - Advertencias: Conceptos sin procesar por falta de datos: ' . $conceptos_nan . '.') : '');
 			} catch(\Exception $ex) {
 				//-------------------
-				$resp .= 'Error. Documento #' . $persona['documento'] . ': ' . $ex->getMessage() . ".";
+				$resp .= 'Error. Documento #' . $arraypersona['documento'] . ': ' . $ex->getMessage() . ".";
+			}
+		}
+		return $resp;
+	}
+}
+
+if (!function_exists('upload_personas_without_concepts')) {
+	function upload_personas_without_concepts($personas)
+	{
+		$resp = "";
+		$advertencias = "";
+		foreach ($personas as $key => $persona) {
+			$arraypersona = (array) $persona;
+			try {
+				$arraypersona['grado'] = iconv("UTF-8", "ISO-8859-1//IGNORE", $arraypersona['grado']);
+				if (mb_detect_encoding($arraypersona['grado']) !== 'ASCII') {
+					$arraypersona['grado'] = '';
+				}
+				$secretaria = explode(' ', $arraypersona['secretaria']);
+				$pagaduria = \App\Pagadurias::query()
+					->where('pagaduria', 'LIKE', "%{$secretaria[count($secretaria)-1]}%")
+					->first();
+
+				if ($arraypersona['nit'] !== '') {
+					if ($pagaduria->nit == '') {
+						$pagaduria->nit = $arraypersona['nit'];
+						$pagaduria->save();
+					}
+				}
+				
+				$ciudad = \App\Ciudades::where('ciudad', $arraypersona['ciudad'] )->first();
+				if ($arraypersona['ciudad'] !== '') {
+					//Crear ciudad
+					if ($ciudad === null) {
+						$ciudad = new \App\Ciudades;
+						$ciudad->ciudad = $arraypersona['ciudad'];
+						$ciudad->save();
+					}
+				}
+
+				$cliente = \App\Clientes::where("documento", "=", $arraypersona['documento'])->first();
+				//Cliente crear-actualizar existente
+				if ($cliente === null) {
+					$cliente = new \App\Clientes;
+					$cliente->users_id				= 1;
+					if ($cliente !== null) {
+						$cliente->ciudades_id 			= $ciudad['id'];
+					}
+					$cliente->tipodocumento			= 'CC';
+					if ($arraypersona['documento'] !== '') {
+						$cliente->documento 			= $arraypersona['documento'];
+					}
+					if ($arraypersona['nombres'] !== '') {
+						$cliente->nombres 				= $arraypersona['nombres'];
+					}
+					if ($arraypersona['apellidos'] !== '') {
+						$cliente->apellidos 			= $arraypersona['apellidos'];
+					}
+					if ($arraypersona['centro_costos'] !== '') {
+						$cliente->centro_costo 			= $arraypersona['centro_costos'];
+					}
+					if ($arraypersona['cargo_docente'] !== '') {
+						$cliente->cargo 				= $arraypersona['cargo_docente'];
+						$cliente->docente 				= '1';
+					} elseif ($arraypersona['cargo_administrativo'] !== '') {
+						$cliente->cargo 				= $arraypersona['cargo_administrativo'];
+						$cliente->docente 				= null;
+					}
+					if ($arraypersona['banco'] !== '') {
+						$cliente->banco 			= $arraypersona['banco'];
+					}
+					if ($arraypersona['cuenta'] !== '') {
+						$cliente->cuenta 			= $arraypersona['cuenta'];
+					}
+					if ($arraypersona['caja_compensacion'] !== '') {
+						$cliente->caja_compensacion 			= $arraypersona['caja_compensacion'];
+					}
+					if ($arraypersona['cesantias'] !== '') {
+						$cliente->cesantias 			= $arraypersona['cesantias'];
+					}
+					if ($arraypersona['pension'] !== '') {
+						$cliente->pension 			= $arraypersona['pension'];
+					}
+					if ($arraypersona['tipo_contratacion'] !== '') {
+						$cliente->tipo_contratacion 	= $arraypersona['tipo_contratacion'];
+					}
+					if ($arraypersona['grado'] !== '') {
+						$cliente->grado 				= $arraypersona['grado'];
+					}
+					if ($arraypersona['ingresos_base'] !== '') {
+						$cliente->ingresos 				= $arraypersona['ingresos_base'];
+					}
+					if ($arraypersona['sexo'] !== '') {
+						$cliente->sexo 				= $arraypersona['sexo'];
+					}
+					if ($arraypersona['fechanto'] !== '') {
+						$cliente->fechanto 				= $arraypersona['fechanto'];
+					}
+					if ($arraypersona['direccion'] !== '') {
+						$cliente->direccion 				= $arraypersona['direccion'];
+					}
+					if ($arraypersona['celular'] !== '') {
+						$cliente->celular 				= $arraypersona['celular'];
+					}
+					if ($arraypersona['telefono'] !== '') {
+						$cliente->telefono 				= $arraypersona['telefono'];
+					}
+					if ($arraypersona['correo'] !== '') {
+						$cliente->correo 				= $arraypersona['correo'];
+					}
+					
+					$cliente->save();
+				} else {
+					
+					if ($arraypersona['nombres'] !== '') {
+						$cliente->nombres 				= $arraypersona['nombres'];
+					}
+					if ($arraypersona['apellidos'] !== '') {
+						$cliente->apellidos 			= $arraypersona['apellidos'];
+					}
+					if ($arraypersona['centro_costos'] !== '') {
+						$cliente->centro_costo 			= $arraypersona['centro_costos'];
+					}
+					if ($arraypersona['cargo_docente'] !== '') {
+						$cliente->cargo 				= $arraypersona['cargo_docente'];
+						$cliente->docente 				= '1';
+					} elseif ($arraypersona['cargo_administrativo'] !== '') {
+						$cliente->cargo 				= $arraypersona['cargo_administrativo'];
+						$cliente->docente 				= null;
+					}
+					if ($arraypersona['banco'] !== '') {
+						$cliente->banco 			= $arraypersona['banco'];
+					}
+					if ($arraypersona['cuenta'] !== '') {
+						$cliente->cuenta 			= $arraypersona['cuenta'];
+					}
+					if ($arraypersona['caja_compensacion'] !== '') {
+						$cliente->caja_compensacion 			= $arraypersona['caja_compensacion'];
+					}
+					if ($arraypersona['cesantias'] !== '') {
+						$cliente->cesantias 			= $arraypersona['cesantias'];
+					}
+					if ($arraypersona['pension'] !== '') {
+						$cliente->pension 			= $arraypersona['pension'];
+					}
+					if ($arraypersona['tipo_contratacion'] !== '') {
+						$cliente->tipo_contratacion 	= $arraypersona['tipo_contratacion'];
+					}
+					if ($arraypersona['grado'] !== '') {
+						$cliente->grado 				= $arraypersona['grado'];
+					}
+					if ($arraypersona['ingresos_base'] !== '') {
+						$cliente->ingresos 				= $arraypersona['ingresos_base'];
+					}
+					if ($arraypersona['sexo'] !== '') {
+						$cliente->sexo 				= $arraypersona['sexo'];
+					}
+					if ($arraypersona['fechanto'] !== '') {
+						$cliente->fechanto 				= $arraypersona['fechanto'];
+					}
+					if ($arraypersona['direccion'] !== '') {
+						$cliente->direccion 				= $arraypersona['direccion'];
+					}
+					if ($arraypersona['celular'] !== '') {
+						$cliente->celular 				= $arraypersona['celular'];
+					}
+					if ($arraypersona['telefono'] !== '') {
+						$cliente->telefono 				= $arraypersona['telefono'];
+					}
+					if ($arraypersona['correo'] !== '') {
+						$cliente->correo 				= $arraypersona['correo'];
+					}
+					
+					$cliente->save();
+				}
+				//-------------------
+				$resp .= 'Carga con éxito. Registro actualizado: ' . $arraypersona['documento'] . ".";
+			} catch(\Exception $ex) {
+				//-------------------
+				$resp .= 'Error. Documento #' . $arraypersona['documento'] . ': ' . $ex->getMessage() . ".";
 			}
 		}
 		return $resp;
@@ -677,9 +909,9 @@ if (!function_exists('calcula_viabilidad_inicial')) {
 		$edad = $fecha_estudio->diff($fechanac);
 		$meses_edad = ($edad->y*12)+$edad->m;
 		$es_pensionado = $persona->registrosfinancieros->last()->pagaduria->de_pensiones;
-		if ($persona->tipo_contratacion == 'Propiedad') {
+		if ($persona->tipo_contratacion == 'Propiedad' || $persona->tipo_contratacion == 'Indefinido') {
 			$plazo_max_permitido = 144;
-		} elseif ($persona->tipo_contratacion == 'Provisional Vacante Definitiva') {
+		} elseif ($persona->tipo_contratacion == 'Provisional Vacante Definitiva' || $persona->tipo_contratacion == 'Fijo') {
 			$plazo_max_permitido = 60;
 			$limite_cupo = $cupomax_vacantedef;
 		} else {

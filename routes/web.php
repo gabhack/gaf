@@ -338,15 +338,24 @@ Route::group(["prefix" => "consultas"], function(){
 Route::group(["prefix" => "estudios"], function(){
 
 	Route::get('/', 'EstudiosController@index');
-
+	//
 	Route::get('/nuevoestudio', 'EstudiosController@paso1');
 	Route::post('/iniciar', 'EstudiosController@iniciar');
+	Route::get('/iniciar/{documento}', 'EstudiosController@iniciar');
 	Route::post('/guardar', 'EstudiosController@guardar');
-
+	//
 	Route::get('/editar/{id}', 'EstudiosController@editar');
 	Route::post('/actualizar', 'EstudiosController@actualizar');
-
+	//
 	Route::get('/borrar/{id}', 'EstudiosController@eliminar');
+});
+
+//Clientes
+Route::group(["prefix" => "clientes"], function(){
+	Route::post('/crear', 'ClientesController@crear');
+	//
+	Route::get('/editar/{id}', 'ClientesController@editar');
+	Route::post('/actualizar', 'ClientesController@actualizar');
 });
 
 Auth::routes();

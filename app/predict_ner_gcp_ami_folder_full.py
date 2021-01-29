@@ -574,7 +574,6 @@ def get_prediction(file_path, model_name):
         
   my_details_todo_conceptos = {
         
-        'ingresos_base': ingresos_base,
         'ingresos_totales':ingresos_totales,
         'egresos_totales': egresos_totales,
         'Neto_A_Pagar': Neto_A_Pagar,
@@ -604,6 +603,7 @@ def get_prediction(file_path, model_name):
         'pension': pension,
         'Caja_CF': Caja_CF,
         'cesantias': cesantias,
+        'ingresos_base': ingresos_base,
         'conceptos_financieros': ner_resultado_provisional_conceptos_individuales
    }
   

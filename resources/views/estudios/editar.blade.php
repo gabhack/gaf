@@ -35,29 +35,6 @@
         var calificacion_wab_opts = ["A","B","C","D","E","F","G","H","I","J","K"];
     </script>
 
-    @if (isset($error))
-        <div class="modal fade" id="modal-default" style="display: block;">
-            <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                    <h4 class="modal-title">Información de carteras incompleta</h4>
-                </div>
-                <div class="modal-body">
-                    <p>{{$error}}</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-    @endif
-
     <form id="form_guardar" action="/estudios/actualizar" method="POST" enctype="multipart/form-data">
         {!! Form::token() !!}
         <input type="hidden" class="form-control" name="cliente_id" id="cliente_id" value="{{$cliente->id}}">
@@ -855,4 +832,5 @@
     <script src="{{asset('js/autoNumeric.js')}}"></script>
     <script src="{{asset('css/gijgo-combined-1.9.13/js/gijgo.min.js')}}"></script>
     <script src="{{asset('js/TablaCarteras.js')}}"></script>
+    <script src="{{asset('js/init_autoNumeric.js')}}"></script>
 @endsection

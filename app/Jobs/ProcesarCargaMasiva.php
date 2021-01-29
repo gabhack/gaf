@@ -123,6 +123,7 @@ class ProcesarCargaMasiva implements ShouldQueue
                         'tipo_contratacion' => ( isset($persona[0]->tipo_contratacion) ? $persona[0]->tipo_contratacion : '' ),
                         'periodo' => ( isset($persona[0]->periodo) ? $persona[0]->periodo : '' ),
                         'secretaria' => ( isset($persona[0]->Secretaria_Educacion) ? $persona[0]->Secretaria_Educacion : '' ),
+                        'ingresos_base' => (isset($persona[0]->ingresos_base) ? $persona[0]->ingresos_base : '' ),
                         'conceptos_financieros' => ( isset($persona[0]->conceptos_financieros[0]) ? $persona[0]->conceptos_financieros[0] : '' )
                     );
                 }

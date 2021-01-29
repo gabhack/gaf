@@ -42,7 +42,7 @@
 			</div>		
 			<footer class="main-footer">
 				<div class="pull-right hidden-xs">
-					<strong>Copyright © 2019</strong>
+					<strong>Copyright © {{ date('Y') }}</strong>
 				</div>
 				<strong>Developed by <a href="">GAF</a></strong>
 			</footer>			
