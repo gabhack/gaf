@@ -226,6 +226,19 @@ function getPagaduriasXPeriodo(idcliente) {
 	//Show Pagaduría select
 	if (periodo !== null) {
 		select_pagaduria.disabled = false;
+		document.getElementById("pagaduria_select").value = '';
+		//
+		document.getElementById("btn-submit-registros").disabled = true;
+		//
+		document.getElementById("btn-submit-registros").disabled = true;
+		//
+		document.getElementById("btn-add-ingr").disabled = true;
+		document.getElementById("btn-add-desc").disabled = true;
+		//
+		document.getElementById("content-ingr-aplicados").innerHTML = '';
+		//
+		document.getElementById("content-desc-aplicados").innerHTML = '';
+		//
 	}
 
 	//Hide All

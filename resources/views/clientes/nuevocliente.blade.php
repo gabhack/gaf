@@ -14,7 +14,7 @@
             </div>
         </div>
     @endif
-    <form action="{{url('estudios/crearcliente')}}" method="POST" enctype="multipart/form-data">
+    <form action="{{url('clientes/crear')}}" method="POST" enctype="multipart/form-data">
         {!! Form::token() !!}
         <div class="col-md-12">
             <div class="btn-group mb-3 mr-3" role="group">
