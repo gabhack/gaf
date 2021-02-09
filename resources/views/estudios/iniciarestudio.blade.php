@@ -56,7 +56,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="btn-group mr-2 float-right" role="group">
-                    <a type="button" class="btn btn-secondary" href="{{url()->previous()}}"><i class="fa fa-arrow-left"></i> Atrás</a>
+                    <a type="button" class="btn btn-secondary" href="{{url('estudios/nuevoestudio')}}"><i class="fa fa-arrow-left"></i> Atrás</a>
                     <input class="btn btn-success" type="submit" value="Guardar">
                 </div>
                 <h3>Cliente: {{$cliente->nombres}} 
@@ -109,7 +109,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="label-consulta{{ $cliente->estado_civil == '' ? ' label-warning' : '' }}" for="pad">Estado Civil:
-                                    <p class="pad">{{ $cliente->estado_civil == '' ? 'No proporcionado' : $cliente->estado_civil }}</p>
+                                    <p class="pad">{{ $cliente->estado_civil == '' ? 'No proporcionado' : estados_civiles()[$cliente->estado_civil] }}</p>
                                 </label>
                             </div>
                             <div class="col-md-4">
@@ -140,6 +140,14 @@
                 <div class="panel panel-primary">
                     <div class="panel-heading"><b>Te Recuperamos</b></div>
                     <div class="panel-body">
+                        {{-- <div class="row">
+                            <div class="col-md-5">
+                                <label class="label-consulta">Fecha de estudio</label>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="text" class="datepicker" name="fecha_estudio" id="fecha_estudio">
+                            </div>
+                        </div> --}}
                         <div class="row">
                             <div class="col-md-5">
                                 <label class="label-consulta">Asesor asignado</label>
@@ -309,7 +317,15 @@
 
             @if ($ultimoregistro)
                 <div class="col-md-12">
-                    <h3>Información de Comprobante de pago (Periodo {{$ultimoregistro->periodo}})</h3>
+                    {{-- <h3>Información de Comprobante de pago (Periodo {{$ultimoregistro->periodo}})</h3> --}}
+                    <h3>Información de Comprobante de pago (Periodo 
+                        <select class="form-control" name="periodo" id="input_periodo">
+                            <option value="" selected disabled hidden>Seleccione una</option>
+                            @foreach ($registrosf as $item => $value)
+                                <option value="{{ $value }}">{{ $value }}</option>
+                            @endforeach
+                        </select> )
+                    </h3>
                 </div>
 
                 <div class="col-md-6">

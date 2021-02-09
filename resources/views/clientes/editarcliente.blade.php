@@ -1,6 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
+    <script>
+        //data
+        var pagadurias = @json(pagadurias());
+        var htmlpagadurias = '';
+        pagadurias.forEach( function(pagaduria) {
+            htmlpagadurias += `<option value="`+pagaduria.id+`">`+pagaduria.pagaduria+`</option>`;
+        });
+    </script>
     @if (isset($message))
         <div id="toast-message" class="col-md-12">
             <div class="row">
@@ -66,7 +74,7 @@
                         </div>
 						<div class="form-group col-md-6">
                             <label class="label-consulta w-100" for="pad">Estado civil:
-                                <select class="form-control" name="estado_civil" id="estado_civil" required>
+                                <select class="form-control" name="estado_civil" id="estado_civil">
                                     <option value="" selected disabled hidden>Seleccione una</option>
                                     @foreach (estados_civiles() as $item => $value)
                                         <option {{ $cliente->estado_civil == $item ? 'selected' : '' }} value="{{ $item }}">{{ $value }}</option>
@@ -176,6 +184,70 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-md-12 col-md-offset-0">
+            <div class="form-row d-inline m-0">
+                <div class="panel panel-primary">
+                    <div class="panel-heading font-weight-bold">
+                        <span class="text-panel-heading">Descuentos No Aplicados</span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-md-12">
+                            <div class="col-md-3">
+                                <input id="btn-add-desc-na" class="form-control btn btn-primary" type="button" value="+ Descuento no aplicado" onclick="addRowDescNoAplicado()">
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Cod. Concepto</th>
+                                            <th scope="col">Concepto</th>
+                                            <th scope="col">Periodo (Año y mes)</th>
+                                            <th scope="col">Pagaduría</th>
+                                            <th scope="col">Inconsistencia</th>
+                                            <th scope="col">Valor Cuota</th>
+                                            <th scope="col">Valor total</th>
+                                            <th scope="col">Saldo pdte</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="content-desc-no-aplicados">
+                                        @if (isset($cliente->descuentosnoaplicados))
+                                            @foreach ($cliente->descuentosnoaplicados as $key => $desc)
+                                                <tr class="row_desc_no_aplicados">
+                                                    <th scope="row">{{$key+1}}</th>
+                                                    <td><input class="form-control" type="text" name="desc_na_cod_concepto[0][{{$key+1}}]" id="desc_na_cod_concepto_{{$key+1}}" placeholder="Opcional" value="{{$desc->cod_concepto}}"></td>
+                                                    <td><input class="form-control" type="text" name="desc_na_concepto[0][{{$key+1}}]" id="desc_na_concepto_{{$key+1}}" required value="{{$desc->concepto}}"></td>
+                                                    <td><input class="form-control" type="number" name="desc_na_periodo[0][{{$key+1}}]" id="desc_na_periodo_{{$key+1}}" required value="{{$desc->periodo}}" placeholder="Ej: 201907"></td>
+                                                    <td>
+                                                        <select class="form-control" name="desc_na_pagaduria[0][{{$key+1}}]" id="desc_na_pagaduria_{{$key+1}}" required>
+                                                            <option value="" selected disabled hidden>Seleccione una</option>
+                                                            @foreach (pagadurias() as $item => $value)
+                                                                <option {{$desc->pagadurias_id == $value->id ? 'selected ' : ''}}value="{{ $value->id }}">{{ $value->pagaduria }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </td>
+                                                    <td><input class="form-control" type="text" name="desc_na_inconsistencia[0][{{$key+1}}]" id="desc_na_inconsistencia_{{$key+1}}" required value="{{$desc->inconsistencia}}"></td>
+                                                    <td style="width: 15%;"><input class="form-control" type="number" name="desc_na_valor_fijo[0][{{$key+1}}]" id="desc_na_valor_fijo_{{$key+1}}" required value="{{$desc->valor_fijo}}"></td>
+                                                    <td style="width: 15%;"><input class="form-control" type="number" name="desc_na_valor_total[0][{{$key+1}}]" id="desc_na_valor_total_{{$key+1}}" placeholder="Opcional" value="{{$desc->valor_total}}"></td>
+                                                    <td style="width: 15%;"><input class="form-control" type="number" name="desc_na_saldo[0][{{$key+1}}]" id="desc_na_saldo_{{$key+1}}" placeholder="Opcional" value="{{$desc->saldo}}"></td>
+                                                    <td style="width: 5%;">
+                                                        <a class="btn btn-link eliminar-registro" type="button" value="-" onclick="removeRowDescNoAplicado(this)">
+                                                            <i class="fa fa-trash"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </form>
 
     <form id="form-registros" action="{{url('api/clientes/actualizarRegistro')}}" method="POST">
@@ -221,7 +293,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <h4>Ingresos Aplicados</h4>
+                                    <h4 class="font-weight-bold">Ingresos Aplicados</h4>
                                     <div class="col-md-3">
                                         <input id="btn-add-ingr" class="form-control btn btn-primary" type="button" value="+ Ingreso" onclick="addRowIngresos()" disabled>
                                     </div>
@@ -242,7 +314,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <h4>Descuentos Aplicados</h4>
+                                    <h4 class="font-weight-bold">Descuentos Aplicados</h4>
                                     <div class="col-md-3">
                                         <input id="btn-add-desc" class="form-control btn btn-primary" type="button" value="+ Descuento" onclick="addRowDescuentos()" disabled>
                                     </div>

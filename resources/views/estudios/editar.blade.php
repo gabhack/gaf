@@ -44,7 +44,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="btn-group mr-2 float-right" role="group">
-                    <a type="button" class="btn btn-secondary" href="{{url('estudios')}}"><i class="fa fa-arrow-left"></i> Atrás</a>
+                    <a type="button" class="btn btn-secondary" href="{{url('estudios/nuevoestudio')}}"><i class="fa fa-arrow-left"></i> Atrás</a>
                     <input class="btn btn-success" type="submit" value="Actualizar">
                 </div>
                 <h3>Cliente: {{$cliente->nombres}}</h3>

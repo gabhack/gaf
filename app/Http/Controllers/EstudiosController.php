@@ -94,6 +94,8 @@ class EstudiosController extends Controller
                 $viabilidad = calcula_viabilidad_inicial($cliente);
                 $viabilidad = calcula_viabilidad_inicial($cliente);
 
+                $registrosf = $cliente->registrosfinancieros->pluck('periodo')->unique();
+
                 $asesores = Asesores::all();
                 $registro = $cliente->registrosfinancieros->last();
 
@@ -158,7 +160,8 @@ class EstudiosController extends Controller
                     "p_x_millon" => $p_x_millon,
                     "factores_x_millon_kredit" => $factores_x_millon_kredit,
                     "factores_x_millon_gnb" => $factores_x_millon_gnb,
-                    "viabilidad" => $viabilidad
+                    "viabilidad" => $viabilidad,
+                    "registrosf" => $registrosf
                 );
                 if (isset($request->message)) {
                     $options["message"] = $request->message;
@@ -218,7 +221,11 @@ class EstudiosController extends Controller
         } else {
             $newestudio->asesores_id = $request->asesor_id;
         }
-        $newestudio->fecha = date("Y-m-d");
+        // if ($request->fecha_estudio !== '') {
+            // $newestudio->fecha = $request->fecha_estudio;
+        // } else {
+            $newestudio->fecha = date("Y-m-d");
+        // }
         $newestudio->periodo_estudio = date("Ym");
         $newestudio->save();
 

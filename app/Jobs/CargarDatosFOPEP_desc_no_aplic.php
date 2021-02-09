@@ -42,7 +42,7 @@ class CargarDatosFOPEP_desc_no_aplic implements ShouldQueue
      */
     public function handle()
     {
-        // try {
+        try {
             set_time_limit(0);
 
             $ruta = $this->ruta;
@@ -120,13 +120,13 @@ class CargarDatosFOPEP_desc_no_aplic implements ShouldQueue
             //Eliminar archivo temporal
             \Storage::disk('archivos')->delete($nombrearchivo);
 
-        // } catch(\Exception $ex) {
-        //     //----------------------------------------
-        //     //Eliminar archivo temporal
-        //     \Storage::disk('archivos')->delete($nombrearchivo);
-        //     $plano->cont_procesos = -1;
-        //     $plano->errors = "Error: " . $ex->getMessage();
-        //     $plano->save();
-        // }
+        } catch(\Exception $ex) {
+            //----------------------------------------
+            //Eliminar archivo temporal
+            \Storage::disk('archivos')->delete($nombrearchivo);
+            $plano->cont_procesos = -1;
+            $plano->errors = "Error: " . $ex->getMessage();
+            $plano->save();
+        }
     }
 }

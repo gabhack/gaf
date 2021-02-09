@@ -60,6 +60,84 @@ function reloadRowsRegistros() {
 	}
 }
 
+//FUNCIONES PARA DESCUENTOS NO APLICADOS
+function addRowDescNoAplicado() {
+	var content_div = document.getElementById("content-desc-no-aplicados");
+	var cont_childs = content_div.childElementCount;
+
+	const div = document.createElement('tr');
+	div.className = 'row_desc_no_aplicados';
+
+	div.innerHTML = `
+		<th scope="row">`+ (cont_childs+1) +`</th>
+		<td><input class="form-control" type="text" name="desc_na_cod_concepto[0][`+ (cont_childs+1) +`]" id="desc_na_cod_concepto_`+ (cont_childs+1) +`" placeholder="Opcional"></td>
+		<td><input class="form-control" type="text" name="desc_na_concepto[0][`+ (cont_childs+1) +`]" id="desc_na_concepto_`+ (cont_childs+1) +`" required></td>
+		<td><input class="form-control" type="number" name="desc_na_periodo[0][`+ (cont_childs+1) +`]" id="desc_na_periodo_`+ (cont_childs+1) +`" placeholder="Ej: 201907" required></td>
+		<td>
+			<select class="form-control" name="desc_na_pagaduria[0][`+ (cont_childs+1) +`]" id="desc_na_pagaduria_`+ (cont_childs+1) +`" required>
+				<option value="" selected disabled hidden>Seleccione una</option>
+				`+ htmlpagadurias +`
+			</select>
+		</td>
+		<td><input class="form-control" type="text" name="desc_na_inconsistencia[0][`+ (cont_childs+1) +`]" id="desc_na_inconsistencia_`+ (cont_childs+1) +`" required></td>
+		<td style="width: 15%;"><input class="form-control" type="number" name="desc_na_valor_fijo[0][`+ (cont_childs+1) +`]" id="desc_na_valor_fijo_`+ (cont_childs+1) +`" required></td>
+		<td style="width: 15%;"><input class="form-control" type="number" name="desc_na_valor_total[0][`+ (cont_childs+1) +`]" id="desc_na_valor_total_`+ (cont_childs+1) +`" placeholder="Opcional"></td>
+		<td style="width: 15%;"><input class="form-control" type="number" name="desc_na_saldo[0][`+ (cont_childs+1) +`]" id="desc_na_saldo_`+ (cont_childs+1) +`" placeholder="Opcional"></td>
+		<td style="width: 5%;">
+			<a class="btn btn-link eliminar-registro" type="button" value="-" onclick="removeRowDescNoAplicado(this)">
+				<i class="fa fa-trash"></i>
+			</a>
+		</td>
+	`;
+	
+	if (cont_childs <= 30) {
+		document.getElementById('content-desc-no-aplicados').appendChild(div);
+	} else {
+		alert('No se puede agregar más de 30 descuentos.');
+	}
+}
+
+function removeRowDescNoAplicado(input) {
+	document.getElementById('content-desc-no-aplicados').removeChild(input.parentNode.parentNode);
+	reloadRowsDescNoAplicado();
+}
+
+function reloadRowsDescNoAplicado() {
+	var content_div = document.getElementById("content-desc-no-aplicados");
+	var content_childs = [].slice.call(content_div.children);
+
+	for (var i = 0; i < content_childs.length; i++) {
+		var elemento = [].slice.call(content_childs[i].children);
+
+		//Id
+		elemento[0].innerHTML = (i+1);
+		//Cod. Concepto
+		$(elemento[1].children[0]).attr("id", `desc_na_cod_concepto_`+(i+1));
+		$(elemento[1].children[0]).attr("name", `desc_na_cod_concepto[0][`+ (i+1) +`]` );
+		//Concepto
+		$(elemento[2].children[0]).attr("id", `desc_na_concepto_`+(i+1));
+		$(elemento[2].children[0]).attr("name", `desc_na_concepto[0][`+ (i+1) +`]` );
+		//Periodo
+		$(elemento[3].children[0]).attr("id", `desc_na_periodo_`+(i+1));
+		$(elemento[3].children[0]).attr("name", `desc_na_periodo[0][`+ (i+1) +`]` );
+		//Pagaduría
+		$(elemento[4].children[0]).attr("id", `desc_na_pagaduria_`+(i+1));
+		$(elemento[4].children[0]).attr("name", `desc_na_pagaduria[0][`+ (i+1) +`]` );
+		//Inconsistencia
+		$(elemento[5].children[0]).attr("id", `desc_na_inconsistencia_`+(i+1));
+		$(elemento[5].children[0]).attr("name", `desc_na_inconsistencia[0][`+ (i+1) +`]` );
+		//Valor fijo
+		$(elemento[6].children[0]).attr("id", `desc_na_valor_fijo_`+(i+1));
+		$(elemento[6].children[0]).attr("name", `desc_na_valor_fijo[0][`+ (i+1) +`]` );
+		//Valor total
+		$(elemento[7].children[0]).attr("id", `desc_na_valor_total_`+(i+1));
+		$(elemento[7].children[0]).attr("name", `desc_na_valor_total[0][`+ (i+1) +`]` );
+		//Saldo
+		$(elemento[8].children[0]).attr("id", `desc_na_saldo_`+(i+1));
+		$(elemento[8].children[0]).attr("name", `desc_na_saldo[0][`+ (i+1) +`]` );
+	}
+}
+
 //FUNCIONES PARA INGRESOS APLICADOS EN REGISTROS
 function addRowsIngresosWithData(ingresos) {
 	var content_div = document.getElementById("content-ingr-aplicados");
@@ -131,10 +209,10 @@ function reloadRowsIngresos() {
 		$(elemento[1].children[0]).attr("id", `ingr_cod_concepto_0_`+(i+1));
 		$(elemento[1].children[0]).attr("name", `ingr_cod_concepto[0][`+ (i+1) +`]` );
 		//Concepto
-		$(elemento[2].children[0]).attr("id", `ingr_concepto_0`+(i+1));
+		$(elemento[2].children[0]).attr("id", `ingr_concepto_0_`+(i+1));
 		$(elemento[2].children[0]).attr("name", `ingr_concepto[0][`+ (i+1) +`]` );
 		//Valor
-		$(elemento[3].children[0]).attr("id", `ingr_valor_0`+(i+1));
+		$(elemento[3].children[0]).attr("id", `ingr_valor_0_`+(i+1));
 		$(elemento[3].children[0]).attr("name", `ingr_valor[0][`+ (i+1) +`]` );
 	}
 }
@@ -210,10 +288,10 @@ function reloadRowsDescuentos() {
 		$(elemento[1].children[0]).attr("id", `desc_cod_concepto_0_`+(i+1));
 		$(elemento[1].children[0]).attr("name", `desc_cod_concepto[0][`+ (i+1) +`]` );
 		//Concepto
-		$(elemento[2].children[0]).attr("id", `desc_concepto_0`+(i+1));
+		$(elemento[2].children[0]).attr("id", `desc_concepto_0_`+(i+1));
 		$(elemento[2].children[0]).attr("name", `desc_concepto[0][`+ (i+1) +`]` );
 		//Valor
-		$(elemento[3].children[0]).attr("id", `desc_valor_0`+(i+1));
+		$(elemento[3].children[0]).attr("id", `desc_valor_0_`+(i+1));
 		$(elemento[3].children[0]).attr("name", `desc_valor[0][`+ (i+1) +`]` );
 	}
 }
