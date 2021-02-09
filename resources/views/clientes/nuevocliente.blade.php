@@ -1,6 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
+    <script>
+        //data
+        var pagadurias = @json(pagadurias());
+        var htmlpagadurias = '';
+        pagadurias.forEach( function(pagaduria) {
+            htmlpagadurias += `<option value="`+pagaduria.id+`">`+pagaduria.pagaduria+`</option>`;
+        });
+    </script>
     @if (isset($message))
         <div id="toast-message" class="col-md-12">
             <div class="row">
@@ -66,7 +74,7 @@
                         </div>
 						<div class="form-group col-md-6">
                             <label class="label-consulta w-100" for="pad">Estado civil:
-                                <select class="form-control" name="estado_civil" id="estado_civil" required>
+                                <select class="form-control" name="estado_civil" id="estado_civil">
                                     <option value="" selected disabled hidden>Seleccione una</option>
                                     @foreach (estados_civiles() as $item => $value)
                                         <option value="{{ $item }}">{{ $value }}</option>
@@ -177,14 +185,47 @@
             </div>
         </div>
 
+        <div class="col-md-12 col-md-offset-0">
+            <div class="form-row d-inline m-0">
+                <div class="panel panel-primary">
+                    <div class="panel-heading font-weight-bold">
+                        <span class="text-panel-heading">Descuentos No Aplicados</span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-md-12">
+                            <div class="col-md-3">
+                                <input id="btn-add-desc-na" class="form-control btn btn-primary" type="button" value="+ Descuento no aplicado" onclick="addRowDescNoAplicado()">
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Cod. Concepto</th>
+                                            <th scope="col">Concepto</th>
+                                            <th scope="col">Periodo (Año y mes)</th>
+                                            <th scope="col">Pagaduría</th>
+                                            <th scope="col">Inconsistencia</th>
+                                            <th scope="col">Valor Cuota</th>
+                                            <th scope="col">Valor total</th>
+                                            <th scope="col">Saldo pdte</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="content-desc-no-aplicados">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="col-md-12">
             <div class="col-md">
                 <h3 class="font-weight-bold">Registros financieros por periodo</h3>
             </div>
-            {{-- <div class="col-md-2 mb-3">
-                <input class="form-control btn-primary" type="button" value="+ Agregar registro" onclick="addRowRegistros()">
-            </div> --}}
-
             <div class="col-md-12 col-md-offset-0">
                 <div id="content-registros">
                     <div class="form-row d-inline m-0">
@@ -211,7 +252,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <h4>Ingresos Aplicados</h4>
+                                    <h4 class="font-weight-bold">Ingresos Aplicados</h4>
                                     <div class="col-md-3">
                                         <input class="form-control btn-primary" type="button" value="+ Ingreso" onclick="addRowIngresos()">
                                     </div>
@@ -232,7 +273,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <h4>Descuentos Aplicados</h4>
+                                    <h4 class="font-weight-bold">Descuentos Aplicados</h4>
                                     <div class="col-md-3">
                                         <input class="form-control btn-primary" type="button" value="+ Descuento" onclick="addRowDescuentos()">
                                     </div>

@@ -1,3 +1,10 @@
+$('.datepicker').datepicker({
+  format: "yyyy-mm-dd",
+  autoclose: true,
+  toggleActive: true,
+  language: "es"
+});
+
 var grid;
 
 var data = dataDB;

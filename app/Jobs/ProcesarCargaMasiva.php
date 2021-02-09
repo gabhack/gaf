@@ -110,6 +110,19 @@ class ProcesarCargaMasiva implements ShouldQueue
                         'documento' => ( isset($persona[0]->documento) ? $persona[0]->documento : '' ),
                         'cargo_docente' => ( isset($persona[0]->cargo_docente) ? $persona[0]->cargo_docente : '' ),
                         'cargo_administrativo' => ( isset($persona[0]->cargo_administrativo) ? $persona[0]->cargo_administrativo : '' ),
+                        'ciudad' => ( isset($persona[0]->ciudad) ? $persona[0]->ciudad : '' ),
+                        'centro_costos' => ( isset($persona[0]->centro_costos) ? $persona[0]->centro_costos : '' ),
+                        'tipo_contratacion' => ( isset($persona[0]->tipo_contratacion) ? $persona[0]->tipo_contratacion : '' ),
+                        'periodo' => ( isset($persona[0]->periodo) ? $persona[0]->periodo : '' ),
+                        'secretaria' => ( isset($persona[0]->Secretaria_Educacion) ? $persona[0]->Secretaria_Educacion : '' ),
+                        'grado' => '',
+                        'estado_civil' => '',
+                        'sexo' => '',
+                        'fechanto' => '',
+                        'direccion' => '',
+                        'telefono' => '',
+                        'celular' => '',
+                        'correo' => '',
                         'banco' => ( isset($persona[0]->Banco) ? $persona[0]->Banco : '' ),
                         'cuenta' => ( isset($persona[0]->Cuenta) ? $persona[0]->Cuenta : '' ),
                         'pension' => ( isset($persona[0]->pension) ? $persona[0]->pension : '' ),
@@ -117,16 +130,13 @@ class ProcesarCargaMasiva implements ShouldQueue
                         'cesantias' => ( isset($persona[0]->cesantias) ? $persona[0]->cesantias : '' ),
                         'dias_laborados' => ( isset($persona[0]->Dias_Laborados) ? $persona[0]->Dias_Laborados : '' ),
                         'nit' => ( isset($persona[0]->Nit_Pagaduria) ? $persona[0]->Nit_Pagaduria : '' ),
-                        'ciudad' => ( isset($persona[0]->ciudad) ? $persona[0]->ciudad : '' ),
-                        'centro_costos' => ( isset($persona[0]->centro_costos) ? $persona[0]->centro_costos : '' ),
-                        'grado' => ( isset($persona[0]->grado) ? utf8_encode($persona[0]->grado ."") : '' ),
-                        'tipo_contratacion' => ( isset($persona[0]->tipo_contratacion) ? $persona[0]->tipo_contratacion : '' ),
-                        'periodo' => ( isset($persona[0]->periodo) ? $persona[0]->periodo : '' ),
-                        'secretaria' => ( isset($persona[0]->Secretaria_Educacion) ? $persona[0]->Secretaria_Educacion : '' ),
                         'ingresos_base' => (isset($persona[0]->ingresos_base) ? $persona[0]->ingresos_base : '' ),
                         'conceptos_financieros' => ( isset($persona[0]->conceptos_financieros[0]) ? $persona[0]->conceptos_financieros[0] : '' )
                     );
                 }
+
+                print_r($personas_upload);
+
                 $respuesta_upload = upload_personas($personas_upload);
                 $log .= '*****Proceso de ingreso a BD: ' . $respuesta_upload;
             } else {

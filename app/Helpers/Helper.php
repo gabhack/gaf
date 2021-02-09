@@ -546,6 +546,9 @@ if (!function_exists('upload_personas')) {
 					if ($arraypersona['sexo'] !== '') {
 						$cliente->sexo 				= $arraypersona['sexo'];
 					}
+					if ($arraypersona['estado_civil'] !== '') {
+						$cliente->estado_civil 				= $arraypersona['estado_civil'];
+					}
 					if ($arraypersona['fechanto'] !== '') {
 						$cliente->fechanto 				= $arraypersona['fechanto'];
 					}
@@ -607,6 +610,9 @@ if (!function_exists('upload_personas')) {
 					}
 					if ($arraypersona['sexo'] !== '') {
 						$cliente->sexo 				= $arraypersona['sexo'];
+					}
+					if ($arraypersona['estado_civil'] !== '') {
+						$cliente->estado_civil 				= $arraypersona['estado_civil'];
 					}
 					if ($arraypersona['fechanto'] !== '') {
 						$cliente->fechanto 				= $arraypersona['fechanto'];
@@ -679,7 +685,7 @@ if (!function_exists('upload_personas')) {
 						if ($egreso['valor'] !== 'Nan') {
 							$descuentoAplicado = \App\Descuentosaplicados::where("registros_id", "=", $registro->id)
 								->where("concepto", "=", $egreso['concepto'])
-								->where("valor", "=", $ingreso['valor'])
+								->where("valor", "=", $egreso['valor'])
 								->first();
 							if ($descuentoAplicado === null) {
 								$descuentoAplicado = new \App\Descuentosaplicados;
@@ -692,6 +698,25 @@ if (!function_exists('upload_personas')) {
 						} else {
 							$conceptos_nan++;
 						}
+					}
+				}
+			
+				//Descuentos no aplicados
+				if (isset($arraypersona['conceptos_financieros']['detallado_conceptos']['desc_no_aplicados'])) {
+					//Elimino los que están en BD
+					\App\Descuentosnoaplicados::where('clientes_id', $cliente->id)->delete();
+					foreach ($arraypersona['conceptos_financieros']['detallado_conceptos']['desc_no_aplicados'] as $key => $descuentoNoAplicado) {
+						$descuento = new \App\Descuentosnoaplicados;
+						$descuento->clientes_id 		= $cliente->id;
+						$descuento->periodo 			= $descuentoNoAplicado['periodo'];
+						$descuento->pagadurias_id 		= $descuentoNoAplicado['pagaduria'];
+						$descuento->cod_concepto		= $descuentoNoAplicado['cod_concepto'];
+						$descuento->concepto			= $descuentoNoAplicado['concepto'];
+						$descuento->inconsistencia		= $descuentoNoAplicado['inconsistencia'];
+						$descuento->valor_fijo			= $descuentoNoAplicado['valor'];
+						$descuento->valor_total			= $descuentoNoAplicado['valor_total'];
+						$descuento->saldo				= $descuentoNoAplicado['saldo'];
+						$descuento->save();
 					}
 				}
 				//-------------------
@@ -794,6 +819,9 @@ if (!function_exists('upload_personas_without_concepts')) {
 					if ($arraypersona['sexo'] !== '') {
 						$cliente->sexo 				= $arraypersona['sexo'];
 					}
+					if ($arraypersona['estado_civil'] !== '') {
+						$cliente->estado_civil 				= $arraypersona['estado_civil'];
+					}
 					if ($arraypersona['fechanto'] !== '') {
 						$cliente->fechanto 				= $arraypersona['fechanto'];
 					}
@@ -856,6 +884,9 @@ if (!function_exists('upload_personas_without_concepts')) {
 					if ($arraypersona['sexo'] !== '') {
 						$cliente->sexo 				= $arraypersona['sexo'];
 					}
+					if ($arraypersona['estado_civil'] !== '') {
+						$cliente->estado_civil 				= $arraypersona['estado_civil'];
+					}
 					if ($arraypersona['fechanto'] !== '') {
 						$cliente->fechanto 				= $arraypersona['fechanto'];
 					}
@@ -873,6 +904,25 @@ if (!function_exists('upload_personas_without_concepts')) {
 					}
 					
 					$cliente->save();
+
+					//Descuentos no aplicados
+					if (isset($arraypersona['conceptos_financieros']['detallado_conceptos']['desc_no_aplicados'])) {
+						//Elimino los que están en BD
+						\App\Descuentosnoaplicados::where('clientes_id', $cliente->id)->delete();
+						foreach ($arraypersona['conceptos_financieros']['detallado_conceptos']['desc_no_aplicados'] as $key => $descuentoNoAplicado) {
+							$descuento = new \App\Descuentosnoaplicados;
+							$descuento->clientes_id 		= $cliente->id;
+							$descuento->periodo 			= $descuentoNoAplicado['periodo'];
+							$descuento->pagadurias_id 		= $descuentoNoAplicado['pagaduria'];
+							$descuento->cod_concepto		= $descuentoNoAplicado['cod_concepto'];
+							$descuento->concepto			= $descuentoNoAplicado['concepto'];
+							$descuento->inconsistencia		= $descuentoNoAplicado['inconsistencia'];
+							$descuento->valor_fijo			= $descuentoNoAplicado['valor'];
+							$descuento->valor_total			= $descuentoNoAplicado['valor_total'];
+							$descuento->saldo				= $descuentoNoAplicado['saldo'];
+							$descuento->save();
+						}
+					}
 				}
 				//-------------------
 				$resp .= 'Carga con éxito. Registro actualizado: ' . $arraypersona['documento'] . ".";

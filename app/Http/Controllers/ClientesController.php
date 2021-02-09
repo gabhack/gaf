@@ -29,6 +29,22 @@ class ClientesController extends Controller
             $cargo_administrativo = $request->cargo;
         }
 
+        //DESCUENTOS NO APLICADOS
+        if (isset($request->desc_na_valor_fijo[0])) {
+            for ($i=1; $i <= sizeof($request->desc_na_valor_fijo[0]); $i++) {
+                $conceptos_financieros['desc_no_aplicados'][] = array(
+                    'periodo'         => $request->desc_na_periodo[0][$i],
+                    'pagaduria'         => $request->desc_na_pagaduria[0][$i],
+                    'cod_concepto'      => $request->desc_na_cod_concepto[0][$i],
+                    'concepto'          => $request->desc_na_concepto[0][$i],
+                    'inconsistencia'    => $request->desc_na_inconsistencia[0][$i],
+                    'valor'             => $request->desc_na_valor_fijo[0][$i],
+                    'valor_total'       => $request->desc_na_valor_total[0][$i],
+                    'saldo'             => $request->desc_na_saldo[0][$i]
+                );
+            }
+        }
+
         //CONCEPTOS
         if (isset($request->ingr_valor[0])) {
             for ($i=1; $i <= sizeof($request->ingr_valor[0]); $i++) {
@@ -141,13 +157,27 @@ class ClientesController extends Controller
         $cargo_docente = '';
         $cargo_administrativo = '';
         $conceptos_financieros = array();
-        $ingresos_totales = 0;
-        $egresos_totales = 0;
 
         if ($request->docente_administrativo) {
             $cargo_docente = $request->cargo;
         } else {
             $cargo_administrativo = $request->cargo;
+        }
+
+        //DESCUENTOS NO APLICADOS
+        if (isset($request->desc_na_valor_fijo[0])) {
+            for ($i=1; $i <= sizeof($request->desc_na_valor_fijo[0]); $i++) {
+                $conceptos_financieros['desc_no_aplicados'][] = array(
+                    'periodo'           => $request->desc_na_periodo[0][$i],
+                    'pagaduria'         => $request->desc_na_pagaduria[0][$i],
+                    'cod_concepto'      => $request->desc_na_cod_concepto[0][$i],
+                    'concepto'          => $request->desc_na_concepto[0][$i],
+                    'inconsistencia'    => $request->desc_na_inconsistencia[0][$i],
+                    'valor'             => $request->desc_na_valor_fijo[0][$i],
+                    'valor_total'       => $request->desc_na_valor_total[0][$i],
+                    'saldo'             => $request->desc_na_saldo[0][$i]
+                );
+            }
         }
 
         $personas_upload[] = array(
@@ -176,7 +206,10 @@ class ClientesController extends Controller
             'cesantias' => '',
             'dias_laborados' => '',
             'nit' => '',
-            'ingresos_base' => $request->ingresos
+            'ingresos_base' => $request->ingresos,
+            'conceptos_financieros' => array(
+                'detallado_conceptos' => $conceptos_financieros
+            )
         );
 
         $resp = upload_personas_without_concepts($personas_upload);
