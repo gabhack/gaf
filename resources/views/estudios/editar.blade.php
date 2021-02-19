@@ -159,7 +159,7 @@
                                 <label class="label-consulta">Observaciones</label>
                             </div>
                             <div class="col-md-7">
-                                <textarea class="form-control" type="text" name="observaciones" id="observaciones" maxlength="100">{{$estudio->observaciones}}</textarea>
+                                <textarea class="form-control" type="text" name="observaciones" id="observaciones" maxlength="500">{{$estudio->observaciones}}</textarea>
                             </div>
                         </div>
                         @if ($viabilidad['analisis'] !== 'Sin datos suficientes para hallar viabilidad preliminar')
@@ -275,12 +275,12 @@
                             </div>
                             <div class="col-md-3 text-center">
                                 <label class="label-consulta col-12" for="pad">Pt. Datacredito:
-                                    <input class="form-control" type="text" name="puntaje_datacredito" id="puntaje_datacredito" required value="{{$estudio->central->puntaje_data}}">
+                                    <input class="form-control" type="text" name="puntaje_datacredito" id="puntaje_datacredito" value="{{$estudio->central->puntaje_data}}" placeholder="Opcional">
                                 </label>
                             </div>
                             <div class="col-md-3 text-center">
                                 <label class="label-consulta col-12" for="pad">Pt. Cifín:
-                                    <input class="form-control" type="text" name="puntaje_sifin" id="puntaje_sifin" required value="{{$estudio->central->puntaje_sifin}}">
+                                    <input class="form-control" type="text" name="puntaje_sifin" id="puntaje_sifin" value="{{$estudio->central->puntaje_sifin}}" placeholder="Opcional">
                                 </label>
                             </div>
                             <div class="col-md-3 text-center">
@@ -376,16 +376,18 @@
                                 <thead>
                                     <tr>
                                         <th class="text-center">Periodo</th>
-                                        <th class="text-center">Valor cuota</th>
+                                        <th class="text-center">Concepto</th>
                                         <th class="text-center">Inconsistencia</th>
+                                        <th class="text-center">Valor cuota</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($cliente->descuentosnoaplicados as $descuento)
                                         <tr>
                                             <td class="text-center">{{$descuento->periodo}}</td>
-                                            <td class="text-center">{{mneyformat($descuento->valor_fijo)}}</td>
+                                            <td class="text-center">{{$descuento->concepto}}</td>
                                             <td class="text-center">{{$descuento->inconsistencia}}</td>
+                                            <td class="text-center">{{mneyformat($descuento->valor_fijo)}}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
