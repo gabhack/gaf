@@ -645,8 +645,10 @@ if (!function_exists('upload_personas')) {
 					if ($arraypersona['dias_laborados'] !== '') {
 						$registro->dias_laborados = $arraypersona['dias_laborados'];
 					}
-					if ($arraypersona['conceptos_financieros']['ingresos_totales'] !== '') {
-						$registro->ingresos_totales = $arraypersona['conceptos_financieros']['ingresos_totales'];
+					if (isset($arraypersona['conceptos_financieros']['ingresos_totales'])) {
+						if ($arraypersona['conceptos_financieros']['ingresos_totales'] !== '') {
+							$registro->ingresos_totales = $arraypersona['conceptos_financieros']['ingresos_totales'];
+						}
 					}
 					if ($arraypersona['conceptos_financieros']['egresos_totales'] !== '') {
 						$registro->egresos_totales = $arraypersona['conceptos_financieros']['egresos_totales'];
@@ -1031,10 +1033,10 @@ if (!function_exists('calcula_viabilidad_inicial')) {
 
 if (!function_exists('deformat_autonumeric')) {
 	function deformat_autonumeric($value){
-		$value = str_replace("$", "", $value);
-		$value = str_replace(",00", "", $value);
-		$value = str_replace(".", "", $value);
-		return trim($value);
+		$valuesinpeso = str_replace("$", "", $value);
+		$valuesindecimal = str_replace(",00", "", $valuesinpeso);
+		$valuelimpio = str_replace(".", "", $valuesindecimal);
+		return trim($valuelimpio);
 	}
 }
 

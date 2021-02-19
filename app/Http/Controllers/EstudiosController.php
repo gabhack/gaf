@@ -198,6 +198,8 @@ class EstudiosController extends Controller
     {
         //Deformateo
         $request->costo_certificados = deformat_autonumeric($request->costo_certificados);
+        $cuota_mensual = deformat_autonumeric($request->AF1['cuota_mensual']);
+        $cuota = deformat_autonumeric($request->AF2['cuota']);
 
         $tieneAF1 = false;
         $tieneAF2 = false;
@@ -233,8 +235,12 @@ class EstudiosController extends Controller
         $newcentrales = new Centrales;
         $newcentrales->estudios_id = $newestudio->id;
         $newcentrales->calificacion_data = $request->calif_wab;
-        $newcentrales->puntaje_data = $request->puntaje_datacredito;
-        $newcentrales->puntaje_sifin = $request->puntaje_sifin;
+        if ($request->puntaje_datacredito !== '') {
+            $newcentrales->puntaje_data = $request->puntaje_datacredito;
+        }
+        if ($request->puntaje_sifin !== '') {
+            $newcentrales->puntaje_sifin = $request->puntaje_sifin;
+        }
         if ($request->proc_en_contra !== '') {
             $newcentrales->proc_en_contra = $request->proc_en_contra;
         }
@@ -288,7 +294,6 @@ class EstudiosController extends Controller
 
         //Registro condiciones AF1 y AF2
         if ($tieneAF1) {
-            $cuota_mensual = deformat_autonumeric($request->AF1['cuota_mensual']);
             $newcondicionAF1 = new Condicionesaf;
             $newcondicionAF1->estudios_id = $newestudio->id;
             $newcondicionAF1->aliados_id = $request->AF1['id'];
@@ -301,7 +306,6 @@ class EstudiosController extends Controller
             $newcondicionAF1->save();
             
             //AF2
-            $cuota = deformat_autonumeric($request->AF2['cuota']);
             $newcondicionAF2 = new Condicionesaf;
             $newcondicionAF2->estudios_id = $newestudio->id;
             $newcondicionAF2->aliados_id = $request->AF2['id'];
@@ -497,6 +501,8 @@ class EstudiosController extends Controller
     {
         //Deformateo
         $request->costo_certificados = deformat_autonumeric($request->costo_certificados);
+        $cuota_mensual = deformat_autonumeric($request->AF1['cuota_mensual']);
+        $cuota = deformat_autonumeric($request->AF2['cuota']);
 
         $tieneAF1 = false;
         $tieneAF2 = false;
@@ -583,12 +589,11 @@ class EstudiosController extends Controller
             }
         }
         if ($tieneAF1) {
-            $cuota_mensual = deformat_autonumeric($request->AF1['cuota_mensual']);
             if ($condicionAF1) {
                 $condicionAF1->aliados_id = $request->AF1['id'];
                 $condicionAF1->plazo = $request->AF1['plazo'];
                 $condicionAF1->tasa = $request->AF1['tasa'];
-                $condicionAF1->cuota = $cuota_mensual;
+                $condicionAF1->cuota = $cuota;
                 $condicionAF1->saldo_refinanciacion = $request->AF1['saldo_refinanciacion'];
                 $condicionAF1->intereses_anticipados = $request->AF1['intereses_anticipados'];
                 $condicionAF1->costo = $request->AF1['costos'];
@@ -599,7 +604,7 @@ class EstudiosController extends Controller
                 $newcondicionAF1->aliados_id = $request->AF1['id'];
                 $newcondicionAF1->plazo = $request->AF1['plazo'];
                 $newcondicionAF1->tasa = $request->AF1['tasa'];
-                $newcondicionAF1->cuota = $request->AF1['cuota_mensual'];
+                $newcondicionAF1->cuota = $cuota_mensual;
                 $newcondicionAF1->saldo_refinanciacion = $request->AF1['saldo_refinanciacion'];
                 $newcondicionAF1->intereses_anticipados = $request->AF1['intereses_anticipados'];
                 $newcondicionAF1->costo = $request->AF1['costos'];

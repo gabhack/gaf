@@ -181,7 +181,7 @@
                                 <label class="label-consulta">Observaciones</label>
                             </div>
                             <div class="col-md-7">
-                                <textarea class="form-control" type="text" name="observaciones" id="observaciones" maxlength="100"></textarea>
+                                <textarea class="form-control" type="text" name="observaciones" id="observaciones" maxlength="500"></textarea>
                             </div>
                         </div>
                         @if ($viabilidad['analisis'] !== 'Sin datos suficientes para hallar viabilidad preliminar')
@@ -297,12 +297,12 @@
                             </div>
                             <div class="col-md-3 text-center">
                                 <label class="label-consulta col-12" for="pad">Pt. Datacredito:
-                                    <input class="form-control" type="text" name="puntaje_datacredito" id="puntaje_datacredito" required value="">
+                                    <input class="form-control" type="text" name="puntaje_datacredito" id="puntaje_datacredito" value="" placeholder="Opcional">
                                 </label>
                             </div>
                             <div class="col-md-3 text-center">
                                 <label class="label-consulta col-12" for="pad">Pt. Cifín:
-                                    <input class="form-control" type="text" name="puntaje_sifin" id="puntaje_sifin" required value="">
+                                    <input class="form-control" type="text" name="puntaje_sifin" id="puntaje_sifin" value="" placeholder="Opcional">
                                 </label>
                             </div>
                             <div class="col-md-3 text-center">
@@ -317,15 +317,15 @@
 
             @if ($ultimoregistro)
                 <div class="col-md-12">
-                    {{-- <h3>Información de Comprobante de pago (Periodo {{$ultimoregistro->periodo}})</h3> --}}
-                    <h3>Información de Comprobante de pago (Periodo 
+                    <h3>Información de Comprobante de pago (Periodo {{$ultimoregistro->periodo}})</h3>
+                    {{-- <h3>Información de Comprobante de pago (Periodo 
                         <select class="form-control" name="periodo" id="input_periodo">
                             <option value="" selected disabled hidden>Seleccione una</option>
                             @foreach ($registrosf as $item => $value)
                                 <option value="{{ $value }}">{{ $value }}</option>
                             @endforeach
                         </select> )
-                    </h3>
+                    </h3> --}}
                 </div>
 
                 <div class="col-md-6">
@@ -406,16 +406,18 @@
                                 <thead>
                                     <tr>
                                         <th class="text-center">Periodo</th>
-                                        <th class="text-center">Valor cuota</th>
+                                        <th class="text-center">Concepto</th>
                                         <th class="text-center">Inconsistencia</th>
+                                        <th class="text-center">Valor cuota</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($cliente->descuentosnoaplicados as $descuento)
                                         <tr>
                                             <td class="text-center">{{$descuento->periodo}}</td>
-                                            <td class="text-center">{{mneyformat($descuento->valor_fijo)}}</td>
+                                            <td class="text-center">{{$descuento->concepto}}</td>
                                             <td class="text-center">{{$descuento->inconsistencia}}</td>
+                                            <td class="text-center">{{mneyformat($descuento->valor_fijo)}}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
