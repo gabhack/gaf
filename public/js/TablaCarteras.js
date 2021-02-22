@@ -739,7 +739,7 @@ const columnas = [
     field: "Cuota",
     type: "text",
     title: "Cuota",
-    align: "rigth",
+    align: "right",
     renderer: render_convertirNumberAMoney,
     editor: true
   },
@@ -747,7 +747,7 @@ const columnas = [
     field: "SaldoCarteraCentrales",
     type: "text",
     title: "Saldo Cartera Centrales",
-    align: "rigth",
+    align: "right",
     renderer: render_convertirNumberAMoney,
     editor: true
   },
@@ -755,7 +755,7 @@ const columnas = [
     field: "VlrInicioNegociacion",
     type: "text",
     title: "Vlr. inicio negociación",
-    align: "rigth",
+    align: "right",
     renderer: render_convertirNumberAMoney,
     editor: true
   },
@@ -763,7 +763,7 @@ const columnas = [
     field: "DescuentoLogrado",
     type: "text",
     title: "Descuento logrado",
-    align: "rigth",
+    align: "right",
     renderer: render_convertirNumberAMoney,
     editor: true
   },
@@ -771,7 +771,7 @@ const columnas = [
     field: "SaldoCarteraNegociada",
     type: "text",
     title: "Saldo cartera negociada",
-    align: "rigth",
+    align: "right",
     renderer: render_calcularSaldoCarteraNegociada,
     mode: "readOnly"
   },

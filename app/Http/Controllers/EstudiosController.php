@@ -281,13 +281,15 @@ class EstudiosController extends Controller
                 $newcartera->saldo = $cartera->SaldoCarteraCentrales;
                 $newcartera->valor_ini = $cartera->VlrInicioNegociacion;
                 $newcartera->dcto_logrado = $cartera->DescuentoLogrado;
-                if (strpos($cartera->FechaVencimiento, '/') !== false) {
-                    $fechaopt = explode('/', $cartera->FechaVencimiento);
-                    $fecha = $fechaopt[2] . '-' . $fechaopt[0] . '-' . $fechaopt[1];
-                } else {
-                    $fecha = $cartera->FechaVencimiento;
+                if ($cartera->FechaVencimiento !== '') {
+                    if (strpos($cartera->FechaVencimiento, '/') !== false) {
+                        $fechaopt = explode('/', $cartera->FechaVencimiento);
+                        $fecha = $fechaopt[2] . '-' . $fechaopt[0] . '-' . $fechaopt[1];
+                    } else {
+                        $fecha = $cartera->FechaVencimiento;
+                    }
+                    $newcartera->fecha_vence = $fecha;
                 }
-                $newcartera->fecha_vence = $fecha;
                 $newcartera->save();
             }
         }
@@ -423,7 +425,7 @@ class EstudiosController extends Controller
                 "DescuentoLogrado" => $cartera->dcto_logrado,
                 "SaldoCarteraNegociada" => 0,
                 "PctjeNegociacion" => 0,
-                "FechaVencimiento" => $date->format('m/d/Y')
+                "FechaVencimiento" => $cartera->fecha_vence
             );
         }
 
@@ -560,13 +562,15 @@ class EstudiosController extends Controller
                 $newcartera->saldo = $cartera->SaldoCarteraCentrales;
                 $newcartera->valor_ini = $cartera->VlrInicioNegociacion;
                 $newcartera->dcto_logrado = $cartera->DescuentoLogrado;
-                if (strpos($cartera->FechaVencimiento, '/') !== false) {
-                    $fechaopt = explode('/', $cartera->FechaVencimiento);
-                    $fecha = $fechaopt[2] . '-' . $fechaopt[0] . '-' . $fechaopt[1];
-                } else {
-                    $fecha = $cartera->FechaVencimiento;
+                if ($cartera->FechaVencimiento !== '') {
+                    if (strpos($cartera->FechaVencimiento, '/') !== false) {
+                        $fechaopt = explode('/', $cartera->FechaVencimiento);
+                        $fecha = $fechaopt[2] . '-' . $fechaopt[0] . '-' . $fechaopt[1];
+                    } else {
+                        $fecha = $cartera->FechaVencimiento;
+                    }
+                    $newcartera->fecha_vence = $fecha;
                 }
-                $newcartera->fecha_vence = $fecha;
                 $newcartera->save();
             }
         }
