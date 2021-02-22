@@ -5,7 +5,13 @@
     <div class="row">
         <div class="col-md-12">
             <a class="btn btn-primary" href="{{url()->previous()}}"><< Atrás</a>
-            <h3>Información de: {{$cliente->nombres}}</h3>
+            <h3>Información de: {{$cliente->nombres}}
+                <span>
+                    <a class="btn btn-link editar-cliente" type="button" href="{{ url('clientes/editar', ['id' => $cliente->id]) }}">
+                        <i class="fa fa-pencil"></i>
+                    </a>
+                </span>
+            </h3>
         </div>
         <div class="col-md-8">
             <div class="panel panel-default">
