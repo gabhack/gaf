@@ -181,7 +181,7 @@
                                 <label class="label-consulta">Observaciones</label>
                             </div>
                             <div class="col-md-7">
-                                <textarea class="form-control" type="text" name="observaciones" id="observaciones" maxlength="500"></textarea>
+                                <textarea class="form-control" type="text" name="observaciones" id="observaciones"></textarea>
                             </div>
                         </div>
                         @if ($viabilidad['analisis'] !== 'Sin datos suficientes para hallar viabilidad preliminar')
@@ -297,12 +297,12 @@
                             </div>
                             <div class="col-md-3 text-center">
                                 <label class="label-consulta col-12" for="pad">Pt. Datacredito:
-                                    <input class="form-control" type="text" name="puntaje_datacredito" id="puntaje_datacredito" value="" placeholder="Opcional">
+                                    <input class="form-control" type="number" name="puntaje_datacredito" id="puntaje_datacredito" value="" placeholder="Opcional">
                                 </label>
                             </div>
                             <div class="col-md-3 text-center">
                                 <label class="label-consulta col-12" for="pad">Pt. Cifín:
-                                    <input class="form-control" type="text" name="puntaje_sifin" id="puntaje_sifin" value="" placeholder="Opcional">
+                                    <input class="form-control" type="number" name="puntaje_sifin" id="puntaje_sifin" value="" placeholder="Opcional">
                                 </label>
                             </div>
                             <div class="col-md-3 text-center">

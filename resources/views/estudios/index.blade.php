@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('title')
+    HEGO
+@endsection
+
 @section('content')
     @if (isset($message))
         <div id="toast-message" class="col-md-12">
