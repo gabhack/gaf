@@ -44,7 +44,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="btn-group mr-2 float-right" role="group">
-                    <a type="button" class="btn btn-secondary" href="{{url('estudios/nuevoestudio')}}"><i class="fa fa-arrow-left"></i> Atrás</a>
+                    <a type="button" class="btn btn-secondary" href="{{url('estudios')}}"><i class="fa fa-arrow-left"></i> Atrás</a>
                     <input class="btn btn-success" type="submit" value="Actualizar">
                 </div>
                 <h3>Cliente: {{$cliente->nombres}}</h3>
@@ -159,7 +159,7 @@
                                 <label class="label-consulta">Observaciones</label>
                             </div>
                             <div class="col-md-7">
-                                <textarea class="form-control" type="text" name="observaciones" id="observaciones" maxlength="500">{{$estudio->observaciones}}</textarea>
+                                <textarea class="form-control" type="text" name="observaciones" id="observaciones">{{$estudio->observaciones}}</textarea>
                             </div>
                         </div>
                         @if ($viabilidad['analisis'] !== 'Sin datos suficientes para hallar viabilidad preliminar')
@@ -275,12 +275,12 @@
                             </div>
                             <div class="col-md-3 text-center">
                                 <label class="label-consulta col-12" for="pad">Pt. Datacredito:
-                                    <input class="form-control" type="text" name="puntaje_datacredito" id="puntaje_datacredito" value="{{$estudio->central->puntaje_data}}" placeholder="Opcional">
+                                    <input class="form-control" type="number" name="puntaje_datacredito" id="puntaje_datacredito" value="{{$estudio->central->puntaje_data}}" placeholder="Opcional">
                                 </label>
                             </div>
                             <div class="col-md-3 text-center">
                                 <label class="label-consulta col-12" for="pad">Pt. Cifín:
-                                    <input class="form-control" type="text" name="puntaje_sifin" id="puntaje_sifin" value="{{$estudio->central->puntaje_sifin}}" placeholder="Opcional">
+                                    <input class="form-control" type="number" name="puntaje_sifin" id="puntaje_sifin" value="{{$estudio->central->puntaje_sifin}}" placeholder="Opcional">
                                 </label>
                             </div>
                             <div class="col-md-3 text-center">

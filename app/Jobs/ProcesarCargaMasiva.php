@@ -104,6 +104,25 @@ class ProcesarCargaMasiva implements ShouldQueue
                 $log .= '*****Proceso de Extracción de entidades: ' . count($personas);
 
                 foreach ($personas as $key => $persona) {
+                    $detallado_conceptos = array();
+                    if (isset($persona[0]->conceptos_financieros[0]->detallado_conceptos->ingresos)) {
+                        foreach ($persona[0]->conceptos_financieros[0]->detallado_conceptos->ingresos as $key => $ingreso) {
+                            $detallado_conceptos['ingresos'][] = array(
+                                'codConcepto' => $ingreso->codConcepto,
+                                'concepto' => $ingreso->concepto,
+                                'valor' => $ingreso->valor
+                            );
+                        }
+                    }
+                    if (isset($persona[0]->conceptos_financieros[0]->detallado_conceptos->egresos)) {
+                        foreach ($persona[0]->conceptos_financieros[0]->detallado_conceptos->egresos as $key => $egreso) {
+                            $detallado_conceptos['egresos'][] = array(
+                                'codConcepto' => $egreso->codConcepto,
+                                'concepto' => $egreso->concepto,
+                                'valor' => $egreso->valor
+                            );
+                        }
+                    }
                     $personas_upload[] = array(
                         'nombres' => ( isset($persona[0]->nombres) ? $persona[0]->nombres : '' ),
                         'apellidos' => ( isset($persona[0]->apellidos) ? $persona[0]->apellidos : '' ),
@@ -130,8 +149,12 @@ class ProcesarCargaMasiva implements ShouldQueue
                         'cesantias' => ( isset($persona[0]->cesantias) ? $persona[0]->cesantias : '' ),
                         'dias_laborados' => ( isset($persona[0]->Dias_Laborados) ? $persona[0]->Dias_Laborados : '' ),
                         'nit' => ( isset($persona[0]->Nit_Pagaduria) ? $persona[0]->Nit_Pagaduria : '' ),
-                        'ingresos_base' => (isset($persona[0]->ingresos_base) ? $persona[0]->ingresos_base : '' ),
-                        'conceptos_financieros' => ( isset($persona[0]->conceptos_financieros[0]) ? $persona[0]->conceptos_financieros[0] : '' )
+                        'ingresos_base' => ( isset($persona[0]->ingresos_base) ? $persona[0]->ingresos_base : '' ),
+                        'conceptos_financieros' => array( 
+                            'ingresos_totales' => ( isset($persona[0]->conceptos_financieros[0]->ingresos_totales) ? $persona[0]->conceptos_financieros[0]->ingresos_totales : ''),
+                            'egresos_totales' => ( isset($persona[0]->conceptos_financieros[0]->egresos_totales) ? $persona[0]->conceptos_financieros[0]->egresos_totales : ''),
+                            'detallado_conceptos' => $detallado_conceptos,
+                        )
                     );
                 }
 
