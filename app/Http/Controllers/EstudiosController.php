@@ -44,9 +44,9 @@ class EstudiosController extends Controller
     public function index()
     {
         if (Auth::user()->rol->id == 1 || Auth::user()->rol->id == 5 ) {
-            $lista = Estudios::all()->paginate(20);
+            $lista = Estudios::all();
         } else {
-            $lista = Estudios::where('user_id', Auth::user()->id)->get()->paginate(20);
+            $lista = Estudios::where('user_id', Auth::user()->id)->get();
         }
         return view("estudios/index")->with([
             "lista" => $lista
