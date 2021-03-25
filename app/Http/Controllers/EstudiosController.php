@@ -19,6 +19,8 @@ use App\Carteras as Carteras;
 use App\FactorXMillonKredit as FactorXMillonKredit;
 use App\FactorXMillonGnb as FactorXMillonGnb;
 //
+use Illuminate\Support\Facades\DB as DB;
+use Illuminate\Support\Facades\Input as Input;
 use Illuminate\Support\Facades\Auth as Auth;
 use Illuminate\Http\Request;
 use App\Helper;
@@ -41,16 +43,47 @@ class EstudiosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        if (Auth::user()->rol->id == 1 || Auth::user()->rol->id == 5 ) {
-            $lista = Estudios::all();
+        $search = '';
+        if (isset($request->busq)) {
+            $search = $request->busq;
+            if (Auth::user()->rol->id == 1 || Auth::user()->rol->id == 5 ) {
+                $lista = Estudios::orderBy('id', 'desc')
+                    ->WhereHas('cliente', function($q) use($search) {
+                        $q->where('documento', 'like', '%' . $search . '%');
+                    })
+                    ->orWhereHas('cliente', function($q) use($search) {
+                        $q->where(DB::raw('CONCAT_WS(" ", nombres, apellidos)'), 'like', $search);
+                    })
+                    ->paginate(20);
+            } else {
+                $lista = Estudios::orderBy('id', 'desc')
+                    ->WhereHas('cliente', function($q) use($search) {
+                        $q->where('documento', 'like', '%' . $search . '%');
+                    })
+                    ->orWhereHas('cliente', function($q) use($search) {
+                        $q->where(DB::raw('CONCAT_WS(" ", nombres, apellidos)'), 'like', $search);
+                    })
+                    ->where('user_id', Auth::user()->id)
+                    ->paginate(20);
+            }
         } else {
-            $lista = Estudios::where('user_id', Auth::user()->id)->get();
+            if (Auth::user()->rol->id == 1 || Auth::user()->rol->id == 5 ) {
+                $lista = Estudios::orderBy('id', 'desc')->paginate(20);
+            } else {
+                $lista = Estudios::orderBy('id', 'desc')->where('user_id', Auth::user()->id)->paginate(20);
+            }
         }
-        return view("estudios/index")->with([
-            "lista" => $lista
-        ]);
+        $links = $lista->links();
+        $options = array(
+            "lista" => $lista,
+            "links" => $links
+        );
+        if ($search !== '') {
+            $options['busq'] = $search;
+        }
+        return view("estudios/index")->with($options);
     }
     
     /**
