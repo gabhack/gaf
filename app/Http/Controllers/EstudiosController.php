@@ -359,28 +359,39 @@ class EstudiosController extends Controller
             }
 
             if (Auth::user()->rol->id == 1 || Auth::user()->rol->id == 5 ) {
-                $lista = Estudios::all();
+                $lista = Estudios::orderBy('id', 'desc')->paginate(20);
             } else {
-                $lista = Estudios::where('user_id', Auth::user()->id)->get();
+                $lista = Estudios::orderBy('id', 'desc')->where('user_id', Auth::user()->id)->paginate(20);
             }
-            return view("estudios/index")->with([
+            $links = $lista->links();
+            $options = array(
                 "lista" => $lista,
+                "links" => $links,
                 "message" => array(
                     'tipo' => 'success',
                     'titulo' => 'Éxito',
                     'mensaje' => 'El estudio se ha creado correctamente',
                 )
-            ]);
+            );
+            return view("estudios/index")->with($options);
 
         } catch (\Exception $e) {
-            return view("estudios/index")->with([
+            if (Auth::user()->rol->id == 1 || Auth::user()->rol->id == 5 ) {
+                $lista = Estudios::orderBy('id', 'desc')->paginate(20);
+            } else {
+                $lista = Estudios::orderBy('id', 'desc')->where('user_id', Auth::user()->id)->paginate(20);
+            }
+            $links = $lista->links();
+            $options = array(
                 "lista" => $lista,
+                "links" => $links,
                 "message" => array(
                     'tipo' => 'error',
                     'titulo' => 'Error',
                     'mensaje' => 'No se pudo actualizar el estudio. Error: ' . $e->getMessage(),
                 )
-            ]);
+            );
+            return view("estudios/index")->with($options);
         }
     }
 
@@ -715,28 +726,39 @@ class EstudiosController extends Controller
             }
 
             if (Auth::user()->rol->id == 1 || Auth::user()->rol->id == 5 ) {
-                $lista = Estudios::all();
+                $lista = Estudios::orderBy('id', 'desc')->paginate(20);
             } else {
-                $lista = Estudios::where('user_id', Auth::user()->id)->get();
+                $lista = Estudios::orderBy('id', 'desc')->where('user_id', Auth::user()->id)->paginate(20);
             }
-            return view("estudios/index")->with([
+            $links = $lista->links();
+            $options = array(
                 "lista" => $lista,
+                "links" => $links,
                 "message" => array(
                     'tipo' => 'success',
                     'titulo' => 'Éxito',
                     'mensaje' => 'El estudio se ha actualizado correctamente',
                 )
-            ]);
+            );
+            return view("estudios/index")->with($options);
 
         } catch (\Exception $e) {
-            return view("estudios/index")->with([
+            if (Auth::user()->rol->id == 1 || Auth::user()->rol->id == 5 ) {
+                $lista = Estudios::orderBy('id', 'desc')->paginate(20);
+            } else {
+                $lista = Estudios::orderBy('id', 'desc')->where('user_id', Auth::user()->id)->paginate(20);
+            }
+            $links = $lista->links();
+            $options = array(
                 "lista" => $lista,
+                "links" => $links,
                 "message" => array(
                     'tipo' => 'error',
                     'titulo' => 'Error',
                     'mensaje' => 'No se pudo actualizar el estudio. Error: ' . $e->getMessage(),
                 )
-            ]);
+            );
+            return view("estudios/index")->with($options);
         }
         
     }
