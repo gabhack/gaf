@@ -30,10 +30,33 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">Listado de Estudios</div>
 			<div class="panel-body">
-                <div>
+                {{-- <div>
                     <form action="{{url('estudios')}}" method="get">
                         <div class="form-row" id="panel-pagaduria">
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-1 text-center">
+                                <p class="pt-1 mb-0 font-weight-bold">Fechas:</p>
+                            </div>
+                            <div class="form-group col-md-1">
+                                <input type="text" class="form-control datepicker" name="filtro[fecha_desde]" id="fecha_desde" placeholder="Desde" value="{{ isset($filtro['fecha_desde']) ? $filtro['fecha_desde'] : '' }}">
+                            </div>
+                            <div class="form-group">
+                                <p class="pt-1 mb-0 font-weight-bold"> - </p>
+                            </div>
+                            <div class="form-group col-md-1">
+                                <input type="text" class="form-control datepicker" name="filtro[fecha_hasta]" id="fecha_hasta" placeholder="Hasta" value="{{ isset($filtro['fecha_hasta']) ? $filtro['fecha_hasta'] : '' }}">
+                            </div>
+                            <div class="form-group col-md-1 text-center">
+                                <select class="form-control" name="filtro[asesor]" id="asesor">
+
+                                </select>
+                            </div>
+                            <div class="form-group col-md-1">
+                                <input type="number" class="form-control datepicker-periodo" name="filtro[periodo]" id="periodo" placeholder="Periodos" value="{{ isset($filtro['periodo']) ? $filtro['periodo'] : '' }}">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <button type="submit" class="btn btn-info">Filtrar</button>
+                            </div>
+                            <div class="form-group col-md-3">
                                 <input type="text" class="form-control" name="busq" id="busq" placeholder="Buscar por: Nombres - Documento" value="{{ isset($busq) ? $busq : '' }}">
                             </div>
                             <div class="form-group-col-md-2">
@@ -46,7 +69,7 @@
                             @endif
                         </div>
                     </form>
-                </div>
+                </div> --}}
                 <table class="table table-hover table-striped table-condensed table-bordered">
                     <thead>
                         <tr>
@@ -86,4 +109,30 @@
 			</div>
 		</div>
 	</div>
+@endsection
+
+@section('css')
+    <link href="{{asset('libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css')}}" rel="stylesheet">
+@endsection
+
+@section('js')
+    <script src="{{asset('libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}"></script>
+    <script>
+        $('.datepicker').datepicker({
+            format: "yyyy-mm-dd",
+            autoclose: true,
+            toggleActive: true,
+            language: "es"
+        });
+    </script>
+    <script>
+        $('.datepicker-periodo').datepicker({
+            format: "yyyymm",
+            autoclose: true,
+            toggleActive: true,
+            language: "es",
+            startView: "decade",
+            showOnFocus: true
+        });
+    </script>
 @endsection
