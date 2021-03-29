@@ -21,19 +21,18 @@
 	<div class="col-md-12">
         <ul class="nav nav-tabs">
             <li class="nav-item">
-                <a class="nav-link active"><b>Lista de Estudios</b></a>
+                <a class="nav-link active"><b>Todas las simulaciones</b></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{url('estudios/nuevoestudio')}}">Crear Estudio</a>
+                <a class="nav-link" href="{{url('estudios/nuevoestudio')}}">Nueva <i class="fa fa-plus" aria-hidden="true"></i></a>
             </li>
         </ul>
 		<div class="panel panel-default">
-			<div class="panel-heading">Listado de Estudios</div>
 			<div class="panel-body">
-                {{-- <div>
+                <div>
                     <form action="{{url('estudios')}}" method="get">
                         <div class="form-row" id="panel-pagaduria">
-                            <div class="form-group col-md-1 text-center">
+                            <div class="form-group col-md-.5 text-center">
                                 <p class="pt-1 mb-0 font-weight-bold">Fechas:</p>
                             </div>
                             <div class="form-group col-md-1">
@@ -45,31 +44,39 @@
                             <div class="form-group col-md-1">
                                 <input type="text" class="form-control datepicker" name="filtro[fecha_hasta]" id="fecha_hasta" placeholder="Hasta" value="{{ isset($filtro['fecha_hasta']) ? $filtro['fecha_hasta'] : '' }}">
                             </div>
-                            <div class="form-group col-md-1 text-center">
+                            <div class="form-group col-md-2 text-center">
                                 <select class="form-control" name="filtro[asesor]" id="asesor">
-
+                                    <option value="" <?php echo (isset($filtro['asesor']) ? '' : ' selected') ?>>Todos los asesores...</option>
+                                    @foreach (asesores() as $asesorgen)
+                                        <option value="{{$asesorgen->id}}"<?php echo ( isset($filtro['asesor']) ? ($asesorgen->id == $filtro['asesor'] ? ' selected' : '') : '' ) ?>>{{$asesorgen->nombres}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2 text-center">
+                                <select class="form-control" name="filtro[decision]" id="decision">
+                                    <option value="" <?php echo (isset($filtro['decision']) ? '' : ' selected') ?>>Todas las decisiones...</option>
+                                    @foreach (decisiones_estudios() as $key => $decision)
+                                        <option value="{{$key}}"<?php echo ( isset($filtro['decision']) ? ($key == $filtro['decision'] ? ' selected' : '') : '' ) ?>>{{$decision}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="form-group col-md-1">
-                                <input type="number" class="form-control datepicker-periodo" name="filtro[periodo]" id="periodo" placeholder="Periodos" value="{{ isset($filtro['periodo']) ? $filtro['periodo'] : '' }}">
+                                <input type="number" class="form-control datepicker-periodo" name="filtro[periodo]" id="periodo" placeholder="Periodo" value="{{ isset($filtro['periodo']) ? $filtro['periodo'] : '' }}">
                             </div>
-                            <div class="form-group col-md-1">
-                                <button type="submit" class="btn btn-info">Filtrar</button>
-                            </div>
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-2">
                                 <input type="text" class="form-control" name="busq" id="busq" placeholder="Buscar por: Nombres - Documento" value="{{ isset($busq) ? $busq : '' }}">
                             </div>
-                            <div class="form-group-col-md-2">
-                                <button type="submit" class="btn btn-info"><i class="fa fa-search" aria-hidden="true"></i></button>
+                            <div class="form-group col-md-1">
+                                <button type="submit" class="btn btn-info"><i class="fa fa-filter" aria-hidden="true"></i> Filtrar</button>
                             </div>
-                            @if (isset($busq))
-                                <div class="form-group-col-md-2">
-                                    <a href="{{url('estudios')}}" class="btn btn-secondary"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                            @if (isset($busq) || isset($filtro))
+                                <div class="form-group col-md-1">
+                                    <a href="{{url('estudios')}}" class="btn btn-secondary"><i class="fa fa-eraser" aria-hidden="true"></i> Limpiar todo</a>
                                 </div>
                             @endif
                         </div>
                     </form>
-                </div> --}}
+                </div>
                 <table class="table table-hover table-striped table-condensed table-bordered">
                     <thead>
                         <tr>
@@ -132,7 +139,8 @@
             toggleActive: true,
             language: "es",
             startView: "decade",
-            showOnFocus: true
+            showOnFocus: true,
+            minViewMode: 'months'
         });
     </script>
 @endsection

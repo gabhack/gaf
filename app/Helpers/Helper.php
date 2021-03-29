@@ -313,6 +313,13 @@ if (!function_exists('ciudades')) {
 	}
 }
 
+if (!function_exists('asesores')) {
+	function asesores()
+	{
+		return App\Asesores::all();	
+	}
+}
+
 if (!function_exists('pagadurias')) {
 	function pagadurias()
 	{

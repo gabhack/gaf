@@ -17,10 +17,10 @@
 	<div class="col-md-12 col-md-offset-0">
 		<ul class="nav nav-tabs">
             <li class="nav-item">
-                <a class="nav-link" href="{{url('estudios')}}">Lista de Estudios</a>
+                <a class="nav-link" href="{{url('estudios')}}">Todas las simulaciones</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active"><b>Crear Estudio</b></a>
+                <a class="nav-link active"><b>Nueva <i class="fa fa-plus" aria-hidden="true"></i></b></a>
             </li>
         </ul>
 		<div class="panel panel-default">
