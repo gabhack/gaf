@@ -8,7 +8,7 @@
 
 		<!-- CSRF Token -->
 		<meta name="csrf-token" content="{{ csrf_token() }}">
-		<title>{{ config('app.name', 'Laravel') }} - @yield('title')</title>
+		<title>{{ Auth::user()->rol->rol == 'ADMIN_HEGO' ? 'HEGO' : 'AMI' }} - @yield('title')</title>
 		
 		<base href="{{url('/')}}">		
 
@@ -20,7 +20,7 @@
 		<link href="{{asset('css/styles.css')}}" rel="stylesheet">
 		@yield('css')  
 	</head>
-	<body class="skin-blue sidebar-mini sidebar-collapse">
+	<body class="skin-{{ Auth::user()->rol->rol == 'ADMIN_HEGO' ? 'red' : 'blue' }} sidebar-mini sidebar-open">
 		<!-- Loader -->
 		<div class="loader">
 			<div class="text-center">
@@ -36,6 +36,14 @@
 			@include('layouts.sidebar')		
 			
 			<div class="content-wrapper">
+				<section class="content-header">
+					<h1>
+						@yield('header-content')
+					</h1>
+					<ol class="breadcrumb">
+						@yield('breadcrumb')
+					</ol>
+				</section>
 				<div class="content">
 					@yield('content')
 				</div>			

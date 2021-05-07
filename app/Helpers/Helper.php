@@ -288,7 +288,6 @@ if (!function_exists('compradores')) {
 			'CK' => 'CK',
 			'ALIA' => 'ALIADO',
 		);
-		
 	}
 }
 
@@ -1044,6 +1043,25 @@ if (!function_exists('deformat_autonumeric')) {
 		$valuesindecimal = str_replace(",00", "", $valuesinpeso);
 		$valuelimpio = str_replace(".", "", $valuesindecimal);
 		return trim($valuelimpio);
+	}
+}
+
+if(!function_exists('roles_label')) {
+	function roles_label($rol){
+		switch ($rol) {
+			case 'ADMIN_SISTEMA':
+				return 'SuperAdmin';
+				break;
+			case 'ADMIN_HEGO':
+				return 'Administrador HEGO';
+				break;
+			case 'ADMIN_AMI':
+				return 'Administrador AMI';
+				break;
+			case 'USUARIO':
+				return 'Usuario';
+				break;
+		}
 	}
 }
 
