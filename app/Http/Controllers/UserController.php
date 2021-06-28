@@ -148,6 +148,7 @@ class UserController extends Controller
 			$usuario->password = bcrypt($request->input('password'));
 		
         if (IsSuperAdmin() || IsAMIAdmin() || IsHEGOAdmin()) {
+		    $usuario->roles_id =  \App\Roles::find($request->input('rol'))->id;
             if ($request->input('hego')) {
                 $usuario->hego = 1;
             } else {
