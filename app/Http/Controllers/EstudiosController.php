@@ -102,7 +102,7 @@ class EstudiosController extends Controller
             });
 
         //Preparar la salida
-        $listaOut = $lista->paginate(20);
+        $listaOut = $lista->paginate(20)->appends(request()->except('page'));
         $links = $listaOut->links();
         $options = array(
             "lista" => $listaOut,

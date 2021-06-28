@@ -8,7 +8,7 @@
 
 		<!-- CSRF Token -->
 		<meta name="csrf-token" content="{{ csrf_token() }}">
-		<title>{{ config('app.name', 'Laravel') }}</title>
+		<title>{{ config('app.name', 'AMI') }}</title>
 		
 		<base href="{{url('/')}}">		
 
@@ -18,6 +18,9 @@
 		<link href="{{asset('css/simple-sidebar.css')}}" rel="stylesheet">    
 		<link href="{{asset('css/font-awesome-4.7.0/css/font-awesome.min.css')}}" rel="stylesheet">
 		<link href="{{asset('css/styles.css')}}" rel="stylesheet">
+		<link href="{{asset('css/login.css')}}" rel="stylesheet">
+		<link rel="preconnect" href="https://fonts.gstatic.com">
+		<link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
 
 		
 		<script type="text/javascript">
@@ -51,16 +54,9 @@
 		</div>
 		
 		<!-- Container -->
-        <div class="container login">
+        <div class="container-fluid login">
             @yield('content')
         </div>
-
-        <footer class="login-footer">
-            <div class="pull-right hidden-xs">
-                <strong>Copyright © {{ date('Y') }}</strong>
-            </div>
-            <strong>Developed by <a href="">GAF</a></strong>
-        </footer>
 			
 		<!-- Scripts -->
 		<script src="{{asset('js/jquery-3.5.1.min.js')}}"></script>

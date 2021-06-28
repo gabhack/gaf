@@ -1,0 +1,107 @@
+/* login */
+
+.font-varela {
+    font-family: 'Varela Round', sans-serif;
+}
+
+.title-login {
+    font-size: 3em;
+}
+
+.btn-submit {
+    width: 100%;
+    font-size: 1.2em;
+}
+
+.checkbox {
+    padding-top: 0 !important;
+}
+
+.checkbox>label {
+    color: #888;
+    font-weight: 400 !important;
+}
+
+.btn.btn-link {
+    color: #888;
+    padding: 0;
+    margin-top: -2px;
+}
+
+input.form-control {
+    padding: 10px 15px;
+    height: auto;
+}
+
+div.grecaptcha-badge {
+    bottom: 52px !important;
+}
+
+.content-fluid.login .content-column {
+    max-width: 300px;
+}
+
+.login-footer {
+    background: #fff;
+    padding: 15px;
+    color: #444;
+    border-top: 1px solid #d2d6de;
+}
+
+.container-fluid.login{
+	height:100%;
+	padding: 0;
+}
+
+.container-fluid.login .bg-image {
+	background: url(../img/Company-Facts-Background.png);
+	background-repeat: no-repeat;
+	height: 100%
+}
+
+.container-fluid.login .col-md-6 .container{
+	height: 100%;
+}
+
+.container-fluid.login .col-md-6 .container>.row{
+	height: 100%;
+}
+
+.container-fluid.login .btn-primary{
+	background: #3097D1;
+	border: 1px solid #3097D1;
+}
+
+.container-fluid.login .btn-outline-primary{
+	color: #3097D1;
+	border: 1px solid #3097D1;
+}
+	
+.container-fluid.login .btn-primary:hover{
+	background: #257fb1;
+}
+
+
+.container-fluid.login .btn-outline-primary:hover{
+	background: #3097D1;
+	color:white;
+}
+
+.container-fluid.login>.row {
+	height: 100%;
+}
+
+.container-fluid.login>.row>.col-md-6 {
+	padding: 0;
+}
+
+.gaf-login {
+	margin-top: 30px;
+	color: #AAA;
+}
+
+.gaf-login>span {
+	color: #3097D1;
+	font-weight: bold;
+	font-size: 1.3em;
+}

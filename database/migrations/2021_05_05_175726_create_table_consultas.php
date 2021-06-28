@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableFactoresXMillonGnb extends Migration
+class CreateTableConsultas extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,13 @@ class CreateTableFactoresXMillonGnb extends Migration
      */
     public function up()
     {
-        Schema::create('factores_x_millon_gnb', function (Blueprint $table) {
+        Schema::create('consultas', function (Blueprint $table) {
             $table->increments('id');
-            $table->char('pagaduria', 200)->nullable();
-            $table->char('plazo', 200)->nullable();
-            $table->char('normal', 200)->nullable();
-            $table->char('saneamiento', 200)->nullable();
+            $table->integer('users_id', 11)->unsigned();
+            $table->bigInteger('documento', 20);
+            $table->integer('cifin', 1)->nullable();
+            $table->integer('datacredito', 1)->nullable();
+            $table->integer('desc_no_aplicados', 1)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -31,6 +32,6 @@ class CreateTableFactoresXMillonGnb extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('factores_x_millon_gnb');
+        Schema::dropIfExists('consultas');
     }
 }

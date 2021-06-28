@@ -535,16 +535,16 @@
             {{-- Seccion Condiciones Aliados --}}
             <div id="panel-aliados" class="col-md-12 panel-aliados hidden">
                 <div class="panel panel-primary">
-                    <div class="panel-heading">Condiciones Aliados Financieros</div>
+                    <div class="panel-heading">Condiciones Entidades Financieras</div>
                     <div class="panel-body">
                         <div class="row">
                             <div id="panel-AF1" class="col-md text-center hidden">
-                                <h4><b>Aliado 1</b></h4>
+                                <h4><b>Entidad 1</b></h4>
                                 <div class="row justify-content-center">
                                     <div class="col-md-10">
                                         <div class="row">
                                             <div class="col-md-5 text-right">
-                                                <label class="label-consulta" for="pad">Aliado</label>
+                                                <label class="label-consulta" for="pad">Entidad</label>
                                             </div>
                                             <div class="col-md">
                                                 <select class="form-control" name="AF1[id]" id="aliadof1">
@@ -712,12 +712,12 @@
                                 </div>
                             </div>
                             <div id="panel-AF2" class="col-md text-center hidden">
-                                <h4><b>Aliado 2</b></h4>
+                                <h4><b>Entidad 2</b></h4>
                                 <div class="row justify-content-center">
                                     <div class="col-md-10">
                                         <div class="row">
                                             <div class="col-md text-right">
-                                                <label class="label-consulta" for="pad">Aliado</label>
+                                                <label class="label-consulta" for="pad">Entidad</label>
                                             </div>
                                             <div class="col-md">
                                                 <select class="form-control" name="AF2[id]" id="aliadof2">
