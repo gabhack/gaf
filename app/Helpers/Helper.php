@@ -1065,4 +1065,130 @@ if(!function_exists('roles_label')) {
 	}
 }
 
+if(!function_exists('IsSuperAdmin')) {
+	function IsSuperAdmin() {
+		switch (Auth::user()->rol->rol) {
+			case 'ADMIN_SISTEMA':
+				return true;
+				break;
+			default:
+				return false;
+				break;
+		}
+	}
+}
+
+if(!function_exists('IsAMIAdmin')) {
+	function IsAMIAdmin() {
+		switch (Auth::user()->rol->rol) {
+			case 'ADMIN_AMI':
+				return true;
+				break;
+			default:
+				return false;
+				break;
+		}
+	}
+}
+
+if(!function_exists('IsHEGOAdmin')) {
+	function IsHEGOAdmin() {
+		switch (Auth::user()->rol->rol) {
+			case 'ADMIN_HEGO':
+				return true;
+				break;
+			default:
+				return false;
+				break;
+		}
+	}
+}
+
+if(!function_exists('IsUser')) {
+	function IsUser() {
+		if (IsCompany()) {
+			return false;
+		} else {
+			switch (Auth::user()->rol->rol) {
+				case 'USUARIO':
+					return true;
+					break;
+				default:
+					return false;
+					break;
+			}
+		}
+	}
+}
+
+if(!function_exists('IsUserCreator')) {
+	function IsUserCreator() {
+		if (Auth::user()->creausuarios) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+}
+
+if(!function_exists('IsCompany')) {
+	function IsCompany() {
+		if (!Auth::user()->id_company) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+}
+
+if(!function_exists('HEGOAccess')) {
+	function HEGOAccess() {
+		if (Auth::user()->hego) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+}
+
+if (!function_exists('AMISilverHabilitado')) {
+	function AMISilverHabilitado()
+	{
+		if (Auth::user()->ami_silver || IsCompany()) {
+			return true;
+		} else {
+			return false;
+		}	
+	}
+}
+
+if (!function_exists('AMIGoldHabilitado')) {
+	function AMIGoldHabilitado()
+	{
+		if (Auth::user()->ami_gold || IsCompany()) {
+			return true;
+		} else {
+			return false;
+		}		
+	}
+}
+
+if (!function_exists('AMIDiamondHabilitado')) {
+	function AMIDiamondHabilitado()
+	{
+		if (Auth::user()->ami_diamond || IsCompany()) {
+			return true;
+		} else {
+			return false;
+		}		
+	}
+}
+
+if (!function_exists('getConsultasXUsuario')) {
+	function getConsultasXUsuario($user)
+	{
+		return App\Consultas::where( 'users_id', $user->id )->get();	
+	}
+}
+
 ?>

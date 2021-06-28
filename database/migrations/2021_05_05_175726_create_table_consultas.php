@@ -14,12 +14,13 @@ class CreateTableConsultas extends Migration
     public function up()
     {
         Schema::create('consultas', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('users_id', 11)->unsigned();
-            $table->bigInteger('documento', 20);
-            $table->integer('cifin', 1)->nullable();
-            $table->integer('datacredito', 1)->nullable();
-            $table->integer('desc_no_aplicados', 1)->nullable();
+            $table->bigIncrements('id');
+            $table->unsignedInteger('users_id')->references('id')->on('users');
+            $table->unsignedInteger('documento');
+            $table->integer('tipo_consulta')->nullable();
+            //
+            $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');
+            //
             $table->timestamps();
             $table->softDeletes();
         });
@@ -32,6 +33,9 @@ class CreateTableConsultas extends Migration
      */
     public function down()
     {
+        Schema::table('consultas', function (Blueprint $table) {
+            $table->dropForeign('consultas_users_id_foreign');
+        });
         Schema::dropIfExists('consultas');
     }
 }

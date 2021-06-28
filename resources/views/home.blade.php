@@ -61,7 +61,7 @@
         <!-- /.col -->
     </div>
     <div class="row">
-        @if (Auth::user()->rol->rol == 'ADMIN_AMI')
+        @if (IsSuperAdmin())
             <div class="col-md-12">
                 <div class="box">
                 <div class="box-header with-border">
@@ -192,7 +192,7 @@
             </div>
         @endif
 
-        @if (Auth::user()->rol->rol == 'ADMIN_HEGO')
+        @if (IsSuperAdmin())
             <div class="col-md-12">
                 <div class="box box-default">
                     <div class="box-header with-border">
@@ -245,6 +245,10 @@
         @endif
     </div>
 </div>
+@endsection
+
+@section('title')
+    Inicio
 @endsection
 
 @section('header-content')

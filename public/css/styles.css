@@ -182,7 +182,7 @@ td:nth-child(2n) {
 }
 
 .form-check>label{
-	margin-left: 20px;
+	margin-left: 10px;
 }
 
 .btn.eliminar-registro {
@@ -275,3 +275,43 @@ input[type=number] {
     from { opacity: 0; }
     to   { opacity: 1; }
 }
+
+
+
+/****************** RESPONSIVE ******************/
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+	header.main-header{
+		position: fixed;
+		width: 100%;
+	}
+	.main-sidebar{
+		position: fixed;
+	}
+	.content-wrapper{
+		margin-top: 52px;
+	}
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+
+}
+
+/**************** FIN RESPONSIVE ****************/

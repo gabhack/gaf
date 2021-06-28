@@ -1,22 +1,7 @@
 @extends('layouts.app')
 
-@section('js')
-	<script type="text/javascript" src="{{asset('js/validaciones/Usuarios.js')}}"></script>	
-@endsection
-
 @section('content')
-	<div class="col-md-12 col-md-offset-0">
-	
-		<h2>Mi Perfil</h2>
-		
-		<ul class="nav nav-tabs">
-			<li class="nav-item">
-				<a class="nav-link active">Mi Perfil</a>
-			</li>
-		</ul>
-		<br />		
-		<h4>Informaci&oacute;n Personal</h4>
-		
+	<div class="col-md-8 col-md-offset-2">		
 		<div class="panel panel-default">
 			<div class="panel-heading">Informaci&oacute;n Personal</div>
 			<div class="panel-body">
@@ -25,7 +10,7 @@
 					<div class="form-row">
 						<div class="form-group col-md-6">
 							<label for="nombre">Nombre: </label>								
-							<input type="text" class="form-control" name="nombre" id="nombre" placeholder="Nombre" value="{{$user->name}}" />
+							<input type="text" class="form-control" name="nombre" id="nombre" placeholder="Nombre" value="{{$user->name}}"{{ IsCompany() || IsUser() ? ' disabled' : '' }}/>
 							@if($errors -> first('nombre'))
 								<label class="control-label"><img src="img/alert.png" title="{{$errors-> first('nombre')}}" alt="*" /></label>
 							@endif
@@ -59,4 +44,17 @@
 			</div>
 		</div>
 	</div>
-@stop
+@endsection
+
+@section('title')
+    Mi Perfil
+@endsection
+
+@section('header-content')
+    Mi Perfil
+@endsection
+
+@section('breadcrumb')
+    <li><a href="{{url('home')}}"><i class="fa fa-dashboard"></i>Inicio</a></li>
+    <li class="active">Mi Perfil</li>
+@endsection

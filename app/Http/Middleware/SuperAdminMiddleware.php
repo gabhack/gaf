@@ -16,7 +16,7 @@ class SuperAdminMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if ($request->user() && $request->user()->rol->id != 1)
+        if ($request->user() && !IsAdmin())
         {
             return new Response(view('unauthorized'));
         }
