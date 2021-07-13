@@ -50,4 +50,19 @@ class User extends Authenticatable
             return false;
         }
     }
+
+    public function consultas()
+    {
+        return $this->hasMany('App\Consultas', 'users_id', 'id');
+    }
+
+    public function usuarioscompany()
+    {
+        return $this->hasMany('App\User', 'id_company', 'id');
+    }
+
+    public function usuarioshijos()
+    {
+        return $this->hasMany('App\User', 'id_padre', 'id');
+    }
 }

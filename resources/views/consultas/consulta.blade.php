@@ -5,6 +5,7 @@
     <div class="row">
         <div class="col-md-12">
             <a class="btn btn-primary" href="{{url()->previous()}}"><< Atrás</a>
+            <input type="button" id="bt" onclick="print();" value="Descargar PDF" />
             <h3>Información de: {{$cliente->nombres}}
                 {{-- <span>
                     <a class="btn btn-link editar-cliente" type="button" href="{{ url('clientes/editar', ['id' => $cliente->id]) }}">
@@ -13,6 +14,9 @@
                 </span> --}}
             </h3>
         </div>
+    </div>
+
+    <div id="consulta-container" class="row">
         <div class="col-md-7">
             <div class="panel panel-primary">
                 <div class="panel-heading"><b>Información básica</b></div>
@@ -317,6 +321,32 @@
 
 @section('title')
 	Consulta AMI®
+@endsection
+
+@section('css')
+    <link href="{{asset('libs/print/print.min.css')}}" rel="stylesheet">
+@endsection
+
+@section('js')
+    <script src="{{asset('libs/print/print.min.js')}}"></script>
+    <script>
+        function print() {
+            // printJS({
+            //     printable: 'consulta-container',
+            //     type: 'html'
+            // });
+
+            printJS({
+                printable: 'consulta-container',
+                type: 'html',
+                css: 'css/styles.css',
+                scanStyles: false
+            });
+
+            // printJS('consulta-container', 'html');
+        }
+    </script>
+
 @endsection
 
 @section('header-content')

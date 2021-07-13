@@ -23,8 +23,8 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::get('/logout', 'Auth\LoginController@logout');
 
 Route::group(["prefix" => "profile"], function(){
-	Route::get('/', 'UserController@profile');
-	Route::post('/store', 'UserController@saveProfile');
+	Route::get('/', 'ProfileController@profile');
+	Route::post('/store', 'ProfileController@saveProfile');
 });
 
 
@@ -330,7 +330,7 @@ Route::group(["prefix" => "planos"], function(){
 // Consultas
 Route::group(["prefix" => "consultas"], function(){
 	Route::get('/', 'ConsultasController@index');
-
+	Route::get('/list', 'ConsultasController@list');
 	Route::post('/{id}', 'ConsultasController@consultar');
 });
 
