@@ -49,7 +49,7 @@
                     <span class="progress-number"><b>{{$labels['consultas']['silver']}}</b></span>
 
                     <div class="progress sm">
-                        <div class="progress-bar progress-bar-aqua" style="width: {{($labels['consultas']['silver']/$labels['total_consultas']*100)}}%"></div>
+                        <div class="progress-bar progress-bar-aqua" style="width: {{($labels['total_consultas'] ? ($labels['consultas']['silver']/$labels['total_consultas']*100) : '0')}}%"></div>
                     </div>
                   </div>
                   <!-- /.progress-group -->
@@ -58,7 +58,7 @@
                     <span class="progress-number"><b>{{$labels['consultas']['gold']}}</b></span>
 
                     <div class="progress sm">
-                        <div class="progress-bar progress-bar-red" style="width: {{($labels['consultas']['gold']/$labels['total_consultas']*100)}}%"></div>
+                        <div class="progress-bar progress-bar-red" style="width: {{($labels['total_consultas'] ? ($labels['consultas']['gold']/$labels['total_consultas']*100) : '0')}}%"></div>
                     </div>
                   </div>
                   <!-- /.progress-group -->
@@ -67,7 +67,7 @@
                     <span class="progress-number"><b>{{$labels['consultas']['diamond']}}</b></span>
 
                     <div class="progress sm">
-                        <div class="progress-bar progress-bar-green" style="width: {{($labels['consultas']['diamond']/$labels['total_consultas']*100)}}%"></div>
+                        <div class="progress-bar progress-bar-green" style="width: {{($labels['total_consultas'] ? ($labels['consultas']['diamond']/$labels['total_consultas']*100) : '0')}}%"></div>
                     </div>
                   </div>
                   <!-- /.progress-group -->
