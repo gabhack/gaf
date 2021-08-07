@@ -15,7 +15,13 @@
 			<li><a href="{{url('home')}}"><i class="fa fa-home"></i> <span>Inicio</span></a></li>
 
 			@if ((IsUser() || IsCompany()) && ( AMISilverHabilitado() || AMIGoldHabilitado() || AMIDiamondHabilitado() ) && !(IsSuperAdmin() || IsAMIAdmin() || IsHEGOAdmin()))
-				<li><a href="{{url('consultas')}}"><i class="fa fa-user"></i> <span>Consulta AMI®</span></a></li>
+			<li class="treeview">
+				<a class="arrow"><i class="fa fa-key"></i> <span>AMI®</span></a>
+				<ul class="treeview-menu">
+					<li><a href="{{url('consultas')}}"><i class="fa fa-plus"></i> <span>Nueva Consulta</span></a></li>
+					<li><a href="{{url('consultas/list')}}"><i class="fa fa-list"></i> <span>Listado de consultas</span></a></li>
+				</ul>
+			</li>
 			@endif
 
 			@if (HEGOAccess())

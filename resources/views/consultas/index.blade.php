@@ -21,7 +21,7 @@
 					{!! Form::token() !!}
 					<div class="form-row" id="panel-pagaduria">
 						<div class="form-group col-md-6">
-							<input type="number" class="form-control" name="documento" id="documento" placeholder="Documento" required>
+							<input type="number" class="form-control" name="documento" id="documento" placeholder="Documento" onchange="checkSubmit(this)" onkeyup="checkSubmit(this)" required>
 						</div>
 						<div class="form-group-col-md-3">
 							<select class="form-control" name="tipo_consulta" id="tipo_consulta" required>
@@ -38,7 +38,25 @@
 							</select>
 						</div>
 						<div class="form-group-col-md-3">
-							<button type="submit" class="btn btn-primary">Consultar</button>
+							<button type="button" id="btn-consultar" onclick="consultarPagadurias();" class="btn btn-primary" disabled>Consultar</button>
+						</div>
+						<div class="form-group col-md-12 text-center">
+							<label for="autorizacion_file">Autorización Política de datos</label>
+							<input class="m-auto mb-4" type="file" id="autorizacion_file" name="autorizacion_file" accept="application/pdf" required>
+						</div>
+						<div class="form-group col-md-12 text-center">
+							<label for="desprendible_file">Último Desprendible</label>
+							<input class="m-auto mb-4" type="file" id="desprendible_file" name="desprendible_file" accept="application/pdf" required>
+						</div>
+					</div>
+					<div class="form-row" id="panel-pagaduria">
+						<div class="form-group-col-md-3">
+							<select class="form-control" onchange="checkSubmitTotal();" name="registro_pagaduria" id="registro_pagaduria" required hidden>
+								<option value="" selected disabled hidden>Pagaduría...</option>
+							</select>
+						</div>
+						<div class="form-group-col-md-3">
+							<button id="btn-submit-consulta" type="submit" class="btn btn-primary" disabled hidden>Generar Reporte</button>
 						</div>
 					</div>
 				</form>
@@ -50,6 +68,71 @@
 
 @section('title')
 	Consulta AMI®
+@endsection
+
+@section('js')
+	<script>
+		function consultarPagadurias() {
+			var documento = document.getElementById('documento').value;
+			var select_pagaduria = document.getElementById("registro_pagaduria");
+			var btn_submit_consulta = document.getElementById("btn-submit-consulta");
+
+			$.post('api/ami/getDesprendiblesXDocumento', {'documento' : documento}, function(data){
+				if (data.error) {
+					alert(data.error);
+					select_pagaduria.hidden = true;
+					btn_submit_consulta.hidden = true;
+					reinitPagadurias();
+				} else {
+					select_pagaduria.hidden = false;
+					btn_submit_consulta.hidden = false;
+					reinitPagadurias();
+					//Agregar las opciones de pagadurías
+					data.desprendibles.forEach(registro => {
+						const option = document.createElement('option');
+						option.className = 'option_registro_pagaduria';
+						option.innerHTML = registro.periodo + ' - ' + data.adicionales[registro.id];
+						option.value = registro.id;
+						select_pagaduria.appendChild(option);
+					});
+				}
+			});
+		}
+
+		function checkSubmit() {
+			var val = document.getElementById('documento').value;
+			reinitPagadurias();
+			if (val !== '') {
+				document.getElementById('btn-consultar').disabled = false;
+			} else {
+				document.getElementById('btn-consultar').disabled = true;
+			}
+		}
+
+		function checkSubmitTotal() {
+			var val = document.getElementById('registro_pagaduria').value;
+			if (val !== '') {
+				document.getElementById('btn-submit-consulta').disabled = false;
+			} else {
+				document.getElementById('btn-submit-consulta').disabled = true;
+			}
+		}
+
+		function reinitPagadurias () {
+			var select_pagaduria = document.getElementById("registro_pagaduria");
+			document.getElementById('btn-submit-consulta').disabled = true;
+			//Limpiar opciones
+			select_pagaduria.innerHTML = "";
+			//Agregar primera opción
+			const optioninicial = document.createElement('option');
+			optioninicial.className = 'option_registro_pagaduria';
+			optioninicial.innerHTML = 'Pagaduría...';
+			optioninicial.disabled = true;
+			optioninicial.hidden = true;
+			optioninicial.selected = true;
+			select_pagaduria.appendChild(optioninicial);
+		}
+	</script>
 @endsection
 
 @section('header-content')

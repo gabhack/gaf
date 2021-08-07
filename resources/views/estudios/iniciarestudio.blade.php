@@ -99,7 +99,11 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="label-consulta{{ $cliente->fechanto == '' ? ' label-warning' : '' }}" for="pad">Fecha de nacimiento:
-                                    <p class="pad">{{ $cliente->fechanto == '' ? 'No proporcionado' : $cliente->fechanto }}</p>
+                                    @if ($cliente->fechanto == '')
+                                        <p class="pad">No proporcionado</p>
+                                    @else
+                                        <p class="pad">{{ $cliente->fechanto }} (<b>{{ $viabilidad['edad']->y }} años y {{ $viabilidad['edad']->m }} meses</b>)</p>
+                                    @endif
                                 </label>
                             </div>
                             <div class="col-md-4">

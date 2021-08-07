@@ -83,3 +83,8 @@ Route::group(['prefix' => 'clientes'], function(){
     Route::post('/getRegistrosXPagaduriayPeriodo', 'JsonClientesController@getRegistrosXPagaduriayPeriodo');
     Route::post('/actualizarRegistro', 'JsonClientesController@actualizarRegistro');
 });
+
+//AMI
+Route::group(['prefix' => 'ami'], function(){
+    Route::post('/getDesprendiblesXDocumento', 'JsonConsultasController@getDesprendiblesXDocumento');
+});

@@ -38,6 +38,7 @@
                         <tr>
                             <th style="width:10%;" class="text-center">Fecha</th>
                             <th style="width:10%;" class="text-center">Tipo Consulta</th>
+                            <th style="width:10%;" class="text-center">Pagaduría</th>
                             <th style="width:10%;" class="text-center">Documento</th>
                             <th style="width:20%;" class="text-center">Nombre Consultante</th>
                         </tr>
@@ -46,7 +47,8 @@
                         @foreach($lista as $consulta)
                             <tr>
                                 <td>{{$consulta->created_at}}</td>
-                                <th>{{LabelTipoConsulta($consulta->tipo_consulta)}}</th>
+                                <th class="text-center">{{LabelTipoConsulta($consulta->tipo_consulta)}}</th>
+                                <th class="text-center">{{$consulta->registros_financieros_id ? $consulta->registrofinanciero->pagaduria->pagaduria : ''}}</th>
                                 <td>{{$consulta->documento}}</td>
                                 <td>{{$consulta->usuario->name}}</td>
                             </tr>

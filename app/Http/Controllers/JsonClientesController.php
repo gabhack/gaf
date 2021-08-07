@@ -51,7 +51,6 @@ class JsonClientesController extends Controller
      */
     public function actualizarRegistro(Request $request)
     {
-        $conceptos_financieros = array();
         $ingresos_totales = 0;
         $egresos_totales = 0;
         $registro = Registrosfinancieros::where('clientes_id', $request->idcliente)

@@ -185,6 +185,10 @@ td:nth-child(2n) {
 	margin-left: 10px;
 }
 
+.form-check>label.form-check-label {
+	margin-left: 20px;
+}
+
 .btn.eliminar-registro {
 	font-size: 1em;
     padding: 0 5px;

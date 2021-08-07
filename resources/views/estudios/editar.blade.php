@@ -84,7 +84,7 @@
                                     @if ($cliente->fechanto == '')
                                         <p class="pad">No proporcionado</p>
                                     @else
-                                        <p class="pad">{{ $cliente->fechanto }} (<b>{{ $viabilidad['edad'] }} años</b>)</p>
+                                        <p class="pad">{{ $cliente->fechanto }} (<b>{{ $viabilidad['edad']->y }} años y {{ $viabilidad['edad']->m }} meses</b>)</p>
                                     @endif
                                 </label>
                             </div>

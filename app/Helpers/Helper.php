@@ -75,14 +75,10 @@ if (!function_exists('calcularCapacidad')) {
 	function calcularCapacidad($vinculacion, $ingresos, $valor_aportes, $asignacion_adicional, $total_dctos, $smlv)
 	{
 		
-		
-		// "PENS, 1000000, 0, 0, 96000, 790000"
 		if($vinculacion == 'PENS')
 		{			
 			$compraCartera 	= 	( $ingresos + $asignacion_adicional - $valor_aportes ) / 2;
 			$libreInversion = ( ( $ingresos + $asignacion_adicional - $valor_aportes ) / 2 ) - $total_dctos +  $valor_aportes;
-			
-			// echo ("( $ingresos + $asignacion_adicional - $valor_aportes ) / 2 = array('compraCartera' => $compraCartera, 'libreInversion' => $libreInversion)");
 		}
 		else
 		{
@@ -90,16 +86,47 @@ if (!function_exists('calcularCapacidad')) {
 			
 			if($base > $smlv)
 			{
-				$libreInversion = ( ( $ingresos + $asignacion_adicional - $valor_aportes ) / 2 ) - $total_dctos + $valor_aportes;
 				$compraCartera 	= 	$base - $total_dctos + $valor_aportes;
+				$libreInversion = ( ( $ingresos + $asignacion_adicional - $valor_aportes ) / 2 ) - $total_dctos + $valor_aportes;
 			}
 			else
 			{
-				$libreInversion = $ingresos + $asignacion_adicional - $smlv - $total_dctos;
 				$compraCartera 	= $ingresos + $asignacion_adicional - $valor_aportes - $smlv;
-			}			
+				$libreInversion = $ingresos + $asignacion_adicional - $smlv - $total_dctos;
+			}
 		}
 		
+		return array(
+			'compraCartera' => array(
+				'valor' => $compraCartera,
+				'color' => ($compraCartera > 0 ? 'verde' : ($compraCartera == 0 ? 'amarillo' : 'rojo'))
+			), 
+			'libreInversion' => array(
+				'valor' => $libreInversion,
+				'color' => ($libreInversion > 0 ? 'verde' : ($libreInversion == 0 ? 'amarillo' : 'rojo'))
+			)
+		);
+	}
+}
+
+if (!function_exists('calcularCapacidadAMI')) {
+	function calcularCapacidadAMI($vinculacion, $ingresos, $valor_aportes, $asignacion_adicional, $total_dctos, $smlv)
+	{
+		
+		if($vinculacion == 'PENS')
+		{			
+			$compraCartera 	= 	( $ingresos + $asignacion_adicional - $valor_aportes ) / 2;
+			$libreInversion = ( ( $ingresos + $asignacion_adicional - $valor_aportes ) / 2 ) - $total_dctos +  $valor_aportes;
+		}
+		else
+		{
+			$libreInversion = ( ( $ingresos - $valor_aportes )/2 ) - $total_dctos;
+			if ($ingresos >= $smlv*2) {
+				$compraCartera = ( $ingresos + $asignacion_adicional - $valor_aportes ) / 2;
+			} else {
+				$compraCartera = ( $ingresos + $asignacion_adicional - $valor_aportes ) - $smlv;
+			}
+		}
 		
 		return array(
 			'compraCartera' => array(
@@ -258,7 +285,6 @@ if (!function_exists('meses')) {
 			'NOV' => 'NOVIEMBRE',
 			'DIC' => 'DICIEMBRE',
 		);
-		
 	}
 }
 
@@ -323,6 +349,17 @@ if (!function_exists('pagadurias')) {
 	function pagadurias()
 	{
 		return App\Pagadurias::all();	
+	}
+}
+
+if (!function_exists('vinculaciones')) {
+	function vinculaciones()
+	{
+		return array(
+			'd' => 'DOCENTE',
+			'a' => 'ADMINISTRATIVO',
+			'p' => 'PENSIONADO',
+		);
 	}
 }
 
@@ -520,10 +557,8 @@ if (!function_exists('upload_personas')) {
 					}
 					if ($arraypersona['cargo_docente'] !== '') {
 						$cliente->cargo 				= $arraypersona['cargo_docente'];
-						$cliente->docente 				= '1';
 					} elseif ($arraypersona['cargo_administrativo'] !== '') {
 						$cliente->cargo 				= $arraypersona['cargo_administrativo'];
-						$cliente->docente 				= null;
 					}
 					if ($arraypersona['banco'] !== '') {
 						$cliente->banco 			= $arraypersona['banco'];
@@ -585,10 +620,8 @@ if (!function_exists('upload_personas')) {
 					}
 					if ($arraypersona['cargo_docente'] !== '') {
 						$cliente->cargo 				= $arraypersona['cargo_docente'];
-						$cliente->docente 				= '1';
 					} elseif ($arraypersona['cargo_administrativo'] !== '') {
 						$cliente->cargo 				= $arraypersona['cargo_administrativo'];
-						$cliente->docente 				= null;
 					}
 					if ($arraypersona['banco'] !== '') {
 						$cliente->banco 			= $arraypersona['banco'];
@@ -793,12 +826,13 @@ if (!function_exists('upload_personas_without_concepts')) {
 					if ($arraypersona['centro_costos'] !== '') {
 						$cliente->centro_costo 			= $arraypersona['centro_costos'];
 					}
+					if ($arraypersona['vinculacion'] !== '') {
+						$cliente->vinculacion 			= $arraypersona['vinculacion'];
+					}
 					if ($arraypersona['cargo_docente'] !== '') {
 						$cliente->cargo 				= $arraypersona['cargo_docente'];
-						$cliente->docente 				= '1';
 					} elseif ($arraypersona['cargo_administrativo'] !== '') {
 						$cliente->cargo 				= $arraypersona['cargo_administrativo'];
-						$cliente->docente 				= null;
 					}
 					if ($arraypersona['banco'] !== '') {
 						$cliente->banco 			= $arraypersona['banco'];
@@ -858,12 +892,13 @@ if (!function_exists('upload_personas_without_concepts')) {
 					if ($arraypersona['centro_costos'] !== '') {
 						$cliente->centro_costo 			= $arraypersona['centro_costos'];
 					}
+					if ($arraypersona['vinculacion'] !== '') {
+						$cliente->vinculacion 			= $arraypersona['vinculacion'];
+					}
 					if ($arraypersona['cargo_docente'] !== '') {
 						$cliente->cargo 				= $arraypersona['cargo_docente'];
-						$cliente->docente 				= '1';
 					} elseif ($arraypersona['cargo_administrativo'] !== '') {
 						$cliente->cargo 				= $arraypersona['cargo_administrativo'];
-						$cliente->docente 				= null;
 					}
 					if ($arraypersona['banco'] !== '') {
 						$cliente->banco 			= $arraypersona['banco'];
@@ -1030,7 +1065,7 @@ if (!function_exists('calcula_viabilidad_inicial')) {
 		return array(
 			"plazomax" => $plazomax,
 			"analisis" => $analisis,
-			"edad" => $edad->y,
+			"edad" => $edad,
 			"limite_cupo" => $limite_cupo,
 			"faltantes" => $faltantes
 		);
@@ -1248,6 +1283,12 @@ if (!function_exists('GetLabelEspanolMeses')) {
 				# code...
 				break;
 		}
+	}
+}
+
+if (!function_exists('ConsultaAMI')) {
+	function ConsultaAMI(Request $request) {
+		
 	}
 }
 

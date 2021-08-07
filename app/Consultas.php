@@ -16,4 +16,9 @@ class Consultas extends Model
 	{
 		return $this->hasOne('\App\User', 'id', 'users_id');
 	}
+
+	public function registrofinanciero()
+	{
+		return $this->hasOne('\App\Registrosfinancieros', 'id', 'registros_financieros_id');
+	}
 }

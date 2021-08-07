@@ -158,9 +158,9 @@ class ClientesController extends Controller
         $cargo_administrativo = '';
         $conceptos_financieros = array();
 
-        if ($request->docente_administrativo) {
+        if ($request->docente_administrativo == 'd') {
             $cargo_docente = $request->cargo;
-        } else {
+        } elseif ($request->docente_administrativo == 'a') {
             $cargo_administrativo = $request->cargo;
         }
 
@@ -199,6 +199,7 @@ class ClientesController extends Controller
             'telefono' => ( isset($request->telefono) ? $request->telefono : '' ),
             'celular' => ( isset($request->celular) ? $request->celular : '' ),
             'correo' => ( isset($request->correo) ? $request->correo : '' ),
+            'vinculacion' => ( isset($request->vinculacion) ? $request->vinculacion : '' ),
             'banco' => '',
             'cuenta' => '',
             'pension' => '',

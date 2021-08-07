@@ -56,4 +56,9 @@ class Clientes extends Model
 	{
 		return $this->hasMany('App\Embargos', 'clientes_id', 'id');
 	}
+
+	public function datoshistoricos()
+	{
+		return $this->hasMany('App\DatosHistoricos', 'clientes_id', 'id')->orderBy('id', 'DESC');
+	}
 }

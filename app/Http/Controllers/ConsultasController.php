@@ -5,9 +5,13 @@ namespace App\Http\Controllers;
 use Auth;
 use App\Consultas as Consultas;
 use App\Clientes as Clientes;
+use App\DatosHistoricos as DatosHistoricos;
 use App\Parametros as Parametros;
 use App\Estudiostr as Estudios;
+use App\Registrosfinancieros as Registrosfinancieros;
 use Illuminate\Support\Facades\DB as DB;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7;
 use Illuminate\Http\Request;
 
 class ConsultasController extends BaseSoapController
@@ -43,71 +47,140 @@ class ConsultasController extends BaseSoapController
     {
         //Obtener consulta
         $cliente = Clientes::where("documento", "=", $request->documento)->first();
-
-        if ($cliente) {
-            //Guardar consulta en BD
-            $nuevaconsulta = new Consultas;
-            $nuevaconsulta->users_id = Auth::user()->id;
-            $nuevaconsulta->documento = $request->input('documento');
-            $nuevaconsulta->tipo_consulta = $request->input('tipo_consulta');
-            $nuevaconsulta->save();
-            //Params
-            $smlv = Parametros::where('llave', 'SMLV')->first();
-            $registro = $cliente->registrosfinancieros->last();
-            $sueldobasico = $cliente->ingresos;
-            $adicional = 0;
-            if ($cliente->cargo) {
-                if (strpos($cliente->cargo, 'Rector') !== false) {
-                    $adicional = ($cliente->ingresos*.3);
-                } elseif (strpos($cliente->cargo, 'Coordinador') !== false) {
-                    $adicional = ($cliente->ingresos*.2);
-                }
-            }
-
-            $aportes = 0;
-            $vinculacion = '';		
-            if($registro->pagaduria->de_pensiones)
-            {
-                $vinculacion = 'PENS';
-                $aportes = Parametros::where('llave', 'APORTES_PENSIONADOS')->first();
-            }	
-            else
-            {
-                $aportes = Parametros::where('llave', 'APORTES_ACTIVOS')->first();
-            }
-            $aportes = $aportes->valor * ($sueldobasico + $adicional) ;
-            
-            $totaldescuentos = totalizar_concepto(descuentos_por_registro($registro->id));
-
-            $cupos = calcularCapacidad(
-                $vinculacion,
-                $sueldobasico,
-                $aportes,
-                $adicional,
-                $totaldescuentos,
-                $smlv->valor
-            );
-
-            $sueldocompleto = $sueldobasico+$adicional;
-
-            return view("consultas/consulta")->with([
-                "cliente" => $cliente,
-                "consulta" => $nuevaconsulta,
-                "cupos" => $cupos,
-                "sueldocompleto" => $sueldocompleto,
-                "aportes" => $aportes,
-                "totaldescuentos" => $totaldescuentos
-            ]);
-        } else {
+        if ( 
+            (strtolower($request->file('autorizacion_file')->getClientOriginalExtension()) !== 'pdf') ||
+            (strtolower($request->file('desprendible_file')->getClientOriginalExtension()) !== 'pdf')
+        ) {
             return view("consultas/index")->with([
                 "message" => array(
                     'tipo' => 'warning',
-                    'titulo' => 'Cliente no se encuentra en la base de datos.',
-                    'mensaje' => '',
-                )
-            ]);
-        }      
-        $nuevaconsulta->users_id = Auth::user()->id;
+                    'titulo' => 'Documentos PDF en formato incorrecto.',
+                    'mensaje' => '
+                            Por favor intente nuevamente cargando los siguientes archivos en formato .pdf:'.
+                            (strtolower($request->file('autorizacion_file')->getClientOriginalExtension()) !== 'pdf' ? "
+                            - Autorización Política de datos" : "").
+                            (strtolower($request->file('desprendible_file')->getClientOriginalExtension()) !== 'pdf' ? "
+                            - Desprendible" : ""),
+                    )
+                ]);
+        } else {
+            if ($cliente) {
+                //API's
+                $url1 = 'https://cargaautorizaciones-llpftvqzdq-ue.a.run.app/webservice?';//Autorizaciones
+                $url2 = 'https://cargaautorizaciones-llpftvqzdq-ue.a.run.app/webserviceDesprendibles?';//Desprendible
+                $client = new Client();
+                $options1 = [
+                    'multipart' => [
+                        [
+                            'name'     => 'autorizacion',
+                            'contents' => file_get_contents($request->file('autorizacion_file')->getRealPath()),
+                            'filename' => $request->file('autorizacion_file')->getClientOriginalName(),
+                        ],
+                    ],
+                ];
+                $options2 = [
+                    'multipart' => [
+                        [
+                            'name'     => 'desprendible',
+                            'contents' => file_get_contents($request->file('desprendible_file')->getRealPath()),
+                            'filename' => $request->file('desprendible_file')->getClientOriginalName(),
+                        ],
+                    ],
+                ];
+                $formdata = http_build_query([
+                    "nombres" => $cliente->nombres,
+                    "apellidos" => $cliente->apellidos,
+                    "cedula" => $cliente->documento,
+                    "key" => "GtsGAF2021*!",
+                    "empresa" => Auth::user()->company->id
+                ]);
+                
+                $response1 = json_decode($client->post($url1 . $formdata, $options1)->getBody());
+                $response2 = json_decode($client->post($url2 . $formdata, $options2)->getBody());
+
+                if (trim($response1[0]) !== 'Carga exitosa' || trim($response2[0]) !== 'Carga exitosa') {
+                    return view("consultas/index")->with([
+                        "message" => array(
+                            'tipo' => 'warning',
+                            'titulo' => 'Documentos PDF en formato incorrecto.',
+                            'mensaje' => '
+                                    Verifique los siguientes archivos:'.
+                                    (trim($response1[0]) !== 'Carga exitosa' ? "- Archivo de autorización no detectado." : "").
+                                    (trim($response2[0]) !== 'Carga exitosa' ? "- Archivo de desprendible de pago no detectado." : ""),
+                        )
+                    ]);
+                }
+                //FIn - API's
+
+                $datoshistoricos = $cliente->datoshistoricos;
+                //Guardar consulta en BD
+                $nuevaconsulta = new Consultas;
+                $nuevaconsulta->users_id = Auth::user()->id;
+                $nuevaconsulta->documento = $request->input('documento');
+                $nuevaconsulta->tipo_consulta = $request->input('tipo_consulta');
+                $nuevaconsulta->registros_financieros_id = $request->registro_pagaduria;
+                $nuevaconsulta->save();
+                //Params
+                $smlv = Parametros::where('llave', 'SMLV')->first();
+                $registro = Registrosfinancieros::find($request->registro_pagaduria);
+                $sueldobasico = $cliente->ingresos;
+                $adicional = 0;
+                if ($cliente->cargo) {
+                    if (strpos($cliente->cargo, 'Rector') !== false) {
+                        $adicional = ($cliente->ingresos*.3);
+                    } elseif (strpos($cliente->cargo, 'Coordinador') !== false) {
+                        $adicional = ($cliente->ingresos*.2);
+                    }
+                }
+                
+                $aportes = 0;
+                $vinculacion = '';		
+                if($registro->pagaduria->de_pensiones)
+                {
+                    $vinculacion = 'PENS';
+                    $aportes = Parametros::where('llave', 'APORTES_PENSIONADOS')->first();
+                }	
+                else
+                {
+                    $aportes = Parametros::where('llave', 'APORTES_ACTIVOS')->first();
+                }
+                $aportes = $aportes->valor * ($sueldobasico + $adicional) ;
+                
+                $totaldescuentos = totalizar_concepto(descuentos_por_registro($registro->id));
+                $viabilidad = calcula_viabilidad_inicial($cliente);
+                
+                $cupos = calcularCapacidadAMI(
+                    $vinculacion,
+                    $sueldobasico,
+                    $aportes,
+                    $adicional,
+                    $totaldescuentos,
+                    $smlv->valor
+                );
+                
+                $sueldocompleto = $sueldobasico+$adicional;
+                
+                return view("consultas/consulta")->with([
+                    "cliente" => $cliente,
+                    "consulta" => $nuevaconsulta,
+                    "cupos" => $cupos,
+                    "sueldocompleto" => $sueldocompleto,
+                    "aportes" => $aportes,
+                    "totaldescuentos" => $totaldescuentos,
+                    "viabilidad" => $viabilidad,
+                    "datoshistoricos" => $datoshistoricos,
+                    "registro" => $registro
+                ]);
+            } else {
+                return view("consultas/index")->with([
+                    "message" => array(
+                        'tipo' => 'warning',
+                        'titulo' => 'Cliente no se encuentra en la base de datos.',
+                        'mensaje' => '',
+                        )
+                    ]);
+            }
+        }
     }
 
     public function consultarprueba(Request $request){
@@ -215,37 +288,9 @@ class ConsultasController extends BaseSoapController
         if (isset($request->filtro['fecha_hasta']) && $request->filtro['fecha_hasta'] !== '') {
             $options['filtro']['fecha_hasta'] = $request->filtro['fecha_hasta'];
         }
+
         return view("consultas.lista")->with($options);
     }
 
-    /**
-     * Download PDF.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function downloadPDF(Request $request)
-    {
-        $consulta = Consultas::find($request->input(''));
-
-        $data = array(
-            "cliente" => $cliente,
-            "consulta" => $nuevaconsulta,
-            "cupos" => $cupos,
-            "sueldocompleto" => $sueldocompleto,
-            "aportes" => $aportes,
-            "totaldescuentos" => $totaldescuentos
-        );
-
-        return PDF::loadView('vista-pdf', $data)
-            ->stream('archivo.pdf');
-
-            return view("consultas/consulta")->with([
-                "cliente" => $cliente,
-                "consulta" => $nuevaconsulta,
-                "cupos" => $cupos,
-                "sueldocompleto" => $sueldocompleto,
-                "aportes" => $aportes,
-                "totaldescuentos" => $totaldescuentos
-            ]);
-    }
+    
 }
