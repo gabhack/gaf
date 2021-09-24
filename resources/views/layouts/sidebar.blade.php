@@ -35,7 +35,7 @@
 						<li><a href="{{url('usuarios')}}"><i class="fa fa-user"></i> <span>Usuarios</span></a></li>	
 						@if (IsSuperAdmin())
 							<li><a href="{{url('roles')}}"><i class="fa fa-users"></i> <span>Roles</span></a></li>						
-							<li><a href="{{url('oficinas')}}"><i class="fa fa-building-o"></i> <span>Oficinas</span></a></li>
+							{{-- <li><a href="{{url('oficinas')}}"><i class="fa fa-building-o"></i> <span>Oficinas</span></a></li> --}}
 							<li><a href="{{url('parametros')}}"><i class="fa fa-wrench"></i> <span>Par&aacute;metros</span></a></li>
 							<li><a href="{{url('factorxmillonkredit')}}"><i class="fa fa-wrench"></i> <span>Factores X Millón Kredit</span></a></li>
 						@endif
@@ -51,7 +51,7 @@
 						<li><a href="{{url('cargos')}}"><i class="fa fa-sitemap"></i> <span>Cargos</span></a></li>
 						<li><a href="{{url('sectores')}}"><i class="fa fa-pie-chart"></i> <span>Sectores</span></a></li>
 						<li><a href="{{url('estadoscartera')}}"><i class="fa fa-check-circle-o"></i> <span>Estados Cartera</span></a></li>
-						<li><a href="{{url('demandantes')}}"><i class="fa fa-gavel"></i> <span>Demandantes</span></a></li>
+						{{-- <li><a href="{{url('demandantes')}}"><i class="fa fa-gavel"></i> <span>Demandantes</span></a></li> --}}
 						<li><a href="{{url('tiposembargo')}}"><i class="fa fa-tags"></i> <span>Tipos de Embargo</span></a></li>
 						<li><a href="{{url('pagadurias')}}"><i class="fa fa-bank"></i> <span>Pagadur&iacute;as</span></a></li>
 						<li><a href="{{url('aliados')}}"><i class="fa fa-building-o"></i> <span>Aliados</span></a></li>

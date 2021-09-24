@@ -18,7 +18,7 @@ class DatasetController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('superadmin');
+        $this->middleware('role:ADMIN_SISTEMA');
     }
     
     /**
