@@ -133,17 +133,23 @@
                             </label>
                         </div>
                         <div class="form-group col-md-6">
-                            <label class="label-consulta w-100" for="pad">Tipo de Cargo (Si aplica):
+                            <label class="label-consulta w-100" for="pad">Vinculacion:
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="docente_administrativo" id="docente" value="1" {{ $cliente->docente == '1' ? 'checked="checked"' : '' }}>
+                                    <input class="form-check-input" type="radio" name="vinculacion" id="docente" value="d" {{ $cliente->vinculacion == 'd' ? 'checked="checked"' : '' }} required>
                                     <label class="form-check-label" for="docente">
                                         Docente
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="docente_administrativo" id="administrativo" value="0" {{ $cliente->docente == null ? 'checked="checked"' : '' }}>
+                                    <input class="form-check-input" type="radio" name="vinculacion" id="administrativo" value="a" {{ $cliente->vinculacion == 'a' ? 'checked="checked"' : '' }} required>
                                     <label class="form-check-label" for="administrativo">
                                         Administrativo
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="vinculacion" id="pensionado" value="p" {{ $cliente->vinculacion == 'p' ? 'checked="checked"' : '' }} required>
+                                    <label class="form-check-label" for="pensionado">
+                                        Pensionado
                                     </label>
                                 </div>
                             </label>

@@ -133,17 +133,23 @@
                             </label>
                         </div>
                         <div class="form-group col-md-6">
-                            <label class="label-consulta w-100" for="pad">Tipo de Cargo (Si aplica):
+                            <label class="label-consulta w-100" for="pad">Vinculacion:
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="docente_administrativo" id="docente" value="1">
+                                    <input class="form-check-input" type="radio" name="vinculacion" id="docente" value="d" required>
                                     <label class="form-check-label" for="docente">
                                         Docente
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="docente_administrativo" id="administrativo" value="0">
+                                    <input class="form-check-input" type="radio" name="vinculacion" id="administrativo" value="a" required>
                                     <label class="form-check-label" for="administrativo">
                                         Administrativo
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="vinculacion" id="pensionado" value="p" required>
+                                    <label class="form-check-label" for="pensionado">
+                                        Pensionado
                                     </label>
                                 </div>
                             </label>

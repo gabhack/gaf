@@ -170,7 +170,6 @@ class EstudiosController extends Controller
                     $factores_x_millon_gnb[$factor->pagaduria][$factor->plazo]['saneamiento'] = $factor->saneamiento;
                 }
                 $viabilidad = calcula_viabilidad_inicial($cliente);
-                $viabilidad = calcula_viabilidad_inicial($cliente);
 
                 $registrosf = $cliente->registrosfinancieros->pluck('periodo')->unique();
 

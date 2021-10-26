@@ -2,8 +2,7 @@
 		
 		<div class="sidebar-heading">
 			<a class="logo" href="{{ url('/') }}">
-				{{-- {{ config('app.name', 'Laravel') }} --}}
-				{{ Auth::user()->rol->rol == 'ADMIN_HEGO' ? 'HEGO' : 'HEGO' }}
+				{{ Auth::user()->hego ? 'HEGO' : 'AMI' }}
 			</a>
 		</div>
 	  
@@ -72,17 +71,17 @@
 						</li>
 						<li class="nav-item dropdown user user-menu">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-								<img src="img/avatar5.png" class="user-image" alt="User Image">
+								<img src="{{ IsCompany() ? 'img/unnamed.png' : 'img/avatar5.png' }}" class="user-image" alt="User Image">
 								<span class="hidden-xs">{{ Auth::user()->name }}</span>
 							</a>
 							<ul class="dropdown-menu">
 								<!-- User image -->
 								<li class="user-header">
-									<img src="img/avatar5.png" class="img-circle" alt="User Image">
+									<img src="{{ IsCompany() ? 'img/unnamed.png' : 'img/avatar5.png' }}" class="img-circle" alt="User Image">
 				
 									<p>
 										{{ Auth::user()->name }}
-										<small>{{ roles_label(Auth::user()->rol->rol) }}</small>
+										<small><b>{{ IsCompany() ? 'Compañía' : roles_label(Auth::user()->rol->rol) }}</b></small>
 									</p>
 							  	</li>
 								<!-- Menu Footer-->
