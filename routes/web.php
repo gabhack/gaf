@@ -358,9 +358,7 @@ Route::group(["prefix" => "clientes"], function(){
 	Route::post('/actualizar', 'ClientesController@actualizar');
 });
 
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
-
 Route::get('/dataset', 'DatasetController@index');
 Route::get('/dataset/get', 'DatasetController@get');
+
+Route::view('/welcome', 'welcome');

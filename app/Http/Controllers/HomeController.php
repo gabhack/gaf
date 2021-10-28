@@ -35,7 +35,7 @@ class HomeController extends Controller
 
         if (IsUser()) {
             $user = Auth::user();
-            
+
             $consultas = Consultas::orderBy('id', 'desc')
                 ->where('users_id', Auth::user()->id)
                 ->whereBetween('created_at', [$fechadesde, $fechahasta])->get();
@@ -61,7 +61,7 @@ class HomeController extends Controller
             }
         } elseif (IsCompany()) {
             $user = Auth::user();
-            
+
             $consultas = Consultas::orderBy('id', 'desc')
                 ->where('users_id', $user->id)
                 ->whereBetween('created_at', [$fechadesde, $fechahasta])->get();
@@ -86,7 +86,7 @@ class HomeController extends Controller
         } else {
             $consultas = Consultas::orderBy('id', 'desc')
                 ->whereBetween('created_at', [$fechadesde, $fechahasta])->get();
-            
+
             $labels['total_consultas'] = $consultas->count();
             $labels['usuarios_activos'] = User::all()->count();
             $labels['usuarios_nuevos'] = User::orderBy('id', 'desc')

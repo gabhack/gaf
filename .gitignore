@@ -18,3 +18,7 @@ yarn-error.log
 public/.htaccess
 /app/Python-laravel
 .gitignore
+
+/public/css/app.css
+/public/css/home.css
+/public/js/app.js
