@@ -3,7 +3,7 @@
     <section class="container-fluid mb-5">
       <div class="row">
         <div class="col-6 pt-5">
-          <img src="/img/amiPersonas1.svg" class="img-fluid w-100" />
+          <img src="/img/amipersonas1.svg" class="img-fluid w-100" />
         </div>
         <div class="col-6 d-flex align-items-center justify-content-center">
           <div>
@@ -52,7 +52,7 @@
     <section class="container-fluid mb-5">
       <div class="row">
         <div class="col-5">
-          <img src="/img/amiPersonas2.svg" class="img-fluid w-100" />
+          <img src="/img/amipersonas2.svg" class="img-fluid w-100" />
         </div>
         <div class="col-7 d-flex align-items-center justify-content-center">
           <div class="text-center">
@@ -163,7 +163,7 @@
           </div>
         </div>
         <div class="col-6">
-          <img src="/img/amiPersonas3.svg" class="img-fluid w-100" />
+          <img src="/img/amipersonas3.svg" class="img-fluid w-100" />
         </div>
       </div>
     </section>
