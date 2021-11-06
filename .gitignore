@@ -20,5 +20,9 @@ public/.htaccess
 .gitignore
 
 /public/css/app.css
-/public/css/home.css
 /public/js/app.js
+/public/css/pages
+
+composer.lock
+package-lock.json
+yarn.lock

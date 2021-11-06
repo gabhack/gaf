@@ -2,18 +2,20 @@
   <div>
     <section class="container-fluid mb-5">
       <div class="row">
-        <div class="col-6">
+        <div class="col-6 pt-5">
           <img src="/img/amiPersonas1.svg" class="img-fluid w-100" />
         </div>
-        <div class="col-6 d-flex align-items-center">
-          <div class="pr-md-5 container-sections">
-            <p class="font-weight-bold text-spring-green text-big-personas">
+        <div class="col-6 d-flex align-items-center justify-content-center">
+          <div>
+            <h1
+              class="font-weight-bold text-spring-green text-big-personas mb-0"
+            >
               AMI
-            </p>
+            </h1>
             <p class="text-ami font-weight-bold">
-              <span class="text-spring-green mb-5">Analisis </span>
+              <span class="text-spring-green">Analisis </span>
               de Mercado
-              <span class="text-spring-green mb-5"> Inteligente</span>
+              <span class="text-spring-green">Inteligente</span>
             </p>
           </div>
         </div>
@@ -21,14 +23,14 @@
     </section>
     <section class="container-fluid mb-5">
       <div class="row">
-        <div class="col-7 d-flex align-items-center">
-          <div class="pr-md-5 container-sections">
-            <p class="first-text">CON NUESTRO SISTEMA</p>
+        <div class="col-7 d-flex align-items-center justify-content-center">
+          <div class="text-center">
+            <p class="text-spacing mb-0">CON NUESTRO SISTEMA</p>
             <p class="text-medium font-weight-bold">
-              <span class="text-spring-green mb-5">Analisis para </span>
-              aprobación de crédito
+              <span class="text-spring-green">Analisis para </span>
+              <span class="text-black-pearl">aprobación de crédito</span>
             </p>
-            <p class="medium-text">
+            <p>
               JAMAS VOLVERAS APROBAR TUS CREDITOS COMO ANTES, con nuestro
               sistema<br />
               inteligente podrás mejorar tus resultados, optimizar tiempos de
@@ -37,29 +39,29 @@
               en un 90%<br />
               los errores operativos
             </p>
-            <b-button variant="black" class="btn-more">
+            <b-button variant="black" class="btn-more font-weight-bold">
               Más Información
             </b-button>
           </div>
         </div>
-        <div class="col-4">
+        <div class="col-5 pr-0">
           <img src="/img/amiCards.svg" class="img-fluid w-100" />
         </div>
       </div>
     </section>
     <section class="container-fluid mb-5">
       <div class="row">
-        <div class="col-6">
+        <div class="col-5">
           <img src="/img/amiPersonas2.svg" class="img-fluid w-100" />
         </div>
-        <div class="col-6 d-flex align-items-center">
-          <div class="pr-md-5 container-sections">
-            <p class="first-text">CON NUESTRO PROCESO</p>
+        <div class="col-7 d-flex align-items-center justify-content-center">
+          <div class="text-center">
+            <p class="text-spacing mb-0">CON NUESTRO PROCESO</p>
             <p class="text-medium font-weight-bold">
               <span class="text-spring-green mb-5">Recuperación </span>
-              de cartera
+              span
             </p>
-            <p class="medium-text">
+            <p>
               ¡Tu cartera al día! controla tu cartera las 24 horas del día y los
               7 días de la <br />semana,sabemos lo importante que es para ti por
               eso diseñamos nuestra<br />
@@ -69,124 +71,101 @@
               decisiones o<br />
               prevenir las situaciones que afectan el desarrollo de tu cartera.
             </p>
-            <b-button variant="black" class="btn-more">
+            <b-button variant="black" class="btn-more font-weight-bold">
               Más Información
             </b-button>
           </div>
         </div>
       </div>
     </section>
-    <section class="">
-      <div class="row subscription-card featured">
-        <div class="col-12">
-          <div class="container-sections">
-            <p class="withe-font">
-              DESCUBRE NUEVOS CLIENTES CON NUESTRO SISTEMA DE
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section class="container-fluid mb-5">
+    <section class="container-fluid bg-black-pearl py-4">
       <div class="row">
-        <div class="col-12 d-flex align-items-center">
-          <div class="pr-md-5 container-sections">
-            <p class="text-medium font-weight-bold mt-3">
-              <span class="text-spring-green mb-5">Prospección </span>
-              de Mercado
-            </p>
-            <p>
-              Conocemos millones de clientes nuevos para ti, de acuerdo a tu
-              política de crédito<br />
-              analizaremos los requerimientos del mercado y diseñamos la mejor
-              estrategia de venta.<br />
-              Podrás desarrollar diferentes estrategias como:
-            </p>
-            <b-button variant="spring-green" class="btn-more">
-              Más Información
-            </b-button>
-          </div>
+        <div class="col-12 text-center">
+          <p class="text-white text-uppercase text-spacing mb-0">
+            Descubre
+            <span class="text-spring-green font-weight-bold">
+              nuevos clientes
+            </span>
+            con nuestro sistema de
+          </p>
         </div>
       </div>
     </section>
-    <section class="container py-5 mb-5">
+    <section class="container my-5">
+      <div class="row mb-5">
+        <div class="col-12 text-center">
+          <p class="text-medium font-weight-bold mb-0">
+            <span class="text-spring-green">Prospección</span>
+            <span>de Mercado</span>
+          </p>
+          <p>
+            Conocemos millones de clientes nuevos para ti, de acuerdo a tu
+            política de crédito<br />
+            analizaremos los requerimientos del mercado y diseñamos la mejor
+            estrategia de venta.<br />
+            Podrás desarrollar diferentes estrategias como:
+          </p>
+          <b-button variant="spring-green" class="btn-more font-weight-bold">
+            Más Información
+          </b-button>
+        </div>
+      </div>
       <div class="row">
         <div class="col-3 col-icons">
           <img src="/img/IconoAmi1.png" class="img-fluid w-40 icon-line" />
-          <p class="font-weight-bold text-line">
+          <p class="font-weight-bold text-line mb-0">
             ESTRATEGIA DE <br />
-            <span class="text-spring-green mb-5"
-              >PENETRACIÓN DE <br />MERCADO</span
-            >
+            <span class="text-spring-green">
+              PENETRACIÓN DE <br />MERCADO
+            </span>
           </p>
         </div>
         <div class="col-3 col-icons">
           <img src="/img/IconoAmi2.png" class="img-fluid w-40 icon-line" />
-          <p class="font-weight-bold text-line">
+          <p class="font-weight-bold text-line mb-0">
             ESTRATEGIA DE <br />
-            <span class="text-spring-green mb-5"
-              >DESARROLLO DE <br />MERCADO</span
-            >
+            <span class="text-spring-green"> DESARROLLO DE <br />MERCADO </span>
           </p>
         </div>
         <div class="col-3 col-icons">
           <img src="/img/IconoAmi3.png" class="img-fluid w-40 icon-line" />
-          <p class="font-weight-bold text-line">
+          <p class="font-weight-bold text-line mb-0">
             ESTRATEGIA DE <br />
-            <span class="text-spring-green mb-5"
-              >DESARROLLO DE <br />PRODUCTO</span
-            >
+            <span class="text-spring-green">
+              DESARROLLO DE <br />PRODUCTO
+            </span>
           </p>
         </div>
         <div class="col-3 col-icons">
           <img src="/img/IconoAmi4.png" class="img-fluid w-40 icon-line" />
-          <p class="font-weight-bold text-line">
+          <p class="font-weight-bold text-line mb-0">
             ESTRATEGIA DE <br />
-            <span class="text-spring-green mb-5">DIVERSIFICACIÓN</span>
+            <span class="text-spring-green"> DIVERSIFICACIÓN </span>
           </p>
         </div>
       </div>
     </section>
-    <section class="container-fluid follow-us mb-5">
+    <section class="container-fluid">
       <div class="row">
         <div class="col-6 d-flex align-items-center justify-content-center">
           <div class="text-center">
-            <h2 class="text-black-pearl text-cursi">
-              con<span class="text-spring-green black-pearl text-pc"
-                >A<span class="text-black-pearl">M</span>I</span
-              >
-            </h2>
-            <span class="black-pearl font-weight-bold text-final1">
-              siempre darás <br />
-              <span class="text-spring-green text-final2">EN EL BLANCO</span>
-            </span>
+            <p class="text-black-pearl font-weight-bold mb-0">
+              <span class="text-cursi font-weight-normal">con</span>
+              <span class="text-spring-green black-pearl text-ami-bottom">
+                A <span class="text-black-pearl">M</span> I
+              </span>
+              <br />
+              <span class="text-black text-final1">
+                siempre darás <br />
+                <span class="text-spring-green text-final2">EN EL BLANCO</span>
+              </span>
+            </p>
           </div>
         </div>
         <div class="col-6">
-          <img src="/img/amiPersonas3.svg" class="img-fluid w-90" />
+          <img src="/img/amiPersonas3.svg" class="img-fluid w-100" />
         </div>
       </div>
     </section>
   </div>
 </template>
-
-<script>
-import {
-  ListIcon,
-  FacebookIcon,
-  InstagramIcon,
-  YoutubeIcon,
-  TwitterIcon,
-} from "../icons";
-
-export default {
-  name: "ami-personas",
-  components: {
-    ListIcon,
-    FacebookIcon,
-    InstagramIcon,
-    YoutubeIcon,
-    TwitterIcon,
-  },
-};
-</script>
