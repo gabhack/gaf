@@ -362,3 +362,4 @@ Route::get('/dataset', 'DatasetController@index');
 Route::get('/dataset/get', 'DatasetController@get');
 
 Route::view('/welcome', 'welcome');
+Route::view('/amipersonas', 'amipersonas');
