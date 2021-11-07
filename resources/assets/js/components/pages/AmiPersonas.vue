@@ -45,7 +45,7 @@
           </div>
         </div>
         <div class="col-5 pr-0">
-          <img src="/img/amiCards.svg" class="img-fluid w-100" />
+          <img src="/img/amicards.svg" class="img-fluid w-100" />
         </div>
       </div>
     </section>
