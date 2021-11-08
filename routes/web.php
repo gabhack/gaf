@@ -365,3 +365,4 @@ Route::get('/dataset/get', 'DatasetController@get');
 
 Route::view('/welcome', 'welcome');
 Route::view('/amipersonas', 'amipersonas');
+Route::view('/moreinformation', 'moreinformation');
