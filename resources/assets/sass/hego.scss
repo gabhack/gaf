@@ -6,13 +6,6 @@ body {
   font-family: Poppins;
 }
 
-.text-big-personas {
-  font-size: 150px;
-  line-height: 1em;
-  text-align: center;
-  letter-spacing: 0.15em;
-}
-
 .col-icons {
   text-align: center;
 
@@ -21,35 +14,10 @@ body {
     margin: 5px;
     border-bottom: 2px solid $spring-green;
   }
-
-  .text-line {
-    margin-top: 10px;
-    font-size: 18px;
-  }
-}
-
-.text-pc {
-  font-weight: bold;
-  font-size: 110px;
-}
-
-.text-cursi {
-  font-family: BillionDreams;
-  font-size: 80px;
-  line-height: 1;
-}
-
-.text-final1 {
-  font-size: 50px;
-  line-height: 50px;
 }
 
 .p-sec3 {
   margin-top: -10px;
-}
-
-.secure-text {
-  margin-top: -23px;
 }
 
 .secure-text {
@@ -59,10 +27,7 @@ body {
 .text-sec3 {
   font-size: 43px;
   margin-top: -35px;
-}
-
-.text-final2 {
-  font-size: 53px;
+  font-weight: 900;
 }
 
 .text-medium {
@@ -71,12 +36,6 @@ body {
 
 .text-ami {
   font-size: 36px;
-
-  &-bottom {
-    font-size: 110px;
-    line-height: 1;
-    letter-spacing: -0.095em;
-  }
 }
 
 .btn-more {

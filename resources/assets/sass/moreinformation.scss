@@ -6,100 +6,18 @@ body {
   font-family: Poppins;
 }
 
-.text-big-personas {
-  font-size: 150px;
-  line-height: 1em;
-  text-align: center;
-  letter-spacing: 0.15em;
-}
-
-.col-icons {
-  text-align: center;
-}
-
-.icon1 {
-  width: 76%;
-}
-
-.icon-line1 {
-  text-align: left;
-  margin-left: 20px;
-}
-
-.icon-line2 {
-  text-align: left;
-  margin-left: -85px;
-}
-
-.video-info {
-  margin-top: 5%;
-  padding: 0;
-}
-
-.text-line1 {
+.text-line {
   margin-top: 10px;
   font-size: 29px;
-  text-align: center;
-  color: #faa600;
-}
-.text-line2 {
-  margin-top: 10px;
-  font-size: 29px;
-  text-align: center;
-  color: #1a2e35;
-}
-.text-line3 {
-  margin-top: 10px;
-  font-size: 29px;
-  text-align: center;
-  color: #10dd8e;
-}
-.text-line4 {
-  margin-top: 10px;
-  font-size: 29px;
-  text-align: left;
-  color: #1a2e35;
-}
-.text-line5 {
-  margin-top: 10px;
-  font-size: 29px;
-  text-align: left;
-  color: #faa600;
-}
-
-.container-icons {
-  margin-left: 15%;
-}
-
-.text-marg {
-  margin-top: -10%;
+  font-weight: bold;
 }
 
 .back-section1 {
-  background-image: url("/img/moneyFlow.png");
+  background-image: url("/img/money-flow.png");
   background-repeat: no-repeat;
-  height: 703px;
+  height: 80vh;
+  max-height: 700px;
   background-size: contain;
-  margin-bottom: -10%;
-}
-
-.text-cursi {
-  font-family: BillionDreams;
-  font-size: 80px;
-  line-height: 1;
-}
-
-.text-final1 {
-  font-size: 50px;
-  line-height: 50px;
-}
-
-.text-final2 {
-  font-size: 53px;
-}
-
-.text-medium {
-  font-size: 29px;
 }
 
 .text-ami {
@@ -107,13 +25,8 @@ body {
   margin-bottom: 15px;
 }
 
-.text-sec1 {
+.text-sec {
   font-size: 20px;
-}
-
-.btn-more {
-  max-width: 300px;
-  width: 100%;
 }
 
 .text-spacing {
@@ -122,31 +35,14 @@ body {
   letter-spacing: 0.3em;
   background-color: #000;
   color: #fff;
-  font-weight: bold;
-  padding: 20px 215px;
-  border-radius: 0px 50px 50px 0px;
+  padding: 1.5rem;
   margin-bottom: 35px;
-}
 
-.section4 {
-  padding: 0 0 0 90px;
-}
+  &.border-rr {
+    border-radius: 0px 50px 50px 0px;
+  }
 
-.text-inter {
-  padding: 0 82px;
-}
-
-.text-spacing2 {
-  font-size: 18px;
-  line-height: 27px;
-  letter-spacing: 0.3em;
-  background-color: #000;
-  color: #fff;
-  padding: 20px 100px;
-  border-radius: 50px 0px 0px 50px;
-  margin-bottom: 35px;
-}
-
-.pad-section {
-  padding-left: 0;
+  &.border-rl {
+    border-radius: 50px 0px 0px 50px;
+  }
 }

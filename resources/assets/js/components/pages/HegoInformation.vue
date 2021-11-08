@@ -1,14 +1,13 @@
 <template>
   <div>
-    <section class="container-fluid mb-5">
-      <div class="row back-section1">
+    <section class="container-fluid back-section1">
+      <div class="row h-100">
         <div class="col-12 d-flex align-items-center justify-content-center">
-          <div class="text-center text-marg">
-            <p class="text-ami font-weight-bold">
-              <span class="text-spring-green">¿Qué</span>
-              es?
-            </p>
-            <p class="text-sec1">
+          <div class="text-center">
+            <h2 class="text-ami text-spring-green font-weight-bold">
+              ¿Qué <span class="text-black-pearl">es?</span>
+            </h2>
+            <p class="text-sec">
               Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed
               diam<br />
               nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam<br />
@@ -23,20 +22,13 @@
     </section>
     <section class="container-fluid mb-5">
       <div class="row">
-        <div
-          class="
-            col-7
-            d-flex
-            align-items-center
-            justify-content-left
-            pad-section
-          "
-        >
-          <div class="text-center">
-            <p class="text-spacing">
-              <span class="text-spring-green">¿CÓMO </span>FUNCIONA?
+        <div class="col-6 d-flex align-items-center pl-0">
+          <div class="text-center w-100 pr-5">
+            <p class="text-spacing border-rr">
+              <span class="text-spring-green">¿CÓMO </span>
+              <span class="font-weight-bold">FUNCIONA?</span>
             </p>
-            <p class="text-sec1">
+            <p class="text-sec">
               Lorem ipsum dolor sit amet, consectetuer<br />
               adipiscing elit, sed diam nonummy nibh<br />
               euismod tincidunt ut laoreet dolore magna<br />
@@ -44,55 +36,45 @@
             </p>
           </div>
         </div>
-        <div class="col-5 pr-0">
-          <img src="/img/imgSec2.svg" class="img-fluid w-100" />
+        <div class="col-6 pr-4">
+          <img src="/img/img-sec-2.svg" class="img-fluid w-100" />
         </div>
       </div>
     </section>
-    <section class="container my-5 container-icons">
+    <section class="container py-5 mb-5">
       <div class="row">
-        <div class="col-6">
-          <div class="row">
-            <div class="col-4 col-icons">
-              <p class="font-weight-bold text-line1">Proceso</p>
-              <img src="/img/Icono _-01.svg" class="img-fluid w-76" />
-            </div>
-            <div class="col-4 col-icons">
-              <p class="font-weight-bold text-line2">Proceso</p>
-              <img src="/img/secondStep.png" class="img-fluid w-76" />
-            </div>
-            <div class="col-4 col-icons">
-              <p class="font-weight-bold text-line3">Proceso</p>
-              <img src="/img/threeStep.png" class="img-fluid w-76" />
-            </div>
-          </div>
+        <div class="col text-center">
+          <p class="text-line text-orange">Proceso</p>
+          <img src="/img/step-one.png" class="img-fluid w-75" />
         </div>
-        <div class="col-6">
-          <div class="row justify-content-left">
-            <div class="col-6 icon-line1">
-              <p class="font-weight-bold text-line4">Proceso</p>
-              <img src="/img/fourStep.png" class="img-fluid w-80" />
-            </div>
-            <div class="col-6 icon-line2">
-              <p class="font-weight-bold text-line5">Proceso</p>
-              <img src="/img/fiveStep.png" class="img-fluid w-80" />
-            </div>
-          </div>
+        <div class="col text-center">
+          <p class="text-line text-black-pearl">Proceso</p>
+          <img src="/img/step-two.png" class="img-fluid w-75" />
+        </div>
+        <div class="col text-center">
+          <p class="text-line text-caribbean-green">Proceso</p>
+          <img src="/img/step-three.png" class="img-fluid w-75" />
+        </div>
+        <div class="col text-center">
+          <p class="text-line text-black-pearl">Proceso</p>
+          <img src="/img/step-four.png" class="img-fluid w-75" />
+        </div>
+        <div class="col text-center">
+          <p class="text-line text-orange">Proceso</p>
+          <img src="/img/step-five.png" class="img-fluid w-75" />
         </div>
       </div>
     </section>
     <section class="container-fluid">
       <div class="row">
-        <div class="col-12 video-info">
-          <iframe
-            width="100%"
-            height="700px"
-            src="https://www.youtube.com/embed/xcJtL7QggTI"
-            title="YouTube video player"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-          ></iframe>
+        <div class="col-12 px-0">
+          <div class="embed-responsive embed-responsive-16by9">
+            <iframe
+              class="embed-responsive-item"
+              src="https://www.youtube.com/embed/xcJtL7QggTI?rel=0"
+              allowfullscreen
+            ></iframe>
+          </div>
         </div>
       </div>
     </section>

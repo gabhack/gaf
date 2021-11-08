@@ -1,16 +1,15 @@
 <template>
   <div>
-    <section class="container-fluid mb-5">
+    <section class="container-fluid">
       <div class="row">
-        <div class="col-6 pt-5">
+        <div class="col-7">
           <img src="/img/hegoprincipal.svg" class="img-fluid w-100" />
         </div>
-        <div class="col-6 d-flex align-items-center justify-content-center">
+        <div class="col-5 d-flex align-items-center justify-content-center">
           <div>
             <p class="text-ami font-weight-bold">
               <span class="text-spring-green">¡Tu </span>
-              analísta
-              <span class="text-spring-green"> financiero!</span>
+              analísta <span class="text-spring-green"> financiero!</span>
             </p>
           </div>
         </div>
@@ -18,7 +17,7 @@
     </section>
     <section class="container-fluid mb-5">
       <div class="row">
-        <div class="col-7 d-flex align-items-center justify-content-center">
+        <div class="col-5 d-flex align-items-center justify-content-end">
           <div class="text-center">
             <p class="text-spacing mb-0">NUESTRA</p>
             <p class="text-medium font-weight-bold">
@@ -37,17 +36,17 @@
             </b-button>
           </div>
         </div>
-        <div class="col-5 pr-0">
+        <div class="col-7 pr-0">
           <img src="/img/hegosec2.svg" class="img-fluid w-100" />
         </div>
       </div>
     </section>
     <section class="container-fluid mb-5">
       <div class="row">
-        <div class="col-5">
+        <div class="offset-1 col-5">
           <img src="/img/hegodoc.svg" class="img-fluid w-100" />
         </div>
-        <div class="col-7 d-flex align-items-center justify-content-center">
+        <div class="col-6 d-flex align-items-center justify-content-center">
           <div class="text-center">
             <p class="text-spacing mb-0">CON NUESTRO PROCESO</p>
             <p class="text-medium font-weight-bold mb-0">
@@ -60,7 +59,7 @@
             <p class="text-medium secure-text font-weight-light">
               <span class="text-spring-green mb-0">100% seguro</span>
             </p>
-            <p class="text-sec3 font-weight-bold">100% legal.</p>
+            <p class="text-sec3">100% legal.</p>
             <b-button variant="black" class="btn-more font-weight-bold">
               Más Información
             </b-button>
