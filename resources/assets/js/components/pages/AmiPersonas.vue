@@ -59,7 +59,7 @@
             <p class="text-spacing mb-0">CON NUESTRO PROCESO</p>
             <p class="text-medium font-weight-bold">
               <span class="text-spring-green mb-5">Recuperación </span>
-              span
+              de cartera
             </p>
             <p>
               ¡Tu cartera al día! controla tu cartera las 24 horas del día y los
@@ -163,7 +163,7 @@
           </div>
         </div>
         <div class="col-6">
-          <img src="/img/amipersonas3.svg" class="img-fluid w-100" />
+          <img src="/img/Icono_Dardo-01.svg" class="img-fluid w-100" />
         </div>
       </div>
     </section>

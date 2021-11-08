@@ -25,6 +25,9 @@ Vue.component("example", require("./components/Example.vue"));
 Vue.component("CustomHeader", require("./components/CustomHeader").default);
 Vue.component("HomePage", require("./components/pages/HomePage").default);
 Vue.component("AmiPersonas", require("./components/pages/AmiPersonas").default);
+Vue.component("MoreInformation", require("./components/pages/MoreInformation").default);
+Vue.component("Hego", require("./components/pages/Hego").default);
+Vue.component("HegoInformation", require("./components/pages/HegoInformation").default);
 
 /* Vue Init */
 const app = new Vue({

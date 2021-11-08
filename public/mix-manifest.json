@@ -1,6 +1,9 @@
 {
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
+    "/css/pages/moreinformation.css": "/css/pages/moreinformation.css",
     "/css/pages/amipersonas.css": "/css/pages/amipersonas.css",
-    "/css/pages/home.css": "/css/pages/home.css"
+    "/css/pages/home.css": "/css/pages/home.css",
+    "/css/pages/hegoinformation.css": "/css/pages/hegoinformation.css",
+    "/css/pages/hego.css": "/css/pages/hego.css"
 }
