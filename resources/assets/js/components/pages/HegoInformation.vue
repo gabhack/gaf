@@ -55,7 +55,7 @@
           <div class="row">
             <div class="col-4 col-icons">
               <p class="font-weight-bold text-line1">Proceso</p>
-              <img src="/img/Icono _-01.svg" class="img-fluid icon1" />
+              <img src="/img/Icono _-01.svg" class="img-fluid w-76" />
             </div>
             <div class="col-4 col-icons">
               <p class="font-weight-bold text-line2">Proceso</p>
@@ -77,38 +77,6 @@
               <p class="font-weight-bold text-line5">Proceso</p>
               <img src="/img/fiveStep.png" class="img-fluid w-80" />
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section class="container-fluid mb-5">
-      <div class="row">
-        <div class="col-6">
-          <img src="/img/imgSec3MoreInfo.svg" class="img-fluid w-100" />
-        </div>
-        <div
-          class="
-            col-6
-            d-flex
-            align-items-center
-            justify-content-center
-            section4
-          "
-        >
-          <div class="text-center">
-            <p class="text-spacing2">
-              <span class="text-spring-green">¡PARAMETROS</span> DE DATOS!
-            </p>
-            <p class="text-sec1 text-inter">
-              Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam
-              nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam
-              erat volutpat.
-            </p>
-            <p class="text-sec1 text-inter">
-              Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam
-              nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam
-              erat volutpat.
-            </p>
           </div>
         </div>
       </div>
