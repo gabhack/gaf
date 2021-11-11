@@ -1,33 +1,35 @@
 
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
     <meta charset="utf-8">
-	<head>
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
 		<!-- CSRF Token -->
-		<meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
 		<title>{{ config('app.name', 'AMI') }}</title>
-		
-		<base href="{{url('/')}}">		
+
+		<base href="{{url('/')}}">
 
 		<!-- Styles -->
-		<link href="{{asset('css/all.css')}}" rel="stylesheet">
-		<link href="{{asset('css/bootstrap-4.3.1/dist/css/bootstrap.min.css')}}" rel="stylesheet">
-		<link href="{{asset('css/simple-sidebar.css')}}" rel="stylesheet">    
-		<link href="{{asset('css/font-awesome-4.7.0/css/font-awesome.min.css')}}" rel="stylesheet">
-		<link href="{{asset('css/styles.css')}}" rel="stylesheet">
-		<link href="{{asset('css/login.css')}}" rel="stylesheet">
-		<link rel="preconnect" href="https://fonts.gstatic.com">
-		<link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+		<link href="{{ asset('css/all.css') }}" rel="stylesheet">
+		<link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/pages/login.css') }}" rel="stylesheet">
 
-		
+		<!-- Fonts -->
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;900&display=swap" rel="stylesheet">
+
 		<script type="text/javascript">
 			function callbackThen(response){
 				// read HTTP status
 				console.log(response.status);
-				
+
 				// read Promise object
 				response.json().then(function(data){
 					console.log(data);
@@ -35,33 +37,33 @@
 			}
 			function callbackCatch(error){
 				console.error('Error:', error)
-			}   
-		</script>  
+			}
+		</script>
 
 		{!! htmlScriptTagJsApi([
-            'action' => 'login',
-            'callback_then' => 'callbackThen',
-            'callback_catch' => 'callbackCatch'
-        ]) !!}
+			'action' => 'login',
+			'callback_then' => 'callbackThen',
+			'callback_catch' => 'callbackCatch'
+		]) !!}
 	</head>
-	<body class="skin-blue sidebar-mini">
+	<body>
 		<!-- Loader -->
 		<div class="loader">
 			<div class="text-center">
-				<div class="spinner-border" role="status">				
-				</div>			
+				<div class="spinner-border" role="status">
+				</div>
 			</div>
 		</div>
-		
+
 		<!-- Container -->
-        <div class="container-fluid login">
-            @yield('content')
-        </div>
-			
+		<div class="container-fluid h-100">
+			@yield('content')
+		</div>
+
 		<!-- Scripts -->
 		<script src="{{asset('js/jquery-3.5.1.min.js')}}"></script>
 		<script src="{{asset('css/bootstrap-4.3.1/dist/js/bootstrap.bundle.min.js')}}"></script>
-		<script src="{{asset('js/scripts.js')}}"></script>		
-				
+		<script src="{{asset('js/scripts.js')}}"></script>
+
 	</body>
 </html>
