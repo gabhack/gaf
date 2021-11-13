@@ -27,7 +27,7 @@ class ConsultasController extends BaseSoapController
     {
         $this->middleware('auth');
     }
-    
+
     /**
      * Display the consult resource.
      *
@@ -47,7 +47,7 @@ class ConsultasController extends BaseSoapController
     {
         //Obtener consulta
         $cliente = Clientes::where("documento", "=", $request->documento)->first();
-        if ( 
+        if (
             (strtolower($request->file('autorizacion_file')->getClientOriginalExtension()) !== 'pdf') ||
             (strtolower($request->file('desprendible_file')->getClientOriginalExtension()) !== 'pdf')
         ) {
@@ -133,14 +133,14 @@ class ConsultasController extends BaseSoapController
                         $adicional = ($cliente->ingresos*.2);
                     }
                 }
-                
+
                 $aportes = 0;
-                $vinculacion = '';		
+                $vinculacion = '';
                 if($registro->pagaduria->de_pensiones)
                 {
                     $vinculacion = 'PENS';
                     $aportes = Parametros::where('llave', 'APORTES_PENSIONADOS')->first();
-                }	
+                }
                 else
                 {
                     $aportes = Parametros::where('llave', 'APORTES_ACTIVOS')->first();

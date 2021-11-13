@@ -200,7 +200,7 @@
 
   .total-count {
     font-weight: 900;
-    font-size: 10rem;
+    font-size: 8rem;
     line-height: 1;
     display: block;
   }
@@ -220,5 +220,22 @@
     font-weight: 900;
     font-size: 5rem;
     line-height: 1;
+  }
+}
+
+.form-control {
+  font-weight: 600;
+  text-align: center;
+
+  background-color: #e1e1e1;
+  color: #253f3d;
+  border-radius: 38px;
+  border: none;
+  min-height: 30px;
+
+  &:focus {
+    background-color: #1a2e35;
+    color: $caribbean-green;
+    box-shadow: none;
   }
 }
