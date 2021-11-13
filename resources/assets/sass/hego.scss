@@ -48,3 +48,46 @@ body {
   line-height: 27px;
   letter-spacing: 0.3em;
 }
+
+//Responsive
+
+@media (max-width: 600px) {
+  .doc-respo {
+    display: block !important;
+  }
+  .doc-desk {
+    display: none !important;
+  }
+  .text-respo {
+    display: block !important;
+  }
+  .text-desk {
+    display: none !important;
+  }
+  .text-ami {
+    font-size: 20px;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: -35px;
+  }
+  .text-p-h {
+    text-align: justify;
+    padding: 5px 40px;
+  }
+  .btn-more {
+    max-width: 195px;
+    width: 100%;
+  }
+}
+.text-respo {
+  display: none;
+}
+.text-desk {
+  display: block;
+}
+.doc-respo {
+  display: none;
+}
+.doc-desk {
+  display: block;
+}

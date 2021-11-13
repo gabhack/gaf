@@ -46,3 +46,59 @@ body {
     border-radius: 50px 0px 0px 50px;
   }
 }
+
+//Responsive
+
+@media (max-width: 600px) {
+  .text-ami {
+    font-size: 34px;
+    margin-bottom: 15px;
+    margin-top: -50%;
+  }
+  .text-sec {
+    font-size: 16px;
+    text-align: justify;
+    padding: 5px 20px;
+  }
+  .text-sec2 {
+    font-size: 16px;
+    text-align: justify;
+    padding: 5px 50px;
+  }
+  .img-sec2 {
+    width: 80% !important;
+    margin-right: -35px;
+  }
+  .res-marg {
+    margin-top: -50%;
+  }
+  .img-sec3 {
+    text-align: right;
+  }
+  .text-sec3 {
+    font-size: 15px;
+    margin-bottom: 20px;
+  }
+  .text-sec4 {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  .pad-resp {
+    padding: 0px 50px;
+  }
+  .width-res {
+    width: 35% !important;
+  }
+  .respo {
+    display: block !important;
+  }
+  .desk {
+    display: none !important;
+  }
+}
+.desk {
+  display: block;
+}
+.respo {
+  display: none;
+}

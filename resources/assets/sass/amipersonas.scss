@@ -72,3 +72,73 @@ body {
   line-height: 27px;
   letter-spacing: 0.3em;
 }
+
+//Responsive
+
+@media (max-width: 600px) {
+  .first-text-res {
+    display: block !important;
+  }
+  .first-desk {
+    display: none !important;
+  }
+  .img-sec3 {
+    display: none !important;
+  }
+  .img-sec4 {
+    display: block !important;
+  }
+  .text-big-personas {
+    font-size: 86px;
+    line-height: 1em;
+    text-align: center;
+    letter-spacing: 0.15em;
+    margin-top: 20px;
+  }
+  .text-ami {
+    font-size: 15px;
+    text-align: center;
+  }
+  .texts-p {
+    text-align: justify;
+    padding: 5px 25px;
+  }
+  .text-ami-bottom {
+    font-size: 54px;
+    line-height: 1;
+    letter-spacing: -0.095em;
+  }
+  .text-final1 {
+    font-size: 23px;
+    line-height: 30px;
+  }
+  .text-final2 {
+    font-size: 31px;
+  }
+  .respo {
+    display: block !important;
+  }
+  .desk {
+    display: none !important;
+  }
+  .text-cursi {
+    font-family: BillionDreams;
+    font-size: 46px;
+    line-height: 1;
+  }
+}
+.desk {
+  display: block;
+}
+.respo {
+  display: none;
+}
+.first-text-res {
+  display: none;
+}
+.img-sec3 {
+  display: block;
+}
+.img-sec4 {
+  display: none;
+}
