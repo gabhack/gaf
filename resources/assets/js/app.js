@@ -4,13 +4,14 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require("./bootstrap");
+require('./bootstrap');
 
 // Vue
-import Vue from "vue";
+import Vue from 'vue';
 
 // BootstrapVue
-import BootstrapVue from "bootstrap-vue";
+import 'bootstrap';
+import BootstrapVue from 'bootstrap-vue';
 Vue.use(BootstrapVue);
 
 /**
@@ -19,17 +20,23 @@ Vue.use(BootstrapVue);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component("example", require("./components/Example.vue"));
+Vue.component('example', require('./components/Example.vue'));
 
 // Vue Components
-Vue.component("CustomHeader", require("./components/CustomHeader").default);
-Vue.component("HomePage", require("./components/pages/HomePage").default);
-Vue.component("AmiPersonas", require("./components/pages/AmiPersonas").default);
-Vue.component("MoreInformation", require("./components/pages/MoreInformation").default);
-Vue.component("Hego", require("./components/pages/Hego").default);
-Vue.component("HegoInformation", require("./components/pages/HegoInformation").default);
+Vue.component('CustomHeader', require('./components/CustomHeader').default);
+Vue.component('HomePage', require('./components/pages/HomePage').default);
+Vue.component('AmiPersonas', require('./components/pages/AmiPersonas').default);
+Vue.component('MoreInformation', require('./components/pages/MoreInformation').default);
+Vue.component('Hego', require('./components/pages/Hego').default);
+Vue.component('HegoInformation', require('./components/pages/HegoInformation').default);
+
+// Vue Icons
+Vue.component('AdminSettingsIcon', require('./components/icons/AdminSettingsIcon').default);
+Vue.component('AmiIcon', require('./components/icons/AmiIcon').default);
+Vue.component('HegoIcon', require('./components/icons/HegoIcon').default);
+Vue.component('HomeIcon', require('./components/icons/HomeIcon').default);
 
 /* Vue Init */
 const app = new Vue({
-  el: "#app",
+  el: '#app'
 });

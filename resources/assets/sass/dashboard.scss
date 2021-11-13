@@ -1,0 +1,224 @@
+@import '~@fortawesome/fontawesome-free';
+@import '~@fortawesome/fontawesome-free/scss/solid';
+@import './sb-admin/sb-admin-2';
+
+.font-weight-exbold {
+  font-weight: 900;
+}
+
+#wrapper {
+  #content-wrapper {
+    background-color: $white;
+    background-image: url('/img/bg-home-dash.svg');
+    background-repeat: no-repeat;
+    background-position: bottom right;
+    background-position-x: calc(100% - 1rem);
+
+    #content {
+      padding-bottom: 3rem;
+    }
+  }
+}
+
+.sidebar {
+  box-shadow: 5px 14px 4px -2px rgba(0, 0, 0, 0.25);
+  z-index: 2;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+
+  @media (min-width: 768px) {
+    transition: width 400ms;
+  }
+
+  &.toggled {
+    .nav-item {
+      &.active {
+        .nav-link {
+          width: 6rem;
+          padding-left: 0.35rem;
+        }
+      }
+
+      .nav-link {
+        flex-direction: column;
+
+        svg {
+          margin-bottom: 0.5rem;
+          margin-right: 0;
+        }
+      }
+    }
+  }
+
+  .nav-item {
+    margin-bottom: 1rem;
+
+    &.active {
+      padding-left: 0.5rem;
+
+      .nav-link {
+        width: 6rem;
+        background-color: $white;
+        border-top-left-radius: 10px;
+        @media (max-width: 768px) {
+          padding-left: 0.35rem;
+        }
+
+        @media (min-width: 768px) {
+          width: 13.5rem;
+        }
+
+        &.collapsed {
+          border-bottom-left-radius: 10px;
+          box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        }
+
+        &::after {
+          color: rgba($caribbean-green, 0.5);
+        }
+      }
+    }
+
+    .nav-link {
+      transition: width 400ms;
+
+      @media (min-width: 768px) {
+        display: flex;
+        align-items: center;
+      }
+
+      &[data-toggle='collapse']::after {
+        margin-left: auto;
+      }
+
+      &:hover {
+        background-color: $white;
+        font-weight: 700;
+
+        &::after {
+          color: rgba($caribbean-green, 0.5);
+        }
+      }
+
+      svg {
+        fill: $caribbean-green;
+        width: 30px;
+        height: 30px;
+        margin-bottom: 0.5rem;
+
+        @media (min-width: 768px) {
+          margin-right: 0.75rem;
+          margin-bottom: 0;
+        }
+      }
+
+      span {
+        color: $caribbean-green;
+        font-weight: bold;
+        letter-spacing: 0.27em;
+        text-transform: uppercase;
+        line-height: 1em;
+      }
+    }
+
+    .collapse,
+    .collapsing {
+      margin: 0;
+
+      .collapse-inner {
+        border-bottom-left-radius: 10px;
+      }
+    }
+  }
+}
+
+.navbar {
+  #userDropdown {
+    span {
+      font-weight: 900;
+      line-height: 1em;
+    }
+  }
+
+  .dropdown-menu {
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 0;
+
+    @media (min-width: 576px) {
+      min-width: 14rem;
+    }
+
+    .user-name {
+      font-size: 1.2rem;
+      line-height: 1;
+      font-weight: 900;
+    }
+
+    .user-position {
+      color: #92a19f;
+      font-weight: 900;
+    }
+
+    .user-company {
+      font-size: 70%;
+    }
+
+    .btn-profile {
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+      border-radius: 14px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .btn-logout {
+      border-bottom: 2px solid #b2c9c6;
+    }
+  }
+}
+
+.box-rounded {
+  border-radius: 30px;
+  padding: 1.5rem 3rem;
+
+  @media (min-width: 768px) {
+    padding: 2rem 3.5rem;
+  }
+
+  .box-label {
+    font-size: 1.3rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    border-bottom: 2px solid $caribbean-green;
+    padding-bottom: 0.5rem;
+    display: inline-block;
+
+    span {
+      font-weight: 900;
+    }
+  }
+
+  .total-count {
+    font-weight: 900;
+    font-size: 10rem;
+    line-height: 1;
+    display: block;
+  }
+}
+
+.box-square {
+  padding: 1rem 2rem;
+  box-shadow: 10px 10px 0px $gainsboro;
+  width: 95%;
+
+  .box-label {
+    font-size: 2rem;
+    text-transform: uppercase;
+  }
+
+  .box-percentage {
+    font-weight: 900;
+    font-size: 5rem;
+    line-height: 1;
+  }
+}

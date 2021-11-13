@@ -22,6 +22,8 @@ public/.htaccess
 /public/css/app.css
 /public/js/app.js
 /public/css/pages
+/public/mix-manifest.json
+/public/fonts/vendor
 
 composer.lock
 package-lock.json
