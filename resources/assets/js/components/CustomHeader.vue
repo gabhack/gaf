@@ -2,19 +2,23 @@
   <header>
     <b-navbar toggleable="lg" type="light" variant="white" class="py-3x px-5x">
       <div class="container">
-        <b-navbar-brand href="#" class="mr-5">
+        <b-navbar-brand href="/welcome" class="mr-5">
           <img src="/img/logo-gaf.svg" alt="Logo GAF" width="60px" />
         </b-navbar-brand>
 
         <div class="icons-desktop">
-          <b-button variant="black-pearl" class="mr-2">
+          <b-button variant="black-pearl" class="mr-2" href="/welcome">
             <span>Personas</span>
             <PersonsIcon />
           </b-button>
-          <b-button variant="spring-green">
-            <span>Empresas</span>
-            <CompaniesIcon />
-          </b-button>
+          <b-dropdown variant="spring-green">
+            <template #button-content>
+              Empresas
+              <CompaniesIcon />
+            </template>
+            <b-dropdown-item href="/amipersonas">Ami</b-dropdown-item>
+            <b-dropdown-item href="/hego">Hego</b-dropdown-item>
+          </b-dropdown>
         </div>
         <div class="icons-responsie">
           <b-button variant="black-pearl" class="mr-2">
@@ -104,6 +108,12 @@ header {
   z-index: 5;
 }
 
+.dropdown-menu:focus-visible {
+  outline: none !important;
+}
+.dropdown-toggle:focus-visible {
+  outline: none !important;
+}
 //Popup-styles
 
 .modal-content {

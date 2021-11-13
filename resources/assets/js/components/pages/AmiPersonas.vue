@@ -8,7 +8,7 @@
             d-flex
             align-items-center
             justify-content-center
-            first-text-res
+            d-md-none
           "
         >
           <div>
@@ -76,7 +76,11 @@
               en un 90%<br />
               los errores operativos
             </p>
-            <b-button variant="black" class="btn-more font-weight-bold">
+            <b-button
+              variant="black"
+              class="btn-more font-weight-bold"
+              href="/moreinformation"
+            >
               Más Información
             </b-button>
           </div>
@@ -115,7 +119,11 @@
               decisiones o<br />
               prevenir las situaciones que afectan el desarrollo de tu cartera.
             </p>
-            <b-button variant="black" class="btn-more font-weight-bold">
+            <b-button
+              variant="black"
+              class="btn-more font-weight-bold"
+              href="/moreinformation"
+            >
               Más Información
             </b-button>
           </div>
@@ -152,7 +160,11 @@
             estrategia de venta.<br />
             Podrás desarrollar diferentes estrategias como:
           </p>
-          <b-button variant="spring-green" class="btn-more font-weight-bold">
+          <b-button
+            variant="spring-green"
+            class="btn-more font-weight-bold"
+            href="/moreinformation"
+          >
             Más Información
           </b-button>
         </div>

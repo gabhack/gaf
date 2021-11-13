@@ -8,7 +8,7 @@
             d-flex
             align-items-center
             justify-content-center
-            text-respo
+            d-md-none
           "
         >
           <div>
@@ -62,7 +62,11 @@
               e<br />
               incrementa tus ventas
             </p>
-            <b-button variant="black" class="btn-more font-weight-bold">
+            <b-button
+              variant="black"
+              class="btn-more font-weight-bold"
+              href="/hegoinformation"
+            >
               Más Información
             </b-button>
           </div>
@@ -98,12 +102,16 @@
               <span class="text-spring-green mb-0">100% seguro</span>
             </p>
             <p class="text-sec3">100% legal.</p>
-            <b-button variant="black" class="btn-more font-weight-bold">
+            <b-button
+              variant="black"
+              class="btn-more font-weight-bold"
+              href="/hegoinformation"
+            >
               Más Información
             </b-button>
           </div>
         </div>
-        <div class="col-12 doc-res">
+        <div class="col-12 d-md-none">
           <img src="/img/hegodoc.svg" class="img-fluid w-100" />
         </div>
       </div>
@@ -133,7 +141,11 @@
             tus clientes, con nuestra<br />
             herramienta podras contar con:
           </p>
-          <b-button variant="spring-green" class="btn-more font-weight-bold">
+          <b-button
+            variant="spring-green"
+            class="btn-more font-weight-bold"
+            href="/hegoinformation"
+          >
             Más Información
           </b-button>
         </div>

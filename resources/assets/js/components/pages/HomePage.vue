@@ -18,7 +18,7 @@
             <p class="text-big font-weight-bold">
               No tomes <br />
               más decisiones <br />
-              <span class="text-spring-green fancy-text mb-5">a ciegas</span>
+              <span class="text-spring-green fancy-text mb-2">a ciegas</span>
             </p>
             <p class="p-text2">
               AMI tu consultor amigo esta
@@ -34,7 +34,7 @@
 
             <b-modal id="modal-tall">
               <div class="row content-popsec1">
-                <div class="col-12">
+                <div class="col-lg-12 col-sm-12">
                   <p class="fancy-text">Nuestras</p>
                   <span class="text-big-popup d-block text-uppercase">
                     soluciones
@@ -42,16 +42,18 @@
                 </div>
               </div>
               <div class="row content-pop2">
-                <div class="col-4">
+                <div class="col-lg-4 col-sm-12">
                   <img
                     src="/img/coheteicon.svg"
                     alt="img-asesoria"
                     width="70%"
                   />
                 </div>
-                <div class="col-8">
+                <div class="col-lg-8 col-sm-12">
                   <p class="text-popup pad-sec1">
-                    <span class="font-weight-bold">Diseñadas </span>
+                    <span class="font-weight-bold text-spring-green"
+                      >Diseñadas
+                    </span>
                     para las compañías originadoras<br />
                     de créditos: La usabilidad hace parte de<br />
                     nuestros pilares, sabemos que cada cliente<br />
@@ -61,9 +63,11 @@
                 </div>
               </div>
               <div class="row content-pop2">
-                <div class="col-8">
+                <div class="col-lg-8 col-sm-12">
                   <p class="text-popup pad-sec1">
-                    <span class="font-weight-bold">Innovadoras </span>
+                    <span class="font-weight-bold text-spring-green"
+                      >Innovadoras
+                    </span>
                     Creemos en la era digital y en<br />
                     sus grandes cambios, por eso GAF invierte en<br />
                     desarrollar nuevas tecnologías con<br />
@@ -71,17 +75,19 @@
                     procesos de las industrias.
                   </p>
                 </div>
-                <div class="col-4">
+                <div class="col-lg-4 col-sm-12">
                   <img src="/img/minticon.svg" alt="img-asesoria" width="70%" />
                 </div>
               </div>
               <div class="row content-pop2">
-                <div class="col-4">
+                <div class="col-lg-4 col-sm-12">
                   <img src="/img/nubeicon.svg" alt="img-asesoria" width="70%" />
                 </div>
-                <div class="col-8">
+                <div class="col-lg-8 col-sm-12">
                   <p class="text-popup pad-sec4">
-                    <span class="font-weight-bold">Automáticas </span>
+                    <span class="font-weight-bold text-spring-green"
+                      >Automáticas
+                    </span>
                     gracias a la inteligencia<br />
                     artificial entrenamos nuestra herramienta<br />
                     para que pueda ayudarte en la toma de<br />
@@ -90,16 +96,18 @@
                 </div>
               </div>
               <div class="row content-pop2">
-                <div class="col-9">
+                <div class="col-lg-9 col-sm-12">
                   <p class="text-popup pad-sec4">
-                    <span class="font-weight-bold">Seguras </span>
+                    <span class="font-weight-bold text-spring-green"
+                      >Seguras
+                    </span>
                     en GAF te ofrecemos una experiencia<br />
                     100% segura gracias a la tecnología blockchain<br />
                     que nos permite garantizar la seguridad de tus<br />
                     procesos y la información.
                   </p>
                 </div>
-                <div class="col-3">
+                <div class="col-lg-3 col-sm-12">
                   <img
                     src="/img/monedafinal.svg"
                     alt="img-asesoria"

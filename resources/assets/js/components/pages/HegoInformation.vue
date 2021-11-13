@@ -20,15 +20,15 @@
         </div>
       </div>
     </section>
-    <section class="container-fluid mb-5">
+    <section class="container-fluid mb-5 res-marg">
       <div class="row">
-        <div class="col-6 d-flex align-items-center pl-0">
+        <div class="col-lg-6 col-sm-12 d-flex align-items-center pl-0">
           <div class="text-center w-100 pr-5">
-            <p class="text-spacing border-rr">
+            <p class="text-spacing border-rr text-sec3">
               <span class="text-spring-green">¿CÓMO </span>
               <span class="font-weight-bold">FUNCIONA?</span>
             </p>
-            <p class="text-sec">
+            <p class="text-sec2 text-sec">
               Lorem ipsum dolor sit amet, consectetuer<br />
               adipiscing elit, sed diam nonummy nibh<br />
               euismod tincidunt ut laoreet dolore magna<br />
@@ -36,12 +36,12 @@
             </p>
           </div>
         </div>
-        <div class="col-6 pr-4">
-          <img src="/img/img-sec-2.svg" class="img-fluid w-100" />
+        <div class="col-lg-6 col-sm-12 pr-4 img-sec3">
+          <img src="/img/img-sec-2.svg" class="img-fluid w-100 img-sec2" />
         </div>
       </div>
     </section>
-    <section class="container py-5 mb-5">
+    <section class="container py-5 mb-5 pad-resp">
       <div class="row">
         <div class="col text-center">
           <p class="text-line text-orange">Proceso</p>
@@ -61,7 +61,7 @@
         </div>
         <div class="col text-center">
           <p class="text-line text-orange">Proceso</p>
-          <img src="/img/step-five.png" class="img-fluid w-75" />
+          <img src="/img/step-five.png" class="img-fluid w-75 width-res" />
         </div>
       </div>
     </section>
