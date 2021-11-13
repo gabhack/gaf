@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app2')
 
 @section('content')
 	@if (isset($message))
@@ -38,15 +38,17 @@
 							</select>
 						</div>
 						<div class="form-group-col-md-3">
-							<button type="button" id="btn-consultar" onclick="consultarPagadurias();" class="btn btn-primary" disabled>Consultar</button>
+							<button type="button" id="btn-consultar" onclick="consultarPagadurias();" class="btn btn-outline-black-pearl" disabled>Consultar</button>
 						</div>
 						<div class="form-group col-md-12 text-center">
 							<label for="autorizacion_file">Autorización Política de datos</label>
-							<input class="m-auto mb-4" type="file" id="autorizacion_file" name="autorizacion_file" accept="application/pdf" required>
+							<!-- <input class="m-auto mb-4" type="file" id="autorizacion_file" name="autorizacion_file" accept="application/pdf" required> -->
+							<b-form-file class="m-auto mb-4" id="autorizacion_file" name="autorizacion_file" accept="application/pdf" required></b-form-file>
 						</div>
 						<div class="form-group col-md-12 text-center">
 							<label for="desprendible_file">Último Desprendible</label>
-							<input class="m-auto mb-4" type="file" id="desprendible_file" name="desprendible_file" accept="application/pdf" required>
+							<!-- <input class="m-auto mb-4" type="file" id="desprendible_file" name="desprendible_file" accept="application/pdf" required> -->
+							<b-form-file class="m-auto mb-4" id="desprendible_file" name="desprendible_file" accept="application/pdf" required></b-form-file>
 						</div>
 					</div>
 					<div class="form-row" id="panel-pagaduria">
@@ -56,7 +58,7 @@
 							</select>
 						</div>
 						<div class="form-group-col-md-3">
-							<button id="btn-submit-consulta" type="submit" class="btn btn-primary" disabled hidden>Generar Reporte</button>
+							<button id="btn-submit-consulta" type="submit" class="btn btn-black-pearl" disabled hidden>Generar Reporte</button>
 						</div>
 					</div>
 				</form>
