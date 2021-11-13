@@ -1,382 +1,85 @@
-@extends('layouts.app')
+@extends('layouts.app2')
 
 @section('content')
 <div class="container-fluid">
   @if (IsUser() || IsCompany() && !IsSuperAdmin())
-    <div class="row">
-        <div class="col-lg-6 col-6">
-          <div class="small-box bg-info">
-            <div class="inner">
-              <h3 class="text-white">{{ $labels['total_consultas'] }}</h3>
-
-              <p class="text-white">Total Consultas: <strong>{{$labels['mes_actual']}}</strong></p>
-            </div>
-            <div class="icon">
-              <i class="fa fa-search"></i>
-            </div>
-            <a href="{{url('/consultas/list')}}" class="small-box-footer">Más <i class="fa fa-arrow-circle-right"></i></a>
+    <div class="row mb-5">
+      <div class="col-12 col-md-5 mb-4 mb-md-0">
+        <div class="box-rounded bg-black-pearl text-white">
+          <p class="box-label">Total <span>Consultas</span></p>
+          <span class="total-count">{{ $labels['total_consultas'] }}</span>
+          <div class="text-right">
+            <a href="{{ url('/consultas/list') }}" class="text-white">
+              Ver más <i class="fas fa-angle-right"></i>
+            </a>
           </div>
-          <!-- small box -->
         </div>
-        <!-- /.col -->
-        @if (IsUserCreator() || IsCompany())
-          <div class="col-lg-6 col-6">
-            <div class="small-box bg-primary">
-              <div class="inner">
-                <h3 class="text-white">{{ $labels['usuarios_activos'] }}</h3>
-
-                <p class="text-white">Usuarios Activos</p>
-              </div>
-              <div class="icon">
-                <i class="fa fa-users"></i>
-              </div>
-              <a href="{{url('usuarios')}}" class="small-box-footer">Más <i class="fa fa-arrow-circle-right"></i></a>
-            </div>
-            <!-- small box -->
+      </div>
+      @if (IsUserCreator() || IsCompany())
+      <div class="col-12 col-md-5">
+        <div class="box-rounded bg-gainsboro text-black-pearl">
+          <p class="box-label">Usuarios <span>Activos</span></p>
+          <span class="total-count ">{{ $labels['usuarios_activos'] }}</span>
+          <div class="text-right">
+            <a href="{{ url('usuarios') }}" class="text-black-pearl">
+              Ver más <i class="fas fa-angle-right"></i>
+            </a>
           </div>
-          <!-- /.col -->
-        @endif
-        @if (IsUser() || IsUserCreator() || IsCompany() && !IsSuperAdmin())
-          <div class="col-lg-6 col-6">
-            <div class="box">
-              <div class="content">
-                  <p class="text-center">
-                  Uso de Consultas AMI: <strong>{{$labels['mes_actual']}}</strong>
-                  </p>
-
-                  <div class="progress-group">
-                    <span class="progress-text">AMI®Silver</span>
-                    <span class="progress-number"><b>{{$labels['consultas']['silver']}}</b></span>
-
-                    <div class="progress sm">
-                        <div class="progress-bar progress-bar-aqua" style="width: {{($labels['total_consultas'] ? ($labels['consultas']['silver']/$labels['total_consultas']*100) : '0')}}%"></div>
-                    </div>
-                  </div>
-                  <!-- /.progress-group -->
-                  <div class="progress-group">
-                    <span class="progress-text">AMI®Gold</span>
-                    <span class="progress-number"><b>{{$labels['consultas']['gold']}}</b></span>
-
-                    <div class="progress sm">
-                        <div class="progress-bar progress-bar-red" style="width: {{($labels['total_consultas'] ? ($labels['consultas']['gold']/$labels['total_consultas']*100) : '0')}}%"></div>
-                    </div>
-                  </div>
-                  <!-- /.progress-group -->
-                  <div class="progress-group">
-                    <span class="progress-text">AMI®Diamond</span>
-                    <span class="progress-number"><b>{{$labels['consultas']['diamond']}}</b></span>
-
-                    <div class="progress sm">
-                        <div class="progress-bar progress-bar-green" style="width: {{($labels['total_consultas'] ? ($labels['consultas']['diamond']/$labels['total_consultas']*100) : '0')}}%"></div>
-                    </div>
-                  </div>
-                  <!-- /.progress-group -->
-              </div>
-              <!-- /.col -->
-            </div>
-            <!-- small box -->
-          </div>
-          <!-- /.col -->
-        @endif
-        {{-- @if (IsUserCreator() || IsCompany())
-          <div class="col-md-12">
-            <div class="box">
-              <div class="box-body">
-                  <div class="row">
-                  <div class="col-md-8">
-                      <p class="text-center">
-                      <strong>Sales: 1 Jan, 2014 - 30 Jul, 2014</strong>
-                      </p>
-
-                      <div class="chart">
-                      <!-- Sales Chart Canvas -->
-                      <canvas id="salesChart" style="height: 180px; width: 1073px;" height="180" width="1073"></canvas>
-                      </div>
-                      <!-- /.chart-responsive -->
-                  </div>
-                  <!-- /.col -->
-                  <div class="col-md-4">
-                      <p class="text-center">
-                      <strong>Goal Completion</strong>
-                      </p>
-
-                      <div class="progress-group">
-                      <span class="progress-text">Add Products to Cart</span>
-                      <span class="progress-number"><b>160</b>/200</span>
-
-                      <div class="progress sm">
-                          <div class="progress-bar progress-bar-aqua" style="width: 80%"></div>
-                      </div>
-                      </div>
-                      <!-- /.progress-group -->
-                      <div class="progress-group">
-                      <span class="progress-text">Complete Purchase</span>
-                      <span class="progress-number"><b>310</b>/400</span>
-
-                      <div class="progress sm">
-                          <div class="progress-bar progress-bar-red" style="width: 80%"></div>
-                      </div>
-                      </div>
-                      <!-- /.progress-group -->
-                      <div class="progress-group">
-                      <span class="progress-text">Visit Premium Page</span>
-                      <span class="progress-number"><b>480</b>/800</span>
-
-                      <div class="progress sm">
-                          <div class="progress-bar progress-bar-green" style="width: 80%"></div>
-                      </div>
-                      </div>
-                      <!-- /.progress-group -->
-                      <div class="progress-group">
-                      <span class="progress-text">Send Inquiries</span>
-                      <span class="progress-number"><b>250</b>/500</span>
-
-                      <div class="progress sm">
-                          <div class="progress-bar progress-bar-yellow" style="width: 80%"></div>
-                      </div>
-                      </div>
-                      <!-- /.progress-group -->
-                  </div>
-                  <!-- /.col -->
-                  </div>
-                  <!-- /.row -->
-              </div>
-              <!-- ./box-body -->
-            <div class="box-footer">
-                <div class="row">
-                <div class="col-sm-3 col-xs-6">
-                    <div class="description-block border-right">
-                    <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 17%</span>
-                    <h5 class="description-header">$35,210.43</h5>
-                    <span class="description-text">TOTAL REVENUE</span>
-                    </div>
-                    <!-- /.description-block -->
-                </div>
-                <!-- /.col -->
-                <div class="col-sm-3 col-xs-6">
-                    <div class="description-block border-right">
-                    <span class="description-percentage text-yellow"><i class="fa fa-caret-left"></i> 0%</span>
-                    <h5 class="description-header">$10,390.90</h5>
-                    <span class="description-text">TOTAL COST</span>
-                    </div>
-                    <!-- /.description-block -->
-                </div>
-                <!-- /.col -->
-                <div class="col-sm-3 col-xs-6">
-                    <div class="description-block border-right">
-                    <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 20%</span>
-                    <h5 class="description-header">$24,813.53</h5>
-                    <span class="description-text">TOTAL PROFIT</span>
-                    </div>
-                    <!-- /.description-block -->
-                </div>
-                <!-- /.col -->
-                <div class="col-sm-3 col-xs-6">
-                    <div class="description-block">
-                    <span class="description-percentage text-red"><i class="fa fa-caret-down"></i> 18%</span>
-                    <h5 class="description-header">1200</h5>
-                    <span class="description-text">GOAL COMPLETIONS</span>
-                    </div>
-                    <!-- /.description-block -->
-                </div>
-                </div>
-                <!-- /.row -->
-            </div>
-            <!-- /.box-footer -->
-            </div>
-            <!-- /.box -->
-          </div>
-        @endif --}}
+        </div>
+      </div>
+      @endif
     </div>
+    @if (IsUser() || IsUserCreator() || IsCompany() && !IsSuperAdmin())
+    <div class="row">
+      <div class="col-12 col-lg-10 col-xl-8">
+        <p class="h4 text-uppercase font-weight-exbold mb-3">
+          Uso de Consultas AMI: <span class="font-weight-normal">{{$labels['mes_actual']}}</span>
+        </p>
+        <div class="row">
+          <div class="col-12 col-sm-6 col-lg-4 mb-5 mb-lg-0">
+            <div class="box-square bg-caribbean-green text-white">
+              <div class="mb-5">
+                <p class="box-label mb-0">
+                  {{ $labels['consultas']['silver'] }} <span class="font-weight-bold">Visitas</span>
+                </p>
+                <p class="text-uppercase">AMI® Silver</p>
+              </div>
+              <p class="box-percentage mb-0">
+                {{ ($labels['total_consultas'] ? ($labels['consultas']['silver']/$labels['total_consultas']*100) : '0') }}%
+              </p>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6 col-lg-4 mb-5 mb-lg-0">
+            <div class="box-square bg-black-pearl text-white">
+              <div class="mb-5">
+                <p class="box-label mb-0">
+                  {{ $labels['consultas']['gold'] }} <span class="font-weight-bold">Visitas</span>
+                </p>
+                <p class="text-uppercase">AMI® Gold</p>
+              </div>
+              <p class="box-percentage mb-0">
+                {{ ($labels['total_consultas'] ? ($labels['consultas']['gold']/$labels['total_consultas']*100) : '0') }}%
+              </p>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6 col-lg-4">
+            <div class="box-square bg-gainsboro text-white">
+              <div class="mb-5">
+                <p class="box-label mb-0">
+                  {{ $labels['consultas']['diamond'] }} <span class="font-weight-bold">Visitas</span>
+                </p>
+                <p class="text-uppercase">AMI® Diamond</p>
+              </div>
+              <p class="box-percentage mb-0">
+                {{ ($labels['total_consultas'] ? ($labels['consultas']['diamond']/$labels['total_consultas']*100) : '0') }}%
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    @endif
   @endif
-  <div class="row">
-      @if (IsSuperAdmin())
-          <div class="col-md-12">
-              <div class="box">
-              <div class="box-header with-border">
-                  <h3 class="box-title">Monthly Recap Report</h3>
-  
-                  <div class="box-tools pull-right">
-                  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                  </button>
-                  <div class="btn-group">
-                      <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown">
-                      <i class="fa fa-wrench"></i></button>
-                      <ul class="dropdown-menu" role="menu">
-                      <li><a href="#">Action</a></li>
-                      <li><a href="#">Another action</a></li>
-                      <li><a href="#">Something else here</a></li>
-                      <li class="divider"></li>
-                      <li><a href="#">Separated link</a></li>
-                      </ul>
-                  </div>
-                  <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                  </div>
-              </div>
-              <!-- /.box-header -->
-              <div class="box-body">
-                  <div class="row">
-                  <div class="col-md-8">
-                      <p class="text-center">
-                      <strong>Sales: 1 Jan, 2014 - 30 Jul, 2014</strong>
-                      </p>
-  
-                      <div class="chart">
-                      <!-- Sales Chart Canvas -->
-                      <canvas id="salesChart" style="height: 180px; width: 1073px;" height="180" width="1073"></canvas>
-                      </div>
-                      <!-- /.chart-responsive -->
-                  </div>
-                  <!-- /.col -->
-                  <div class="col-md-4">
-                      <p class="text-center">
-                      <strong>Goal Completion</strong>
-                      </p>
-  
-                      <div class="progress-group">
-                      <span class="progress-text">Add Products to Cart</span>
-                      <span class="progress-number"><b>160</b>/200</span>
-  
-                      <div class="progress sm">
-                          <div class="progress-bar progress-bar-aqua" style="width: 80%"></div>
-                      </div>
-                      </div>
-                      <!-- /.progress-group -->
-                      <div class="progress-group">
-                      <span class="progress-text">Complete Purchase</span>
-                      <span class="progress-number"><b>310</b>/400</span>
-  
-                      <div class="progress sm">
-                          <div class="progress-bar progress-bar-red" style="width: 80%"></div>
-                      </div>
-                      </div>
-                      <!-- /.progress-group -->
-                      <div class="progress-group">
-                      <span class="progress-text">Visit Premium Page</span>
-                      <span class="progress-number"><b>480</b>/800</span>
-  
-                      <div class="progress sm">
-                          <div class="progress-bar progress-bar-green" style="width: 80%"></div>
-                      </div>
-                      </div>
-                      <!-- /.progress-group -->
-                      <div class="progress-group">
-                      <span class="progress-text">Send Inquiries</span>
-                      <span class="progress-number"><b>250</b>/500</span>
-  
-                      <div class="progress sm">
-                          <div class="progress-bar progress-bar-yellow" style="width: 80%"></div>
-                      </div>
-                      </div>
-                      <!-- /.progress-group -->
-                  </div>
-                  <!-- /.col -->
-                  </div>
-                  <!-- /.row -->
-              </div>
-              <!-- ./box-body -->
-              <div class="box-footer">
-                  <div class="row">
-                  <div class="col-sm-3 col-xs-6">
-                      <div class="description-block border-right">
-                      <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 17%</span>
-                      <h5 class="description-header">$35,210.43</h5>
-                      <span class="description-text">TOTAL REVENUE</span>
-                      </div>
-                      <!-- /.description-block -->
-                  </div>
-                  <!-- /.col -->
-                  <div class="col-sm-3 col-xs-6">
-                      <div class="description-block border-right">
-                      <span class="description-percentage text-yellow"><i class="fa fa-caret-left"></i> 0%</span>
-                      <h5 class="description-header">$10,390.90</h5>
-                      <span class="description-text">TOTAL COST</span>
-                      </div>
-                      <!-- /.description-block -->
-                  </div>
-                  <!-- /.col -->
-                  <div class="col-sm-3 col-xs-6">
-                      <div class="description-block border-right">
-                      <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 20%</span>
-                      <h5 class="description-header">$24,813.53</h5>
-                      <span class="description-text">TOTAL PROFIT</span>
-                      </div>
-                      <!-- /.description-block -->
-                  </div>
-                  <!-- /.col -->
-                  <div class="col-sm-3 col-xs-6">
-                      <div class="description-block">
-                      <span class="description-percentage text-red"><i class="fa fa-caret-down"></i> 18%</span>
-                      <h5 class="description-header">1200</h5>
-                      <span class="description-text">GOAL COMPLETIONS</span>
-                      </div>
-                      <!-- /.description-block -->
-                  </div>
-                  </div>
-                  <!-- /.row -->
-              </div>
-              <!-- /.box-footer -->
-              </div>
-              <!-- /.box -->
-          </div>
-      @endif
-
-      {{-- <pre>
-        {{ print_r($labels['prueba']) }}
-      </pre> --}}
-
-      @if (IsSuperAdmin())
-          <div class="col-md-12">
-              <div class="box box-default">
-                  <div class="box-header with-border">
-                    <h3 class="box-title">Browser Usage</h3>
-      
-                    <div class="box-tools pull-right">
-                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                      </button>
-                      <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                    </div>
-                  </div>
-                  <!-- /.box-header -->
-                  <div class="box-body">
-                    <div class="row">
-                      <div class="col-md-8">
-                        <div class="chart-responsive">
-                          <canvas id="pieChart" height="155" width="329" style="width: 329px; height: 155px;"></canvas>
-                        </div>
-                        <!-- ./chart-responsive -->
-                      </div>
-                      <!-- /.col -->
-                      <div class="col-md-4">
-                        <ul class="chart-legend clearfix">
-                          <li><i class="fa fa-circle-o text-red"></i> Chrome</li>
-                          <li><i class="fa fa-circle-o text-green"></i> IE</li>
-                          <li><i class="fa fa-circle-o text-yellow"></i> FireFox</li>
-                          <li><i class="fa fa-circle-o text-aqua"></i> Safari</li>
-                          <li><i class="fa fa-circle-o text-light-blue"></i> Opera</li>
-                          <li><i class="fa fa-circle-o text-gray"></i> Navigator</li>
-                        </ul>
-                      </div>
-                      <!-- /.col -->
-                    </div>
-                    <!-- /.row -->
-                  </div>
-                  <!-- /.box-body -->
-                  <div class="box-footer no-padding">
-                    <ul class="nav nav-pills nav-stacked">
-                      <li><a href="#">United States of America
-                        <span class="pull-right text-red"><i class="fa fa-angle-down"></i> 12%</span></a></li>
-                      <li><a href="#">India <span class="pull-right text-green"><i class="fa fa-angle-up"></i> 4%</span></a>
-                      </li>
-                      <li><a href="#">China
-                        <span class="pull-right text-yellow"><i class="fa fa-angle-left"></i> 0%</span></a></li>
-                    </ul>
-                  </div>
-                  <!-- /.footer -->
-              </div>
-          </div>
-      @endif
-  </div>
 </div>
 @endsection
 

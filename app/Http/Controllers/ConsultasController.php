@@ -87,14 +87,15 @@ class ConsultasController extends BaseSoapController
                         ],
                     ],
                 ];
+
                 $formdata = http_build_query([
                     "nombres" => $cliente->nombres,
                     "apellidos" => $cliente->apellidos,
                     "cedula" => $cliente->documento,
                     "key" => "GtsGAF2021*!",
-                    "empresa" => Auth::user()->company->id
+                    "empresa" => Auth::user()->id_company
                 ]);
-                
+
                 $response1 = json_decode($client->post($url1 . $formdata, $options1)->getBody());
                 $response2 = json_decode($client->post($url2 . $formdata, $options2)->getBody());
 
