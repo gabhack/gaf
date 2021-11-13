@@ -2,10 +2,40 @@
   <div>
     <section class="container-fluid mb-5">
       <div class="row">
-        <div class="col-6 pt-5">
+        <div
+          class="
+            col-12
+            d-flex
+            align-items-center
+            justify-content-center
+            first-text-res
+          "
+        >
+          <div>
+            <h1
+              class="font-weight-bold text-spring-green text-big-personas mb-0"
+            >
+              AMI
+            </h1>
+            <p class="text-ami font-weight-bold">
+              <span class="text-spring-green">Analisis </span>
+              de Mercado
+              <span class="text-spring-green">Inteligente</span>
+            </p>
+          </div>
+        </div>
+        <div class="col-lg-6 col-sm-12 pt-5">
           <img src="/img/amipersonas1.svg" class="img-fluid w-100" />
         </div>
-        <div class="col-6 d-flex align-items-center justify-content-center">
+        <div
+          class="
+            col-6
+            d-flex
+            align-items-center
+            justify-content-center
+            first-desk
+          "
+        >
           <div>
             <h1
               class="font-weight-bold text-spring-green text-big-personas mb-0"
@@ -23,14 +53,21 @@
     </section>
     <section class="container-fluid mb-5">
       <div class="row">
-        <div class="col-7 d-flex align-items-center justify-content-center">
+        <div
+          class="
+            col-lg-7 col-sm-12
+            d-flex
+            align-items-center
+            justify-content-center
+          "
+        >
           <div class="text-center">
             <p class="text-spacing mb-0">CON NUESTRO SISTEMA</p>
             <p class="text-medium font-weight-bold">
               <span class="text-spring-green">Analisis para </span>
               <span class="text-black-pearl">aprobación de crédito</span>
             </p>
-            <p>
+            <p class="texts-p">
               JAMAS VOLVERAS APROBAR TUS CREDITOS COMO ANTES, con nuestro
               sistema<br />
               inteligente podrás mejorar tus resultados, optimizar tiempos de
@@ -44,24 +81,31 @@
             </b-button>
           </div>
         </div>
-        <div class="col-5 pr-0">
+        <div class="col-lg-5 col-sm-12 pr-0">
           <img src="/img/amicards.svg" class="img-fluid w-100" />
         </div>
       </div>
     </section>
     <section class="container-fluid mb-5">
       <div class="row">
-        <div class="col-5">
+        <div class="col-5 img-sec3">
           <img src="/img/amipersonas2.svg" class="img-fluid w-100" />
         </div>
-        <div class="col-7 d-flex align-items-center justify-content-center">
+        <div
+          class="
+            col-lg-7 col-sm-12
+            d-flex
+            align-items-center
+            justify-content-center
+          "
+        >
           <div class="text-center">
             <p class="text-spacing mb-0">CON NUESTRO PROCESO</p>
             <p class="text-medium font-weight-bold">
               <span class="text-spring-green mb-5">Recuperación </span>
               de cartera
             </p>
-            <p>
+            <p class="texts-p">
               ¡Tu cartera al día! controla tu cartera las 24 horas del día y los
               7 días de la <br />semana,sabemos lo importante que es para ti por
               eso diseñamos nuestra<br />
@@ -75,6 +119,9 @@
               Más Información
             </b-button>
           </div>
+        </div>
+        <div class="col-12 img-sec4">
+          <img src="/img/amipersonas2.svg" class="img-fluid w-100" />
         </div>
       </div>
     </section>
@@ -98,7 +145,7 @@
             <span class="text-spring-green">Prospección</span>
             <span>de Mercado</span>
           </p>
-          <p>
+          <p class="texts-p">
             Conocemos millones de clientes nuevos para ti, de acuerdo a tu
             política de crédito<br />
             analizaremos los requerimientos del mercado y diseñamos la mejor
@@ -111,7 +158,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-3 col-icons">
+        <div class="col-lg-3 col-sm-12 col-icons">
           <img src="/img/IconoAmi1.png" class="img-fluid w-40 icon-line" />
           <p class="font-weight-bold text-line mb-0">
             ESTRATEGIA DE <br />
@@ -120,14 +167,14 @@
             </span>
           </p>
         </div>
-        <div class="col-3 col-icons">
+        <div class="col-lg-3 col-sm-12 col-icons">
           <img src="/img/IconoAmi2.png" class="img-fluid w-40 icon-line" />
           <p class="font-weight-bold text-line mb-0">
             ESTRATEGIA DE <br />
             <span class="text-spring-green"> DESARROLLO DE <br />MERCADO </span>
           </p>
         </div>
-        <div class="col-3 col-icons">
+        <div class="col-lg-3 col-sm-12 col-icons">
           <img src="/img/IconoAmi3.png" class="img-fluid w-40 icon-line" />
           <p class="font-weight-bold text-line mb-0">
             ESTRATEGIA DE <br />
@@ -136,7 +183,7 @@
             </span>
           </p>
         </div>
-        <div class="col-3 col-icons">
+        <div class="col-lg-3 col-sm-12 col-icons">
           <img src="/img/IconoAmi4.png" class="img-fluid w-40 icon-line" />
           <p class="font-weight-bold text-line mb-0">
             ESTRATEGIA DE <br />
@@ -147,10 +194,18 @@
     </section>
     <section class="container-fluid">
       <div class="row">
-        <div class="col-6 d-flex align-items-center justify-content-center">
+        <div
+          class="
+            col-lg-6 col-sm-12
+            d-flex
+            align-items-center
+            justify-content-center
+          "
+        >
           <div class="text-center">
             <p class="text-black-pearl font-weight-bold mb-0">
-              <span class="text-cursi font-weight-normal">con</span>
+              <span class="text-cursi font-weight-normal desk">con</span>
+              <span class="text-cursi font-weight-normal respo">con<br /></span>
               <span class="text-spring-green black-pearl text-ami-bottom">
                 A <span class="text-black-pearl">M</span> I
               </span>
@@ -162,7 +217,7 @@
             </p>
           </div>
         </div>
-        <div class="col-6">
+        <div class="col-lg-6 col-sm-12">
           <img src="/img/Icono_Dardo-01.svg" class="img-fluid w-100" />
         </div>
       </div>

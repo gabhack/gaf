@@ -2,10 +2,34 @@
   <div>
     <section class="container-fluid">
       <div class="row">
-        <div class="col-7">
+        <div
+          class="
+            col-12
+            d-flex
+            align-items-center
+            justify-content-center
+            text-respo
+          "
+        >
+          <div>
+            <p class="text-ami font-weight-bold">
+              <span class="text-spring-green">¡Tu </span>
+              analísta <span class="text-spring-green"> financiero!</span>
+            </p>
+          </div>
+        </div>
+        <div class="col-lg-7 col-sm-12">
           <img src="/img/hegoprincipal.svg" class="img-fluid w-100" />
         </div>
-        <div class="col-5 d-flex align-items-center justify-content-center">
+        <div
+          class="
+            col-5
+            d-flex
+            align-items-center
+            justify-content-center
+            text-desk
+          "
+        >
           <div>
             <p class="text-ami font-weight-bold">
               <span class="text-spring-green">¡Tu </span>
@@ -17,14 +41,21 @@
     </section>
     <section class="container-fluid mb-5">
       <div class="row">
-        <div class="col-5 d-flex align-items-center justify-content-end">
+        <div
+          class="
+            col-lg-5 col-sm-12
+            d-flex
+            align-items-center
+            justify-content-end
+          "
+        >
           <div class="text-center">
             <p class="text-spacing mb-0">NUESTRA</p>
             <p class="text-medium font-weight-bold">
               <span class="text-spring-green">Fábrica de </span>
               <span class="text-black-pearl">Crédito</span>
             </p>
-            <p>
+            <p class="text-p-h">
               Personaliza tu proceso de crédito, brinda a tus clientes una
               experiencia<br />
               fácil, rápida, segura y totalmente digital, olvídate del papeleo
@@ -36,17 +67,24 @@
             </b-button>
           </div>
         </div>
-        <div class="col-7 pr-0">
+        <div class="col-lg-7 col-sm-12 pr-0">
           <img src="/img/hegosec2.svg" class="img-fluid w-100" />
         </div>
       </div>
     </section>
     <section class="container-fluid mb-5">
       <div class="row">
-        <div class="offset-1 col-5">
+        <div class="offset-1 col-5 doc-desk">
           <img src="/img/hegodoc.svg" class="img-fluid w-100" />
         </div>
-        <div class="col-6 d-flex align-items-center justify-content-center">
+        <div
+          class="
+            col-lg-6 col-sm-12
+            d-flex
+            align-items-center
+            justify-content-center
+          "
+        >
           <div class="text-center">
             <p class="text-spacing mb-0">CON NUESTRO PROCESO</p>
             <p class="text-medium font-weight-bold mb-0">
@@ -64,6 +102,9 @@
               Más Información
             </b-button>
           </div>
+        </div>
+        <div class="col-12 doc-res">
+          <img src="/img/hegodoc.svg" class="img-fluid w-100" />
         </div>
       </div>
     </section>
@@ -98,7 +139,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-3 col-icons">
+        <div class="col-lg-3 col-sm-12 col-icons">
           <img src="/img/iconhego1.svg" class="img-fluid w-40 icon-line" />
           <p>
             Un sistema seguro y confiable<br />
@@ -107,7 +148,7 @@
             pagares
           </p>
         </div>
-        <div class="col-3 col-icons">
+        <div class="col-lg-3 col-sm-12 col-icons">
           <img src="/img/iconhego2.svg" class="img-fluid w-40 icon-line" />
           <p>
             Ahorre dinero, los gastos de<br />
@@ -115,7 +156,7 @@
             serán eliminados.
           </p>
         </div>
-        <div class="col-3 col-icons">
+        <div class="col-lg-3 col-sm-12 col-icons">
           <img src="/img/iconhego3.svg" class="img-fluid w-40 icon-line" />
           <p>
             Realice transacciones en el<br />
@@ -124,7 +165,7 @@
             carteras colectivas.
           </p>
         </div>
-        <div class="col-3 col-icons">
+        <div class="col-lg-3 col-sm-12 col-icons">
           <img src="/img/iconhego4.svg" class="img-fluid w-40 icon-line" />
           <p>
             Reduzca los riesgos por<br />
