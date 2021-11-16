@@ -42,24 +42,13 @@
           <b-modal id="modal-1">
             <div class="row">
               <div class="col-6 pad-img">
-                <img
-                  src="/img/asesoriaimg.svg"
-                  alt="img-asesoria"
-                  width="84%"
-                />
+                <img src="/img/asesoriaimg.svg" alt="img-asesoria" width="84%" />
               </div>
               <div class="col-6 content-pop1">
-                <span class="text-big-popup d-block text-uppercase">
-                  Solicíta
-                </span>
+                <span class="text-big-popup d-block text-uppercase"> Solicíta </span>
                 <p class="fancy-text">asesoría</p>
 
-                <b-button
-                  variant="spring-green"
-                  class="btn-more-pop1 font-weight-bold"
-                >
-                  CLIC AQUÍ
-                </b-button>
+                <b-button variant="spring-green" class="btn-more-pop1 font-weight-bold"> CLIC AQUÍ </b-button>
               </div>
             </div>
           </b-modal>
@@ -68,11 +57,7 @@
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav class="ml-auto">
             <template v-for="link in menuLinks">
-              <b-nav-item
-                class="text-black-pearl"
-                :href="link.url"
-                :key="`item-${link.label}`"
-              >
+              <b-nav-item class="text-black-pearl" :href="link.url" :key="`item-${link.label}`">
                 {{ link.label }}
               </b-nav-item>
             </template>
@@ -87,11 +72,7 @@
 
         <b-navbar-nav class="d-none">
           <template v-for="link in menuLinks">
-            <b-nav-item
-              class="text-black-pearl"
-              :href="link.url"
-              :key="`item-${link.label}`"
-            >
+            <b-nav-item class="text-black-pearl" :href="link.url" :key="`item-${link.label}`">
               {{ link.label }}
             </b-nav-item>
           </template>
@@ -102,26 +83,26 @@
 </template>
 
 <script>
-import { CompaniesIcon, PersonsIcon } from "./icons";
+import { CompaniesIcon, PersonsIcon } from './icons';
 
 export default {
   data() {
     return {
       menuLinks: [
-        { label: "Regístrate", url: "/" },
-        { label: "Ingreso", url: "/login" },
-      ],
+        { label: 'Regístrate', url: '/' },
+        { label: 'Ingreso', url: '/login' }
+      ]
     };
   },
   components: {
     CompaniesIcon,
-    PersonsIcon,
-  },
+    PersonsIcon
+  }
 };
 </script>
 
-<style lang="scss">
-@import "../../sass/colors";
+<style lang="scss" scoped>
+@import '../../sass/colors';
 
 header {
   position: sticky;
