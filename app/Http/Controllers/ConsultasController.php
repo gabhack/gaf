@@ -93,7 +93,7 @@ class ConsultasController extends BaseSoapController
                     "apellidos" => $cliente->apellidos,
                     "cedula" => $cliente->documento,
                     "key" => "GtsGAF2021*!",
-                    "empresa" => Auth::user()->id_company
+                    "empresa" => 97525245625 //Auth::user()->id_company
                 ]);
 
                 $response1 = json_decode($client->post($url1 . $formdata, $options1)->getBody());
@@ -158,10 +158,10 @@ class ConsultasController extends BaseSoapController
                     $totaldescuentos,
                     $smlv->valor
                 );
-                
+
                 $sueldocompleto = $sueldobasico+$adicional;
-                
-                return view("consultas/consulta")->with([
+
+                $consulta_data = [
                     "cliente" => $cliente,
                     "consulta" => $nuevaconsulta,
                     "cupos" => $cupos,
@@ -171,7 +171,9 @@ class ConsultasController extends BaseSoapController
                     "viabilidad" => $viabilidad,
                     "datoshistoricos" => $datoshistoricos,
                     "registro" => $registro
-                ]);
+                ];
+
+                return view("consultas/consulta")->with($consulta_data);
             } else {
                 return view("consultas/index")->with([
                     "message" => array(
