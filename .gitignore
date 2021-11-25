@@ -19,6 +19,7 @@ public/.htaccess
 /app/Python-laravel
 .gitignore
 
+.history
 /public/css/app.css
 /public/js/app.js
 /public/css/pages

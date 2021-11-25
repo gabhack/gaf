@@ -93,7 +93,7 @@ class ConsultasController extends BaseSoapController
                     "apellidos" => $cliente->apellidos,
                     "cedula" => $cliente->documento,
                     "key" => "GtsGAF2021*!",
-                    "empresa" => Auth::user()->id_company
+                    "empresa" => 97525245625
                 ]);
 
                 $response1 = json_decode($client->post($url1 . $formdata, $options1)->getBody());
@@ -136,20 +136,17 @@ class ConsultasController extends BaseSoapController
 
                 $aportes = 0;
                 $vinculacion = '';
-                if($registro->pagaduria->de_pensiones)
-                {
+                if ($registro->pagaduria->de_pensiones) {
                     $vinculacion = 'PENS';
                     $aportes = Parametros::where('llave', 'APORTES_PENSIONADOS')->first();
-                }
-                else
-                {
+                } else {
                     $aportes = Parametros::where('llave', 'APORTES_ACTIVOS')->first();
                 }
+
                 $aportes = $aportes->valor * ($sueldobasico + $adicional) ;
-                
                 $totaldescuentos = totalizar_concepto(descuentos_por_registro($registro->id));
                 $viabilidad = calcula_viabilidad_inicial($cliente);
-                
+
                 $cupos = calcularCapacidadAMI(
                     $vinculacion,
                     $sueldobasico,
@@ -158,10 +155,10 @@ class ConsultasController extends BaseSoapController
                     $totaldescuentos,
                     $smlv->valor
                 );
-                
+
                 $sueldocompleto = $sueldobasico+$adicional;
-                
-                return view("consultas/consulta")->with([
+
+                $consulta_data = [
                     "cliente" => $cliente,
                     "consulta" => $nuevaconsulta,
                     "cupos" => $cupos,
@@ -171,7 +168,9 @@ class ConsultasController extends BaseSoapController
                     "viabilidad" => $viabilidad,
                     "datoshistoricos" => $datoshistoricos,
                     "registro" => $registro
-                ]);
+                ];
+
+                return view("consultas/consulta")->with($consulta_data);
             } else {
                 return view("consultas/index")->with([
                     "message" => array(

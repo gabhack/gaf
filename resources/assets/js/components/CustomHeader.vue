@@ -22,11 +22,7 @@
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav class="ml-auto">
             <template v-for="link in menuLinks">
-              <b-nav-item
-                class="text-black-pearl"
-                :href="link.url"
-                :key="`item-${link.label}`"
-              >
+              <b-nav-item class="text-black-pearl" :href="link.url" :key="`item-${link.label}`">
                 {{ link.label }}
               </b-nav-item>
             </template>
@@ -44,26 +40,26 @@
 </template>
 
 <script>
-import { CompaniesIcon, PersonsIcon } from "./icons";
+import { CompaniesIcon, PersonsIcon } from './icons';
 
 export default {
   data() {
     return {
       menuLinks: [
-        { label: "Regístrate", url: "/" },
-        { label: "Ingreso", url: "/login" },
-      ],
+        { label: 'Regístrate', url: '/' },
+        { label: 'Ingreso', url: '/login' }
+      ]
     };
   },
   components: {
     CompaniesIcon,
-    PersonsIcon,
-  },
+    PersonsIcon
+  }
 };
 </script>
 
-<style lang="scss">
-@import "../../sass/colors";
+<style lang="scss" scoped>
+@import '../../sass/colors';
 
 header {
   position: sticky;

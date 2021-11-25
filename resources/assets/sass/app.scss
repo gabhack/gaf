@@ -1,16 +1,16 @@
 // Fonts
-@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
+@import url('https://fonts.googleapis.com/css?family=Raleway:300,400,600');
 
 // Variables
-@import "colors";
-@import "variables";
+@import 'colors';
+@import 'variables';
 
 // Bootstrap
-@import "~bootstrap/scss/bootstrap";
+@import '~bootstrap/scss/bootstrap';
 
 @font-face {
   font-family: BillionDreams;
-  src: url("/fonts/BillionDreams.ttf");
+  src: url('/fonts/BillionDreams.ttf');
 }
 
 @each $name, $color in $theme-colors {
