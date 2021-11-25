@@ -2,6 +2,25 @@
 @import '~@fortawesome/fontawesome-free/scss/solid';
 @import './sb-admin/sb-admin-2';
 
+.breadcrumb-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+
+  .breadcrumb-item {
+    font-size: 80%;
+
+    a {
+      color: $spring-green;
+    }
+  }
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  content: '>';
+}
+
 .font-weight-exbold {
   font-weight: 900;
 }
@@ -9,10 +28,10 @@
 #wrapper {
   #content-wrapper {
     background-color: $white;
-    background-image: url('/img/bg-home-dash.svg');
-    background-repeat: no-repeat;
-    background-position: bottom right;
-    background-position-x: calc(100% - 1rem);
+    // background-image: url('/img/bg-home-dash.svg');
+    // background-repeat: no-repeat;
+    // background-position: bottom right;
+    // background-position-x: calc(100% - 1rem);
 
     #content {
       padding-bottom: 3rem;
@@ -227,15 +246,95 @@
   font-weight: 600;
   text-align: center;
 
-  background-color: #e1e1e1;
-  color: #253f3d;
+  background-color: $gainsboro;
+  color: $black-pearl;
   border-radius: 38px;
-  border: none;
+  border-color: transparent;
   min-height: 30px;
 
   &:focus {
-    background-color: #1a2e35;
+    background-color: $black-pearl;
     color: $caribbean-green;
-    box-shadow: none;
+  }
+}
+
+.custom-select {
+  border-radius: 38px;
+  border-color: transparent;
+  background-color: $gainsboro;
+  font-weight: 600;
+  padding-left: 1rem;
+
+  &.is-valid,
+  &.is-invalid {
+    background-color: $gainsboro;
+  }
+
+  &:focus {
+    background-color: $black-pearl;
+    color: $caribbean-green;
+  }
+}
+
+.custom-file {
+  &-label {
+    border-radius: 38px;
+    border-color: transparent;
+    background-color: $gainsboro;
+    color: $black-pearl;
+    padding-left: 3rem;
+
+    &::before {
+      content: '\f07b';
+      position: absolute;
+      font-family: 'Font Awesome 5 Free';
+      font-weight: 400;
+      left: 1rem;
+    }
+
+    &::after {
+      display: none;
+    }
+  }
+
+  &.filled {
+    .custom-file-label {
+      background-color: $black-pearl;
+      color: $white;
+
+      &::before {
+        color: $caribbean-green;
+      }
+    }
+  }
+}
+
+.panel {
+  &-heading {
+    background-color: rgb(12, 237, 176);
+    padding: 5px 10px;
+
+    b {
+      font-weight: 900;
+      text-transform: uppercase;
+      font-size: 1rem;
+      margin-bottom: 0px;
+    }
+  }
+
+  &-body {
+    padding: 1rem;
+  }
+
+  &-label {
+    font-weight: 900;
+    display: block;
+  }
+
+  &-value {
+    display: inline-block;
+    padding-right: 1rem;
+    min-width: 75%;
+    border-bottom: 1px solid rgb(12, 237, 176);
   }
 }

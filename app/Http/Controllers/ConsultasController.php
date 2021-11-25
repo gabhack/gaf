@@ -136,20 +136,17 @@ class ConsultasController extends BaseSoapController
 
                 $aportes = 0;
                 $vinculacion = '';
-                if($registro->pagaduria->de_pensiones)
-                {
+                if ($registro->pagaduria->de_pensiones) {
                     $vinculacion = 'PENS';
                     $aportes = Parametros::where('llave', 'APORTES_PENSIONADOS')->first();
-                }
-                else
-                {
+                } else {
                     $aportes = Parametros::where('llave', 'APORTES_ACTIVOS')->first();
                 }
+
                 $aportes = $aportes->valor * ($sueldobasico + $adicional) ;
-                
                 $totaldescuentos = totalizar_concepto(descuentos_por_registro($registro->id));
                 $viabilidad = calcula_viabilidad_inicial($cliente);
-                
+
                 $cupos = calcularCapacidadAMI(
                     $vinculacion,
                     $sueldobasico,

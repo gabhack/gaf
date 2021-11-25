@@ -253,7 +253,6 @@ if (!function_exists('sexos')) {
 			'F' => 'FEMENINO',
 			'M' => 'MASCULINO',
 		);
-		
 	}
 }
 
@@ -261,10 +260,9 @@ if (!function_exists('tipos_documento')) {
 	function tipos_documento()
 	{
 		return array(
-			'CC' => 'CEDULA DE CIUDADAN&Iacute;A',
-			'CE' => 'CEDULA DE EXTRANJER&Iacute;A',
+			'CC' => 'CEDULA DE CIUDADANÍA',
+			'CE' => 'CEDULA DE EXTRANJERÍA',
 		);
-		
 	}
 }
 

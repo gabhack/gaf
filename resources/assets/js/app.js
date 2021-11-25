@@ -14,6 +14,9 @@ import 'bootstrap';
 import BootstrapVue from 'bootstrap-vue';
 Vue.use(BootstrapVue);
 
+import Vuelidate from 'vuelidate';
+Vue.use(Vuelidate);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -30,11 +33,15 @@ Vue.component('MoreInformation', require('./components/pages/MoreInformation').d
 Vue.component('Hego', require('./components/pages/Hego').default);
 Vue.component('HegoInformation', require('./components/pages/HegoInformation').default);
 
+// Pages
+Vue.component('ConsultasIndex', require('./components/pages/Consultas/Index').default);
+
 // Vue Icons
 Vue.component('AdminSettingsIcon', require('./components/icons/AdminSettingsIcon').default);
 Vue.component('AmiIcon', require('./components/icons/AmiIcon').default);
 Vue.component('HegoIcon', require('./components/icons/HegoIcon').default);
 Vue.component('HomeIcon', require('./components/icons/HomeIcon').default);
+Vue.component('DownloadIcon', require('./components/icons/DownloadIcon').default);
 
 /* Vue Init */
 const app = new Vue({

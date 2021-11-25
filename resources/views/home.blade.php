@@ -1,5 +1,17 @@
 @extends('layouts.app2')
 
+@section('title')
+  Inicio
+@endsection
+
+@section('header-content')
+  Inicio
+@endsection
+
+@section('breadcrumb')
+  <li class="breadcrumb-item active">Inicio</li>
+@endsection
+
 @section('content')
 <div class="container-fluid">
   @if (IsUser() || IsCompany() && !IsSuperAdmin())
@@ -81,16 +93,4 @@
     @endif
   @endif
 </div>
-@endsection
-
-@section('title')
-    Inicio
-@endsection
-
-@section('header-content')
-    Inicio
-@endsection
-
-@section('breadcrumb')
-    <li class="active"><i class="fa fa-dashboard"></i> Inicio</li>
 @endsection

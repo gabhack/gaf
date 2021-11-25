@@ -22,10 +22,6 @@
 
 		@yield('css')
 
-		<!-- Scripts -->
-		<script src="{{asset('js/app.js')}}" defer></script>
-		<script src="{{asset('js/sb-admin-2.js')}}" defer></script>
-
 	</head>
 	<body id="page-top" class="sidebar-toggled">
 		<div id="app">
@@ -42,6 +38,15 @@
 						<!-- Topbar -->
 						@include('layouts.header2')
 						<!-- End of Topbar -->
+
+						<div class="container-fluid breadcrumb-wrap">
+							<h1 class="h4 text-black-pearl font-weight-exbold mb-0">
+								@yield('header-content')
+							</h1>
+							<ol class="breadcrumb bg-transparent mb-0">
+								@yield('breadcrumb')
+							</ol>
+						</div>
 
 						<!-- Begin Page Content -->
 						@yield('content')
@@ -70,6 +75,10 @@
 		</div>
 
 		@yield('js')
+
+		<!-- Scripts -->
+		<script src="{{asset('js/app.js')}}"></script>
+		<script src="{{asset('js/sb-admin-2.js')}}"></script>
 
 	</body>
 </html>
