@@ -19,12 +19,19 @@
 		<!-- Styles -->
 		<link href="{{ asset('css/app.css') }}" rel="stylesheet">
 		<link href="{{ asset('css/pages/dashboard.css') }}" rel="stylesheet">
+		<link href="{{asset('css/font-awesome-4.7.0/css/font-awesome.min.css')}}" rel="stylesheet">
 
 		@yield('css')
 
 	</head>
 	<body id="page-top" class="sidebar-toggled">
 		<div id="app">
+			<!-- Loader -->
+			<div class="loader">
+				<div class="text-center">
+					<div class="spinner-border" role="status"></div>
+				</div>
+			</div>
 			<!-- Page Wrapper -->
 			<div id="wrapper">
 				<!-- Sidebar -->
@@ -74,11 +81,12 @@
 			</a>
 		</div>
 
-		@yield('js')
-
 		<!-- Scripts -->
 		<script src="{{asset('js/app.js')}}"></script>
 		<script src="{{asset('js/sb-admin-2.js')}}"></script>
+
+		@yield('js')
+		<script src="{{asset('js/scripts.js')}}"></script>
 
 	</body>
 </html>
