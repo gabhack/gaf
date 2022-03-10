@@ -61,6 +61,7 @@
 				</li>
 				<li><a href="{{url('planos')}}"><i class="fa fa-file-text-o"></i> <span>Carga de Archivos Manual</span></a></li>			
 				<li><a href="{{url('planos/crear_gcp')}}"><i class="fa fa-file-text-o"></i> <span>Carga de Archivos Inteligente</span></a></li>
+				<li><a href="{{url('/pdfexcel')}}"><i class="fa fa-file-text-o"></i> <span>PDF A Excel</span></a></li>
 			@endif
 		</ul>	 
 	</div>
