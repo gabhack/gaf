@@ -368,3 +368,4 @@ Route::view('/amipersonas', 'amipersonas');
 Route::view('/moreinformation', 'moreinformation');
 Route::view('/hego', 'hego');
 Route::view('/hegoinformation', 'hegoinformation');
+Route::view('/integration', 'integration');

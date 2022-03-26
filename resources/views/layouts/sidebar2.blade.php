@@ -48,6 +48,13 @@
 			<span>HEGO®</span>
 		</a>
 	</li>
+
+	<li class="nav-item">
+		<a class="nav-link" href="{{ url('integration') }}">
+			<hego-icon></hego-icon>
+			<span>HEGO®</span>
+		</a>
+	</li>
 	@endif
 
 	@if (IsSuperAdmin() || IsAMIAdmin() || IsHEGOAdmin() || IsCompany() || IsUserCreator())
