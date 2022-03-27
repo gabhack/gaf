@@ -17,22 +17,22 @@
 
                 <div class="form-group" v-if="optionSelected === 'fechavinc'">
                     <label for="">Selecciona el archivo a importar (FECHAVINC)</label>
-                    <input type="file" name="fechavinc" :value="file" class="form-control">
+                    <input type="file" name="fechavinc" v-on:change="(e)=>getFile(e.target.files)" class="form-control">
                 </div>
 
                 <div class="form-group" v-if="optionSelected === 'datames'">
                     <label for="">Selecciona el archivo a importar (DATAMES)</label>
-                    <input type="file" name="datames" :value="file" class="form-control">                    
+                    <input type="file" name="datames" v-on:change="(e)=>getFile(e.target.files)" class="form-control">                    
                 </div>
 
                 <div class="form-group" v-if="optionSelected === 'descapli'">
                     <label for="">Selecciona el archivo a importar (DESCAPLI)</label>
-                    <input type="file" name="descapli" :value="file" class="form-control">
+                    <input type="file" name="descapli" v-on:change="(e)=>getFile(e.target.files)" class="form-control">
                 </div>
 
                 <div class="form-group" v-if="optionSelected === 'descnoap'">
                     <label for="">Selecciona el archivo a importar (DESCNOAP)</label>
-                    <input type="file" name="descnoap" :value="file" class="form-control">
+                    <input type="file" name="descnoap" v-on:change="(e)=>getFile(e.target.files)" class="form-control">
                 </div>
 
                 <div class="form-group" v-if="optionSelected !==null">
@@ -62,6 +62,9 @@ export default ({
     },
 
     methods:{
+        getFile(data){
+            this.file = data
+        },
         dumpDataMes(){
             axios.get('dumpDataMes').then((response)=>{
                 this.$bvToast.toast(res.data.error, {
@@ -72,7 +75,7 @@ export default ({
                 console.log(response.data);
             })
         },
-        importFile(){
+        importFile(){        
             if(optionSelected === 'fechavinc'){
                 axios.post('fechaVincImport',this.file).then((response)=>{
                     this.$bvToast.toast(res.data.error, {
