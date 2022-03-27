@@ -56,15 +56,15 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'host' => env('DBP_HOST', '127.0.0.1'),
+            'port' => env('DBP_PORT', '5432'),
+            'database' => env('DBP_DATABASE', 'forge'),
+            'username' => env('DBP_USERNAME', 'forge'),
+            'password' => env('DBP_PASSWORD', ''),
             'charset' => 'utf8',
             'prefix' => '',
             'schema' => 'public',
-            'sslmode' => 'prefer',
+            'sslmode' => 'require',
         ],
 
         'sqlsrv' => [
