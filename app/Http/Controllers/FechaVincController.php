@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 
 class FechaVincController extends Controller
 {
+    public function import(){
+        
+    }
     /**
      * Display a listing of the resource.
      *

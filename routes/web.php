@@ -369,3 +369,11 @@ Route::view('/moreinformation', 'moreinformation');
 Route::view('/hego', 'hego');
 Route::view('/hegoinformation', 'hegoinformation');
 Route::view('/integration', 'integration');
+Route::view('/massive', 'massive');
+
+Route::post('datamesImport','DataMesController@import');
+Route::post('fechaVincImport','FechaVincController@import');
+Route::post('descapliImport','DescapliController@import');
+Route::post('descnoapController','DescnoapController@import');
+
+Route::get('dumpDataMes','DateMesController@dumpDataMes');

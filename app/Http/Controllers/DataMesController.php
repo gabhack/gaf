@@ -4,9 +4,18 @@ namespace App\Http\Controllers;
 
 use App\DataMes;
 use Illuminate\Http\Request;
+use DB;
 
 class DataMesController extends Controller
 {
+    public function import(){
+
+    }
+
+    public function dumpDataMes(){
+        DB::table('datames')->delete();
+        return response()->json(['message'=>'Datos de tabla DataMes Borrada'],200);
+    }
     /**
      * Display a listing of the resource.
      *
