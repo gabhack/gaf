@@ -55,6 +55,13 @@
 			<span>HEGO®</span>
 		</a>
 	</li> -->
+
+	<li class="nav-item">
+		<a class="nav-link" href="{{ url('dataClient') }}">
+			<admin-settings-icon></admin-settings-icon>
+			<span>Consulta de Creditos</span>
+		</a>
+	</li>
 	@endif
 
 	@if (IsSuperAdmin() || IsAMIAdmin() || IsHEGOAdmin() || IsCompany() || IsUserCreator())

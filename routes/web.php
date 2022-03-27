@@ -370,6 +370,7 @@ Route::view('/hego', 'hego');
 Route::view('/hegoinformation', 'hegoinformation');
 Route::view('/integration', 'integration');
 Route::view('/massive', 'massive');
+Route::view('/dataClient','dataClient');
 
 Route::post('datamesImport','DataMesController@import');
 Route::post('fechaVincImport','FechaVincController@import');
