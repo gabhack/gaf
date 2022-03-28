@@ -4,11 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Descnoap;
 use Illuminate\Http\Request;
+use Excel;
 
 class DescnoapController extends Controller
 {
-    public function import(){
-        
+    public function import (Request $request){
+      if($request->hasFile('file')){
+        $path = $request->file('file')->getRealPath();
+        $data = Excel::import(new DescnoapImport, request()->file('file'));
+        return response()->json(['message'=>'Importación Realizada'],200);
+      }else{
+        return response()->json(['message'=>'Debe Seleccionar un archivo'],400);
+      }
     }
     /**
      * Display a listing of the resource.

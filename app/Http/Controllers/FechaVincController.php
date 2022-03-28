@@ -4,12 +4,19 @@ namespace App\Http\Controllers;
 
 use App\FechaVinc;
 use Illuminate\Http\Request;
+use Excel;
 
 class FechaVincController extends Controller
 {
-    public function import(){
-        
+  public function import (Request $request){
+    if($request->hasFile('file')){
+      $path = $request->file('file')->getRealPath();
+      $data = Excel::import(new FechaVincImport, request()->file('file'));
+      return response()->json(['message'=>'Importación Realizada'],200);
+    }else{
+      return response()->json(['message'=>'Debe Seleccionar un archivo'],400);
     }
+  }
     /**
      * Display a listing of the resource.
      *

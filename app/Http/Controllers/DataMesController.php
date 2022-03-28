@@ -5,22 +5,21 @@ namespace App\Http\Controllers;
 use App\DataMes;
 use App\Imports\DataMesImport;
 use Illuminate\Http\Request;
-use DB;
 use Excel;
 
 class DataMesController extends Controller
 {
-  public function import (Request $request){        
+  public function import (Request $request){
     if($request->hasFile('file')){
-      $path = $request->file('file')->getRealPath();                
+      $path = $request->file('file')->getRealPath();
       $data = Excel::import(new DataMesImport, request()->file('file'));
       return response()->json(['message'=>'Importación Realizada'],200);
     }else{
       return response()->json(['message'=>'Debe Seleccionar un archivo'],400);
     }
   }
-    public function dumpDataMes(){        
-        DataMes::truncate();        
+    public function dumpDataMes(){
+        DataMes::truncate();
         return response()->json(['message'=>'Datos de tabla DataMes Borrada'],200);
     }
     /**
