@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\FechaVinc;
+use App\Imports\FechaVincImport;
 use Illuminate\Http\Request;
 use Excel;
 

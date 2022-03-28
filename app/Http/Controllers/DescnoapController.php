@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Descnoap;
+use App\Imports\DescnoapImport;
 use Illuminate\Http\Request;
 use Excel;
 

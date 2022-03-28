@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Descapli;
+use App\Imports\DescapliImport;
 use Illuminate\Http\Request;
 use Excel;
 
