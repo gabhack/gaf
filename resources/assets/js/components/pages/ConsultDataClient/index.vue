@@ -2,27 +2,27 @@
     <div class="container-fluid">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
-                <a class="nav-link active" id="formClient-tab" data-toggle="tab" href="#formClient" role="tab" aria-controls="formClient" aria-selected="true">Formulario Cliente</a>
+                <a :class="tabSelect === 'form' ? 'nav-link active' : 'nav-link'" id="formClient-tab" data-toggle="tab" href="#formClient" :v-on:click="()=>changeTab('form')" role="tab" aria-controls="formClient" aria-selected="true">Formulario Cliente</a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link" id="menu1-tab" data-toggle="tab" href="#menu1" role="tab" aria-controls="menu1" aria-selected="true">Fecha Vinculación</a>
+                <a :class="tabSelect === 'menu1' && menu1Disabled === false ? 'nav-link active' : 'nav-link disabled'" id="menu1-tab" data-toggle="tab" href="#menu1" :v-on:click="()=>changeTab('menu1')" role="tab" aria-controls="menu1" aria-selected="true">Fecha Vinculación</a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link" id="menu2-tab" data-toggle="tab" href="#menu2" role="tab" aria-controls="menu2" aria-selected="false">Data Mes</a>
+                <a :class="tabSelect === 'menu2' && menu2Disabled === false ? 'nav-link active' : 'nav-link disabled'" id="menu2-tab" data-toggle="tab" href="#menu2" :v-on:click="()=>changeTab('menu2')" role="tab" aria-controls="menu2" aria-selected="false">Data Mes</a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link" id="menu3-tab" data-toggle="tab" href="#menu3" role="tab" aria-controls="menu3" aria-selected="false">Descapli</a>
+                <a :class="tabSelect === 'menu3' && menu3Disabled === false ? 'nav-link active' : 'nav-link disabled'" id="menu3-tab" data-toggle="tab" href="#menu3" :v-on:click="()=>changeTab('menu3')" role="tab" aria-controls="menu3" aria-selected="false">Descapli</a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link" id="menu4-tab" data-toggle="tab" href="#menu4" role="tab" aria-controls="menu4" aria-selected="false">Descanoap</a>
+                <a :class="tabSelect === 'menu4' && menu4Disabled === false ? 'nav-link active' : 'nav-link disabled'" id="menu4-tab" data-toggle="tab" href="#menu4" :v-on:click="()=>changeTab('menu4')" role="tab" aria-controls="menu4" aria-selected="false">Descanoap</a>
             </li>
 
             <li class="nav-item" role="presentation">
-                <a class="nav-link" id="menu5-tab" data-toggle="tab" href="#menu5" role="tab" aria-controls="menu5" aria-selected="false">Resultado</a>
+                <a :class="tabSelect === 'menu5' && menu5Disabled === false ? 'nav-link active' : 'nav-link disabled'" id="menu5-tab" data-toggle="tab" href="#menu5" :v-on:click="()=>changeTab('menu5')" role="tab" aria-controls="menu5" aria-selected="false">Resultado</a>
             </li>
         </ul>
         <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade show active" id="formClient" role="tabpanel" aria-labelledby="formClient-tab">
+            <div :class="tabSelect === 'form' ? 'tab-pane fade show active' : 'tab-pane fade'" id="formClient" role="tabpanel" aria-labelledby="formClient-tab">
                 <div class="form-group">
                     <label>Seleccione</label>
                     <select v-model="type" class="form-control">
@@ -39,58 +39,9 @@
                             <label>Cedula</label>
                             <input v-model="dataclient.cc" class="form-control">
                         </div>
-
+                        
                         <div class="form-group">
-                            <label>Nombre</label>
-                            <input v-model="dataclient.nomb" class="form-control">
-                        </div>
-
-                        <div class="form-group">
-                            <label>Pagaduria</label>
-                            <input v-model="dataclient.pagaduria" class="form-control">
-                        </div>
-
-                        <div class="form-group">
-                            <label>Tipo de Credito</label>
-                            <input v-model="dataclient.tp_cred" class="form-control">
-                        </div>
-
-                        <div class="form-group">
-                            <label>Cupo Libre Inversión</label>
-                            <input v-model="dataclient.cup_libre" class="form-control">
-                        </div>
-
-                        <div class="form-group">
-                            <label>Cuota Compra</label>
-                            <input v-model="dataclient.cuot_compra" class="form-control">
-                        </div>
-
-                        <div class="form-group">
-                            <label>Pagare</label>
-                            <input v-model="dataclient.pagare" class="form-control">
-                        </div>
-
-                        <div class="form-group">
-                            <label>Valor Credito</label>
-                            <input v-model="dataclient.vcredito" class="form-control">
-                        </div>
-
-                        <div class="form-group">
-                            <label>Valor Desembolso</label>
-                            <input v-model="dataclient.vdesembolso" class="form-control">
-                        </div>
-
-                        <div class="form-group">
-                            <label>Plazo</label>
-                            <input v-model="dataclient.plazo" class="form-control">
-                        </div>
-
-                        <div class="form-group">
-                            <label>Cuota Credito</label>
-                            <input v-model="dataclient.cuot_credito" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <button v-on:click="getDataClient" class="btn btn-primary">Consultar</button>
+                            <button v-on:click="getDescnoap" class="btn btn-primary">Consultar</button>
                         </div>
                     </div>
                 </div>
@@ -104,7 +55,7 @@
                     </div>
                 </div>                
             </div>
-            <div class="tab-pane fade" id="menu1" role="tabpanel" aria-labelledby="menu1-tab">
+            <div :class="tabSelect === 'menu1' ? 'tab-pane fade show active' : 'tab-pane fade'" id="menu1" role="tabpanel" aria-labelledby="menu1-tab">
                 <table class="table table-responsive table-striped table-hover">
                     <thead>
                         <tr>
@@ -123,7 +74,7 @@
                 </table>
             </div>
             
-            <div class="tab-pane fade" id="menu2" role="tabpanel" aria-labelledby="menu2-tab">
+            <div :class="tabSelect === 'menu2' ? 'tab-pane fade show active' : 'tab-pane fade'" id="menu2" role="tabpanel" aria-labelledby="menu2-tab">
                 <table class="table table-responsive table-striped table-hover">
                     <thead>
                         <tr>
@@ -173,7 +124,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="tab-pane fade" id="menu3" role="tabpanel" aria-labelledby="menu3-tab">
+            <div :class="tabSelect === 'menu3' ? 'tab-pane fade show active' : 'tab-pane fade'" id="menu3" role="tabpanel" aria-labelledby="menu3-tab">
                 <table class="table table-responsive table-striped table-hover">
                     <thead>
                         <tr>
@@ -234,7 +185,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="tab-pane fade" id="menu4" role="tabpanel" aria-labelledby="menu4-tab">
+            <div :class="tabSelect === 'menu4' ? 'tab-pane fade show active' : 'tab-pane fade'" id="menu4" role="tabpanel" aria-labelledby="menu4-tab">
                 <table class="table table-responsive table-striped table-hover">
                     <thead>
                         <tr>
@@ -289,7 +240,7 @@
                 </table>
             </div>
 
-            <div class="tab-pane fade" id="menu5" role="tabpanel" aria-labelledby="menu5-tab">
+            <div :class="tabSelect === 'menu5' ? 'tab-pane fade show active' : 'tab-pane fade'" id="menu5" role="tabpanel" aria-labelledby="menu5-tab">
                 <table class="table table-responsive table-striped table-hover">
                     <thead>
                         <tr>
@@ -322,16 +273,36 @@ export default {
         return {
             dataclient:{},
             type:'',
+            tabSelect:'form',
+            menu1Disabled: true,  
+            menu2Disabled: true,
+            menu3Disabled: true,
+            menu4Disabled: true,
+            menu4Disabled: true         
         }
     },
     mounted(){
         
     },
     methods:{
+        changeTab(data){
+            console.log(data);
+            this.tabSelect = data;
+        },
         getDataClient(){
-            console.log(this.dataclient);
+            console.log(this.dataclient);        
+            this.tabSelect='menu1';
+            this.menu1Disabled = false
+            
+            axios.post('').then((response)=>{
+            
+            }).catch((error)=>{
+
+            })            
         },
         getFechaVinc(){
+            this.tabSelect='menu2';
+            this.menu2Disabled = false
             axios.get('').then((response)=>{
 
             }).catch((error)=>{
@@ -340,6 +311,8 @@ export default {
         },
 
         getDataMes(){
+            this.tabSelect='menu3';
+            this.menu3Disabled = false
             axios.get('').then((response)=>{
 
             }).catch((error)=>{
@@ -348,6 +321,8 @@ export default {
         },
 
         getDescapli(){
+            this.tabSelect='menu4';
+            this.menu4Disabled = false
             axios.get('').then((response)=>{
 
             }).catch((error)=>{
@@ -356,8 +331,10 @@ export default {
         },
 
         getDescnoap(){
-            axios.get('').then((response)=>{
-
+            this.tabSelect='menu5';
+            this.menu5Disabled = false
+            axios.post('consultaDescnoap',{doc:this.dataclient.cc}).then((response)=>{
+                console.log(response.data)
             }).catch((error)=>{
                 console.log(error);
             })

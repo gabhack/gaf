@@ -378,3 +378,4 @@ Route::post('descapliImport','DescapliController@import');
 Route::post('descnoapController','DescnoapController@import');
 
 Route::get('dumpDataMes','DataMesController@dumpDataMes');
+Route::post('consultaDescnoap','DescnoapController@consultaUnitaria');

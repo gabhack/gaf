@@ -18,10 +18,12 @@ class DescnoapController extends Controller
         return response()->json(['message'=>'Debe Seleccionar un archivo'],400);
       }
     }
-    public function consulta_unitaria(Request $request){
-      $consulta_cedula = \App\Descnoap::Where('doc',$request->doc)
-        ->get();
-      dd($consulta_cedula);
+    public function consultaUnitaria(Request $request){
+      $consulta_cedula = \App\Descnoap::Where('doc',$request->doc)->get();
+      $resultados = json_decode($consulta_cedula);
+      dd($resultados);
+      return response()->json($consulta_cedula);
+      //return response()->json(['message'=>$th->errorInfo[2]],200)
     }
     /**
      * Display a listing of the resource.
