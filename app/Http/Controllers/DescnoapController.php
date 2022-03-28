@@ -33,7 +33,7 @@ class DescnoapController extends Controller
           return response()->json(['message'=>'El cliente seleccionado tiene inconsistencias.','data'=>$resultados],200);
         }
         else{
-          return response()->json(['message'=>'Consulta exitosa.','data'=>$resultados],200);
+          return response()->json(['message'=>'Consulta exitosa.','data'=>$request->doc],200);
         }
       }
     }

@@ -39,7 +39,57 @@
                             <label>Cedula</label>
                             <input v-model="dataclient.cc" class="form-control">
                         </div>
-                        
+
+                        <div class="form-group">
+                            <label>Nombre</label>
+                            <input v-model="dataclient.nombre" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Pagaduria</label>
+                            <input v-model="dataclient.pagaduria" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Tipo de Credito</label>
+                            <input v-model="dataclient.tipo_de_credito" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Cupo Lib Inversión</label>
+                            <input v-model="dataclient.cupo_lib_inversion" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Compras</label>
+                            <input v-model="dataclient.compras" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label>pagaré</label>
+                            <input v-model="dataclient.pagare" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Vr Credito</label>
+                            <input v-model="dataclient.vr_credito" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Vr Desembolso</label>
+                            <input v-model="dataclient.vr_desembolso" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Plazo</label>
+                            <input v-model="dataclient.plazo" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Cuota Credito</label>
+                            <input v-model="dataclient.cuota_cred" class="form-control">
+                        </div>
+
                         <div class="form-group">
                             <button v-on:click="getDataClient" class="btn btn-primary">Consultar</button>
                         </div>
@@ -113,12 +163,22 @@
                 <table class="table table-responsive table-striped table-hover">
                     <thead>
                         <tr>
-                            <th>Periodo</th>
+                            <th>Entidad Anterior</th>
+                            <th>Nombre Tercero</th>
+                            <th>Pagare</th>
+                            <th>Valor Aplicado</th>
+                            <th>Selecciona</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1026303251</td>
+                        <tr v-for="(consultaD,key) in consultaDescnoapli" :key="key">
+                            <td>{{consultaD.nonentant}}</td>
+                            <td>{{consultaD.nomtercero}}</td>
+                            <td>{{consultaD.pagare}}</td>
+                            <td>{{consultaD.vaplicado}}</td>
+                            <td>                            
+                                <input type="checkbox" v-on:click="getpagare(consultaD.pagare)"/>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -169,6 +229,7 @@ export default {
             menu4Disabled: true,
             menu4Disabled: true,
             constultaDescnoap:[],
+            consultaDescnoapli:[],
         }
     },
     methods:{
@@ -181,12 +242,24 @@ export default {
                     toastr.success(response.data.message);               
                     this.constultaDescnoap = response.data.data;
                 }else{
-                    
+                    axios.post('consultaUnitaria',{doc:response.data.data}).then((response)=>{
+                        toastr.success(response.data.message);
+                        this.consultaDescnoapli = response.data.data;
+                        this.tabSelect = 'menu3';
+                        this.menu3Disabled= false;
+                    })
                 }
             }).catch((error)=>{
                 console.log(error);
             })            
         },
+        getpagare(data){            
+            axios.post('',{data:data}).then((response)=>{
+
+            }).catch((error)=>{
+                console.log(error);
+            })
+        }
     }
 }
 </script>

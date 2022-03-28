@@ -25,7 +25,7 @@ class DescapliController extends Controller
     $consulta_cedula = \App\Descapli::Where('doc',$request->doc)->select('')->get();
     $resultados = json_decode($consulta_cedula);
     if($resultados == "" or $resultados == null ){
-      return response()->json(['message'=>'No se encontraron registros con el numero seleccionado.'],400);
+      return response()->json(['message'=>'No se encontraron registros con el numero seleccionado.', 'data'=>$resultados],400);
     }
     else{
       return response()->json(['message'=>'Consulta exitosa.','data'=>$resultados],200);
