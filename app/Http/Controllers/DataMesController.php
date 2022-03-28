@@ -3,112 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\DataMes;
+use App\Imports\DataMesImport;
 use Illuminate\Http\Request;
 use DB;
 use Excel;
 
 class DataMesController extends Controller
 {
-  public function import (Request $request){    
-    // $j = [];
-    try {
-      if($request->hasFile('file')){
-        $path = $request->file('file')->getRealPath();        
-        $data = Excel::selectSheetsByIndex(0)->import($path, function ($reader){})->get();
-        dd($data);
-          if($data->count()){
-            $i = 2;
-            $position = 0;
-            dd($data);
-
-            foreach ($data as $key => $value) {
-              // $x= trim($value->codigo.$value->productoservicio.$value->precio_venta.$value->tipo_de_impuesto.
-              //   $value->porcentaje_impuesto);
-              // if(trim($value->codigo) == ''){
-              //   $value->codigo = null;
-              // }
-              // if($x == ''){
-              //
-              // }
-              // else{
-                $arr[] = [
-                  'fondo' => $value->fondo,
-                  'td' => $value->td,
-                  'doc' => $value->doc,
-                  'x' => $value->x,
-                  'nomp' => $value->nomp,
-                  'fecnacimient' => $value->fecnacimient,
-                  'dir' => $value->dir,
-                  'dpto' => $value->dpto,
-                  'mnpio' => $value->mnpio,
-                  'tp' => $value->tp,
-                  'nbanco' => $value->nbanco,
-                  'sucursal' => $value->sucursal,
-                  'tel' => $value->tel,
-                  'cel' => $value->cel,
-                  'correo' => $value->correo,
-                  'vpension' => $value->vpension,
-                  'vsalud' => $value->vsalud,
-                  'vembargos' => $value->vembargos,
-                  'vdesc' => $value->vdesc,
-                  'cupo' => $value->cupo
-               ];
-                $i++;
-                $position++;
-              // }
-            }
-            $cant_reg = $i -2;
-            if(!empty($arr)){
-              foreach ($array as $key => $value) {
-                $datos = [
-                  'fondo' => $value->fondo,
-                  'td' => $value->td,
-                  'doc' => $value->doc,
-                  'x' => $value->x,
-                  'nomp' => $value->nomp,
-                  'fecnacimient' => $value->fecnacimient,
-                  'dir' => $value->dir,
-                  'dpto' => $value->dpto,
-                  'mnpio' => $value->mnpio,
-                  'tp' => $value->tp,
-                  'nbanco' => $value->nbanco,
-                  'sucursal' => $value->sucursal,
-                  'tel' => $value->tel,
-                  'cel' => $value->cel,
-                  'correo' => $value->correo,
-                  'vpension' => $value->vpension,
-                  'vsalud' => $value->vsalud,
-                  'vembargos' => $value->vembargos,
-                  'vdesc' => $value->vdesc,
-                  'cupo' => $value->cupo
-                ];
-                DB::table('datames')->insert($datos);
-              }
-            }
-          }
-        }
-        else {
-          throw new \Exception("Debe cargar un archivo", 1);
-        }
-        DB::commit();
-        $j['success'] = true;
-        $j['msg'] = "Cargue realizado";
-        $j['data'] = "";
+  public function import (Request $request){        
+    if($request->hasFile('file')){
+      $path = $request->file('file')->getRealPath();                
+      $data = Excel::import(new DataMesImport, request()->file('file'));
+      return response()->json(['message'=>'Importación Realizada'],200);
+    }else{
+      return response()->json(['message'=>'Debe Seleccionar un archivo'],400);
     }
-    catch (\Illuminate\Database\Query\Exception $e) {
-      $j = $e;
-      DB::rollBack();
-    }
-    catch (\Exception $e) {
-      $j['success'] = false;
-      $j['msg'] = "{$e->getMessage()}";
-      $j['e'] = $e->getMessage();
-      DB::rollBack();
-    }
-
-    return response()->json($j);
   }
-
     public function dumpDataMes(){        
         DataMes::truncate();        
         return response()->json(['message'=>'Datos de tabla DataMes Borrada'],200);

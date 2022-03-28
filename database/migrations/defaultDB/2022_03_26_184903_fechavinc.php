@@ -15,9 +15,10 @@ class Fechavinc extends Migration
     {
         Schema::connection('pgsql')->create('fechavinc', function($table){
             $table->increments('id');
-            $table->string('doc');
-            $table->string('vinc');
-            $table->string('tp');            
+            $table->string('doc')->nullable();
+            $table->string('vinc')->nullable();
+            $table->string('tp')->nullable();    
+            $table->timestamps();        
         });
     }
 

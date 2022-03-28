@@ -16,29 +16,30 @@ class Descapli extends Migration
 
         Schema::connection('pgsql')->create('descalpi', function($table){
             $table->increments('id');
-            $table->string('periodo');
-            $table->string('concecutivo');
-            $table->string('clase');
-            $table->string('tercero');
-            $table->string('nomtercero');
-            $table->string('td');
-            $table->string('doc');
-            $table->string('nomp');
-            $table->string('pagare');
-            $table->string('porcentaje');
-            $table->string('vaplicado');
-            $table->string('vtotal');
-            $table->string('vpagado');
-            $table->string('saldo');
-            $table->string('fgrab');
-            $table->string('forma');
-            $table->string('codentiant');
-            $table->string('nonentant');
-            $table->string('fechacesion');
-            $table->string('tdesc');
-            $table->string('p5d');
-            $table->string('p4d');
-            $table->string('numpagopt');
+            $table->string('periodo')->nullable();
+            $table->string('concecutivo')->nullable();
+            $table->string('clase')->nullable();
+            $table->string('tercero')->nullable();
+            $table->string('nomtercero')->nullable();
+            $table->string('td')->nullable();
+            $table->string('doc')->nullable();
+            $table->string('nomp')->nullable();
+            $table->string('pagare')->nullable();
+            $table->string('porcentaje')->nullable();
+            $table->string('vaplicado')->nullable();
+            $table->string('vtotal')->nullable();
+            $table->string('vpagado')->nullable();
+            $table->string('saldo')->nullable();
+            $table->string('fgrab')->nullable();
+            $table->string('forma')->nullable();
+            $table->string('codentiant')->nullable();
+            $table->string('nonentant')->nullable();
+            $table->string('fechacesion')->nullable();
+            $table->string('tdesc')->nullable();
+            $table->string('p5d')->nullable();
+            $table->string('p4d')->nullable();
+            $table->string('numpagopt')->nullable();
+            $table->timestamps();
         });
     }
 

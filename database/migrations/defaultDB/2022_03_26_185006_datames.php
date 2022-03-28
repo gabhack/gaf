@@ -15,25 +15,26 @@ class Datames extends Migration
     {
         Schema::connection('pgsql')->create('datames', function($table){
             $table->increments('id');
-            $table->string('fondo');
-            $table->string('td');
-            $table->string('x');
-            $table->string('nomp');
-            $table->string('fecnacimient');
-            $table->string('dir');
-            $table->string('dpto');
-            $table->string('mnpio');
-            $table->string('tp');
-            $table->string('nbanco');
-            $table->string('sucursal');
-            $table->string('tel');
-            $table->string('cel');
-            $table->string('correo');
-            $table->string('vpension');
-            $table->string('vsalud');
-            $table->string('vembargos');
-            $table->string('vdesc');
-            $table->string('cupo');
+            $table->string('fondo')->nullable();
+            $table->string('td')->nullable();
+            $table->string('x')->nullable();
+            $table->string('nomp')->nullable();
+            $table->string('fecnacimient')->nullable();
+            $table->string('dir')->nullable();
+            $table->string('dpto')->nullable();
+            $table->string('mnpio')->nullable();
+            $table->string('tp')->nullable();
+            $table->string('nbanco')->nullable();
+            $table->string('sucursal')->nullable();
+            $table->string('tel')->nullable();
+            $table->string('cel')->nullable();
+            $table->string('correo')->nullable();
+            $table->string('vpension')->nullable();
+            $table->string('vsalud')->nullable();
+            $table->string('vembargos')->nullable();
+            $table->string('vdesc')->nullable();
+            $table->string('cupo')->nullable();
+            $table->timestamps();
         });
     }
 

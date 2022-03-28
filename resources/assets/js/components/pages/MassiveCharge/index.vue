@@ -70,7 +70,7 @@ export default ({
         },
         dumpDataMes(){
             axios.get('dumpDataMes').then((response)=>{
-                this.$bvToast.toast(response.data.error, {
+                this.$bvToast.toast(response.data.message, {
                     title: 'Datos de la tabla Eliminados',
                     variant: 'success',
                     solid: true
@@ -83,8 +83,8 @@ export default ({
                 const formData = new FormData();
                 formData.append("file", this.file);
                 axios.post('fechaVincImport',formData,{headers:{'Content-Type':'multipart/form-data','mime-type':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}}).then((response)=>{
-                    this.$bvToast.toast(response.data.error, {
-                        title: 'Importación Realizada',
+                    this.$bvToast.toast(response.data.message, {
+                        title: response.data.message,
                         variant: 'success',
                         solid: true
                     });
@@ -96,8 +96,8 @@ export default ({
                 const formData = new FormData();
                 formData.append("file", this.file);
                 axios.post('datamesImport',formData,{headers:{'Content-Type':'multipart/form-data','mime-type':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}}).then((response)=>{
-                    this.$bvToast.toast(response.data.error, {
-                        title: 'Importación Realizada',
+                    this.$bvToast.toast(response.data.message, {
+                        title: response.data.message,
                         variant: 'success',
                         solid: true
                     });
@@ -109,8 +109,8 @@ export default ({
                 const formData = new FormData();
                 formData.append("file", this.file);
                 axios.post('descapliImport',formData,{headers:{'Content-Type':'multipart/form-data','mime-type':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}}).then((response)=>{
-                    this.$bvToast.toast(response.data.error, {
-                        title: 'Importación Realizada',
+                    this.$bvToast.toast(response.data.message, {
+                        title: response.data.message,
                         variant: 'success',
                         solid: true
                     });
@@ -122,8 +122,8 @@ export default ({
                 const formData = new FormData();
                 formData.append("file", this.file);
                 axios.post('descnoapController',formData,{headers:{'Content-Type':'multipart/form-data','mime-type':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}}).then((response)=>{
-                    this.$bvToast.toast(response.data.error, {
-                        title: 'Importación Realizada',
+                    this.$bvToast.toast(response.data.message, {
+                        title: response.data.message,
                         variant: 'success',
                         solid: true
                     });
