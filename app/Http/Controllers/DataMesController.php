@@ -9,12 +9,13 @@ use Excel;
 
 class DataMesController extends Controller
 {
-  public function import (Request $request){
-    $j = [];
+  public function import (Request $request){    
+    // $j = [];
     try {
       if($request->hasFile('file')){
-        $path = $request->file('file')->getRealPath();
+        $path = $request->file('file')->getRealPath();        
         $data = Excel::selectSheetsByIndex(0)->load($path, function ($reader){})->get();
+        dd($data);
           if($data->count()){
             $i = 2;
             $position = 0;

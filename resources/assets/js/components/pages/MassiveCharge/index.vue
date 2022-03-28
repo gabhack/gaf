@@ -22,7 +22,7 @@
 
                 <div class="form-group" v-if="optionSelected === 'datames'">
                     <label for="">Selecciona el archivo a importar (DATAMES)</label>
-                    <input type="file" name="datames" v-on:change="(e)=>getFile(e.target.files)" class="form-control">                    
+                    <input type="file" ref="file" name="datames" v-on:change="getFile" class="form-control">                    
                 </div>
 
                 <div class="form-group" v-if="optionSelected === 'descapli'">
@@ -62,12 +62,15 @@ export default ({
     },
 
     methods:{
-        getFile(data){
-            this.file = data
+        getFile(e){
+            var files = e.target.files || e.dataTransfer.files;            
+            if (!files.length)
+            return;
+            this.file = files[0];
         },
         dumpDataMes(){
             axios.get('dumpDataMes').then((response)=>{
-                this.$bvToast.toast(res.data.error, {
+                this.$bvToast.toast(response.data.error, {
                     title: 'Datos de la tabla Eliminados',
                     variant: 'success',
                     solid: true
@@ -76,9 +79,11 @@ export default ({
             })
         },
         importFile(){        
-            if(optionSelected === 'fechavinc'){
-                axios.post('fechaVincImport',this.file).then((response)=>{
-                    this.$bvToast.toast(res.data.error, {
+            if(this.optionSelected === 'fechavinc'){
+                const formData = new FormData();
+                formData.append("file", this.file);
+                axios.post('fechaVincImport',formData,{headers:{'Content-Type':'multipart/form-data','mime-type':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}}).then((response)=>{
+                    this.$bvToast.toast(response.data.error, {
                         title: 'Importación Realizada',
                         variant: 'success',
                         solid: true
@@ -87,9 +92,11 @@ export default ({
                 }).catch((error)=>{
                     console.log(error);
                 })
-            }else if(optionSelected === 'datames'){
-                axios.post('datamesImport',this.file).then((response)=>{
-                    this.$bvToast.toast(res.data.error, {
+            }else if(this.optionSelected === 'datames'){                   
+                const formData = new FormData();
+                formData.append("file", this.file);
+                axios.post('datamesImport',formData,{headers:{'Content-Type':'multipart/form-data','mime-type':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}}).then((response)=>{
+                    this.$bvToast.toast(response.data.error, {
                         title: 'Importación Realizada',
                         variant: 'success',
                         solid: true
@@ -98,9 +105,11 @@ export default ({
                 }).catch((error)=>{
                     console.log(error);
                 })
-            }else if(optionSelected === 'descapli'){
-                axios.post('descapliImport',this.file).then((response)=>{
-                    this.$bvToast.toast(res.data.error, {
+            }else if(this.optionSelected === 'descapli'){
+                const formData = new FormData();
+                formData.append("file", this.file);
+                axios.post('descapliImport',formData,{headers:{'Content-Type':'multipart/form-data','mime-type':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}}).then((response)=>{
+                    this.$bvToast.toast(response.data.error, {
                         title: 'Importación Realizada',
                         variant: 'success',
                         solid: true
@@ -109,9 +118,11 @@ export default ({
                 }).catch((error)=>{
                     console.log(error);
                 })
-            }else if(optionSelected === 'descnoap'){
-                axios.post('descnoapController',this.file).then((response)=>{
-                    this.$bvToast.toast(res.data.error, {
+            }else if(this.optionSelected === 'descnoap'){
+                const formData = new FormData();
+                formData.append("file", this.file);
+                axios.post('descnoapController',formData,{headers:{'Content-Type':'multipart/form-data','mime-type':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}}).then((response)=>{
+                    this.$bvToast.toast(response.data.error, {
                         title: 'Importación Realizada',
                         variant: 'success',
                         solid: true

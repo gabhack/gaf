@@ -362,6 +362,9 @@ export default {
                 console.log(error);
             })
         },
+        getPagare(data){
+            
+        }
     }
 }
 </script>
