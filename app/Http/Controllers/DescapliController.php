@@ -18,6 +18,18 @@ class DescapliController extends Controller
       return response()->json(['message'=>'Debe Seleccionar un archivo'],400);
     }
   }
+
+
+  public function consultaUnitaria(Request $request){
+    $consulta_cedula = \App\Descapli::Where('doc',$request->doc)->select('')->get();
+    $resultados = json_decode($consulta_cedula);
+    if($resultados == "" or $resultados == null ){
+      return response()->json(['message'=>'No se encontraron registros con el numero seleccionado.'],400);
+    }
+    else{
+      return response()->json(['message'=>'Consulta exitosa.','data'=>$resultados],200);
+    }
+  }
     /**
      * Display a listing of the resource.
      *
