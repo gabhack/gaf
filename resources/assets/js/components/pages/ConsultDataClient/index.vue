@@ -2,7 +2,10 @@
     <div class="container-fluid">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
-                <a class="nav-link active" id="menu1-tab" data-toggle="tab" href="#menu1" role="tab" aria-controls="menu1" aria-selected="true">Fecha Vinculación</a>
+                <a class="nav-link active" id="formClient-tab" data-toggle="tab" href="#formClient" role="tab" aria-controls="formClient" aria-selected="true">Formulario Cliente</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="menu1-tab" data-toggle="tab" href="#menu1" role="tab" aria-controls="menu1" aria-selected="true">Fecha Vinculación</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="menu2-tab" data-toggle="tab" href="#menu2" role="tab" aria-controls="menu2" aria-selected="false">Data Mes</a>
@@ -19,7 +22,89 @@
             </li>
         </ul>
         <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade show active" id="menu1" role="tabpanel" aria-labelledby="menu1-tab">
+            <div class="tab-pane fade show active" id="formClient" role="tabpanel" aria-labelledby="formClient-tab">
+                <div class="form-group">
+                    <label>Seleccione</label>
+                    <select v-model="type" class="form-control">
+                        <option value="individual">Individual</option>
+                        <option value="bloque">Bloque</option>
+                    </select>
+                </div>
+                <div class="card" v-if="type === 'individual'">
+                    <div class="card-header">
+                        <h2>Individual</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Cedula</label>
+                            <input v-model="dataclient.cc" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Nombre</label>
+                            <input v-model="dataclient.nomb" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Pagaduria</label>
+                            <input v-model="dataclient.pagaduria" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Tipo de Credito</label>
+                            <input v-model="dataclient.tp_cred" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Cupo Libre Inversión</label>
+                            <input v-model="dataclient.cup_libre" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Cuota Compra</label>
+                            <input v-model="dataclient.cuot_compra" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Pagare</label>
+                            <input v-model="dataclient.pagare" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Valor Credito</label>
+                            <input v-model="dataclient.vcredito" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Valor Desembolso</label>
+                            <input v-model="dataclient.vdesembolso" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Plazo</label>
+                            <input v-model="dataclient.plazo" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Cuota Credito</label>
+                            <input v-model="dataclient.cuot_credito" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <button v-on:click="getDataClient" class="btn btn-primary">Consultar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" v-else-if="type === 'bloque'">
+                    <div class="card-header">
+                        <h2>Bloque</h2>
+                    </div>
+                    <div class="card-body">
+                        <p>Proximamente</p>
+                    </div>
+                </div>                
+            </div>
+            <div class="tab-pane fade" id="menu1" role="tabpanel" aria-labelledby="menu1-tab">
                 <table class="table table-responsive table-striped table-hover">
                     <thead>
                         <tr>
@@ -235,13 +320,17 @@
 export default {
     data() {
         return {
-            tabView:1
+            dataclient:{},
+            type:'',
         }
     },
     mounted(){
         
     },
     methods:{
+        getDataClient(){
+            console.log(this.dataclient);
+        },
         getFechaVinc(){
             axios.get('').then((response)=>{
 
