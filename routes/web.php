@@ -377,4 +377,4 @@ Route::post('fechaVincImport','FechaVincController@import');
 Route::post('descapliImport','DescapliController@import');
 Route::post('descnoapController','DescnoapController@import');
 
-Route::get('dumpDataMes','DateMesController@dumpDataMes');
+Route::get('dumpDataMes','DataMesController@dumpDataMes');

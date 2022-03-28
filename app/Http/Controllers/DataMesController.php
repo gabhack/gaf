@@ -109,8 +109,8 @@ class DataMesController extends Controller
     return response()->json($j);
   }
 
-    public function dumpDataMes(){
-        DB::table('datames')->delete();
+    public function dumpDataMes(){        
+        DataMes::truncate();        
         return response()->json(['message'=>'Datos de tabla DataMes Borrada'],200);
     }
     /**
