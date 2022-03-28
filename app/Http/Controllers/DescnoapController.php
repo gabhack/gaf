@@ -21,9 +21,20 @@ class DescnoapController extends Controller
     public function consultaUnitaria(Request $request){
       $consulta_cedula = \App\Descnoap::Where('doc',$request->doc)->get();
       $resultados = json_decode($consulta_cedula);
-      dd($resultados);
-      return response()->json($consulta_cedula);
-      //return response()->json(['message'=>$th->errorInfo[2]],200)
+      if($resultados == "" or $resultados == null){
+        return response()->json(['message'=>'No se encontraron registros con el numero seleccionado.'],400);
+      }
+      else{
+        foreach ($resultados as $resultado) {
+          $incon = $resultado->incon;
+        }
+        if($incon != null or $incon != ""){
+          return response()->json(['message'=>'El cliente seleccionado tiene inconsistencias.','data'=>$resultado],200);
+        }
+        else{
+          return response()->json(['message'=>'Consulta exitosa.','data'=>$resultado],200);
+        }
+      }
     }
     /**
      * Display a listing of the resource.
