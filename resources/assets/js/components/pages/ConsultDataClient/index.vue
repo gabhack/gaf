@@ -30,7 +30,7 @@
                         <option value="bloque">Bloque</option>
                     </select>
                 </div>
-                <div class="card" v-if="type === 'individual'">
+                <div class="card text-center" v-if="type === 'individual'">
                     <div class="card-header">
                         <h2>Individual</h2>
                     </div>
@@ -95,7 +95,7 @@
                     </div>
                 </div>
 
-                <div class="card" v-else-if="type === 'bloque'">
+                <div class="card text-center" v-else-if="type === 'bloque'">
                     <div class="card-header">
                         <h2>Bloque</h2>
                     </div>
@@ -269,7 +269,7 @@
                             <td>13095b33b23</td>
                             <td>13095b33b23</td>
                             <td>
-                                <input type="checkbox"/>13095b33b23                                
+                                <input type="checkbox" v-on:click="() => getPagare()"/>13095b33b23                                
                             </td>
                             <td>13095b33b23</td>
                             <td>13095b33b23</td>
