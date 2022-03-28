@@ -27,6 +27,7 @@
     "@fortawesome/fontawesome-free": "^5.15.4",
     "bootstrap": "^4.6.0",
     "bootstrap-vue": "^2.21.2",
+    "toastr": "^2.1.4",
     "vuelidate": "^0.7.6"
   }
 }

@@ -12,7 +12,9 @@ import Vue from 'vue';
 // BootstrapVue
 import 'bootstrap';
 import BootstrapVue from 'bootstrap-vue';
+import toastr from 'toastr';
 Vue.use(BootstrapVue);
+Vue.use(toastr);
 
 import Vuelidate from 'vuelidate';
 Vue.use(Vuelidate);
