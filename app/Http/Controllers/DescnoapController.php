@@ -10,6 +10,7 @@ use Excel;
 class DescnoapController extends Controller
 {
     public function import (Request $request){
+      set_time_limit(0);
       if($request->hasFile('file')){
         $path = $request->file('file')->getRealPath();
         $data = Excel::import(new DescnoapImport, request()->file('file'));
