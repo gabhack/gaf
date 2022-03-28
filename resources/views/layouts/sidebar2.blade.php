@@ -34,8 +34,11 @@
 			data-parent="#accordionSidebar"
 		>
 			<div class="bg-white py-2 collapse-inner">
+				<a class="collapse-item" href="{{ url('dataClient') }}">Visado </a>
+				<a class="collapse-item" href="#">Recuperacion de Cartera </a>
+				<a class="collapse-item" href="#">Prospección de Mercado</a>
 				<a class="collapse-item" href="{{ url('consultas') }}">Nueva Consulta</a>
-				<a class="collapse-item" href="{{ url('consultas/list' )}}">Listado de consultas</a>
+				<a class="collapse-item" href="{{ url('consultas/list' )}}">Listado de consultas</a>				
 			</div>
 		</div>
 	</li>
@@ -55,13 +58,6 @@
 			<span>HEGO®</span>
 		</a>
 	</li> -->
-
-	<li class="nav-item">
-		<a class="nav-link" href="{{ url('dataClient') }}">
-			<admin-settings-icon></admin-settings-icon>
-			<span>Consulta de Creditos</span>
-		</a>
-	</li>
 	@endif
 
 	@if (IsSuperAdmin() || IsAMIAdmin() || IsHEGOAdmin() || IsCompany() || IsUserCreator())
