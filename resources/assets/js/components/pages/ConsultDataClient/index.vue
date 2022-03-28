@@ -41,7 +41,28 @@
                         </div>
                         
                         <div class="form-group">
-                            <button v-on:click="getDescnoap" class="btn btn-primary">Consultar</button>
+                            <button v-on:click="getDataClient" class="btn btn-primary">Consultar</button>
+                        </div>
+
+                        <div class="form-group">
+                            <table class="table table-responsive table-striped table-hover" v-if="constultaDescnoap.length > 0">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Nombre Tercero</th>
+                                        <th>Pagare</th>
+                                        <th>Inconveniente</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(descnoap, key) in constultaDescnoap" :key="key">
+                                        <td>{{descnoap.nomp}}</td>
+                                        <td>{{descnoap.nomtercero}}</td>
+                                        <td>{{descnoap.pagare}}</td>
+                                        <td>{{descnoap.incon}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -79,46 +100,10 @@
                     <thead>
                         <tr>
                             <th>Fondo</th>
-                            <th>Tipo de Documento</th>
-                            <th>x</th>
-                            <th>Pensionado</th>
-                            <th>Fecha de Nacimiento</th>
-                            <th>Dirección</th>
-                            <th>Departamento</th>
-                            <th>Municipio</th>
-                            <th>Tipo Pensión</th>
-                            <th>Nombre Banco</th>
-                            <th>Sucursal</th>
-                            <th>Telefono</th>
-                            <th>Celular</th>
-                            <th>Correo</th>
-                            <th>Valor Pensiones</th>
-                            <th>Valor Salud</th>
-                            <th>Valor Embargos</th>
-                            <th>Valor Descuento</th>
-                            <th>Cupo</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>1026303251</td>
-                            <td>13095b33b23</td>
-                            <td>Vinculacion</td>
-                            <td>1026303251</td>
-                            <td>1026303251</td>
-                            <td>1026303251</td>
-                            <td>1026303251</td>
-                            <td>1026303251</td>
-                            <td>1026303251</td>
-                            <td>1026303251</td>
-                            <td>1026303251</td>
-                            <td>1026303251</td>
-                            <td>1026303251</td>
-                            <td>1026303251</td>
-                            <td>1026303251</td>
-                            <td>1026303251</td>
-                            <td>1026303251</td>
-                            <td>1026303251</td>
                             <td>1026303251</td>
                         </tr>
                     </tbody>
@@ -129,58 +114,11 @@
                     <thead>
                         <tr>
                             <th>Periodo</th>
-                            <th>Consecutivo</th>
-                            <th>Clase Tercero</th>
-                            <th>Tercero</th>
-                            <th>Nombre del Tercero</th>
-                            <th>Tipo de Documento</th>
-                            <th>Documento</th>
-                            <th>Nombre</th>
-                            <th>Pagare</th>
-                            <th>Porcentaje</th>
-                            <th>Valor Aplicado</th>
-                            <th>Valor Total</th>
-                            <th>Valor Pagado</th>
-                            <th>Saldo</th>
-                            <th>Fecha Grabación</th>
-                            <th>Forma</th>
-                            <th>Codigo Entidad Anterior</th>
-                            <th>Nombre Entidad Anterior</th>
-                            <th>Fecha de Cesión</th>
-                            <th>Tipo Descuento</th>
-                            <th>Pagare 5 Dig</th>
-                            <th>PAGARE4DIGCON0</th>
-                            <th>Numero pagare</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td>1026303251</td>
-                            <td>13095b33b23</td>
-                            <td>Vinculacion</td>
-                            <td>1026303251</td>
-                            <td>1026303251</td>
-                            <td>1026303251</td>
-                            <td>1026303251</td>
-                            <td>1026303251</td>
-                            <td>
-                                <input type="checkbox"/>
-                                1026303251
-                            </td>
-                            <td>1026303251</td>
-                            <td>1026303251</td>
-                            <td>1026303251</td>
-                            <td>1026303251</td>
-                            <td>1026303251</td>
-                            <td>1026303251</td>
-                            <td>1026303251</td>
-                            <td>1026303251</td>
-                            <td>1026303251</td>
-                            <td>1026303251</td>
-                            <td>1026303251</td>
-                            <td>1026303251</td>
-                            <td>1026303251</td>
-                            <td>13095b33b23</td>
                         </tr>
                     </tbody>
                 </table>
@@ -189,52 +127,13 @@
                 <table class="table table-responsive table-striped table-hover">
                     <thead>
                         <tr>
-                            <th>Clase Tercero</th>
-                            <th>Tercero</th>
-                            <th>Nombre Tercero</th>
-                            <th>Tipo de Documento</th>
-                            <th>Documento</th>
-                            <th>Nombre</th>
-                            <th>Pagare</th>
-                            <th>Porcentaje</th>
-                            <th>Valor Fijo</th>
-                            <th>Valor Aplicado</th>
-                            <th>Valor Total</th>
-                            <th>Valor Pagad0</th>
-                            <th>Saldo</th>
-                            <th>Fecha Grabación</th>
-                            <th>Forma</th>
-                            <th>Inconsistencia</th>
-                            <th>Código entidad anterior</th>
-                            <th>Nombre Entidad Anterior</th>
-                            <th>Fecha de Cesión</th>
-                            <th>Tipo Descuento</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>1026303251</td>
-                            <td>13095b33b23</td>
-                            <td>Vinculacion</td>
-                            <td>13095b33b23</td>
-                            <td>13095b33b23</td>
-                            <td>13095b33b23</td>
                             <td>
                                 <input type="checkbox" v-on:click="() => getPagare()"/>13095b33b23                                
                             </td>
-                            <td>13095b33b23</td>
-                            <td>13095b33b23</td>
-                            <td>13095b33b23</td>
-                            <td>13095b33b23</td>
-                            <td>13095b33b23</td>
-                            <td>13095b33b23</td>
-                            <td>13095b33b23</td>
-                            <td>13095b33b23</td>
-                            <td>13095b33b23</td>
-                            <td>13095b33b23</td>
-                            <td>13095b33b23</td>
-                            <td>13095b33b23</td>
-                            <td>13095b33b23</td>
                         </tr>
                     </tbody>
                 </table>
@@ -245,21 +144,11 @@
                     <thead>
                         <tr>
                             <th>Aprobado</th>
-                            <th>% de incorporacion</th>
-                            <th>Cuota Maxima de incorporacion</th>
-                            <th>Fecha resp.</th>
-                            <th>Fecha Vinculacion</th>
-                            <th>Tipo Vinculacion</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td>Si</td>
-                            <td>2</td>
-                            <td>40</td>
-                            <td>10-10-2020</td>
-                            <td>11-11-2021</td>
-                            <td>Directa</td>
                         </tr>
                     </tbody>
                 </table>
@@ -278,70 +167,26 @@ export default {
             menu2Disabled: true,
             menu3Disabled: true,
             menu4Disabled: true,
-            menu4Disabled: true         
+            menu4Disabled: true,
+            constultaDescnoap:[],
         }
-    },
-    mounted(){
-        
     },
     methods:{
         changeTab(data){
-            console.log(data);
             this.tabSelect = data;
         },
         getDataClient(){
-            console.log(this.dataclient);        
-            this.tabSelect='menu1';
-            this.menu1Disabled = false
-            
-            axios.post('').then((response)=>{
-            
+            axios.post('consultaDescnoap',{doc:this.dataclient.cc}).then((response)=>{  
+                if(response.data.message === 'El cliente seleccionado tiene inconsistencias.'){
+                    toastr.success(response.data.message);               
+                    this.constultaDescnoap = response.data.data;
+                }else{
+                    
+                }
             }).catch((error)=>{
-
+                console.log(error);
             })            
         },
-        getFechaVinc(){
-            this.tabSelect='menu2';
-            this.menu2Disabled = false
-            axios.get('').then((response)=>{
-
-            }).catch((error)=>{
-                console.log(error);
-            })
-        },
-
-        getDataMes(){
-            this.tabSelect='menu3';
-            this.menu3Disabled = false
-            axios.get('').then((response)=>{
-
-            }).catch((error)=>{
-                console.log(error);
-            })
-        },
-
-        getDescapli(){
-            this.tabSelect='menu4';
-            this.menu4Disabled = false
-            axios.get('').then((response)=>{
-
-            }).catch((error)=>{
-                console.log(error);
-            })
-        },
-
-        getDescnoap(){
-            this.tabSelect='menu5';
-            this.menu5Disabled = false
-            axios.post('consultaDescnoap',{doc:this.dataclient.cc}).then((response)=>{
-                console.log(response.data)
-            }).catch((error)=>{
-                console.log(error);
-            })
-        },
-        getPagare(data){
-            
-        }
     }
 }
 </script>

@@ -70,11 +70,7 @@ export default ({
         },
         dumpDataMes(){
             axios.get('dumpDataMes').then((response)=>{
-                this.$bvToast.toast(response.data.message, {
-                    title: 'Datos de la tabla Eliminados',
-                    variant: 'success',
-                    solid: true
-                });
+                toastr.success('Datos de tabla Borrados');
                 console.log(response.data);
             })
         },
@@ -83,12 +79,7 @@ export default ({
                 const formData = new FormData();
                 formData.append("file", this.file);
                 axios.post('fechaVincImport',formData,{headers:{'Content-Type':'multipart/form-data','mime-type':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}}).then((response)=>{
-                    this.$bvToast.toast(response.data.message, {
-                        title: response.data.message,
-                        variant: 'success',
-                        solid: true
-                    });
-                    console.log(response.data);
+                    toastr.success('Importación de fechaVinc realizada');                    
                 }).catch((error)=>{
                     console.log(error);
                 })
@@ -96,12 +87,7 @@ export default ({
                 const formData = new FormData();
                 formData.append("file", this.file);
                 axios.post('datamesImport',formData,{headers:{'Content-Type':'multipart/form-data','mime-type':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}}).then((response)=>{
-                    this.$bvToast.toast(response.data.message, {
-                        title: response.data.message,
-                        variant: 'success',
-                        solid: true
-                    });
-                    console.log(response.data);
+                    toastr.success('Importación datames Realizado');                
                 }).catch((error)=>{
                     console.log(error);
                 })
@@ -109,12 +95,7 @@ export default ({
                 const formData = new FormData();
                 formData.append("file", this.file);
                 axios.post('descapliImport',formData,{headers:{'Content-Type':'multipart/form-data','mime-type':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}}).then((response)=>{
-                    this.$bvToast.toast(response.data.message, {
-                        title: response.data.message,
-                        variant: 'success',
-                        solid: true
-                    });
-                    console.log(response.data);
+                    toastr.success('importación de Descapli Realizada');                
                 }).catch((error)=>{
                     console.log(error);
                 })
@@ -122,11 +103,7 @@ export default ({
                 const formData = new FormData();
                 formData.append("file", this.file);
                 axios.post('descnoapController',formData,{headers:{'Content-Type':'multipart/form-data','mime-type':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}}).then((response)=>{
-                    this.$bvToast.toast(response.data.message, {
-                        title: response.data.message,
-                        variant: 'success',
-                        solid: true
-                    });
+                    toastr.success('importación de Descnoap Realizada');
                     console.log(response.data);
                 }).catch((error)=>{
                     console.log(error);

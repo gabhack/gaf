@@ -10,6 +10,7 @@ use Excel;
 class DescnoapController extends Controller
 {
     public function import (Request $request){
+      set_time_limit(0);
       if($request->hasFile('file')){
         $path = $request->file('file')->getRealPath();
         $data = Excel::import(new DescnoapImport, request()->file('file'));
@@ -29,10 +30,10 @@ class DescnoapController extends Controller
           $incon = $resultado->incon;
         }
         if($incon != null or $incon != ""){
-          return response()->json(['message'=>'El cliente seleccionado tiene inconsistencias.','data'=>$resultado],200);
+          return response()->json(['message'=>'El cliente seleccionado tiene inconsistencias.','data'=>$resultados],200);
         }
         else{
-          return response()->json(['message'=>'Consulta exitosa.','data'=>$request->doc],200);
+          return response()->json(['message'=>'Consulta exitosa.','data'=>$resultados],200);
         }
       }
     }
