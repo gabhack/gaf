@@ -14,7 +14,7 @@ class DataMesController extends Controller
     try {
       if($request->hasFile('file')){
         $path = $request->file('file')->getRealPath();        
-        $data = Excel::selectSheetsByIndex(0)->load($path, function ($reader){})->get();
+        $data = Excel::selectSheetsByIndex(0)->import($path, function ($reader){})->get();
         dd($data);
           if($data->count()){
             $i = 2;

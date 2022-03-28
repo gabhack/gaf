@@ -178,8 +178,7 @@ return array(
         | method is significantly slower, and its accuracy is still dependent on
         | having the appropriate fonts installed.
         |
-        */
-        'autosize-method'             => PHPExcel_Shared_Font::AUTOSIZE_METHOD_APPROX,
+        */        
 
         /*
         |--------------------------------------------------------------------------
