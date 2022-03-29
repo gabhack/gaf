@@ -20,8 +20,9 @@ class DescnoapController extends Controller
       }
     }
     public function consultaUnitaria(Request $request){
-      dd($request);
-      $consulta_cedula = \App\Descnoap::Where('doc',$request->doc)->get();
+      $data_formulario = $request->data
+      $doc = $request->data->doc;
+      $consulta_cedula = \App\Descnoap::Where('doc',$doc)->get();
       $resultados = json_decode($consulta_cedula);
       if($resultados == "" or $resultados == null){
         return response()->json(['message'=>'No se encontraron registros con el numero seleccionado.'],400);
@@ -34,7 +35,7 @@ class DescnoapController extends Controller
           return response()->json(['message'=>'El cliente seleccionado tiene inconsistencias.','data'=>$resultados],200);
         }
         else{
-          return response()->json(['message'=>'Consulta exitosa.','data'=>$request->doc],200);
+          return response()->json(['message'=>'Consulta exitosa.','data'=>$data_formulario],200);
         }
       }
     }

@@ -22,6 +22,7 @@ class DescapliController extends Controller
 
 
   public function consultaUnitaria(Request $request){
+    dd($request->all());
     $consulta_cedula = \App\Descapli::Where('doc',$request->doc)->get();
     $resultados = json_decode($consulta_cedula);
     if($resultados == "" or $resultados == null ){
