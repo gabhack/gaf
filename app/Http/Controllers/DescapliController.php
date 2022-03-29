@@ -41,7 +41,7 @@ class DescapliController extends Controller
       $doc = $request->data['doc'];
       $info_datames = \App\DataMes::Where('doc',$doc)->select('cupo')->first();
       $info_fechavinc = \App\FechaVinc::Where('doc',$doc)->first();
-      $cupo = $info_datames->cupo;
+      $cupo = '$'.$info_datames->cupo;
       $fecha_vinculacion = $info_fechavinc->vinc;
       $tipo_vinculacion = $info_fechavinc->tp;
       $array_entidad = $data_formulario['nomterSelect'];
@@ -53,9 +53,9 @@ class DescapliController extends Controller
       foreach ($array_cuota_compra as $cuota_compra) {
         $cuota_compra = str_replace('$','',$cuota_compra);
         $cuota_compra = str_replace('.','',$cuota_compra);
-        $total_cuota = (int)$total_cuota + (int)$cuota_compra;        
-      }      
-      $cuota_cred = $data_formulario['cuota_cred'];      
+        $total_cuota = (int)$total_cuota + (int)$cuota_compra;
+      }
+      $cuota_cred = $data_formulario['cuota_cred'];
       $pct_incorporacion = ($total_cuota/(int)$cuota_cred) * 100;
       $pct_incorporacion = round($pct_incorporacion);
       $aprobado = ($pct_incorporacion<=100)?"NO":"SI";
@@ -67,10 +67,13 @@ class DescapliController extends Controller
       $data_formulario['cuota_compra']=$array_cuota_compra;
       $data_formulario['aprobado']=$aprobado;
       $data_formulario['pct_incorporacion']=(int)$pct_incorporacion."%";
-      $data_formulario['max_incorporacion']=$total_cuota;
+      $data_formulario['max_incorporacion']='$ '.number_format($total_cuota, 2,',','.');
+      $data_formulario['cuota_cred'] = '$ '.number_format($cuota_cred, 2,',','.');
+      $data_formulario['vr_credito'] = '$ '.number_format($data_formulario['vr_credito'], 2,',','.');
+      $data_formulario['vr_desembolso'] = '$ '.number_format($data_formulario['vr_desembolso'], 2,',','.');
       $data_formulario['fec_rta_consulta']= date('Y-m-d');
       $data_formulario['fecha_vinculacion']=$fecha_vinculacion;
-      $data_formulario['tipo_vinculacion']=$tipo_vinculacion;      
+      $data_formulario['tipo_vinculacion']=$tipo_vinculacion;
       return response()->json(['message'=>'Consulta exitosa.','data'=>$data_formulario],200);
     }
     /**
