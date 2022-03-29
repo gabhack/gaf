@@ -51,23 +51,26 @@ class DescapliController extends Controller
       $array_cuota_compra[]=$cupo;
       $total_cuota = 0;
       foreach ($array_cuota_compra as $cuota_compra) {
-        $total_cuota += (int)$cuota_compra;
-      }
-      $cuota_cred = $data_formulario['cuota_cred'];
-      $pct_incorporacion = $total_cuota/(int)$cuota_cred;
-      $aprobado = ($pct_incorporacion<=100)?"SI":"NO";
+        $cuota_compra = str_replace('$','',$cuota_compra);
+        $cuota_compra = str_replace('.','',$cuota_compra);
+        $total_cuota = (int)$total_cuota + (int)$cuota_compra;        
+      }      
+      $cuota_cred = $data_formulario['cuota_cred'];      
+      $pct_incorporacion = ($total_cuota/(int)$cuota_cred) * 100;
+      $pct_incorporacion = round($pct_incorporacion);
+      $aprobado = ($pct_incorporacion<=100)?"NO":"SI";
       $data_formulario['consecutivo']="";
       $data_formulario['estado']="Consulta";
       $data_formulario['fecha_consulta']= date('Y-m-d');
       $data_formulario['entidad']=$array_entidad;
       $data_formulario['pagare']=$array_pagare;
       $data_formulario['cuota_compra']=$array_cuota_compra;
-      $data_formulario['aprobado']="APROBADO";
-      $data_formulario['pct_incorporacion']=$pct_incorporacion."%";
+      $data_formulario['aprobado']=$aprobado;
+      $data_formulario['pct_incorporacion']=(int)$pct_incorporacion."%";
       $data_formulario['max_incorporacion']=$total_cuota;
       $data_formulario['fec_rta_consulta']= date('Y-m-d');
       $data_formulario['fecha_vinculacion']=$fecha_vinculacion;
-      $data_formulario['tipo_vinculacion']=$tipo_vinculacion;
+      $data_formulario['tipo_vinculacion']=$tipo_vinculacion;      
       return response()->json(['message'=>'Consulta exitosa.','data'=>$data_formulario],200);
     }
     /**

@@ -57,17 +57,7 @@
 
                         <div class="form-group">
                             <label>Cupo Lib Inversión</label>
-                            <input v-model="dataclient.cupo_lib_inversion" class="form-control">
-                        </div>
-
-                        <div class="form-group">
-                            <label>Cuota Compra</label>
-                            <input v-model="dataclient.cuota_compra" class="form-control">
-                        </div>
-
-                        <div class="form-group">
-                            <label>Compras</label>
-                            <input v-model="dataclient.compras" class="form-control">
+                            <input type="number" v-model="dataclient.cupo_lib_inversion" class="form-control">
                         </div>
 
                         <div class="form-group">
@@ -77,12 +67,12 @@
 
                         <div class="form-group">
                             <label>Vr Credito</label>
-                            <input v-model="dataclient.vr_credito" class="form-control">
+                            <input type="number" v-model="dataclient.vr_credito" class="form-control">
                         </div>
 
                         <div class="form-group">
                             <label>Vr Desembolso</label>
-                            <input v-model="dataclient.vr_desembolso" class="form-control">
+                            <input type="number" v-model="dataclient.vr_desembolso" class="form-control">
                         </div>
 
                         <div class="form-group">
@@ -92,11 +82,12 @@
 
                         <div class="form-group">
                             <label>Cuota Credito</label>
-                            <input v-model="dataclient.cuota_cred" class="form-control">
+                            <input type="number" v-model="dataclient.cuota_cred" class="form-control">
                         </div>
 
                         <div class="form-group">
                             <button v-on:click="getDataClient" class="btn btn-primary">Consultar</button>
+                            <button class="btn btn-primary" v-on:click="newConsult">Nueva Consulta</button>
                         </div>
 
                         <div class="form-group">
@@ -206,6 +197,7 @@
             </div> -->
 
             <div :class="tabSelect === 'menu5' ? 'tab-pane fade show active' : 'tab-pane fade'" id="menu5" role="tabpanel" aria-labelledby="menu5-tab">
+                
                 <table class="table table-responsive table-striped table-hover">
                     <thead>
                         <tr>                            
@@ -218,8 +210,7 @@
                             <th>Tipo de credito</th>	
                             <th>Cupo Lib Inversion</th>	
                             
-                            <th>Cuota Compra</th>	
-                            <th>Compra</th>
+                            <th>Cuota Compra</th>	                            
                             <th>Entidad</th>	
                             <th>Pagare</th>	
                             
@@ -227,7 +218,6 @@
                             <th>Vr. Desembolso</th>	
                             <th>Plazo</th>	
                             <th>Cuota Cred</th>
-                            <th>Valor Aplicado</th>
                             <th>Aprobado</th>	
                             <th>% de incorporacion</th>	
                             <th>Cuota Maxima de incorporacion</th>	
@@ -246,34 +236,27 @@
                             <td>{{result.pagaduria}}</td>
                             <td>{{result.tipo_de_credito}}</td>
                             <td>{{result.cupo_lib_inversion}}</td>
+                            <td>        
+                                <div v-for="(libInv, key) in result.cuota_compra" :key="key">
+                                    <p>{{libInv}}</p><br/>
+                                </div>                                
+                            </td>                            
                             <td>
-                                <ul>
-                                    <ul v-for="(libInv, key) in result.cuota_compra" :key="key">
-                                        <li>{{libInv[key]}}</li>
-                                    </ul>
-                                </ul>
-                            </td>
-                            <td>{{result.compras}}</td>
-                            <td>
-                                <ul v-for="(libInv, key) in result.entidad" :key="key">
-                                    <li>{{libInv[key]}}</li>
-                                </ul>
+                                <div v-for="(libInv, key) in result.entidad" :key="key">
+                                    <p>{{libInv}}</p><br/>
+                                </div>
                             </td>
                             <td>
-                                <ul v-for="(libInv, key) in result.pagare" :key="key">
-                                    <li>{{libInv[key]}}</li>
-                                </ul>
+                                <div v-for="(libInv, key) in result.pagare" :key="key">
+                                    <p>{{libInv}}</p><br/>
+                                </div>
                             </td>
                             
                             <td>{{result.vr_credito}}</td>
                             <td>{{result.vr_desembolso}}</td>
                             <td>{{result.plazo}}</td>
                             <td>{{result.cuota_cred}}</td>
-                            <td>
-                                <ul v-for="(libInv, key) in result.v_aplicado" :key="key">
-                                    <li>{{libInv[key]}}</li>
-                                </ul>
-                            </td>
+                            
 
                             <td>{{result.aprobado}}</td>
                             <td>{{result.pct_incorporacion}}</td>
@@ -371,7 +354,8 @@ export default {
         sendPagare(){
             axios.post('resultadoAprobacion',{data:this.dataclient}).then((response)=>{
                 toastr.success(response.data.message);                
-                this.result = response.data.data;                
+                this.result = response.data.data;   
+                console.log(response.data.data);             
                 this.tabSelect = 'menu5';
                 this.menu5Disabled = false;
             }).catch((error)=>{
