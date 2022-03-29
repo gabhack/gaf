@@ -203,13 +203,75 @@
             <div :class="tabSelect === 'menu5' ? 'tab-pane fade show active' : 'tab-pane fade'" id="menu5" role="tabpanel" aria-labelledby="menu5-tab">
                 <table class="table table-responsive table-striped table-hover">
                     <thead>
-                        <tr>
-                            <th>Aprobado</th>
+                        <tr>                            
+                            <th>Consecutivo</th>	
+                            <th>Estado</th>	
+                            <th>Fecha consulta</th>	
+                            <th>Cedula</th>	
+                            <th>Nombre</th>	
+                            <th>Pagaduria</th>	
+                            <th>Tipo de credito</th>	
+                            <th>Cupo Lib Inversion</th>	
+                            
+                            <th>Cuota Compra</th>	
+                            <th>Entidad</th>	
+                            <th>Pagare</th>	
+                            
+                            <th>Vr. Credito</th>	
+                            <th>Vr. Desembolso</th>	
+                            <th>Plazo</th>	
+                            <th>Cuota Cred</th>
+                            <th>Aprobado</th>	
+                            <th>% de incorporacion</th>	
+                            <th>Cuota Maxima de incorporacion</th>	
+                            <th>Fecha respuesta consulta</th>	
+                            <th>Fecha Vinculacion</th>	
+                            <th>Tipo Vinculacion</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Si</td>
+                            <td>|</td>
+                            <td>|</td>
+                            <td>|</td>
+                            <td>|</td>
+                            <td>|</td>
+                            <td>|</td>
+                            <td>|</td>
+                            
+                            <td>
+                                <ul>
+                                    <li>12</li>
+                                    <li>10</li>
+                                    <li>12</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>15</li>
+                                    <li>24</li>
+                                    <li>12</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>Bancolombia</li>
+                                    <li>AvVillas</li>
+                                    <li>Banco Bogotá</li>
+                                </ul>
+                            </td>
+                            
+                            <td>|</td>
+                            <td>|</td>
+                            <td>|</td>
+                            <td>|</td>
+                            <td>|</td>
+                            <td>|</td>
+                            <td>|</td>
+                            <td>|</td>
+                            <td>|</td>
+                            <td>|</td>
+                            <td>|</td>
                         </tr>
                     </tbody>
                 </table>
