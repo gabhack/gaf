@@ -17,6 +17,7 @@ class Datames extends Migration
             $table->increments('id');
             $table->string('fondo')->nullable();
             $table->string('td')->nullable();
+            $table->string('doc');
             $table->string('x')->nullable();
             $table->string('nomp');
             $table->string('fecnacimient')->nullable();

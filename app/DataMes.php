@@ -12,6 +12,7 @@ class DataMes extends Model
     protected $fillable = [
         'fondo',
         'td',
+        'doc',
         'x',
         'nomp',
         'fecnacimient',

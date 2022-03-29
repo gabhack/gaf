@@ -8,6 +8,7 @@ use App\FechaVinc;
 use App\Imports\DescapliImport;
 use Illuminate\Http\Request;
 use Excel;
+use date;
 
 class DescapliController extends Controller
 {
@@ -57,17 +58,16 @@ class DescapliController extends Controller
       $aprobado = ($pct_incorporacion<=100)?"SI":"NO";
       $data_formulario['consecutivo']="";
       $data_formulario['estado']="Consulta";
-      $data_formulario['fecha_consulta']= new Date();
+      $data_formulario['fecha_consulta']= date('Y-m-d');
       $data_formulario['entidad']=$array_entidad;
       $data_formulario['pagare']=$array_pagare;
       $data_formulario['cuota_compra']=$array_cuota_compra;
       $data_formulario['aprobado']="APROBADO";
       $data_formulario['pct_incorporacion']=$pct_incorporacion."%";
       $data_formulario['max_incorporacion']=$total_cuota;
-      $data_formulario['fec_rta_consulta']= new Date();
+      $data_formulario['fec_rta_consulta']= date('Y-m-d');
       $data_formulario['fecha_vinculacion']=$fecha_vinculacion;
       $data_formulario['tipo_vinculacion']=$tipo_vinculacion;
-      dd($data_formulario);
       return response()->json(['message'=>'Consulta exitosa.','data'=>$data_formulario],200);
     }
     /**
