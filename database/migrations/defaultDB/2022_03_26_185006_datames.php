@@ -18,7 +18,7 @@ class Datames extends Migration
             $table->string('fondo')->nullable();
             $table->string('td')->nullable();
             $table->string('x')->nullable();
-            $table->string('nomp')->nullable();
+            $table->string('nomp');
             $table->string('fecnacimient')->nullable();
             $table->string('dir')->nullable();
             $table->string('dpto')->nullable();

@@ -22,7 +22,7 @@ class Descapli extends Migration
             $table->string('tercero')->nullable();
             $table->string('nomtercero')->nullable();
             $table->string('td')->nullable();
-            $table->string('doc')->nullable();
+            $table->string('doc');
             $table->string('nomp')->nullable();
             $table->string('pagare')->nullable();
             $table->string('porcentaje')->nullable();

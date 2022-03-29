@@ -4,12 +4,12 @@
             <li class="nav-item" role="presentation">
                 <a :class="tabSelect === 'form' ? 'nav-link active' : 'nav-link'" id="formClient-tab" data-toggle="tab" href="#formClient" :v-on:click="()=>changeTab('form')" role="tab" aria-controls="formClient" aria-selected="true">Formulario Cliente</a>
             </li>
-            <li class="nav-item" role="presentation">
+            <!-- <li class="nav-item" role="presentation">
                 <a :class="tabSelect === 'menu1' && menu1Disabled === false ? 'nav-link active' : 'nav-link disabled'" id="menu1-tab" data-toggle="tab" href="#menu1" :v-on:click="()=>changeTab('menu1')" role="tab" aria-controls="menu1" aria-selected="true">Fecha Vinculación</a>
-            </li>
-            <li class="nav-item" role="presentation">
+            </li> -->
+            <!-- <li class="nav-item" role="presentation">
                 <a :class="tabSelect === 'menu2' && menu2Disabled === false ? 'nav-link active' : 'nav-link disabled'" id="menu2-tab" data-toggle="tab" href="#menu2" :v-on:click="()=>changeTab('menu2')" role="tab" aria-controls="menu2" aria-selected="false">Data Mes</a>
-            </li>
+            </li> -->
             <li class="nav-item" role="presentation">
                 <a :class="tabSelect === 'menu3' && menu3Disabled === false ? 'nav-link active' : 'nav-link disabled'" id="menu3-tab" data-toggle="tab" href="#menu3" :v-on:click="()=>changeTab('menu3')" role="tab" aria-controls="menu3" aria-selected="false">Descapli</a>
             </li>
@@ -126,7 +126,7 @@
                     </div>
                 </div>                
             </div>
-            <div :class="tabSelect === 'menu1' ? 'tab-pane fade show active' : 'tab-pane fade'" id="menu1" role="tabpanel" aria-labelledby="menu1-tab">
+            <!-- <div :class="tabSelect === 'menu1' ? 'tab-pane fade show active' : 'tab-pane fade'" id="menu1" role="tabpanel" aria-labelledby="menu1-tab">
                 <table class="table table-responsive table-striped table-hover">
                     <thead>
                         <tr>
@@ -143,9 +143,9 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
+            </div> -->
             
-            <div :class="tabSelect === 'menu2' ? 'tab-pane fade show active' : 'tab-pane fade'" id="menu2" role="tabpanel" aria-labelledby="menu2-tab">
+            <!-- <div :class="tabSelect === 'menu2' ? 'tab-pane fade show active' : 'tab-pane fade'" id="menu2" role="tabpanel" aria-labelledby="menu2-tab">
                 <table class="table table-responsive table-striped table-hover">
                     <thead>
                         <tr>
@@ -158,7 +158,7 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
+            </div> -->
             <div :class="tabSelect === 'menu3' ? 'tab-pane fade show active' : 'tab-pane fade'" id="menu3" role="tabpanel" aria-labelledby="menu3-tab">
                 <table class="table table-responsive table-striped table-hover">
                     <thead>
