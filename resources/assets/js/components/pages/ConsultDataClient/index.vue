@@ -177,7 +177,7 @@
                             <td>{{consultaD.pagare}}</td>
                             <td>{{consultaD.vaplicado}}</td>
                             <td>                            
-                                <input type="checkbox" v-on:click="(e)=>getpagare(e.target.checked, consultaD.pagare)"/>
+                                <input type="checkbox" v-on:click="(e)=>vAplicado(e.target.checked, consultaD.vaplicado)"/>
                             </td>
                         </tr>
                     </tbody>
@@ -193,7 +193,7 @@
                     <tbody>
                         <tr>
                             <td>
-                                <input type="checkbox" v-on:click="() => getPagare()"/>13095b33b23                                
+                                <input type="checkbox" v-on:click="() => vAplicado()"/>13095b33b23                                
                             </td>
                         </tr>
                     </tbody>
@@ -265,16 +265,16 @@ export default {
                 console.log(error);
             })            
         },
-        getpagare(value, data){
+        vAplicado(value, data){
             if(value === true){
                 this.pagare.push(data);
-                this.dataclient.pagare = this.pagare;
+                this.dataclient.v_aplicado = this.pagare;
                 console.log(this.dataclient);  
             }else{                
                 let pagare = this.pagare.filter(function(item) {
                     return item !== data
                 });
-                this.dataclient.pagare = pagare;
+                this.dataclient.v_aplicado = pagare;
                 console.log(this.dataclient);
             }
         },
@@ -287,6 +287,19 @@ export default {
             }).catch((error)=>{
                 console.log(error);
             })
+        },
+        newConsult(){
+            this.type='';
+            this.tabSelect='form';
+            this.menu1Disabled= true;  
+            this.menu2Disabled= true;
+            this.menu3Disabled= true;
+            this.menu4Disabled= true;
+            this.menu4Disabled= true;
+            this.constultaDescnoap=[];
+            this.consultaDescnoapli=[];
+            this.consultaDescapli=[];
+            this.pagare=[];
         }
     }
 }
