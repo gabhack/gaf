@@ -33,6 +33,9 @@ class DescapliController extends Controller
       return response()->json(['message'=>'Consulta exitosa.','data'=>$resultados],200);
     }
   }
+  public function resultadoAprobacion(Request $request){
+    dd($request->all());
+  }
     /**
      * Display a listing of the resource.
      *

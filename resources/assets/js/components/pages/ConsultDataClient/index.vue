@@ -13,9 +13,9 @@
             <li class="nav-item" role="presentation">
                 <a :class="tabSelect === 'menu3' && menu3Disabled === false ? 'nav-link active' : 'nav-link disabled'" id="menu3-tab" data-toggle="tab" href="#menu3" :v-on:click="()=>changeTab('menu3')" role="tab" aria-controls="menu3" aria-selected="false">Descapli</a>
             </li>
-            <li class="nav-item" role="presentation">
+            <!-- <li class="nav-item" role="presentation">
                 <a :class="tabSelect === 'menu4' && menu4Disabled === false ? 'nav-link active' : 'nav-link disabled'" id="menu4-tab" data-toggle="tab" href="#menu4" :v-on:click="()=>changeTab('menu4')" role="tab" aria-controls="menu4" aria-selected="false">Descanoap</a>
-            </li>
+            </li> -->
 
             <li class="nav-item" role="presentation">
                 <a :class="tabSelect === 'menu5' && menu5Disabled === false ? 'nav-link active' : 'nav-link disabled'" id="menu5-tab" data-toggle="tab" href="#menu5" :v-on:click="()=>changeTab('menu5')" role="tab" aria-controls="menu5" aria-selected="false">Resultado</a>
@@ -171,19 +171,20 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(consultaD,key) in consultaDescnoapli" :key="key">
+                        <tr v-for="(consultaD,key) in consultaDescapli" :key="key">
                             <td>{{consultaD.nonentant}}</td>
                             <td>{{consultaD.nomtercero}}</td>
                             <td>{{consultaD.pagare}}</td>
                             <td>{{consultaD.vaplicado}}</td>
                             <td>                            
-                                <input type="checkbox" v-on:click="getpagare(consultaD.pagare)"/>
+                                <input type="checkbox" v-on:click="(e)=>getpagare(e.target.checked, consultaD.pagare)"/>
                             </td>
                         </tr>
                     </tbody>
                 </table>
+                <button v-on:click="sendPagare" class="btn btn-primary">Continuar</button>
             </div>
-            <div :class="tabSelect === 'menu4' ? 'tab-pane fade show active' : 'tab-pane fade'" id="menu4" role="tabpanel" aria-labelledby="menu4-tab">
+            <!-- <div :class="tabSelect === 'menu4' ? 'tab-pane fade show active' : 'tab-pane fade'" id="menu4" role="tabpanel" aria-labelledby="menu4-tab">
                 <table class="table table-responsive table-striped table-hover">
                     <thead>
                         <tr>
@@ -197,7 +198,7 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
+            </div> -->
 
             <div :class="tabSelect === 'menu5' ? 'tab-pane fade show active' : 'tab-pane fade'" id="menu5" role="tabpanel" aria-labelledby="menu5-tab">
                 <table class="table table-responsive table-striped table-hover">
@@ -230,6 +231,8 @@ export default {
             menu4Disabled: true,
             constultaDescnoap:[],
             consultaDescnoapli:[],
+            consultaDescapli:[],
+            pagare:[],
         }
     },
     methods:{
@@ -248,8 +251,9 @@ export default {
                             toastr.success(response.data.message);
                             this.constultaDescnoap = response.data.data;
                         }else{
-                            toastr.success(response.data.message);                            
-                            this.consultaDescnoapli = response.data.data;
+                            toastr.success(response.data.message);    
+                            console.log(response.data.data);                        
+                            this.consultaDescapli = response.data.data;
                             this.tabSelect = 'menu3';
                             this.menu3Disabled= false;
                         }                        
@@ -261,9 +265,25 @@ export default {
                 console.log(error);
             })            
         },
-        getpagare(data){            
-            axios.post('',{data:data}).then((response)=>{
-
+        getpagare(value, data){
+            if(value === true){
+                this.pagare.push(data);
+                this.dataclient.pagare = this.pagare;
+                console.log(this.dataclient);  
+            }else{                
+                let pagare = this.pagare.filter(function(item) {
+                    return item !== data
+                });
+                this.dataclient.pagare = pagare;
+                console.log(this.dataclient);
+            }
+        },
+        sendPagare(){
+            axios.post('resultadoAprobacion',{data:this.dataclient}).then((response)=>{
+                toastr.success(response.data.message);
+                this.result = response.data.data;
+                this.tabSelect = 'menu5';
+                this.menu5Disabled = false;
             }).catch((error)=>{
                 console.log(error);
             })

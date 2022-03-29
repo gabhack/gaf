@@ -380,3 +380,4 @@ Route::post('descnoapController','DescnoapController@import');
 Route::get('dumpDataMes','DataMesController@dumpDataMes');
 Route::post('consultaDescnoap','DescnoapController@consultaUnitaria');
 Route::post('consultaUnitaria','DescapliController@consultaUnitaria');
+Route::post('resultadoAprobacion','DescapliController@resultadoAprobacion');
