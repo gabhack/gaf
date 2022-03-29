@@ -41,7 +41,7 @@ class DescapliController extends Controller
       $doc = $request->data['doc'];
       $info_datames = \App\DataMes::Where('doc',$doc)->select('cupo')->first();
       $info_fechavinc = \App\FechaVinc::Where('doc',$doc)->first();
-      $cupo = '$'.$info_datames->cupo;
+      $cupo = '$'.number_format($info_datames->cupo, 2,',','.');
       $fecha_vinculacion = $info_fechavinc->vinc;
       $tipo_vinculacion = $info_fechavinc->tp;
       $array_entidad = $data_formulario['nomterSelect'];
