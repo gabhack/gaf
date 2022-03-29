@@ -213,6 +213,8 @@
                         </tr>
                     </tbody>
                 </table>
+
+                <button class="btn btn-primary" v-on:click="newConsult">Nueva Consulta</button>
             </div>
         </div>
     </div>
@@ -289,6 +291,7 @@ export default {
             })
         },
         newConsult(){
+            this.dataclient = {};
             this.type='';
             this.tabSelect='form';
             this.menu1Disabled= true;  
