@@ -243,11 +243,12 @@ export default {
                     this.constultaDescnoap = response.data.data;
                 }else{  
                     toastr.success(response.data.message);
-                    axios.post('consultaUnitaria',{doc:response.data.data}).then((response)=>{
-                        if(response.data.message === 'No se encontraron registros con el numero seleccionado.'){
+                    axios.post('consultaUnitaria',{data:this.dataclient}).then((response)=>{
+                        if(response.data.message === 'El cliente seleccionado tiene inconsistencias.'){
                             toastr.success(response.data.message);
+                            this.constultaDescnoap = response.data.data;
                         }else{
-                            toastr.success(response.data.message);
+                            toastr.success(response.data.message);                            
                             this.consultaDescnoapli = response.data.data;
                             this.tabSelect = 'menu3';
                             this.menu3Disabled= false;
