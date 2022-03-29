@@ -237,7 +237,7 @@ export default {
             this.tabSelect = data;
         },
         getDataClient(){
-            axios.post('consultaDescnoap',{doc:this.dataclient.cc}).then((response)=>{  
+            axios.post('consultaDescnoap',{doc:this.dataclient}).then((response)=>{  
                 if(response.data.message === 'El cliente seleccionado tiene inconsistencias.'){
                     toastr.success(response.data.message);               
                     this.constultaDescnoap = response.data.data;

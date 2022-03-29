@@ -20,6 +20,7 @@ class DescnoapController extends Controller
       }
     }
     public function consultaUnitaria(Request $request){
+      dd($request);
       $consulta_cedula = \App\Descnoap::Where('doc',$request->doc)->get();
       $resultados = json_decode($consulta_cedula);
       if($resultados == "" or $resultados == null){
