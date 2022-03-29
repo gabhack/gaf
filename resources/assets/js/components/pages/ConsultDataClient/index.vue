@@ -241,13 +241,20 @@ export default {
                 if(response.data.message === 'El cliente seleccionado tiene inconsistencias.'){
                     toastr.success(response.data.message);               
                     this.constultaDescnoap = response.data.data;
-                }else{
+                }else{  
+                    toastr.success(response.data.message);
                     axios.post('consultaUnitaria',{doc:response.data.data}).then((response)=>{
+                        if(response.data.message === 'No se encontraron registros con el numero seleccionado.'){
+                            toastr.success(response.data.message);
+                        }else{
+                            toastr.success(response.data.message);
+                            this.consultaDescnoapli = response.data.data;
+                            this.tabSelect = 'menu3';
+                            this.menu3Disabled= false;
+                        }                        
+                    }).catch((error)=>{
                         toastr.success(response.data.message);
-                        this.consultaDescnoapli = response.data.data;
-                        this.tabSelect = 'menu3';
-                        this.menu3Disabled= false;
-                    })
+                    });
                 }
             }).catch((error)=>{
                 console.log(error);
