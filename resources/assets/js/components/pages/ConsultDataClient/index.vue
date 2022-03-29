@@ -391,6 +391,9 @@ export default {
             this.consultaDescnoapli=[];
             this.consultaDescapli=[];
             this.pagare=[];
+            this.result={};
+            this.pagareSelected=[];
+            this.nomterSelect=[];
         }
     }
 }
