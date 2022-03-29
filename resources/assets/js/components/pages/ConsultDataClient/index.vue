@@ -61,6 +61,11 @@
                         </div>
 
                         <div class="form-group">
+                            <label>Cuota Compra</label>
+                            <input v-model="dataclient.cuota_compra" class="form-control">
+                        </div>
+
+                        <div class="form-group">
                             <label>Compras</label>
                             <input v-model="dataclient.compras" class="form-control">
                         </div>
@@ -177,7 +182,7 @@
                             <td>{{consultaD.pagare}}</td>
                             <td>{{consultaD.vaplicado}}</td>
                             <td>                            
-                                <input type="checkbox" v-on:click="(e)=>vAplicado(e.target.checked, consultaD.vaplicado)"/>
+                                <input type="checkbox" v-on:click="(e)=>vAplicado(e.target.checked, consultaD.vaplicado, consultaD.pagare, consultaD.nomtercero)"/>
                             </td>
                         </tr>
                     </tbody>
@@ -214,6 +219,7 @@
                             <th>Cupo Lib Inversion</th>	
                             
                             <th>Cuota Compra</th>	
+                            <th>Compra</th>
                             <th>Entidad</th>	
                             <th>Pagare</th>	
                             
@@ -221,6 +227,7 @@
                             <th>Vr. Desembolso</th>	
                             <th>Plazo</th>	
                             <th>Cuota Cred</th>
+                            <th>Valor Aplicado</th>
                             <th>Aprobado</th>	
                             <th>% de incorporacion</th>	
                             <th>Cuota Maxima de incorporacion</th>	
@@ -231,47 +238,49 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>|</td>
-                            <td>|</td>
-                            <td>|</td>
-                            <td>|</td>
-                            <td>|</td>
-                            <td>|</td>
-                            <td>|</td>
-                            
+                            <td>{{result.consecutivo}}</td>
+                            <td>{{result.estado}}</td>
+                            <td>{{result.fecha_consulta}}</td>
+                            <td>{{result.doc}}</td>
+                            <td>{{result.nombre}}</td>
+                            <td>{{result.pagaduria}}</td>
+                            <td>{{result.tipo_de_credito}}</td>
+                            <td>{{result.cupo_lib_inversion}}</td>
                             <td>
                                 <ul>
-                                    <li>12</li>
-                                    <li>10</li>
-                                    <li>12</li>
+                                    <ul v-for="(libInv, key) in result.cuota_compra" :key="key">
+                                        <li>{{libInv[key]}}</li>
+                                    </ul>
+                                </ul>
+                            </td>
+                            <td>{{result.compras}}</td>
+                            <td>
+                                <ul v-for="(libInv, key) in result.entidad" :key="key">
+                                    <li>{{libInv[key]}}</li>
                                 </ul>
                             </td>
                             <td>
-                                <ul>
-                                    <li>15</li>
-                                    <li>24</li>
-                                    <li>12</li>
-                                </ul>
-                            </td>
-                            <td>
-                                <ul>
-                                    <li>Bancolombia</li>
-                                    <li>AvVillas</li>
-                                    <li>Banco Bogotá</li>
+                                <ul v-for="(libInv, key) in result.pagare" :key="key">
+                                    <li>{{libInv[key]}}</li>
                                 </ul>
                             </td>
                             
-                            <td>|</td>
-                            <td>|</td>
-                            <td>|</td>
-                            <td>|</td>
-                            <td>|</td>
-                            <td>|</td>
-                            <td>|</td>
-                            <td>|</td>
-                            <td>|</td>
-                            <td>|</td>
-                            <td>|</td>
+                            <td>{{result.vr_credito}}</td>
+                            <td>{{result.vr_desembolso}}</td>
+                            <td>{{result.plazo}}</td>
+                            <td>{{result.cuota_cred}}</td>
+                            <td>
+                                <ul v-for="(libInv, key) in result.v_aplicado" :key="key">
+                                    <li>{{libInv[key]}}</li>
+                                </ul>
+                            </td>
+
+                            <td>{{result.aprobado}}</td>
+                            <td>{{result.pct_incorporacion}}</td>
+                            <td>{{result.max_incorporacion}}</td>
+                            <td>{{result.fec_rta_consulta}}</td>
+                            <td>{{result.fecha_vinculacion}}</td>
+                            <td>{{result.tipo_vinculacion}}</td>                            
                         </tr>
                     </tbody>
                 </table>
@@ -297,6 +306,9 @@ export default {
             consultaDescnoapli:[],
             consultaDescapli:[],
             pagare:[],
+            result:{},
+            pagareSelected:[],
+            nomterSelect:[],
         }
     },
     methods:{
@@ -329,23 +341,37 @@ export default {
                 console.log(error);
             })            
         },
-        vAplicado(value, data){
+        vAplicado(value, data, pagareSelect, nomterSelected){
             if(value === true){
                 this.pagare.push(data);
+                this.pagareSelected.push(pagareSelect);
+                this.nomterSelect.push(nomterSelected);
+
                 this.dataclient.v_aplicado = this.pagare;
+                this.dataclient.pagareSelected = this.pagareSelected;
+                this.dataclient.nomterSelect = this.nomterSelect;
                 console.log(this.dataclient);  
             }else{                
                 let pagare = this.pagare.filter(function(item) {
                     return item !== data
                 });
                 this.dataclient.v_aplicado = pagare;
-                console.log(this.dataclient);
+                
+                let pagareSelected = this.pagareSelected.filter(function(item) {
+                    return item !== pagareSelect
+                });
+                this.dataclient.pagareSelected = pagareSelected;
+
+                let nomterSelect = this.nomterSelect.filter(function(item) {                
+                    return item !== nomterSelected
+                });
+                this.dataclient.nomterSelect = nomterSelect;
             }
         },
         sendPagare(){
             axios.post('resultadoAprobacion',{data:this.dataclient}).then((response)=>{
-                toastr.success(response.data.message);
-                this.result = response.data.data;
+                toastr.success(response.data.message);                
+                this.result = response.data.data;                
                 this.tabSelect = 'menu5';
                 this.menu5Disabled = false;
             }).catch((error)=>{

@@ -18,6 +18,7 @@ class DataMesImport implements ToModel
         return new DataMes([
             'fondo'=> $row[0],
             'td'=> $row[1],
+            'doc'=> $row[2],
             'x'=> $row[3],
             'nomp'=> $row[4],
             'fecnacimient'=> $row[5],

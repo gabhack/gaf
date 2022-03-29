@@ -8,6 +8,7 @@ use App\FechaVinc;
 use App\Imports\DescapliImport;
 use Illuminate\Http\Request;
 use Excel;
+use date;
 
 class DescapliController extends Controller
 {
@@ -35,10 +36,9 @@ class DescapliController extends Controller
         return response()->json(['message'=>'Consulta exitosa.','data'=>$resultados],200);
       }
     }
-    public function resultadoAprobacion(Request $request){
-      dd($request->all());
+    public function resultadoAprobacion(Request $request){       
       $data_formulario = $request->data;
-      $doc = $request->data['doc'];
+      $doc = $request->data['doc'];      
       $info_datames = \App\DataMes::Where('doc',$doc)->select('cupo')->first();
       $info_fechavinc = \App\FechaVinc::Where('doc',$doc)->first();
       $cupo = $info_datames->cupo;
@@ -51,16 +51,15 @@ class DescapliController extends Controller
       $array_cuota_compra[]=$cupo;
       $data_formulario['consecutivo']="";
       $data_formulario['estado']="Consulta";
-      $data_formulario['fecha_consulta']= new Date();
+      $data_formulario['fecha_consulta']= date('Y-m-d');
       $data_formulario['entidad']=$array_entidad;
       $data_formulario['pagare']=$array_pagare;
       $data_formulario['cuota_compra']=$array_cuota_compra;
       $data_formulario['aprobado']="APROBADO";
       $data_formulario['pct_incorporacion']="PCT";
-      $data_formulario['fec_rta_consulta']= new Date();
+      $data_formulario['fec_rta_consulta']= date('Y-m-d');
       $data_formulario['fecha_vinculacion']=$fecha_vinculacion;
-      $data_formulario['tipo_vinculacion']=$tipo_vinculacion;
-      dd($data_formulario);
+      $data_formulario['tipo_vinculacion']=$tipo_vinculacion;      
       return response()->json(['message'=>'Consulta exitosa.','data'=>$data_formulario],200);
     }
     /**
