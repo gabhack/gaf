@@ -37,7 +37,7 @@
                     <div class="card-body">
                         <div class="form-group">
                             <label>Cedula</label>
-                            <input v-model="dataclient.cc" class="form-control">
+                            <input v-model="dataclient.doc" class="form-control">
                         </div>
 
                         <div class="form-group">
@@ -237,7 +237,7 @@ export default {
             this.tabSelect = data;
         },
         getDataClient(){
-            axios.post('consultaDescnoap',{doc:this.dataclient}).then((response)=>{  
+            axios.post('consultaDescnoap',{data:this.dataclient}).then((response)=>{  
                 if(response.data.message === 'El cliente seleccionado tiene inconsistencias.'){
                     toastr.success(response.data.message);               
                     this.constultaDescnoap = response.data.data;
