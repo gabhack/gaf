@@ -4,11 +4,81 @@
             <div class="text-center">
                 <div class="card">
                     <div class="card-header">
-                        <p>Integración</p>
+                        <p>Solicitud Validación</p>
                     </div>
+                    <!-- <div class="card-body" v-if="token !== null"> -->
                     <div class="card-body">
-                        <p>{{token}}</p>
-                        <button class="btn btn-primary" v-on:click="getSolicValidacion">Clic</button>
+                        <div class="form-group">
+                            <label>Identificador unico de Convenio</label>
+                            <input class="form-control" v-model="solicitudVal.GuidConv"/>
+                        </div>
+
+                        <div class='form-group'>
+                            <label>Tipo de Validación</label>
+                            <select v-model="solicitudVal.TipoValidacion" class="form-control">
+                                <option :value="1">Directa</option>
+                                <option :value="2">Asesor</option>
+                                <option :value="3">AutoGestionada</option>
+                                <option :value="4">Ambas</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Asesor</label>
+                            <input v-model="solicitudVal.Asesor" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Sede</label>
+                            <input v-model="solicitudVal.Sede" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Tipo Documento</label>
+                            <input v-model="solicitudVal.TipoDoc" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Numero de Documento</label>
+                            <input v-model="solicitudVal.NumDoc" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input v-model="solicitudVal.Email" type="email" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Celular</label>
+                            <input v-model="solicitudVal.Celular" type="number" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Usuario</label>
+                            <input v-model="solicitudVal.Usuario" type="text" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Clave</label>
+                            <input v-model="solicitudVal.Clave" type="password" class="form-control">
+                        </div>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" v-on:click="getSolicValidacion">Solicitar Validación</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" style="width:740px">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Verificacion de Identidad</h5>                            
+                        </div>
+                        <div class="modal-body">
+                            <iframe :src="resultSolicVal.url" allow="camera" title="Inline Frame Example" width="700" height="700"></iframe>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>                            
+                        </div>
                     </div>
                 </div>
             </div>
@@ -19,7 +89,9 @@
     export default {
         data(){
             return{
-                token: 'Sin Token',
+                token: null,
+                solicitudVal:{},
+                resultSolicVal:{}
             }
         },
         mounted(){
@@ -40,6 +112,7 @@
             },
 
             getSolicValidacion(){
+                console.log(this.solicitudVal);
                 let data = {
                     GuidConv: '575650aa-b5ed-4797-844d-6ee965e41786',
                     TipoValidacion: 4,
@@ -54,12 +127,10 @@
                     Clave:'CKComercializadora.2022*',
                 };
 
-                let headers= {
-                    'Authorization': `Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6InphSEVTNEh4LVRSNFBEcGxKUU1zREEiLCJ0eXAiOiJhdCtqd3QifQ.eyJuYmYiOjE2NDgwNTY1MTgsImV4cCI6MTY0ODA1ODMxOCwiaXNzIjoiaHR0cDovLzEwLjEzMC4xLjQwOjYzMjAiLCJhdWQiOlsiaWRlbnRpdHlBcGkiLCJtYWluQVBJIiwic2VydmljZXNBUEkiXSwiY2xpZW50X2lkIjoiQ0tDT01FUkNJQUxJWkFET1JBIiwic2NvcGUiOlsiaWRlbnRpdHlBcGkiLCJtYWluQVBJIiwic2VydmljZXNBUEkiXX0.F_1UJMGbfRmWPXPQJXXcZwT9gF2wjtkI5idtANtBlQWpcVsv0zlDmNErw89t1vGPIZ4tPpwGzQ5CvHy3000y70kf9JkaWIt0rtuLtcAFAvhXGWBnuZJV1S7Zu4xkDlBzvM3USK_ilOpyRby_OvGtS6RU-rbjPiqSTc_OnhXt32VkMtnxrdBXU9OHvLXwNx7WbZ6iRX0vBfTu5hIqc4oDujcbrkwh_I9QwCuvSdSUpyFlXRU_EyXXDh99Y7pgfXiApUOQxZpiPgu4WcNrT3tYhChXJnOr5zoACSrj8e55Df_o5VlZQj9ZU3Udm4Gm_CvHovGof1S4M3hcserfQgUKig`
-                }                           
-
-                axios.post('https://demorcs.olimpiait.com:6314/Validacion/SolicitudValidacion', data, headers).then((response)=>{
-                    console.log(response.data);
+                axios.post('https://demorcs.olimpiait.com:6314/Validacion/SolicitudValidacion', data, {headers:{
+                    'Authorization':`Bearer ${this.token}`
+                }}).then((response)=>{
+                    this.resultSolicVal = response.data.data
                 }).catch((error)=>{
                     console.log(error);
                 })
