@@ -17,6 +17,19 @@ class VisadoController extends Controller
         //
     }
 
+    public function historialConsultas(Request $request){
+      $data_formulario = $request->data;
+      // $doc = $request->data['doc'];
+      // $historial_consultas = \App\Descapli::Where('doc',$doc)->get();
+      $historial_consultas = \App\Descapli::get();
+      $resultados = json_decode($historial_consultas);
+      if($resultados == "" or $resultados == null ){
+        return response()->json(['message'=>'No se encontraron registros.', 'data'=>$resultados],200);
+      }
+      else{
+        return response()->json(['message'=>'Consulta exitosa.','data'=>$resultados],200);
+      }
+
     /**
      * Show the form for creating a new resource.
      *
