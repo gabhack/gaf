@@ -6,7 +6,7 @@
                     <!-- <a class="btn btn-primary" href="{{ url()->previous()}} "><< Atrás</a> -->
                     <div class="d-flex align-items-end">
                         <img src="/img/avatar-img.svg" width="90" class="mr-3">
-                        <h2 class="h3 text-black-pearl font-weight-exbold d-inline-block mb-0">{{dataclient.nombre}}</h2>
+                        <h2 class="h3 text-black-pearl font-weight-exbold d-inline-block mb-0"></h2>
                     </div>
                     <button type="button" onclick="print();" class="btn btn-black-pearl px-3">
                         <span>Descargar PDF</span>
@@ -27,16 +27,17 @@
                                     <input class="form-control text-center" type="number" v-model="dataclient.doc">
                                 </div>
                                 <div class="col-6">
-                                    <b class="panel-label">Nombre Completo:</b>                                
-                                    <input class="form-control text-center" type="text" v-model="dataclient.nombre">
-                                </div>
-                                <div class="col-6">
                                     <b class="panel-label">FOPEP:</b>
                                     <input class="form-control text-center" type="text" v-model="dataclient.pagaduria">
                                 </div>
                                 <div class="col-6">
                                     <b class="panel-label">Vr Credito:</b>
                                     <input type="number" class="form-control text-center" v-model="dataclient.vr_credito">
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Cupo Libre Inversión:</b>
+                                    <input type="number" class="form-control text-center" v-model="dataclient.clibinv">
                                 </div>
 
                                 <div class="col-6">

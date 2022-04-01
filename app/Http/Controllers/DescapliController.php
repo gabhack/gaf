@@ -83,16 +83,16 @@ class DescapliController extends Controller
         'fconsultaami'=> date('Y-m-d'),
         'ced'=>$doc,
         'nombre'=>$info_datames->nomp,
-        'pagaduria'=>$request->pagaduria,
+        'pagaduria'=>$data_formulario['pagaduria'],
         'tcredito'=>"Compra cartera",
-        'clibinv'=>$request->clibinv,
-        'ccompra'=>$request->cuota_cred,
+        'clibinv'=>$data_formulario['clibinv'],
+        'ccompra'=>$data_formulario['cuota_cred'],
         'entidad'=>"FOPEP",
-        'pagare'=>$request->pagaduria,,
-        'vcredito'=>$request->vr_credito,
-        'vdesembolso'=>$request->vr_desembolso,
-        'plazo'=>$request->plazo,
-        'cuotacredito'=>$request->cuota_cred,
+        'pagare'=>$data_formulario['pagaduria'],
+        'vcredito'=>$data_formulario['vr_credito'],
+        'vdesembolso'=>$data_formulario['vr_desembolso'],
+        'plazo'=>$data_formulario['plazo'],
+        'cuotacredito'=>$data_formulario['cuota_cred'],
         'aprobado'=>$aprobado,
         'porcincorp'=>(int)$pct_incorporacion,
         'cmaxincorp'=>$total_cuota,
@@ -100,8 +100,8 @@ class DescapliController extends Controller
         'fvinculacion'=>$fecha_vinculacion,
         'tvinculacion'=>$tipo_vinculacion,
         'tipo_consulta'=>'Individual'
-      ]
-      Visado::create($data_visado;
+      ];
+      Visado::create($data_visado);
       return response()->json(['message'=>'Consulta exitosa.','data'=>$data_formulario],200);
     }
     /**
