@@ -84,7 +84,7 @@ class DescapliController extends Controller
         'ced'=>$doc,
         'nombre'=>$info_datames->nomp,
         'pagaduria'=>$data_formulario['pagaduria'],
-        'tcredito'=>"Compra cartera",
+        'tcredito'=>$data_formulario['tipo_credito'],
         'clibinv'=>$data_formulario['clibinv'],
         'ccompra'=>$data_formulario['cuota_cred'],
         'entidad'=>"FOPEP",

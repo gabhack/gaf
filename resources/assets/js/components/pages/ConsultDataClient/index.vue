@@ -54,6 +54,14 @@
                                     <b class="panel-label">Cuota Credito</b>
                                     <input type="number" class="form-control text-center" v-model="dataclient.cuota_cred">
                                 </div>
+                                <div class="col-6">
+                                    <label>Tipo de credito</label>
+                                    <select v-model="dataclient.tipo_credito" class="form-control">
+                                        <option value="Libre inversión">Libre inversión</option>
+                                        <option value="Compra cartera">Compra cartera</option>
+                                        <option value="Refinanciación">Refinanciación</option>
+                                    </select>
+                                </div>
                                 <div class="col-6 mt-4">
                                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"  v-on:click="getData">Consultar</button>
                                 </div>                            
@@ -210,6 +218,7 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            <button class="btn btn-primary" v-on:click="sendPagare">Consultar</button>
                         </div>
                     </div>
                 </div>
@@ -271,6 +280,7 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            <button class="btn btn-primary" v-on:click="sendPagare">Consultar</button>
                         </div>
                     </div>
                 </div>
@@ -316,7 +326,7 @@
                                         <td>{{resultPagare.doc}}</td>
                                         <td>{{resultPagare.nombre}}</td>
                                         <td>{{resultPagare.pagaduria}}</td>
-                                        <td>{{resultPagare.tipo_de_credito}}</td>
+                                        <td>{{dataclient.tipo_credito}}</td>
                                         <td>{{resultPagare.cupo_lib_inversion}}</td>
                                         <td>        
                                             <div v-for="(libInv, key) in resultPagare.cuota_compra" :key="key">
@@ -328,10 +338,8 @@
                                                 <p>{{row}}</p><br/>
                                             </div>
                                         </td>
-                                        <td>
-                                            <div v-for="(libInv, key) in resultPagare.pagare" :key="key">
-                                                <p>{{libInv}}</p><br/>
-                                            </div>
+                                        <td>                                        
+                                            <p>{{dataclient.libInv}}</p><br/>                                            
                                         </td>
                                         
                                         <td>{{resultPagare.vr_credito}}</td>
@@ -495,8 +503,7 @@ export default {
                     return item !== nomterSelected
                 });
                 this.dataclient.nomterSelect = nomterSelect.length === 0 ? nomterSelected : this.nomterSelect.push(nomterSelected);                
-            }
-            this.sendPagare();
+            }            
         },
 
         sendPagare(){            
