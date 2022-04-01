@@ -36,7 +36,7 @@ class DescapliController extends Controller
         return response()->json(['message'=>'Consulta exitosa.','data'=>$resultados],200);
       }
     }
-    public function resultadoAprobacion(Request $request){
+    public function resultadoAprobacion(Request $request){      
       $data_formulario = $request->data;
       $doc = $request->data['doc'];
       $info_datames = \App\DataMes::Where('doc',$doc)->select('cupo')->first();
@@ -73,7 +73,7 @@ class DescapliController extends Controller
       $data_formulario['vr_desembolso'] = '$ '.number_format($data_formulario['vr_desembolso'], 2,',','.');
       $data_formulario['fec_rta_consulta']= date('Y-m-d');
       $data_formulario['fecha_vinculacion']=$fecha_vinculacion;
-      $data_formulario['tipo_vinculacion']=$tipo_vinculacion;
+      $data_formulario['tipo_vinculacion']=$tipo_vinculacion;      
       return response()->json(['message'=>'Consulta exitosa.','data'=>$data_formulario],200);
     }
     /**
@@ -81,9 +81,9 @@ class DescapliController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+
     }
 
     /**
@@ -113,9 +113,10 @@ class DescapliController extends Controller
      * @param  \App\Descapli  $descapli
      * @return \Illuminate\Http\Response
      */
-    public function show(Descapli $descapli)
-    {
-        //
+    public function show($doc)
+    {        
+        $descapli = Descapli::where('doc', $doc)->get();
+        return response()->json($descapli);
     }
 
     /**

@@ -33,12 +33,13 @@
 			aria-labelledby="menuAMI"
 			data-parent="#accordionSidebar"
 		>
-			<div class="bg-white py-2 collapse-inner">
-				<a class="collapse-item" href="{{ url('dataClient') }}">Visado </a>
+			<div class="bg-white py-2 collapse-inner">		
+				<a class="collapse-item btn-list" href="{{ url('consultas/list' )}}">Listado de consultas</a>		
+				<a class="collapse-item" href="{{ url('dataClient') }}">Consulta Individual</a> 
+				<a class="collapse-item" href="#">Consulta bloque</a> 				
 				<a class="collapse-item" href="#">Recuperacion de Cartera </a>
 				<a class="collapse-item" href="#">Prospección de Mercado</a>
-				<a class="collapse-item" href="{{ url('consultas') }}">Nueva Consulta</a>
-				<a class="collapse-item" href="{{ url('consultas/list' )}}">Listado de consultas</a>				
+				<!-- <a class="collapse-item" href="{{ url('consultas') }}">Nueva Consulta</a> -->				
 			</div>
 		</div>
 	</li>

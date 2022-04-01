@@ -26,7 +26,7 @@ class FechaVincController extends Controller
      */
     public function index()
     {
-        //
+      
     }
 
     /**
@@ -56,9 +56,10 @@ class FechaVincController extends Controller
      * @param  \App\FechaVinc  $fechaVinc
      * @return \Illuminate\Http\Response
      */
-    public function show(FechaVinc $fechaVinc)
-    {
-        //
+    public function show($doc)
+    {      
+      $fechaVinc = FechaVinc::where('doc',$doc)->get();
+      return response()->json($fechaVinc);
     }
 
     /**

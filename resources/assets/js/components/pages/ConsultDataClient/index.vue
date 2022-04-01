@@ -1,12 +1,5 @@
 <template>
-    <div class="container-fluid">
-        <div>
-            <label for="">Tipo de Consulta</label>
-            <select v-model="type_consult" class="form-control">
-                <option value="individual">Individual</option>
-                <option value="bloque">Bloque</option>
-            </select>
-        </div>
+    <div class="container-fluid">        
         <div v-if="type_consult === 'individual'">
             <div class="row mb-5">
                 <div class="col-12 d-flex align-items-center justify-content-between">
@@ -38,236 +31,254 @@
                                     <input class="form-control text-center" type="text" v-model="dataclient.nombre">
                                 </div>
                                 <div class="col-6">
-                                    <b class="panel-label">Pagaduría:</b>
-                                    <input class="form-control text-center" type="number" v-model="dataclient.pagaduria">
+                                    <b class="panel-label">FOPEP:</b>
+                                    <input class="form-control text-center" type="text" v-model="dataclient.pagaduria">
+                                </div>
+                                <div class="col-6">
+                                    <b class="panel-label">Vr Credito:</b>
+                                    <input type="number" class="form-control text-center" v-model="dataclient.vr_credito">
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Vr Desembolso:</b>
+                                    <input type="number" class="form-control text-center" v-model="dataclient.vr_desembolso">
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Plazo</b>
+                                    <input type="number" class="form-control text-center" v-model="dataclient.plazo">
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Cuota Credito</b>
+                                    <input type="number" class="form-control text-center" v-model="dataclient.cuota_cred">
                                 </div>
                                 <div class="col-6 mt-4">
-                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"  v-on:click="getDataClient">Consultar</button>
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"  v-on:click="getData">Consultar</button>
                                 </div>                            
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-6" v-if="consultaDescapli.length > 0">
+                <div class="col-12">
                     <div class="panel">
                         <div class="panel-heading">
-                            <b>Resultado</b>
+                            <b>(FECHAVINC)</b>
                         </div>
                         <div class="panel-body">
-                            <div class="row">
-                                <div class="col-6">
-                                    <b class="panel-label">Fecha de Consulta:</b>
-                                    <td><input class="text-center" type="text" disabled :placeholder="actualDate"></td>
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Correo:</b>
-                                    <td><input class="text-center" type="text" disabled></td>
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Cedula:</b>
-                                    <td><input class="text-center" type="text" disabled :placeholder="consultaDescapli[0].doc"></td>
-                                </div>
-                                <div class="col-6">
-                                    <b class="panel-label">Nombre:</b>
-                                    <td><input class="text-center" type="text" disabled :placeholder="consultaDescapli[0].nomp"></td>
-                                </div>
-                                <div class="col-6">
-                                    <b class="panel-label">Pagaduria:</b>
-                                    <td>
-                                        <tr v-for="(consultaD,key) in consultaDescapli" :key="key">
-                                            <td>
-                                                <input type="checkbox" v-on:click="(e)=>vAplicado(e.target.checked, consultaD.vaplicado, consultaD.pagare, consultaD.nomtercero)"/><input class="text-center" type="text" disabled :placeholder="consultaD.pagare">
-                                            </td>                                        
-                                        </tr>                                    
-                                    </td>
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Inconsistencia:</b>
-                                    <td>
-                                        <tr v-for="(consultaD,key) in consultaDescapli" :key="key">
-                                            <td>
-                                                <input class="text-center" type="text" disabled :placeholder="consultaD.incon ? consultaD.incon : ''">
-                                            </td>                                        
-                                        </tr>                                    
-                                    </td>
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Score:</b>
-                                    <td><input class="text-center" type="text" disabled></td>
-                                </div>                                
-
-                                <div class="col-6">
-                                    <b class="panel-label">Vr Credito:</b>
-                                    <td><input type="number" v-model="dataclient.vr_credito" class="text-center"></td>
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Vr Desembolso:</b>
-                                    <td><input type="number" v-model="dataclient.vr_desembolso" class="text-center"></td>
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Plazo</b>
-                                    <td><input type="number" v-model="dataclient.plazo" class="text-center"></td>
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Cuota Credito</b>
-                                    <td><input type="number" v-model="dataclient.cuota_cred" class="text-center"></td>
-                                </div>
-
-                                <div class="col-6 mt-4" v-if="plan === 'basico'">
-                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal1">Tenemos Mas Información para tí</button>
-                                </div>                      
-                            </div>
+                            <table class="table table-responsive table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>DOCUMENTO</th>
+                                        <th>VINCULACIÓN</th>
+                                        <th>TIPO_PENSION</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(fechavinc, key) in fechaVinc" :key="key">
+                                        <td>{{fechavinc.doc}}</td>
+                                        <td>{{fechavinc.vinc}}</td>
+                                        <td>{{fechavinc.tp}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>            
 
-                <div class="col-md-6" v-if="plan === 'premium'  || enableFirstStep === true">
+                <div class="col-md-12">
                     <div class="panel panel-primary">
-                        <div class="panel-heading"><b>Información General</b></div>
+                        <div class="panel-heading"><b>Información Pesonal (DATAMES)</b></div>
                         <div class="panel-body">      
-                            <div class="row">
-                                <div class="col-6">
-                                    <b class="panel-label">Cedula:</b>
-                                    <td><input class="text-center" type="text" disabled :placeholder="consultaDescapli[0].doc"></td>
-                                </div>
-                                <div class="col-6">
-                                    <b class="panel-label">Nombre Completo:</b>
-                                    <td><input class="text-center" type="text" disabled :placeholder="consultaDescapli[0].nomp"></td>
-                                </div>
-                                <div class="col-6">
-                                    <b class="panel-label">Telefono Celular:</b>
-                                    <td><input class="text-center" type="text" disabled :placeholder="dataclient.celphone"></td>
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Telefono Fijo:</b>
-                                    <td><input class="text-center" type="text" disabled :placeholder="dataclient.phone"></td>
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Edad:</b>
-                                    <td><input class="text-center" type="text" disabled :placeholder="dataclient.age"></td>
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Cargo:</b>
-                                    <td><input class="text-center" type="text" disabled :placeholder="dataclient.charge"></td>
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Tipo de Pension:</b>
-                                    <td><input class="text-center" type="text" disabled :placeholder="resultPagare.tipo_vinculacion"></td>
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Antiguedad:</b>
-                                    <td><input class="text-center" type="text" disabled :placeholder="dataclient.antiguedad"></td>
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Correo Electronico:</b>
-                                    <td><input class="text-center" type="text" disabled :placeholder="dataclient.email"></td>
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Dirección :</b>
-                                    <td><input class="text-center" type="text" disabled :placeholder="dataclient.address"></td>
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Ciudad:</b>
-                                    <td><input class="text-center" type="text" disabled :placeholder="dataclient.city"></td>
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Barrio:</b>
-                                    <td><input class="text-center" type="text" disabled :placeholder="dataclient.barrio"></td>
-                                </div>
-                            </div>
+                            <table class="table table-responsive table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>FONDO</th>
+                                        <th>TD DOCUMENTO</th>
+                                        <th>DOCUMENTO</th>
+                                        <th>X</th>
+                                        <th>PENSIONADO (APELLIDOS Y NOMBRES)</th>
+                                        <th>FECHA DE NACIMIENTO</th>
+                                        <th>DIRECCION</th>
+                                        <th>DPTO (NOMBRE DEPARTAMENTO de residencia del pensionado)</th>
+                                        <th>MNPIO (NOMBRE MUNICIPIO de residencia del pensionado)</th>
+                                        <th>TIPO_PENSION (NOMBRE_PENSION)</th>
+                                        <th>NOMBRE_BANCO (NOMBRE DEL BANCO)</th>
+                                        <th>SUCURSAL (NOMBRE DE LA SUCURSAL)</th>
+                                        <th>TELÉFONO</th>
+                                        <th>CELULAR</th>
+                                        <th>CORREO ELECTRÓNICO</th>
+                                        <th>*VALOR PENSIONES</th>
+                                        <th>*VALOR SALUD</th>
+                                        <th>*VALOR EMBARGOS</th>
+                                        <th>*VALOR DESCUENTOS</th>
+                                        <th>*CUPO</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(datames, key) in datames" :key="key">
+                                        <td>{{datames.fondo}}</td>
+                                        <td>{{datames.td}}</td>
+                                        <td>{{datames.x}}</td>
+                                        <td>{{datames.doc}}</td>
+                                        <td>{{datames.nomp}}</td>
+                                        <td>{{datames.fecnacimient}}</td>
+                                        <td>{{datames.dir}}</td>
+                                        <td>{{datames.dpto}}</td>
+                                        <td>{{datames.mnpio}}</td>
+                                        <td>{{datames.tp}}</td>
+                                        <td>{{datames.nbanco}}</td>
+                                        <td>{{datames.sucursal}}</td>
+                                        <td>{{datames.tel}}</td>
+                                        <td>{{datames.cel}}</td>
+                                        <td>{{datames.correo}}</td>
+                                        <td>{{datames.vpension}}</td>
+                                        <td>{{datames.vsalud}}</td>
+                                        <td>{{datames.venbargos}}</td>
+                                        <td>{{datames.vdesc}}</td>
+                                        <td>{{datames.cupo}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-6" v-if="plan === 'premium'  || enableSecondStep === true">
+                <div class="col-md-12" v-if="descapli.length > 0">
                     <div class="panel panel-primary">
-                        <div class="panel-heading"><b>Obligaciones Aplicadas</b></div>
+                        <div class="panel-heading"><b>Obligaciones Aplicadas (DESCAPLI)</b></div>
                         <div class="panel-body">      
-                            <div class="row">
-                                <div class="col-6">
-                                    <b class="panel-label">Entidad:</b>
-                                    <td><input class="text-center" v-for="(result, key) in resultPagare.entidad" :key="key" type="text" disabled :placeholder="result"></td>
-                                </div>
-                                <div class="col-6">
-                                    <b class="panel-label">Numero Obligación:</b>
-                                    <td><input class="text-center" type="text" disabled></td>
-                                </div>
-                                <div class="col-6">
-                                    <b class="panel-label">Valor de Cuota:</b>
-                                    <td><input class="text-center" type="text" disabled :placeholder="resultPagare.cuota_cred"></td>
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Valor de Credito:</b>
-                                    <td><input class="text-center" type="text" disabled: :placeholder="resultPagare.vr_credito"></td>
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Valor Pagado:</b>
-                                    <td><input class="text-center" type="text" disabled :placeholder="resultPagare.vr_desembolso"></td>
-                                </div>
-                            </div>
+                            <table class="table table-responsive table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Seleccionar</th>
+                                        <th>Periodo</th>
+                                        <th>Consecutivo</th>
+                                        <th>Clase Tercero</th>
+                                        <th>Tercero</th>
+                                        <th>Nombre del Tercero</th>
+                                        <th>Tipo Documento</th>
+                                        <th>Documento</th>
+                                        <th>Nombre</th>
+                                        <th>Pagare</th>
+                                        <th>Porcentaje</th>
+                                        <th>Valor Aplicado</th>
+                                        <th>Valor Total</th>
+                                        <th>Valor Pagado</th>
+                                        <th>Saldo</th>
+                                        <th>Fecha Grabación</th>
+                                        <th>Forma</th>
+                                        <th>Código entidad anterior</th>
+                                        <th>Nombre Entidad Anterior</th>
+                                        <th>Fecha de Cesión</th>
+                                        <th>Tipo Descuento</th>
+                                        <th>PAGARE5DIG</th>
+                                        <th>PAGARE4DIGCON0</th>
+                                        <th>Numero pagare</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(descapli, key) in descapli" :key="key">
+                                        <td>
+                                            <input type="checkbox" v-on:click="(e)=>vAplicado(e.target.checked, descapli.vaplicado, descapli.pagare, descapli.nomtercero)"/>
+                                        </td>
+                                        <td>{{descapli.periodo}}</td>
+                                        <td>{{descapli.concecutivo}}</td>
+                                        <td>{{descapli.clase}}</td>
+                                        <td>{{descapli.tercero}}</td>
+                                        <td>{{descapli.nomtercero}}</td>
+                                        <td>{{descapli.td}}</td>
+                                        <td>{{descapli.doc}}</td>
+                                        <td>{{descapli.nomp}}</td>
+                                        <td>{{descapli.pagare}}</td>
+                                        <td>{{descapli.porcentaje}}</td>
+                                        <td>{{descapli.vaplicado}}</td>
+                                        <td>{{descapli.vtotal}}</td>
+                                        <td>{{descapli.vpagado}}</td>
+                                        <td>{{descapli.saldo}}</td>
+                                        <td>{{descapli.fgrab}}</td>
+                                        <td>{{descapli.forma}}</td>
+                                        <td>{{descapli.codentiant}}</td>
+                                        <td>{{descapli.nonentant}}</td>
+                                        <td>{{descapli.fechacesion}}</td>
+                                        <td>{{descapli.tdesc}}</td>
+                                        <td>{{descapli.p5d}}</td>
+                                        <td>{{descapli.p4d}}</td>
+                                        <td>{{descapli.numpagopt}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6" v-if="plan === 'premium'  || enableThirdStep === true">
+                <div class="col-md-12" v-if="descnoap.length > 0">
                     <div class="panel panel-primary">
-                        <div class="panel-heading"><b>Obligaciones no Descontadas</b></div>
+                        <div class="panel-heading"><b>Obligaciones no Aplicadas (DESCNOAPL)</b></div>
                         <div class="panel-body">      
-                            <div class="row">
-                                <div class="col-6">
-                                    <b class="panel-label">Entidad:</b>
-                                    <td><input class="text-center" v-for="(result, key) in resultPagare.entidad" :key="key" type="text" disabled :placeholder="result"></td>
-                                </div>
-                                <div class="col-6">
-                                    <b class="panel-label">Numero Obligación:</b>
-                                    <td><input class="text-center" type="text" disabled></td>
-                                </div>
-                                <div class="col-6">
-                                    <b class="panel-label">Valor de Cuota:</b>
-                                    <td><input class="text-center" type="text" disabled :placeholder="resultPagare.cuota_cred"></td>
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Valor de Credito:</b>
-                                    <td><input class="text-center" type="text" disabled: :placeholder="resultPagare.vr_credito"></td>
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Valor Pagado:</b>
-                                    <td><input class="text-center" type="text" disabled :placeholder="resultPagare.vr_desembolso"></td>
-                                </div>
-                            </div>
+                            <table class="table table-responsive table-striped table-hover">
+                                <thead>
+                                    <tr> 
+                                        <th>Seleccionar</th>                                       
+                                        <th>Clase Tercero</th>
+                                        <th>Tercero</th>
+                                        <th>Nombre del Tercero</th>
+                                        <th>Tipo Documento</th>
+                                        <th>Documento</th>
+                                        <th>Nombre</th>
+                                        <th>Pagare</th>
+                                        <th>Porcentaje</th>
+                                        <th>Valor Fijo</th>
+                                        <th>Valor Aplicado</th>
+                                        <th>Valor Total</th>
+                                        <th>Valor Pagado</th>
+                                        <th>Saldo</th>
+                                        <th>Fecha Grabación</th>
+                                        <th>Forma</th>
+                                        <th>Inconsistencia</th>
+                                        <th>Código entidad anterior</th>
+                                        <th>Nombre Entidad Anterior</th>
+                                        <th>Fecha de Cesión</th>
+                                        <th>Tipo Descuento</th>                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(descnoap, key) in descnoap" :key="key">
+                                        <td>
+                                            <input type="checkbox" v-on:click="(e)=>vAplicado(e.target.checked, descnoap.vaplicado, descnoap.pagare, descnoap.nomtercero)"/>
+                                        </td>
+                                        <td>{{descnoap.clase}}</td>
+                                        <td>{{descnoap.tercero}}</td>
+                                        <td>{{descnoap.nomercero}}</td>
+                                        <td>{{descnoap.td}}</td>
+                                        <td>{{descnoap.doc}}</td>
+                                        <td>{{descnoap.nomp}}</td>
+                                        <td>{{descnoap.pagare}}</td>
+                                        <td>{{descnoap.porcentaje}}</td>
+                                        <td>{{descnoap.vfijo}}</td>
+                                        <td>{{descnoap.vaplicado}}</td>
+                                        <td>{{descnoap.vtotal}}</td>
+                                        <td>{{descnoap.vpagado}}</td>
+                                        <td>{{descnoap.saldo}}</td>
+                                        <td>{{descnoap.fgrab}}</td>
+                                        <td>{{descnoap.forma}}</td>
+                                        <td>{{descnoap.Incon}}</td>
+                                        <td>{{descnoap.codentiant}}</td>
+                                        <td>{{descnoap.nonentant}}</td>
+                                        <td>{{descnoap.fechacesion}}</td>
+                                        <td>{{descnoap.tdesc}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-12" v-if="plan === 'premium' || enableFourStep === true">
+                <div class="col-md-12">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
                             <b>INFORMACION FINANCIERA INGRESOS PROBABLES DEL CLIENTE</b>
                         </div>
                         <div class="panel-body">
-                            <div class="float-right">
-                                <label for="">Buscar</label>
-                                <input type="text" placeholder="Módulo" v-model="filter" class="form-control" />
-                            </div>
                             <table class="table table-responsive table-striped table-hover">
                                 <thead>
                                     <tr>                            
@@ -276,7 +287,7 @@
                                         <th>Fecha consulta</th>	
                                         <th>Cedula</th>	
                                         <th>Nombre</th>	
-                                        <th>Pagaduria</th>	
+                                        <th>Pagare</th>	
                                         <th>Tipo de credito</th>	
                                         <th>Cupo Lib Inversion</th>	
                                         
@@ -340,30 +351,6 @@
                         </div>
                     </div>
                 </div>
-            </div>      
-
-            <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModal1Label" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">   
-                            <h5 class="modal-title" id="exampleModal1Label">Todo va bien</h5>                     
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <b>¡queremos preguntarte si deseas conocer mas detalles de tu consulta!</b>
-                            <div class="row text-center">
-                                <div class="col-6">
-                                    <button class="btn btn-primary btn-block" v-on:click="enableSteps(true)">Si</button>
-                                </div>
-                                <div class="col-6">
-                                    <button class="btn btn-primary btn-block" v-on:click="enableSteps(false)">No</button>
-                                </div>
-                            </div>
-                        </div>                    
-                    </div>
-                </div>
             </div>
         </div>        
     </div>
@@ -385,7 +372,12 @@ export default {
             nomterSelect:[],
             resultPagare:[],
             filter: '',
-            type_consult:'',
+            type_consult:'individual',
+
+            datames:[],
+            fechaVinc:[],
+            descapli:[],
+            descnoap:[]
         }
     },
     computed: {
@@ -401,6 +393,32 @@ export default {
             },
         },
     methods:{  
+        getData(){
+            this.getDatames();
+            this.getFechaVinc();
+            this.getDescapli();
+            this.getDescnoap();
+        },
+        getDatames(){
+            axios.get(`datames/${this.dataclient.doc}`).then((response)=>{
+                this.datames = response.data;
+            });
+        },
+        getFechaVinc(){
+            axios.get(`fechavinc/${this.dataclient.doc}`).then((response)=>{
+                this.fechaVinc = response.data;
+            });
+        },
+        getDescapli(){
+            axios.get(`descapli/${this.dataclient.doc}`).then((response)=>{
+                this.descapli = response.data;
+            });
+        },
+        getDescnoap(){
+            axios.get(`descnoap/${this.dataclient.doc}`).then((response)=>{
+                this.descnoap = response.data;
+            });
+        },
         enableSteps(enable){
             if(enable === true){
                 this.plan === 'premium';
@@ -477,12 +495,12 @@ export default {
                 });
                 this.dataclient.nomterSelect = nomterSelect.length === 0 ? nomterSelected : this.nomterSelect.push(nomterSelected);                
             }
+            this.sendPagare();
         },
 
         sendPagare(){            
             axios.post('resultadoAprobacion',{data:this.dataclient}).then((response)=>{
-                toastr.success(response.data.message);
-                console.log(response.data.data);
+                toastr.success(response.data.message);                
                 this.resultPagare = response.data.data;
             }).catch((error)=>{
                 console.log(error);

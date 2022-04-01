@@ -36,9 +36,9 @@ class DescnoapController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+      
     }
 
     /**
@@ -68,9 +68,10 @@ class DescnoapController extends Controller
      * @param  \App\Descnoap  $descnoap
      * @return \Illuminate\Http\Response
      */
-    public function show(Descnoap $descnoap)
-    {
-        //
+    public function show($doc)
+    {      
+      $descnoap = Descnoap::where('doc',$doc)->get();
+      return response()->json($descnoap);
     }
 
     /**

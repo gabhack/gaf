@@ -381,3 +381,8 @@ Route::get('dumpDataMes','DataMesController@dumpDataMes');
 Route::post('consultaDescnoap','DescnoapController@consultaUnitaria');
 Route::post('consultaUnitaria','DescapliController@consultaUnitaria');
 Route::post('resultadoAprobacion','DescapliController@resultadoAprobacion');
+
+Route::resource('datames','DataMesController');
+Route::resource('fechavinc','FechaVincController');
+Route::resource('descapli','DescapliController');
+Route::resource('descnoap','DescnoapController');

@@ -28,9 +28,9 @@ class DataMesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        
     }
 
     /**
@@ -60,9 +60,10 @@ class DataMesController extends Controller
      * @param  \App\DataMes  $dataMes
      * @return \Illuminate\Http\Response
      */
-    public function show(DataMes $dataMes)
+    public function show($doc)
     {
-        //
+        $datames = DataMes::where('doc',$doc)->get();
+        return response()->json($datames);
     }
 
     /**
