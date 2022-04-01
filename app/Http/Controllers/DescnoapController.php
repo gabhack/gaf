@@ -25,7 +25,7 @@ class DescnoapController extends Controller
       $consulta_cedula = \App\Descnoap::Where('doc',$doc)->get();
       $resultados = json_decode($consulta_cedula);
       if($resultados == "" or $resultados == null){
-        return response()->json(['message'=>'El cliente aplica para estudio.','data'=>$data_formulario],200);
+        return response()->json(['message'=>'El cliente no tiene inconsistencias.','data'=>$data_formulario],200);
       }
       else{
         return response()->json(['message'=>'El cliente seleccionado tiene inconsistencias.','data'=>$resultados],200);
