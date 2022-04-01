@@ -21,7 +21,7 @@ class VisadoController extends Controller
       // $data_formulario = $request->data;
       // $doc = $request->data['doc'];
       // $historial_consultas = \App\Descapli::Where('doc',$doc)->get();
-      $historial_consultas = \App\Descapli::get();
+      $historial_consultas = \App\Visado::get();
       $resultados = json_decode($historial_consultas);
       if($resultados == "" or $resultados == null ){
         return response()->json(['message'=>'No se encontraron registros.', 'data'=>$resultados],200);
