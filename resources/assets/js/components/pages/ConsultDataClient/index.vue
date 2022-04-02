@@ -27,74 +27,24 @@
                                     <input class="form-control text-center" type="number" v-model="dataclient.doc">
                                 </div>
                                 <div class="col-6">
-                                    <b class="panel-label">FOPEP:</b>
-                                    <input class="form-control text-center" type="text" v-model="dataclient.pagaduria">
+                                    <b class="panel-label">Nombre:</b>                                
+                                    <input class="form-control text-center" type="text" v-model="dataclient.name">
                                 </div>
                                 <div class="col-6">
-                                    <b class="panel-label">Vr Credito:</b>
-                                    <input type="number" class="form-control text-center" v-model="dataclient.vr_credito">
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Cupo Libre Inversión:</b>
-                                    <input type="number" class="form-control text-center" v-model="dataclient.clibinv">
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Vr Desembolso:</b>
-                                    <input type="number" class="form-control text-center" v-model="dataclient.vr_desembolso">
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Plazo</b>
-                                    <input type="number" class="form-control text-center" v-model="dataclient.plazo">
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Cuota Credito</b>
-                                    <input type="number" class="form-control text-center" v-model="dataclient.cuota_cred">
-                                </div>
-                                <div class="col-6">
-                                    <label>Tipo de credito</label>
-                                    <select v-model="dataclient.tipo_credito" class="form-control">
-                                        <option value="Libre inversión">Libre inversión</option>
-                                        <option value="Compra cartera">Compra cartera</option>
-                                        <option value="Refinanciación">Refinanciación</option>
-                                    </select>
-                                </div>
+                                    <b class="panel-label">PAGADURIA:</b>
+                                    <select class="form-control" v-model="dataclient.pagaduria">
+                                        <option value="FOPEP">FOPEP</option>
+                                        <option value="FIDUPREVISORA">FIDUPREVISORA</option>
+                                        <option value="FODE VALLE">FODE VALLE</option>                                        
+                                    </select>                                    
+                                </div>                                
                                 <div class="col-6 mt-4">
-                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"  v-on:click="getData">Consultar</button>
+                                    <button type="button" class="btn btn-primary" v-on:click="getData">Consultar</button>
                                 </div>                            
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="col-12">
-                    <div class="panel">
-                        <div class="panel-heading">
-                            <b>(FECHAVINC)</b>
-                        </div>
-                        <div class="panel-body">
-                            <table class="table table-responsive table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>DOCUMENTO</th>
-                                        <th>VINCULACIÓN</th>
-                                        <th>TIPO_PENSION</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(fechavinc, key) in fechaVinc" :key="key">
-                                        <td>{{fechavinc.doc}}</td>
-                                        <td>{{fechavinc.vinc}}</td>
-                                        <td>{{fechavinc.tp}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>            
 
                 <div class="col-md-12">
                     <div class="panel panel-primary">
@@ -154,7 +104,33 @@
                     </div>
                 </div>
 
-                <div class="col-md-12" v-if="descapli.length > 0">
+                <div class="col-12">
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <b>(FECHAVINC)</b>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-responsive table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>DOCUMENTO</th>
+                                        <th>VINCULACIÓN</th>
+                                        <th>TIPO_PENSION</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(fechavinc, key) in fechaVinc" :key="key">
+                                        <td>{{fechavinc.doc}}</td>
+                                        <td>{{fechavinc.vinc}}</td>
+                                        <td>{{fechavinc.tp}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>            
+
+                <div class="col-md-12">
                     <div class="panel panel-primary">
                         <div class="panel-heading"><b>Obligaciones Aplicadas (DESCAPLI)</b></div>
                         <div class="panel-body">      
@@ -217,12 +193,11 @@
                                         <td>{{descapli.numpagopt}}</td>
                                     </tr>
                                 </tbody>
-                            </table>
-                            <button class="btn btn-primary" v-on:click="sendPagare">Consultar</button>
+                            </table>                            
                         </div>
                     </div>
                 </div>
-                <div class="col-md-12" v-if="descnoap.length > 0">
+                <div class="col-md-12">
                     <div class="panel panel-primary">
                         <div class="panel-heading"><b>Obligaciones no Aplicadas (DESCNOAPL)</b></div>
                         <div class="panel-body">      
@@ -280,14 +255,14 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <button class="btn btn-primary" v-on:click="sendPagare">Consultar</button>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Consultar</button>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-12" v-if="resultPagare.cuota_compra && resultPagare.cuota_compra.length > 0">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            <b>INFORMACION FINANCIERA INGRESOS PROBABLES DEL CLIENTE</b>
+                            <b>CALCULO DE COMPRA DE CARTERA</b>
                         </div>
                         <div class="panel-body">
                             <table class="table table-responsive table-striped table-hover">
@@ -298,13 +273,12 @@
                                         <th>Fecha consulta</th>	
                                         <th>Cedula</th>	
                                         <th>Nombre</th>	
-                                        <th>Pagare</th>	
                                         <th>Tipo de credito</th>	
                                         <th>Cupo Lib Inversion</th>	
                                         
                                         <th>Cuota Compra</th>	                            
                                         <th>Entidad</th>	
-                                        <th>Pagare</th>	
+                                        <th>Pagaduria</th>	
                                         
                                         <th>Vr. Credito</th>	
                                         <th>Vr. Desembolso</th>	
@@ -325,9 +299,8 @@
                                         <td>{{resultPagare.fecha_consulta}}</td>
                                         <td>{{resultPagare.doc}}</td>
                                         <td>{{resultPagare.nombre}}</td>
-                                        <td>{{resultPagare.pagaduria}}</td>
                                         <td>{{dataclient.tipo_credito}}</td>
-                                        <td>{{resultPagare.cupo_lib_inversion}}</td>
+                                        <td>{{dataclient.clibinv}}</td>
                                         <td>        
                                             <div v-for="(libInv, key) in resultPagare.cuota_compra" :key="key">
                                                 <p>{{libInv}}</p><br/>
@@ -338,8 +311,8 @@
                                                 <p>{{row}}</p><br/>
                                             </div>
                                         </td>
-                                        <td>                                        
-                                            <p>{{dataclient.libInv}}</p><br/>                                            
+                                        <td>                                                
+                                            <p>{{resultPagare.pagaduria}}</p><br/>                                            
                                         </td>
                                         
                                         <td>{{resultPagare.vr_credito}}</td>
@@ -361,7 +334,59 @@
                     </div>
                 </div>
             </div>
-        </div>        
+        </div> 
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Detalle de Historial</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-12">
+                        <b class="panel-label">Vr Credito:</b>
+                            <input type="number" class="form-control text-center" v-model="dataclient.vr_credito">
+                        </div>
+
+                        <div class="col-12">
+                            <b class="panel-label">Cupo Libre Inversión:</b>
+                            <input type="number" class="form-control text-center" v-model="dataclient.clibinv">
+                        </div>
+                            
+                        <div class="col-12">
+                            <b class="panel-label">Vr Desembolso:</b>
+                            <input type="number" class="form-control text-center" v-model="dataclient.vr_desembolso">
+                        </div>
+
+                        <div class="col-12">
+                            <b class="panel-label">Plazo</b>
+                            <input type="number" class="form-control text-center" v-model="dataclient.plazo">
+                        </div>
+                            
+                        <div class="col-12">
+                            <b class="panel-label">Cuota Credito</b>
+                            <input type="number" class="form-control text-center" v-model="dataclient.cuota_cred">
+                        </div>
+            
+                        <div class="col-12">
+                            <label>Tipo de credito</label>
+                            <select v-model="dataclient.tipo_credito" class="form-control">
+                                <option value="Libre inversión">Libre inversión</option>
+                                <option value="Compra cartera">Compra cartera</option>
+                                <option value="Refinanciación">Refinanciación</option>
+                            </select>
+                        </div>
+                    </div>
+                        
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>  
+                        <button type="button" class="btn btn-primary" v-on:click="sendPagare">Cosultar</button>                      
+                    </div>
+                </div>
+            </div>
+        </div>       
     </div>
 </template>
 <script>
