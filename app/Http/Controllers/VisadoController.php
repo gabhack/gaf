@@ -36,18 +36,19 @@ class VisadoController extends Controller
       // $historial_consultas = \App\Descapli::Where('doc',$doc)->get();
       $detalle_consulta = \App\Visado::where('id',$request->id)->first();
       $detalle_consulta = json_decode($detalle_consulta);
-      $info_datames = \App\DataMes::Where('doc',$detalle_consulta->doc)->first();
-      $info_fechavinc = \App\FechaVinc::Where('doc',$detalle_consulta->doc)->first();
+      $info_datames = \App\DataMes::Where('doc',$detalle_consulta->ced)->first();
+      $info_fechavinc = \App\FechaVinc::Where('doc',$detalle_consulta->ced)->first();
       $resultado = [];
+      $info_obligaciones = $detalle_consulta->info_obligaciones;
       $resultado['info_datames'] = $info_datames;
       $resultado['info_fechavinc'] = $info_fechavinc;
-      $resultado['info_obligaciones'] = $info_obligaciones;
-      $resultado['detalle_consulta'] = $detalle_consulta;
-      if($resultados == "" or $resultados == null ){
-        return response()->json(['message'=>'No se encontraron registros.', 'data'=>$resultados],200);
+      $resultado['info_obligaciones'] = json_decode($info_obligaciones);
+      $resultado['detalle_consulta'] = $detalle_consulta;      
+      if($resultado == "" or $resultado == null ){
+        return response()->json(['message'=>'No se encontraron registros.', 'data'=>$resultado],200);
       }
       else{
-        return response()->json(['message'=>'Consulta exitosa.','data'=>$resultados],200);
+        return response()->json(['message'=>'Consulta exitosa.','data'=>$resultado],200);
       }
     }
 

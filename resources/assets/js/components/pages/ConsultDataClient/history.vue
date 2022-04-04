@@ -229,6 +229,9 @@ export default {
         },
         getData(data){
             this.detailHistory = data;
+            axios.post('detalleConsulta',{id:data.id}).then((result)=>{
+                console.log(result);
+            })
         }
     }
 }

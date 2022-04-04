@@ -34,6 +34,7 @@ class Visado extends Model
         'frespuesta',
         'fvinculacion',
         'tvinculacion',
-        'tipo_consulta'
+        'tipo_consulta',
+        'info_obligaciones'
     ];
 }

@@ -2,11 +2,10 @@
     <div class="container-fluid">        
         <div v-if="type_consult === 'individual'">
             <div class="row mb-5">
-                <div class="col-12 d-flex align-items-center justify-content-between">
-                    <!-- <a class="btn btn-primary" href="{{ url()->previous()}} "><< Atrás</a> -->
+                <div class="col-12 d-flex align-items-center justify-content-between">                
                     <div class="d-flex align-items-end">
                         <img src="/img/avatar-img.svg" width="90" class="mr-3">
-                        <h2 class="h3 text-black-pearl font-weight-exbold d-inline-block mb-0"></h2>
+                        <h2 class="h3 text-black-pearl font-weight-exbold d-inline-block mb-0">{{dataclient.name}}</h2>
                     </div>                    
                 </div>
             </div>

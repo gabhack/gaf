@@ -386,6 +386,7 @@ Route::resource('datames','DataMesController');
 Route::resource('fechavinc','FechaVincController');
 Route::resource('descapli','DescapliController');
 Route::resource('descnoap','DescnoapController');
+Route::post('detalleConsulta','VisadoController@detalleConsulta');
 
 Route::get('getHistoryConsults','VisadoController@historialConsultas');
 Route::view('/historyClient','historyClient');
