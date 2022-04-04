@@ -52,6 +52,7 @@ Vue.component('DownloadIcon', require('./components/icons/DownloadIcon').default
 Vue.component('imports-component', require('./components/pages/MassiveCharge/index.vue').default);
 Vue.component('client-data-component', require('./components/pages/ConsultDataClient/index.vue').default);
 Vue.component('history-component', require('./components/pages/ConsultDataClient/history.vue').default);
+Vue.component('detail-history-component', require('./components/pages/ConsultDataClient/detailhistory.vue').default);
 /* Vue Init */
 const app = new Vue({
   el: '#app'

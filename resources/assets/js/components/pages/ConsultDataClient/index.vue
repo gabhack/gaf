@@ -298,7 +298,7 @@
                                         <td>{{dataclient.clibinv}}</td>
                                         <td>        
                                             <div v-for="(libInv, key) in resultPagare.cuota_compra" :key="key">
-                                                <p>{{libInv}}</p><br/>
+                                                <p>{{libInv.vaplicado}}</p><br/>
                                             </div>                                
                                         </td>                            
                                         <td>
