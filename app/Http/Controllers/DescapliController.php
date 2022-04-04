@@ -100,12 +100,11 @@ class DescapliController extends Controller
         'fvinculacion'=>$fecha_vinculacion,
         'tvinculacion'=>$tipo_vinculacion,
         'tipo_consulta'=>'Individual',
-        'info_obligaciones'=>json_encode($data_formulario['pagareSelected'])
-      ];      
+        'info_obligaciones'=>$data_formulario['pagareSelected']
+      ];
       // Visado::create($data_visado);
-      $id_consulta = Visado::create($data_visado)->id;      
+      $id_consulta = Visado::create($data_visado)->id;
       $data_formulario['id_consulta'] = $id_consulta;
-
       return response()->json(['message'=>'Consulta exitosa.','data'=>$data_formulario],200);
     }
     /**
