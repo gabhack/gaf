@@ -7,7 +7,7 @@
                         <img src="/img/avatar-img.svg" width="90" class="mr-3">
                         <h2 class="h3 text-black-pearl font-weight-exbold d-inline-block mb-0">{{dataclient.name}}</h2>
                     </div>       
-                    <button v-if="resultPagare.cuota_compra && resultPagare.cuota_compra.length > 0" type="button" onclick="print();" class="btn btn-black-pearl px-3">
+                    <button v-if="id_consulta !== null" type="button" v-on:click="getPdf" class="btn btn-black-pearl px-3">
                         <span>Descargar PDF</span>
                         <download-icon></download-icon>
                     </button>             
@@ -410,7 +410,8 @@ export default {
             datames:[],
             fechaVinc:[],
             descapli:[],
-            descnoap:[]
+            descnoap:[],
+            id_consulta:null
         }
     },
     computed: {
@@ -519,11 +520,16 @@ export default {
         sendPagare(){            
             axios.post('resultadoAprobacion',{data:this.dataclient}).then((response)=>{
                 toastr.success(response.data.message);                
+                this.id_consulta = response.data.data.id_consulta;              
                 this.resultPagare = response.data.data;
             }).catch((error)=>{
                 console.log(error);
             })
         },
+
+        getPdf(){
+            console.log(this.id_consulta);
+        }
     }
 }
 </script>
