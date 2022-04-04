@@ -12,7 +12,7 @@
                 <div class="col-12">
                     <div class="panel">
                         <div class="panel-heading">
-                            <b>Información básica</b>
+                            <b>Resultado de la Consulta</b>
                         </div>
                         <div class="panel-body">
                             <div class="row">
