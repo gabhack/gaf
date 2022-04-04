@@ -7,11 +7,7 @@
                     <div class="d-flex align-items-end">
                         <img src="/img/avatar-img.svg" width="90" class="mr-3">
                         <h2 class="h3 text-black-pearl font-weight-exbold d-inline-block mb-0"></h2>
-                    </div>
-                    <button type="button" onclick="print();" class="btn btn-black-pearl px-3">
-                        <span>Descargar PDF</span>
-                        <download-icon></download-icon>
-                    </button>
+                    </div>                    
                 </div>
             </div>
             <div id="consulta-container" class="row">
@@ -166,7 +162,7 @@
                                 <tbody>
                                     <tr v-for="(descapli, key) in descapli" :key="key">
                                         <td>
-                                            <input type="checkbox" v-on:click="(e)=>vAplicado(e.target.checked, descapli.vaplicado, descapli.pagare, descapli.nomtercero)"/>
+                                            <input type="checkbox" v-on:click="(e)=>vAplicado(e.target.checked, descapli, descapli.pagare, descapli.nomtercero)"/>
                                         </td>
                                         <td>{{descapli.periodo}}</td>
                                         <td>{{descapli.concecutivo}}</td>
@@ -230,7 +226,7 @@
                                 <tbody>
                                     <tr v-for="(descnoap, key) in descnoap" :key="key">
                                         <td>
-                                            <input type="checkbox" v-on:click="(e)=>vAplicado(e.target.checked, descnoap.vaplicado, descnoap.pagare, descnoap.nomtercero)"/>
+                                            <input type="checkbox" v-on:click="(e)=>vAplicado(e.target.checked, descnoap, descnoap.pagare, descnoap.nomtercero)"/>
                                         </td>
                                         <td>{{descnoap.clase}}</td>
                                         <td>{{descnoap.tercero}}</td>
@@ -331,6 +327,10 @@
                                 </tbody>
                             </table>
                         </div>
+                        <button v-if="resultPagare.cuota_compra && resultPagare.cuota_compra.length > 0" type="button" onclick="print();" class="btn btn-black-pearl px-3">
+                            <span>Descargar PDF</span>
+                            <download-icon></download-icon>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -486,26 +486,11 @@ export default {
             });            
         },
 
-        vAplicado(value, data, pagareSelect, nomterSelected){
-            let pagares=[];            
-            this.consultaDescapli.forEach(element => {
-                
-                if(element.pagare === pagareSelect && value === true){
-                    pagares.push({
-                        pagare: element.pagare,
-                        selected: true
-                    });
-
-                    this.pagareSelected.push(element.pagare)
-                }else{
-                    pagares.push({
-                        pagare: element.pagare,
-                        selected: false
-                    })
-                }
-            });
-
-            this.dataclient.pagareSelectedTable = pagares;
+        vAplicado(value, data, pagareSelect, nomterSelected){            
+            if(value === true){
+                this.pagareSelected.push(data)
+            }
+            
             this.dataclient.pagareSelected = this.pagareSelected;
 
             if(value === true){
@@ -515,20 +500,21 @@ export default {
                 this.dataclient.nomterSelect = this.nomterSelect;                
             }else{                
                 let pagare = this.pagare.filter(function(item) {
-                    return item !== data
+                    return item !== nomterSelected
                 });
                 this.dataclient.v_aplicado = pagare;
                 
                 let pagareSelected = this.pagareSelected.filter(function(item) {
-                    return item !== pagareSelect
+                    return item.pagare !== pagareSelect
                 });
                 this.dataclient.pagareSelected = pagareSelected;
 
                 let nomterSelect = this.nomterSelect.filter(function(item) {                
                     return item !== nomterSelected
                 });
-                this.dataclient.nomterSelect = nomterSelect.length === 0 ? nomterSelected : this.nomterSelect.push(nomterSelected);                
-            }            
+                this.dataclient.nomterSelect = nomterSelect.length === 0 ? nomterSelected : this.nomterSelect.push(nomterSelected);                                
+            }
+            console.log(this.dataclient);            
         },
 
         sendPagare(){            

@@ -12,6 +12,7 @@
                     <th scope="col" class="text-center">Cedula</th>
                     <th scope="col" class="text-center">Nombre Completo</th>
                     <th scope="col" class="text-center">Pagaduria</th>
+                    <th scope="col" class="text-center">Tipo de Consulta</th>
                     <th scope="col" class="text-center">Score</th>
                     <th scope="col" class="text-center">Fecha de Consulta</th>
                     <th scope="col" class="text-center"></th>
@@ -23,6 +24,7 @@
                     <td>{{history.ced}}</td>
                     <td>{{history.nombre}}</td>
                     <td>{{history.pagaduria}}</td>
+                    <td>{{history.tipo_consulta}}</td>
                     <td></td>                    
                     <td>{{history.created_at}}</td>
                     <td>
@@ -199,8 +201,18 @@ export default {
                             }else{
                                 const id = row.id.toString().toLowerCase();
                                 const searchTerm = this.filter.toLowerCase();
-                                let data4 = id.includes(searchTerm);                                
-                                return id.includes(searchTerm);                                
+                                let data4 = id.includes(searchTerm);  
+                                if(data4 === true){
+                                    return id.includes(searchTerm);
+                                }else{
+                                    const type_consulta = row.tipo_consulta.toString().toLowerCase();
+                                    const searchTerm = this.filter.toLowerCase();
+                                    let data5 = type_consulta.includes(searchTerm);
+                                    // if(data5 === true){
+                                        return type_consulta.includes(searchTerm)
+                                    // }
+                                }
+                                
                             }
                         }
                     }
