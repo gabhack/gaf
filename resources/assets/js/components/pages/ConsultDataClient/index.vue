@@ -6,7 +6,11 @@
                     <div class="d-flex align-items-end">
                         <img src="/img/avatar-img.svg" width="90" class="mr-3">
                         <h2 class="h3 text-black-pearl font-weight-exbold d-inline-block mb-0">{{dataclient.name}}</h2>
-                    </div>                    
+                    </div>       
+                    <button v-if="resultPagare.cuota_compra && resultPagare.cuota_compra.length > 0" type="button" onclick="print();" class="btn btn-black-pearl px-3">
+                        <span>Descargar PDF</span>
+                        <download-icon></download-icon>
+                    </button>             
                 </div>
             </div>
             <div id="consulta-container" class="row">
@@ -325,11 +329,7 @@
                                     </tr>
                                 </tbody>
                             </table>
-                        </div>
-                        <button v-if="resultPagare.cuota_compra && resultPagare.cuota_compra.length > 0" type="button" onclick="print();" class="btn btn-black-pearl px-3">
-                            <span>Descargar PDF</span>
-                            <download-icon></download-icon>
-                        </button>
+                        </div>                        
                     </div>
                 </div>
             </div>
