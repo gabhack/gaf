@@ -381,7 +381,7 @@
                         
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>  
-                        <button type="button" class="btn btn-primary" v-on:click="sendPagare">Cosultar</button>                      
+                        <button type="button" class="btn btn-primary" v-on:click="sendPagare" data-dismiss="modal" aria-label="Close">Cosultar</button>                      
                     </div>
                 </div>
             </div>
