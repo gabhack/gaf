@@ -37,6 +37,7 @@ class CreateVisadosTable extends Migration
             $table->string('fvinculacion');
             $table->string('tvinculacion');
             $table->string('tipo_consulta');
+            $table->string('info_obligaciones');
             $table->timestamps();
         });
     }
