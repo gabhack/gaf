@@ -10,6 +10,7 @@ require('./bootstrap');
 import Vue from 'vue';
 
 // BootstrapVue
+import "jspdf-autotable"
 import 'bootstrap';
 import BootstrapVue from 'bootstrap-vue';
 import toastr from 'toastr';

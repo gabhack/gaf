@@ -27,6 +27,8 @@
     "@fortawesome/fontawesome-free": "^5.15.4",
     "bootstrap": "^4.6.0",
     "bootstrap-vue": "^2.21.2",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.5.23",
     "toastr": "^2.1.4",
     "vuelidate": "^0.7.6"
   }

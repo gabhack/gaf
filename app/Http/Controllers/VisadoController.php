@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Visado;
 use Illuminate\Http\Request;
+use Dompdf\Dompdf;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class VisadoController extends Controller
 {
@@ -59,30 +61,52 @@ class VisadoController extends Controller
       $info_fechavinc = \App\FechaVinc::Where('doc',$detalle_consulta->ced)->first();
       $htmldata = "
       <html>
-        <div>Consecutivo: {$request->id_consulta}</div>
-        <div>Estado: {$detalle_consulta->estado}</div>
-        <div>Fecha consulta: {$detalle_consulta->fconsultaami}</div>
-        <div>Cedula: {$detalle_consulta->ced}</div>
-        <div>Nombre: {$detalle_consulta->nombre}</div>
-        <div>Tipo de credito: {$detalle_consulta->tcredito}</div>
-        <div>Cupo Lib inversión: {$detalle_consulta->clibinv}</div>
-        <div>Pagaduria: {$detalle_consulta->pagaduria}</div>
-        <div>Vr Credito: {$detalle_consulta->vcredito}</div>
-        <div>Vr Desembolso: {$detalle_consulta->vdesembolso}</div>
-        <div>Plazo: {$detalle_consulta->plazo}</div>
-        <div>Cuota: {$detalle_consulta->cuotacredito}</div>
-        <div>Aprobado: {$detalle_consulta->aprobado}</div>
-        <div>% incorporacion: {$detalle_consulta->porcincorp}</div>
-        <div>Cuota max incorporación: {$detalle_consulta->cmaxincorp}</div>
-        <div>Fecha respuesta: {$detalle_consulta->frespuesta}</div>
-        <div>Fecha vinculacion: {$detalle_consulta->fvinculacion}</div>
-        <div>Tipo vinculacion: {$detalle_consulta->tvinculacion}</div>
+        <div style='font: bold 90% monospace; font-size: 5px; display:flex;'>Consecutivo: {$request->id_consulta}</div>
+        <br>
+        <div style='font: bold 90% monospace; font-size: 5px; display:flex;'>Estado: {$detalle_consulta->estado}</div>
+        <br>
+        <div style='font: bold 90% monospace; font-size: 5px; display:flex;'>Fecha consulta: {$detalle_consulta->fconsultaami}</div>
+        <br>
+        <div style='font: bold 90% monospace; font-size: 5px; display:flex;'>Cedula: {$detalle_consulta->ced}</div>
+        <br>
+        <div style='font: bold 90% monospace; font-size: 5px; display:flex;'>Nombre: {$detalle_consulta->nombre}</div>
+        <br>
+        <div style='font: bold 90% monospace; font-size: 5px; display:flex;'>Tipo de credito: {$detalle_consulta->tcredito}</div>
+        <br>
+        <div style='font: bold 90% monospace; font-size: 5px; display:flex;'>Cupo Lib inversión: {$detalle_consulta->clibinv}</div>
+        <br>
+        <div style='font: bold 90% monospace; font-size: 5px; display:flex;'>Pagaduria: {$detalle_consulta->pagaduria}</div>
+        <br>
+        <div style='font: bold 90% monospace; font-size: 5px; display:flex;'>Vr Credito: {$detalle_consulta->vcredito}</div>
+        <br>
+        <div style='font: bold 90% monospace; font-size: 5px; display:flex;'>Vr Desembolso: {$detalle_consulta->vdesembolso}</div>
+        <br>
+        <div style='font: bold 90% monospace; font-size: 5px; display:flex;'>Plazo: {$detalle_consulta->plazo}</div>
+        <br>
+        <div style='font: bold 90% monospace; font-size: 5px; display:flex;'>Cuota: {$detalle_consulta->cuotacredito}</div>
+        <br>
+        <div style='font: bold 90% monospace; font-size: 5px; display:flex;'>Aprobado: {$detalle_consulta->aprobado}</div>
+        <br>
+        <div style='font: bold 90% monospace; font-size: 5px; display:flex;'>% incorporacion: {$detalle_consulta->porcincorp}</div>
+        <br>
+        <div style='font: bold 90% monospace; font-size: 5px; display:flex;'>Cuota max incorporación: {$detalle_consulta->cmaxincorp}</div>
+        <br>
+        <div style='font: bold 90% monospace; font-size: 5px; display:flex;'>Fecha respuesta: {$detalle_consulta->frespuesta}</div>
+        <br>
+        <div style='font: bold 90% monospace; font-size: 5px; display:flex;'>Fecha vinculacion: {$detalle_consulta->fvinculacion}</div>
+        <br>
+        <div style='font: bold 90% monospace; font-size: 5px; display:flex;'>Tipo vinculacion: {$detalle_consulta->tvinculacion}</div>
+        <br>
       </html>
-      "
+      ";
       $dompdf = new DOMPDF();
       $dompdf->load_html($htmldata);
       $dompdf->render();
-      $pdfdata = $dompdf->download();
+      return $htmldata;
+      // $pdf = PDF::loadView('pdf.invoice', $htmldata);
+      // return $pdf->download('invoice.pdf');
+
+      // return $dompdf->download("Consulta{$request->id_consulta}.pdf");
     }
 
     /**

@@ -264,7 +264,7 @@
                             <b>CALCULO DE COMPRA DE CARTERA</b>
                         </div>
                         <div class="panel-body">
-                            <table class="table table-responsive table-striped table-hover">
+                            <table id="consulta" class="table table-responsive table-striped table-hover">
                                 <thead>
                                     <tr>                            
                                         <th>Consecutivo</th>	
@@ -389,6 +389,7 @@
     </div>
 </template>
 <script>
+import { jsPDF } from "jspdf";
 export default {
     data() {
         return {
@@ -528,7 +529,19 @@ export default {
         },
 
         getPdf(){
-            console.log(this.id_consulta);
+            // consulta
+            axios.post('pdfDetalle',{id_consulta:this.id_consulta}).then((response)=>{
+                var doc = new jsPDF();
+                doc.html(response.data, {
+                    callback: function (doc) {
+                        doc.save("Informe");
+                    },
+                    x: 15,
+                    y: 15,
+                    width: 170,
+                    weight:12,
+                });
+            });                        
         }
     }
 }
