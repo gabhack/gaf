@@ -240,6 +240,20 @@
             },
 
             getSolicValidacion(){
+                // let data = {
+                //     GuidConv: '575650aa-b5ed-4797-844d-6ee965e41786',
+                //     TipoValidacion: 4,
+                //     Asesor:'pruevav',
+                //     Sede:'000100',                    
+                //     TipoDoc:'CC',
+                //     NumDoc:'1026307251',
+                //     Email:'brayantriana22@gmail.com',
+                //     Celular:'3007819686',          
+                //     PrefCelular : "57",          
+                //     Usuario:'CKCOMERCIALIZADORA_2022',
+                //     Clave:'CKComercializadora.2022*',
+                // };
+
                 axios.post('https://demorcs.olimpiait.com:6314/Validacion/SolicitudValidacion', this.solicitudVal, {headers:{
                     'Authorization':`Bearer ${this.token}`
                 }}).then((response)=>{
