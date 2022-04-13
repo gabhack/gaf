@@ -46,7 +46,7 @@ Vue.component('HomeIcon', require('./components/icons/HomeIcon').default);
 Vue.component('DownloadIcon', require('./components/icons/DownloadIcon').default);
 
 //Intragration Pages
-// Vue.component('integration', require('./components/pages/Integrations/index.vue').default);
+Vue.component('integration', require('./components/pages/Integrations/index.vue').default);
 
 //imports Data
 Vue.component('imports-component', require('./components/pages/MassiveCharge/index.vue').default);
