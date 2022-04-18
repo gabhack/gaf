@@ -88,7 +88,15 @@
                             <h5 class="modal-title" id="exampleModalLabel">Verificacion de Identidad</h5>                            
                         </div>
                         <div class="modal-body">
-                            <iframe :src="resultSolicVal.url" allow="camera *" title="Inline Frame Example" width="700" height="700"></iframe>
+                            <!-- <iframe :src="resultSolicVal.url" allow="camera" title="Inline Frame Example" width="700" height="700"></iframe> -->
+                            <vue-iframe
+                                :src="resultSolicVal.url"
+                                allow="camera *;"
+                                frame-id="my-ifram"                                
+                                name="my-frame"
+                                width="700px"
+                                height="700px"
+                            />
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>                            
@@ -203,6 +211,7 @@
 </template>
 <script>
     export default {
+        modules: ['vue-iframes/nuxt'],
         data(){
             return{
                 token: null,
@@ -240,21 +249,21 @@
             },
 
             getSolicValidacion(){
-                // let data = {
-                //     GuidConv: '575650aa-b5ed-4797-844d-6ee965e41786',
-                //     TipoValidacion: 4,
-                //     Asesor:'pruevav',
-                //     Sede:'000100',                    
-                //     TipoDoc:'CC',
-                //     NumDoc:'1026307251',
-                //     Email:'brayantriana22@gmail.com',
-                //     Celular:'3007819686',          
-                //     PrefCelular : "57",          
-                //     Usuario:'CKCOMERCIALIZADORA_2022',
-                //     Clave:'CKComercializadora.2022*',
-                // };
+                let data = {
+                    GuidConv: '575650aa-b5ed-4797-844d-6ee965e41786',
+                    TipoValidacion: 4,
+                    Asesor:'pruevav',
+                    Sede:'000100',                    
+                    TipoDoc:'CC',
+                    NumDoc:'1026307251',
+                    Email:'brayantriana22@gmail.com',
+                    Celular:'3007819686',          
+                    PrefCelular : "57",          
+                    Usuario:'CKCOMERCIALIZADORA_2022',
+                    Clave:'CKComercializadora.2022*',
+                };
 
-                axios.post('https://demorcs.olimpiait.com:6314/Validacion/SolicitudValidacion', this.solicitudVal, {headers:{
+                axios.post('https://demorcs.olimpiait.com:6314/Validacion/SolicitudValidacion', data, {headers:{
                     'Authorization':`Bearer ${this.token}`
                 }}).then((response)=>{
                     this.resultSolicVal = response.data.data;
