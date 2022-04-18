@@ -63,7 +63,7 @@
                         </div>
                         <div class="modal-body">                           
                             <div v-if="resultSolicVal.url">
-                                <iframe :src="resultSolicVal.url" allow="camera" width="700" height="700"></iframe>
+                                <iframe id="myIframe" :src="resultSolicVal.url" allow="camera" width="700" height="700"></iframe>
                                 <!-- <vue-iframe
                                     style="visibility: visible; border: none;height: 700px;"
                                     :src="resultSolicVal.url"
@@ -248,13 +248,15 @@
                 axios.post('https://demorcs.olimpiait.com:6314/Validacion/SolicitudValidacion', this.solicitudVal, {headers:{
                     'Authorization':`Bearer ${this.token}`
                 }}).then((response)=>{
-                    this.resultSolicVal = response.data.data;
-                    let url = response.data.data.url;
-                    window.open(url,'_blank');
+                    this.resultSolicVal = response.data.data;                       
+                    navigator.permissions.query({ name: "camera" }).then(res => {
+                        console.log(res);
+                    });               
                     this.solicitudVal.ProcesoConvenioGuid = response.data.data.procesoConvenioGuid;
+            
                     axios.post('validate',this.solicitudVal).then((response)=>{
-                        console.log(response.data);
-                    })
+                        // console.log(response.data);
+                    });
                 }).catch((error)=>{
                     console.log(error);
                 })
