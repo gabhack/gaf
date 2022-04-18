@@ -8,27 +8,7 @@
                     </div>
                     <!-- <div class="card-body" v-if="token !== null"> -->
                     <div class="card-body">
-                        <form>
-                            <div class="form-row">
-                                <div class="form-group col-md-4">
-                                    <label>Tipo de Validación</label>
-                                    <select v-model="solicitudVal.TipoValidacion" class="form-control">
-                                        <option :value="1">Directa</option>
-                                        <option :value="2">Asesor</option>
-                                        <option :value="3">AutoGestionada</option>
-                                        <option :value="4">Ambas</option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label>Asesor</label>
-                                    <input v-model="solicitudVal.Asesor" class="form-control">
-                                </div>
-
-                                <div class="form-group col-md-4">
-                                    <label>Sede</label>
-                                    <input v-model="solicitudVal.Sede" class="form-control">
-                                </div>
-                            </div>                            
+                        <form>                            
                             <div class="form-row">
                                 <div class="form-group col-md-2">
                                     <label>Tipo Documento</label>
@@ -46,14 +26,8 @@
                                     <label>Celular</label>
                                     <input v-model="solicitudVal.Celular" type="number" class="form-control">
                                 </div>
-                            </div>       
-
-                            <div class="form-group">
-                                <label>Identificador unico de Convenio</label>
-                                <input class="form-control" v-model="solicitudVal.GuidConv"/>
-                            </div>                       
-
-                            <button v-if="solicitudVal.Asesor" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" v-on:click="getSolicValidacion">Solicitar Validación</button>
+                            </div>
+                            <button v-if="solicitudVal.TipoDoc" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" v-on:click="getSolicValidacion">Solicitar Validación</button>
                         </form> 
                         <table class="mt-3 table table-striped table-bordered table hover">
                             <thead>
@@ -219,6 +193,11 @@
             return{
                 token: null,
                 solicitudVal:{
+                    TipoValidacion: 4,
+                    Asesor:'pruevav',                    
+                    Sede:'000100',  
+                    TipoDoc:'CC',
+                    GuidConv: '575650aa-b5ed-4797-844d-6ee965e41786',                  
                     Usuario:'CKCOMERCIALIZADORA_2022',
                     Clave:'CKComercializadora.2022*',
                 },
