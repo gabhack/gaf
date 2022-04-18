@@ -63,7 +63,7 @@
                         </div>
                         <div class="modal-body">                           
                             <div v-if="resultSolicVal.url">
-                                <iframe :src="resultSolicVal.url" frameborder="0" border="0" cellspacing="0" style="border-style: none;" width="700" height="700"></iframe>
+                                <iframe src="https://demorcs.olimpiait.com:6319/#/redirect/08284972-d08f-4b1e-891c-b13901795666" allow="camera" frameborder="0" border="0" cellspacing="0" style="border-style: none;" width="700" height="700"></iframe>
                                 <!-- <vue-iframe
                                     style="visibility: visible; border: none;height: 700px;"
                                     :src="resultSolicVal.url"
