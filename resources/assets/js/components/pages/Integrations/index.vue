@@ -63,7 +63,7 @@
                         </div>
                         <div class="modal-body">                           
                             <div v-if="resultSolicVal.url">
-                                <iframe :src="resultSolicVal.url" frameborder="0" border="0" cellspacing="0" style="border-style: none;" allow="camera" width="700" height="700"></iframe>
+                                <iframe :src="resultSolicVal.url" frameborder="0" border="0" cellspacing="0" style="border-style: none;" width="700" height="700"></iframe>
                                 <!-- <vue-iframe
                                     style="visibility: visible; border: none;height: 700px;"
                                     :src="resultSolicVal.url"
