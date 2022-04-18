@@ -8,9 +8,6 @@ require('./bootstrap');
 
 // Vue
 import Vue from 'vue';
-
-import VueIframe from 'vue-iframes'
-Vue.use(VueIframe)
 // BootstrapVue
 import 'bootstrap';
 import BootstrapVue from 'bootstrap-vue';

@@ -61,19 +61,8 @@
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Verificacion de Identidad</h5>                            
                         </div>
-                        <div class="modal-body">                           
-                            <div v-if="resultSolicVal.url">
-                                <iframe id="myIframe" :src="resultSolicVal.url" allow="camera" width="700" height="700"></iframe>
-                                <!-- <vue-iframe
-                                    style="visibility: visible; border: none;height: 700px;"
-                                    :src="resultSolicVal.url"
-                                    allow="camera *;"
-                                    frame-id="my-ifram"                                
-                                    name="my-frame"
-                                    width="700px"
-                                    height="700px"
-                                /> -->
-                            </div>                            
+                        <div class="modal-body">
+                            <iframe :src="resultSolicVal.url" allow="camera" width="700" height="700"></iframe>                       
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>                            
