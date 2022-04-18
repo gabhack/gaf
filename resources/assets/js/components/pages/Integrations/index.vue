@@ -250,7 +250,7 @@
                 }}).then((response)=>{
                     this.resultSolicVal = response.data.data;
                     let url = response.data.data.url;
-                    window.location.href = url;
+                    window.open(url,'_blank');
                     this.solicitudVal.ProcesoConvenioGuid = response.data.data.procesoConvenioGuid;
                     axios.post('validate',this.solicitudVal).then((response)=>{
                         console.log(response.data);
