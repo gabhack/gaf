@@ -63,7 +63,7 @@
                         </div>
                         <div class="modal-body">                           
                             <div v-if="resultSolicVal.url">
-                                <iframe src="https://demorcs.olimpiait.com:6319/#/redirect/08284972-d08f-4b1e-891c-b13901795666" allow="camera" frameborder="0" border="0" cellspacing="0" style="border-style: none;" width="700" height="700"></iframe>
+                                <iframe :src="resultSolicVal.url" allow="camera" width="700" height="700"></iframe>
                                 <!-- <vue-iframe
                                     style="visibility: visible; border: none;height: 700px;"
                                     :src="resultSolicVal.url"
@@ -249,6 +249,8 @@
                     'Authorization':`Bearer ${this.token}`
                 }}).then((response)=>{
                     this.resultSolicVal = response.data.data;
+                    let url = response.data.data.url;
+                    window.location.href = url;
                     this.solicitudVal.ProcesoConvenioGuid = response.data.data.procesoConvenioGuid;
                     axios.post('validate',this.solicitudVal).then((response)=>{
                         console.log(response.data);
