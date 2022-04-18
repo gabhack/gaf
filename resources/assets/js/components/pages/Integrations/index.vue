@@ -81,13 +81,13 @@
                 </div>
             </div>
             <!-- Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content" style="width:740px">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Verificacion de Identidad</h5>                            
                         </div>
-                        <div class="modal-body">
+                        <div class="modal-body"> -->
                             <!-- <iframe :src="resultSolicVal.url" allow="camera" title="Inline Frame Example" width="700" height="700"></iframe> -->
                             <vue-iframe
                                 style="visibility: visible; border: none;height: 700px;"
@@ -98,13 +98,13 @@
                                 width="700px"
                                 height="700px"
                             />
-                        </div>
+                        <!-- </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>                            
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
 
             <!-- Modal -->
