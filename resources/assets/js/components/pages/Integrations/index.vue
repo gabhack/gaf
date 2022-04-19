@@ -62,7 +62,7 @@
                             <h5 class="modal-title" id="exampleModalLabel">Verificacion de Identidad</h5>                            
                         </div>
                         <div class="modal-body">
-                            <iframe :src="resultSolicVal.url" width="700" height="700" allow="microphone; camera"></iframe>
+                            <iframe :src="resultSolicVal.url" width="700" height="700" allow="camera *;"></iframe>                            
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>                            
@@ -200,6 +200,9 @@
             this.getData();
         },
         methods:{
+            onLoad(data){
+                console.log('datos',data);
+            },
             getData(){
                 axios.get('validate').then((response)=>{
                     console.log(response.data);
