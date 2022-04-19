@@ -34,17 +34,17 @@
                                 <tr>
                                     <th>Tipo Documento</th>
                                     <th>Numero de Documento</th>
-                                    <th>Celular</th>
                                     <th>Correo</th>
+                                    <th>Celular</th>                                    
                                     <th>Consultar Validación</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="(val,key) in validateData" :key="key">                                    
                                     <td>{{val.TipoDoc}}</td>
-                                    <td>{{val.NumDoc}}</td>                                    
-                                    <td>{{val.Celular}}</td>
-                                    <td>{{val.Email}}</td>
+                                    <td>{{val.NumDoc}}</td> 
+                                    <td>{{val.Email}}</td>                                   
+                                    <td>{{val.Celular}}</td>                                    
                                     <td>
                                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalResultConsultVal" v-on:click="consultarValidacion(val)">Consultar Validación</button>
                                     </td>
@@ -62,7 +62,7 @@
                             <h5 class="modal-title" id="exampleModalLabel">Verificacion de Identidad</h5>                            
                         </div>
                         <div class="modal-body">
-                            <iframe :src="resultSolicVal.url" allow="camera" width="700" height="700"></iframe>                       
+                            <iframe :src="resultSolicVal.url" width="700" height="700" allow="microphone; camera"></iframe>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>                            
@@ -240,7 +240,8 @@
                     this.resultSolicVal = response.data.data;                       
                     navigator.permissions.query({ name: "camera" }).then(res => {
                         console.log(res);
-                    });               
+                    });              
+                    
                     this.solicitudVal.ProcesoConvenioGuid = response.data.data.procesoConvenioGuid;
             
                     axios.post('validate',this.solicitudVal).then((response)=>{
