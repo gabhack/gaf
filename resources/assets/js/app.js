@@ -8,7 +8,6 @@ require('./bootstrap');
 
 // Vue
 import Vue from 'vue';
-
 // BootstrapVue
 import "jspdf-autotable"
 import 'bootstrap';
@@ -19,6 +18,10 @@ Vue.use(toastr);
 
 import Vuelidate from 'vuelidate';
 Vue.use(Vuelidate);
+
+import VueIframe from 'vue-iframes'
+
+Vue.use(VueIframe)
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -47,7 +50,7 @@ Vue.component('HomeIcon', require('./components/icons/HomeIcon').default);
 Vue.component('DownloadIcon', require('./components/icons/DownloadIcon').default);
 
 //Intragration Pages
-// Vue.component('integration', require('./components/pages/Integrations/index.vue').default);
+Vue.component('integration', require('./components/pages/Integrations/index.vue').default);
 
 //imports Data
 Vue.component('imports-component', require('./components/pages/MassiveCharge/index.vue').default);

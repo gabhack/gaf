@@ -52,26 +52,26 @@
                             <table class="table table-responsive table-striped table-hover">
                                 <thead>
                                     <tr>
-                                        <th>FONDO</th>
-                                        <th>TD DOCUMENTO</th>
-                                        <th>DOCUMENTO</th>
-                                        <th>X</th>
-                                        <th>PENSIONADO (APELLIDOS Y NOMBRES)</th>
-                                        <th>FECHA DE NACIMIENTO</th>
-                                        <th>DIRECCION</th>
-                                        <th>DPTO (NOMBRE DEPARTAMENTO de residencia del pensionado)</th>
-                                        <th>MNPIO (NOMBRE MUNICIPIO de residencia del pensionado)</th>
-                                        <th>TIPO_PENSION (NOMBRE_PENSION)</th>
-                                        <th>NOMBRE_BANCO (NOMBRE DEL BANCO)</th>
-                                        <th>SUCURSAL (NOMBRE DE LA SUCURSAL)</th>
-                                        <th>TELÉFONO</th>
-                                        <th>CELULAR</th>
-                                        <th>CORREO ELECTRÓNICO</th>
-                                        <th>*VALOR PENSIONES</th>
-                                        <th>*VALOR SALUD</th>
-                                        <th>*VALOR EMBARGOS</th>
-                                        <th>*VALOR DESCUENTOS</th>
-                                        <th>*CUPO</th>
+                                        <th>Fondo</th>
+                                        <th>Tipo de documento</th>
+                                        <th>Documento de identidad Pensionado</th>
+                                        <th>Tipo y Cedula concatenadas (B)</th>
+                                        <th>Nombre y apellido pensionado</th>
+                                        <th>Fecha de Nacimiento</th>
+                                        <th>Dirección</th>
+                                        <th>Departamento</th>
+                                        <th>Municipio</th>
+                                        <th>Tipo Pension</th>
+                                        <th>Nombre Banco donde le cosignan</th>
+                                        <th>Sucursal Banco</th>
+                                        <th>Telefono</th>
+                                        <th>Celular</th>
+                                        <th>Correo</th>
+                                        <th>Valor pension</th>
+                                        <th>Valor salud</th>
+                                        <th>Valor embargos Aproximado</th>
+                                        <th>Valor descuentos</th>
+                                        <th>Valor Cupo</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -112,9 +112,12 @@
                             <table class="table table-responsive table-striped table-hover">
                                 <thead>
                                     <tr>
-                                        <th>DOCUMENTO</th>
-                                        <th>VINCULACIÓN</th>
-                                        <th>TIPO_PENSION</th>
+                                        <th>Documento de identidad Pensionado</th>
+                                        <th>Fecha de Vinculacion</th>
+                                        <th>Tipo pension</th>
+                                        <th>Fecha carga data</th>
+                                        <th>Mes carga data</th>
+                                        <th>Año carga data</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -122,6 +125,9 @@
                                         <td>{{fechavinc.doc}}</td>
                                         <td>{{fechavinc.vinc}}</td>
                                         <td>{{fechavinc.tp}}</td>
+                                        <td>{{fechavinc.fecdata}}</td>
+                                        <td>{{fechavinc.mesdata}}</td>
+                                        <td>{{fechavinc.anodata}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -137,29 +143,32 @@
                                 <thead>
                                     <tr>
                                         <th>Seleccionar</th>
-                                        <th>Periodo</th>
-                                        <th>Consecutivo</th>
-                                        <th>Clase Tercero</th>
-                                        <th>Tercero</th>
-                                        <th>Nombre del Tercero</th>
+                                        <th>Periodo de data</th>
+                                        <th>Consecutivo (B)</th>
+                                        <th>Tipo entidad</th>
+                                        <th>Entidad (B)</th>
+                                        <th>Nombre entidad actual</th>
                                         <th>Tipo Documento</th>
-                                        <th>Documento</th>
-                                        <th>Nombre</th>
-                                        <th>Pagare</th>
-                                        <th>Porcentaje</th>
-                                        <th>Valor Aplicado</th>
-                                        <th>Valor Total</th>
-                                        <th>Valor Pagado</th>
-                                        <th>Saldo</th>
-                                        <th>Fecha Grabación</th>
-                                        <th>Forma</th>
-                                        <th>Código entidad anterior</th>
-                                        <th>Nombre Entidad Anterior</th>
-                                        <th>Fecha de Cesión</th>
-                                        <th>Tipo Descuento</th>
+                                        <th>Documento de identidad Pensionado</th>
+                                        <th>Nombre y apellido pensionado</th>
+                                        <th>Numero de pagare</th>
+                                        <th>Porcentaje (B)</th>
+                                        <th>Valor total descuentos Aplicados</th>
+                                        <th>Valor total deuda</th>
+                                        <th>Valor pagado deuda</th>
+                                        <th>Saldo deuda</th>
+                                        <th>Fecha inicio deuda</th>
+                                        <th>Forma (B)</th>
+                                        <th>Codigo entidad anterior (B)</th>
+                                        <th>Nombre entidad cediente</th>
+                                        <th>Fecha de cesion a entidad actual</th>
+                                        <th>Tipo de descuento</th>
                                         <th>PAGARE5DIG</th>
                                         <th>PAGARE4DIGCON0</th>
                                         <th>Numero pagare</th>
+                                        <th>Fecha carga data</th>
+                                        <th>Mes carga data</th>
+                                        <th>Año carga data</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -190,6 +199,9 @@
                                         <td>{{descapli.p5d}}</td>
                                         <td>{{descapli.p4d}}</td>
                                         <td>{{descapli.numpagopt}}</td>
+                                        <td>{{descapli.fecdata}}</td>
+                                        <td>{{descapli.mesdata}}</td>
+                                        <td>{{descapli.anodata}}</td>
                                     </tr>
                                 </tbody>
                             </table>                            
@@ -204,26 +216,29 @@
                                 <thead>
                                     <tr> 
                                         <th>Seleccionar</th>                                       
-                                        <th>Clase Tercero</th>
-                                        <th>Tercero</th>
-                                        <th>Nombre del Tercero</th>
-                                        <th>Tipo Documento</th>
-                                        <th>Documento</th>
-                                        <th>Nombre</th>
-                                        <th>Pagare</th>
-                                        <th>Porcentaje</th>
-                                        <th>Valor Fijo</th>
-                                        <th>Valor Aplicado</th>
-                                        <th>Valor Total</th>
-                                        <th>Valor Pagado</th>
-                                        <th>Saldo</th>
-                                        <th>Fecha Grabación</th>
-                                        <th>Forma</th>
+                                        <th>Tipo entidad</th>
+                                        <th>Entidad (B)</th>
+                                        <th>Nombre entidad actual</th>
+                                        <th>Tipo de documento</th>
+                                        <th>Documento de identidad Pensionado</th>
+                                        <th>Nombre y apellido pensionado</th>
+                                        <th>Numero de pagare</th>
+                                        <th>Porcentaje (B)</th>
+                                        <th>Cuota deuda</th>
+                                        <th>Valor descuento no aplicado</th>
+                                        <th>Valor total deuda</th>
+                                        <th>Valor pagado deuda</th>
+                                        <th>Saldo deuda</th>
+                                        <th>Fecha inicio deuda</th>
+                                        <th>Forma (B)</th>
                                         <th>Inconsistencia</th>
-                                        <th>Código entidad anterior</th>
-                                        <th>Nombre Entidad Anterior</th>
-                                        <th>Fecha de Cesión</th>
-                                        <th>Tipo Descuento</th>                                        
+                                        <th>Codigo entidad anterior (B)</th>
+                                        <th>Nombre entidad cediente</th>
+                                        <th>Fecha de cesion a entidad actual</th>
+                                        <th>Tipo de descuento</th>     
+                                        <th>Fecha carga data</th>
+                                        <th>Mes carga data</th>
+                                        <th>Año carga data</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -251,6 +266,9 @@
                                         <td>{{descnoap.nonentant}}</td>
                                         <td>{{descnoap.fechacesion}}</td>
                                         <td>{{descnoap.tdesc}}</td>
+                                        <td>{{descnoap.fecdata}}</td>
+                                        <td>{{descnoap.mesdata}}</td>
+                                        <td>{{descnoap.anodata}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -258,6 +276,164 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-md-12">
+                    <div class="panel-heading">
+                        <b>DATAMESFIDU</b>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-responsive table-striped table-hover">
+                            <thead>
+                                <tr> 
+                                    <th>Municipio</th>
+                                    <th>Documento de identidad Pensionado</th>
+                                    <th>Tipo de documento</th>
+                                    <th>Descripcion tipo documento (B)</th>
+                                    <th>Nombre(s) pensionado</th>
+                                    <th>Apellido(s) pensionado</th>
+                                    <th>Genero</th>
+                                    <th>Estado civil</th>
+                                    <th>Fecha de nacimiento</th>
+                                    <th>Edad Pensionado</th>
+                                    <th>Tipo de Vinculacion (B)</th>
+                                    <th>Descripcion tipo de vinculacion</th>
+                                    <th>Codigo Fuente recurso (B)</th>
+                                    <th>Fuente de recurso</th>
+                                    <th>Codigo dane departamento (B)</th>
+                                    <th>Departamento</th>
+                                    <th>Resolucion (B)</th>
+                                    <th>Vinculacion</th>
+                                    <th>Fecha expedicion resolucion (B)</th>
+                                    <th>Valor pension</th>
+                                    <th>Estado Pension (B)</th>
+                                    <th>Documento de identidad beneficiario</th>
+                                    <th>Tipo de documento Beneficiario</th>
+                                    <th>Nombre beneficiario</th>
+                                    <th>Telefono</th>
+                                    <th>Direccion</th>
+                                    <th>Correo</th>
+                                    <th>Numero comprobante (B)</th>
+                                    <th>Periodo de data</th>
+                                    <th>Tipo pension codigo</th>
+                                    <th>Fecha pago pension</th>
+                                    <th>Sucursal Banco (B)</th>
+                                    <th>Valor pension Con retroactivo (B)</th>
+                                    <th>Valor descuentos en bruto Retroactivo (B)</th>
+                                    <th>Valor pago en bruto Retroactivo (B)</th>
+                                    <th>Fecha carga data</th>
+                                    <th>Mes carga data</th>
+                                    <th>Año carga data</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                    <td>{{datamesfidu.mnpio}}</td>
+                                    <td>{{datamesfidu.doc}}</td>
+                                    <td>{{datamesfidu.td}}</td>
+                                    <td>{{datamesfidu.tdd}}</td>
+                                    <td>{{datamesfidu.solonomp}}</td>
+                                    <td>{{datamesfidu.soloapellp}}</td>
+                                    <td>{{datamesfidu.genero}}</td>
+                                    <td>{{datamesfidu.estcivil}}</td>
+                                    <td>{{datamesfidu.fecnacimient}}</td>
+                                    <td>{{datamesfidu.edad}}</td>
+                                    <td>{{datamesfidu.tipvinc}}</td>
+                                    <td>{{datamesfidu.desctipvinc}}</td>
+                                    <td>{{datamesfidu.fuenrecurso}}</td>
+                                    <td>{{datamesfidu.descfuenrecurso}}</td>
+                                    <td>{{datamesfidu.numdep}}</td>
+                                    <td>{{datamesfidu.dpto}}</td>
+                                    <td>{{datamesfidu.resol}}</td>
+                                    <td>{{datamesfidu.fechresol}}</td>
+                                    <td>{{datamesfidu.fechefect}}</td>
+                                    <td>{{datamesfidu.vpension}}</td>
+                                    <td>{{datamesfidu.estpens}}</td>
+                                    <td>{{datamesfidu.docbenef}}</td>
+                                    <td>{{datamesfidu.td}}</td>
+                                    <td>{{datamesfidu.nombenef}}</td>
+                                    <td>{{datamesfidu.tel}}</td>
+                                    <td>{{datamesfidu.dir}}</td>
+                                    <td>{{datamesfidu.correo}}</td>
+                                    <td>{{datamesfidu.nomcomprob}}</td>
+                                    <td>{{datamesfidu.periodo}}</td>
+                                    <td>{{datamesfidu.tipprest}}</td>
+                                    <td>{{datamesfidu.fechpago}}</td>
+                                    <td>{{datamesfidu.sucursal}}</td>
+                                    <td>{{datamesfidu.vpension}}</td>
+                                    <td>{{datamesfidu.vdescbruto}}</td>
+                                    <td>{{datamesfidu.pagonetbruto}}</td>
+                                    <td>{{datamesfidu.fecdata}}</td>
+                                    <td>{{datamesfidu.mesdata}}</td>
+                                    <td>{{datamesfidu.anodata}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <b>DATAMESSECEDUC</b>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-responsive table-striped table-hover">
+                                <thead>
+                                    <tr> 
+                                        <th>Documento de identidad docente </th>
+                                        <th>Nombre y apellido docente </th>
+                                        <th>Fecha Vinculacion </th>
+                                        <th>Antigüedad Vinculacion (B) </th>
+                                        <th>Fecha de nacimiento </th>
+                                        <th>Edad Pensionado </th>
+                                        <th>Area de desempeño </th>
+                                        <th>Cargo </th>
+                                        <th>Valor ingreso Aproximado </th>
+                                        <th>Fecha Vinculacion </th>
+                                        <th>Fecha de posesion (B) </th>
+                                        <th>Tipo Vinculacion </th>
+                                        <th>Estado laboral </th>
+                                        <th>Centro de educacion </th>
+                                        <th>Municipio y Departamento </th>
+                                        <th>Telefono </th>
+                                        <th>Direccion </th>
+                                        <th>Correo </th>
+                                        <th>Sede en que presta el servicio </th>
+                                        <th>Fecha carga data</th>
+                                        <th>Mes carga data</th>
+                                        <th>Año carga data</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                        <td>{{datamesseceduc.doc}}</td>
+                                        <td>{{datamesseceduc.nomp}}</td>
+                                        <td>{{datamesseceduc.fechingr}}</td>
+                                        <td>{{datamesseceduc.antiguedad}}</td>
+                                        <td>{{datamesseceduc.fecnacimient}}</td>
+                                        <td>{{datamesseceduc.edad}}</td>
+                                        <td>{{datamesseceduc.esquema}}</td>
+                                        <td>{{datamesseceduc.cargo}}</td>
+                                        <td>{{datamesseceduc.vpension}}</td>
+                                        <td>{{datamesseceduc.fecnombr}}</td>
+                                        <td>{{datamesseceduc.fecposesion}}</td>
+                                        <td>{{datamesseceduc.nivcontr}}</td>
+                                        <td>{{datamesseceduc.estlaboral}}</td>
+                                        <td>{{datamesseceduc.centrocosto}}</td>
+                                        <td>{{datamesseceduc.mnpioydep}}</td>
+                                        <td>{{datamesseceduc.tel}}</td>
+                                        <td>{{datamesseceduc.dir}}</td>
+                                        <td>{{datamesseceduc.correo}}</td>
+                                        <td>{{datamesseceduc.sedecoleg}}</td>
+                                        <td>{{datamesseceduc.fecdata}}</td>
+                                        <td>{{datamesseceduc.mesdata}}</td>
+                                        <td>{{datamesseceduc.anodata}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="col-md-12" v-if="resultPagare.cuota_compra && resultPagare.cuota_compra.length > 0">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
@@ -412,6 +588,8 @@ export default {
             fechaVinc:[],
             descapli:[],
             descnoap:[],
+            datamesfidu:[],
+            datamesseceduc:[],
             id_consulta:null
         }
     },
@@ -433,6 +611,8 @@ export default {
             this.getFechaVinc();
             this.getDescapli();
             this.getDescnoap();
+            this.getDatamesfidu();
+            this.getDatamesseceduc();
         },
         getDatames(){
             axios.get(`datames/${this.dataclient.doc}`).then((response)=>{
@@ -452,6 +632,16 @@ export default {
         getDescnoap(){
             axios.get(`descnoap/${this.dataclient.doc}`).then((response)=>{
                 this.descnoap = response.data;
+            });
+        },
+        getDatamesfidu(){
+            axios.get('/datamesfidu').then((response)=>{
+                this.datamesfidu = response.data
+            });
+        },
+        getDatamesseceduc(){
+            axios.get('/datamesseceduc').then((response)=>{
+                this.datamesseceduc = response.data;
             });
         },
         enableSteps(enable){

@@ -369,8 +369,6 @@ Route::view('/moreinformation', 'moreinformation');
 Route::view('/hego', 'hego');
 Route::view('/hegoinformation', 'hegoinformation');
 Route::view('/integration', 'integration');
-Route::view('/massive', 'massive');
-Route::view('/dataClient','dataClient');
 
 Route::post('datamesImport','DataMesController@import');
 Route::post('fechaVincImport','FechaVincController@import');
@@ -391,3 +389,8 @@ Route::post('pdfDetalle','VisadoController@pdfDetalle');
 
 Route::get('getHistoryConsults','VisadoController@historialConsultas');
 Route::view('/historyClient','historyClient');
+Route::view('/dataClient','dataClient');
+Route::resource('/validate','SolicitudValidacionController');
+
+Route::resource('/datamesfidu','datamesfidu_controller');
+Route::resource('/datamesseceduc','datamesseceduc_controller');
