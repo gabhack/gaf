@@ -374,8 +374,13 @@ Route::post('datamesImport','DataMesController@import');
 Route::post('fechaVincImport','FechaVincController@import');
 Route::post('descapliImport','DescapliController@import');
 Route::post('descnoapController','DescnoapController@import');
+Route::post('datamesfiduImport','DatamesfiduController@import');
+Route::post('datamesseceducImport','DatamesseceducController@import');
 
 Route::get('dumpDataMes','DataMesController@dumpDataMes');
+Route::get('dumpDataMesFidu','DatamesfiduController@dumpDatamesfidu');
+Route::get('dumpDataMesSeceduc','DatamesseceducController@dumpDatamesseceduc');
+
 Route::post('consultaDescnoap','DescnoapController@consultaUnitaria');
 Route::post('consultaUnitaria','DescapliController@consultaUnitaria');
 Route::post('resultadoAprobacion','DescapliController@resultadoAprobacion');
@@ -390,6 +395,7 @@ Route::post('pdfDetalle','VisadoController@pdfDetalle');
 Route::get('getHistoryConsults','VisadoController@historialConsultas');
 Route::view('/historyClient','historyClient');
 Route::view('/dataClient','dataClient');
+Route::view('/massiveCharge','massive');
 Route::resource('/validate','SolicitudValidacionController');
 
 Route::resource('/datamesfidu','DatamesfiduController');

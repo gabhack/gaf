@@ -36,6 +36,7 @@
 			<div class="bg-white py-2 collapse-inner">		
 				<a class="collapse-item btn-list" href="{{ url('historyClient' )}}">Listado de consultas</a>		
 				<!-- <a class="collapse-item btn-list" href="{{ url('consultas/list' )}}">Listado de consultas</a>		 -->
+				<a class="collapse-item" href="/massiveCharge">Carga Masiva</a>
 				<a class="collapse-item" href="{{ url('dataClient') }}">Consulta Individual</a> 
 				<a class="collapse-item" href="#">Consulta bloque</a> 				
 				<a class="collapse-item" href="#">Recuperacion de Cartera </a>

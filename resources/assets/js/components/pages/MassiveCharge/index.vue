@@ -12,6 +12,8 @@
                         <option value="datames">DATAMES</option>
                         <option value="descapli">DESCAPLI</option>
                         <option value="descnoap">DESCNOAP</option>
+                        <option value="datamesfidu">DATAMESFIDU</option>
+                        <option value="datamesseceduc">DATAMESSECEDUC</option>
                     </select>
                 </div>
 
@@ -35,13 +37,23 @@
                     <input type="file" name="descnoap" v-on:change="getFile" class="form-control">
                 </div>
 
+                <div class="form-group" v-if="optionSelected === 'datamesfidu'">
+                    <label for="">Selecciona el archivo a importar (DATAMESFIDU)</label>
+                    <input type="file" name="datamesfidu" v-on:change="getFile" class="form-control">
+                </div>
+
+                <div class="form-group" v-if="optionSelected === 'datamesseceduc'">
+                    <label for="">Selecciona el archivo a importar (DATAMESSECEDUC)</label>
+                    <input type="file" name="datamesseceduc" v-on:change="getFile" class="form-control">
+                </div>
+
                 <div class="form-group" v-if="optionSelected !==null">
                     <button class="btn btn-primary" v-on:click="importFile">Importar</button>
                 </div> 
 
-                <div class="form-group mt-2" v-if="optionSelected === 'datames'">
+                <div class="form-group mt-2" v-if="optionSelected === 'datames' || optionSelected === 'datamesfidu' || optionSelected === 'datamesseceduc'">
                     <label for="">Vaciar Tabla</label>
-                    <button class="btn btn-primary" v-on:click="dumpDataMes">Vaciar tabla DATAMES</button>
+                    <button class="btn btn-primary" v-on:click="dumpDataMes">Vaciar tabla</button>
                 </div>               
             </div>
         </div>
@@ -69,10 +81,22 @@ export default ({
             this.file = files[0];
         },
         dumpDataMes(){
-            axios.get('dumpDataMes').then((response)=>{
-                toastr.success('Datos de tabla Borrados');
-                console.log(response.data);
-            })
+            if(this.optionSelected === 'datames'){                   
+                axios.get('dumpDataMes').then((response)=>{
+                    toastr.success('Datos de tabla Borrados');
+                    console.log(response.data);
+                });
+            }else if(this.optionSelected === 'datamesfidu'){
+                axios.get('dumpDataMesFidu').then((response)=>{
+                    toastr.success('Datos de tabla Borrados');
+                    console.log(response.data);
+                });
+            }else if(this.optionSelected === 'datamesseceduc'){
+                axios.get('dumpDataMesSeceduc').then((response)=>{
+                    toastr.success('Datos de tabla Borrados');
+                    console.log(response.data);
+                });
+            }
         },
         importFile(){        
             if(this.optionSelected === 'fechavinc'){
@@ -104,6 +128,24 @@ export default ({
                 formData.append("file", this.file);
                 axios.post('descnoapController',formData,{headers:{'Content-Type':'multipart/form-data','mime-type':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}}).then((response)=>{
                     toastr.success('importación de Descnoap Realizada');
+                    console.log(response.data);
+                }).catch((error)=>{
+                    console.log(error);
+                })
+            }else if(this.optionSelected === 'datamesfidu'){
+                const formData = new FormData();
+                formData.append("file", this.file);
+                axios.post('datamesfiduImport',formData,{headers:{'Content-Type':'multipart/form-data','mime-type':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}}).then((response)=>{
+                    toastr.success('importación de Datamesfidu Realizada');
+                    console.log(response.data);
+                }).catch((error)=>{
+                    console.log(error);
+                })
+            }else if(this.optionSelected === 'datamesseceduc'){
+                const formData = new FormData();
+                formData.append("file", this.file);
+                axios.post('datamesseceducImport',formData,{headers:{'Content-Type':'multipart/form-data','mime-type':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}}).then((response)=>{
+                    toastr.success('importación de DATAMESSECEDUC Realizada');
                     console.log(response.data);
                 }).catch((error)=>{
                     console.log(error);
