@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Visado extends Model
+class Datamesfidu extends Model
 {
     protected $connection = 'pgsql';
 
@@ -13,43 +13,43 @@ class Visado extends Model
     protected $guarded = ['id'];
 
     protected $fillable = [
-      'mnpio'
-      'doc'
-      'td'
-      'tdd'
-      'solonomp'
-      'soloapellp'
-      'genero'
-      'estcivil'
-      'fecnacimient'
-      'edad'
-      'tipvinc'
-      'desctipvinc'
-      'fuenrecurso'
-      'descfuenrecurso'
-      'numdep'
-      'dpto'
-      'resol'
-      'fechresol'
-      'fechefect'
-      'vpension'
-      'estpens'
-      'docbenef'
-      'td'
-      'nombenef'
-      'tel'
-      'dir'
-      'correo'
-      'nomcomprob'
-      'periodo'
-      'tipprest'
-      'fechpago'
-      'sucursal'
-      'vpension'
-      'vdescbruto'
-      'pagonetbruto'
-      'fecdata'
-      'mesdata'
-      'anodata'
+      'mnpio',
+      'doc',
+      'td',
+      'tdd',
+      'solonomp',
+      'soloapellp',
+      'genero',
+      'estcivil',
+      'fecnacimient',
+      'edad',
+      'tipvinc',
+      'desctipvinc',
+      'fuenrecurso',
+      'descfuenrecurso',
+      'numdep',
+      'dpto',
+      'resol',
+      'fechresol',
+      'fechefect',
+      'vpension',
+      'estpens',
+      'docbenef',
+      'td',
+      'nombenef',
+      'tel',
+      'dir',
+      'correo',
+      'nomcomprob',
+      'periodo',
+      'tipprest',
+      'fechpago',
+      'sucursal',
+      'vpension',
+      'vdescbruto',
+      'pagonetbruto',
+      'fecdata',
+      'mesdata',
+      'anodata',
     ];
 }

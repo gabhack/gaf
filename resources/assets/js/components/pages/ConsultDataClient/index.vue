@@ -635,12 +635,12 @@ export default {
             });
         },
         getDatamesfidu(){
-            axios.get('/datamesfidu').then((response)=>{
+            axios.post('/datamesfidu/consultaUnitaria',{doc: this.dataclient.doc}).then((response)=>{
                 this.datamesfidu = response.data
             });
         },
         getDatamesseceduc(){
-            axios.get('/datamesseceduc').then((response)=>{
+            axios.post('/datamesseceduc/consultaUnitaria',{doc: this.dataclient.doc}).then((response)=>{
                 this.datamesseceduc = response.data;
             });
         },

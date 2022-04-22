@@ -19,10 +19,10 @@ class DatamesfiduController extends Controller
       return response()->json(['message'=>'Debe Seleccionar un archivo'],400);
     }
   }
-  public function consultaUnitaria(Request $request){
-    $data_formulario = $request->data;
-    $doc = $request->data['doc'];
-    $consulta_cedula = \App\Datamesfidu::Where('doc',$doc)->get();
+  public function consultaUnitaria(Request $request){    
+    $data_formulario = $request->data;    
+    $doc = $request->doc;    
+    $consulta_cedula = Datamesfidu::where('doc',$doc)->get();
     $resultados = json_decode($consulta_cedula);
     if($resultados == "" or $resultados == null ){
       return response()->json(['message'=>'No se encontraron registros con el numero seleccionado.', 'data'=>$resultados],200);

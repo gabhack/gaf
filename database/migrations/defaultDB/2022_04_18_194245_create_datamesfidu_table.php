@@ -13,7 +13,7 @@ class CreateDatamesfiduTable extends Migration
      */
     public function up()
     {
-        Schema::create('datamesfidu', function (Blueprint $table) {
+        Schema::connection('pgsql')->create('datamesfidu', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
             $table->text('mnpio');
@@ -37,8 +37,7 @@ class CreateDatamesfiduTable extends Migration
             $table->text('fechefect');
             $table->text('vpension');
             $table->text('estpens');
-            $table->text('docbenef');
-            $table->text('td');
+            $table->text('docbenef');            
             $table->text('nombenef');
             $table->text('tel');
             $table->text('dir');
@@ -48,7 +47,6 @@ class CreateDatamesfiduTable extends Migration
             $table->text('tipprest');
             $table->text('fechpago');
             $table->text('sucursal');
-            $table->text('vpension');
             $table->text('vdescbruto');
             $table->text('pagonetbruto');
             $table->text('fecdata');

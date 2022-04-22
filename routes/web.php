@@ -392,5 +392,7 @@ Route::view('/historyClient','historyClient');
 Route::view('/dataClient','dataClient');
 Route::resource('/validate','SolicitudValidacionController');
 
-Route::resource('/datamesfidu','datamesfidu_controller');
-Route::resource('/datamesseceduc','datamesseceduc_controller');
+Route::resource('/datamesfidu','DatamesfiduController');
+Route::post('/datamesfidu/consultaUnitaria','DatamesfiduController@consultaUnitaria');
+Route::post('/datamesseceduc/consultaUnitaria','DatamesseceducController@consultaUnitaria');
+Route::resource('/datamesseceduc','DatamesseceducController');

@@ -21,8 +21,8 @@ class DatamesseceducController extends Controller
   }
   public function consultaUnitaria(Request $request){
     $data_formulario = $request->data;
-    $doc = $request->data['doc'];
-    $consulta_cedula = \App\Datamesseceduc::Where('doc',$doc)->get();
+    $doc = $request->doc;
+    $consulta_cedula =Datamesseceduc::where('doc',$doc)->get();
     $resultados = json_decode($consulta_cedula);
     if($resultados == "" or $resultados == null ){
       return response()->json(['message'=>'No se encontraron registros con el numero seleccionado.', 'data'=>$resultados],200);

@@ -13,32 +13,31 @@ class CreateDatamesseceducTable extends Migration
      */
     public function up()
     {
-        Schema::create('datamesseceduc', function (Blueprint $table) {
+        Schema::connection('pgsql')->create('datamesseceduc', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->text('doc')
-            $table->text('nomp')
-            $table->text('fechingr')
-            $table->text('antiguedad')
-            $table->text('fecnacimient')
-            $table->text('edad')
-            $table->text('esquema')
-            $table->text('cargo')
-            $table->text('vpension')
-            $table->text('fecnombr')
-            $table->text('fecposesion')
-            $table->text('nivcontr')
-            $table->text('estlaboral')
-            $table->text('centrocosto')
-            $table->text('mnpioydep')
-            $table->text('tel')
-            $table->text('dir')
-            $table->text('correo')
-            $table->text('sedecoleg')
-            $table->text('fecdata')
-            $table->text('mesdata')
-            $table->text('anodata')
-
+            $table->text('doc');
+            $table->text('nomp');
+            $table->text('fechingr');
+            $table->text('antiguedad');
+            $table->text('fecnacimient');
+            $table->text('edad');
+            $table->text('esquema');
+            $table->text('cargo');
+            $table->text('vpension');
+            $table->text('fecnombr');
+            $table->text('fecposesion');
+            $table->text('nivcontr');
+            $table->text('estlaboral');
+            $table->text('centrocosto');
+            $table->text('mnpioydep');
+            $table->text('tel');
+            $table->text('dir');
+            $table->text('correo');
+            $table->text('sedecoleg');
+            $table->text('fecdata');
+            $table->text('mesdata');
+            $table->text('anodata');
         });
     }
 
