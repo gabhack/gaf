@@ -343,7 +343,7 @@
                                     <td>{{datamesfidu.numdep}}</td>
                                     <td>{{datamesfidu.dpto}}</td>
                                     <td>{{datamesfidu.resol}}</td>
-                                    <td>{{datamesfidu.fechresol}}</td>
+                                    <td>{{datamesfidu.vinc}}</td>
                                     <td>{{datamesfidu.fechefect}}</td>
                                     <td>{{datamesfidu.vpension}}</td>
                                     <td>{{datamesfidu.estpens}}</td>
@@ -355,7 +355,7 @@
                                     <td>{{datamesfidu.correo}}</td>
                                     <td>{{datamesfidu.nomcomprob}}</td>
                                     <td>{{datamesfidu.periodo}}</td>
-                                    <td>{{datamesfidu.tipprest}}</td>
+                                    <td>{{datamesfidu.tipvinc}}</td>
                                     <td>{{datamesfidu.fechpago}}</td>
                                     <td>{{datamesfidu.sucursal}}</td>
                                     <td>{{datamesfidu.vpension}}</td>
@@ -636,12 +636,12 @@ export default {
         },
         getDatamesfidu(){
             axios.post('/datamesfidu/consultaUnitaria',{doc: this.dataclient.doc}).then((response)=>{
-                this.datamesfidu = response.data
+                this.datamesfidu = response.data.data;                
             });
         },
         getDatamesseceduc(){
             axios.post('/datamesseceduc/consultaUnitaria',{doc: this.dataclient.doc}).then((response)=>{
-                this.datamesseceduc = response.data;
+                this.datamesseceduc = response.data.data;
             });
         },
         enableSteps(enable){
