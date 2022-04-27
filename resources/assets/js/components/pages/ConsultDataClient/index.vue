@@ -7,509 +7,1150 @@
                         <img src="/img/avatar-img.svg" width="90" class="mr-3">
                         <h2 class="h3 text-black-pearl font-weight-exbold d-inline-block mb-0">{{dataclient.name}}</h2>
                     </div>       
-                    <button v-if="id_consulta !== null" type="button" v-on:click="getPdf" class="btn btn-black-pearl px-3">
+                    <button type="button" v-on:click="print" class="btn btn-black-pearl px-3">
                         <span>Descargar PDF</span>
                         <download-icon></download-icon>
                     </button>             
                 </div>
             </div>
+
             <div id="consulta-container" class="row">
-                <div class="col-12">
-                    <div class="panel">
-                        <div class="panel-heading">
-                            <b>Información básica</b>
+                <div class="panel mb-3">
+                    <div class="panel-heading">
+                        <b>Información básica</b>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <b class="panel-label">Cedula:</b>                                
+                                <input class="form-control text-center" type="number" v-model="dataclient.doc">
+                            </div>
+                            <div class="col-6">
+                                <b class="panel-label">Nombre:</b>                                
+                                <input class="form-control text-center" type="text" v-model="dataclient.name">
+                            </div>
+                            <div class="col-6">
+                                <b class="panel-label">PAGADURIA:</b>
+                                <select class="form-control" v-model="dataclient.pagaduria">
+                                    <option value="FOPEP">FOPEP</option>
+                                    <option value="FIDUPREVISORA">FIDUPREVISORA</option>
+                                    <option value="FODE VALLE">FODE VALLE</option>                                        
+                                </select>                                    
+                            </div>                                
+                            <div class="col-6 mt-4">
+                            <button type="button" class="btn btn-primary" v-on:click="getData">Consultar</button>
+                        </div>                            
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="panel mb-3">
+                    <div class="panel-heading">
+                        <b>Información Personal</b>
+                    </div>
+                    <div class="panel-body" v-if="datames.length > 0">
+                        <div class="row">
+                            <div class="col-6">
+                                <b class="panel-label">Fondo:</b>
+                                <div v-for="(datames, key) in datames" :key="key">
+                                    <p class="panel-value">{{datames.fondo}}</p>
+                                </div>                                
+                            </div>
+                            <div class="col-6">
+                                <b class="panel-label">Tipo de documento:</b>
+                                <div v-for="(datames, key) in datames" :key="key">
+                                    <p class="panel-value">{{datames.td}}</p>
+                                </div>                                
+                            </div>
+                            <div class="col-6">
+                                <b class="panel-label">Documento de identidad Pensionado:</b>
+                                <div v-for="(datames, key) in datames" :key="key">
+                                    <p class="panel-value">{{datames.x}}</p>
+                                </div>                                
+                            </div>
+                            <div class="col-6">
+                                <b class="panel-label">Tipo y Cedula concatenadas:</b>
+                                <div v-for="(datames, key) in datames" :key="key">
+                                    <p class="panel-value">{{datames.doc}}</p>
+                                </div>                                
+                            </div>
+                            <div class="col-6">
+                                <b class="panel-label">Nombre y apellido pensionado:</b>
+                                <div v-for="(datames, key) in datames" :key="key">
+                                    <p class="panel-value">{{datames.nomp}}</p>
+                                </div>                                
+                            </div>
+                            <div class="col-6">
+                                <b class="panel-label">Fecha de Nacimiento:</b>      
+                                <div v-for="(datames, key) in datames" :key="key">
+                                    <p class="panel-value">{{datames.fecnacimient}}</p>
+                                </div>                                
+                            </div>
+                            <div class="col-6">
+                                <b class="panel-label">Dirección:</b>
+                                <div v-for="(datames, key) in datames" :key="key">
+                                    <p class="panel-value">{{datames.dir}}</p>
+                                </div>                                
+                            </div> <div class="col-6">
+                                <b class="panel-label">Departamento:</b>
+                                <div v-for="(datames, key) in datames" :key="key">
+                                    <p class="panel-value">{{datames.dpto}}</p>
+                                </div>                                
+                            </div>
+                            <div class="col-6">
+                                <b class="panel-label">Municipio:</b>
+                                <div v-for="(datames, key) in datames" :key="key">
+                                    <p class="panel-value">{{datames.mnpio}}</p>
+                                </div>                                
+                            </div>
+                            <div class="col-6">
+                                <b class="panel-label">Tipo Pension:</b>
+                                <div v-for="(datames, key) in datames" :key="key">
+                                    <p class="panel-value">{{datames.tp}}</p>
+                                </div>                                
+                            </div>
+                            <div class="col-md-6">
+                                <b class="panel-label">Nombre Banco donde le cosignan:</b>
+                                <div v-for="(datames, key) in datames" :key="key">
+                                    <p class="panel-value">{{datames.nbanco}}</p>
+                                </div>                                
+                            </div>
+                            <div class="col-md-6">
+                                <b class="panel-label">Sucursal Banco:</b>
+                                <div v-for="(datames, key) in datames" :key="key">
+                                    <p class="panel-value">{{datames.sucursal}}</p>
+                                </div>                                
+                            </div>
+                            <div class="col-md-6">
+                                <b class="panel-label">Telefono:</b>
+                                <div v-for="(datames, key) in datames" :key="key">
+                                    <p class="panel-value">{{datames.tel}}</p>
+                                </div>                                
+                            </div>
+                            <div class="col-md-6">
+                                <b class="panel-label">Celular:</b>
+                                <div v-for="(datames, key) in datames" :key="key">
+                                    <p class="panel-value">{{datames.cel}}</p>
+                                </div>                                
+                            </div>
+                            <div class="col-md-6">
+                                <b class="panel-label">Correo:</b>
+                                <div v-for="(datames, key) in datames" :key="key">
+                                    <p class="panel-value">{{datames.correo}}</p>
+                                </div>                                
+                            </div>
+                            <div class="col-md-6">
+                                <b class="panel-label">Valor pension:</b>
+                                <div v-for="(datames, key) in datames" :key="key">
+                                    <p class="panel-value">{{datames.vpension}}</p>
+                                </div>                                
+                            </div>
+                            <div class="col-md-6">
+                                <b class="panel-label">Valor salud:</b>
+                                <div v-for="(datames, key) in datames" :key="key">
+                                    <p class="panel-value">{{datames.vsalud}}</p>
+                                </div>                                
+                            </div>
+                            <div class="col-md-6">
+                                <b class="panel-label">Valor embargos Aproximado:</b>
+                                <div v-for="(datames, key) in datames" :key="key">
+                                    <p class="panel-value">{{datames.venbargos}}</p>
+                                </div>                                
+                            </div>
+                            <div class="col-md-6">
+                                <b class="panel-label">Valor descuentos:</b>
+                                <div v-for="(datames, key) in datames" :key="key">
+                                    <p class="panel-value">{{datames.vdesc}}</p>
+                                </div>                                
+                            </div>
+                            <div class="col-md-6">
+                                <b class="panel-label">Valor Cupo:</b>
+                                <div v-for="(datames, key) in datames" :key="key">
+                                    <p class="panel-value">{{datames.cupo}}</p>
+                                </div>                                
+                            </div>
                         </div>
-                        <div class="panel-body">
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="panel mb-3">
+                    <div class="panel-heading">
+                        <b>FECHAVINC</b>
+                    </div>
+                    <div class="panel-body" v-if="fechaVinc.length > 0">
+                        <div class="row">
+                            <div class="col-6">
+                                <b class="panel-label">Documento de identidad Pensionado:</b>
+                                <div v-for="(fechavinc, key) in fechaVinc" :key="key">
+                                    <p class="panel-value">{{fechavinc.doc}}</p>
+                                </div>                                
+                            </div>
+                            <div class="col-6">
+                                <b class="panel-label">Fecha de Vinculacion:</b>
+                                <div v-for="(fechavinc, key) in fechaVinc" :key="key">
+                                    <p class="panel-value">{{fechavinc.vinc}}</p>
+                                </div>                                
+                            </div>
+                            <div class="col-6">
+                                <b class="panel-label">Tipo pension:</b>
+                                <div v-for="(fechavinc, key) in fechaVinc" :key="key">
+                                    <p class="panel-value">{{fechavinc.tp}}</p>
+                                </div>                                
+                            </div>
+                            <div class="col-6">
+                                <b class="panel-label">Fecha carga data:</b>
+                                <div v-for="(fechavinc, key) in fechaVinc" :key="key">
+                                    <p class="panel-value">{{fechavinc.fecdata}}</p>
+                                </div>                                
+                            </div>
+                            <div class="col-6">
+                                <b class="panel-label">Mes carga data:</b>
+                                <div v-for="(fechavinc, key) in fechaVinc" :key="key">
+                                    <p class="panel-value">{{fechavinc.mesdata}}</p>
+                                </div>                                
+                            </div>
+                            <div class="col-6">
+                                <b class="panel-label">Año carga data:</b>
+                                <div v-for="(fechavinc, key) in fechaVinc" :key="key">
+                                    <p class="panel-value">{{fechavinc.anodata}}</p>
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
+                </div>                
+            </div>
+
+            <div class="col-md-6">
+                <div class="panel panel-primary mb-3">
+                    <div class="panel-heading"><b>Obligaciones Aplicadas (DESCAPLI)</b></div>
+                        <div class="panel-body" v-if="descapli.length > 0">
                             <div class="row">
                                 <div class="col-6">
-                                    <b class="panel-label">Cedula:</b>                                
-                                    <input class="form-control text-center" type="number" v-model="dataclient.doc">
+                                    <b class="panel-label">Seeccionar Periodo de data:</b>
+                                    <div v-for="(descapli, key) in descapli" :key="key">
+                                        <input type="checkbox" class="mr-2" v-on:click="(e)=>vAplicado(e.target.checked, descapli, descapli.pagare, descapli.nomtercero)"/><p class="panel-value">{{descapli.periodo}}</p>                                        
+                                    </div>
                                 </div>
                                 <div class="col-6">
-                                    <b class="panel-label">Nombre:</b>                                
-                                    <input class="form-control text-center" type="text" v-model="dataclient.name">
+                                    <b class="panel-label">Consecutivo (B):</b>
+                                    <div v-for="(descapli, key) in descapli" :key="key">
+                                        <p class="panel-value">{{descapli.concecutivo}}</p>
+                                    </div>                                
                                 </div>
                                 <div class="col-6">
-                                    <b class="panel-label">PAGADURIA:</b>
-                                    <select class="form-control" v-model="dataclient.pagaduria">
-                                        <option value="FOPEP">FOPEP</option>
-                                        <option value="FIDUPREVISORA">FIDUPREVISORA</option>
-                                        <option value="FODE VALLE">FODE VALLE</option>                                        
-                                    </select>                                    
-                                </div>                                
-                                <div class="col-6 mt-4">
-                                    <button type="button" class="btn btn-primary" v-on:click="getData">Consultar</button>
-                                </div>                            
+                                    <b class="panel-label">Tipo entidad:</b>
+                                    <div v-for="(descapli, key) in descapli" :key="key">
+                                        <p class="panel-value">{{descapli.clase}}</p>
+                                    </div>                                
+                                </div>
+                                <div class="col-6">
+                                    <b class="panel-label">Entidad (B):</b>
+                                    <div v-for="(descapli, key) in descapli" :key="key">
+                                        <p class="panel-value">{{descapli.tercero}}</p>
+                                    </div>                                
+                                </div>
+                                <div class="col-6">
+                                    <b class="panel-label">Nombre entidad actual:</b>
+                                    <div v-for="(descapli, key) in descapli" :key="key">
+                                        <p class="panel-value">{{descapli.nomtercero}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Tipo Documento:</b>
+                                    <div v-for="(descapli, key) in descapli" :key="key">
+                                        <p class="panel-value">{{descapli.td}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Documento de identidad Pensionado:</b>
+                                    <div v-for="(descapli, key) in descapli" :key="key">
+                                        <p class="panel-value">{{descapli.doc}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Nombre y apellido pensionado:</b>
+                                    <div v-for="(descapli, key) in descapli" :key="key">
+                                        <p class="panel-value">{{descapli.nomp}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Numero de pagare:</b>
+                                    <div v-for="(descapli, key) in descapli" :key="key">
+                                        <p class="panel-value">{{descapli.pagare}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Porcentaje (B):</b>
+                                    <div v-for="(descapli, key) in descapli" :key="key">
+                                        <p class="panel-value">{{descapli.porcentaje}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Valor total descuentos Aplicados:</b>
+                                    <div v-for="(descapli, key) in descapli" :key="key">
+                                        <p class="panel-value">{{descapli.vaplicado}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Valor total deuda:</b>
+                                    <div v-for="(descapli, key) in descapli" :key="key">
+                                        <p class="panel-value">{{descapli.vtotal}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Valor pagado deuda:</b>
+                                    <div v-for="(descapli, key) in descapli" :key="key">
+                                        <p class="panel-value">{{descapli.vpagado}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Saldo deuda:</b>
+                                    <div v-for="(descapli, key) in descapli" :key="key">
+                                        <p class="panel-value">{{descapli.saldo}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Fecha inicio deuda:</b>
+                                    <div v-for="(descapli, key) in descapli" :key="key">
+                                        <p class="panel-value">{{descapli.fgrab}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Forma (B):</b>
+                                    <div v-for="(descapli, key) in descapli" :key="key">
+                                        <p class="panel-value">{{descapli.forma}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Codigo entidad anterior (B):</b>
+                                    <div v-for="(descapli, key) in descapli" :key="key">
+                                        <p class="panel-value">{{descapli.codentiant}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Nombre entidad cediente:</b>
+                                    <div v-for="(descapli, key) in descapli" :key="key">
+                                        <p class="panel-value">{{descapli.nonentant}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Fecha de cesion a entidad actual:</b>
+                                    <div v-for="(descapli, key) in descapli" :key="key">
+                                        <p class="panel-value">{{descapli.fechacesion}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Tipo de descuento:</b>
+                                    <div v-for="(descapli, key) in descapli" :key="key">
+                                        <p class="panel-value">{{descapli.tdesc}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">PAGARE5DIG:</b>
+                                    <div v-for="(descapli, key) in descapli" :key="key">
+                                        <p class="panel-value">{{descapli.p5d}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">PAGARE4DIGCON0:</b>
+                                    <div v-for="(descapli, key) in descapli" :key="key">
+                                        <p class="panel-value">{{descapli.p4d}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Numero pagare:</b>
+                                    <div v-for="(descapli, key) in descapli" :key="key">
+                                        <p class="panel-value">{{descapli.numpagopt}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Fecha carga data:</b>
+                                    <div v-for="(descapli, key) in descapli" :key="key">
+                                        <p class="panel-value">{{descapli.fecdata}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Mes carga data:</b>
+                                    <div v-for="(descapli, key) in descapli" :key="key">
+                                        <p class="panel-value">{{descapli.mesdata}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Año carga data:</b>
+                                    <div v-for="(descapli, key) in descapli" :key="key">
+                                        <p class="panel-value">{{descapli.anodata}}</p>
+                                    </div>                                
+                                </div>
+                                
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-12">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading"><b>Información Pesonal (DATAMES)</b></div>
-                        <div class="panel-body">      
-                            <table class="table table-responsive table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Fondo</th>
-                                        <th>Tipo de documento</th>
-                                        <th>Documento de identidad Pensionado</th>
-                                        <th>Tipo y Cedula concatenadas (B)</th>
-                                        <th>Nombre y apellido pensionado</th>
-                                        <th>Fecha de Nacimiento</th>
-                                        <th>Dirección</th>
-                                        <th>Departamento</th>
-                                        <th>Municipio</th>
-                                        <th>Tipo Pension</th>
-                                        <th>Nombre Banco donde le cosignan</th>
-                                        <th>Sucursal Banco</th>
-                                        <th>Telefono</th>
-                                        <th>Celular</th>
-                                        <th>Correo</th>
-                                        <th>Valor pension</th>
-                                        <th>Valor salud</th>
-                                        <th>Valor embargos Aproximado</th>
-                                        <th>Valor descuentos</th>
-                                        <th>Valor Cupo</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(datames, key) in datames" :key="key">
-                                        <td>{{datames.fondo}}</td>
-                                        <td>{{datames.td}}</td>
-                                        <td>{{datames.x}}</td>
-                                        <td>{{datames.doc}}</td>
-                                        <td>{{datames.nomp}}</td>
-                                        <td>{{datames.fecnacimient}}</td>
-                                        <td>{{datames.dir}}</td>
-                                        <td>{{datames.dpto}}</td>
-                                        <td>{{datames.mnpio}}</td>
-                                        <td>{{datames.tp}}</td>
-                                        <td>{{datames.nbanco}}</td>
-                                        <td>{{datames.sucursal}}</td>
-                                        <td>{{datames.tel}}</td>
-                                        <td>{{datames.cel}}</td>
-                                        <td>{{datames.correo}}</td>
-                                        <td>{{datames.vpension}}</td>
-                                        <td>{{datames.vsalud}}</td>
-                                        <td>{{datames.venbargos}}</td>
-                                        <td>{{datames.vdesc}}</td>
-                                        <td>{{datames.cupo}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                <div class="col-md-6">
+                    <div class="panel panel-primary mb-3">
+                        <div class="panel-heading"><b>Obligaciones no Aplicadas (DESCNOAPL)</b></div>
+                        <div class="panel-body" v-if="descnoap.length > 0">                                
+                            <div class="row">
+                                <div class="col-6">
+                                    <b class="panel-label">Seleccionar Tipo entidad:</b>
+                                    <div v-for="(descnoap, key) in descnoap" :key="key">
+                                        <input type="checkbox" v-on:click="(e)=>vAplicado(e.target.checked, descnoap, descnoap.pagare, descnoap.nomtercero)"/><p>{{descnoap.clase}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <b class="panel-label">Entidad (B):</b>
+                                    <div v-for="(descnoap, key) in descnoap" :key="key">
+                                        <p class="panel-value">{{descnoap.tercero}}</p>
+                                    </div>                                
+                                </div>
+                                <div class="col-6">
+                                    <b class="panel-label">Nombre entidad actual:</b>
+                                    <div v-for="(descnoap, key) in descnoap" :key="key">
+                                        <p class="panel-value">{{descnoap.nomercero}}</p>
+                                    </div>                                
+                                </div>
+                                <div class="col-6">
+                                    <b class="panel-label">Tipo de documento:</b>
+                                    <div v-for="(descnoap, key) in descnoap" :key="key">
+                                        <p class="panel-value">{{descnoap.td}}</p>
+                                    </div>                                
+                                </div>
+                                <div class="col-6">
+                                    <b class="panel-label">Documento de identidad Pensionado:</b>
+                                    <div v-for="(descnoap, key) in descnoap" :key="key">
+                                        <p class="panel-value">{{descnoap.doc}}</p>
+                                    </div>                                
+                                </div>
+                                <div class="col-6">
+                                    <b class="panel-label">Nombre y apellido pensionado:</b>
+                                    <div v-for="(descnoap, key) in descnoap" :key="key">
+                                        <p class="panel-value">{{descnoap.nomp}}</p>
+                                    </div>                                
+                                </div>
 
-                <div class="col-12">
-                    <div class="panel">
-                        <div class="panel-heading">
-                            <b>(FECHAVINC)</b>
+                                <div class="col-6">
+                                    <b class="panel-label">Numero de pagare:</b>
+                                    <div v-for="(descnoap, key) in descnoap" :key="key">
+                                        <p class="panel-value">{{descnoap.pagare}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Porcentaje (B):</b>
+                                    <div v-for="(descnoap, key) in descnoap" :key="key">
+                                        <p class="panel-value">{{descnoap.porcentaje}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Cuota deuda:</b>
+                                    <div v-for="(descnoap, key) in descnoap" :key="key">
+                                        <p class="panel-value">{{descnoap.vfijo}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Valor descuento no aplicado:</b>
+                                    <div v-for="(descnoap, key) in descnoap" :key="key">
+                                        <p class="panel-value">{{descnoap.vaplicado}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Valor total deuda:</b>
+                                    <div v-for="(descnoap, key) in descnoap" :key="key">
+                                        <p class="panel-value">{{descnoap.vtotal}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Valor pagado deuda:</b>
+                                    <div v-for="(descnoap, key) in descnoap" :key="key">
+                                        <p class="panel-value">{{descnoap.vpagado}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Saldo deuda:</b>
+                                    <div v-for="(descnoap, key) in descnoap" :key="key">
+                                        <p class="panel-value">{{descnoap.saldo}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Fecha inicio deuda:</b>
+                                    <div v-for="(descnoap, key) in descnoap" :key="key">
+                                        <p class="panel-value">{{descnoap.fgrab}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Forma (B):</b>
+                                    <div v-for="(descnoap, key) in descnoap" :key="key">
+                                        <p class="panel-value">{{descnoap.forma}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Inconsistencia:</b>
+                                    <div v-for="(descnoap, key) in descnoap" :key="key">
+                                        <p class="panel-value">{{descnoap.Incon}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Codigo entidad anterior (B):</b>
+                                    <div v-for="(descnoap, key) in descnoap" :key="key">
+                                        <p class="panel-value">{{descnoap.codentiant}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Nombre entidad cediente:</b>
+                                    <div v-for="(descnoap, key) in descnoap" :key="key">
+                                        <p class="panel-value">{{descnoap.nonentant}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Fecha de cesion a entidad actual:</b>
+                                    <div v-for="(descnoap, key) in descnoap" :key="key">
+                                        <p class="panel-value">{{descnoap.fechacesion}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Tipo de descuento:</b>
+                                    <div v-for="(descnoap, key) in descnoap" :key="key">
+                                        <p class="panel-value">{{descnoap.tdesc}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Fecha carga data:</b>
+                                    <div v-for="(descnoap, key) in descnoap" :key="key">
+                                        <p class="panel-value">{{descnoap.fecdata}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Mes carga data:</b>
+                                    <div v-for="(descnoap, key) in descnoap" :key="key">
+                                        <p class="panel-value">{{descnoap.mesdata}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Año carga data:</b>
+                                    <div v-for="(descnoap, key) in descnoap" :key="key">
+                                        <p class="panel-value">{{descnoap.anodata}}</p>
+                                    </div>                                
+                                </div>                            
+                            </div>
                         </div>
-                        <div class="panel-body">
-                            <table class="table table-responsive table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Documento de identidad Pensionado</th>
-                                        <th>Fecha de Vinculacion</th>
-                                        <th>Tipo pension</th>
-                                        <th>Fecha carga data</th>
-                                        <th>Mes carga data</th>
-                                        <th>Año carga data</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(fechavinc, key) in fechaVinc" :key="key">
-                                        <td>{{fechavinc.doc}}</td>
-                                        <td>{{fechavinc.vinc}}</td>
-                                        <td>{{fechavinc.tp}}</td>
-                                        <td>{{fechavinc.fecdata}}</td>
-                                        <td>{{fechavinc.mesdata}}</td>
-                                        <td>{{fechavinc.anodata}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    </div>                    
+                </div>    
+
+                <div class="col-12 mt-3 mb-3" v-if="descnoap.length > 0 || descapli.length > 0">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Consultar</button>
                 </div>            
 
-                <div class="col-md-12">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading"><b>Obligaciones Aplicadas (DESCAPLI)</b></div>
-                        <div class="panel-body">      
-                            <table class="table table-responsive table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Seleccionar</th>
-                                        <th>Periodo de data</th>
-                                        <th>Consecutivo (B)</th>
-                                        <th>Tipo entidad</th>
-                                        <th>Entidad (B)</th>
-                                        <th>Nombre entidad actual</th>
-                                        <th>Tipo Documento</th>
-                                        <th>Documento de identidad Pensionado</th>
-                                        <th>Nombre y apellido pensionado</th>
-                                        <th>Numero de pagare</th>
-                                        <th>Porcentaje (B)</th>
-                                        <th>Valor total descuentos Aplicados</th>
-                                        <th>Valor total deuda</th>
-                                        <th>Valor pagado deuda</th>
-                                        <th>Saldo deuda</th>
-                                        <th>Fecha inicio deuda</th>
-                                        <th>Forma (B)</th>
-                                        <th>Codigo entidad anterior (B)</th>
-                                        <th>Nombre entidad cediente</th>
-                                        <th>Fecha de cesion a entidad actual</th>
-                                        <th>Tipo de descuento</th>
-                                        <th>PAGARE5DIG</th>
-                                        <th>PAGARE4DIGCON0</th>
-                                        <th>Numero pagare</th>
-                                        <th>Fecha carga data</th>
-                                        <th>Mes carga data</th>
-                                        <th>Año carga data</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(descapli, key) in descapli" :key="key">
-                                        <td>
-                                            <input type="checkbox" v-on:click="(e)=>vAplicado(e.target.checked, descapli, descapli.pagare, descapli.nomtercero)"/>
-                                        </td>
-                                        <td>{{descapli.periodo}}</td>
-                                        <td>{{descapli.concecutivo}}</td>
-                                        <td>{{descapli.clase}}</td>
-                                        <td>{{descapli.tercero}}</td>
-                                        <td>{{descapli.nomtercero}}</td>
-                                        <td>{{descapli.td}}</td>
-                                        <td>{{descapli.doc}}</td>
-                                        <td>{{descapli.nomp}}</td>
-                                        <td>{{descapli.pagare}}</td>
-                                        <td>{{descapli.porcentaje}}</td>
-                                        <td>{{descapli.vaplicado}}</td>
-                                        <td>{{descapli.vtotal}}</td>
-                                        <td>{{descapli.vpagado}}</td>
-                                        <td>{{descapli.saldo}}</td>
-                                        <td>{{descapli.fgrab}}</td>
-                                        <td>{{descapli.forma}}</td>
-                                        <td>{{descapli.codentiant}}</td>
-                                        <td>{{descapli.nonentant}}</td>
-                                        <td>{{descapli.fechacesion}}</td>
-                                        <td>{{descapli.tdesc}}</td>
-                                        <td>{{descapli.p5d}}</td>
-                                        <td>{{descapli.p4d}}</td>
-                                        <td>{{descapli.numpagopt}}</td>
-                                        <td>{{descapli.fecdata}}</td>
-                                        <td>{{descapli.mesdata}}</td>
-                                        <td>{{descapli.anodata}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>                            
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading"><b>Obligaciones no Aplicadas (DESCNOAPL)</b></div>
-                        <div class="panel-body">      
-                            <table class="table table-responsive table-striped table-hover">
-                                <thead>
-                                    <tr> 
-                                        <th>Seleccionar</th>                                       
-                                        <th>Tipo entidad</th>
-                                        <th>Entidad (B)</th>
-                                        <th>Nombre entidad actual</th>
-                                        <th>Tipo de documento</th>
-                                        <th>Documento de identidad Pensionado</th>
-                                        <th>Nombre y apellido pensionado</th>
-                                        <th>Numero de pagare</th>
-                                        <th>Porcentaje (B)</th>
-                                        <th>Cuota deuda</th>
-                                        <th>Valor descuento no aplicado</th>
-                                        <th>Valor total deuda</th>
-                                        <th>Valor pagado deuda</th>
-                                        <th>Saldo deuda</th>
-                                        <th>Fecha inicio deuda</th>
-                                        <th>Forma (B)</th>
-                                        <th>Inconsistencia</th>
-                                        <th>Codigo entidad anterior (B)</th>
-                                        <th>Nombre entidad cediente</th>
-                                        <th>Fecha de cesion a entidad actual</th>
-                                        <th>Tipo de descuento</th>     
-                                        <th>Fecha carga data</th>
-                                        <th>Mes carga data</th>
-                                        <th>Año carga data</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(descnoap, key) in descnoap" :key="key">
-                                        <td>
-                                            <input type="checkbox" v-on:click="(e)=>vAplicado(e.target.checked, descnoap, descnoap.pagare, descnoap.nomtercero)"/>
-                                        </td>
-                                        <td>{{descnoap.clase}}</td>
-                                        <td>{{descnoap.tercero}}</td>
-                                        <td>{{descnoap.nomercero}}</td>
-                                        <td>{{descnoap.td}}</td>
-                                        <td>{{descnoap.doc}}</td>
-                                        <td>{{descnoap.nomp}}</td>
-                                        <td>{{descnoap.pagare}}</td>
-                                        <td>{{descnoap.porcentaje}}</td>
-                                        <td>{{descnoap.vfijo}}</td>
-                                        <td>{{descnoap.vaplicado}}</td>
-                                        <td>{{descnoap.vtotal}}</td>
-                                        <td>{{descnoap.vpagado}}</td>
-                                        <td>{{descnoap.saldo}}</td>
-                                        <td>{{descnoap.fgrab}}</td>
-                                        <td>{{descnoap.forma}}</td>
-                                        <td>{{descnoap.Incon}}</td>
-                                        <td>{{descnoap.codentiant}}</td>
-                                        <td>{{descnoap.nonentant}}</td>
-                                        <td>{{descnoap.fechacesion}}</td>
-                                        <td>{{descnoap.tdesc}}</td>
-                                        <td>{{descnoap.fecdata}}</td>
-                                        <td>{{descnoap.mesdata}}</td>
-                                        <td>{{descnoap.anodata}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Consultar</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="panel-heading">
-                        <b>DATAMESFIDU</b>
-                    </div>
-                    <div class="panel-body">
-                        <table class="table table-responsive table-striped table-hover">
-                            <thead>
-                                <tr> 
-                                    <th>Municipio</th>
-                                    <th>Documento de identidad Pensionado</th>
-                                    <th>Tipo de documento</th>
-                                    <th>Descripcion tipo documento (B)</th>
-                                    <th>Nombre(s) pensionado</th>
-                                    <th>Apellido(s) pensionado</th>
-                                    <th>Genero</th>
-                                    <th>Estado civil</th>
-                                    <th>Fecha de nacimiento</th>
-                                    <th>Edad Pensionado</th>
-                                    <th>Tipo de Vinculacion (B)</th>
-                                    <th>Descripcion tipo de vinculacion</th>
-                                    <th>Codigo Fuente recurso (B)</th>
-                                    <th>Fuente de recurso</th>
-                                    <th>Codigo dane departamento (B)</th>
-                                    <th>Departamento</th>
-                                    <th>Resolucion (B)</th>
-                                    <th>Vinculacion</th>
-                                    <th>Fecha expedicion resolucion (B)</th>
-                                    <th>Valor pension</th>
-                                    <th>Estado Pension (B)</th>
-                                    <th>Documento de identidad beneficiario</th>
-                                    <th>Tipo de documento Beneficiario</th>
-                                    <th>Nombre beneficiario</th>
-                                    <th>Telefono</th>
-                                    <th>Direccion</th>
-                                    <th>Correo</th>
-                                    <th>Numero comprobante (B)</th>
-                                    <th>Periodo de data</th>
-                                    <th>Tipo pension codigo</th>
-                                    <th>Fecha pago pension</th>
-                                    <th>Sucursal Banco (B)</th>
-                                    <th>Valor pension Con retroactivo (B)</th>
-                                    <th>Valor descuentos en bruto Retroactivo (B)</th>
-                                    <th>Valor pago en bruto Retroactivo (B)</th>
-                                    <th>Fecha carga data</th>
-                                    <th>Mes carga data</th>
-                                    <th>Año carga data</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                    <td>{{datamesfidu.mnpio}}</td>
-                                    <td>{{datamesfidu.doc}}</td>
-                                    <td>{{datamesfidu.td}}</td>
-                                    <td>{{datamesfidu.tdd}}</td>
-                                    <td>{{datamesfidu.solonomp}}</td>
-                                    <td>{{datamesfidu.soloapellp}}</td>
-                                    <td>{{datamesfidu.genero}}</td>
-                                    <td>{{datamesfidu.estcivil}}</td>
-                                    <td>{{datamesfidu.fecnacimient}}</td>
-                                    <td>{{datamesfidu.edad}}</td>
-                                    <td>{{datamesfidu.tipvinc}}</td>
-                                    <td>{{datamesfidu.desctipvinc}}</td>
-                                    <td>{{datamesfidu.fuenrecurso}}</td>
-                                    <td>{{datamesfidu.descfuenrecurso}}</td>
-                                    <td>{{datamesfidu.numdep}}</td>
-                                    <td>{{datamesfidu.dpto}}</td>
-                                    <td>{{datamesfidu.resol}}</td>
-                                    <td>{{datamesfidu.vinc}}</td>
-                                    <td>{{datamesfidu.fechefect}}</td>
-                                    <td>{{datamesfidu.vpension}}</td>
-                                    <td>{{datamesfidu.estpens}}</td>
-                                    <td>{{datamesfidu.docbenef}}</td>
-                                    <td>{{datamesfidu.td}}</td>
-                                    <td>{{datamesfidu.nombenef}}</td>
-                                    <td>{{datamesfidu.tel}}</td>
-                                    <td>{{datamesfidu.dir}}</td>
-                                    <td>{{datamesfidu.correo}}</td>
-                                    <td>{{datamesfidu.nomcomprob}}</td>
-                                    <td>{{datamesfidu.periodo}}</td>
-                                    <td>{{datamesfidu.tipvinc}}</td>
-                                    <td>{{datamesfidu.fechpago}}</td>
-                                    <td>{{datamesfidu.sucursal}}</td>
-                                    <td>{{datamesfidu.vpension}}</td>
-                                    <td>{{datamesfidu.vdescbruto}}</td>
-                                    <td>{{datamesfidu.pagonetbruto}}</td>
-                                    <td>{{datamesfidu.fecdata}}</td>
-                                    <td>{{datamesfidu.mesdata}}</td>
-                                    <td>{{datamesfidu.anodata}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                <div class="col-md-6">
+                    <div class="panel panel-primary mb-3">
+                        <div class="panel-heading"><b>DATAMESFIDU</b></div>
+                        <div class="panel-body" v-if="datamesfidu.length > 0">
+                            <div class="row">
+                                <div class="col-6">
+                                    <b class="panel-label">Municipio:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.mnpio}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <b class="panel-label">Documento de identidad Pensionado:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.doc}}</p>
+                                    </div>                                
+                                </div>
+                                <div class="col-6">
+                                    <b class="panel-label">Tipo de documento:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.td}}</p>
+                                    </div>                                
+                                </div>
+                                <div class="col-6">
+                                    <b class="panel-label">Descripcion tipo documento (B):</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.tdd}}</p>
+                                    </div>                                
+                                </div>
+                                <div class="col-6">
+                                    <b class="panel-label">Nombre(s) pensionado:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.solonomp}}</p>
+                                    </div>                                
+                                </div>
+                                <div class="col-6">
+                                    <b class="panel-label">Apellido(s) pensionado:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.soloapellp}}</p>
+                                    </div>                                
+                                </div>
 
-                <div class="col-md-12">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <b>DATAMESSECEDUC</b>
-                        </div>
-                        <div class="panel-body">
-                            <table class="table table-responsive table-striped table-hover">
-                                <thead>
-                                    <tr> 
-                                        <th>Documento de identidad docente </th>
-                                        <th>Nombre y apellido docente </th>
-                                        <th>Fecha Vinculacion </th>
-                                        <th>Antigüedad Vinculacion (B) </th>
-                                        <th>Fecha de nacimiento </th>
-                                        <th>Edad Pensionado </th>
-                                        <th>Area de desempeño </th>
-                                        <th>Cargo </th>
-                                        <th>Valor ingreso Aproximado </th>
-                                        <th>Fecha Vinculacion </th>
-                                        <th>Fecha de posesion (B) </th>
-                                        <th>Tipo Vinculacion </th>
-                                        <th>Estado laboral </th>
-                                        <th>Centro de educacion </th>
-                                        <th>Municipio y Departamento </th>
-                                        <th>Telefono </th>
-                                        <th>Direccion </th>
-                                        <th>Correo </th>
-                                        <th>Sede en que presta el servicio </th>
-                                        <th>Fecha carga data</th>
-                                        <th>Mes carga data</th>
-                                        <th>Año carga data</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                        <td>{{datamesseceduc.doc}}</td>
-                                        <td>{{datamesseceduc.nomp}}</td>
-                                        <td>{{datamesseceduc.fechingr}}</td>
-                                        <td>{{datamesseceduc.antiguedad}}</td>
-                                        <td>{{datamesseceduc.fecnacimient}}</td>
-                                        <td>{{datamesseceduc.edad}}</td>
-                                        <td>{{datamesseceduc.esquema}}</td>
-                                        <td>{{datamesseceduc.cargo}}</td>
-                                        <td>{{datamesseceduc.vpension}}</td>
-                                        <td>{{datamesseceduc.fecnombr}}</td>
-                                        <td>{{datamesseceduc.fecposesion}}</td>
-                                        <td>{{datamesseceduc.nivcontr}}</td>
-                                        <td>{{datamesseceduc.estlaboral}}</td>
-                                        <td>{{datamesseceduc.centrocosto}}</td>
-                                        <td>{{datamesseceduc.mnpioydep}}</td>
-                                        <td>{{datamesseceduc.tel}}</td>
-                                        <td>{{datamesseceduc.dir}}</td>
-                                        <td>{{datamesseceduc.correo}}</td>
-                                        <td>{{datamesseceduc.sedecoleg}}</td>
-                                        <td>{{datamesseceduc.fecdata}}</td>
-                                        <td>{{datamesseceduc.mesdata}}</td>
-                                        <td>{{datamesseceduc.anodata}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                <div class="col-6">
+                                    <b class="panel-label">Genero:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.genero}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Estado civil:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.estcivil}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Fecha de nacimiento:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.fecnacimient}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Edad Pensionado:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.edad}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Tipo de Vinculacion (B):</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.tipvinc}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Descripcion tipo de vinculacion:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.desctipvinc}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Codigo Fuente recurso (B):</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.fuenrecurso}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Fuente de recurso:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.descfuenrecurso}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Codigo dane departamento (B):</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.numdep}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Departamento:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.dpto}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Resolucion (B):</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.resol}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Vinculacion:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.vinc}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Fecha expedicion resolucion (B):</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.fechefect}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Valor pension:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.vpension}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Estado Pension (B):</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.estpens}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Documento de identidad beneficiario:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.docbenef}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Tipo de documento Beneficiario:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.td}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Nombre beneficiario:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.nombenef}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Telefono:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.tel}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Direccion:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.dir}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Correo:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.correo}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Numero comprobante (B):</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.nomcomprob}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Periodo de data:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.periodo}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Tipo pension codigo:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.tipvinc}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Fecha pago pension:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.fechpago}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Sucursal Banco (B):</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.sucursal}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Valor pension Con retroactivo (B):</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.vpension}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Valor descuentos en bruto Retroactivo (B):</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.vdescbruto}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Valor pago en bruto Retroactivo (B):</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.pagonetbruto}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Fecha carga data:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.fecdata}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Mes carga data:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.mesdata}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Año carga data:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.anodata}}</p>
+                                    </div>                                
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+                
+                <div class="col-md-6">
+                    <div class="panel panel-primary mb-3">
+                        <div class="panel-heading"><b>DATAMESSECEDUC</b></div>
+                        <div class="panel-body" v-if="datamesseceduc.length > 0">
+                            <div class="row">
+                                <div class="col-6">
+                                    <b class="panel-label">Documento de identidad docente:</b>
+                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                        <p class="panel-value">{{datamesseceduc.doc}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <b class="panel-label">Nombre y apellido docente:</b>
+                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                        <p class="panel-value">{{datamesseceduc.nomp}}</p>
+                                    </div>                                
+                                </div>
+                                <div class="col-6">
+                                    <b class="panel-label">Fecha Ingreso:</b>
+                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                        <p class="panel-value">{{datamesseceduc.fechingr}}</p>
+                                    </div>                                
+                                </div>
+                                <div class="col-6">
+                                    <b class="panel-label">Antigüedad Vinculacion (B) :</b>
+                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                        <p class="panel-value">{{datamesseceduc.antiguedad}}</p>
+                                    </div>                                
+                                </div>
+                                <div class="col-6">
+                                    <b class="panel-label">Fecha de nacimiento:</b>
+                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                        <p class="panel-value">{{datamesseceduc.fecnacimient}}</p>
+                                    </div>                                
+                                </div>
+                                <div class="col-6">
+                                    <b class="panel-label">Edad Pensionado:</b>
+                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                        <p class="panel-value">{{datamesseceduc.edad}}</p>
+                                    </div>                                
+                                </div>
 
-                <div class="col-md-12" v-if="resultPagare.cuota_compra && resultPagare.cuota_compra.length > 0">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <b>CALCULO DE COMPRA DE CARTERA</b>
+                                <div class="col-6">
+                                    <b class="panel-label">Area de desempeño:</b>
+                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                        <p class="panel-value">{{datamesseceduc.esquema}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Cargo:</b>
+                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                        <p class="panel-value">{{datamesseceduc.cargo}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Valor ingreso Aproximado:</b>
+                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                        <p class="panel-value">{{datamesseceduc.vpension}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Fecha Vinculacion:</b>
+                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                        <p class="panel-value">{{datamesseceduc.fecnombr}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Fecha de posesion (B):</b>
+                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                        <p class="panel-value">{{datamesseceduc.fecposesion}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Tipo Vinculacion:</b>
+                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                        <p class="panel-value">{{datamesseceduc.nivcontr}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Estado laboral:</b>
+                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                        <p class="panel-value">{{datamesseceduc.estlaboral}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Centro de educacion:</b>
+                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                        <p class="panel-value">{{datamesseceduc.centrocosto}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Municipio y Departamento:</b>
+                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                        <p class="panel-value">{{datamesseceduc.mnpioydep}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Telefono:</b>
+                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                        <p class="panel-value">{{datamesseceduc.tel}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Direccion:</b>
+                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                        <p class="panel-value">{{datamesseceduc.dir}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Correo:</b>
+                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                        <p class="panel-value">{{datamesseceduc.correo}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Sede en que presta el servicio:</b>
+                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                        <p class="panel-value">{{datamesseceduc.sedecoleg}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Fecha carga data:</b>
+                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                        <p class="panel-value">{{datamesseceduc.fecdata}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Mes carga data:</b>
+                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                        <p class="panel-value">{{datamesseceduc.mesdata}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Año carga data:</b>
+                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                        <p class="panel-value">{{datamesseceduc.anodata}}</p>
+                                    </div>                                
+                                </div>                                
+                            </div>
                         </div>
-                        <div class="panel-body">
-                            <table id="consulta" class="table table-responsive table-striped table-hover">
-                                <thead>
-                                    <tr>                            
-                                        <th>Consecutivo</th>	
-                                        <th>Estado</th>	
-                                        <th>Fecha consulta</th>	
-                                        <th>Cedula</th>	
-                                        <th>Nombre</th>	
-                                        <th>Tipo de credito</th>	
-                                        <th>Cupo Lib Inversion</th>	
-                                        
-                                        <th>Cuota Compra</th>	                            
-                                        <th>Entidad</th>	
-                                        <th>Pagaduria</th>	
-                                        
-                                        <th>Vr. Credito</th>	
-                                        <th>Vr. Desembolso</th>	
-                                        <th>Plazo</th>	
-                                        <th>Cuota Cred</th>
-                                        <th>Aprobado</th>	
-                                        <th>% de incorporacion</th>	
-                                        <th>Cuota Maxima de incorporacion</th>	
-                                        <th>Fecha respuesta consulta</th>	
-                                        <th>Fecha Vinculacion</th>	
-                                        <th>Tipo Vinculacion</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>{{resultPagare.consecutivo}}</td>
-                                        <td>{{resultPagare.estado}}</td>
-                                        <td>{{resultPagare.fecha_consulta}}</td>
-                                        <td>{{resultPagare.doc}}</td>
-                                        <td>{{resultPagare.nombre}}</td>
-                                        <td>{{dataclient.tipo_credito}}</td>
-                                        <td>{{dataclient.clibinv}}</td>
-                                        <td>        
-                                            <div v-for="(libInv, key) in resultPagare.cuota_compra" :key="key">
-                                                <p>{{libInv.vaplicado}}</p><br/>
-                                            </div>                                
-                                        </td>                            
-                                        <td>
-                                            <div v-for="(row, index) in filteredRows" :key="index">
-                                                <p>{{row}}</p><br/>
-                                            </div>
-                                        </td>
-                                        <td>                                                
-                                            <p>{{resultPagare.pagaduria}}</p><br/>                                            
-                                        </td>
-                                        
-                                        <td>{{resultPagare.vr_credito}}</td>
-                                        <td>{{resultPagare.vr_desembolso}}</td>
-                                        <td>{{resultPagare.plazo}}</td>
-                                        <td>{{resultPagare.cuota_cred}}</td>
-                                        
+                    </div>
+                </div>
+                
+                <div class="col-md-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading"><b>CALCULO DE COMPRA DE CARTERA</b></div>
+                        <div class="panel-body" v-if="resultPagare.cuota_compra && resultPagare.cuota_compra.length > 0">    
+                            <div class="row">
+                                <div class="col-6">
+                                    <b class="panel-label">Consecutivo:</b>
+                                    <div>
+                                        <p class="panel-value">{{resultPagare.consecutivo}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <b class="panel-label">Estado:</b>
+                                    <div>
+                                        <p class="panel-value">{{resultPagare.estado}}</p>
+                                    </div>                                
+                                </div>
+                                <div class="col-6">
+                                    <b class="panel-label">Fecha consulta:</b>
+                                    <div>
+                                        <p class="panel-value">{{resultPagare.fecha_consulta}}</p>
+                                    </div>                                
+                                </div>
+                                <div class="col-6">
+                                    <b class="panel-label">Cedula:</b>
+                                    <div>
+                                        <p class="panel-value">{{resultPagare.doc}}</p>
+                                    </div>                                
+                                </div>
+                                <div class="col-6">
+                                    <b class="panel-label">Nombre:</b>
+                                    <div>
+                                        <p class="panel-value">{{resultPagare.nombre}}</p>
+                                    </div>                                
+                                </div>
+                                <div class="col-6">
+                                    <b class="panel-label">Tipo de credito:</b>
+                                    <div>
+                                        <p class="panel-value">{{dataclient.tipo_credito}}</p>
+                                    </div>                                
+                                </div>
 
-                                        <td>{{resultPagare.aprobado}}</td>
-                                        <td>{{resultPagare.pct_incorporacion}}</td>
-                                        <td>{{resultPagare.max_incorporacion}}</td>
-                                        <td>{{resultPagare.fec_rta_consulta}}</td>
-                                        <td>{{resultPagare.fecha_vinculacion}}</td>
-                                        <td>{{resultPagare.tipo_vinculacion}}</td>                            
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>                        
+                                <div class="col-6">
+                                    <b class="panel-label">Cupo Lib Inversion:</b>
+                                    <div>
+                                        <p class="panel-value">{{dataclient.clibinv}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Cuota Compra:</b>
+                                    <div v-for="(libInv, key) in resultPagare.cuota_compra" :key="key">
+                                        <p class="panel-value">{{libInv.vaplicado}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Entidad:</b>
+                                    <div v-for="(row, index) in filteredRows" :key="index">
+                                        <p class="panel-value">{{row}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Pagaduria:</b>
+                                    <div>
+                                        <p class="panel-value">{{resultPagare.pagaduria}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Vr. Credito:</b>
+                                    <div>
+                                        <p class="panel-value">{{resultPagare.vr_credito}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Vr. Desembolso:</b>
+                                    <div>
+                                        <p class="panel-value">{{resultPagare.vr_desembolso}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Plazo:</b>
+                                    <div>
+                                        <p class="panel-value">{{resultPagare.plazo}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Cuota Cred:</b>
+                                    <div>
+                                        <p class="panel-value">{{resultPagare.cuota_cred}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Aprobado:</b>
+                                    <div>
+                                        <p class="panel-value">{{resultPagare.aprobado}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">% de incorporacion:</b>
+                                    <div>
+                                        <p class="panel-value">{{resultPagare.pct_incorporacion}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Cuota Maxima de incorporacion:</b>
+                                    <div>
+                                        <p class="panel-value">{{resultPagare.max_incorporacion}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Fecha respuesta consulta:</b>
+                                    <div>
+                                        <p class="panel-value">{{resultPagare.fec_rta_consulta}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Fecha Vinculacion:</b>
+                                    <div>
+                                        <p class="panel-value">{{resultPagare.fecha_vinculacion}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Tipo Vinculacion:</b>
+                                    <div>
+                                        <p class="panel-value">{{resultPagare.tipo_vinculacion}}</p>
+                                    </div>                                
+                                </div>                                
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div> 
+        </div>
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -564,8 +1205,11 @@
         </div>       
     </div>
 </template>
+
+<script src="print.js"></script>
+<script rel="stylesheet" type="text/css" href="print.css"/>
 <script>
-import { jsPDF } from "jspdf";
+import printJS from 'print-js';
 export default {
     data() {
         return {
@@ -718,20 +1362,13 @@ export default {
             })
         },
 
-        getPdf(){
-            // consulta
-            axios.post('pdfDetalle',{id_consulta:this.id_consulta}).then((response)=>{
-                var doc = new jsPDF();
-                doc.html(response.data, {
-                    callback: function (doc) {
-                        doc.save("Informe");
-                    },
-                    x: 15,
-                    y: 15,
-                    width: 170,
-                    weight:12,
-                });
-            });                        
+        print() {
+            printJS({
+                printable: 'consulta-container',
+                type: 'html',
+                css: 'css/styles.css',
+                scanStyles: false
+            });
         }
     }
 }
