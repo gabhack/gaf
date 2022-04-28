@@ -232,24 +232,24 @@
                                         <input type="checkbox" class="mr-2" v-on:click="(e)=>vAplicado(e.target.checked, descapli, descapli.pagare, descapli.nomtercero)"/><p class="panel-value">{{descapli.periodo}}</p>                                        
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <!-- <div class="col-6">
                                     <b class="panel-label">Consecutivo (B):</b>
                                     <div v-for="(descapli, key) in descapli" :key="key">
                                         <p class="panel-value">{{descapli.concecutivo}}</p>
                                     </div>                                
-                                </div>
+                                </div> -->
                                 <div class="col-6">
                                     <b class="panel-label">Tipo entidad:</b>
                                     <div v-for="(descapli, key) in descapli" :key="key">
                                         <p class="panel-value">{{descapli.clase}}</p>
                                     </div>                                
                                 </div>
-                                <div class="col-6">
+                                <!-- <div class="col-6">
                                     <b class="panel-label">Entidad (B):</b>
                                     <div v-for="(descapli, key) in descapli" :key="key">
                                         <p class="panel-value">{{descapli.tercero}}</p>
                                     </div>                                
-                                </div>
+                                </div> -->
                                 <div class="col-6">
                                     <b class="panel-label">Nombre entidad actual:</b>
                                     <div v-for="(descapli, key) in descapli" :key="key">
@@ -285,12 +285,12 @@
                                     </div>                                
                                 </div>
 
-                                <div class="col-6">
+                                <!-- <div class="col-6">
                                     <b class="panel-label">Porcentaje (B):</b>
                                     <div v-for="(descapli, key) in descapli" :key="key">
                                         <p class="panel-value">{{descapli.porcentaje}}</p>
                                     </div>                                
-                                </div>
+                                </div> -->
 
                                 <div class="col-6">
                                     <b class="panel-label">Valor total descuentos Aplicados:</b>
@@ -327,19 +327,19 @@
                                     </div>                                
                                 </div>
 
-                                <div class="col-6">
+                                <!-- <div class="col-6">
                                     <b class="panel-label">Forma (B):</b>
                                     <div v-for="(descapli, key) in descapli" :key="key">
                                         <p class="panel-value">{{descapli.forma}}</p>
                                     </div>                                
-                                </div>
+                                </div> -->
 
-                                <div class="col-6">
+                                <!-- <div class="col-6">
                                     <b class="panel-label">Codigo entidad anterior (B):</b>
                                     <div v-for="(descapli, key) in descapli" :key="key">
                                         <p class="panel-value">{{descapli.codentiant}}</p>
                                     </div>                                
-                                </div>
+                                </div> -->
 
                                 <div class="col-6">
                                     <b class="panel-label">Nombre entidad cediente:</b>
@@ -420,12 +420,12 @@
                                         <input type="checkbox" v-on:click="(e)=>vAplicado(e.target.checked, descnoap, descnoap.pagare, descnoap.nomtercero)"/><p>{{descnoap.clase}}</p>
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <!-- <div class="col-6">
                                     <b class="panel-label">Entidad (B):</b>
                                     <div v-for="(descnoap, key) in descnoap" :key="key">
                                         <p class="panel-value">{{descnoap.tercero}}</p>
                                     </div>                                
-                                </div>
+                                </div> -->
                                 <div class="col-6">
                                     <b class="panel-label">Nombre entidad actual:</b>
                                     <div v-for="(descnoap, key) in descnoap" :key="key">
@@ -458,12 +458,12 @@
                                     </div>                                
                                 </div>
 
-                                <div class="col-6">
+                                <!-- <div class="col-6">
                                     <b class="panel-label">Porcentaje (B):</b>
                                     <div v-for="(descnoap, key) in descnoap" :key="key">
                                         <p class="panel-value">{{descnoap.porcentaje}}</p>
                                     </div>                                
-                                </div>
+                                </div> -->
 
                                 <div class="col-6">
                                     <b class="panel-label">Cuota deuda:</b>
@@ -507,12 +507,12 @@
                                     </div>                                
                                 </div>
 
-                                <div class="col-6">
+                                <!-- <div class="col-6">
                                     <b class="panel-label">Forma (B):</b>
                                     <div v-for="(descnoap, key) in descnoap" :key="key">
                                         <p class="panel-value">{{descnoap.forma}}</p>
                                     </div>                                
-                                </div>
+                                </div> -->
 
                                 <div class="col-6">
                                     <b class="panel-label">Inconsistencia:</b>
@@ -521,12 +521,12 @@
                                     </div>                                
                                 </div>
 
-                                <div class="col-6">
+                                <!-- <div class="col-6">
                                     <b class="panel-label">Codigo entidad anterior (B):</b>
                                     <div v-for="(descnoap, key) in descnoap" :key="key">
                                         <p class="panel-value">{{descnoap.codentiant}}</p>
                                     </div>                                
-                                </div>
+                                </div> -->
 
                                 <div class="col-6">
                                     <b class="panel-label">Nombre entidad cediente:</b>
@@ -601,12 +601,12 @@
                                         <p class="panel-value">{{datamesfidu.td}}</p>
                                     </div>                                
                                 </div>
-                                <div class="col-6">
+                                <!-- <div class="col-6">
                                     <b class="panel-label">Descripcion tipo documento (B):</b>
                                     <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                                         <p class="panel-value">{{datamesfidu.tdd}}</p>
                                     </div>                                
-                                </div>
+                                </div> -->
                                 <div class="col-6">
                                     <b class="panel-label">Nombre(s) pensionado:</b>
                                     <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
@@ -648,12 +648,12 @@
                                     </div>                                
                                 </div>
 
-                                <div class="col-6">
+                                <!-- <div class="col-6">
                                     <b class="panel-label">Tipo de Vinculacion (B):</b>
                                     <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                                         <p class="panel-value">{{datamesfidu.tipvinc}}</p>
                                     </div>                                
-                                </div>
+                                </div> -->
 
                                 <div class="col-6">
                                     <b class="panel-label">Descripcion tipo de vinculacion:</b>
@@ -662,12 +662,12 @@
                                     </div>                                
                                 </div>
 
-                                <div class="col-6">
+                                <!-- <div class="col-6">
                                     <b class="panel-label">Codigo Fuente recurso (B):</b>
                                     <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                                         <p class="panel-value">{{datamesfidu.fuenrecurso}}</p>
                                     </div>                                
-                                </div>
+                                </div> -->
 
                                 <div class="col-6">
                                     <b class="panel-label">Fuente de recurso:</b>
@@ -676,12 +676,12 @@
                                     </div>                                
                                 </div>
 
-                                <div class="col-6">
+                                <!-- <div class="col-6">
                                     <b class="panel-label">Codigo dane departamento (B):</b>
                                     <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                                         <p class="panel-value">{{datamesfidu.numdep}}</p>
                                     </div>                                
-                                </div>
+                                </div> -->
 
                                 <div class="col-6">
                                     <b class="panel-label">Departamento:</b>
@@ -690,12 +690,12 @@
                                     </div>                                
                                 </div>
 
-                                <div class="col-6">
+                                <!-- <div class="col-6">
                                     <b class="panel-label">Resolucion (B):</b>
                                     <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                                         <p class="panel-value">{{datamesfidu.resol}}</p>
                                     </div>                                
-                                </div>
+                                </div> -->
 
                                 <div class="col-6">
                                     <b class="panel-label">Vinculacion:</b>
@@ -704,12 +704,12 @@
                                     </div>                                
                                 </div>
 
-                                <div class="col-6">
+                                <!-- <div class="col-6">
                                     <b class="panel-label">Fecha expedicion resolucion (B):</b>
                                     <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                                         <p class="panel-value">{{datamesfidu.fechefect}}</p>
                                     </div>                                
-                                </div>
+                                </div> -->
 
                                 <div class="col-6">
                                     <b class="panel-label">Valor pension:</b>
@@ -718,12 +718,12 @@
                                     </div>                                
                                 </div>
 
-                                <div class="col-6">
+                                <!-- <div class="col-6">
                                     <b class="panel-label">Estado Pension (B):</b>
                                     <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                                         <p class="panel-value">{{datamesfidu.estpens}}</p>
                                     </div>                                
-                                </div>
+                                </div> -->
 
                                 <div class="col-6">
                                     <b class="panel-label">Documento de identidad beneficiario:</b>
@@ -767,12 +767,12 @@
                                     </div>                                
                                 </div>
 
-                                <div class="col-6">
+                                <!-- <div class="col-6">
                                     <b class="panel-label">Numero comprobante (B):</b>
                                     <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                                         <p class="panel-value">{{datamesfidu.nomcomprob}}</p>
                                     </div>                                
-                                </div>
+                                </div> -->
 
                                 <div class="col-6">
                                     <b class="panel-label">Periodo de data:</b>
@@ -795,33 +795,33 @@
                                     </div>                                
                                 </div>
 
-                                <div class="col-6">
+                                <!-- <div class="col-6">
                                     <b class="panel-label">Sucursal Banco (B):</b>
                                     <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                                         <p class="panel-value">{{datamesfidu.sucursal}}</p>
                                     </div>                                
-                                </div>
+                                </div> -->
 
-                                <div class="col-6">
+                                <!-- <div class="col-6">
                                     <b class="panel-label">Valor pension Con retroactivo (B):</b>
                                     <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                                         <p class="panel-value">{{datamesfidu.vpension}}</p>
                                     </div>                                
-                                </div>
+                                </div> -->
 
-                                <div class="col-6">
+                                <!-- <div class="col-6">
                                     <b class="panel-label">Valor descuentos en bruto Retroactivo (B):</b>
                                     <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                                         <p class="panel-value">{{datamesfidu.vdescbruto}}</p>
                                     </div>                                
-                                </div>
+                                </div> -->
 
-                                <div class="col-6">
+                                <!-- <div class="col-6">
                                     <b class="panel-label">Valor pago en bruto Retroactivo (B):</b>
                                     <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                                         <p class="panel-value">{{datamesfidu.pagonetbruto}}</p>
                                     </div>                                
-                                </div>
+                                </div> -->
 
                                 <div class="col-6">
                                     <b class="panel-label">Fecha carga data:</b>
@@ -871,12 +871,12 @@
                                         <p class="panel-value">{{datamesseceduc.fechingr}}</p>
                                     </div>                                
                                 </div>
-                                <div class="col-6">
+                                <!-- <div class="col-6">
                                     <b class="panel-label">Antigüedad Vinculacion (B) :</b>
                                     <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
                                         <p class="panel-value">{{datamesseceduc.antiguedad}}</p>
                                     </div>                                
-                                </div>
+                                </div> -->
                                 <div class="col-6">
                                     <b class="panel-label">Fecha de nacimiento:</b>
                                     <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
@@ -918,12 +918,12 @@
                                     </div>                                
                                 </div>
 
-                                <div class="col-6">
+                                <!-- <div class="col-6">
                                     <b class="panel-label">Fecha de posesion (B):</b>
                                     <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
                                         <p class="panel-value">{{datamesseceduc.fecposesion}}</p>
                                     </div>                                
-                                </div>
+                                </div> -->
 
                                 <div class="col-6">
                                     <b class="panel-label">Tipo Vinculacion:</b>
@@ -1363,12 +1363,7 @@ export default {
         },
 
         print() {
-            printJS({
-                printable: 'consulta-container',
-                type: 'html',
-                css: 'css/styles.css',
-                scanStyles: false
-            });
+            window.print();
         }
     }
 }
