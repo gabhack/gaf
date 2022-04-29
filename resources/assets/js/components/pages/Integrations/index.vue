@@ -12,7 +12,7 @@
                             <div class="form-row">
                                 <div class="form-group col-md-2">
                                     <label>Tipo Documento</label>
-                                    <input v-model="solicitudVal.TipoDoc" class="form-control">
+                                    <input v-model="solicitudVal.TipoDoc" disabled class="form-control">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label># Documento</label>
@@ -62,7 +62,8 @@
                             <h5 class="modal-title" id="exampleModalLabel">Verificacion de Identidad</h5>                            
                         </div>
                         <div class="modal-body">
-                            <iframe :src="resultSolicVal.url" width="700" height="700" allow="camera *;"></iframe>                            
+                            <!-- <iframe :src="resultSolicVal.url" width="700" height="700" allow="camera *;"></iframe> -->
+                            <iframe :src="resultSolicVal.url" allow="geolocation *; camera *;" frameborder="0" border="0" cellspacing="0" style="border-style: none;width: 100%; height: 770px;"></iframe>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>                            
