@@ -65,13 +65,13 @@
                             <div class="col-6">
                                 <b class="panel-label">Documento de identidad Pensionado:</b>
                                 <div v-for="(datames, key) in datames" :key="key">
-                                    <p class="panel-value">{{datames.x}}</p>
+                                    <p class="panel-value">{{datames.doc}}</p>
                                 </div>                                
                             </div>
                             <div class="col-6">
                                 <b class="panel-label">Tipo y Cedula concatenadas:</b>
                                 <div v-for="(datames, key) in datames" :key="key">
-                                    <p class="panel-value">{{datames.doc}}</p>
+                                    <p class="panel-value">{{datames.x}}</p>
                                 </div>                                
                             </div>
                             <div class="col-6">
