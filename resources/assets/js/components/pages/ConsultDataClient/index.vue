@@ -5,7 +5,9 @@
                 <div class="col-12 d-flex align-items-center justify-content-between">                
                     <div class="d-flex align-items-end">
                         <img src="/img/avatar-img.svg" width="90" class="mr-3">
-                        <h2 class="h3 text-black-pearl font-weight-exbold d-inline-block mb-0">{{dataclient.name}}</h2>
+                        <div v-for="(datames, key) in datames" :key="key">
+                            <h2 class="h3 text-black-pearl font-weight-exbold d-inline-block mb-0">{{datames.nomp}}</h2>
+                        </div>                        
                     </div>       
                     <button type="button" v-on:click="print" class="btn btn-black-pearl px-3">
                         <span>Descargar PDF</span>
