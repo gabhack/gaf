@@ -862,6 +862,9 @@ export default {
                 this.fechaVinc = result.data.data.info_fechavinc;
                 this.obligacionSelected = result.data.data.info_obligaciones;
 
+                this.datamesfidu = result.data.data.datamesfidu;
+                this.datamesseceduc = result.data.data.datamesseceduc;
+
             })
         },
         print() {

@@ -40,12 +40,16 @@ class VisadoController extends Controller
       $detalle_consulta = json_decode($detalle_consulta);
       $info_datames = \App\DataMes::Where('doc',$detalle_consulta->ced)->first();
       $info_fechavinc = \App\FechaVinc::Where('doc',$detalle_consulta->ced)->first();
+      $datamesfidu = \App\Datamesfidu::Where('doc',$detalle_consulta->ced)->get();
+      $datamesseceduc = \App\Datamesseceduc::Where('doc',$detalle_consulta->ced)->get();
       $resultado = [];
       $info_obligaciones = $detalle_consulta->info_obligaciones;
       $resultado['info_datames'] = $info_datames;
       $resultado['info_fechavinc'] = $info_fechavinc;
       $resultado['info_obligaciones'] = json_decode($info_obligaciones);
       $resultado['detalle_consulta'] = $detalle_consulta;
+      $resultado['datamesfidu'] = $datamesfidu;
+      $resultado['datamesseceduc'] = $datamesseceduc;
       if($resultado == "" or $resultado == null ){
         return response()->json(['message'=>'No se encontraron registros.', 'data'=>$resultado],200);
       }
