@@ -23,6 +23,12 @@ import VueIframe from 'vue-iframes'
 
 Vue.use(VueIframe)
 
+import VueCurrencyFilter from 'vue-currency-filter';
+Vue.use(VueCurrencyFilter, { symbol: '$' });
+
+import VueSwal from 'vue-swal'
+Vue.use(VueSwal)
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -57,6 +63,8 @@ Vue.component('imports-component', require('./components/pages/MassiveCharge/ind
 Vue.component('client-data-component', require('./components/pages/ConsultDataClient/index.vue').default);
 Vue.component('history-component', require('./components/pages/ConsultDataClient/history.vue').default);
 Vue.component('detail-history-component', require('./components/pages/ConsultDataClient/detailhistory.vue').default);
+Vue.component('credit-calculator', require('./components/pages/CreditColsult/CreditCalculator.vue').default);
+Vue.component('register-credit', require('./components/pages/CreditColsult/CreditForm.vue').default);
 /* Vue Init */
 const app = new Vue({
   el: '#app'

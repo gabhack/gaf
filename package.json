@@ -31,7 +31,10 @@
     "jspdf-autotable": "^3.5.23",
     "print-js": "^1.6.0",
     "toastr": "^2.1.4",
+    "vue-currency-filter": "^5.2.0",
     "vue-iframes": "0.0.19",
-    "vuelidate": "^0.7.6"
+    "vue-swal": "^1.0.0",
+    "vuelidate": "^0.7.6",
+    "vuex": "^4.0.2"
   }
 }

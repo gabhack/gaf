@@ -402,3 +402,7 @@ Route::resource('/datamesfidu','DatamesfiduController');
 Route::post('/datamesfidu/consultaUnitaria','DatamesfiduController@consultaUnitaria');
 Route::post('/datamesseceduc/consultaUnitaria','DatamesseceducController@consultaUnitaria');
 Route::resource('/datamesseceduc','DatamesseceducController');
+
+Route::resource('/cotizer-data', dataCotizerController::class)->only(['store', 'index', 'show', 'update','destroy']);
+Route::view('/solicitud','creditCalculator');
+Route::view('/RegisterCredit','registerCredit');
