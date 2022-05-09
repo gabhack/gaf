@@ -1,6 +1,6 @@
 <template>
-  <form id="credit-form" class="ml-5 d-flex" :class="collapsed ? 'collapsed' : null">
-    <b-card no-body class="card-main mt-12 mb-12">
+  <form id="credit-form" class="d-flex align-items-center" :class="collapsed ? 'collapsed' : null">
+    <b-card no-body class="card-main mt-5 mb-5">
       <b-card-body>
         <div v-if="form.requestAmount >= 660000">
           <p>Sí es tu primera vez, sólo puedes solicitar hasta $650,000.</p>
@@ -127,7 +127,7 @@
         </div>
       </b-card-body>
     </b-card>
-    <div id="credit-detail" class="ml-5">
+    <div id="credit-detail">
       <b-list-group>
         <b-list-group-item>
           <b-row>
@@ -555,7 +555,7 @@ input.form-control {
   }
 }
 
-$card-width: 570px;
+$card-width: 460px;
 
 #credit-detail {
   max-width: $card-width;
@@ -605,8 +605,8 @@ $card-width: 570px;
 
 #credit-detail {
   padding: 3rem;
-  background: rgb(6, 172, 15);
-  background: linear-gradient(90deg, rgb(6, 172, 15) 0%, rgb(6, 172, 15) 80%);
+  background: #0cedb0;
+  background: linear-gradient(90deg, #0cedb0 0%, #0cedb0 80%);
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
 
@@ -614,8 +614,8 @@ $card-width: 570px;
   transform: translateX(100%);
 
   .list-group-item {
-    background: rgb(24, 235, 35);
-    background: linear-gradient(90deg, rgb(24, 235, 35) 0%, rgb(24, 235, 35) 100%);
+    background: #0cedb0;
+    background: linear-gradient(90deg, #0cedb0 0%, #0cedb0 100%);
     color: #fff;
 
     padding: 0.5rem 1.25rem;
@@ -638,8 +638,8 @@ $card-width: 570px;
     }
 
     .total-val {
-      background: rgb(12, 58, 241);
-      background: linear-gradient(90deg, rgb(12, 57, 238) 50%, rgb(14, 32, 235) 100%);
+      background: #0cedb0;
+      background: linear-gradient(90deg, #0cedb0 50%, #0cedb0 100%);
       border-radius: 6px;
       padding-top: 5px;
       padding-bottom: 3px;
@@ -783,8 +783,7 @@ input[type='number'] {
   bottom: -25px;
 
   .btn-credit {
-    color: white;
-    background-image: linear-gradient(to right, #26e40d 0%, #06da34d2 55%, #0ab12e 100%);
+    background-image: linear-gradient(to right, #0cedb0 0%, #0cedb0 55%, #0cedb0 100%);
     transition: 0.5s;
     background-size: 200% auto;
 

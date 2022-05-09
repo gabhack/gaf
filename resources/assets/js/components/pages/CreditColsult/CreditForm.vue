@@ -1489,7 +1489,7 @@ export default  ({
   margin-top: 5%;
   font-weight: bolder;
   margin-bottom: 25px;
-  color: #05ca05;
+  color: #0cedb0;
 }
 .dateSub {
   font-size: 32px;
@@ -1558,7 +1558,7 @@ export default  ({
 .tituleInfo {
   font-size: 32px;
   font-weight: bolder;
-  color: #05ca05;
+  color: #0cedb0;
   margin-bottom: 5%;
 }
 .numberMonto {
@@ -1566,7 +1566,7 @@ export default  ({
   font-weight: bolder;
   margin-bottom: 5%;
   margin-top: -6%;
-  color: #05ca05;
+  color: #0cedb0;
 }
 .namePopup {
   font-size: 25px;
@@ -1633,13 +1633,13 @@ export default  ({
 
 .btnAceptCredit {
   padding: 8px 79px;
-  background-image: linear-gradient(to right, #05ca05 0%, #05ca05 55%, #05ca05 100%);
+  background-image: linear-gradient(to right, #0cedb0 0%, #0cedb0 55%, #0cedb0 100%);
   color: #fff;
   border-radius: 50px;
 }
 .btnAceptPopup {
   padding: 8px 60px;
-  background-image: linear-gradient(to right, #05ca05 0%, #05ca05 55%, #05ca05 100%);
+  background-image: linear-gradient(to right, #0cedb0 0%, #0cedb0 55%, #0cedb0 100%);
   color: #fff;
   border-radius: 50px;
 }
