@@ -783,6 +783,7 @@ input[type='number'] {
   bottom: -25px;
 
   .btn-credit {
+    color:white;
     background-image: linear-gradient(to right, #0cedb0 0%, #0cedb0 55%, #0cedb0 100%);
     transition: 0.5s;
     background-size: 200% auto;
