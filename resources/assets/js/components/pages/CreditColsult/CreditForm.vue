@@ -1429,7 +1429,7 @@ export default  ({
 .labelForm {
   font-size: 13px;
   margin-bottom: 0;
-  color: #6970f2;
+  color: black;
   font-weight: bolder;
 }
 .labelContenedor {
@@ -1447,7 +1447,7 @@ export default  ({
 // secciones
 .seccion1 {
   padding: 50px 97px 20px;
-  background: #e7e8fd;
+  background: #f8f8fc;
   border-radius: 20px;
 }
 .seccion2 {
@@ -1456,7 +1456,7 @@ export default  ({
 }
 .seccion3 {
   padding: 50px 97px 20px;
-  background: #e7e8fd;
+  background: #eaecf4;
   border-radius: 20px;
 }
 .seccion4 {
@@ -1465,7 +1465,7 @@ export default  ({
 }
 .seccion5 {
   padding: 50px 97px 51px;
-  background-color: #e7e8fd;
+  background-color: #eaecf4;
   border-radius: 20px;
 }
 .seccion6 {
@@ -1474,7 +1474,7 @@ export default  ({
 }
 .seccion7 {
   padding: 30px 97px 10px;
-  background-color: #e7e8fd;
+  background-color: #eaecf4;
   border-radius: 20px;
 }
 .seccion8 {
@@ -1489,14 +1489,14 @@ export default  ({
   margin-top: 5%;
   font-weight: bolder;
   margin-bottom: 25px;
-  color: #0052a7;
+  color: #05ca05;
 }
 .dateSub {
   font-size: 32px;
   margin-top: 5%;
   font-weight: 200;
   margin-bottom: 25px;
-  color: #6770f2;
+  color: #059418;
   margin-top: -6%;
 }
 .margin_data_account {
@@ -1558,7 +1558,7 @@ export default  ({
 .tituleInfo {
   font-size: 32px;
   font-weight: bolder;
-  color: #0052a7;
+  color: #05ca05;
   margin-bottom: 5%;
 }
 .numberMonto {
@@ -1566,7 +1566,7 @@ export default  ({
   font-weight: bolder;
   margin-bottom: 5%;
   margin-top: -6%;
-  color: #6770f2;
+  color: #05ca05;
 }
 .namePopup {
   font-size: 25px;
@@ -1633,13 +1633,13 @@ export default  ({
 
 .btnAceptCredit {
   padding: 8px 79px;
-  background-image: linear-gradient(to right, #004280 0%, #6d71fc 55%, #004280 100%);
+  background-image: linear-gradient(to right, #05ca05 0%, #05ca05 55%, #05ca05 100%);
   color: #fff;
   border-radius: 50px;
 }
 .btnAceptPopup {
   padding: 8px 60px;
-  background-image: linear-gradient(to right, #004280 0%, #6d71fc 55%, #004280 100%);
+  background-image: linear-gradient(to right, #05ca05 0%, #05ca05 55%, #05ca05 100%);
   color: #fff;
   border-radius: 50px;
 }
