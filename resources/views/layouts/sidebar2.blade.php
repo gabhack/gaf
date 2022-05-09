@@ -56,6 +56,13 @@
 	</li>
 
 	<li class="nav-item">
+		<a class="nav-link"href="/solicitud">
+			<ami-icon></ami-icon>
+			<span>Solicitud de Credito</span>
+		</a>
+	</li>
+
+	<li class="nav-item">
 		<a class="nav-link" href="{{ url('integration') }}">
 			<hego-icon></hego-icon>
 			<span>ID</span>
