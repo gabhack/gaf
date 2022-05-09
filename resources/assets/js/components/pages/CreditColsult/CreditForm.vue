@@ -1212,16 +1212,16 @@
                 <b-button type="submit" v-b-modal.modal-1 class="btnAceptCredit">Aceptar</b-button>
 
                 <b-modal id="modal-1" class="modalFinalCredit" @ok="aproveValue" centered>
-                  <img
+                  <!-- <img
                     src="/img/logoKapital_White.png"
                     alt="Logo KapitalBank White "
                     class="imgLogoPopup"
-                  />
+                  /> -->
                   <div class="containerInfoModal">
                     <p class="namePopup">{{ form.firstName }} {{ form.middleName }}</p>
                     <p class="lastNamePopup">{{ form.firstLastname }} {{ form.secondLastname }}</p>
-                    <p class="detailsSub">¡eres nuestro cliente</p>
-                    <p class="fontBillion">más importante!</p>
+                    <!-- <p class="detailsSub">¡eres nuestro cliente</p>
+                    <p class="fontBillion">más importante!</p> -->
                     <p class="textPopup">
                       Espera un poco
                       <strong>
@@ -1229,9 +1229,11 @@
                         terminar,
                       </strong>
                       nuestro sistema esta<br />analizando tu solicitud
-                    </p>
-                    <b-button class="btnAceptCredit" :to="{ name: 'Home' }">Aceptar</b-button>
+                    </p>                    
                   </div>
+                  <template #modal-footer="{ ok }">
+                    <b-button class="btnAceptCredit" :to="{ name: 'Home' }" v-on:click="ok()">Aceptar</b-button>                    
+                  </template>
                 </b-modal>
               </div>
             </div>
@@ -1496,7 +1498,7 @@ export default  ({
   margin-top: 5%;
   font-weight: 200;
   margin-bottom: 25px;
-  color: #059418;
+  color: #0cedb0;
   margin-top: -6%;
 }
 .margin_data_account {

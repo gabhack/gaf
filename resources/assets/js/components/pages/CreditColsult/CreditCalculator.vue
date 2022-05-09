@@ -605,8 +605,8 @@ $card-width: 570px;
 
 #credit-detail {
   padding: 3rem;
-  background: #0cedb0;
-  background: linear-gradient(90deg, #0cedb0 0%, #0cedb0 80%);
+  background: #021b1e;
+  background: linear-gradient(90deg, #021b1e 0%, #021b1e 80%);
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
 
@@ -614,8 +614,8 @@ $card-width: 570px;
   transform: translateX(100%);
 
   .list-group-item {
-    background: #0cedb0;
-    background: linear-gradient(90deg, #0cedb0 0%, #0cedb0 100%);
+    background: #021b1e;
+    background: linear-gradient(90deg, #021b1e 0%, #021b1e 100%);
     color: #fff;
 
     padding: 0.5rem 1.25rem;
@@ -638,8 +638,8 @@ $card-width: 570px;
     }
 
     .total-val {
-      background: #0cedb0;
-      background: linear-gradient(90deg, #0cedb0 50%, #0cedb0 100%);
+      background: #021b1e;
+      background: linear-gradient(90deg, #021b1e 50%, #021b1e 100%);
       border-radius: 6px;
       padding-top: 5px;
       padding-bottom: 3px;
