@@ -1,6 +1,6 @@
 <template>
   <form id="credit-form" class="d-flex align-items-center" :class="collapsed ? 'collapsed' : null">
-    <b-card no-body class="card-main mt-5 mb-5">
+    <b-card no-body class="card-main mt-5 mb-5 ml-5">
       <b-card-body>
         <div v-if="form.requestAmount >= 660000">
           <p>Sí es tu primera vez, sólo puedes solicitar hasta $650,000.</p>
@@ -555,7 +555,7 @@ input.form-control {
   }
 }
 
-$card-width: 460px;
+$card-width: 570px;
 
 #credit-detail {
   max-width: $card-width;
