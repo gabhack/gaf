@@ -19,7 +19,7 @@
             <div id="consulta-container" class="row">
                 <div class="panel mb-3">
                     <div class="panel-heading">
-                        <b>Información básica</b>
+                        <b>Realizar Consulta</b>
                     </div>
                     <div class="panel-body">
                         <div class="row">
@@ -45,12 +45,12 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col-6" v-if="datames.length > 0">
                 <div class="panel mb-3">
                     <div class="panel-heading">
                         <b>Información Personal</b>
                     </div>
-                    <div class="panel-body" v-if="datames.length > 0">
+                    <div class="panel-body">
                         <div class="row">
                             <div class="col-6">
                                 <b class="panel-label">Fondo:</b>
@@ -175,12 +175,12 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col-6" v-if="fechaVinc.length > 0">
                 <div class="panel mb-3">
                     <div class="panel-heading">
                         <b>FECHAVINC</b>
                     </div>
-                    <div class="panel-body" v-if="fechaVinc.length > 0">
+                    <div class="panel-body">
                         <div class="row">
                             <div class="col-6">
                                 <b class="panel-label">Documento de identidad Pensionado:</b>
@@ -223,10 +223,10 @@
                 </div>                
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-6" v-if="descapli.length > 0">
                 <div class="panel panel-primary mb-3">
                     <div class="panel-heading"><b>Obligaciones Aplicadas (DESCAPLI)</b></div>
-                        <div class="panel-body" v-if="descapli.length > 0">
+                        <div class="panel-body">
                             <div class="row">
                                 <div class="col-6">
                                     <b class="panel-label">Seeccionar Periodo de data:</b>
@@ -411,10 +411,10 @@
                     </div>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-6" v-if="descnoap.length > 0">
                     <div class="panel panel-primary mb-3">
                         <div class="panel-heading"><b>Obligaciones no Aplicadas (DESCNOAPL)</b></div>
-                        <div class="panel-body" v-if="descnoap.length > 0">                                
+                        <div class="panel-body">                                
                             <div class="row">
                                 <div class="col-6">
                                     <b class="panel-label">Seleccionar Tipo entidad:</b>
@@ -580,10 +580,10 @@
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Consultar</button>
                 </div>            
 
-                <div class="col-md-6">
+                <div class="col-md-6" v-if="datamesfidu.length > 0">
                     <div class="panel panel-primary mb-3">
                         <div class="panel-heading"><b>DATAMESFIDU</b></div>
-                        <div class="panel-body" v-if="datamesfidu.length > 0">
+                        <div class="panel-body">
                             <div class="row">
                                 <div class="col-6">
                                     <b class="panel-label">Municipio:</b>
@@ -850,10 +850,10 @@
                     </div>
                 </div>
                 
-                <div class="col-md-6">
+                <div class="col-md-6" v-if="datamesseceduc.length > 0">
                     <div class="panel panel-primary mb-3">
                         <div class="panel-heading"><b>DATAMESSECEDUC</b></div>
-                        <div class="panel-body" v-if="datamesseceduc.length > 0">
+                        <div class="panel-body">
                             <div class="row">
                                 <div class="col-6">
                                     <b class="panel-label">Documento de identidad docente:</b>
@@ -1008,10 +1008,10 @@
                     </div>
                 </div>
                 
-                <div class="col-md-12">
+                <div class="col-md-12" v-if="resultPagare.cuota_compra && resultPagare.cuota_compra.length > 0">
                     <div class="panel panel-primary">
                         <div class="panel-heading"><b>CALCULO DE COMPRA DE CARTERA</b></div>
-                        <div class="panel-body" v-if="resultPagare.cuota_compra && resultPagare.cuota_compra.length > 0">    
+                        <div class="panel-body">    
                             <div class="row">
                                 <div class="col-6">
                                     <b class="panel-label">Consecutivo:</b>
