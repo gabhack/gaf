@@ -113,7 +113,6 @@
 
                                         <th>codigoCliente</th>
                                         <th>estadoDescripcion</th>
-                                        <th>fuentesAbiertas</th>
                                         <th>motivoCancelacion</th>
                                         <th>scoreProceso</th>
 
@@ -147,8 +146,7 @@
                                         <td>{{resultConsultVal.sede}}</td>
                                                                         
                                         <td>{{resultConsultVal.codigoCliente}}</td>
-                                        <td>{{resultConsultVal.estadoDescripcion}}</td>
-                                        <td>{{resultConsultVal.fuentesAbiertas}}</td>
+                                        <td>{{resultConsultVal.estadoDescripcion}}</td>                                        
                                         <td>{{resultConsultVal.motivoCancelacion}}</td>
                                         <td>{{resultConsultVal.scoreProceso}}</td>
 
@@ -162,6 +160,52 @@
                                             </div>
                                         </td> -->
                                         
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="table table-striped table-bordered table-hover table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>Codigo</th>
+                                        <th>Descripcion</th>
+                                        <th>Mensaje</th>
+                                        <th>Nombre</th>
+                                        <th>Riesgo</th>
+                                        <th>Puntaje</th>
+                                        <th>Riesgo de la Fuente</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(fuente, key) in fuentes" :key="key">
+                                        <td>{{fuente.codigo}}</td>
+                                        <td>{{fuente.descripcion}}</td>
+                                        <td>{{fuente.mensaje}}</td>
+                                        <td>{{fuente.nombre}}</td>
+                                        <td>{{fuente.riesgo === true ? 'Riesgo Encontrado': 'Sin Riesgo'}}</td>
+                                        <td>{{fuente.score}}</td>
+                                        <td>{{fuente.isSourceRisk === true ? 'Riesgo Encontrado': 'Sin Riesgo'}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="table table-striped table-bordered table-hover table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>Codigo</th>
+                                        <th>Nombre</th>
+                                        <th>Texto</th>
+                                        <th>Tipo</th>
+                                        <th>Estado</th>
+                                        <th>Error</th>                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(fuentesR, key) in fuentesRaw" :key="key">
+                                        <td>{{fuentesR.codigo}}</td>
+                                        <td>{{fuentesR.nombre}}</td>
+                                        <td>{{fuentesR.texto.resultado ? fuentesR.data.texto.boletin_acuerdos : fuentesR.data.texto.resultado ? fuentesR.data.texto.respuesta : fuentesR.data.texto.main_respuesta ? fuentesR.data.texto : fuentesR.texto}}</td>
+                                        <td>{{fuentesR.tipo}}</td>
+                                        <td>{{fuentesR.estado}}</td>
+                                        <td>{{fuentesR.error === true ? 'Error Encontrado': 'Sin Error'}}</td>                                        
                                     </tr>
                                 </tbody>
                             </table>
@@ -192,7 +236,9 @@
                 },
                 resultSolicVal:{},
                 validateData:[],
-                resultConsultVal:{}
+                resultConsultVal:{},
+                fuentes:[],
+                fuentesRaw:[],
             }
         },
         mounted(){
@@ -223,20 +269,6 @@
             },
 
             getSolicValidacion(){
-                // let data = {
-                //     GuidConv: '575650aa-b5ed-4797-844d-6ee965e41786',
-                //     TipoValidacion: 4,
-                //     Asesor:'pruevav',
-                //     Sede:'000100',                    
-                //     TipoDoc:'CC',
-                //     NumDoc:'1026307251',
-                //     Email:'brayantriana22@gmail.com',
-                //     Celular:'3007819686',          
-                //     PrefCelular : "57",          
-                //     Usuario:'CKCOMERCIALIZADORA_2022',
-                //     Clave:'CKComercializadora.2022*',
-                // };
-
                 axios.post('https://demorcs.olimpiait.com:6314/Validacion/SolicitudValidacion', this.solicitudVal, {headers:{
                     'Authorization':`Bearer ${this.token}`
                 }}).then((response)=>{
@@ -266,6 +298,8 @@
                 axios.post('https://demorcs.olimpiait.com:6314/Validacion/ConsultarValidacion', dataDinamic, {headers:{
                     'Authorization':`Bearer ${this.token}`
                 }}).then((response)=>{
+                    this.fuentes = response.data.data.fuentesAbiertas.fuentes;
+                    this.fuentesRaw = response.data.data.fuentesAbiertas.fuentesRaw;                    
                     this.resultConsultVal = response.data.data;
                 }).catch((error)=>{
                     console.log(error);
