@@ -2,9 +2,9 @@
   <form id="credit-form" class="d-flex align-items-center" :class="collapsed ? 'collapsed' : null">
     <b-card no-body class="card-main mt-5 mb-5 ml-5">
       <b-card-body>
-        <div v-if="form.requestAmount >= 660000">
+        <!-- <div v-if="form.requestAmount >= 1000000">
           <p>Sí es tu primera vez, sólo puedes solicitar hasta $650,000.</p>
-        </div>        
+        </div>         -->
 
         <h2 class="title mb-3">Calcula tu crédito</h2>
 
@@ -43,7 +43,7 @@
             <b-form-group label-for="payDate" class="mb-0">
               <template v-slot:label>
                 <span>¿Cuándo puedes pagar?</span>
-                <small>Una cuota máx de <b>30 días</b></small>
+                <small>Una cuota máx de <b>180 meses</b></small>
               </template>
             </b-form-group>
           </b-col>
@@ -246,7 +246,7 @@ export default {
   data() {
     return {
       form: {
-        requestAmount: 150000,
+        requestAmount: 1000000,
         payDate: '',
         due: 1,
         client: null,
@@ -297,54 +297,19 @@ export default {
             { value: 'ALCALDIA-CALI-PENSIONADOS', text: 'Alcaldía de Cali pensionados' }
           ]
         },
-        {
-          value: 'fuerzas-armadas',
-          text: 'Fuerzas Armadas de Colombia / Activos',
-          entidades: [
-            { value: null, text: 'Entidad' },
-            { value: 'FUERZA-AEREA', text: 'Fuerza aérea' },
-            { value: 'EJERCITO-NAL', text: 'Ejercito nacional' },
-            { value: 'ARMADA-NAL', text: 'Armada nacional' },
-            { value: 'COMANDO-GENERAL', text: 'Comando general' },
-            { value: 'UND-GEST-GENERAL', text: 'Unidad de gestión general' },
-            { value: 'DIREC-GENERAL-MARITIMA', text: 'Dirección general marítima' },
-            { value: 'JUST-PENAL-MILITAR', text: 'Justicia penal militar' },
-            { value: 'POLICIA-NACIONAL', text: 'Policia nacional' },
-            { value: 'INPEC', text: 'INPEC' }
-          ]
-        },
-        {
-          value: 'empleado-sector-publico',
-          text: 'Empleado - Sector Publico',
-          entidades: [
-            { value: null, text: 'Entidad' },
-            { value: 'ALCALDIA-CALI-ACTIVOS', text: 'Alcaldía de Cali Activos' }
-          ]
-        },
-        {
-          value: 'empleado-sector-privado',
-          text: 'Empleado - Sector Privado',
-          entidades: [
-            { value: null, text: 'Entidad' },
-            { value: 'EMPLEADO-SECTOR-PRIVADO', text: 'Empleado de sector privado' }
-          ]
-        }
       ],
 
       creditType: [
         { value: null, text: 'Tipo de Crédito' },
-        { value: 'libranza', text: 'Libranza', min: 150000, max: 1000000 },
         {
           value: 'libre-inversion',
           text: 'Libranza, Libre Inversión',
-          min: 1000000,
-          max: 150000000
+          min: 1000000, max: 200000000
         },
         {
           value: 'compra-cartera',
           text: 'Libranza, Compra de Cartera',
-          min: 1000000,
-          max: 150000000
+          min: 1000000, max: 200000000
         }
       ]
     };
@@ -426,8 +391,47 @@ export default {
     },
     onSubmit() {
       // let items = this.items;
+      let tasa = 0.014;
+
+      let val1 = 10/100;
+      let val2 = 19/100;
+      let val3 = 5/100;
+      let val5 = 3.93/100;
+      let val6 = 2.500;
+
+      let amount = this.form.requestAmount;
+      let dues = this.form.due;
+
+      let aval = amount * val1;
+      let ivaAval = aval*val2;
+      let comision = amount * val3;
+      let val1TR = amount + aval + ivaAval + comision;
+       console.log('Calculos TR',val1TR);
+
+      let val2t = (amount + aval + ivaAval + comision)* val3;
+      let ivaCK =  val2t * val2;
+      let totalCredit = val1TR + val2t + ivaCK;
+      
+      let interesInicial = totalCredit * val5;
+      let gmf = (val1TR*4)/1000;
+
+      let totalCredit2 = totalCredit + interesInicial + gmf;      
+      let seguro = (totalCredit2 / 1000000) * val6;
+      
+      let cuota =  totalCredit2 * dues * tasa
+      
+
+      console.log('Calculo vlr 2: ', val2t);
+      console.log('Calculo ivaCK: ', ivaCK);
+      console.log('Calculo totalCredit: ', totalCredit);
+      console.log('Calculo interesInicial: ', interesInicial);
+      console.log('Calculo gmf: ', gmf);
+      console.log('Calculo totalCredit2: ', totalCredit2);      
+      console.log('seguro: ', seguro);
+      console.log('Calculo Cuota: '+cuota);
 
       const params = {
+        amount: this.form.requestAmount,
         dues: this.form.due,
         total: this.items.total.value,
         iva: this.items.iva.value,
@@ -436,16 +440,16 @@ export default {
         insurance: this.items.insurance.value,
         interestRate: this.items.interestRate.value
       };
+      console.log('Parametros: ',params);
+      // // this.setCreditInfo(params);
+      // window.localStorage.setItem('creditInfo', JSON.stringify(params));
 
-      // this.setCreditInfo(params);
-      window.localStorage.setItem('creditInfo', JSON.stringify(params));
-
-      this.$swal({
-        icon: 'success',
-        title: '¡ Vamos bien !'
-      }).then(() => {
-        window.location.href = 'RegisterCredit';
-      });
+      // this.$swal({
+      //   icon: 'success',
+      //   title: '¡ Vamos bien !'
+      // }).then(() => {
+      //   window.location.href = 'RegisterCredit';
+      // });
     },
     minusDue() {
       const dueValue = this.form.due;
@@ -453,15 +457,15 @@ export default {
     },
     plusDue() {
       const dueValue = this.form.due;
-      this.form.due = dueValue < 30 ? dueValue + 1 : dueValue;
+      this.form.due = dueValue < 180 ? dueValue + 1 : dueValue;
     },
     validateDue() {
       const dueValue = this.form.due;
 
       if (dueValue < 1) {
         this.form.due = 1;
-      } else if (dueValue > 30) {
-        this.form.due = 30;
+      } else if (dueValue > 180) {
+        this.form.due = 180;
       } else {
         this.form.due = dueValue;
       }
