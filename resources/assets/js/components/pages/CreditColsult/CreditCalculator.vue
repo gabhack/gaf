@@ -42,7 +42,7 @@
           <b-col cols="12">
             <b-form-group label-for="payDate" class="mb-0">
               <template v-slot:label>
-                <span>¿Cuándo puedes pagar?</span>
+                <span>¿En cuántas cuotas?</span>
                 <small>Una cuota máx de <b>180 meses</b></small>
               </template>
             </b-form-group>
@@ -76,14 +76,39 @@
               <!-- <b-form-select v-model="form.due" :options="duesOptions" /> -->
               <b-input-group class="dues">
                 <b-input-group-prepend>
-                  <b-input-group-text>Cuotas</b-input-group-text>
-                  <b-button variant="lavender" @click="minusDue">-</b-button>
+                  <b-input-group-text>Cuotas</b-input-group-text>                
                 </b-input-group-prepend>
-                <b-form-input type="text" @change="validateDue" v-model.number="form.due" trim />
-                <b-input-group-append>
-                  <b-button variant="lavender" @click="plusDue">+</b-button>
-                </b-input-group-append>
+                <b-form-select
+                  id="gender"
+                  v-model="form.due"
+                  :options="selectDues"
+                />
               </b-input-group>
+            </b-form-group>
+          </b-col>
+        </b-form-row>
+        <b-form-row>
+          <b-col cols="12">
+            <b-form-group label-for="gender" class="form-group-icon"> 
+              <ClientTypeIcon class="icon" />             
+              <b-form-select
+                id="gender"
+                v-model="form.gender"
+                :options="gender"
+              />
+            </b-form-group>
+          </b-col>
+        </b-form-row>
+        <b-form-row>
+          <b-col cols="12">
+            <b-form-group label-for="age" class="form-group-icon"> 
+              <ClientTypeIcon class="icon" />             
+              <b-form-input
+                placeholder="Edad"
+                id="age"
+                v-model.number="form.age"
+                type="number"                
+              />
             </b-form-group>
           </b-col>
         </b-form-row>
@@ -116,7 +141,7 @@
             </b-form-group>
           </b-col>
         </b-form-row>
-        <div class="btn-credit-wrap">
+        <div class="btn-credit-wrap" v-if="showButton">
           <b-button
             class="btn-credit rounded-pill py-3 px-5"
             variant="slate-blue"
@@ -135,82 +160,153 @@
               <span class="font-weight-bold">Valor solicitado</span>
             </b-col>
             <b-col cols="5">
-              <span class="font-weight-bold">{{ form.requestAmount | currency }}</span>
+              <span class="font-weight-bold">{{ amount | currency }}</span>
             </b-col>
           </b-row>
         </b-list-group-item>
         <b-list-group-item>
           <b-row>
             <b-col cols="7">
-              <span>Interés (25%)</span>
+              <span>Cuotas</span>
             </b-col>
             <b-col cols="5">
-              <span>{{ (form.requestAmount * 0.025) | currency }}</span>
+              <span>{{ dues }}</span>
             </b-col>
           </b-row>
         </b-list-group-item>
+        <b-list-group-item>
+          <b-row>
+            <b-col cols="7">
+              <span>Aval</span>
+            </b-col>
+            <b-col cols="5">
+              <span>{{ aval | currency }}</span>
+            </b-col>
+          </b-row>
+        </b-list-group-item>
+        <b-list-group-item>
+          <b-row>
+            <b-col cols="7">
+              <span>IVA Aval</span>
+            </b-col>
+            <b-col cols="5">
+              <span>{{ivaAval | currency}}</span>
+            </b-col>
+          </b-row>
+        </b-list-group-item>
+        <b-list-group-item>
+          <b-row>
+            <b-col cols="7">
+              <span class="font-weight-bold">Comisión</span>
+            </b-col>
+            <b-col cols="5">
+              <span class="font-weight-bold">{{ comision | currency }}</span>
+            </b-col>
+          </b-row>
+        </b-list-group-item>
+        <b-list-group-item>
+          <b-row>
+            <b-col cols="7">
+              <span class="font-weight-bold">Valor 1</span>
+            </b-col>
+            <b-col cols="5">
+              <span>{{ val1TR | currency }}</span>
+            </b-col>
+          </b-row>
+        </b-list-group-item>
+        <b-list-group-item>
+          <b-row>
+            <b-col cols="7">
+              <span>Valor 2</span>
+            </b-col>
+            <b-col cols="5">
+              <span>{{ val2t | currency }}</span>
+            </b-col>
+          </b-row>
+        </b-list-group-item>
+
+        <b-list-group-item>
+          <b-row>
+            <b-col cols="7">
+              <span>IVA CK</span>
+            </b-col>
+            <b-col cols="5">
+              <span>{{ ivaCK | currency }}</span>
+            </b-col>
+          </b-row>
+        </b-list-group-item>
+
+        <b-list-group-item>
+          <b-row>
+            <b-col cols="7">
+              <span>Credito Total</span>
+            </b-col>
+            <b-col cols="5">
+              <span>{{ totalCredit | currency }}</span>
+            </b-col>
+          </b-row>
+        </b-list-group-item>
+
+        <b-list-group-item>
+          <b-row>
+            <b-col cols="7">
+              <span>Interes Inicial</span>
+            </b-col>
+            <b-col cols="5">
+              <span>{{ interesInicial | currency }}</span>
+            </b-col>
+          </b-row>
+        </b-list-group-item>
+
+        <b-list-group-item>
+          <b-row>
+            <b-col cols="7">
+              <span>GMF</span>
+            </b-col>
+            <b-col cols="5">
+              <span>{{ gmf | currency }}</span>
+            </b-col>
+          </b-row>
+        </b-list-group-item>
+
         <b-list-group-item>
           <b-row>
             <b-col cols="7">
               <span>Seguro</span>
             </b-col>
             <b-col cols="5">
-              <span>2900</span>
+              <span>{{ seguro | currency }}</span>
             </b-col>
           </b-row>
         </b-list-group-item>
+
         <b-list-group-item>
           <b-row>
             <b-col cols="7">
-              <span>Administración</span>
+              <span>Total a Pagar</span>
             </b-col>
             <b-col cols="5">
-              <span>25500</span>
-            </b-col>
-          </b-row>
-        </b-list-group-item>
-        <b-list-group-item>
-          <b-row>
-            <b-col cols="7">
-              <span class="font-weight-bold">Subtotal</span>
-            </b-col>
-            <b-col cols="5">
-              <span class="font-weight-bold">{{ subTotal | currency }}</span>
-            </b-col>
-          </b-row>
-        </b-list-group-item>
-        <b-list-group-item>
-          <b-row>
-            <b-col cols="7">
-              <span class="font-weight-bold">Tecnología</span>
-            </b-col>
-            <b-col cols="5">
-              <span>0</span>
-            </b-col>
-          </b-row>
-        </b-list-group-item>
-        <b-list-group-item>
-          <b-row>
-            <b-col cols="7">
-              <span>IVA</span>
-            </b-col>
-            <b-col cols="5">
-              <span>4845</span>
-            </b-col>
-          </b-row>
-        </b-list-group-item>
-        <b-list-group-item>
-          <b-row>
-            <b-col cols="7">
-              <span class="h5 font-weight-bold">Total a pagar</span>
-            </b-col>
-            <b-col cols="5">
-              <span class="h5 font-weight-bold total-val">
-                {{ total | currency }}
+              <span>
+                {{ totalCredit2 | currency }}
               </span>
             </b-col>
           </b-row>
         </b-list-group-item>
+
+        <b-list-group-item>
+          <b-row>
+            <b-col cols="7">
+              <span class="h5 font-weight-bold">
+                Cuota
+              </span>
+            </b-col>
+            <b-col cols="5">
+              <span class="h5 font-weight-bold total-val">
+                {{ cuota | currency }}
+              </span>
+            </b-col>
+          </b-row>
+        </b-list-group-item>        
       </b-list-group>
     </div>
     <div class="btn-wrap">
@@ -245,13 +341,30 @@ export default {
   },
   data() {
     return {
+      showButton:true,
+      amount:null,
+      dues:null,
+      aval:null,
+      ivaAval:null,
+      comision:null,
+      val1TR:null,
+      val2t:null,
+      ivaCK:null,
+      totalCredit:null,
+      interesInicial:null,
+      gmf:null,
+      totalCredit2:null,
+      seguro:null,
+      cuota:null,
       form: {
         requestAmount: 1000000,
         payDate: '',
         due: 1,
         client: null,
         credit: null,
-        entidad: null
+        entidad: null,
+        gender: null,
+        age:null
       },
       entidades: [],
       collapsed: false,
@@ -268,18 +381,15 @@ export default {
           text: 'Docente - Sector Publico',
           entidades: [
             { value: null, text: 'Entidad' },
-            { value: 'SED-CALDAS', text: '(SED) CALDAS' },
-            { value: 'SED-CAUCA', text: '(SED) CAUCA' },
-            { value: 'SED-CHOCO', text: '(SED) CHOCO' },
-            { value: 'SED-SAN-ANDRES', text: '(SED) SAN ANDRES' },
             { value: 'SED-VALLE', text: '(SED) VALLE' },
+            { value: 'SED-CAUCA', text: '(SED) CAUCA' },
+            { value: 'SED-NARIÑO', text: '(SED) SAN NARIÑO' },
+            { value: 'SED-CHOCO', text: '(SED) CHOCO' },            
+            { value: 'SED-CALI', text: '(SED) CALI' },
+            { value: 'SEM-YUMBO', text: '(SEM) YUMBO' },
             { value: 'SEM-BUGA', text: '(SEM) BUGA' },
-            { value: 'SEM-CALI', text: '(SEM) CALI' },
-            { value: 'SEM-IBAGUE', text: '(SEM) IBAGUE' },
-            { value: 'SEM-JAMUNDI', text: '(SEM) JAMUNDI' },
-            { value: 'SEM-PASTO', text: '(SEM) PASTO' },
-            { value: 'SEM-POPAYÁN', text: '(SEM) POPAYÁN' },
-            { value: 'SEM-QUIBDO', text: '(SEM) QUIBDO' }
+            { value: 'SEM-POPAYAN', text: '(SEM) POPAYAN' },
+            { value: 'SEM-QUIBDÓ', text: '(SEM) QUIBDÓ' }
           ]
         },
         {
@@ -287,15 +397,23 @@ export default {
           text: 'Pensionado',
           entidades: [
             { value: null, text: 'Entidad' },
-            { value: 'FIDUPREVISORA', text: 'Fiduprevisora' },
             { value: 'COLPENSIONES', text: 'Colpensiones' },
-            { value: 'FOPEP', text: 'Fopep' },
-            { value: 'CASUR', text: 'Casur' },
-            { value: 'CAGEN', text: 'Cagen' },
-            { value: 'CREMIL', text: 'Cremil' },
-            { value: 'MINDEFENSA-PENSIONADOS ', text: 'Mindefensa pensionados' },
-            { value: 'ALCALDIA-CALI-PENSIONADOS', text: 'Alcaldía de Cali pensionados' }
+            { value: 'FIDUPREVISORA', text: 'Fiduprevisora' },            
+            { value: 'FOPEP', text: 'Fopep' }
           ]
+        },
+      ],
+
+      gender: [
+        {
+          value: null,
+          text: 'Genero'
+        },{
+          value: 'Masculino',
+          text: 'Masculino',        
+        },{
+          value: 'Femenino',
+          text: 'Femenino',        
         },
       ],
 
@@ -311,10 +429,95 @@ export default {
           text: 'Libranza, Compra de Cartera',
           min: 1000000, max: 200000000
         }
+      ],
+
+      selectDues: [
+        { 
+          value: null, 
+          text: 'Seleccione Cuota' 
+        },{
+          value: 12,
+          text: '12 Meses'
+        },{
+          value: 24,
+          text: '24 Meses'
+        },{
+          value: 36,
+          text: '36 Meses'
+        },{
+          value: 48,
+          text: '48 Meses'
+        },{
+          value: 60,
+          text: '60 Meses'
+        },{
+          value: 72,
+          text: '72 Meses'
+        },{
+          value: 84,
+          text: '84 Meses'
+        },{
+          value: 96,
+          text: '96 Meses'
+        },{
+          value: 108,
+          text: '108 Meses'
+        },{
+          value: 120,
+          text: '120 Meses'
+        },{
+          value: 132,
+          text: '132 Meses'
+        },{
+          value: 144,
+          text: '144 Meses'
+        },{
+          value: 156,
+          text: '156 Meses'
+        },{
+          value: 168,
+          text: '168 Meses'
+        },{
+          value: 180,
+          text: '180 Meses'
+        }
       ]
     };
   },
-  computed: {    
+  watch:{
+    'form.requestAmount': function(newVal,oldVal){
+      if(newVal!==oldVal){
+        this.simulator();
+      }
+    },
+    'form.due': function(newVal,oldVal){
+      if(newVal!==oldVal){
+        this.simulator();
+      }
+    },
+    'form.client': function(newVal){
+      if( (newVal === 'pensionado' && this.form.age > 75) || (newVal === 'docente-sector-publico' && this.form.gender === 'Femenino' && this.form.age > 57) || (newVal === 'docente-sector-publico' && this.form.gender === 'Masculino' && this.form.age > 62) ){
+        this.showButton = false;
+        this.$swal({
+          icon: 'warning',
+          title: 'Tu solicitud de credito no ha sido aprobada, revisa el campo de edad ingresado o cambia tu tipo de cliente'
+        });
+      }
+    },
+    'form.age': function(newVal){
+      if(newVal){
+        this.showButton = true;
+        if( (this.form.client === 'pensionado' && newVal > 75) || (this.form.client === 'docente-sector-publico' && this.form.gender === 'Femenino' && newVal > 57) || (this.form.client === 'docente-sector-publico' && this.form.gender === 'Masculino' && newVal > 62) ){
+          this.showButton = false;
+          this.$swal({
+            icon: 'warning',
+            title: 'Tu solicitud de credito no ha sido aprobada, revisa el campo de edad ingresado o cambia tu tipo de cliente'
+          });
+        }
+      }
+    }
+  },
+  computed: {   
     firstName() {
       return this.userFirstname != '' ? this.userFirstname : 'Usuario';
     },
@@ -351,13 +554,41 @@ export default {
       }
     }
   },
-  created() {
-    this.setSubTotal();
-    this.setTotal();
+  created() {      
     this.generateDues(30);
+    this.simulator();
     this.form.payDate = this.minPayDate;
   },
-  methods: {    
+  methods: {  
+    simulator(){
+      let tasa = 1.40;
+
+      let val1 = 10/100;
+      let val2 = 19/100;
+      let val3 = 5/100;
+      let val5 = 3.93/100;
+      let val6 = 2500;
+
+      this.amount = this.form.requestAmount;
+      this.dues = this.form.due;
+
+      this.aval = this.amount * val1;
+      this.ivaAval = this.aval*val2;
+      this.comision = this.amount * val3;
+      this.val1TR = this.amount + this.aval + this.ivaAval + this.comision;
+
+      this.val2t = (this.amount + this.aval + this.ivaAval + this.comision)* val3;
+      this.ivaCK =  this.val2t * val2;
+      this.totalCredit = this.val1TR + this.val2t + this.ivaCK;
+          
+      this.interesInicial = this.totalCredit * val5;
+      this.gmf = (this.val1TR*4)/1000;
+
+      this.totalCredit2 = this.totalCredit + this.interesInicial + this.gmf;      
+      this.seguro = (this.totalCredit2 / 1000000) * val6;
+        
+      this.cuota = this.totalCredit2 * (Math.pow(1+tasa/100, this.dues)*tasa/100) / (Math.pow(1+tasa/100,this.dues)-1);
+    },  
     generateDues(count) {
       for (let i = 1; i <= count; i++) {
         this.duesOptions.push({ value: i, text: `Cuotas: ${i}` });
@@ -366,70 +597,17 @@ export default {
     setEntidades() {
       this.form.entidad = null;
 
-      const selectType = this.clientType.find(type => {
-        console.log(type.value, this.form.client);
+      const selectType = this.clientType.find(type => {        
         return type.value === this.form.client;
       });
 
       this.entidades = selectType.entidades || [{ value: null, text: 'No hay entidades' }];
-    },
-    setSubTotal() {
-      const subTotal =
-        this.items.amount.value +
-        this.items.interestRate.value +
-        this.items.insurance.value +
-        this.items.administration.value;
-      this.subTotal = subTotal;
-    },
-    setTotal() {
-      const total = this.items.subTotal.value + this.items.technology.value + this.items.iva.value;
-      this.total = total;
     },
     setCollapsed() {
       this.collapsed = !this.collapsed;
       // document.querySelector('#text-fancy').style.display = this.collapsed ? 'flex' : 'none';
     },
     onSubmit() {
-      // let items = this.items;
-      let tasa = 0.014;
-
-      let val1 = 10/100;
-      let val2 = 19/100;
-      let val3 = 5/100;
-      let val5 = 3.93/100;
-      let val6 = 2.500;
-
-      let amount = this.form.requestAmount;
-      let dues = this.form.due;
-
-      let aval = amount * val1;
-      let ivaAval = aval*val2;
-      let comision = amount * val3;
-      let val1TR = amount + aval + ivaAval + comision;
-       console.log('Calculos TR',val1TR);
-
-      let val2t = (amount + aval + ivaAval + comision)* val3;
-      let ivaCK =  val2t * val2;
-      let totalCredit = val1TR + val2t + ivaCK;
-      
-      let interesInicial = totalCredit * val5;
-      let gmf = (val1TR*4)/1000;
-
-      let totalCredit2 = totalCredit + interesInicial + gmf;      
-      let seguro = (totalCredit2 / 1000000) * val6;
-      
-      let cuota =  totalCredit2 * dues * tasa
-      
-
-      console.log('Calculo vlr 2: ', val2t);
-      console.log('Calculo ivaCK: ', ivaCK);
-      console.log('Calculo totalCredit: ', totalCredit);
-      console.log('Calculo interesInicial: ', interesInicial);
-      console.log('Calculo gmf: ', gmf);
-      console.log('Calculo totalCredit2: ', totalCredit2);      
-      console.log('seguro: ', seguro);
-      console.log('Calculo Cuota: '+cuota);
-
       const params = {
         amount: this.form.requestAmount,
         dues: this.form.due,
@@ -439,9 +617,8 @@ export default {
         administration: this.items.administration.value,
         insurance: this.items.insurance.value,
         interestRate: this.items.interestRate.value
-      };
-      console.log('Parametros: ',params);
-      // // this.setCreditInfo(params);
+      };      
+      // this.setCreditInfo(params);
       // window.localStorage.setItem('creditInfo', JSON.stringify(params));
 
       // this.$swal({
