@@ -88,7 +88,7 @@
           </b-col>
         </b-form-row>
         <b-form-row>
-          <b-col cols="12">
+          <b-col cols="6">
             <b-form-group label-for="gender" class="form-group-icon"> 
               <ClientTypeIcon class="icon" />             
               <b-form-select
@@ -98,9 +98,7 @@
               />
             </b-form-group>
           </b-col>
-        </b-form-row>
-        <b-form-row>
-          <b-col cols="12">
+          <b-col cols="6">
             <b-form-group label-for="age" class="form-group-icon"> 
               <ClientTypeIcon class="icon" />             
               <b-form-input
