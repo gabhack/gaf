@@ -65,7 +65,7 @@
                             <iframe :src="resultSolicVal.url" width="700" height="700" allow="camera *;"></iframe>                            
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>                            
+                            <button type="button" class="btn btn-secondary" v-on:click="getData" data-dismiss="modal">Cerrar</button>                            
                         </div>
                     </div>
                 </div>
@@ -250,8 +250,7 @@
                 console.log('datos',data);
             },
             getData(){
-                axios.get('validate').then((response)=>{
-                    console.log(response.data);
+                axios.get('validate').then((response)=>{                    
                     this.validateData = response.data;
                 })
             },
