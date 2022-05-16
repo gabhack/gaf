@@ -1,6 +1,6 @@
 @extends('layouts.app2')
 
 @section('content')
-    <history-component></history-component>
+    <history-component :user="{{Auth::user()}}"></history-component>
 @endsection
 

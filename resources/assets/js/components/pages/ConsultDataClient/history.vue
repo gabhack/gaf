@@ -156,15 +156,16 @@
                     </div>
                 </div>
             </div>
-        </div>       
+        </div>
         <div v-else>
             <button class="btn btn-primary mb-4" v-on:click="back">Volver</button>
-            <detail-history-component :id="id_consult"></detail-history-component>            
+            <detail-history-component :id="id_consult" :user="user"></detail-history-component>            
         </div>         
     </div>
 </template>
 <script>
 export default {
+    props:['user'],
     data(){
         return {
             HistoryConsult:[],

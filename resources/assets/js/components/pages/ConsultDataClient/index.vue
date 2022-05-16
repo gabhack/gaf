@@ -52,12 +52,12 @@
                     </div>
                     <div class="panel-body">
                         <div class="row">
-                            <!-- <div class="col-6">
-                                <b class="panel-label">Fondo:</b>
+                            <div class="col-6" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
+                                <b class="panel-label">FONDO:</b>
                                 <div v-for="(datames, key) in datames" :key="key">
                                     <p class="panel-value">{{datames.fondo}}</p>
                                 </div>                                
-                            </div> -->
+                            </div>
                             <div class="col-6">
                                 <b class="panel-label">TIPO DE DOCUMENTO:</b>
                                 <div v-for="(datames, key) in datames" :key="key">
@@ -105,18 +105,18 @@
                                     <p class="panel-value">{{datames.tp}}</p>
                                 </div>                                
                             </div>
-                            <!-- <div class="col-md-6">
-                                <b class="panel-label">Nombre Banco donde le cosignan:</b>
+                            <div class="col-md-6" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
+                                <b class="panel-label">NOMBRE DEL BANCO DONDE LE CONSIGNAN:</b>
                                 <div v-for="(datames, key) in datames" :key="key">
                                     <p class="panel-value">{{datames.nbanco}}</p>
                                 </div>                                
                             </div>
-                            <div class="col-md-6">
-                                <b class="panel-label">Sucursal Banco:</b>
+                            <div class="col-md-6" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
+                                <b class="panel-label">SUCURSAL BANCO:</b>
                                 <div v-for="(datames, key) in datames" :key="key">
                                     <p class="panel-value">{{datames.sucursal}}</p>
                                 </div>                                
-                            </div> -->
+                            </div>
                             <div class="col-md-6">
                                 <b class="panel-label">TELEFONO:</b>
                                 <div v-for="(datames, key) in datames" :key="key">
@@ -194,24 +194,24 @@
                                     <p class="panel-value">{{fechavinc.tp}}</p>
                                 </div>                                
                             </div>
-                            <!--<div class="col-6">
+                            <div class="col-6" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
                                 <b class="panel-label">FECHA CARGA DATA:</b>
                                 <div v-for="(fechavinc, key) in fechaVinc" :key="key">
                                     <p class="panel-value">{{fechavinc.fecdata}}</p>
                                 </div>                                
                             </div>
-                            <div class="col-6">
+                            <div class="col-6"  v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
                                 <b class="panel-label">MES CARGA DATA:</b>
                                 <div v-for="(fechavinc, key) in fechaVinc" :key="key">
                                     <p class="panel-value">{{fechavinc.mesdata}}</p>
                                 </div>                                
                             </div>
-                            <div class="col-6">
+                            <div class="col-6" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
                                 <b class="panel-label">AÑO CARGA DATA:</b>
                                 <div v-for="(fechavinc, key) in fechaVinc" :key="key">
                                     <p class="panel-value">{{fechavinc.anodata}}</p>
                                 </div>                                
-                            </div>-->
+                            </div>
                         </div>
                     </div>
                 </div>                
@@ -222,25 +222,25 @@
                     <div class="panel-heading"><b>OBLIGACIONES VIGENTES AL DIA</b></div>
                         <div class="panel-body">
                             <div class="row">
-                                <!-- <div class="col-md-2">
-                                    <b class="panel-label table-text">PERIODO DE DATA:</b>
+                                <!-- <div class="col-md-2" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
+                                    <b class="panel-label table-text">SELECCIONE PERIODO DE DATA:</b>
                                     <div v-for="(descapli, key) in descapli" :key="key">
                                         <input type="checkbox" class="mr-2" v-on:click="(e)=>vAplicado(e.target.checked, descapli, descapli.pagare, descapli.nomtercero)"/><p class="panel-value">{{descapli.periodo}}</p>                                        
                                     </div>
                                 </div> -->
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <b class="panel-label table-text">TIPO ENTIDAD:</b>
                                     <div v-for="(descapli, key) in descapli" :key="key">
                                         <p class="panel-value">{{descapli.clase}}</p>
                                     </div> 
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
                                     <div v-for="(descapli, key) in descapli" :key="key">
                                         <p class="panel-value">{{descapli.nomtercero}}</p>
                                     </div>
                                 </div> 
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <b class="panel-label table-text">NUMERO PAGARE:</b>
                                     <div v-for="(descapli, key) in descapli" :key="key">
                                         <p class="panel-value">{{descapli.pagare}}</p>
@@ -287,41 +287,41 @@
                                         <p class="panel-value">{{descapli.porcentaje}}</p>
                                     </div>                                
                                 </div> -->
-
-                                <div class="col-md-2">
-                                    <b class="panel-label table-text">CUOTA:</b>
+                            
+                                <div class="col-md-3">
+                                    <b class="panel-label table-text">NOMBRE ENTIDAD CEDIENTE:</b>
                                     <div v-for="(descapli, key) in descapli" :key="key">
-                                        <p class="panel-value">{{descapli.vaplicado}}</p>
+                                        <p class="panel-value">{{descapli.nonentant}}</p>
                                     </div>                                
                                 </div>
 
-                                <!--<div class="col-2">
+                                <div class="col-md-3" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
                                     <b class="panel-label table-text">VALOR TOTAL DEUDA:</b>
                                     <div v-for="(descapli, key) in descapli" :key="key">
                                         <p class="panel-value">{{descapli.vtotal}}</p>
                                     </div>                                
-                                </div>-->
+                                </div>
 
-                                <!--<div class="col-6">
-                                    <b class="panel-label">VALOR PAGADO DEUDA:</b>
+                                <div class="col-md-3" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
+                                    <b class="panel-label table-text">VALOR PAGADO DEUDA:</b>
                                     <div v-for="(descapli, key) in descapli" :key="key">
                                         <p class="panel-value">{{descapli.vpagado}}</p>
                                     </div>                                
-                                </div>-->
+                                </div>
 
-                                <div class="col-md-2">
+                                <div class="col-md-3" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
                                     <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
                                     <div v-for="(descapli, key) in descapli" :key="key">
                                         <p class="panel-value">{{descapli.fgrab}}</p>
                                     </div>                                
                                 </div>
 
-                                <div class="col-md-2">
-                                    <b class="panel-label table-text">NOMBRE ENTIDAD CEDIENTE:</b>
+                                <div class="col-md-3">
+                                    <b class="panel-label table-text">CUOTA:</b>
                                     <div v-for="(descapli, key) in descapli" :key="key">
-                                        <p class="panel-value">{{descapli.nonentant}}</p>
+                                        <p class="panel-value">{{descapli.vaplicado}}</p>
                                     </div>                                
-                                </div>
+                                </div>                                
 
                                 <!--<div class="col-6">
                                     <b class="panel-label">SALDO DEUDA:</b>
@@ -398,8 +398,7 @@
                                     <div v-for="(descapli, key) in descapli" :key="key">
                                         <p class="panel-value">{{descapli.anodata}}</p>
                                     </div>                                
-                                </div> -->
-                                
+                                </div> -->                                
                             </div>
                         </div>
                     </div>
@@ -410,12 +409,12 @@
                         <div class="panel-heading"><b>OBLIGACIONES VIGENTES EN MORA</b></div>
                         <div class="panel-body">                                
                             <div class="row">
-                                <!-- <div class="col-6">
-                                    <b class="panel-label">Seleccionar Tipo entidad:</b>
+                                <div class="col-6" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
+                                    <b class="panel-label">SELECCIONE PERIODO DE DATA:</b>
                                     <div v-for="(descnoap, key) in descnoap" :key="key">
                                         <input type="checkbox" v-on:click="(e)=>vAplicado(e.target.checked, descnoap, descnoap.pagare, descnoap.nomtercero)"/><p>{{descnoap.clase}}</p>
                                     </div>
-                                </div> -->
+                                </div>
                                 <!-- <div class="col-6">
                                     <b class="panel-label">Entidad (B):</b>
                                     <div v-for="(descnoap, key) in descnoap" :key="key">
@@ -477,19 +476,19 @@
                                     </div>                                
                                 </div>
 
-                                <!--<div class="col-6">
-                                    <b class="panel-label">Valor total deuda:</b>
+                                <div class="col-6" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
+                                    <b class="panel-label">VALOR TOTAL DEUDA:</b>
                                     <div v-for="(descnoap, key) in descnoap" :key="key">
                                         <p class="panel-value">{{descnoap.vtotal}}</p>
                                     </div>                                
                                 </div>
 
-                                <div class="col-6">
-                                    <b class="panel-label">Valor pagado deuda:</b>
+                                <div class="col-6" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
+                                    <b class="panel-label">VALOR PAGADO DEUDA:</b>
                                     <div v-for="(descnoap, key) in descnoap" :key="key">
                                         <p class="panel-value">{{descnoap.vpagado}}</p>
                                     </div>                                
-                                </div>-->
+                                </div>
 
                                 <div class="col-6">
                                     <b class="panel-label">SALDO DEUDA:</b>
@@ -505,12 +504,12 @@
                                     </div>                                
                                 </div>
 
-                               <!-- <div class="col-6">
-                                    <b class="panel-label">Fecha inicio deuda:</b>
+                               <div class="col-6">
+                                    <b class="panel-label">FECHA INICIO DEUDA:</b>
                                     <div v-for="(descnoap, key) in descnoap" :key="key">
                                         <p class="panel-value">{{descnoap.fgrab}}</p>
                                     </div>                                
-                                </div>-->
+                                </div>
 
                                 <!-- <div class="col-6">
                                     <b class="panel-label">Forma (B):</b>
@@ -846,7 +845,7 @@
                     </div>
                 </div>
                 
-               <!-- <div class="col-md-6" v-if="datamesseceduc.length > 0">
+                <div class="col-md-6" v-if="datamesseceduc.length > 0 && user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
                     <div class="panel panel-primary mb-3">
                         <div class="panel-heading"><b>DATAMESSECEDUC</b></div>
                         <div class="panel-body">
@@ -1002,9 +1001,9 @@
                             </div>
                         </div>
                     </div>
-                </div> -->
+                </div>
                 
-                <div class="col-md-12" v-if="resultPagare.cuota_compra && resultPagare.cuota_compra.length > 0">
+                <!-- <div class="col-md-12" v-if="resultPagare.cuota_compra && resultPagare.cuota_compra.length > 0">
                     <div class="panel panel-primary">
                         <div class="panel-heading"><b>CALCULO DE COMPRA DE CARTERA</b></div>
                         <div class="panel-body">    
@@ -1146,7 +1145,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -1213,6 +1212,7 @@
 <script>
 import printJS from 'print-js';
 export default {
+    props:['user'],
     data() {
         return {
             dataclient:{},
