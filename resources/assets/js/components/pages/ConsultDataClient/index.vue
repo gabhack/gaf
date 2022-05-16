@@ -586,13 +586,13 @@
                                         <p class="panel-value">{{datamesfidu.mnpio}}</p>
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-6" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
                                     <b class="panel-label">DOCUMENTO DE IDENTIDAD:</b>
                                     <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                                         <p class="panel-value">{{datamesfidu.doc}}</p>
                                     </div>                                
                                 </div>
-                                <div class="col-6">
+                                <div class="col-6" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
                                     <b class="panel-label">TIPO DE DOCUMENTO:</b>
                                     <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                                         <p class="panel-value">{{datamesfidu.td}}</p>
@@ -604,20 +604,20 @@
                                         <p class="panel-value">{{datamesfidu.tdd}}</p>
                                     </div>                                
                                 </div> -->
-                                <div class="col-6">
+                                <div class="col-6" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
                                     <b class="panel-label">NOMBRES:</b>
                                     <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                                         <p class="panel-value">{{datamesfidu.solonomp}}</p>
                                     </div>                                
                                 </div>
-                                <div class="col-6">
+                                <div class="col-6" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
                                     <b class="panel-label">APELLIDOS:</b>
                                     <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                                         <p class="panel-value">{{datamesfidu.soloapellp}}</p>
                                     </div>                                
                                 </div>
 
-                                <div class="col-6">
+                                <div class="col-6" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
                                     <b class="panel-label">GENERO:</b>
                                     <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                                         <p class="panel-value">{{datamesfidu.genero}}</p>
@@ -639,7 +639,7 @@
                                 </div>
 
                                 <div class="col-6">
-                                    <b class="panel-label">EDAD PENSIONADO:</b>
+                                    <b class="panel-label">EDAD:</b>
                                     <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                                         <p class="panel-value">{{datamesfidu.edad}}</p>
                                     </div>                                
@@ -709,7 +709,7 @@
                                 </div> -->
 
                                 <div class="col-6">
-                                    <b class="panel-label">VALOR PENSION:</b>
+                                    <b class="panel-label">OTRO INGRESO POSIBLE:</b>
                                     <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                                         <p class="panel-value">{{datamesfidu.vpension}}</p>
                                     </div>                                
