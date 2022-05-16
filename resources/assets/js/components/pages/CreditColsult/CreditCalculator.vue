@@ -43,35 +43,13 @@
             <b-form-group label-for="payDate" class="mb-0">
               <template v-slot:label>
                 <span>¿En cuántas cuotas?</span>
-                <small>Una cuota máx de <b>180 meses</b></small>
+                <small>Maximo <b>180 meses</b></small>
               </template>
             </b-form-group>
           </b-col>
-          <b-col cols="6">
-            <b-form-group class="form-group-icon">
-              <b-form-datepicker
-                id="payDate"
-                v-model="form.payDate"                
-                locale="es"
-                :initial-date="minPayDate"
-                :min="minPayDate"
-                :max="maxPayDate"
-                label-no-date-selected=""
-                :date-format-options="{
-                  year: 'numeric',
-                  month: 'numeric',
-                  day: 'numeric'
-                }"
-                :hide-header="true"
-                label-help=""
-              >
-                <template #button-content>
-                  <CalendarIcon class="icon" />
-                </template>
-              </b-form-datepicker>
-            </b-form-group>
-          </b-col>
-          <b-col cols="6">
+        </b-form-row>    
+        <b-form-row>
+          <b-col cols="12">
             <b-form-group>
               <!-- <b-form-select v-model="form.due" :options="duesOptions" /> -->
               <b-input-group class="dues">
@@ -87,55 +65,112 @@
             </b-form-group>
           </b-col>
         </b-form-row>
+
         <b-form-row>
-          <b-col cols="6">
-            <b-form-group label-for="gender" class="form-group-icon"> 
-              <ClientTypeIcon class="icon" />             
-              <b-form-select
-                id="gender"
-                v-model="form.gender"
-                :options="gender"
-              />
-            </b-form-group>
-          </b-col>
-          <b-col cols="6">
-            <b-form-group label-for="age" class="form-group-icon"> 
-              <ClientTypeIcon class="icon" />             
-              <b-form-input
-                placeholder="Edad"
-                id="age"
-                v-model.number="form.age"
-                type="number"                
-              />
+          <b-col cols="12">
+            <b-form-group label-for="payDate" class="mb-0">
+              <template v-slot:label>
+                <span>Seleccione su Genero</span>                
+              </template>
             </b-form-group>
           </b-col>
         </b-form-row>
         <b-form-row>
           <b-col cols="12">
-            <b-form-group label-for="clientType" class="form-group-icon">
-              <ClientTypeIcon class="icon" />
-              <b-form-select
-                id="clientType"
-                v-model="form.client"
-                :options="clientType"
-                @change="setEntidades()"
-              />
+            <b-form-group>
+              <!-- <b-form-select v-model="form.due" :options="duesOptions" /> -->
+              <b-input-group class="dues">                
+                <b-form-select
+                  id="gender"
+                  v-model="form.gender"
+                  :options="gender"
+                />
+              </b-input-group>
+            </b-form-group>
+          </b-col>
+        </b-form-row>
+
+        <b-form-row>
+          <b-col cols="12">
+            <b-form-group label-for="payDate" class="mb-0">
+              <template v-slot:label>
+                <span>Edad</span>                
+              </template>
+            </b-form-group>
+          </b-col>
+        </b-form-row>
+        <b-form-row>    
+          <b-col cols="12">
+            <b-form-group> 
+              <b-input-group class="dues">                
+                <b-form-input                
+                  id="age"
+                  v-model.number="form.age"
+                  type="number"                
+                />
+              </b-input-group>
+            </b-form-group>
+          </b-col>
+        </b-form-row>
+
+        <b-form-row>
+          <b-col cols="12">
+            <b-form-group label-for="payDate" class="mb-0">
+              <template v-slot:label>
+                <span>Seleccione Tipo de Cliente</span>                
+              </template>
+            </b-form-group>
+          </b-col>
+        </b-form-row>
+        <b-form-row>
+          <b-col cols="12">
+            <b-form-group>
+              <b-input-group class="dues">                
+                <b-form-select
+                  id="clientType"
+                  v-model="form.client"
+                  :options="clientType"
+                  @change="setEntidades()"
+                />
+              </b-input-group>              
+            </b-form-group>
+          </b-col>
+        </b-form-row>
+
+        <b-form-row v-if="form.client">
+          <b-col cols="12">
+            <b-form-group label-for="payDate" class="mb-0">
+              <template v-slot:label>
+                <span>Seleccione la Entidad</span>                
+              </template>
             </b-form-group>
           </b-col>
         </b-form-row>
         <b-form-row v-if="form.client">
           <b-col cols="12">
-            <b-form-group label-for="clientType" class="form-group-icon">
-              <ClientTypeIcon class="icon" />
-              <b-form-select id="clientType" v-model="form.entidad" :options="entidades" />
+            <b-form-group>
+              <b-input-group class="dues">                
+                <b-form-select id="clientType" v-model="form.entidad" :options="entidades" />
+              </b-input-group>              
+            </b-form-group>
+          </b-col>
+        </b-form-row>
+
+        <b-form-row>
+          <b-col cols="12">
+            <b-form-group label-for="payDate" class="mb-0">
+              <template v-slot:label>
+                <span>Seleccione el tipo de credito</span>                
+              </template>
             </b-form-group>
           </b-col>
         </b-form-row>
         <b-form-row>
           <b-col cols="12">
-            <b-form-group class="form-group-icon">
-              <CreditTypeIcon class="icon" />
-              <b-form-select v-model="form.credit" :options="creditType" />
+            <b-form-group>
+              <b-input-group class="dues">                
+                <b-form-select v-model="form.credit" :options="creditType" />
+              </b-input-group>              
             </b-form-group>
           </b-col>
         </b-form-row>
@@ -369,16 +404,11 @@ export default {
       subTotal: 0,
       total: 0,
       duesOptions: [{ value: null, text: 'Cuotas' }],
-      clientType: [
-        {
-          value: null,
-          text: 'Tipo de Cliente'
-        },
+      clientType: [        
         {
           value: 'docente-sector-publico',
           text: 'Docente - Sector Publico',
-          entidades: [
-            { value: null, text: 'Entidad' },
+          entidades: [            
             { value: 'SED-VALLE', text: '(SED) VALLE' },
             { value: 'SED-CAUCA', text: '(SED) CAUCA' },
             { value: 'SED-NARIÑO', text: '(SED) SAN NARIÑO' },
@@ -394,7 +424,6 @@ export default {
           value: 'pensionado',
           text: 'Pensionado',
           entidades: [
-            { value: null, text: 'Entidad' },
             { value: 'COLPENSIONES', text: 'Colpensiones' },
             { value: 'FIDUPREVISORA', text: 'Fiduprevisora' },            
             { value: 'FOPEP', text: 'Fopep' }
@@ -402,11 +431,7 @@ export default {
         },
       ],
 
-      gender: [
-        {
-          value: null,
-          text: 'Genero'
-        },{
+      gender: [{
           value: 'Masculino',
           text: 'Masculino',        
         },{
@@ -415,8 +440,7 @@ export default {
         },
       ],
 
-      creditType: [
-        { value: null, text: 'Tipo de Crédito' },
+      creditType: [        
         {
           value: 'libre-inversion',
           text: 'Libranza, Libre Inversión',
@@ -429,11 +453,7 @@ export default {
         }
       ],
 
-      selectDues: [
-        { 
-          value: null, 
-          text: 'Seleccione Cuota' 
-        },{
+      selectDues: [{
           value: 12,
           text: '12 Meses'
         },{
@@ -607,24 +627,30 @@ export default {
     },
     onSubmit() {
       const params = {
-        amount: this.form.requestAmount,
-        dues: this.form.due,
-        total: this.items.total.value,
-        iva: this.items.iva.value,
-        technology: this.items.technology.value,
-        administration: this.items.administration.value,
-        insurance: this.items.insurance.value,
-        interestRate: this.items.interestRate.value
-      };      
-      // this.setCreditInfo(params);
-      // window.localStorage.setItem('creditInfo', JSON.stringify(params));
+        amount: this.amount,
+        dues: this.dues,
+        aval: this.aval,
+        ivaAval: this.ivaAval,
+        comision: this.comision,
+        val1TR: this.val1TR,
+        val2t: this.val2t,
+        ivaCK: this.ivaCK,
+        totalCredit: this.totalCredit,
+        interesInicial: this.interesInicial,
+        gmf: this.gmf,
+        totalCredit2: this.totalCredit2,
+        seguro: this.seguro,
+        cuota: this.cuota,
+      }; 
 
-      // this.$swal({
-      //   icon: 'success',
-      //   title: '¡ Vamos bien !'
-      // }).then(() => {
-      //   window.location.href = 'RegisterCredit';
-      // });
+      window.localStorage.setItem('creditInfo', JSON.stringify(params));
+
+      this.$swal({
+        icon: 'success',
+        title: '¡ Vamos bien !'
+      }).then(() => {
+        window.location.href = 'RegisterCredit';
+      });
     },
     minusDue() {
       const dueValue = this.form.due;

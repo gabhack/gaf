@@ -1204,7 +1204,7 @@
             <div class="infoFinalContainer">
               <p class="detailsSub">Monto solicitado</p>
               <h2 class="numberMonto">
-                {{ (this.creditInfo.total + this.creditInfo.iva) | currency }}
+                {{ (this.creditInfo.amount) | currency }}
               </h2>
               <p class="detailsSub">Plazo de pago</p>
               <h3 class="dateSub">31 - Dic - 2023</h3>
@@ -1373,16 +1373,20 @@ export default  ({
   computed: {    
     items(){
       return {
-        adminCost: { key: 'Costo Administrativo', value: this.creditInfo.administration },
-        secure: { key: 'Seguro (Vida deudor)', value: this.creditInfo.insurance },
-        interest: { key: 'Tasa de Interés', value: this.creditInfo.interestRate },
-        totalForm: { key: 'TOTAL', value: this.creditInfo.total },
-        iva: { key: 'IVA', value: this.creditInfo.iva },
-        totalPay: { key: 'TOTAL A PAGAR', value: this.creditInfo.total + this.creditInfo.iva },
-        totalCuote: {
-          key: 'CUOTA MENSUAL',
-          value: (this.creditInfo.total + this.creditInfo.iva) / this.creditInfo.dues
-        }
+        amount: {key: 'Monto Solicitado',value: this.creditInfo.amount},
+        dues: {key: 'Cuotas',value: this.creditInfo.dues},
+        aval: {key: 'Aval',value: this.creditInfo.aval},
+        ivaAval: {key: 'Aval IVA',value: this.creditInfo.ivaAval},
+        comision: {key: 'Comisión',value: this.creditInfo.comision},
+        val1TR: {key: 'val1TR',value: this.creditInfo.val1TR},
+        val2t: {key: 'val2t',value: this.creditInfo.val2t},
+        ivaCK: {key: 'IVA CK',value: this.creditInfo.ivaCK},
+        totalCredit: {key: 'Credito Total',value: this.creditInfo.totalCredit},
+        interesInicial: {key: 'Interes Inicial',value: this.creditInfo.interesInicial},
+        gmf: {key: 'GMF',value: this.creditInfo.gmf},
+        totalCredit2: {key: 'Total',value: this.creditInfo.totalCredit2},
+        seguro: {key: 'Seguro',value: this.creditInfo.seguro},
+        cuota: {key: 'Cuota',value: this.creditInfo.cuota},
       };
     }
   },
@@ -1392,11 +1396,6 @@ export default  ({
       return $dirty ? !$error : null;
     },
     submitData() {
-      this.form.$touch();
-      if (this.form.$anyError) {
-        return;
-      }
-
       let params = this.form;
       console.log(params, 'esto es params');
       axios

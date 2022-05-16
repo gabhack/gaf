@@ -14,7 +14,7 @@ class DataCotizer extends Migration
     public function up()
     {
         Schema::create('data_cotizer', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->string('gender');
             $table->string('firstName');
             $table->string('middleName');
