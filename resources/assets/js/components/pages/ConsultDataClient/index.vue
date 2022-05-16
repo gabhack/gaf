@@ -241,11 +241,11 @@
                                     </div>
                                 </div> 
                                 <div class="col-md-3">
-                                    <b class="panel-label table-text">NUMERO PAGARE:</b>
+                                    <b class="panel-label table-text">CUOTA:</b>
                                     <div v-for="(descapli, key) in descapli" :key="key">
-                                        <p class="panel-value">{{descapli.pagare}}</p>
-                                    </div>  
-                                </div>           
+                                        <p class="panel-value">{{descapli.vaplicado}}</p>
+                                    </div>                                
+                                </div>                                   
                                 <!-- <div class="col-6">
                                     <b class="panel-label">Consecutivo (B):</b>
                                     <div v-for="(descapli, key) in descapli" :key="key">
@@ -317,12 +317,12 @@
                                 </div>
 
                                 <div class="col-md-3">
-                                    <b class="panel-label table-text">CUOTA:</b>
+                                    <b class="panel-label table-text">NUMERO PAGARE:</b>
                                     <div v-for="(descapli, key) in descapli" :key="key">
-                                        <p class="panel-value">{{descapli.vaplicado}}</p>
-                                    </div>                                
-                                </div>                                
-
+                                        <p class="panel-value">{{descapli.pagare}}</p>
+                                    </div>  
+                                </div>                                           
+                                
                                 <!--<div class="col-6">
                                     <b class="panel-label">SALDO DEUDA:</b>
                                     <div v-for="(descapli, key) in descapli" :key="key">
