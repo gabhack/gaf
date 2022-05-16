@@ -404,11 +404,14 @@ export default {
       subTotal: 0,
       total: 0,
       duesOptions: [{ value: null, text: 'Cuotas' }],
-      clientType: [        
-        {
+      clientType: [ {
+          value:null,
+          text:'Seleccione el Tipo de Cliente'
+        },{
           value: 'docente-sector-publico',
           text: 'Docente - Sector Publico',
           entidades: [            
+            { value: null, text: 'Seleccione la entidad' },
             { value: 'SED-VALLE', text: '(SED) VALLE' },
             { value: 'SED-CAUCA', text: '(SED) CAUCA' },
             { value: 'SED-NARIÑO', text: '(SED) SAN NARIÑO' },
@@ -424,6 +427,7 @@ export default {
           value: 'pensionado',
           text: 'Pensionado',
           entidades: [
+            { value: null, text: 'Seleccione la entidad' },
             { value: 'COLPENSIONES', text: 'Colpensiones' },
             { value: 'FIDUPREVISORA', text: 'Fiduprevisora' },            
             { value: 'FOPEP', text: 'Fopep' }
@@ -432,6 +436,9 @@ export default {
       ],
 
       gender: [{
+          value:null,
+          text:'Seleccione el Genero'
+        },{
           value: 'Masculino',
           text: 'Masculino',        
         },{
@@ -440,8 +447,10 @@ export default {
         },
       ],
 
-      creditType: [        
-        {
+      creditType: [{
+          value:null,
+          text:'Seleccione el tipo de Credito'
+        },{
           value: 'libre-inversion',
           text: 'Libranza, Libre Inversión',
           min: 1000000, max: 200000000

@@ -476,12 +476,12 @@
                                         </div>                                
                                     </div> -->
 
-                                    <!--<div class="col-6">
+                                    <div class="col-6" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
                                         <b class="panel-label">DESCRIPCION:</b>
                                         <div v-for="(datamesfidu, key) in datamesfidu"  :key="key">
                                             <p class="panel-value">{{datamesfidu.desctipvinc}}</p>
                                         </div>                                
-                                    </div>-->
+                                    </div>
 
                                     <!-- <div class="col-6">
                                         <b class="panel-label">Codigo Fuente recurso (B):</b>
@@ -490,12 +490,12 @@
                                         </div>                                
                                     </div> -->
 
-                                    <!--<div class="col-6">
+                                    <div class="col-6" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
                                         <b class="panel-label">RECURSOS:</b>
                                         <div v-for="(datamesfidu, key) in datamesfidu"  :key="key">
                                             <p class="panel-value">{{datamesfidu.descfuenrecurso}}</p>
                                         </div>                                
-                                    </div>-->
+                                    </div>
 
                                     <!-- <div class="col-6">
                                         <b class="panel-label">Codigo dane departamento (B):</b>
