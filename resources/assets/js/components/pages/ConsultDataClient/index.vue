@@ -45,7 +45,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6" v-if="datames.length > 0">
+            <div class="col-6" v-if="datames.length > 0 && dataclient.pagaduria === 'FOPEP'">
                 <div class="panel mb-3">
                     <div class="panel-heading">
                         <b>INFORMACIÓN PERSONAL</b>
@@ -99,12 +99,12 @@
                                     <p class="panel-value">{{datames.mnpio}}</p>
                                 </div>                                
                             </div>
-                            <div class="col-6">
+                            <!-- <div class="col-6">
                                 <b class="panel-label">TIPO PENSION:</b>
                                 <div v-for="(datames, key) in datames" :key="key">
                                     <p class="panel-value">{{datames.tp}}</p>
                                 </div>                                
-                            </div>
+                            </div> -->
                             <div class="col-md-6" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
                                 <b class="panel-label">NOMBRE DEL BANCO DONDE LE CONSIGNAN:</b>
                                 <div v-for="(datames, key) in datames" :key="key">
@@ -139,6 +139,391 @@
                     </div>
                 </div>
             </div>
+            <!-- <div class="col-md-6" v-if="datamesseceduc.length > 0 && dataclient.pagaduria === 'FODE VALLE' || user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5' || user.roles_id === 6 || user.roles_id === '6' "> -->
+            <div class="col-md-6" v-if="datamesseceduc.length > 0 && dataclient.pagaduria === 'FODE VALLE'">    
+                <div class="panel panel-primary mb-3">
+                    <div class="panel-heading"><b>INFORMACIÓN PERSONAL</b></div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <b class="panel-label">DOCUMENTO IDENTIDAD DOCENTE:</b>
+                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                    <p class="panel-value">{{datamesseceduc.doc}}</p>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <b class="panel-label">NOMBRE Y APELLIDO DOCENTE:</b>
+                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                    <p class="panel-value">{{datamesseceduc.nomp}}</p>
+                                </div>                                
+                            </div>
+                            <div class="col-6">
+                                <b class="panel-label">FECHA INGRESO:</b>
+                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                    <p class="panel-value">{{datamesseceduc.fechingr}}</p>
+                                </div>                                
+                            </div>
+                            <!-- <div class="col-6">
+                                <b class="panel-label">Antigüedad Vinculacion (B) :</b>
+                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                    <p class="panel-value">{{datamesseceduc.antiguedad}}</p>
+                                </div>                                
+                            </div>  -->
+                            <div class="col-6">
+                                <b class="panel-label">FECHA NACIMIENTO:</b>
+                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                    <p class="panel-value">{{datamesseceduc.fecnacimient}}</p>
+                                </div>                                
+                            </div>
+                            <!-- <div class="col-6">
+                                <b class="panel-label">EDAD PENSIONADO:</b>
+                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                    <p class="panel-value">{{datamesseceduc.edad}}</p>
+                                </div>                                
+                            </div> -->
+
+                            <div class="col-6">
+                                <b class="panel-label">AREA DE DESEMPEÑO:</b>
+                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                    <p class="panel-value">{{datamesseceduc.esquema}}</p>
+                                </div>                                
+                            </div>
+
+                            <div class="col-6">
+                                <b class="panel-label">CARGO:</b>
+                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                    <p class="panel-value">{{datamesseceduc.cargo}}</p>
+                                </div>                                
+                            </div>
+
+                            <div class="col-6">
+                                <b class="panel-label">VALOR INGRESO APOXIMADO:</b>
+                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                    <p class="panel-value">{{datamesseceduc.vpension}}</p>
+                                </div>                                
+                            </div>
+
+                            <div class="col-6">
+                                <b class="panel-label">FECHA VINCULACIÓN:</b>
+                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                    <p class="panel-value">{{datamesseceduc.fecnombr}}</p>
+                                </div>                                
+                            </div>
+
+                            <!-- <div class="col-6">
+                                <b class="panel-label">Fecha de posesion (B):</b>
+                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                    <p class="panel-value">{{datamesseceduc.fecposesion}}</p>
+                                </div>                                
+                            </div>  -->
+
+                            <div class="col-6">
+                                <b class="panel-label">TIPO VINCULACIÓN:</b>
+                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                    <p class="panel-value">{{datamesseceduc.nivcontr}}</p>
+                                </div>                                
+                            </div>
+                                
+                            <div class="col-6">
+                                <b class="panel-label">ESTADO LABORAL:</b>
+                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                    <p class="panel-value">{{datamesseceduc.estlaboral}}</p>
+                                </div>                                
+                            </div>
+
+                            <div class="col-6">
+                                <b class="panel-label">CENTRO DE EDUCACIÓN:</b>
+                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                    <p class="panel-value">{{datamesseceduc.centrocosto}}</p>
+                                </div>                                
+                            </div>
+
+                            <div class="col-6">
+                                <b class="panel-label">MUNICIPIO Y DEPARTAMENTO:</b>
+                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                    <p class="panel-value">{{datamesseceduc.mnpioydep}}</p>
+                                </div>                                
+                            </div>
+
+                            <div class="col-6">
+                                <b class="panel-label">TELEFONO:</b>
+                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                    <p class="panel-value">{{datamesseceduc.tel}}</p>
+                                </div>                                
+                            </div>
+
+                            <div class="col-6">
+                                <b class="panel-label">DIRECCIÓN:</b>
+                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                    <p class="panel-value">{{datamesseceduc.dir}}</p>
+                                </div>                                
+                            </div>
+
+                            <div class="col-6">
+                                <b class="panel-label">CORREO:</b>
+                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                    <p class="panel-value">{{datamesseceduc.correo}}</p>
+                                </div>                                
+                            </div>
+
+                            <div class="col-6">
+                                <b class="panel-label">SEDE EN LA QUE PRESTA EL SERVICIO:</b>
+                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                    <p class="panel-value">{{datamesseceduc.sedecoleg}}</p>
+                                </div>                                
+                            </div>
+                                
+                            <div class="col-6" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
+                                <b class="panel-label">FECHA CARGA DATA:</b>
+                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                    <p class="panel-value">{{datamesseceduc.fecdata}}</p>
+                                </div>                                
+                            </div>
+
+                            <div class="col-6" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
+                                <b class="panel-label">MES CARGA DATA:</b>
+                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                    <p class="panel-value">{{datamesseceduc.mesdata}}</p>
+                                </div>                                
+                            </div>
+
+                            <div class="col-6" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
+                                <b class="panel-label">AÑO CARGA DATA:</b>
+                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                    <p class="panel-value">{{datamesseceduc.anodata}}</p>
+                                </div>                                
+                            </div>                                
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6" v-if="datamesfidu.length > 0 && dataclient.pagaduria === 'FIDUPREVISORA'">
+                    <div class="panel panel-primary mb-3">
+                        <div class="panel-heading"><b>INFORMACIÓN PERSONAL</b></div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <b class="panel-label">MUNICIPIO:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.mnpio}}</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">ESTADO CIVIL:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.estcivil}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">FECHA DE NACIMIENTO:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.fecnacimient}}</p>
+                                    </div>                                
+                                </div>
+
+                                <!-- <div class="col-6">
+                                    <b class="panel-label">EDAD:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.edad}}</p>
+                                    </div>                                
+                                </div> -->
+
+                                <!-- <div class="col-6">
+                                    <b class="panel-label">Tipo de Vinculacion (B):</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.tipvinc}}</p>
+                                    </div>                                
+                                </div>  -->
+
+                                <div class="col-6" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
+                                    <b class="panel-label">DESCRIPCIÓN:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.desctipvinc}}</p>
+                                    </div>                                
+                                </div>
+
+                                <!-- <div class="col-6">
+                                    <b class="panel-label">Codigo Fuente recurso (B):</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.fuenrecurso}}</p>
+                                    </div>                                
+                                </div>  -->
+
+                                <div class="col-6" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
+                                    <b class="panel-label">RECURSOS:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.descfuenrecurso}}</p>
+                                    </div>                                
+                                </div>
+
+                                <!-- <div class="col-6">
+                                    <b class="panel-label">Codigo dane departamento (B):</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.numdep}}</p>
+                                    </div>                                
+                                </div>  -->
+
+                                <div class="col-6">
+                                    <b class="panel-label">DEPARTAMENTO:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.dpto}}</p>
+                                    </div>                                
+                                </div>
+
+                                <!-- <div class="col-6">
+                                    <b class="panel-label">Resolucion (B):</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.resol}}</p>
+                                    </div>                                
+                                </div>  -->
+
+                                <div class="col-6">
+                                    <b class="panel-label">VINCULACION:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.vinc}}</p>
+                                    </div>                                
+                                </div>
+
+                                <!-- <div class="col-6">
+                                    <b class="panel-label">Fecha expedicion resolucion (B):</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.fechefect}}</p>
+                                    </div>                                
+                                </div>  -->
+                        
+                                <!-- <div class="col-6">
+                                    <b class="panel-label">Estado Pension (B):</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.estpens}}</p>
+                                    </div>                                
+                                </div> -->
+
+                                <div class="col-6">
+                                    <b class="panel-label">TIPO DOCUMENTO BENEFICIARIO:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.td}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">DOCUMENTO IDENTIDAD BENEFICIARIO:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.docbenef}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">NOMBRE BENEFICIARIO:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.nombenef}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">TELEFONO:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.tel}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">DIRECCIÓN:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.dir}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">CORREO:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.correo}}</p>
+                                    </div>                                
+                                </div>
+
+                                <!-- <div class="col-6">
+                                    <b class="panel-label">Numero comprobante (B):</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.nomcomprob}}</p>
+                                    </div>                                
+                                </div> -->
+
+                                <!-- <div class="col-6">
+                                    <b class="panel-label">PERIODO DE DATA:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.periodo}}</p>
+                                    </div>                                
+                                </div> -->
+
+                                <!-- <div class="col-6">
+                                    <b class="panel-label">TIPO PENSION CODIGO:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.tipvinc}}</p>
+                                    </div>                                
+                                </div> -->
+
+                                <div class="col-6">
+                                    <b class="panel-label">FECHA DE PAGO PENSION:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.fechpago}}</p>
+                                    </div>                                
+                                </div>
+
+                                <!-- <div class="col-6">
+                                    <b class="panel-label">Sucursal Banco (B):</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.sucursal}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Valor pension Con retroactivo (B):</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.vpension}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Valor descuentos en bruto Retroactivo (B):</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.vdescbruto}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6">
+                                    <b class="panel-label">Valor pago en bruto Retroactivo (B):</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.pagonetbruto}}</p>
+                                    </div>                                
+                                </div> -->
+
+                                <div class="col-6" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
+                                    <b class="panel-label">FECHA DE CARGA DATA:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.fecdata}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
+                                    <b class="panel-label">MES DE CARGA DATA:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.mesdata}}</p>
+                                    </div>                                
+                                </div>
+
+                                <div class="col-6" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
+                                    <b class="panel-label">AÑO DE CARGA DATA:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.anodata}}</p>
+                                    </div>                                
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
             <div class="col-6" v-if="fechaVinc.length > 0">
                 <div class="panel mb-3">
                     <div class="panel-heading">
@@ -158,42 +543,65 @@
                                     <p class="panel-value">{{fechavinc.vinc}}</p>
                                 </div>                                
                             </div>
-                            <div class="col-6">
+                            <div class="col-6" v-if="dataclient.pagaduria === 'FOPEP'">
                                 <b class="panel-label">TIPO PENSION:</b>
                                 <div v-for="(fechavinc, key) in fechaVinc" :key="key">
                                     <p class="panel-value">{{fechavinc.tp}}</p>
                                 </div>                                
                             </div>
-                            <div class="col-md-6">
-                                <b class="panel-label">VALOR INGRESO:</b>
+                            <div class="col-md-6" v-if="dataclient.pagaduria === 'FOPEP'">
+                                <b class="panel-label">VALOR INGRESO FOPEP:</b>
                                 <div v-for="(datames, key) in datames" :key="key">
                                     <p class="panel-value">${{datames.vpension}}</p>
+                                </div>                                                                  
+                            </div>
+
+                            <div class="col-6" v-if="dataclient.pagaduria === 'FIDUPREVISORA'">
+                                <b class="panel-label">VALOR INGRESO FIDUPREVISORA:</b>
+                                <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                    <p class="panel-value">{{datamesfidu.vpension}}</p>
                                 </div>                                
                             </div>
-                            <div class="col-md-6">
+
+                            <div class="col-6" v-if="dataclient.pagaduria === 'FODE VALLE'">
+                                <b class="panel-label">VALOR INGRESO SECRETARIA EDUCACIÓN VALLE:</b>
+                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                    <p class="panel-value">{{datamesseceduc.vpension}}</p>
+                                </div>
+                            </div>
+                
+                            <div class="col-md-6" v-if="dataclient.pagaduria === 'FOPEP'">
                                 <b class="panel-label">VALOR SALUD:</b>
                                 <div v-for="(datames, key) in datames" :key="key">
                                     <p class="panel-value">{{datames.vsalud}}</p>
                                 </div>                                
                             </div>
-                            <div class="col-md-6">
+                            
+                            <div class="col-md-6" v-if="dataclient.pagaduria === 'FOPEP'">
                                 <b class="panel-label">VALOR DESCUENTOS:</b>
                                 <div v-for="(datames, key) in datames" :key="key">
                                     <p class="panel-value">{{datames.vdesc}}</p>
                                 </div>                                
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-6" v-if="dataclient.pagaduria === 'FIDUPREVISORA'">
+                                <b class="panel-label">VALOR DESCUENTO FIDUPREVISORA:</b>
+                                <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                    <p class="panel-value">{{datamesfidu.vdescbruto}}</p>
+                                </div>                                
+                            </div>
+                            
+                            <div class="col-md-6" v-if="dataclient.pagaduria === 'FOPEP'">
                                 <b class="panel-label">VALOR CUPO:</b>
                                 <div v-for="(datames, key) in datames" :key="key">
                                     <p class="panel-value">{{datames.cupo}}</p>
                                 </div>                                
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6" v-if="dataclient.pagaduria === 'FOPEP'">
                                 <b class="panel-label">VALOR EMBARGOS:</b>
                                 <div v-for="(datames, key) in datames" :key="key">
                                     <p class="panel-value">{{datames.venbargos}}</p>
                                 </div>                                
-                            </div>
+                            </div>                            
                             <div class="col-6" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
                                 <b class="panel-label">FECHA CARGA DATA:</b>
                                 <div v-for="(fechavinc, key) in fechaVinc" :key="key">
@@ -576,402 +984,82 @@
                 <div class="col-md-12" v-if="datamesfidu.length > 0">
                     <div class="panel panel-primary mb-3">
                         <div class="panel-heading"><b>OTROS POSIBLES INGRESOS Y DEDUCCIONES</b></div>
-                        <div class="panel-body">
-                            <div class="row">
-                                <!--<div class="col-6">
-                                    <b class="panel-label">MUNICIPIO:</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.mnpio}}</p>
-                                    </div>
-                                </div>
-
+                        <div class="panel-body">                    
+                            <div class="row" v-if="dataclient.pagaduria === 'FOPEP'">
                                 <div class="col-6">
-                                    <b class="panel-label">ESTADO CIVIL:</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.estcivil}}</p>
-                                    </div>                                
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">FECHA DE NACIMIENTO:</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.fecnacimient}}</p>
-                                    </div>                                
-                                </div> -->
-
-                                <!--<div class="col-6">
-                                    <b class="panel-label">EDAD:</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.edad}}</p>
-                                    </div>                                
-                                </div>-->
-
-                                <!-- <div class="col-6">
-                                    <b class="panel-label">Tipo de Vinculacion (B):</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.tipvinc}}</p>
-                                    </div>                                
-                                </div> --> 
-
-                                <!--<div class="col-6" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
-                                    <b class="panel-label">DESCRIPCIÓN:</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.desctipvinc}}</p>
-                                    </div>                                
-                                </div>-->
-
-                                <!-- <div class="col-6">
-                                    <b class="panel-label">Codigo Fuente recurso (B):</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.fuenrecurso}}</p>
-                                    </div>                                
-                                </div> -->
-
-                               <!-- <div class="col-6" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
-                                    <b class="panel-label">RECURSOS:</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.descfuenrecurso}}</p>
-                                    </div>                                
-                                </div>-->
-
-                                <!-- <div class="col-6">
-                                    <b class="panel-label">Codigo dane departamento (B):</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.numdep}}</p>
-                                    </div>                                
-                                </div> -->
-
-                                <!--<div class="col-6">
-                                    <b class="panel-label">DEPARTAMENTO:</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.dpto}}</p>
-                                    </div>                                
-                                </div>-->
-
-                                <!-- <div class="col-6">
-                                    <b class="panel-label">Resolucion (B):</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.resol}}</p>
-                                    </div>                                
-                                </div> -->
-
-                                <!--<div class="col-6">
-                                    <b class="panel-label">VINCULACION:</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.vinc}}</p>
-                                    </div>                                
-                                </div>-->
-
-                                <!-- <div class="col-6">
-                                    <b class="panel-label">Fecha expedicion resolucion (B):</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.fechefect}}</p>
-                                    </div>                                
-                                </div> -->
-
-                                <div class="col-6">
-                                    <b class="panel-label">OTRO INGRESO POSIBLE 1:</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.vpension}}</p>
-                                    </div>                                
-                                </div>
-                                <div class="col-6">
-                                    <b class="panel-label">OTRO INGRESO POSIBLE 2:</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.vpension}}</p>
-                                    </div>                                
-                                </div>
-                                <div class="col-6">
-                                    <b class="panel-label">OTRO INGRESO POSIBLE 3:</b>
+                                    <b class="panel-label">OTRO INGRESO POSIBLE FIDUPREVISORA:</b>
                                     <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                                         <p class="panel-value">{{datamesfidu.vpension}}</p>
                                     </div>                                
                                 </div>
 
-                                <!-- <div class="col-6">
-                                    <b class="panel-label">Estado Pension (B):</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.estpens}}</p>
-                                    </div>                                
-                                </div> -->
-
-                                <!--<div class="col-6">
-                                    <b class="panel-label">TIPO DOCUMENTO BENEFICIARIO:</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.td}}</p>
-                                    </div>                                
-                                </div>
-
                                 <div class="col-6">
-                                    <b class="panel-label">DOCUMENTO IDENTIDAD BENEFICIARIO:</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.docbenef}}</p>
-                                    </div>                                
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">NOMBRE BENEFICIARIO:</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.nombenef}}</p>
-                                    </div>                                
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">TELEFONO:</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.tel}}</p>
-                                    </div>                                
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">DIRECCIÓN:</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.dir}}</p>
-                                    </div>                                
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">CORREO:</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.correo}}</p>
-                                    </div>                                
-                                </div>-->
-
-                                <!-- <div class="col-6">
-                                    <b class="panel-label">Numero comprobante (B):</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.nomcomprob}}</p>
-                                    </div>                                
-                                </div> -->
-
-                                <!--<div class="col-6">
-                                    <b class="panel-label">PERIODO DE DATA:</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.periodo}}</p>
-                                    </div>                                
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">TIPO PENSION CODIGO:</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.tipvinc}}</p>
-                                    </div>                                
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">FECHA DE PAGO PENSION:</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.fechpago}}</p>
-                                    </div>                                
-                                </div> -->
-
-                                <!-- <div class="col-6">
-                                    <b class="panel-label">Sucursal Banco (B):</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.sucursal}}</p>
-                                    </div>                                
-                                </div> -->
-
-                                <!-- <div class="col-6">
-                                    <b class="panel-label">Valor pension Con retroactivo (B):</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.vpension}}</p>
-                                    </div>                                
-                                </div> -->
-
-                                <!-- <div class="col-6">
-                                    <b class="panel-label">Valor descuentos en bruto Retroactivo (B):</b>
+                                    <b class="panel-label">OTRO DESCUENTO POSIBLE FIDUPREVISORA:</b>
                                     <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                                         <p class="panel-value">{{datamesfidu.vdescbruto}}</p>
                                     </div>                                
-                                </div> -->
-
-                                <!-- <div class="col-6">
-                                    <b class="panel-label">Valor pago en bruto Retroactivo (B):</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.pagonetbruto}}</p>
-                                    </div>                                
-                                </div> -->
-
-                                <div class="col-6" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
-                                    <b class="panel-label">FECHA DE CARGA DATA:</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.fecdata}}</p>
-                                    </div>                                
                                 </div>
-
-                                <div class="col-6" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
-                                    <b class="panel-label">MES DE CARGA DATA:</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.mesdata}}</p>
-                                    </div>                                
-                                </div>
-
-                                <div class="col-6" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
-                                    <b class="panel-label">AÑO DE CARGA DATA:</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.anodata}}</p>
-                                    </div>                                
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-md-6" v-if="datamesseceduc.length > 0 && user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
-                    <div class="panel panel-primary mb-3">
-                        <div class="panel-heading"><b>DATAMESSECEDUC</b></div>
-                        <div class="panel-body">
-                            <div class="row">
+                                    
                                 <div class="col-6">
-                                    <b class="panel-label">Documento de identidad docente:</b>
-                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                        <p class="panel-value">{{datamesseceduc.doc}}</p>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <b class="panel-label">Nombre y apellido docente:</b>
-                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                        <p class="panel-value">{{datamesseceduc.nomp}}</p>
-                                    </div>                                
-                                </div>
-                                <div class="col-6">
-                                    <b class="panel-label">Fecha Ingreso:</b>
-                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                        <p class="panel-value">{{datamesseceduc.fechingr}}</p>
-                                    </div>                                
-                                </div>
-                                 <div class="col-6">
-                                    <b class="panel-label">Antigüedad Vinculacion (B) :</b>
-                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                        <p class="panel-value">{{datamesseceduc.antiguedad}}</p>
-                                    </div>                                
-                                </div> 
-                                <div class="col-6">
-                                    <b class="panel-label">Fecha de nacimiento:</b>
-                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                        <p class="panel-value">{{datamesseceduc.fecnacimient}}</p>
-                                    </div>                                
-                                </div>
-                                <div class="col-6">
-                                    <b class="panel-label">Edad Pensionado:</b>
-                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                        <p class="panel-value">{{datamesseceduc.edad}}</p>
-                                    </div>                                
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Area de desempeño:</b>
-                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                        <p class="panel-value">{{datamesseceduc.esquema}}</p>
-                                    </div>                                
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Cargo:</b>
-                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                        <p class="panel-value">{{datamesseceduc.cargo}}</p>
-                                    </div>                                
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Valor ingreso Aproximado:</b>
+                                    <b class="panel-label">OTRO INGRESO POSIBLE SECRETARIA EDUCACIÓN VALLE:</b>
                                     <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
                                         <p class="panel-value">{{datamesseceduc.vpension}}</p>
-                                    </div>                                
+                                    </div>
+                                </div>
+                            </div>   
+                                
+                            <div class="row" v-if="dataclient.pagaduria === 'FIDUPREVISORA'">
+                                <div class="col-6" >
+                                    <b class="panel-label">OTRO INGRESO POSIBLE FOPEP:</b>
+                                    <div v-for="(datames, key) in datames" :key="key">
+                                        <p class="panel-value">{{datames.vpension}}</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-6" >
+                                    <b class="panel-label">OTRO VALOR DE SALUD FOPEP:</b>
+                                    <div v-for="(datames, key) in datames" :key="key">
+                                        <p class="panel-value">{{datames.vsalud}}</p>
+                                    </div>
                                 </div>
 
                                 <div class="col-6">
-                                    <b class="panel-label">Fecha Vinculacion:</b>
+                                    <b class="panel-label">OTRO INGRESO POSIBLE SECRETARIA EDUCACIÓN VALLE:</b>
                                     <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                        <p class="panel-value">{{datamesseceduc.fecnombr}}</p>
-                                    </div>                                
+                                        <p class="panel-value">{{datamesseceduc.vpension}}</p>
+                                    </div>
+                                </div>
+                            </div>   
+                                
+                            <div class="row" v-if="dataclient.pagaduria === 'FODE VALLE'">
+                                <div class="col-6" >
+                                    <b class="panel-label">OTRO INGRESO POSIBLE FOPEP:</b>
+                                    <div v-for="(datames, key) in datames" :key="key">
+                                        <p class="panel-value">{{datames.vpension}}</p>
+                                    </div>
                                 </div>
 
-                                 <div class="col-6">
-                                    <b class="panel-label">Fecha de posesion (B):</b>
-                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                        <p class="panel-value">{{datamesseceduc.fecposesion}}</p>
-                                    </div>                                
-                                </div> 
-
-                                <div class="col-6">
-                                    <b class="panel-label">Tipo Vinculacion:</b>
-                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                        <p class="panel-value">{{datamesseceduc.nivcontr}}</p>
-                                    </div>                                
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Estado laboral:</b>
-                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                        <p class="panel-value">{{datamesseceduc.estlaboral}}</p>
-                                    </div>                                
+                                <div class="col-6" >
+                                    <b class="panel-label">OTRO VALOR DE SALUD FOPEP:</b>
+                                    <div v-for="(datames, key) in datames" :key="key">
+                                        <p class="panel-value">{{datames.vsalud}}</p>
+                                    </div>
                                 </div>
 
                                 <div class="col-6">
-                                    <b class="panel-label">Centro de educacion:</b>
-                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                        <p class="panel-value">{{datamesseceduc.centrocosto}}</p>
+                                    <b class="panel-label">OTRO INGRESO POSIBLE FIDUPREVISORA:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.vpension}}</p>
+                                    </div>                                
+                                </div>  
+                                
+                                <div class="col-6">
+                                    <b class="panel-label">OTRO DESCUENTO POSIBLE FIDUPREVISORA:</b>
+                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                        <p class="panel-value">{{datamesfidu.vdescbruto}}</p>
                                     </div>                                
                                 </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Municipio y Departamento:</b>
-                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                        <p class="panel-value">{{datamesseceduc.mnpioydep}}</p>
-                                    </div>                                
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Telefono:</b>
-                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                        <p class="panel-value">{{datamesseceduc.tel}}</p>
-                                    </div>                                
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Direccion:</b>
-                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                        <p class="panel-value">{{datamesseceduc.dir}}</p>
-                                    </div>                                
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Correo:</b>
-                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                        <p class="panel-value">{{datamesseceduc.correo}}</p>
-                                    </div>                                
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Sede en que presta el servicio:</b>
-                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                        <p class="panel-value">{{datamesseceduc.sedecoleg}}</p>
-                                    </div>                                
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Fecha carga data:</b>
-                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                        <p class="panel-value">{{datamesseceduc.fecdata}}</p>
-                                    </div>                                
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Mes carga data:</b>
-                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                        <p class="panel-value">{{datamesseceduc.mesdata}}</p>
-                                    </div>                                
-                                </div>
-
-                                <div class="col-6">
-                                    <b class="panel-label">Año carga data:</b>
-                                    <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                        <p class="panel-value">{{datamesseceduc.anodata}}</p>
-                                    </div>                                
-                                </div>                                
-                            </div>
+                            </div>                            
                         </div>
                     </div>
                 </div>
