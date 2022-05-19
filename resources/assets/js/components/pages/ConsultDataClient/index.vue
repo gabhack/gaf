@@ -146,13 +146,13 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-6">
-                                <b class="panel-label">DOCUMENTO IDENTIDAD DOCENTE:</b>
+                                <b class="panel-label">DOCUMENTO IDENTIDAD:</b>
                                 <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
                                     <p class="panel-value">{{datamesseceduc.doc}}</p>
                                 </div>
                             </div>
                             <div class="col-6">
-                                <b class="panel-label">NOMBRE Y APELLIDO DOCENTE:</b>
+                                <b class="panel-label">NOMBRE Y APELLIDO:</b>
                                 <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
                                     <p class="panel-value">{{datamesseceduc.nomp}}</p>
                                 </div>                                
@@ -196,12 +196,12 @@
                                 </div>                                
                             </div>
 
-                            <div class="col-6">
+                            <!-- <div class="col-6">
                                 <b class="panel-label">VALOR INGRESO APOXIMADO:</b>
                                 <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
                                     <p class="panel-value">{{datamesseceduc.vpension | currency}}</p>
                                 </div>                                
-                            </div>
+                            </div> -->
 
                             <div class="col-6">
                                 <b class="panel-label">FECHA VINCULACIÓN:</b>
@@ -402,21 +402,21 @@
                                 </div> -->
 
                                 <div class="col-6">
-                                    <b class="panel-label">TIPO DOCUMENTO BENEFICIARIO:</b>
+                                    <b class="panel-label">TIPO DOCUMENTO:</b>
                                     <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                                         <p class="panel-value">{{datamesfidu.td}}</p>
                                     </div>                                
                                 </div>
 
                                 <div class="col-6">
-                                    <b class="panel-label">DOCUMENTO IDENTIDAD BENEFICIARIO:</b>
+                                    <b class="panel-label">DOCUMENTO IDENTIDAD:</b>
                                     <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                                         <p class="panel-value">{{datamesfidu.docbenef}}</p>
                                     </div>                                
                                 </div>
 
                                 <div class="col-6">
-                                    <b class="panel-label">NOMBRE BENEFICIARIO:</b>
+                                    <b class="panel-label">NOMBRE Y APELLIDO:</b>
                                     <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                                         <p class="panel-value">{{datamesfidu.nombenef}}</p>
                                     </div>                                
@@ -550,21 +550,21 @@
                                 </div>                                
                             </div>
                             <div class="col-md-6" v-if="dataclient.pagaduria === 'FOPEP'">
-                                <b class="panel-label">VALOR INGRESO FOPEP:</b>
+                                <b class="panel-label">VALOR INGRESO:</b>
                                 <div v-for="(datames, key) in datames" :key="key">
-                                    <p class="panel-value">${{datames.vpension}}</p>
+                                    <p class="panel-value">{{datames.vpension | currency}}</p>
                                 </div>                                                                  
                             </div>
 
                             <div class="col-6" v-if="dataclient.pagaduria === 'FIDUPREVISORA'">
-                                <b class="panel-label">VALOR INGRESO FIDUPREVISORA:</b>
+                                <b class="panel-label">VALOR INGRESO:</b>
                                 <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                                     <p class="panel-value">{{datamesfidu.vpension | currency}}</p>
                                 </div>                                
                             </div>
 
                             <div class="col-6" v-if="dataclient.pagaduria === 'FODE VALLE'">
-                                <b class="panel-label">VALOR INGRESO SECRETARIA EDUCACIÓN VALLE:</b>
+                                <b class="panel-label">VALOR INGRESO:</b>
                                 <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
                                     <p class="panel-value">{{datamesseceduc.vpension | currency}}</p>
                                 </div>
@@ -584,7 +584,7 @@
                                 </div>                                
                             </div>
                             <div class="col-6" v-if="dataclient.pagaduria === 'FIDUPREVISORA'">
-                                <b class="panel-label">VALOR DESCUENTO FIDUPREVISORA:</b>
+                                <b class="panel-label">VALOR DESCUENTO:</b>
                                 <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                                     <p class="panel-value">{{datamesfidu.vdescbruto | currency}}</p>
                                 </div>                                
@@ -987,21 +987,21 @@
                         <div class="panel-body">                    
                             <div class="row" v-if="dataclient.pagaduria === 'FOPEP'">
                                 <div class="col-6">
-                                    <b class="panel-label">OTRO INGRESO POSIBLE FIDUPREVISORA:</b>
+                                    <b class="panel-label">OTRO POSIBLE INGRESO 3:</b>
                                     <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                                         <p class="panel-value">{{datamesfidu.vpension | currency}}</p>
                                     </div>                                
                                 </div>
 
                                 <div class="col-6">
-                                    <b class="panel-label">OTRO DESCUENTO POSIBLE FIDUPREVISORA:</b>
+                                    <b class="panel-label">OTRO POSIBLE DESCUENTO 3:</b>
                                     <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                                         <p class="panel-value">{{datamesfidu.vdescbruto | currency}}</p>
                                     </div>                                
                                 </div>
                                     
                                 <div class="col-6">
-                                    <b class="panel-label">OTRO INGRESO POSIBLE SECRETARIA EDUCACIÓN VALLE:</b>
+                                    <b class="panel-label">OTRO POSIBLE INGRESO 1:</b>
                                     <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
                                         <p class="panel-value">{{datamesseceduc.vpension | currency}}</p>
                                     </div>
@@ -1010,21 +1010,21 @@
                                 
                             <div class="row" v-if="dataclient.pagaduria === 'FIDUPREVISORA'">
                                 <div class="col-6" >
-                                    <b class="panel-label">OTRO INGRESO POSIBLE FOPEP:</b>
+                                    <b class="panel-label">OTRO POSIBLE INGRESO 2:</b>
                                     <div v-for="(datames, key) in datames" :key="key">
                                         <p class="panel-value">{{datames.vpension | currency}}</p>
                                     </div>
                                 </div>
 
                                 <div class="col-6" >
-                                    <b class="panel-label">OTRO VALOR DE SALUD FOPEP:</b>
+                                    <b class="panel-label">OTRO POSIBLE EGRESO SALUD:</b>
                                     <div v-for="(datames, key) in datames" :key="key">
                                         <p class="panel-value">{{datames.vsalud | currency}}</p>
                                     </div>
                                 </div>
 
                                 <div class="col-6">
-                                    <b class="panel-label">OTRO INGRESO POSIBLE SECRETARIA EDUCACIÓN VALLE:</b>
+                                    <b class="panel-label">OTRO POSIBLE INGRESO 1:</b>
                                     <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
                                         <p class="panel-value">{{datamesseceduc.vpension | currency}}</p>
                                     </div>
@@ -1033,28 +1033,28 @@
                                 
                             <div class="row" v-if="dataclient.pagaduria === 'FODE VALLE'">
                                 <div class="col-6" >
-                                    <b class="panel-label">OTRO INGRESO POSIBLE FOPEP:</b>
+                                    <b class="panel-label">OTRO POSIBLE INGRESO 2:</b>
                                     <div v-for="(datames, key) in datames" :key="key">
                                         <p class="panel-value">{{datames.vpension | currency}}</p>
                                     </div>
                                 </div>
 
                                 <div class="col-6" >
-                                    <b class="panel-label">OTRO VALOR DE SALUD FOPEP:</b>
+                                    <b class="panel-label">OTRO POSIBLE EGRESO SALUD:</b>
                                     <div v-for="(datames, key) in datames" :key="key">
                                         <p class="panel-value">{{datames.vsalud | currency}}</p>
                                     </div>
                                 </div>
 
                                 <div class="col-6">
-                                    <b class="panel-label">OTRO INGRESO POSIBLE FIDUPREVISORA:</b>
+                                    <b class="panel-label">OTRO POSIBLE INGRESO 3:</b>
                                     <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                                         <p class="panel-value">{{datamesfidu.vpension | currency}}</p>
                                     </div>                                
                                 </div>  
                                 
                                 <div class="col-6">
-                                    <b class="panel-label">OTRO DESCUENTO POSIBLE FIDUPREVISORA:</b>
+                                    <b class="panel-label">OTRO POSIBLE DESCUENTO 3:</b>
                                     <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                                         <p class="panel-value">{{datamesfidu.vdescbruto | currency}}</p>
                                     </div>                                
