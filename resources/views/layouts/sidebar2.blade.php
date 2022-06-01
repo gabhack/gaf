@@ -39,7 +39,7 @@
 				<!-- <a class="collapse-item" href="/massiveCharge">Carga Masiva</a> -->
 				<a class="collapse-item" href="{{ url('dataClient') }}">Nueva consulta +</a> 
 				<!-- <a class="collapse-item" href="#">Consulta bloque</a> 				 -->
-				<!-- <a class="collapse-item" href="#">Recuperacion de Cartera </a> -->
+				<a class="collapse-item" href="{{ url('refundCartera') }}">Recuperacion de Cartera </a>
 				<!-- <a class="collapse-item" href="#">Prospección de Mercado</a> -->
 				<!-- <a class="collapse-item" href="{{ url('consultas') }}">Nueva Consulta</a> -->
 			</div>

@@ -395,6 +395,7 @@ Route::post('pdfDetalle','VisadoController@pdfDetalle');
 Route::get('getHistoryConsults','VisadoController@historialConsultas');
 Route::view('/historyClient','historyClient');
 Route::view('/dataClient','dataClient');
+Route::view('/refundCartera','refundCartera');
 Route::view('/massiveCharge','massive');
 Route::resource('/validate','SolicitudValidacionController');
 
