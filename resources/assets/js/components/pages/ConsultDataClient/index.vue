@@ -1033,7 +1033,7 @@
 
         <div class="col-md-12" v-if="datamesfidu.length > 0">
           <div class="panel panel-primary mb-3">
-            <div class="panel-heading"><b>OTROS POSIBLES INGRESOS Y DEDUCCIONES</b></div>
+            <div class="panel-heading"><b>OTROS POSIBLES INGRESS Y DEDUCCIONES</b></div>
             <div class="panel-body">
               <div class="row" v-if="dataclient.pagaduria === 'FOPEP'">
                 <div class="col-12">
