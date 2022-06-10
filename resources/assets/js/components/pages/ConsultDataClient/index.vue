@@ -40,7 +40,7 @@
                   <option value="FOPEP">FOPEP</option>
                   <option value="FIDUPREVISORA">FIDUPREVISORA</option>
                   <option value="FODE VALLE">FODE VALLE</option>
-                  <option value="SECCALI">SECCALI</option>
+                  <option value="SECCALI">SEM CALI</option>
                 </select>
               </div>
               <div class="col-6 mt-4">
@@ -463,78 +463,71 @@
         </div>
 
         <!-- PAGADURIA SECCALI -->
-        <div class="col-md-6" v-if="datamesfidu.length > 0 && dataclient.pagaduria === 'SECCALI'">
+        <div class="col-md-6" v-if="datamesseccali.length > 0 && dataclient.pagaduria === 'SECCALI'">
           <div class="panel panel-primary mb-3">
             <div class="panel-heading"><b>INFORMACIÓN PERSONAL</b></div>
             <div class="panel-body">
               <div class="row">
                 <div class="col-6">
                   <b class="panel-label">TIPO DE DOCUMENTO:</b>
-                  <div v-for="(datames, key) in datames" :key="key">
-                    <p class="panel-value">{{ datames.td }}</p>
+                  <div>
+                    <p class="panel-value">-</p>
                   </div>
                 </div>
                 <div class="col-6">
                   <b class="panel-label">NUMERO DE DOCUMENTO:</b>
-                  <div v-for="(datames, key) in datames" :key="key">
-                    <p class="panel-value">{{ datames.doc }}</p>
+                  <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                    <p class="panel-value">{{ datamesseccali.nvinc }}</p>
                   </div>
                 </div>
                 <div class="col-6">
                   <b class="panel-label">NOMBRE Y APELLIDO:</b>
-                  <div v-for="(datames, key) in datames" :key="key">
-                    <p class="panel-value">{{ datames.nomp }}</p>
+                  <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                    <p class="panel-value">{{ datamesseccali.nomp }}</p>
                   </div>
                 </div>
                 <div class="col-6">
                   <b class="panel-label">FECHA DE NACIMIENTO:</b>
-                  <div v-for="(datames, key) in datames" :key="key">
-                    <p class="panel-value">{{ datames.fecnacimient }}</p>
+                  <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                    <p class="panel-value">{{ datamesseccali.fecnacimient }}</p>
                   </div>
                 </div>
                 <div class="col-6">
                   <b class="panel-label">DIRECCIÓN:</b>
-                  <div v-for="(datames, key) in datames" :key="key">
-                    <p class="panel-value">{{ datames.dir }}</p>
+                  <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                    <p class="panel-value">{{ datamesseccali.dir }}</p>
                   </div>
                 </div>
                 <div class="col-6">
                   <b class="panel-label">DEPARTAMENTO:</b>
-                  <div v-for="(datames, key) in datames" :key="key">
-                    <p class="panel-value">{{ datames.dpto }}</p>
+                  <div>
+                    <p class="panel-value">-</p>
                   </div>
                 </div>
                 <div class="col-6">
                   <b class="panel-label">MUNICIPIO:</b>
-                  <div v-for="(datames, key) in datames" :key="key">
-                    <p class="panel-value">{{ datames.mnpio }}</p>
+                  <div>
+                    <p class="panel-value">-</p>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <b class="panel-label">TELEFONO:</b>
-                  <div v-for="(datames, key) in datames" :key="key">
-                    <p class="panel-value">{{ datames.tel }}</p>
+                  <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                    <p class="panel-value">{{ datamesseccali.tel }}</p>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <b class="panel-label">CELULAR:</b>
-                  <div v-for="(datames, key) in datames" :key="key">
-                    <p class="panel-value">{{ datames.cel }}</p>
+                  <div>
+                    <p class="panel-value">-</p>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <b class="panel-label">CORREO:</b>
-                  <div v-for="(datames, key) in datames" :key="key">
-                    <p class="panel-value">{{ datames.correo }}</p>
+                  <div v-for="(datamesseccali, key) in datames" :key="key">
+                    <p class="panel-value">{{ datamesseccali.email }}</p>
                   </div>
                 </div>
-                <!--<div class="col-6">
-                                    <b class="panel-label">ESTADO CIVIL:</b>
-                                    <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                        <p class="panel-value">{{datamesfidu.estcivil}}</p>
-                                    </div>                                
-                                </div>-->
-
                 <div
                   class="col-6"
                   v-if="
@@ -632,52 +625,53 @@
             </div>
             <div class="panel-body">
               <div class="row">
-                <!--<div class="col-6">
-                                <b class="panel-label">Documento de identidad Pensionado:</b>
-                                <div v-for="(fechavinc, key) in fechaVinc" :key="key">
-                                    <p class="panel-value">{{fechavinc.doc}}</p>
-                                </div>                                
-                            </div> -->
+                <!-- ANTIGUEDAD LABORAL -->
                 <div class="col-6">
                   <b class="panel-label">ANTIGUEDAD LABORAL:</b>
                   <div v-for="(fechavinc, key) in fechaVinc" :key="key">
                     <p class="panel-value">{{ fechavinc.vinc }}</p>
                   </div>
                 </div>
+                <!-- TIPO PENSION -->
                 <div class="col-6" v-if="dataclient.pagaduria === 'FOPEP'">
                   <b class="panel-label">TIPO PENSION:</b>
                   <div v-for="(fechavinc, key) in fechaVinc" :key="key">
                     <p class="panel-value">{{ fechavinc.tp }}</p>
                   </div>
                 </div>
+                <!-- VALOR INGRESO -->
                 <div class="col-md-6" v-if="dataclient.pagaduria === 'FOPEP'">
                   <b class="panel-label">VALOR INGRESO:</b>
                   <div v-for="(datames, key) in datames" :key="key">
                     <p class="panel-value">{{ datames.vpension | currency }}</p>
                   </div>
                 </div>
-
                 <div class="col-6" v-if="dataclient.pagaduria === 'FIDUPREVISORA'">
                   <b class="panel-label">VALOR INGRESO:</b>
                   <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                     <p class="panel-value">{{ datamesfidu.vpension | currency }}</p>
                   </div>
                 </div>
-
                 <div class="col-6" v-if="dataclient.pagaduria === 'FODE VALLE'">
                   <b class="panel-label">VALOR INGRESO:</b>
                   <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
                     <p class="panel-value">{{ datamesseceduc.vpension | currency }}</p>
                   </div>
                 </div>
-
+                <div class="col-6" v-if="dataclient.pagaduria === 'SECCALI'">
+                  <b class="panel-label">VALOR INGRESO:</b>
+                  <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                    <p class="panel-value">{{ datamesseccali.vingreso | currency }}</p>
+                  </div>
+                </div>
+                <!-- VALOR SALUD -->
                 <div class="col-md-6" v-if="dataclient.pagaduria === 'FOPEP'">
                   <b class="panel-label">VALOR SALUD:</b>
                   <div v-for="(datames, key) in datames" :key="key">
                     <p class="panel-value">{{ datames.vsalud | currency }}</p>
                   </div>
                 </div>
-
+                <!-- VALOR DESCUENTOS -->
                 <div class="col-md-6" v-if="dataclient.pagaduria === 'FOPEP'">
                   <b class="panel-label">VALOR DESCUENTOS:</b>
                   <div v-for="(datames, key) in datames" :key="key">
@@ -690,81 +684,108 @@
                     <p class="panel-value">{{ datamesfidu.vdescbruto | currency }}</p>
                   </div>
                 </div>
-
+                <!-- VALOR CUPO -->
                 <div class="col-md-6" v-if="dataclient.pagaduria === 'FOPEP'">
                   <b class="panel-label">VALOR CUPO:</b>
                   <div v-for="(datames, key) in datames" :key="key">
                     <p class="panel-value">{{ datames.cupo | currency }}</p>
                   </div>
                 </div>
+                <!-- VALOR EMBARGOS -->
                 <div class="col-md-6" v-if="dataclient.pagaduria === 'FOPEP'">
                   <b class="panel-label">VALOR EMBARGOS:</b>
                   <div v-for="(datames, key) in datames" :key="key">
                     <p class="panel-value">{{ datames.venbargos | currency }}</p>
                   </div>
                 </div>
+                <!-- FECHA INGRESO -->
                 <div class="col-6" v-if="dataclient.pagaduria === 'FODE VALLE'">
                   <b class="panel-label">FECHA INGRESO:</b>
                   <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
                     <p class="panel-value">{{ datamesseceduc.fechingr }}</p>
                   </div>
                 </div>
-
+                <div class="col-6" v-if="dataclient.pagaduria === 'SECCALI'">
+                  <b class="panel-label">FECHA INGRESO:</b>
+                  <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                    <p class="panel-value">{{ datamesseccali.fingr }}</p>
+                  </div>
+                </div>
+                <!-- AREA DE DESEMPEÑO -->
                 <div class="col-6" v-if="dataclient.pagaduria === 'FODE VALLE'">
                   <b class="panel-label">AREA DE DESEMPEÑO:</b>
                   <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
                     <p class="panel-value">{{ datamesseceduc.esquema }}</p>
                   </div>
                 </div>
-
+                <div class="col-6" v-if="dataclient.pagaduria === 'SECCALI'">
+                  <b class="panel-label">AREA DE DESEMPEÑO:</b>
+                  <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                    <p class="panel-value">{{ datamesseccali.esquema }}</p>
+                  </div>
+                </div>
+                <!-- CARGO -->
                 <div class="col-6" v-if="dataclient.pagaduria === 'FODE VALLE'">
                   <b class="panel-label">CARGO:</b>
                   <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
                     <p class="panel-value">{{ datamesseceduc.cargo }}</p>
                   </div>
                 </div>
-
+                <div class="col-6" v-if="dataclient.pagaduria === 'SECCALI'">
+                  <b class="panel-label">CARGO:</b>
+                  <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                    <p class="panel-value">{{ datamesseccali.cargo }}</p>
+                  </div>
+                </div>
+                <!-- FECHA VINVULACION -->
                 <div class="col-6" v-if="dataclient.pagaduria === 'FODE VALLE'">
                   <b class="panel-label">FECHA VINCULACIÓN:</b>
                   <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
                     <p class="panel-value">{{ datamesseceduc.fecnombr }}</p>
                   </div>
                 </div>
-
+                <div class="col-6" v-if="dataclient.pagaduria === 'SECCALI'">
+                  <b class="panel-label">FECHA VINCULACIÓN:</b>
+                  <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                    <p class="panel-value">{{ datamesseccali.fnombramiento }}</p>
+                  </div>
+                </div>
+                <!-- TIPO VINCULACION  -->
                 <div class="col-6" v-if="dataclient.pagaduria === 'FODE VALLE'">
                   <b class="panel-label">TIPO VINCULACIÓN:</b>
                   <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
                     <p class="panel-value">{{ datamesseceduc.nivcontr }}</p>
                   </div>
                 </div>
-
+                <!-- ESTADO LABORAL -->
                 <div class="col-6" v-if="dataclient.pagaduria === 'FODE VALLE'">
                   <b class="panel-label">ESTADO LABORAL:</b>
                   <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
                     <p class="panel-value">{{ datamesseceduc.estlaboral }}</p>
                   </div>
                 </div>
-
+                <!-- CENTRO DE EDUCACION -->
                 <div class="col-6" v-if="dataclient.pagaduria === 'FODE VALLE'">
                   <b class="panel-label">CENTRO DE EDUCACIÓN:</b>
                   <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
                     <p class="panel-value">{{ datamesseceduc.centrocosto }}</p>
                   </div>
                 </div>
-
+                <!-- SEDE EN LA QUE PRESTA EL SERVICIO -->
                 <div class="col-6" v-if="dataclient.pagaduria === 'FODE VALLE'">
                   <b class="panel-label">SEDE EN LA QUE PRESTA EL SERVICIO:</b>
                   <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
                     <p class="panel-value">{{ datamesseceduc.sedecoleg }}</p>
                   </div>
                 </div>
+                <!-- VINCULACION -->
                 <div class="col-6" v-if="dataclient.pagaduria === 'FIDUPREVISORA'">
                   <b class="panel-label">VINCULACION:</b>
                   <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                     <p class="panel-value">{{ datamesfidu.vinc }}</p>
                   </div>
                 </div>
-
+                <!-- FECHA DE PAGO PENSION -->
                 <div class="col-6" v-if="dataclient.pagaduria === 'FIDUPREVISORA'">
                   <b class="panel-label">FECHA DE PAGO PENSION:</b>
                   <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
@@ -884,8 +905,8 @@
                 </div>
                 <div class="col-md-2" v-if="dataclient.pagaduria === 'SECCALI'">
                   <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
-                  <div>
-                    <p class="panel-value">-</p>
+                  <div v-for="(deduccionesseccali, key) in deduccionesseccali" :key="key">
+                    <p class="panel-value">{{ deduccionesseccali.centrocostdeduc }}</p>
                   </div>
                 </div>
 
@@ -936,8 +957,8 @@
                 </div>
                 <div class="col-md-2" v-if="dataclient.pagaduria === 'SECCALI'">
                   <b class="panel-label table-text">CUOTA:</b>
-                  <div>
-                    <p class="panel-value">-</p>
+                  <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                    <p class="panel-value">{{ datamesseccali.valordeduc | currency }}</p>
                   </div>
                 </div>
 
@@ -1092,7 +1113,7 @@
                 <div class="col-md-2" v-if="dataclient.pagaduria === 'FODE VALLE'">
                   <b class="panel-label table-text">NOMBRE ENTIDAD ACTUAL:</b>
                   <div v-for="(embargosseceduc, key) in embargosseceduc" :key="key">
-                    <p class="panel-value">{{ embargosseceduc.nomp }}</p>
+                    <p class="panel-value">{{ embargosseceduc.ndeman }}</p>
                   </div>
                 </div>
                 <div class="col-md-2" v-if="dataclient.pagaduria === 'FIDUPREVISORA'">
@@ -1104,7 +1125,7 @@
                 <div class="col-2" v-if="dataclient.pagaduria === 'SECCALI'">
                   <b class="panel-label table-text">NOMBRE ENTIDAD ACTUAL:</b>
                   <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-                    <p class="panel-value">{{ embargosseccali.nomp }}</p>
+                    <p class="panel-value">{{ embargosseccali.entidaddeman }}</p>
                   </div>
                 </div>
 
@@ -1117,8 +1138,8 @@
                 </div>
                 <div class="col-md-2" v-if="dataclient.pagaduria === 'FODE VALLE'">
                   <b class="panel-label table-text">NUMERO DE PAGARE:</b>
-                  <div>
-                    <p class="panel-value">-</p>
+                  <div v-for="(embargosseceduc, key) in embargosseceduc" :key="key">
+                    <p class="panel-value">{{ embargosseceduc.nitdeman }}</p>
                   </div>
                 </div>
                 <div class="col-md-2" v-if="dataclient.pagaduria === 'FIDUPREVISORA'">
@@ -1129,8 +1150,8 @@
                 </div>
                 <div class="col-md-2" v-if="dataclient.pagaduria === 'SECCALI'">
                   <b class="panel-label table-text">NUMERO DE PAGARE:</b>
-                  <div>
-                    <p class="panel-value">-</p>
+                  <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
+                    <p class="panel-value">{{ embargosseccali.docdeman | currency }}</p>
                   </div>
                 </div>
 
@@ -1144,7 +1165,7 @@
                 <div class="col-md-2" v-if="dataclient.pagaduria === 'FODE VALLE'">
                   <b class="panel-label table-text">CUOTA DEUDA:</b>
                   <div v-for="(embargosseceduc, key) in embargosseceduc" :key="key">
-                    <p class="panel-value">{{ embargosseceduc.tegre | currency }}</p>
+                    <p class="panel-value">{{ embargosseceduc.temb | currency }}</p>
                   </div>
                 </div>
                 <div class="col-md-2" v-if="dataclient.pagaduria === 'FIDUPREVISORA'">
@@ -1156,7 +1177,7 @@
                 <div class="col-md-2" v-if="dataclient.pagaduria === 'SECCALI'">
                   <b class="panel-label table-text">CUOTA DEUDA:</b>
                   <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-                    <p class="panel-value">{{ embargosseccali.tegre | currency }}</p>
+                    <p class="panel-value">{{ embargosseccali.temb | currency }}</p>
                   </div>
                 </div>
                 
@@ -1170,7 +1191,7 @@
                 <div class="col-md-2" v-if="dataclient.pagaduria === 'FODE VALLE'">
                   <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
                   <div v-for="(embargosseceduc, key) in embargosseceduc" :key="key">
-                    <p class="panel-value">{{ embargosseceduc.nitdeman }}</p>
+                    <p class="panel-value">{{ embargosseceduc.finiemb }}</p>
                   </div>
                 </div>
                 <div class="col-md-2" v-if="dataclient.pagaduria === 'FIDUPREVISORA'">
@@ -1182,7 +1203,7 @@
                 <div class="col-2" v-if="dataclient.pagaduria === 'SECCALI'">
                   <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
                   <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-                    <p class="panel-value">{{ embargosseccali.docdeman }}</p>
+                    <p class="panel-value">{{ embargosseccali.fembini }}</p>
                   </div>
                 </div>
 
@@ -1273,7 +1294,7 @@
                 <div class="col-md-2" v-if="dataclient.pagaduria === 'FODE VALLE'">
                   <b class="panel-label table-text">INCONSISTENCIA:</b>
                   <div v-for="(embargosseceduc, key) in embargosseceduc" :key="key">
-                    <p class="panel-value">{{ embargosseceduc.finiemb }}</p>
+                    <p class="panel-value">{{ embargosseceduc.memb }}</p>
                   </div>
                 </div>
                 <div class="col-md-2" v-if="dataclient.pagaduria === 'FIDUPREVISORA'">
@@ -1285,7 +1306,7 @@
                 <div class="col-md-2" v-if="dataclient.pagaduria === 'SECCALI'">
                   <b class="panel-label table-text">INCONSISTENCIA:</b>
                   <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-                    <p class="panel-value">{{ embargosseccali.fembini }}</p>
+                    <p class="panel-value">{{ embargosseccali.motemb }}</p>
                   </div>
                 </div>
               </div>
@@ -1303,301 +1324,6 @@
               <div class="row" v-if="dataclient.pagaduria === 'FOPEP'">
                 <div class="col-12">
                   <b class="panel-label">OTRO POSIBLE INGRESO 1:</b>
-                  <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                    <p class="panel-value">{{ datamesseceduc.vpension | currency }}</p>
-                  </div>
-                  <button type="button" class="btn btn-primary" v-on:click="dataPlusFode = true">Ver mas</button>
-                  <button type="button" class="btn btn-secondary" v-on:click="dataPlusFode = false">Cerrar</button>
-                    <!-- Mostrando respuesta nueva en btn Ver mas FODE -->
-                  <div class="col-md-12 tables-space" v-if="dataPlusFode">
-                    <div class="row">
-                      <div class="col-6">
-                        <div class="panel mb-3">
-                          <div class="panel-heading">
-                            <b>INFORMACIÓN PERSONAL</b>
-                          </div>
-                          <div class="panel-body">
-                            <div class="row">
-                              <div class="col-6">
-                                <b class="panel-label">TIPO DE DOCUMENTO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.td }}</p>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                <b class="panel-label">NUMERO DE DOCUMENTO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.doc }}</p>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                <b class="panel-label">NOMBRE Y APELLIDO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.nomp }}</p>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                <b class="panel-label">FECHA DE NACIMIENTO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.fecnacimient }}</p>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                <b class="panel-label">DIRECCIÓN:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.dir }}</p>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                <b class="panel-label">DEPARTAMENTO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.dpto }}</p>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                <b class="panel-label">MUNICIPIO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.mnpio }}</p>
-                                </div>
-                              </div>
-                              <div
-                                class="col-md-6"
-                                v-if="
-                                  user.roles_id === 1 ||
-                                  user.roles_id === '1' ||
-                                  user.roles_id === 4 ||
-                                  user.roles_id === '4' ||
-                                  user.roles_id === 5 ||
-                                  user.roles_id === '5'
-                                "
-                              >
-                                <b class="panel-label">NOMBRE DEL BANCO DONDE LE CONSIGNAN:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.nbanco }}</p>
-                                </div>
-                              </div>
-                              <div
-                                class="col-md-6"
-                                v-if="
-                                  user.roles_id === 1 ||
-                                  user.roles_id === '1' ||
-                                  user.roles_id === 4 ||
-                                  user.roles_id === '4' ||
-                                  user.roles_id === 5 ||
-                                  user.roles_id === '5'
-                                "
-                              >
-                                <b class="panel-label">SUCURSAL BANCO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.sucursal }}</p>
-                                </div>
-                              </div>
-                              <div class="col-md-6">
-                                <b class="panel-label">TELEFONO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.tel }}</p>
-                                </div>
-                              </div>
-                              <div class="col-md-6">
-                                <b class="panel-label">CELULAR:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.cel }}</p>
-                                </div>
-                              </div>
-                              <div class="col-md-6">
-                                <b class="panel-label">CORREO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.correo }}</p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-6" v-if="fechaVinc.length > 0">
-                        <div class="panel mb-3">
-                          <div class="panel-heading">
-                            <b>HISTORIAL LABORAL</b>
-                          </div>
-                          <div class="panel-body">
-                            <div class="row">
-                              <div class="col-6">
-                                <b class="panel-label">ANTIGUEDAD LABORAL:</b>
-                                <div v-for="(fechavinc, key) in fechaVinc" :key="key">
-                                  <p class="panel-value">{{ fechavinc.vinc }}</p>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                <b class="panel-label">VALOR INGRESO:</b>
-                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                  <p class="panel-value">{{ datamesseceduc.vpension | currency }}</p>
-                                </div>
-                              </div>
-
-                              <div class="col-6">
-                                <b class="panel-label">FECHA INGRESO:</b>
-                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                  <p class="panel-value">{{ datamesseceduc.fechingr }}</p>
-                                </div>
-                              </div>
-
-                              <div class="col-6">
-                                <b class="panel-label">AREA DE DESEMPEÑO:</b>
-                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                  <p class="panel-value">{{ datamesseceduc.esquema }}</p>
-                                </div>
-                              </div>
-
-                              <div class="col-6">
-                                <b class="panel-label">CARGO:</b>
-                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                  <p class="panel-value">{{ datamesseceduc.cargo }}</p>
-                                </div>
-                              </div>
-
-                              <div class="col-6">
-                                <b class="panel-label">FECHA VINCULACIÓN:</b>
-                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                  <p class="panel-value">{{ datamesseceduc.fecnombr }}</p>
-                                </div>
-                              </div>
-
-                              <div class="col-6">
-                                <b class="panel-label">TIPO VINCULACIÓN:</b>
-                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                  <p class="panel-value">{{ datamesseceduc.nivcontr }}</p>
-                                </div>
-                              </div>
-
-                              <div class="col-6">
-                                <b class="panel-label">ESTADO LABORAL:</b>
-                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                  <p class="panel-value">{{ datamesseceduc.estlaboral }}</p>
-                                </div>
-                              </div>
-
-                              <div class="col-6">
-                                <b class="panel-label">CENTRO DE EDUCACIÓN:</b>
-                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                  <p class="panel-value">{{ datamesseceduc.centrocosto }}</p>
-                                </div>
-                              </div>
-
-                              <div class="col-6">
-                                <b class="panel-label">SEDE EN LA QUE PRESTA EL SERVICIO:</b>
-                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                  <p class="panel-value">{{ datamesseceduc.sedecoleg }}</p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="panel panel-primary mb-3">
-                        <div class="panel-heading"><b>OBLIGACIONES VIGENTES AL DIA</b></div>
-                        <div class="panel-body">
-                          <div class="row">
-                            <div class="col-md-2">
-                              <b class="panel-label table-text">TIPO ENTIDAD:</b>
-                              <div>
-                                <p class="panel-value">-</p>
-                              </div>
-                            </div>
-
-                            <div class="col-md-2">
-                              <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
-                              <div>
-                                <p class="panel-value">-</p>
-                              </div>
-                            </div>
-
-                            <div class="col-md-2">
-                              <b class="panel-label table-text">NUMERO PAGARE:</b>
-                              <div>
-                                <p class="panel-value">-</p>
-                              </div>
-                            </div>
-
-                            <div class="col-md-2">
-                              <b class="panel-label table-text">CUOTA:</b>
-                              <div>
-                                <p class="panel-value">-</p>
-                              </div>
-                            </div>
-
-                            <div class="col-md-2">
-                              <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
-                              <div>
-                                <p class="panel-value">-</p>
-                              </div>
-                            </div>
-
-                            <div class="col-md-2">
-                              <b class="panel-label table-text">NOMBRE ENTIDAD CEDIENTE:</b>
-                              <div>
-                                <p class="panel-value">-</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="panel panel-primary mb-3">
-                          <div class="panel-heading"><b>OBLIGACIONES VIGENTES EN MORA</b></div>
-                          <div class="panel-body">
-                            <div class="row">
-                              <div class="col-2">
-                                <b class="panel-label table-text">NOMBRE ENTIDAD ACTUAL:</b>
-                                <div v-for="(embargosseceduc, key) in embargosseceduc" :key="key">
-                                  <p class="panel-value">{{ embargosseceduc.nomp }}</p>
-                                </div>
-                              </div>
-
-                              <div class="col-md-2">
-                                <b class="panel-label table-text">NUMERO DE PAGARE:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
-                                </div>
-                              </div>
-
-                              <div class="col-2">
-                                <b class="panel-label table-text">CUOTA DEUDA:</b>
-                                <div v-for="(embargosseceduc, key) in embargosseceduc" :key="key">
-                                  <p class="panel-value">{{ embargosseceduc.tegre | currency }}</p>
-                                </div>
-                              </div>
-
-                              <div class="col-2">
-                                <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
-                                <div v-for="(embargosseceduc, key) in embargosseceduc" :key="key">
-                                  <p class="panel-value">{{ embargosseceduc.nitdeman }}</p>
-                                </div>
-                              </div>
-
-                              <div class="col-2">
-                                <b class="panel-label table-text">NOMBRE ENTIDAD CEDIENTE:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
-                                </div>
-                              </div>
-
-                              <div class="col-2">
-                                <b class="panel-label table-text">INCONSISTENCIA:</b>
-                                <div v-for="(embargosseceduc, key) in embargosseceduc" :key="key">
-                                  <p class="panel-value">{{ embargosseceduc.finiemb }}</p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                  </div>
-                </div>
-                <div class="col-12 tables-space">
-                  <b class="panel-label">OTRO POSIBLE INGRESO 2:</b>
                   <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                     <p class="panel-value">{{ datamesfidu.vpension | currency }}</p>
                   </div>
@@ -1857,277 +1583,13 @@
                   </div>
                 </div>
                 <div class="col-12 tables-space">
-                  <b class="panel-label">OTRO POSIBLE INGRESO 3:</b>
-                  <div>
-                    <p class="panel-value">-</p>
-                  </div>
-                  <button type="button" class="btn btn-primary" v-on:click="dataPlusSeca = true">Ver mas</button>
-                  <button type="button" class="btn btn-secondary" v-on:click="dataPlusSeca = false">Cerrar</button>
-                  <!-- Mostrando respuesta nueva en btn Ver mas SECCALI -->
-                  <div class="col-12 tables-space" v-if="dataPlusSeca">
-                    <div class="row">
-                      <div class="col-6">
-                        <div class="panel mb-3">
-                          <div class="panel-heading">
-                            <b>INFORMACIÓN PERSONAL</b>
-                          </div>
-                          <div class="panel-body">
-                            <div class="row">
-                              <div class="col-6">
-                                <b class="panel-label">TIPO DE DOCUMENTO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.td }}</p>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                <b class="panel-label">NUMERO DE DOCUMENTO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.doc }}</p>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                <b class="panel-label">NOMBRE Y APELLIDO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.nomp }}</p>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                <b class="panel-label">FECHA DE NACIMIENTO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.fecnacimient }}</p>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                <b class="panel-label">DIRECCIÓN:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.dir }}</p>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                <b class="panel-label">DEPARTAMENTO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.dpto }}</p>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                <b class="panel-label">MUNICIPIO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.mnpio }}</p>
-                                </div>
-                              </div>
-                              <div
-                                class="col-md-6"
-                                v-if="
-                                  user.roles_id === 1 ||
-                                  user.roles_id === '1' ||
-                                  user.roles_id === 4 ||
-                                  user.roles_id === '4' ||
-                                  user.roles_id === 5 ||
-                                  user.roles_id === '5'
-                                "
-                              >
-                                <b class="panel-label">NOMBRE DEL BANCO DONDE LE CONSIGNAN:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.nbanco }}</p>
-                                </div>
-                              </div>
-                              <div
-                                class="col-md-6"
-                                v-if="
-                                  user.roles_id === 1 ||
-                                  user.roles_id === '1' ||
-                                  user.roles_id === 4 ||
-                                  user.roles_id === '4' ||
-                                  user.roles_id === 5 ||
-                                  user.roles_id === '5'
-                                "
-                              >
-                                <b class="panel-label">SUCURSAL BANCO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.sucursal }}</p>
-                                </div>
-                              </div>
-                              <div class="col-md-6">
-                                <b class="panel-label">TELEFONO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.tel }}</p>
-                                </div>
-                              </div>
-                              <div class="col-md-6">
-                                <b class="panel-label">CELULAR:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.cel }}</p>
-                                </div>
-                              </div>
-                              <div class="col-md-6">
-                                <b class="panel-label">CORREO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.correo }}</p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-6" v-if="fechaVinc.length > 0">
-                        <div class="panel mb-3">
-                          <div class="panel-heading">
-                            <b>HISTORIAL LABORAL</b>
-                          </div>
-                          <div class="panel-body">
-                            <div class="row">
-                              <div class="col-6">
-                                <b class="panel-label">ANTIGUEDAD LABORAL:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
-                                </div>
-                              </div>
-
-                              <div class="col-6">
-                                <b class="panel-label">VALOR INGRESO:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
-                                </div>
-                              </div>
-
-                              <div class="col-6">
-                                <b class="panel-label">VALOR DESCUENTO:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                <b class="panel-label">VINCULACION:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
-                                </div>
-                              </div>
-
-                              <div class="col-6">
-                                <b class="panel-label">FECHA DE PAGO PENSION:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="panel panel-primary mb-3">
-                        <div class="panel-heading"><b>OBLIGACIONES VIGENTES AL DIA</b></div>
-                        <div class="panel-body">
-                          <div class="row">
-                            <div class="col-md-2">
-                              <b class="panel-label table-text">TIPO ENTIDAD:</b>
-                              <div>
-                                <p class="panel-value">-</p>
-                              </div>
-                            </div>
-
-                            <div class="col-md-2">
-                              <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
-                              <div>
-                                <p class="panel-value">-</p>
-                              </div>
-                            </div>
-
-                            <div class="col-md-2">
-                              <b class="panel-label table-text">NUMERO PAGARE:</b>
-                              <div>
-                                <p class="panel-value">-</p>
-                              </div>
-                            </div>
-
-                            <div class="col-md-2">
-                              <b class="panel-label table-text">CUOTA:</b>
-                              <div>
-                                <p class="panel-value">-</p>
-                              </div>
-                            </div>
-
-                            <div class="col-md-2">
-                              <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
-                              <div>
-                                <p class="panel-value">-</p>
-                              </div>
-                            </div>
-
-                            <div class="col-md-2">
-                              <b class="panel-label table-text">NOMBRE ENTIDAD CEDIENTE:</b>
-                              <div>
-                                <p class="panel-value">-</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="panel panel-primary mb-3">
-                        <div class="panel-heading"><b>OBLIGACIONES VIGENTES EN MORA</b></div>
-                        <div class="panel-body">
-                          <div class="row">
-                            <div class="col-2">
-                              <b class="panel-label table-text">NOMBRE ENTIDAD ACTUAL:</b>
-                              <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-                                <p class="panel-value">{{ embargosseccali.nomp }}</p>
-                              </div>
-                            </div>
-
-                            <div class="col-md-2">
-                              <b class="panel-label table-text">NUMERO DE PAGARE:</b>
-                              <div>
-                                <p class="panel-value">-</p>
-                              </div>
-                            </div>
-
-                            <div class="col-2">
-                              <b class="panel-label table-text">CUOTA DEUDA:</b>
-                              <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-                                <p class="panel-value">{{ embargosseccali.tegre | currency }}</p>
-                              </div>
-                            </div>
-
-                            <div class="col-2">
-                              <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
-                              <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-                                <p class="panel-value">{{ embargosseccali.docdeman }}</p>
-                              </div>
-                            </div>
-
-                            <div class="col-2">
-                              <b class="panel-label table-text">NOMBRE ENTIDAD CEDIENTE:</b>
-                              <div>
-                                <p class="panel-value">-</p>
-                              </div>
-                            </div>
-
-                            <div class="col-2">
-                              <b class="panel-label table-text">INCONSISTENCIA:</b>
-                              <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-                                <p class="panel-value">{{ embargosseccali.fembini }}</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- OTROS INGRESOS FIDUPREVISORA -->
-              <div class="row" v-if="dataclient.pagaduria === 'FIDUPREVISORA'">
-                <div class="col-12">
-                  <b class="panel-label">OTRO POSIBLE INGRESO 1:</b>
+                  <b class="panel-label">OTRO POSIBLE INGRESO 2:</b>
                   <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
                     <p class="panel-value">{{ datamesseceduc.vpension | currency }}</p>
                   </div>
                   <button type="button" class="btn btn-primary" v-on:click="dataPlusFode = true">Ver mas</button>
                   <button type="button" class="btn btn-secondary" v-on:click="dataPlusFode = false">Cerrar</button>
-                  <!-- Mostrando respuesta nueva en btn Ver mas FODE -->
+                    <!-- Mostrando respuesta nueva en btn Ver mas FODE -->
                   <div class="col-md-12 tables-space" v-if="dataPlusFode">
                     <div class="row">
                       <div class="col-6">
@@ -2370,29 +1832,29 @@
                             <div class="row">
                               <div class="col-2">
                                 <b class="panel-label table-text">NOMBRE ENTIDAD ACTUAL:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
+                                <div v-for="(embargosseceduc, key) in embargosseceduc" :key="key">
+                                  <p class="panel-value">{{ embargosseceduc.ndeman }}</p>
                                 </div>
                               </div>
 
                               <div class="col-md-2">
                                 <b class="panel-label table-text">NUMERO DE PAGARE:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
+                                <div v-for="(embargosseceduc, key) in embargosseceduc" :key="key">
+                                  <p class="panel-value">{{ embargosseceduc.nitdeman }}</p>
                                 </div>
                               </div>
 
                               <div class="col-2">
                                 <b class="panel-label table-text">CUOTA DEUDA:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
+                                <div v-for="(embargosseceduc, key) in embargosseceduc" :key="key">
+                                  <p class="panel-value">{{ embargosseceduc.temb | currency }}</p>
                                 </div>
                               </div>
 
                               <div class="col-2">
                                 <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
+                                <div v-for="(embargosseceduc, key) in embargosseceduc" :key="key">
+                                  <p class="panel-value">{{ embargosseceduc.finiemb }}</p>
                                 </div>
                               </div>
 
@@ -2405,8 +1867,8 @@
 
                               <div class="col-2">
                                 <b class="panel-label table-text">INCONSISTENCIA:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
+                                <div v-for="(embargosseceduc, key) in embargosseceduc" :key="key">
+                                  <p class="panel-value">{{ embargosseceduc.memb }}</p>
                                 </div>
                               </div>
                             </div>
@@ -2417,6 +1879,327 @@
                 </div>
                 <div class="col-12 tables-space">
                   <b class="panel-label">OTRO POSIBLE INGRESO 2:</b>
+                  <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                    <p class="panel-value">{{ datamesseccali.vingreso | currency }}</p>
+                  </div>
+                  <button type="button" class="btn btn-primary" v-on:click="dataPlusSeca = true">Ver mas</button>
+                  <button type="button" class="btn btn-secondary" v-on:click="dataPlusSeca = false">Cerrar</button>
+                  <!-- Mostrando respuesta nueva en btn Ver mas SECCALI -->
+                  <div class="col-12 tables-space" v-if="dataPlusSeca">
+                    <div class="row">
+                      <div class="col-6">
+                        <div class="panel mb-3">
+                          <div class="panel-heading">
+                            <b>INFORMACIÓN PERSONAL</b>
+                          </div>
+                          <div class="panel-body">
+                            <div class="row">
+                              <div class="col-6">
+                                <b class="panel-label">TIPO DE DOCUMENTO:</b>
+                                <div>
+                                  <p class="panel-value">-</p>
+                                </div>
+                              </div>
+                              <div class="col-6">
+                                <b class="panel-label">NUMERO DE DOCUMENTO:</b>
+                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                                  <p class="panel-value">{{ datamesseccali.nvinc }}</p>
+                                </div>
+                              </div>
+                              <div class="col-6">
+                                <b class="panel-label">NOMBRE Y APELLIDO:</b>
+                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                                  <p class="panel-value">{{ datamesseccali.nomp }}</p>
+                                </div>
+                              </div>
+                              <div class="col-6">
+                                <b class="panel-label">FECHA DE NACIMIENTO:</b>
+                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                                  <p class="panel-value">{{ datamesseccali.fecnacimient }}</p>
+                                </div>
+                              </div>
+                              <div class="col-6">
+                                <b class="panel-label">DIRECCIÓN:</b>
+                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                                  <p class="panel-value">{{ datamesseccali.dir }}</p>
+                                </div>
+                              </div>
+                              <div class="col-6">
+                                <b class="panel-label">DEPARTAMENTO:</b>
+                                <div>
+                                  <p class="panel-value">-</p>
+                                </div>
+                              </div>
+                              <div class="col-6">
+                                <b class="panel-label">MUNICIPIO:</b>
+                                <div>
+                                  <p class="panel-value">-</p>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <b class="panel-label">TELEFONO:</b>
+                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                                  <p class="panel-value">{{ datamesseccali.tel }}</p>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <b class="panel-label">CELULAR:</b>
+                                <div>
+                                  <p class="panel-value">-</p>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <b class="panel-label">CORREO:</b>
+                                <div v-for="(datamesseccali, key) in datames" :key="key">
+                                  <p class="panel-value">{{ datamesseccali.email }}</p>
+                                </div>
+                              </div>
+                              <div
+                                class="col-6"
+                                v-if="
+                                  user.roles_id === 1 ||
+                                  user.roles_id === '1' ||
+                                  user.roles_id === 4 ||
+                                  user.roles_id === '4' ||
+                                  user.roles_id === 5 ||
+                                  user.roles_id === '5'
+                                "
+                              >
+                                <b class="panel-label">DESCRIPCIÓN:</b>
+                                <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                  <p class="panel-value">{{ datamesfidu.desctipvinc }}</p>
+                                </div>
+                              </div>
+
+                              <div
+                                class="col-6"
+                                v-if="
+                                  user.roles_id === 1 ||
+                                  user.roles_id === '1' ||
+                                  user.roles_id === 4 ||
+                                  user.roles_id === '4' ||
+                                  user.roles_id === 5 ||
+                                  user.roles_id === '5'
+                                "
+                              >
+                                <b class="panel-label">RECURSOS:</b>
+                                <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                  <p class="panel-value">{{ datamesfidu.descfuenrecurso }}</p>
+                                </div>
+                              </div>
+
+                              <div
+                                class="col-6"
+                                v-if="
+                                  user.roles_id === 1 ||
+                                  user.roles_id === '1' ||
+                                  user.roles_id === 4 ||
+                                  user.roles_id === '4' ||
+                                  user.roles_id === 5 ||
+                                  user.roles_id === '5'
+                                "
+                              >
+                                <b class="panel-label">FECHA DE CARGA DATA:</b>
+                                <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                  <p class="panel-value">{{ datamesfidu.fecdata }}</p>
+                                </div>
+                              </div>
+
+                              <div
+                                class="col-6"
+                                v-if="
+                                  user.roles_id === 1 ||
+                                  user.roles_id === '1' ||
+                                  user.roles_id === 4 ||
+                                  user.roles_id === '4' ||
+                                  user.roles_id === 5 ||
+                                  user.roles_id === '5'
+                                "
+                              >
+                                <b class="panel-label">MES DE CARGA DATA:</b>
+                                <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                  <p class="panel-value">{{ datamesfidu.mesdata }}</p>
+                                </div>
+                              </div>
+
+                              <div
+                                class="col-6"
+                                v-if="
+                                  user.roles_id === 1 ||
+                                  user.roles_id === '1' ||
+                                  user.roles_id === 4 ||
+                                  user.roles_id === '4' ||
+                                  user.roles_id === 5 ||
+                                  user.roles_id === '5'
+                                "
+                              >
+                                <b class="panel-label">AÑO DE CARGA DATA:</b>
+                                <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                  <p class="panel-value">{{ datamesfidu.anodata }}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6" v-if="fechaVinc.length > 0">
+                        <div class="panel mb-3">
+                          <div class="panel-heading">
+                            <b>HISTORIAL LABORAL</b>
+                          </div>
+                          <div class="panel-body">
+                            <div class="row">
+                              <div class="col-6">
+                                <b class="panel-label">ANTIGUEDAD LABORAL:</b>
+                                <div v-for="(fechavinc, key) in fechaVinc" :key="key">
+                                  <p class="panel-value">{{ fechavinc.vinc }}</p>
+                                </div>
+                              </div>
+
+                              <div class="col-6">
+                                <b class="panel-label">VALOR INGRESO:</b>
+                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                                  <p class="panel-value">{{ datamesseccali.vingreso | currency }}</p>
+                                </div>
+                              </div>
+
+                              <div class="col-6">
+                                <b class="panel-label">FECHA INGRESO:</b>
+                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                                  <p class="panel-value">{{ datamesseccali.fingr }}</p>
+                                </div>
+                              </div>
+                              <div class="col-6">
+                                <b class="panel-label">AREA DE DESEMPEÑO:</b>
+                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                                  <p class="panel-value">{{ datamesseccali.esquema }}</p>
+                                </div>
+                              </div>
+                              <div class="col-6">
+                                <b class="panel-label">CARGO:</b>
+                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                                  <p class="panel-value">{{ datamesseccali.cargo }}</p>
+                                </div>
+                              </div>
+                              <div class="col-6">
+                                <b class="panel-label">FECHA VINCULACIÓN:</b>
+                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                                  <p class="panel-value">{{ datamesseccali.fnombramiento }}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="panel panel-primary mb-3">
+                        <div class="panel-heading"><b>OBLIGACIONES VIGENTES AL DIA</b></div>
+                        <div class="panel-body">
+                          <div class="row">
+                            <div class="col-md-2">
+                              <b class="panel-label table-text">TIPO ENTIDAD:</b>
+                              <div>
+                                <p class="panel-value">-</p>
+                              </div>
+                            </div>
+
+                            <div class="col-md-2">
+                              <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
+                              <div v-for="(deduccionesseccali, key) in deduccionesseccali" :key="key">
+                                <p class="panel-value">{{ deduccionesseccali.centrocostdeduc }}</p>
+                              </div>
+                            </div>
+
+                            <div class="col-md-2">
+                              <b class="panel-label table-text">NUMERO PAGARE:</b>
+                              <div>
+                                <p class="panel-value">-</p>
+                              </div>
+                            </div>
+
+                            <div class="col-md-2">
+                              <b class="panel-label table-text">CUOTA:</b>
+                              <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                                <p class="panel-value">{{ datamesseccali.valordeduc | currency }}</p>
+                              </div>
+                            </div>
+
+                            <div class="col-md-2">
+                              <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
+                              <div>
+                                <p class="panel-value">-</p>
+                              </div>
+                            </div>
+
+                            <div class="col-md-2">
+                              <b class="panel-label table-text">NOMBRE ENTIDAD CEDIENTE:</b>
+                              <div>
+                                <p class="panel-value">-</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="panel panel-primary mb-3">
+                        <div class="panel-heading"><b>OBLIGACIONES VIGENTES EN MORA</b></div>
+                        <div class="panel-body">
+                          <div class="row">
+                            <div class="col-2">
+                              <b class="panel-label table-text">NOMBRE ENTIDAD ACTUAL:</b>
+                              <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
+                                <p class="panel-value">{{ embargosseccali.entidaddeman }}</p>
+                              </div>
+                            </div>
+
+                            <div class="col-md-2">
+                              <b class="panel-label table-text">NUMERO DE PAGARE:</b>
+                              <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
+                                <p class="panel-value">{{ embargosseccali.docdeman | currency }}</p>
+                              </div>
+                            </div>
+
+                            <div class="col-2">
+                              <b class="panel-label table-text">CUOTA DEUDA:</b>
+                              <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
+                                <p class="panel-value">{{ embargosseccali.temb | currency }}</p>
+                              </div>
+                            </div>
+
+                            <div class="col-2">
+                              <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
+                              <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
+                                <p class="panel-value">{{ embargosseccali.fembini }}</p>
+                              </div>
+                            </div>
+
+                            <div class="col-2">
+                              <b class="panel-label table-text">NOMBRE ENTIDAD CEDIENTE:</b>
+                              <div>
+                                <p class="panel-value">-</p>
+                              </div>
+                            </div>
+
+                            <div class="col-2">
+                              <b class="panel-label table-text">INCONSISTENCIA:</b>
+                              <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
+                                <p class="panel-value">{{ embargosseccali.fembini }}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- OTROS INGRESOS FIDUPREVISORA -->
+              <div class="row" v-if="dataclient.pagaduria === 'FIDUPREVISORA'">
+                <div class="col-12 tables-space">
+                  <b class="panel-label">OTRO POSIBLE INGRESO 1:</b>
                   <div v-for="(datames, key) in datames" :key="key">
                     <p class="panel-value">{{ datames.vpension | currency }}</p>
                   </div>
@@ -2687,15 +2470,15 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-12 tables-space">
-                  <b class="panel-label">OTRO POSIBLE INGRESO 3:</b>
-                  <div>
-                    <p class="panel-value">-</p>
+                <div class="col-12">
+                  <b class="panel-label">OTRO POSIBLE INGRESO 2:</b>
+                  <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                    <p class="panel-value">{{ datamesseceduc.vpension | currency }}</p>
                   </div>
-                  <button type="button" class="btn btn-primary" v-on:click="dataPlusSeca = true">Ver mas</button>
-                  <button type="button" class="btn btn-secondary" v-on:click="dataPlusSeca = false">Cerrar</button>
-                  <!-- Mostrando respuesta nueva en btn Ver mas SECCALI -->
-                  <div class="col-12 tables-space" v-if="dataPlusSeca">
+                  <button type="button" class="btn btn-primary" v-on:click="dataPlusFode = true">Ver mas</button>
+                  <button type="button" class="btn btn-secondary" v-on:click="dataPlusFode = false">Cerrar</button>
+                  <!-- Mostrando respuesta nueva en btn Ver mas FODE -->
+                  <div class="col-md-12 tables-space" v-if="dataPlusFode">
                     <div class="row">
                       <div class="col-6">
                         <div class="panel mb-3">
@@ -2809,35 +2592,70 @@
                             <div class="row">
                               <div class="col-6">
                                 <b class="panel-label">ANTIGUEDAD LABORAL:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
+                                <div v-for="(fechavinc, key) in fechaVinc" :key="key">
+                                  <p class="panel-value">{{ fechavinc.vinc }}</p>
                                 </div>
                               </div>
-
                               <div class="col-6">
                                 <b class="panel-label">VALOR INGRESO:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
+                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                  <p class="panel-value">{{ datamesseceduc.vpension | currency }}</p>
                                 </div>
                               </div>
 
                               <div class="col-6">
-                                <b class="panel-label">VALOR DESCUENTO:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                <b class="panel-label">VINCULACION:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
+                                <b class="panel-label">FECHA INGRESO:</b>
+                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                  <p class="panel-value">{{ datamesseceduc.fechingr }}</p>
                                 </div>
                               </div>
 
                               <div class="col-6">
-                                <b class="panel-label">FECHA DE PAGO PENSION:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
+                                <b class="panel-label">AREA DE DESEMPEÑO:</b>
+                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                  <p class="panel-value">{{ datamesseceduc.esquema }}</p>
+                                </div>
+                              </div>
+
+                              <div class="col-6">
+                                <b class="panel-label">CARGO:</b>
+                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                  <p class="panel-value">{{ datamesseceduc.cargo }}</p>
+                                </div>
+                              </div>
+
+                              <div class="col-6">
+                                <b class="panel-label">FECHA VINCULACIÓN:</b>
+                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                  <p class="panel-value">{{ datamesseceduc.fecnombr }}</p>
+                                </div>
+                              </div>
+
+                              <div class="col-6">
+                                <b class="panel-label">TIPO VINCULACIÓN:</b>
+                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                  <p class="panel-value">{{ datamesseceduc.nivcontr }}</p>
+                                </div>
+                              </div>
+
+                              <div class="col-6">
+                                <b class="panel-label">ESTADO LABORAL:</b>
+                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                  <p class="panel-value">{{ datamesseceduc.estlaboral }}</p>
+                                </div>
+                              </div>
+
+                              <div class="col-6">
+                                <b class="panel-label">CENTRO DE EDUCACIÓN:</b>
+                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                  <p class="panel-value">{{ datamesseceduc.centrocosto }}</p>
+                                </div>
+                              </div>
+
+                              <div class="col-6">
+                                <b class="panel-label">SEDE EN LA QUE PRESTA EL SERVICIO:</b>
+                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
+                                  <p class="panel-value">{{ datamesseceduc.sedecoleg }}</p>
                                 </div>
                               </div>
                             </div>
@@ -2896,6 +2714,324 @@
                       </div>
                     </div>
                     <div class="col-md-12">
+                        <div class="panel panel-primary mb-3">
+                          <div class="panel-heading"><b>OBLIGACIONES VIGENTES EN MORA</b></div>
+                          <div class="panel-body">
+                            <div class="row">
+                              <div class="col-2">
+                                <b class="panel-label table-text">NOMBRE ENTIDAD ACTUAL:</b>
+                                <div v-for="(embargosseceduc, key) in embargosseceduc" :key="key">
+                                  <p class="panel-value">{{ embargosseceduc.ndeman }}</p>
+                                </div>
+                              </div>
+
+                              <div class="col-md-2">
+                                <b class="panel-label table-text">NUMERO DE PAGARE:</b>
+                                <div v-for="(embargosseceduc, key) in embargosseceduc" :key="key">
+                                  <p class="panel-value">{{ embargosseceduc.nitdeman }}</p>
+                                </div>
+                              </div>
+
+                              <div class="col-2">
+                                <b class="panel-label table-text">CUOTA DEUDA:</b>
+                                <div v-for="(embargosseceduc, key) in embargosseceduc" :key="key">
+                                  <p class="panel-value">{{ embargosseceduc.temb | currency }}</p>
+                                </div>
+                              </div>
+
+                              <div class="col-2">
+                                <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
+                                <div v-for="(embargosseceduc, key) in embargosseceduc" :key="key">
+                                  <p class="panel-value">{{ embargosseceduc.finiemb }}</p>
+                                </div>
+                              </div>
+
+                              <div class="col-2">
+                                <b class="panel-label table-text">NOMBRE ENTIDAD CEDIENTE:</b>
+                                <div>
+                                  <p class="panel-value">-</p>
+                                </div>
+                              </div>
+
+                              <div class="col-2">
+                                <b class="panel-label table-text">INCONSISTENCIA:</b>
+                                <div v-for="(embargosseceduc, key) in embargosseceduc" :key="key">
+                                  <p class="panel-value">{{ embargosseceduc.memb }}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+                
+                <div class="col-12 tables-space">
+                  <b class="panel-label">OTRO POSIBLE INGRESO 2:</b>
+                  <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                    <p class="panel-value">{{ datamesseccali.vingreso | currency }}</p>
+                  </div>
+                  <button type="button" class="btn btn-primary" v-on:click="dataPlusSeca = true">Ver mas</button>
+                  <button type="button" class="btn btn-secondary" v-on:click="dataPlusSeca = false">Cerrar</button>
+                  <!-- Mostrando respuesta nueva en btn Ver mas SECCALI -->
+                  <div class="col-12 tables-space" v-if="dataPlusSeca">
+                    <div class="row">
+                      <div class="col-6">
+                        <div class="panel mb-3">
+                          <div class="panel-heading">
+                            <b>INFORMACIÓN PERSONAL</b>
+                          </div>
+                          <div class="panel-body">
+                            <div class="row">
+                              <div class="col-6">
+                                <b class="panel-label">TIPO DE DOCUMENTO:</b>
+                                <div>
+                                  <p class="panel-value">-</p>
+                                </div>
+                              </div>
+                              <div class="col-6">
+                                <b class="panel-label">NUMERO DE DOCUMENTO:</b>
+                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                                  <p class="panel-value">{{ datamesseccali.nvinc }}</p>
+                                </div>
+                              </div>
+                              <div class="col-6">
+                                <b class="panel-label">NOMBRE Y APELLIDO:</b>
+                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                                  <p class="panel-value">{{ datamesseccali.nomp }}</p>
+                                </div>
+                              </div>
+                              <div class="col-6">
+                                <b class="panel-label">FECHA DE NACIMIENTO:</b>
+                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                                  <p class="panel-value">{{ datamesseccali.fecnacimient }}</p>
+                                </div>
+                              </div>
+                              <div class="col-6">
+                                <b class="panel-label">DIRECCIÓN:</b>
+                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                                  <p class="panel-value">{{ datamesseccali.dir }}</p>
+                                </div>
+                              </div>
+                              <div class="col-6">
+                                <b class="panel-label">DEPARTAMENTO:</b>
+                                <div>
+                                  <p class="panel-value">-</p>
+                                </div>
+                              </div>
+                              <div class="col-6">
+                                <b class="panel-label">MUNICIPIO:</b>
+                                <div>
+                                  <p class="panel-value">-</p>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <b class="panel-label">TELEFONO:</b>
+                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                                  <p class="panel-value">{{ datamesseccali.tel }}</p>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <b class="panel-label">CELULAR:</b>
+                                <div>
+                                  <p class="panel-value">-</p>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <b class="panel-label">CORREO:</b>
+                                <div v-for="(datamesseccali, key) in datames" :key="key">
+                                  <p class="panel-value">{{ datamesseccali.email }}</p>
+                                </div>
+                              </div>
+                              <div
+                                class="col-6"
+                                v-if="
+                                  user.roles_id === 1 ||
+                                  user.roles_id === '1' ||
+                                  user.roles_id === 4 ||
+                                  user.roles_id === '4' ||
+                                  user.roles_id === 5 ||
+                                  user.roles_id === '5'
+                                "
+                              >
+                                <b class="panel-label">DESCRIPCIÓN:</b>
+                                <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                  <p class="panel-value">{{ datamesfidu.desctipvinc }}</p>
+                                </div>
+                              </div>
+
+                              <div
+                                class="col-6"
+                                v-if="
+                                  user.roles_id === 1 ||
+                                  user.roles_id === '1' ||
+                                  user.roles_id === 4 ||
+                                  user.roles_id === '4' ||
+                                  user.roles_id === 5 ||
+                                  user.roles_id === '5'
+                                "
+                              >
+                                <b class="panel-label">RECURSOS:</b>
+                                <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                  <p class="panel-value">{{ datamesfidu.descfuenrecurso }}</p>
+                                </div>
+                              </div>
+
+                              <div
+                                class="col-6"
+                                v-if="
+                                  user.roles_id === 1 ||
+                                  user.roles_id === '1' ||
+                                  user.roles_id === 4 ||
+                                  user.roles_id === '4' ||
+                                  user.roles_id === 5 ||
+                                  user.roles_id === '5'
+                                "
+                              >
+                                <b class="panel-label">FECHA DE CARGA DATA:</b>
+                                <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                  <p class="panel-value">{{ datamesfidu.fecdata }}</p>
+                                </div>
+                              </div>
+
+                              <div
+                                class="col-6"
+                                v-if="
+                                  user.roles_id === 1 ||
+                                  user.roles_id === '1' ||
+                                  user.roles_id === 4 ||
+                                  user.roles_id === '4' ||
+                                  user.roles_id === 5 ||
+                                  user.roles_id === '5'
+                                "
+                              >
+                                <b class="panel-label">MES DE CARGA DATA:</b>
+                                <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                  <p class="panel-value">{{ datamesfidu.mesdata }}</p>
+                                </div>
+                              </div>
+
+                              <div
+                                class="col-6"
+                                v-if="
+                                  user.roles_id === 1 ||
+                                  user.roles_id === '1' ||
+                                  user.roles_id === 4 ||
+                                  user.roles_id === '4' ||
+                                  user.roles_id === 5 ||
+                                  user.roles_id === '5'
+                                "
+                              >
+                                <b class="panel-label">AÑO DE CARGA DATA:</b>
+                                <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
+                                  <p class="panel-value">{{ datamesfidu.anodata }}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6" v-if="fechaVinc.length > 0">
+                        <div class="panel mb-3">
+                          <div class="panel-heading">
+                            <b>HISTORIAL LABORAL</b>
+                          </div>
+                          <div class="panel-body">
+                            <div class="row">
+                              <div class="col-6">
+                                <b class="panel-label">ANTIGUEDAD LABORAL:</b>
+                                <div v-for="(fechavinc, key) in fechaVinc" :key="key">
+                                  <p class="panel-value">{{ fechavinc.vinc }}</p>
+                                </div>
+                              </div>
+
+                              <div class="col-6">
+                                <b class="panel-label">VALOR INGRESO:</b>
+                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                                  <p class="panel-value">{{ datamesseccali.vingreso | currency }}</p>
+                                </div>
+                              </div>
+
+                              <div class="col-6">
+                                <b class="panel-label">FECHA INGRESO:</b>
+                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                                  <p class="panel-value">{{ datamesseccali.fingr }}</p>
+                                </div>
+                              </div>
+                              <div class="col-6">
+                                <b class="panel-label">AREA DE DESEMPEÑO:</b>
+                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                                  <p class="panel-value">{{ datamesseccali.esquema }}</p>
+                                </div>
+                              </div>
+                              <div class="col-6">
+                                <b class="panel-label">CARGO:</b>
+                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                                  <p class="panel-value">{{ datamesseccali.cargo }}</p>
+                                </div>
+                              </div>
+                              <div class="col-6">
+                                <b class="panel-label">FECHA VINCULACIÓN:</b>
+                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                                  <p class="panel-value">{{ datamesseccali.fnombramiento }}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="panel panel-primary mb-3">
+                        <div class="panel-heading"><b>OBLIGACIONES VIGENTES AL DIA</b></div>
+                        <div class="panel-body">
+                          <div class="row">
+                            <div class="col-md-2">
+                              <b class="panel-label table-text">TIPO ENTIDAD:</b>
+                              <div>
+                                <p class="panel-value">-</p>
+                              </div>
+                            </div>
+
+                            <div class="col-md-2">
+                              <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
+                              <div v-for="(deduccionesseccali, key) in deduccionesseccali" :key="key">
+                                <p class="panel-value">{{ deduccionesseccali.centrocostdeduc }}</p>
+                              </div>
+                            </div>
+
+                            <div class="col-md-2">
+                              <b class="panel-label table-text">NUMERO PAGARE:</b>
+                              <div>
+                                <p class="panel-value">-</p>
+                              </div>
+                            </div>
+
+                            <div class="col-md-2">
+                              <b class="panel-label table-text">CUOTA:</b>
+                              <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
+                                <p class="panel-value">{{ datamesseccali.valordeduc | currency }}</p>
+                              </div>
+                            </div>
+
+                            <div class="col-md-2">
+                              <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
+                              <div>
+                                <p class="panel-value">-</p>
+                              </div>
+                            </div>
+
+                            <div class="col-md-2">
+                              <b class="panel-label table-text">NOMBRE ENTIDAD CEDIENTE:</b>
+                              <div>
+                                <p class="panel-value">-</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
                       <div class="panel panel-primary mb-3">
                         <div class="panel-heading"><b>OBLIGACIONES VIGENTES EN MORA</b></div>
                         <div class="panel-body">
@@ -2903,28 +3039,28 @@
                             <div class="col-2">
                               <b class="panel-label table-text">NOMBRE ENTIDAD ACTUAL:</b>
                               <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-                                <p class="panel-value">{{ embargosseccali.nomp }}</p>
+                                <p class="panel-value">{{ embargosseccali.entidaddeman }}</p>
                               </div>
                             </div>
 
                             <div class="col-md-2">
                               <b class="panel-label table-text">NUMERO DE PAGARE:</b>
-                              <div>
-                                <p class="panel-value">-</p>
+                              <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
+                                <p class="panel-value">{{ embargosseccali.docdeman | currency }}</p>
                               </div>
                             </div>
 
                             <div class="col-2">
                               <b class="panel-label table-text">CUOTA DEUDA:</b>
                               <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-                                <p class="panel-value">{{ embargosseccali.tegre | currency }}</p>
+                                <p class="panel-value">{{ embargosseccali.temb | currency }}</p>
                               </div>
                             </div>
 
                             <div class="col-2">
                               <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
                               <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-                                <p class="panel-value">{{ embargosseccali.docdeman }}</p>
+                                <p class="panel-value">{{ embargosseccali.fembini }}</p>
                               </div>
                             </div>
 
@@ -3483,266 +3619,6 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-12 tables-space">
-                  <b class="panel-label">OTRO POSIBLE INGRESO 3:</b>
-                  <div>
-                    <p class="panel-value">-</p>
-                  </div>
-                  <button type="button" class="btn btn-primary" v-on:click="dataPlusSeca = true">Ver mas</button>
-                  <button type="button" class="btn btn-secondary" v-on:click="dataPlusSeca = false">Cerrar</button>
-                  <!-- Mostrando respuesta nueva en btn Ver mas SECCALI -->
-                  <div class="col-12 tables-space" v-if="dataPlusSeca">
-                    <div class="row">
-                      <div class="col-6">
-                        <div class="panel mb-3">
-                          <div class="panel-heading">
-                            <b>INFORMACIÓN PERSONAL</b>
-                          </div>
-                          <div class="panel-body">
-                            <div class="row">
-                              <div class="col-6">
-                                <b class="panel-label">TIPO DE DOCUMENTO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.td }}</p>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                <b class="panel-label">NUMERO DE DOCUMENTO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.doc }}</p>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                <b class="panel-label">NOMBRE Y APELLIDO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.nomp }}</p>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                <b class="panel-label">FECHA DE NACIMIENTO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.fecnacimient }}</p>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                <b class="panel-label">DIRECCIÓN:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.dir }}</p>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                <b class="panel-label">DEPARTAMENTO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.dpto }}</p>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                <b class="panel-label">MUNICIPIO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.mnpio }}</p>
-                                </div>
-                              </div>
-                              <div
-                                class="col-md-6"
-                                v-if="
-                                  user.roles_id === 1 ||
-                                  user.roles_id === '1' ||
-                                  user.roles_id === 4 ||
-                                  user.roles_id === '4' ||
-                                  user.roles_id === 5 ||
-                                  user.roles_id === '5'
-                                "
-                              >
-                                <b class="panel-label">NOMBRE DEL BANCO DONDE LE CONSIGNAN:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.nbanco }}</p>
-                                </div>
-                              </div>
-                              <div
-                                class="col-md-6"
-                                v-if="
-                                  user.roles_id === 1 ||
-                                  user.roles_id === '1' ||
-                                  user.roles_id === 4 ||
-                                  user.roles_id === '4' ||
-                                  user.roles_id === 5 ||
-                                  user.roles_id === '5'
-                                "
-                              >
-                                <b class="panel-label">SUCURSAL BANCO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.sucursal }}</p>
-                                </div>
-                              </div>
-                              <div class="col-md-6">
-                                <b class="panel-label">TELEFONO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.tel }}</p>
-                                </div>
-                              </div>
-                              <div class="col-md-6">
-                                <b class="panel-label">CELULAR:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.cel }}</p>
-                                </div>
-                              </div>
-                              <div class="col-md-6">
-                                <b class="panel-label">CORREO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.correo }}</p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-6" v-if="fechaVinc.length > 0">
-                        <div class="panel mb-3">
-                          <div class="panel-heading">
-                            <b>HISTORIAL LABORAL</b>
-                          </div>
-                          <div class="panel-body">
-                            <div class="row">
-                              <div class="col-6">
-                                <b class="panel-label">ANTIGUEDAD LABORAL:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
-                                </div>
-                              </div>
-
-                              <div class="col-6">
-                                <b class="panel-label">VALOR INGRESO:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
-                                </div>
-                              </div>
-
-                              <div class="col-6">
-                                <b class="panel-label">VALOR DESCUENTO:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                <b class="panel-label">VINCULACION:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
-                                </div>
-                              </div>
-
-                              <div class="col-6">
-                                <b class="panel-label">FECHA DE PAGO PENSION:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="panel panel-primary mb-3">
-                        <div class="panel-heading"><b>OBLIGACIONES VIGENTES AL DIA</b></div>
-                        <div class="panel-body">
-                          <div class="row">
-                            <div class="col-md-2">
-                              <b class="panel-label table-text">TIPO ENTIDAD:</b>
-                              <div>
-                                <p class="panel-value">-</p>
-                              </div>
-                            </div>
-
-                            <div class="col-md-2">
-                              <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
-                              <div>
-                                <p class="panel-value">-</p>
-                              </div>
-                            </div>
-
-                            <div class="col-md-2">
-                              <b class="panel-label table-text">NUMERO PAGARE:</b>
-                              <div>
-                                <p class="panel-value">-</p>
-                              </div>
-                            </div>
-
-                            <div class="col-md-2">
-                              <b class="panel-label table-text">CUOTA:</b>
-                              <div>
-                                <p class="panel-value">-</p>
-                              </div>
-                            </div>
-
-                            <div class="col-md-2">
-                              <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
-                              <div>
-                                <p class="panel-value">-</p>
-                              </div>
-                            </div>
-
-                            <div class="col-md-2">
-                              <b class="panel-label table-text">NOMBRE ENTIDAD CEDIENTE:</b>
-                              <div>
-                                <p class="panel-value">-</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="panel panel-primary mb-3">
-                        <div class="panel-heading"><b>OBLIGACIONES VIGENTES EN MORA</b></div>
-                        <div class="panel-body">
-                          <div class="row">
-                            <div class="col-2">
-                              <b class="panel-label table-text">NOMBRE ENTIDAD ACTUAL:</b>
-                              <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-                                <p class="panel-value">{{ embargosseccali.nomp }}</p>
-                              </div>
-                            </div>
-
-                            <div class="col-md-2">
-                              <b class="panel-label table-text">NUMERO DE PAGARE:</b>
-                              <div>
-                                <p class="panel-value">-</p>
-                              </div>
-                            </div>
-
-                            <div class="col-2">
-                              <b class="panel-label table-text">CUOTA DEUDA:</b>
-                              <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-                                <p class="panel-value">{{ embargosseccali.tegre | currency }}</p>
-                              </div>
-                            </div>
-
-                            <div class="col-2">
-                              <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
-                              <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-                                <p class="panel-value">{{ embargosseccali.docdeman }}</p>
-                              </div>
-                            </div>
-
-                            <div class="col-2">
-                              <b class="panel-label table-text">NOMBRE ENTIDAD CEDIENTE:</b>
-                              <div>
-                                <p class="panel-value">-</p>
-                              </div>
-                            </div>
-
-                            <div class="col-2">
-                              <b class="panel-label table-text">INCONSISTENCIA:</b>
-                              <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-                                <p class="panel-value">{{ embargosseccali.fembini }}</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
 
               <!-- OTROS INGRESOS SECCALI -->
@@ -4279,305 +4155,11 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-12 tables-space">
-                  <b class="panel-label">OTRO POSIBLE INGRESO 3:</b>
-                  <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                    <p class="panel-value">{{ datamesseceduc.vpension | currency }}</p>
-                  </div>
-                  <button type="button" class="btn btn-primary" v-on:click="dataPlusFode = true">Ver mas</button>
-                  <button type="button" class="btn btn-secondary" v-on:click="dataPlusFode = false">Cerrar</button>
-                  <!-- Mostrando respuesta nueva en btn Ver mas FODE -->
-                  <div class="col-md-12 tables-space" v-if="dataPlusFode">
-                    <div class="row">
-                      <div class="col-6">
-                        <div class="panel mb-3">
-                          <div class="panel-heading">
-                            <b>INFORMACIÓN PERSONAL</b>
-                          </div>
-                          <div class="panel-body">
-                            <div class="row">
-                              <div class="col-6">
-                                <b class="panel-label">TIPO DE DOCUMENTO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.td }}</p>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                <b class="panel-label">NUMERO DE DOCUMENTO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.doc }}</p>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                <b class="panel-label">NOMBRE Y APELLIDO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.nomp }}</p>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                <b class="panel-label">FECHA DE NACIMIENTO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.fecnacimient }}</p>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                <b class="panel-label">DIRECCIÓN:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.dir }}</p>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                <b class="panel-label">DEPARTAMENTO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.dpto }}</p>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                <b class="panel-label">MUNICIPIO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.mnpio }}</p>
-                                </div>
-                              </div>
-                              <div
-                                class="col-md-6"
-                                v-if="
-                                  user.roles_id === 1 ||
-                                  user.roles_id === '1' ||
-                                  user.roles_id === 4 ||
-                                  user.roles_id === '4' ||
-                                  user.roles_id === 5 ||
-                                  user.roles_id === '5'
-                                "
-                              >
-                                <b class="panel-label">NOMBRE DEL BANCO DONDE LE CONSIGNAN:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.nbanco }}</p>
-                                </div>
-                              </div>
-                              <div
-                                class="col-md-6"
-                                v-if="
-                                  user.roles_id === 1 ||
-                                  user.roles_id === '1' ||
-                                  user.roles_id === 4 ||
-                                  user.roles_id === '4' ||
-                                  user.roles_id === 5 ||
-                                  user.roles_id === '5'
-                                "
-                              >
-                                <b class="panel-label">SUCURSAL BANCO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.sucursal }}</p>
-                                </div>
-                              </div>
-                              <div class="col-md-6">
-                                <b class="panel-label">TELEFONO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.tel }}</p>
-                                </div>
-                              </div>
-                              <div class="col-md-6">
-                                <b class="panel-label">CELULAR:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.cel }}</p>
-                                </div>
-                              </div>
-                              <div class="col-md-6">
-                                <b class="panel-label">CORREO:</b>
-                                <div v-for="(datames, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datames.correo }}</p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-6" v-if="fechaVinc.length > 0">
-                        <div class="panel mb-3">
-                          <div class="panel-heading">
-                            <b>HISTORIAL LABORAL</b>
-                          </div>
-                          <div class="panel-body">
-                            <div class="row">
-                              <div class="col-6">
-                                <b class="panel-label">ANTIGUEDAD LABORAL:</b>
-                                <div v-for="(fechavinc, key) in fechaVinc" :key="key">
-                                  <p class="panel-value">{{ fechavinc.vinc }}</p>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                <b class="panel-label">VALOR INGRESO:</b>
-                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                  <p class="panel-value">{{ datamesseceduc.vpension | currency }}</p>
-                                </div>
-                              </div>
-
-                              <div class="col-6">
-                                <b class="panel-label">FECHA INGRESO:</b>
-                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                  <p class="panel-value">{{ datamesseceduc.fechingr }}</p>
-                                </div>
-                              </div>
-
-                              <div class="col-6">
-                                <b class="panel-label">AREA DE DESEMPEÑO:</b>
-                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                  <p class="panel-value">{{ datamesseceduc.esquema }}</p>
-                                </div>
-                              </div>
-
-                              <div class="col-6">
-                                <b class="panel-label">CARGO:</b>
-                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                  <p class="panel-value">{{ datamesseceduc.cargo }}</p>
-                                </div>
-                              </div>
-
-                              <div class="col-6">
-                                <b class="panel-label">FECHA VINCULACIÓN:</b>
-                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                  <p class="panel-value">{{ datamesseceduc.fecnombr }}</p>
-                                </div>
-                              </div>
-
-                              <div class="col-6">
-                                <b class="panel-label">TIPO VINCULACIÓN:</b>
-                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                  <p class="panel-value">{{ datamesseceduc.nivcontr }}</p>
-                                </div>
-                              </div>
-
-                              <div class="col-6">
-                                <b class="panel-label">ESTADO LABORAL:</b>
-                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                  <p class="panel-value">{{ datamesseceduc.estlaboral }}</p>
-                                </div>
-                              </div>
-
-                              <div class="col-6">
-                                <b class="panel-label">CENTRO DE EDUCACIÓN:</b>
-                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                  <p class="panel-value">{{ datamesseceduc.centrocosto }}</p>
-                                </div>
-                              </div>
-
-                              <div class="col-6">
-                                <b class="panel-label">SEDE EN LA QUE PRESTA EL SERVICIO:</b>
-                                <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
-                                  <p class="panel-value">{{ datamesseceduc.sedecoleg }}</p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="panel panel-primary mb-3">
-                        <div class="panel-heading"><b>OBLIGACIONES VIGENTES AL DIA</b></div>
-                        <div class="panel-body">
-                          <div class="row">
-                            <div class="col-md-2">
-                              <b class="panel-label table-text">TIPO ENTIDAD:</b>
-                              <div>
-                                <p class="panel-value">-</p>
-                              </div>
-                            </div>
-
-                            <div class="col-md-2">
-                              <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
-                              <div>
-                                <p class="panel-value">-</p>
-                              </div>
-                            </div>
-
-                            <div class="col-md-2">
-                              <b class="panel-label table-text">NUMERO PAGARE:</b>
-                              <div>
-                                <p class="panel-value">-</p>
-                              </div>
-                            </div>
-
-                            <div class="col-md-2">
-                              <b class="panel-label table-text">CUOTA:</b>
-                              <div>
-                                <p class="panel-value">-</p>
-                              </div>
-                            </div>
-
-                            <div class="col-md-2">
-                              <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
-                              <div>
-                                <p class="panel-value">-</p>
-                              </div>
-                            </div>
-
-                            <div class="col-md-2">
-                              <b class="panel-label table-text">NOMBRE ENTIDAD CEDIENTE:</b>
-                              <div>
-                                <p class="panel-value">-</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="panel panel-primary mb-3">
-                          <div class="panel-heading"><b>OBLIGACIONES VIGENTES EN MORA</b></div>
-                          <div class="panel-body">
-                            <div class="row">
-                              <div class="col-2">
-                                <b class="panel-label table-text">NOMBRE ENTIDAD ACTUAL:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
-                                </div>
-                              </div>
-
-                              <div class="col-md-2">
-                                <b class="panel-label table-text">NUMERO DE PAGARE:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
-                                </div>
-                              </div>
-
-                              <div class="col-2">
-                                <b class="panel-label table-text">CUOTA DEUDA:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
-                                </div>
-                              </div>
-
-                              <div class="col-2">
-                                <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
-                                </div>
-                              </div>
-
-                              <div class="col-2">
-                                <b class="panel-label table-text">NOMBRE ENTIDAD CEDIENTE:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
-                                </div>
-                              </div>
-
-                              <div class="col-2">
-                                <b class="panel-label table-text">INCONSISTENCIA:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
         </div>
+
         <!-- <div class="col-md-12" v-if="resultPagare.cuota_compra && resultPagare.cuota_compra.length > 0">
                     <div class="panel panel-primary">
                         <div class="panel-heading"><b>CALCULO DE COMPRA DE CARTERA</b></div>
@@ -4833,11 +4415,11 @@ export default {
       descnoap: [],
       datamesfidu: [],
       datamesseceduc: [],
+      datamesseccali: [],
       deduccionesseccali: [],
       mensajedeliquidacionseceduc: [],
       embargosseccali: [],
       embargosseceduc: [],
-      datamesseccali: [],
       id_consulta: null
     };
   },
@@ -4872,6 +4454,22 @@ export default {
         this.datames = response.data;
       });
     },
+    getDatamesfidu() {
+      axios.post('/datamesfidu/consultaUnitaria', { doc: this.dataclient.doc }).then(response => {
+        this.datamesfidu = response.data.data;
+      });
+    },
+    getDatamesseceduc() {
+      axios.post('/datamesseceduc/consultaUnitaria', { doc: this.dataclient.doc }).then(response => {
+        this.datamesseceduc = response.data.data;
+      });
+    },
+    getDatamesseccali() {
+      axios.post('/consultaDatamesseccali', { doc: this.dataclient.doc }).then(response => {
+        console.log("Esto es datamesseccali",response.data);
+        this.datamesseccali = response.data.data;
+      });
+    },
     getFechaVinc() {
       axios.get(`fechavinc/${this.dataclient.doc}`).then(response => {
         this.fechaVinc = response.data;
@@ -4887,26 +4485,10 @@ export default {
         this.descnoap = response.data;
       });
     },
-    getDatamesfidu() {
-      axios.post('/datamesfidu/consultaUnitaria', { doc: this.dataclient.doc }).then(response => {
-        this.datamesfidu = response.data.data;
-      });
-    },
-    getDatamesseceduc() {
-      axios.post('/datamesseceduc/consultaUnitaria', { doc: this.dataclient.doc }).then(response => {
-        this.datamesseceduc = response.data.data;
-      });
-    },
     getDeduccionesseccali() {
       axios.post('/consultaDeduccionesseccali', { doc: this.dataclient.doc }).then(response => {
-        //console.log("Esto es deduccionesseccali",response.data);
+        console.log("Esto es deduccionesseccali",response.data);
         this.deduccionesseccali = response.data.data;
-      });
-    },
-    getDatamesseccali() {
-      axios.post('/consultaDatamesseccali', { doc: this.dataclient.doc }).then(response => {
-        //console.log("Esto es datamesseccali",response.data);
-        this.datamesseccali = response.data.data;
       });
     },
     getEmbargosseccali() {
@@ -4923,7 +4505,7 @@ export default {
     },
     getMensajedeliquidacionseceduc() {
       axios.post('/consultaMensajedeliquidacionseceduc', { doc: this.dataclient.doc }).then(response => {
-        //console.log("Esto es mensajedeliquidacionseceduc",response.data);
+        console.log("Esto es mensajedeliquidacionseceduc",response.data);
         this.mensajedeliquidacionseceduc = response.data.data;
       });
     },
