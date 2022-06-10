@@ -17,11 +17,11 @@ class CreateMensajedeliquidacionseceduTable extends Migration
             $table->increments('id');
             $table->timestamps();
             $table->text('doc');
-            $table->text('nomp');
-            $table->text('mliquid');
-            $table->text('fecdata');
-            $table->text('mesdata');
-            $table->text('anodata');
+            $table->text('nomp')->nullable();
+            $table->text('mliquid')->nullable();
+            $table->text('fecdata')->nullable();
+            $table->text('mesdata')->nullable();
+            $table->text('anodata')->nullable();
 
 
         });

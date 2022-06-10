@@ -17,19 +17,19 @@ class CreateEmbargosseccaliTable extends Migration
             $table->increments('id');
             $table->timestamps();
             $table->text('doc');
-            $table->text('nomp');
-            $table->text('docdeman');
-            $table->text('entidaddeman');
-            $table->text('fembini');
-            $table->text('fembfin');
-            $table->text('motemb');
-            $table->text('tingr');
-            $table->text('tegre');
-            $table->text('temb');
-            $table->text('netoemb');
-            $table->text('fecdata');
-            $table->text('mesdata');
-            $table->text('anodata');
+            $table->text('nomp')->nullable();
+            $table->text('docdeman')->nullable();
+            $table->text('entidaddeman')->nullable();
+            $table->text('fembini')->nullable();
+            $table->text('fembfin')->nullable();
+            $table->text('motemb')->nullable();
+            $table->text('tingr')->nullable();
+            $table->text('tegre')->nullable();
+            $table->text('temb')->nullable();
+            $table->text('netoemb')->nullable();
+            $table->text('fecdata')->nullable();
+            $table->text('mesdata')->nullable();
+            $table->text('anodata')->nullable();
         });
     }
 

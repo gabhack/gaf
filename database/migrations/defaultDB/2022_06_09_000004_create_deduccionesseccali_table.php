@@ -17,13 +17,13 @@ class CreateDeduccionesseccaliTable extends Migration
             $table->increments('id');
             $table->timestamps();
             $table->text('doc');
-            $table->text('nomp');
-            $table->text('valordeduc');
-            $table->text('centrocostdeduc');
-            $table->text('entiddeduc');
-            $table->text('fecdata');
-            $table->text('mesdata');
-            $table->text('anodata');
+            $table->text('nomp')->nullable();
+            $table->text('valordeduc')->nullable();
+            $table->text('centrocostdeduc')->nullable();
+            $table->text('entiddeduc')->nullable();
+            $table->text('fecdata')->nullable();
+            $table->text('mesdata')->nullable();
+            $table->text('anodata')->nullable();
         });
     }
 

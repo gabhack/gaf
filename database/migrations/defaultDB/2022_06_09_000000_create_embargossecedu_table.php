@@ -17,19 +17,19 @@ class CreateEmbargosseceduTable extends Migration
             $table->increments('id');
             $table->timestamps();
             $table->text('doc');
-            $table->text('nomp');
-            $table->text('nitdeman');
-            $table->text('ndeman');
-            $table->text('finiemb');
-            $table->text('ffinemb');
-            $table->text('memb');
-            $table->text('tingr');
-            $table->text('tegre');
-            $table->text('temb');
-            $table->text('neto');
-            $table->text('fecdata');
-            $table->text('mesdata');
-            $table->text('anodata');
+            $table->text('nomp')->nullable();
+            $table->text('nitdeman')->nullable();
+            $table->text('ndeman')->nullable();
+            $table->text('finiemb')->nullable();
+            $table->text('ffinemb')->nullable();
+            $table->text('memb')->nullable();
+            $table->text('tingr')->nullable();
+            $table->text('tegre')->nullable();
+            $table->text('temb')->nullable();
+            $table->text('neto')->nullable();
+            $table->text('fecdata')->nullable();
+            $table->text('mesdata')->nullable();
+            $table->text('anodata')->nullable();
 
         });
     }
