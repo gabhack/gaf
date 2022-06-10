@@ -385,6 +385,7 @@ Route::post('consultaDescnoap','DescnoapController@consultaUnitaria');
 Route::post('consultaUnitaria','DescapliController@consultaUnitaria');
 Route::post('resultadoAprobacion','DescapliController@resultadoAprobacion');
 
+// Nuevas rutas agregadas //
 Route::post('consultaDatamesseccali','DatamesseccaliController@consultaUnitaria');
 Route::post('consultaDeduccionesseccali','DeduccionesseccaliController@consultaUnitaria');
 Route::post('consultaSabana','SabanaController@consultaUnitaria');
@@ -392,6 +393,13 @@ Route::post('consultaMensajedeliquidacionseceduc','MensajedeliquidacionseceducCo
 Route::post('consultaEmbargosseccali','EmbargosseccaliController@consultaUnitaria');
 Route::post('consultaEmbargosseceduc','EmbargosseceducController@consultaUnitaria');
 
+Route::resource('datamesseccali','DatamesseccaliController');
+Route::resource('deduccionesseccali','DeduccionesseccaliController');
+Route::resource('sabana','SabanaController');
+Route::resource('mensajedeliquidacionseceduc','MensajedeliquidacionseceducController');
+Route::resource('embargosseccali','EmbargosseccaliController');
+Route::resource('embargosseceduc','EmbargosseceducController');
+//FIN //
 Route::resource('datames','DataMesController');
 Route::resource('fechavinc','FechaVincController');
 Route::resource('descapli','DescapliController');

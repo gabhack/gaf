@@ -8,7 +8,7 @@ class Embargosseceduc extends Model
 {
     protected $connection = 'pgsql';
 
-    protected $table = 'embargosseceduc';
+    protected $table = 'embargossecedu';
 
     protected $guarded = ['id'];
 

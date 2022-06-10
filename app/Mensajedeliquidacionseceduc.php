@@ -8,7 +8,7 @@ class Mensajedeliquidacionseceduc extends Model
 {
     protected $connection = 'pgsql';
 
-    protected $table = 'mensajedeliquidacionseceduc';
+    protected $table = 'mensajedeliquidacionsecedu';
 
     protected $guarded = ['id'];
 

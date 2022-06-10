@@ -4,11 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Sabana extends Model
+class Datamesseccali extends Model
 {
     protected $connection = 'pgsql';
 
-    protected $table = 'sabana';
+    protected $table = 'datamesseccali';
 
     protected $guarded = ['id'];
 

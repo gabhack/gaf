@@ -4,17 +4,15 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Sabana extends Model
+class Deduccionesseccali extends Model
 {
     protected $connection = 'pgsql';
 
-    protected $table = 'sabana';
+    protected $table = 'deduccionesseccali';
 
     protected $guarded = ['id'];
 
     protected $fillable = [
-      $table->increments('id');
-      $table->timestamps();
       'doc',
       'nomp',
       'valordeduc',
