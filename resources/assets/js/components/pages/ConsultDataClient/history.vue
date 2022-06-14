@@ -9,7 +9,7 @@
             <table class="table table-hover table-striped table-condensed table-bordered">
                 <thead>
                     <tr>
-                        <th scope="col" class="text-center">Id Consulta</th>
+                        <th scope="col" class="text-center">Id Consult</th>
                         <th scope="col" class="text-center">Cedula</th>
                         <th scope="col" class="text-center">Nombre Completo</th>
                         <th scope="col" class="text-center">Pagaduria</th>
