@@ -4,7 +4,7 @@
       <div class="row mb-5">
         <div class="col-12 d-flex align-items-center justify-content-between">
           <div class="d-flex align-items-end">
-            <img src="/img/avatar-img.svg" width="90" class="mr-3" />
+            <img src="/img/avatar-img.svg" width="90" class="mr-3"/>
             <div v-for="(datames, key) in datames" :key="key">
               <h2 class="h3 text-black-pearl font-weight-exbold d-inline-block mb-0">{{ datames.nomp }}</h2>
             </div>
@@ -17,6 +17,10 @@
       </div>
 
       <div id="consulta-container" class="row">
+
+        <!--============================
+             REALIZACION DE CONSULTA
+        ==============================-->
         <div class="panel mb-3 col-md-12">
           <div class="panel-heading">
             <b>REALIZAR CONSULTA</b>
@@ -25,11 +29,11 @@
             <div class="row">
               <div class="col-6">
                 <b class="panel-label">CEDULA:</b>
-                <input required class="form-control text-center" type="number" v-model="dataclient.doc" />
+                <input required class="form-control text-center" type="number" v-model="dataclient.doc"/>
               </div>
               <div class="col-6">
                 <b class="panel-label">NOMBRES Y APELLIDOS:</b>
-                <input required class="form-control text-center" type="text" v-model="dataclient.name" />
+                <input required class="form-control text-center" type="text" v-model="dataclient.name"/>
               </div>
               <div class="col-6">
                 <b class="panel-label">PAGADURIA:</b>
@@ -41,10 +45,10 @@
               </div>
               <div class="col-6 mt-4">
                 <button
-                  type="button"
-                  v-if="dataclient.pagaduria && dataclient.name && dataclient.doc"
-                  class="btn btn-primary"
-                  v-on:click="getData"
+                    type="button"
+                    v-if="dataclient.pagaduria && dataclient.name && dataclient.doc"
+                    class="btn btn-primary"
+                    v-on:click="getData"
                 >
                   CONSULTAR
                 </button>
@@ -52,6 +56,10 @@
             </div>
           </div>
         </div>
+
+        <!--============================
+          DATAMES
+        ==============================-->
         <div class="col-6" v-if="datames.length > 0 && dataclient.pagaduria === 'FOPEP'">
           <div class="panel mb-3">
             <div class="panel-heading">
@@ -59,9 +67,8 @@
             </div>
             <div class="panel-body">
               <div class="row">
-                <div
-                  class="col-6"
-                  v-if="
+                <div class="col-6"
+                     v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -117,9 +124,8 @@
                     <p class="panel-value">{{ datames.mnpio }}</p>
                   </div>
                 </div>
-                <div
-                  class="col-md-6"
-                  v-if="
+                <div class="col-md-6"
+                     v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -133,9 +139,8 @@
                     <p class="panel-value">{{ datames.nbanco }}</p>
                   </div>
                 </div>
-                <div
-                  class="col-md-6"
-                  v-if="
+                <div class="col-md-6"
+                     v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -172,6 +177,10 @@
           </div>
         </div>
         <!-- <div class="col-md-6" v-if="datamesseceduc.length > 0 && dataclient.pagaduria === 'FODE VALLE' || user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5' || user.roles_id === 6 || user.roles_id === '6' "> -->
+
+        <!--============================
+          DATAMESSEDUC
+        ==============================-->
         <div class="col-md-6" v-if="datamesseceduc.length > 0 && dataclient.pagaduria === 'FODE VALLE'">
           <div class="panel panel-primary mb-3">
             <div class="panel-heading"><b>INFORMACIÓN PERSONAL</b></div>
@@ -239,8 +248,8 @@
                 </div>
 
                 <div
-                  class="col-6"
-                  v-if="
+                    class="col-6"
+                    v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -256,8 +265,8 @@
                 </div>
 
                 <div
-                  class="col-6"
-                  v-if="
+                    class="col-6"
+                    v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -273,8 +282,8 @@
                 </div>
 
                 <div
-                  class="col-6"
-                  v-if="
+                    class="col-6"
+                    v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -293,6 +302,11 @@
           </div>
         </div>
 
+
+
+        <!--============================
+             datamesfidu
+        ==============================-->
         <div class="col-md-6" v-if="datamesfidu.length > 0 && dataclient.pagaduria === 'FIDUPREVISORA'">
           <div class="panel panel-primary mb-3">
             <div class="panel-heading"><b>INFORMACIÓN PERSONAL</b></div>
@@ -362,12 +376,12 @@
                                     <b class="panel-label">ESTADO CIVIL:</b>
                                     <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
                                         <p class="panel-value">{{datamesfidu.estcivil}}</p>
-                                    </div>                                
+                                    </div>
                                 </div>-->
 
                 <div
-                  class="col-6"
-                  v-if="
+                    class="col-6"
+                    v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -383,8 +397,8 @@
                 </div>
 
                 <div
-                  class="col-6"
-                  v-if="
+                    class="col-6"
+                    v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -400,8 +414,8 @@
                 </div>
 
                 <div
-                  class="col-6"
-                  v-if="
+                    class="col-6"
+                    v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -417,8 +431,8 @@
                 </div>
 
                 <div
-                  class="col-6"
-                  v-if="
+                    class="col-6"
+                    v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -434,8 +448,8 @@
                 </div>
 
                 <div
-                  class="col-6"
-                  v-if="
+                    class="col-6"
+                    v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -465,7 +479,7 @@
                                 <b class="panel-label">Documento de identidad Pensionado:</b>
                                 <div v-for="(fechavinc, key) in fechaVinc" :key="key">
                                     <p class="panel-value">{{fechavinc.doc}}</p>
-                                </div>                                
+                                </div>
                             </div> -->
                 <div class="col-6">
                   <b class="panel-label">ANTIGUEDAD LABORAL:</b>
@@ -601,8 +615,8 @@
                   </div>
                 </div>
                 <div
-                  class="col-6"
-                  v-if="
+                    class="col-6"
+                    v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -617,8 +631,8 @@
                   </div>
                 </div>
                 <div
-                  class="col-6"
-                  v-if="
+                    class="col-6"
+                    v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -633,8 +647,8 @@
                   </div>
                 </div>
                 <div
-                  class="col-6"
-                  v-if="
+                    class="col-6"
+                    v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -661,7 +675,7 @@
                 <!-- <div class="col-md-2" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
                                     <b class="panel-label table-text">SELECCIONE PERIODO DE DATA:</b>
                                     <div v-for="(descapli, key) in descapli" :key="key">
-                                        <input type="checkbox" class="mr-2" v-on:click="(e)=>vAplicado(e.target.checked, descapli, descapli.pagare, descapli.nomtercero)"/><p class="panel-value">{{descapli.periodo}}</p>                                        
+                                        <input type="checkbox" class="mr-2" v-on:click="(e)=>vAplicado(e.target.checked, descapli, descapli.pagare, descapli.nomtercero)"/><p class="panel-value">{{descapli.periodo}}</p>
                                     </div>
                                 </div> -->
                 <div class="col-md-2" v-if="dataclient.pagaduria === 'FOPEP'">
@@ -775,8 +789,8 @@
                 </div>
 
                 <div
-                  class="col-md-6"
-                  v-if="
+                    class="col-md-6"
+                    v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -794,18 +808,18 @@
                                     <b class="panel-label table-text">VALOR TOTAL DEUDA:</b>
                                     <div>
                                         <p class="panel-value">-</p>
-                                    </div> 
+                                    </div>
                                 </div>
                                 <div class="col-md-2" v-if="dataclient.pagaduria === 'FIDUPREVISORA'">
                                     <b class="panel-label table-text">VALOR TOTAL DEUDA:</b>
                                     <div>
                                         <p class="panel-value">-</p>
-                                    </div> 
+                                    </div>
                                 </div>-->
 
                 <div
-                  class="col-md-6"
-                  v-if="
+                    class="col-md-6"
+                    v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -823,13 +837,13 @@
                                     <b class="panel-label table-text">VALOR PAGADO DEUDA:</b>
                                     <div>
                                         <p class="panel-value">-</p>
-                                    </div> 
+                                    </div>
                                 </div>
                                 <div class="col-md-2" v-if="dataclient.pagaduria === 'FIDUPREVISORA'">
                                     <b class="panel-label table-text">VALOR PAGADO DEUDA:</b>
                                     <div>
                                         <p class="panel-value">-</p>
-                                    </div> 
+                                    </div>
                                 </div>-->
               </div>
             </div>
@@ -842,8 +856,8 @@
             <div class="panel-body">
               <div class="row">
                 <div
-                  class="col-3"
-                  v-if="
+                    class="col-3"
+                    v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -855,8 +869,8 @@
                   <b class="panel-label">SELECCIONE PERIODO DE DATA:</b>
                   <div v-for="(descnoap, key) in descnoap" :key="key">
                     <input
-                      type="checkbox"
-                      v-on:click="e => vAplicado(e.target.checked, descnoap, descnoap.pagare, descnoap.nomtercero)"
+                        type="checkbox"
+                        v-on:click="e => vAplicado(e.target.checked, descnoap, descnoap.pagare, descnoap.nomtercero)"
                     />
                     <p>{{ descnoap.clase }}</p>
                   </div>
@@ -958,8 +972,8 @@
                 </div>
 
                 <div
-                  class="col-6"
-                  v-if="
+                    class="col-6"
+                    v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -975,8 +989,8 @@
                 </div>
 
                 <div
-                  class="col-6"
-                  v-if="
+                    class="col-6"
+                    v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -992,8 +1006,8 @@
                 </div>
 
                 <div
-                  class="col-6"
-                  v-if="
+                    class="col-6"
+                    v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -1043,7 +1057,7 @@
                   </div>
                   <button type="button" class="btn btn-primary" v-on:click="dataPlusFode = true">Ver mas</button>
                   <button type="button" class="btn btn-secondary" v-on:click="dataPlusFode = false">Cerrar</button>
-                    <!-- Mostrando respuesta nueva en btn Ver mas FODE -->
+                  <!-- Mostrando respuesta nueva en btn Ver mas FODE -->
                   <div class="col-md-12 tables-space" v-if="dataPlusFode">
                     <div class="row">
                       <div class="col-6">
@@ -1096,8 +1110,8 @@
                                 </div>
                               </div>
                               <div
-                                class="col-md-6"
-                                v-if="
+                                  class="col-md-6"
+                                  v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -1112,8 +1126,8 @@
                                 </div>
                               </div>
                               <div
-                                class="col-md-6"
-                                v-if="
+                                  class="col-md-6"
+                                  v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -1280,55 +1294,55 @@
                       </div>
                     </div>
                     <div class="col-md-12">
-                        <div class="panel panel-primary mb-3">
-                          <div class="panel-heading"><b>OBLIGACIONES VIGENTES EN MORA</b></div>
-                          <div class="panel-body">
-                            <div class="row">
-                              <div class="col-2">
-                                <b class="panel-label table-text">NOMBRE ENTIDAD ACTUAL:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
-                                </div>
+                      <div class="panel panel-primary mb-3">
+                        <div class="panel-heading"><b>OBLIGACIONES VIGENTES EN MORA</b></div>
+                        <div class="panel-body">
+                          <div class="row">
+                            <div class="col-2">
+                              <b class="panel-label table-text">NOMBRE ENTIDAD ACTUAL:</b>
+                              <div>
+                                <p class="panel-value">-</p>
                               </div>
+                            </div>
 
-                              <div class="col-md-2">
-                                <b class="panel-label table-text">NUMERO DE PAGARE:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
-                                </div>
+                            <div class="col-md-2">
+                              <b class="panel-label table-text">NUMERO DE PAGARE:</b>
+                              <div>
+                                <p class="panel-value">-</p>
                               </div>
+                            </div>
 
-                              <div class="col-2">
-                                <b class="panel-label table-text">CUOTA DEUDA:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
-                                </div>
+                            <div class="col-2">
+                              <b class="panel-label table-text">CUOTA DEUDA:</b>
+                              <div>
+                                <p class="panel-value">-</p>
                               </div>
+                            </div>
 
-                              <div class="col-2">
-                                <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
-                                </div>
+                            <div class="col-2">
+                              <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
+                              <div>
+                                <p class="panel-value">-</p>
                               </div>
+                            </div>
 
-                              <div class="col-2">
-                                <b class="panel-label table-text">NOMBRE ENTIDAD CEDIENTE:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
-                                </div>
+                            <div class="col-2">
+                              <b class="panel-label table-text">NOMBRE ENTIDAD CEDIENTE:</b>
+                              <div>
+                                <p class="panel-value">-</p>
                               </div>
+                            </div>
 
-                              <div class="col-2">
-                                <b class="panel-label table-text">INCONSISTENCIA:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
-                                </div>
+                            <div class="col-2">
+                              <b class="panel-label table-text">INCONSISTENCIA:</b>
+                              <div>
+                                <p class="panel-value">-</p>
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
+                    </div>
                   </div>
                 </div>
                 <div class="col-12 tables-space">
@@ -1391,8 +1405,8 @@
                                 </div>
                               </div>
                               <div
-                                class="col-md-6"
-                                v-if="
+                                  class="col-md-6"
+                                  v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -1407,8 +1421,8 @@
                                 </div>
                               </div>
                               <div
-                                class="col-md-6"
-                                v-if="
+                                  class="col-md-6"
+                                  v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -1654,8 +1668,8 @@
                                 </div>
                               </div>
                               <div
-                                class="col-md-6"
-                                v-if="
+                                  class="col-md-6"
+                                  v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -1670,8 +1684,8 @@
                                 </div>
                               </div>
                               <div
-                                class="col-md-6"
-                                v-if="
+                                  class="col-md-6"
+                                  v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -1838,55 +1852,55 @@
                       </div>
                     </div>
                     <div class="col-md-12">
-                        <div class="panel panel-primary mb-3">
-                          <div class="panel-heading"><b>OBLIGACIONES VIGENTES EN MORA</b></div>
-                          <div class="panel-body">
-                            <div class="row">
-                              <div class="col-2">
-                                <b class="panel-label table-text">NOMBRE ENTIDAD ACTUAL:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
-                                </div>
+                      <div class="panel panel-primary mb-3">
+                        <div class="panel-heading"><b>OBLIGACIONES VIGENTES EN MORA</b></div>
+                        <div class="panel-body">
+                          <div class="row">
+                            <div class="col-2">
+                              <b class="panel-label table-text">NOMBRE ENTIDAD ACTUAL:</b>
+                              <div>
+                                <p class="panel-value">-</p>
                               </div>
+                            </div>
 
-                              <div class="col-md-2">
-                                <b class="panel-label table-text">NUMERO DE PAGARE:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
-                                </div>
+                            <div class="col-md-2">
+                              <b class="panel-label table-text">NUMERO DE PAGARE:</b>
+                              <div>
+                                <p class="panel-value">-</p>
                               </div>
+                            </div>
 
-                              <div class="col-2">
-                                <b class="panel-label table-text">CUOTA DEUDA:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
-                                </div>
+                            <div class="col-2">
+                              <b class="panel-label table-text">CUOTA DEUDA:</b>
+                              <div>
+                                <p class="panel-value">-</p>
                               </div>
+                            </div>
 
-                              <div class="col-2">
-                                <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
-                                </div>
+                            <div class="col-2">
+                              <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
+                              <div>
+                                <p class="panel-value">-</p>
                               </div>
+                            </div>
 
-                              <div class="col-2">
-                                <b class="panel-label table-text">NOMBRE ENTIDAD CEDIENTE:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
-                                </div>
+                            <div class="col-2">
+                              <b class="panel-label table-text">NOMBRE ENTIDAD CEDIENTE:</b>
+                              <div>
+                                <p class="panel-value">-</p>
                               </div>
+                            </div>
 
-                              <div class="col-2">
-                                <b class="panel-label table-text">INCONSISTENCIA:</b>
-                                <div>
-                                  <p class="panel-value">-</p>
-                                </div>
+                            <div class="col-2">
+                              <b class="panel-label table-text">INCONSISTENCIA:</b>
+                              <div>
+                                <p class="panel-value">-</p>
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
+                    </div>
                   </div>
                 </div>
                 <div class="col-12 tables-space">
@@ -1949,8 +1963,8 @@
                                 </div>
                               </div>
                               <div
-                                class="col-md-6"
-                                v-if="
+                                  class="col-md-6"
+                                  v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -1965,8 +1979,8 @@
                                 </div>
                               </div>
                               <div
-                                class="col-md-6"
-                                v-if="
+                                  class="col-md-6"
+                                  v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -2224,8 +2238,8 @@
                                 </div>
                               </div>
                               <div
-                                class="col-md-6"
-                                v-if="
+                                  class="col-md-6"
+                                  v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -2240,8 +2254,8 @@
                                 </div>
                               </div>
                               <div
-                                class="col-md-6"
-                                v-if="
+                                  class="col-md-6"
+                                  v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -2496,8 +2510,8 @@
                                 </div>
                               </div>
                               <div
-                                class="col-md-6"
-                                v-if="
+                                  class="col-md-6"
+                                  v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -2512,8 +2526,8 @@
                                 </div>
                               </div>
                               <div
-                                class="col-md-6"
-                                v-if="
+                                  class="col-md-6"
+                                  v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -2703,7 +2717,7 @@
         <!-- <div class="col-md-12" v-if="resultPagare.cuota_compra && resultPagare.cuota_compra.length > 0">
                     <div class="panel panel-primary">
                         <div class="panel-heading"><b>CALCULO DE COMPRA DE CARTERA</b></div>
-                        <div class="panel-body">    
+                        <div class="panel-body">
                             <div class="row">
                                 <div class="col-6">
                                     <b class="panel-label">Consecutivo:</b>
@@ -2715,130 +2729,130 @@
                                     <b class="panel-label">Estado:</b>
                                     <div>
                                         <p class="panel-value">{{resultPagare.estado}}</p>
-                                    </div>                                
+                                    </div>
                                 </div>
                                 <div class="col-6">
                                     <b class="panel-label">Fecha consulta:</b>
                                     <div>
                                         <p class="panel-value">{{resultPagare.fecha_consulta}}</p>
-                                    </div>                                
+                                    </div>
                                 </div>
                                 <div class="col-6">
                                     <b class="panel-label">Cedula:</b>
                                     <div>
                                         <p class="panel-value">{{resultPagare.doc}}</p>
-                                    </div>                                
+                                    </div>
                                 </div>
                                 <div class="col-6">
                                     <b class="panel-label">Nombre:</b>
                                     <div>
                                         <p class="panel-value">{{resultPagare.nombre}}</p>
-                                    </div>                                
+                                    </div>
                                 </div>
                                 <div class="col-6">
                                     <b class="panel-label">Tipo de credito:</b>
                                     <div>
                                         <p class="panel-value">{{dataclient.tipo_credito}}</p>
-                                    </div>                                
+                                    </div>
                                 </div>
 
                                 <div class="col-6">
                                     <b class="panel-label">Cupo Lib Inversion:</b>
                                     <div>
                                         <p class="panel-value">{{dataclient.clibinv}}</p>
-                                    </div>                                
+                                    </div>
                                 </div>
 
                                 <div class="col-6">
                                     <b class="panel-label">Cuota Compra:</b>
                                     <div v-for="(libInv, key) in resultPagare.cuota_compra" :key="key">
                                         <p class="panel-value">{{libInv.vaplicado}}</p>
-                                    </div>                                
+                                    </div>
                                 </div>
 
                                 <div class="col-6">
                                     <b class="panel-label">Entidad:</b>
                                     <div v-for="(row, index) in filteredRows" :key="index">
                                         <p class="panel-value">{{row}}</p>
-                                    </div>                                
+                                    </div>
                                 </div>
 
                                 <div class="col-6">
                                     <b class="panel-label">Pagaduria:</b>
                                     <div>
                                         <p class="panel-value">{{resultPagare.pagaduria}}</p>
-                                    </div>                                
+                                    </div>
                                 </div>
 
                                 <div class="col-6">
                                     <b class="panel-label">Vr. Credito:</b>
                                     <div>
                                         <p class="panel-value">{{resultPagare.vr_credito}}</p>
-                                    </div>                                
+                                    </div>
                                 </div>
 
                                 <div class="col-6">
                                     <b class="panel-label">Vr. Desembolso:</b>
                                     <div>
                                         <p class="panel-value">{{resultPagare.vr_desembolso}}</p>
-                                    </div>                                
+                                    </div>
                                 </div>
 
                                 <div class="col-6">
                                     <b class="panel-label">Plazo:</b>
                                     <div>
                                         <p class="panel-value">{{resultPagare.plazo}}</p>
-                                    </div>                                
+                                    </div>
                                 </div>
 
                                 <div class="col-6">
                                     <b class="panel-label">Cuota Cred:</b>
                                     <div>
                                         <p class="panel-value">{{resultPagare.cuota_cred}}</p>
-                                    </div>                                
+                                    </div>
                                 </div>
 
                                 <div class="col-6">
                                     <b class="panel-label">Aprobado:</b>
                                     <div>
                                         <p class="panel-value">{{resultPagare.aprobado}}</p>
-                                    </div>                                
+                                    </div>
                                 </div>
 
                                 <div class="col-6">
                                     <b class="panel-label">% de incorporacion:</b>
                                     <div>
                                         <p class="panel-value">{{resultPagare.pct_incorporacion}}</p>
-                                    </div>                                
+                                    </div>
                                 </div>
 
                                 <div class="col-6">
                                     <b class="panel-label">Cuota Maxima de incorporacion:</b>
                                     <div>
                                         <p class="panel-value">{{resultPagare.max_incorporacion}}</p>
-                                    </div>                                
+                                    </div>
                                 </div>
 
                                 <div class="col-6">
                                     <b class="panel-label">Fecha respuesta consulta:</b>
                                     <div>
                                         <p class="panel-value">{{resultPagare.fec_rta_consulta}}</p>
-                                    </div>                                
+                                    </div>
                                 </div>
 
                                 <div class="col-6">
                                     <b class="panel-label">Fecha Vinculacion:</b>
                                     <div>
                                         <p class="panel-value">{{resultPagare.fecha_vinculacion}}</p>
-                                    </div>                                
+                                    </div>
                                 </div>
 
                                 <div class="col-6">
                                     <b class="panel-label">Tipo Vinculacion:</b>
                                     <div>
                                         <p class="panel-value">{{resultPagare.tipo_vinculacion}}</p>
-                                    </div>                                
-                                </div>                                
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -2918,14 +2932,16 @@
 .table-text {
   font-size: 12px;
 }
+
 .tables-space {
   margin-top: 15px !important;
 }
 </style>
 <script src="print.js"></script>
-<script rel="stylesheet" type="text/css" href="print.css" />
+<script rel="stylesheet" type="text/css" href="print.css"/>
 <script>
 import printJS from 'print-js';
+
 export default {
   props: ['user'],
   data() {
@@ -2971,12 +2987,18 @@ export default {
   },
   methods: {
     getData() {
-      this.getDatames();
+      if (this.dataclient.pagaduria == 'FOPEP') {
+        this.getDatames();
+      } else if (this.dataclient.pagaduria == 'FODE VALLE') {
+        this.getDatamesseceduc();
+      } else if (this.dataclient.pagaduria == 'FIDUPREVISORA') {
+        this.getDatamesfidu();
+      }
       this.getFechaVinc();
       this.getDescapli();
       this.getDescnoap();
-      this.getDatamesfidu();
-      this.getDatamesseceduc();
+
+
     },
     getDatames() {
       axios.get(`datames/${this.dataclient.doc}`).then(response => {
@@ -2995,18 +3017,18 @@ export default {
     },
     getDescnoap() {
       axios.get(`descnoap/${this.dataclient.doc}`).then(response => {
-        console.log(response.data);
         this.descnoap = response.data;
       });
     },
     getDatamesfidu() {
-      axios.post('/datamesfidu/consultaUnitaria', { doc: this.dataclient.doc }).then(response => {
+      axios.post('/datamesfidu/consultaUnitaria', {doc: this.dataclient.doc}).then(response => {
         this.datamesfidu = response.data.data;
       });
     },
     getDatamesseceduc() {
-      axios.post('/datamesseceduc/consultaUnitaria', { doc: this.dataclient.doc }).then(response => {
-        console.log(response.data);
+      axios.post('/datamesseceduc/consultaUnitaria', {doc: this.dataclient.doc}).then(response => {
+        alert('ss')
+        console.log(response.data.data);
         this.datamesseceduc = response.data.data;
       });
     },
@@ -3023,29 +3045,29 @@ export default {
     },
     getDataClient() {
       axios
-        .post('consultaDescnoap', { data: this.dataclient })
-        .then(response => {
-          if (response.data.message === 'El cliente seleccionado tiene inconsistencias.') {
-            this.consultaDescapli = response.data.data;
-          } else {
-            axios
-              .post('consultaUnitaria', { data: this.dataclient })
-              .then(response => {
-                if (response.data.message === 'El cliente seleccionado tiene inconsistencias.') {
-                  toastr.success(response.data.message);
-                  this.consultaDescapli = response.data.data;
-                } else {
-                  this.consultaDescapli = response.data.data;
-                }
-              })
-              .catch(error => {
-                toastr.success(response.data.message);
-              });
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
+          .post('consultaDescnoap', {data: this.dataclient})
+          .then(response => {
+            if (response.data.message === 'El cliente seleccionado tiene inconsistencias.') {
+              this.consultaDescapli = response.data.data;
+            } else {
+              axios
+                  .post('consultaUnitaria', {data: this.dataclient})
+                  .then(response => {
+                    if (response.data.message === 'El cliente seleccionado tiene inconsistencias.') {
+                      toastr.success(response.data.message);
+                      this.consultaDescapli = response.data.data;
+                    } else {
+                      this.consultaDescapli = response.data.data;
+                    }
+                  })
+                  .catch(error => {
+                    toastr.success(response.data.message);
+                  });
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
     },
 
     vAplicado(value, data, pagareSelect, nomterSelected) {
@@ -3075,22 +3097,22 @@ export default {
           return item !== nomterSelected;
         });
         this.dataclient.nomterSelect =
-          nomterSelect.length === 0 ? nomterSelected : this.nomterSelect.push(nomterSelected);
+            nomterSelect.length === 0 ? nomterSelected : this.nomterSelect.push(nomterSelected);
       }
       console.log(this.dataclient);
     },
 
     sendPagare() {
       axios
-        .post('resultadoAprobacion', { data: this.dataclient })
-        .then(response => {
-          toastr.success(response.data.message);
-          this.id_consulta = response.data.data.id_consulta;
-          this.resultPagare = response.data.data;
-        })
-        .catch(error => {
-          console.log(error);
-        });
+          .post('resultadoAprobacion', {data: this.dataclient})
+          .then(response => {
+            toastr.success(response.data.message);
+            this.id_consulta = response.data.data.id_consulta;
+            this.resultPagare = response.data.data;
+          })
+          .catch(error => {
+            console.log(error);
+          });
     },
 
     print() {

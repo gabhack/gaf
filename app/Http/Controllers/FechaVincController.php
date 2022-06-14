@@ -9,16 +9,18 @@ use Excel;
 
 class FechaVincController extends Controller
 {
-  public function import (Request $request){
-    set_time_limit(0);
-    if($request->hasFile('file')){
-      $path = $request->file('file')->getRealPath();
-      $data = Excel::import(new FechaVincImport, request()->file('file'));
-      return response()->json(['message'=>'Importación Realizada'],200);
-    }else{
-      return response()->json(['message'=>'Debe Seleccionar un archivo'],400);
+    public function import(Request $request)
+    {
+        set_time_limit(0);
+        if ($request->hasFile('file')) {
+            $path = $request->file('file')->getRealPath();
+            $data = Excel::import(new FechaVincImport, request()->file('file'));
+            return response()->json(['message' => 'Importación Realizada'], 200);
+        } else {
+            return response()->json(['message' => 'Debe Seleccionar un archivo'], 400);
+        }
     }
-  }
+
     /**
      * Display a listing of the resource.
      *
@@ -26,7 +28,7 @@ class FechaVincController extends Controller
      */
     public function index()
     {
-      
+
     }
 
     /**
@@ -42,7 +44,7 @@ class FechaVincController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -53,19 +55,19 @@ class FechaVincController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\FechaVinc  $fechaVinc
+     * @param \App\FechaVinc $fechaVinc
      * @return \Illuminate\Http\Response
      */
     public function show($doc)
-    {      
-      $fechaVinc = FechaVinc::where('doc',$doc)->get();
-      return response()->json($fechaVinc);
+    {
+        $fechaVinc = FechaVinc::where('doc', $doc)->first();
+        return response()->json($fechaVinc);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\FechaVinc  $fechaVinc
+     * @param \App\FechaVinc $fechaVinc
      * @return \Illuminate\Http\Response
      */
     public function edit(FechaVinc $fechaVinc)
@@ -76,8 +78,8 @@ class FechaVincController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\FechaVinc  $fechaVinc
+     * @param \Illuminate\Http\Request $request
+     * @param \App\FechaVinc $fechaVinc
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, FechaVinc $fechaVinc)
@@ -88,7 +90,7 @@ class FechaVincController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\FechaVinc  $fechaVinc
+     * @param \App\FechaVinc $fechaVinc
      * @return \Illuminate\Http\Response
      */
     public function destroy(FechaVinc $fechaVinc)

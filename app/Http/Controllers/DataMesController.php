@@ -30,7 +30,7 @@ class DataMesController extends Controller
      */
     public function index(Request $request)
     {
-        
+
     }
 
     /**
@@ -62,7 +62,7 @@ class DataMesController extends Controller
      */
     public function show($doc)
     {
-        $datames = DataMes::where('doc',$doc)->get();
+        $datames = DataMes::where('doc',$doc)->first();
         return response()->json($datames);
     }
 

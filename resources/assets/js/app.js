@@ -61,6 +61,7 @@ Vue.component('integration', require('./components/pages/Integrations/index.vue'
 //imports Data
 Vue.component('imports-component', require('./components/pages/MassiveCharge/index.vue').default);
 Vue.component('client-data-component', require('./components/pages/ConsultDataClient/index.vue').default);
+Vue.component('client-data-component-draft', require('./components/pages/ConsultDataClientDraft/index.vue').default);
 Vue.component('refund-component', require('./components/pages/ConsultDataClient/refundCartera.vue').default);
 Vue.component('history-component', require('./components/pages/ConsultDataClient/history.vue').default);
 Vue.component('detail-history-component', require('./components/pages/ConsultDataClient/detailhistory.vue').default);
