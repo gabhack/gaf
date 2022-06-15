@@ -22,7 +22,7 @@
           <!--============================
                  FOPEP
           ==============================-->
-          <template v-if="pagaduriaType === 'FOPEP' && datames">
+          <template v-if="datames">
 
             <div class="col-6">
               <b class="panel-label">TIPO PENSION:</b>
@@ -70,7 +70,7 @@
                 FODE VALLE
           ==============================-->
 
-          <template v-if="pagaduriaType === 'FODE VALLE' && datamesseceduc">
+          <template v-if="datamesseceduc">
 
 
             <div class="col-6">
@@ -142,7 +142,7 @@
           <!--============================
                FIDUPREVISORA
           ==============================-->
-          <template v-if="pagaduriaType === 'FIDUPREVISORA' && datamesfidu">
+          <template v-if="datamesfidu">
 
             <div class="col-6">
               <b class="panel-label">VALOR INGRESO:</b>
@@ -172,6 +172,42 @@
               </div>
             </div>
           </template>
+
+
+          <!--============================
+            DATAMESCALI SECCALI
+          ==============================-->
+          <template v-if="datamesseccali">
+
+            <div class="col-6">
+              <b class="panel-label">VALOR INGRESO:</b>
+              <div>
+                <p class="panel-value">{{ datamesseccali.vpension | currency }}</p>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <b class="panel-label">VINCULACION:</b>
+              <div>
+                <p class="panel-value">{{ datamesseccali.vinc }}</p>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <b class="panel-label">FECHA DE PAGO PENSION:</b>
+              <div>
+                <p class="panel-value">{{ datamesseccali.fechpago }}</p>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <b class="panel-label">VALOR DESCUENTO:</b>
+              <div>
+                <p class="panel-value">{{ datamesseccali.vdescbruto | currency }}</p>
+              </div>
+            </div>
+          </template>
+
 
           <div
               class="col-6"
@@ -230,7 +266,7 @@
 <script>
 export default {
   name: "EmploymentHistory",
-  props: ['fechavinc', 'pagaduriaType', 'datames', 'datamesseceduc', 'datamesfidu', 'user'],
+  props: ['fechavinc', 'pagaduriaType', 'datames', 'datamesseceduc', 'datamesfidu', 'datamesseccali', 'user'],
   created() {
   },
 }

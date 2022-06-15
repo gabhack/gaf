@@ -11,7 +11,9 @@
 |
 */
 
- Route::get('/tests', function() {
+use App\Http\Controllers\PagaduriasController;
+
+Route::get('/tests', function() {
 //     $exitCode = Artisan::call('cache:clear');
 ////     $exitCode = Artisan::call('config:cache');
 //     return bcrypt('password');
@@ -401,6 +403,10 @@ Route::resource('sabana','SabanaController');
 Route::resource('mensajedeliquidacionseceduc','MensajedeliquidacionseceducController');
 Route::resource('embargosseccali','EmbargosseccaliController');
 Route::resource('embargosseceduc','EmbargosseceducController');
+
+
+
+
 //FIN //
 Route::resource('datames','DataMesController');
 Route::resource('fechavinc','FechaVincController');
@@ -420,8 +426,14 @@ Route::resource('/validate','SolicitudValidacionController');
 Route::resource('/datamesfidu','DatamesfiduController');
 Route::post('/datamesfidu/consultaUnitaria','DatamesfiduController@consultaUnitaria');
 Route::post('/datamesseceduc/consultaUnitaria','DatamesseceducController@consultaUnitaria');
+Route::post('/pagadurias/consultaUnitaria','DatamesseceducController@allPagadurias');
 Route::resource('/datamesseceduc','DatamesseceducController');
+
+
 
 Route::resource('/cotizer-data', dataCotizerController::class)->only(['store', 'index', 'show', 'update','destroy']);
 Route::view('/solicitud','creditCalculator');
 Route::view('/RegisterCredit','registerCredit');
+
+
+

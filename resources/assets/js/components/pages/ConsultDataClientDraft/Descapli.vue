@@ -6,43 +6,73 @@
         <div class="row">
           <div class="col-md-2">
             <b class="panel-label table-text">TIPO ENTIDAD:</b>
-            <div v-for="(descapli, key) in descapli" :key="key">
-              <p class="panel-value">{{ descapli.clase }}</p>
+            <template v-if="descapli.length">
+              <div v-for="(descapli, key) in descapli" :key="key">
+                <p class="panel-value">{{ descapli.clase }}</p>
+              </div>
+            </template>
+            <div v-else>
+              <p class="panel-value">-</p>
             </div>
           </div>
 
           <div class="col-md-2">
             <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
-            <div v-for="(descapli, key) in descapli" :key="key">
-              <p class="panel-value">{{ descapli.nomtercero }}</p>
+            <template v-if="descapli.length">
+              <div v-for="(descapli, key) in descapli" :key="key">
+                <p class="panel-value">{{ descapli.nomtercero }}</p>
+              </div>
+            </template>
+            <div v-else>
+              <p class="panel-value">-</p>
             </div>
           </div>
 
           <div class="col-md-2">
             <b class="panel-label table-text">NUMERO PAGARE:</b>
-            <div v-for="(descapli, key) in descapli" :key="key">
-              <p class="panel-value">{{ descapli.pagare }}</p>
+            <template v-if="descapli.length">
+              <div v-for="(descapli, key) in descapli" :key="key">
+                <p class="panel-value">{{ descapli.pagare }}</p>
+              </div>
+            </template>
+            <div v-else>
+              <p class="panel-value">-</p>
             </div>
           </div>
 
           <div class="col-md-2">
             <b class="panel-label table-text">CUOTA:</b>
-            <div v-for="(descapli, key) in descapli" :key="key">
-              <p class="panel-value">{{ descapli.vaplicado | currency }}</p>
+            <template v-if="descapli.length">
+              <div v-for="(descapli, key) in descapli" :key="key">
+                <p class="panel-value">{{ descapli.vaplicado | currency }}</p>
+              </div>
+            </template>
+            <div v-else>
+              <p class="panel-value">-</p>
             </div>
           </div>
 
           <div class="col-md-2">
             <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
-            <div v-for="(descapli, key) in descapli" :key="key">
-              <p class="panel-value">{{ descapli.fgrab }}</p>
+            <template v-if="descapli.length">
+              <div v-for="(descapli, key) in descapli" :key="key">
+                <p class="panel-value">{{ descapli.fgrab }}</p>
+              </div>
+            </template>
+            <div v-else>
+              <p class="panel-value">-</p>
             </div>
           </div>
 
           <div class="col-md-2">
             <b class="panel-label table-text">NOMBRE ENTIDAD CEDIENTE:</b>
-            <div v-for="(descapli, key) in descapli" :key="key">
-              <p class="panel-value">{{ descapli.nonentant }}</p>
+            <template v-if="descapli.length">
+              <div v-for="(descapli, key) in descapli" :key="key">
+                <p class="panel-value">{{ descapli.nonentant }}</p>
+              </div>
+            </template>
+            <div v-else>
+              <p class="panel-value">-</p>
             </div>
           </div>
         </div>

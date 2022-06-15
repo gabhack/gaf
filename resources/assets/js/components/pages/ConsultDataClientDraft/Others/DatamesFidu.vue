@@ -165,6 +165,8 @@
 export default {
   name: "DatamesFidu",
   props: ['datamesfidu', 'user'],
+  created() {
+  }
 }
 </script>
 

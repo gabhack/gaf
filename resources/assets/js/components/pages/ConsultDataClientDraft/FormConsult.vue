@@ -13,23 +13,41 @@
           <b class="panel-label">NOMBRES Y APELLIDOS:</b>
           <input required class="form-control text-center" type="text" v-model="dataclient.name"/>
         </div>
+
         <div class="col-6">
-          <b class="panel-label">PAGADURIA:</b>
-          <select required class="form-control" v-model="dataclient.pagaduria">
-            <option value="FOPEP">FOPEP</option>
-            <option value="FIDUPREVISORA">FIDUPREVISORA</option>
-            <option value="FODE VALLE">FODE VALLE</option>
-          </select>
+          <template v-if="dataclient.pagadurias">
+            <b class="panel-label">PAGADURIA:</b>
+            <select required class="form-control" v-model="dataclient.pagaduria">
+              <option v-if="dataclient.pagadurias.datames" value="FOPEP">FOPEP</option>
+              <option v-if="dataclient.pagadurias.datamesfidu" value="FIDUPREVISORA">FIDUPREVISORA</option>
+              <option v-if="dataclient.pagadurias.datamesseceduc" value="FODE VALLE">FODE VALLE</option>
+              <option v-if="dataclient.pagadurias.datamesseccali" value="SECCALI">SECCALI</option>
+            </select>
+          </template>
         </div>
+
         <div class="col-6 mt-4">
           <button
               type="button"
-              v-if="dataclient.pagaduria && dataclient.name && dataclient.doc"
+              v-if="dataclient.doc && dataclient.name"
               class="btn btn-primary"
-              @click="emitInfo">
-            CONSULTAR
+              @click="getAllPagadurias">
+            CONSULTAR PAGADURIAS
           </button>
         </div>
+
+
+        <!--        <div class="col-6 mt-4">-->
+        <!--          <button-->
+        <!--              type="button"-->
+        <!--              v-if="dataclient.pagaduria && dataclient.name && dataclient.doc"-->
+        <!--              class="btn btn-primary"-->
+        <!--              @click="emitInfo">-->
+        <!--            CONSULTAR-->
+        <!--          </button>-->
+        <!--        </div>-->
+
+
       </div>
     </div>
   </div>
@@ -44,11 +62,24 @@ export default {
         doc: '',
         name: '',
         pagaduria: '',
-      }
+        pagadurias: null,
+      },
+
     }
   },
   methods: {
     emitInfo() {
+      this.getAllPagadurias();
+      // this.$emit('emitInfo', this.dataclient);
+    },
+    async getAllPagadurias() {
+      const response = await axios.post('/pagadurias/consultaUnitaria', {doc: this.dataclient.doc});
+      this.dataclient.pagadurias = response.data;
+      return Promise.resolve(response.data);
+    },
+  },
+  watch: {
+    'dataclient.pagaduria': function (val) {
       this.$emit('emitInfo', this.dataclient);
     }
   }

@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\DataMes;
+use App\Datamesfidu;
+use App\Datamesseccali;
+use App\Datamesseceduc;
 use Illuminate\Http\Request;
 
 class PagaduriasController extends Controller
@@ -16,7 +20,7 @@ class PagaduriasController extends Controller
         $this->middleware('auth');
         $this->middleware('role:ADMIN_SISTEMA');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -41,23 +45,23 @@ class PagaduriasController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-		$pagaduria = new \App\Pagadurias;
-		$pagaduria->codigo = strtoupper(str_replace(" ", "_", $request->input('pagaduria')));
-		$pagaduria->pagaduria = strtoupper($request->input('pagaduria'));
-		$pagaduria->save();
-		
-		return redirect('pagadurias');
+        $pagaduria = new \App\Pagadurias;
+        $pagaduria->codigo = strtoupper(str_replace(" ", "_", $request->input('pagaduria')));
+        $pagaduria->pagaduria = strtoupper($request->input('pagaduria'));
+        $pagaduria->save();
+
+        return redirect('pagadurias');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -68,40 +72,44 @@ class PagaduriasController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
         $pagaduria = \App\Pagadurias::find($id);
-		return view("pagadurias/editar")->with(["pagaduria" => $pagaduria]);
+        return view("pagadurias/editar")->with(["pagaduria" => $pagaduria]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         $pagaduria = \App\Pagadurias::find($id);
-		$pagaduria->pagaduria = strtoupper($request->input('pagaduria'));
-		$pagaduria->save();
-		
-		return redirect('pagadurias');
+        $pagaduria->pagaduria = strtoupper($request->input('pagaduria'));
+        $pagaduria->save();
+
+        return redirect('pagadurias');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        \App\Pagadurias::find($id)->delete();		
-		return redirect('pagadurias');
+        \App\Pagadurias::find($id)->delete();
+        return redirect('pagadurias');
     }
+
+
+
+
 }
