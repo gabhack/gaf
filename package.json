@@ -33,6 +33,7 @@
     "toastr": "^2.1.4",
     "vue-currency-filter": "^5.2.0",
     "vue-iframes": "0.0.19",
+    "vue-loading-overlay": "^3.0.1",
     "vue-swal": "^1.0.0",
     "vuelidate": "^0.7.6",
     "vuex": "^4.0.2"

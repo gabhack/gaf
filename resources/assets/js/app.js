@@ -26,6 +26,11 @@ Vue.use(VueIframe)
 import VueCurrencyFilter from 'vue-currency-filter';
 Vue.use(VueCurrencyFilter, { symbol: '$' });
 
+
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
+Vue.use(Loading);
+
 import VueSwal from 'vue-swal'
 Vue.use(VueSwal)
 
@@ -36,6 +41,7 @@ Vue.use(VueSwal)
  */
 
 Vue.component('example', require('./components/Example.vue'));
+Vue.component('loading',Loading)
 
 // Vue Components
 Vue.component('CustomHeader', require('./components/CustomHeader').default);
@@ -65,6 +71,7 @@ Vue.component('client-data-component-draft', require('./components/pages/Consult
 Vue.component('refund-component', require('./components/pages/ConsultDataClient/refundCartera.vue').default);
 Vue.component('history-component', require('./components/pages/ConsultDataClient/history.vue').default);
 Vue.component('detail-history-component', require('./components/pages/ConsultDataClient/detailhistory.vue').default);
+// Vue.component('detail-history-component-draft', require('./components/pages/ConsultDataClient/detailhistoryBorrador.vue').default);
 Vue.component('credit-calculator', require('./components/pages/CreditColsult/CreditCalculator.vue').default);
 Vue.component('register-credit', require('./components/pages/CreditColsult/CreditForm.vue').default);
 /* Vue Init */

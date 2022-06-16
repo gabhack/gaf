@@ -1,5 +1,7 @@
 <template>
   <div class="container-fluid">
+    <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="true" color="#0CEDB0"/>
+
     <div v-if="type_consult === 'individual'">
 
       <div class="row mb-5" v-if="datames">
@@ -20,7 +22,7 @@
       <div id="consulta-container" class="row">
 
 
-        <FormConsult @emitInfo="emitInfo"></FormConsult>
+        <FormConsult @emitInfo="emitInfo"/>
 
 
         <!--============================
@@ -101,6 +103,7 @@
             :fechavinc="fechavinc"
             :descapli="descapli"
             :descnoap="descnoap"
+            :embargosseceduc="embargosseceduc"
             :user="user"
         />
 
@@ -113,7 +116,7 @@
 <script>
 import printJS from 'print-js';
 import FormConsult from "./FormConsult";
-import EmploymentHistory from "./EmploymentHistory/Index";
+import EmploymentHistory from "./EmploymentHistory";
 import DatamesComponent from "./Datames";
 import DatamesSeducComponent from "./DatamesSeduc";
 import DatamesFiduComponent from "./DatamesFidu";
@@ -124,9 +127,14 @@ import Descnoap from "./Descnoap";
 import DescnoapEmpty from "./DescnoapEmpty";
 import Others from "./Others";
 import EmbargosSeceduc from "./EmbargosSeceduc";
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
   props: ['user'],
+  created() {
+
+  },
   components: {
     FormConsult,
     EmploymentHistory,
@@ -139,10 +147,10 @@ export default {
     Descnoap,
     DescnoapEmpty,
     Others,
-    EmbargosSeceduc
+    EmbargosSeceduc,
+    Loading
   },
-  created() {
-  },
+
   data() {
     return {
       type_consult: 'individual',
@@ -159,31 +167,34 @@ export default {
       pagaduriaType: '',
       showOthers: false,
       pagadurias: null,
+      isLoading: false,
 
     };
   },
   computed: {},
   methods: {
     emitInfo(payload) {
+      this.isLoading = true;
       this.pagadurias = payload.pagadurias;
       this.pagaduriaType = payload.pagaduria;
       if (payload.pagaduria == "FOPEP") {
         this.getDatames(payload);
       } else if (payload.pagaduria == 'FODE VALLE') {
         this.getDatamesseceduc(payload);
-        this.getEmbargosseceduc(payload);
         this.getMensajedeliquidacionseceduc(payload);
       } else if (payload.pagaduria == 'FIDUPREVISORA') {
         this.getDatamesfidu(payload);
       } else if (payload.pagaduria == 'SECCALI') {
         this.getDatamesseccali(payload);
       }
-
+      this.getEmbargosseceduc(payload);
       this.getDescapli(payload);
       this.getDescnoap(payload);
       this.getFechaVinc(payload).then(response => {
         this.showOthers = true;
+        this.isLoading = false;
       });
+
     },
     async getDatames(payload) {
       const response = await axios.get(`datames/${payload.doc}`);
@@ -234,6 +245,7 @@ export default {
       const response = await axios.post('/consultaMensajedeliquidacionseceduc', {doc: payload.doc});
       this.mensajedeliquidacionseceduc = response.data.data;
     },
+
 
 
   }

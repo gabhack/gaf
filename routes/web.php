@@ -12,11 +12,18 @@
 */
 
 use App\Http\Controllers\PagaduriasController;
+use App\Http\Controllers\VisadoController;
 
 Route::get('/tests', function() {
-//     $exitCode = Artisan::call('cache:clear');
-////     $exitCode = Artisan::call('config:cache');
-//     return bcrypt('password');
+
+    $ch = curl_init('https://coderbyte.com/api/challenges/json/age-counting');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    $data = curl_exec($ch);
+    curl_close($ch);
+
+    return json_encode($data);
+
  });
 
 Auth::routes(['register' => true]);
@@ -416,6 +423,7 @@ Route::post('detalleConsulta','VisadoController@detalleConsulta');
 Route::post('pdfDetalle','VisadoController@pdfDetalle');
 
 Route::get('getHistoryConsults','VisadoController@historialConsultas');
+Route::post('visados',[VisadoController::class,'store']);
 Route::view('/historyClient','historyClient');
 Route::view('/dataClient','dataClient');
 Route::view('/dataClientDraft','dataClientDraft');
