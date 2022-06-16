@@ -163,8 +163,8 @@
     </div>
     <div v-else>
       <button class="btn btn-primary mb-4" v-on:click="back">Volver</button>
-      <detail-history-component :id="id_consult" :user="user"></detail-history-component>
-<!--      <detail-history-component-draft :id="id_consult" :user="user" :pagaduriaType="pagaduriaType"/>-->
+<!--      <detail-history-component :id="id_consult" :user="user"></detail-history-component>-->
+      <detail-history-component-draft :id="id_consult" :user="user" :pagaduriaType="pagaduriaType"/>
     </div>
   </div>
 </template>
