@@ -81,8 +81,8 @@
 
 <script>
 import Datames from "../ConsultDataClientDraft/Datames";
-import DatamesFiduComponent from "../ConsultDataClientDraft/DatamesFiduComponent";
-import DatamesSeducComponent from "../ConsultDataClientDraft/DatamesSeducComponent";
+import DatamesFiduComponent from "../ConsultDataClientDraft/DatamesFidu";
+import DatamesSeducComponent from "../ConsultDataClientDraft/DatamesSeduc";
 import DatamesCali from "../ConsultDataClientDraft/DatamesCali";
 import EmploymentHistory from "../ConsultDataClientDraft/EmploymentHistory";
 import Descapli from "../ConsultDataClientDraft/Descapli";
