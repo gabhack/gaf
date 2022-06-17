@@ -24,7 +24,7 @@
               <option v-if="dataclient.pagadurias.datames" value="FOPEP">FOPEP</option>
               <option v-if="dataclient.pagadurias.datamesfidu" value="FIDUPREVISORA">FIDUPREVISORA</option>
               <option v-if="dataclient.pagadurias.datamesseceduc" value="FODE VALLE">FODE VALLE</option>
-              <option v-if="dataclient.pagadurias.datamesseccali" value="SECCALI">SECCALI</option>
+              <option v-if="dataclient.pagadurias.datamesseccali" value="SECCALI">SEM CALI</option>
             </select>
           </template>
           <select class="form-control" v-else>

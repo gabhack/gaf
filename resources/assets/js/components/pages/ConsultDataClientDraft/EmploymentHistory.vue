@@ -2,7 +2,7 @@
   <div class="col-6">
     <div class="panel mb-3">
       <div class="panel-heading">
-        <b>HISTORIAL LABORAL {{ pagaduriaType }}</b>
+        <b>HISTORIAL LABORAL</b>
       </div>
       <div class="panel-body">
         <div class="row">
@@ -199,28 +199,35 @@
             <div class="col-6">
               <b class="panel-label">VALOR INGRESO:</b>
               <div>
-                <p class="panel-value">{{ datamesseccali.vpension | currency }}</p>
+                <p class="panel-value">{{ datamesseccali.vingreso | currency }}</p>
               </div>
             </div>
 
             <div class="col-6">
-              <b class="panel-label">VINCULACION:</b>
+              <b class="panel-label">FECHA INGRESO:</b>
               <div>
-                <p class="panel-value">{{ datamesseccali.vinc }}</p>
+                <p class="panel-value">{{ datamesseccali.fingr }}</p>
               </div>
             </div>
 
             <div class="col-6">
-              <b class="panel-label">FECHA DE PAGO PENSION:</b>
+              <b class="panel-label">FECHA VINCULACION:</b>
               <div>
-                <p class="panel-value">{{ datamesseccali.fechpago }}</p>
+                <p class="panel-value">{{ datamesseccali.fnombramiento }}</p>
               </div>
             </div>
 
             <div class="col-6">
-              <b class="panel-label">VALOR DESCUENTO:</b>
+              <b class="panel-label">AREA DE DESEMPEÑO:</b>
               <div>
-                <p class="panel-value">{{ datamesseccali.vdescbruto | currency }}</p>
+                <p class="panel-value">{{ datamesseccali.esquema }}</p>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <b class="panel-label">CARGO:</b>
+              <div>
+                <p class="panel-value">{{ datamesseccali.cargo }}</p>
               </div>
             </div>
           </template>

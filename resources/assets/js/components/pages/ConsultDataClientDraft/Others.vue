@@ -11,7 +11,7 @@
              datames FOPEP -
           ==============================-->
           <div class="col-12 tables-space mb-4" v-if="pagadurias.datames && pagaduriaType != 'FOPEP'">
-            <b class="panel-label">OTRO POSIBLE INGRESO: datames FOPEP</b>
+            <b class="panel-label">OTRO POSIBLE INGRESO 1:</b>
             <div>
               <p class="panel-value">{{ pagadurias.datames.vpension | currency }}</p>
             </div>
@@ -34,7 +34,7 @@
           ==============================-->
 
           <div class="col-12 tables-space mb-4" v-if="pagadurias.datamesfidu && pagaduriaType != 'FIDUPREVISORA'">
-            <b class="panel-label">OTRO POSIBLE INGRESO: datamesfidu FIDUPREVISORA</b>
+            <b class="panel-label">OTRO POSIBLE INGRESO 2:</b>
             <div>
               <p class="panel-value">{{ pagadurias.datamesfidu.vpension  | currency }}</p>
             </div>
@@ -58,7 +58,7 @@
           ==============================-->
 
           <div class="col-12 tables-space  mb-4" v-if="pagadurias.datamesseceduc && pagaduriaType != 'FODE VALLE'">
-            <b class="panel-label">OTRO POSIBLE INGRESO: DATAMESSEDUC FODE VALLE</b>
+            <b class="panel-label">OTRO POSIBLE INGRESO 4:</b>
             <div>
               <p class="panel-value">{{ pagadurias.datamesseceduc.vpension | currency }}</p>
             </div>
@@ -82,7 +82,7 @@
           ==============================-->
 
           <div class="col-12 tables-space mb-4" v-if="pagadurias.datamesseccali && pagaduriaType != 'SECCALI'">
-            <b class="panel-label">OTRO POSIBLE INGRESO: DATAMESCALISECCALI</b>
+            <b class="panel-label">OTRO POSIBLE INGRESO 3:</b>
             <div>
               <p class="panel-value">{{ pagadurias.datamesseccali.vpension | currency }}</p>
             </div>
