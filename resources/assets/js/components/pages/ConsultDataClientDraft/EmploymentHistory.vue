@@ -173,7 +173,7 @@
             </div>
 
 
-            <div class="col-6">
+            <!-- <div class="col-6">
               <b class="panel-label">VALOR POSIBLE DESCUENTO:</b>
               <div>
                 <p class="panel-value">{{ datamesfidu.vdescbruto | currency }}</p>
@@ -186,7 +186,7 @@
               <div>
                 <p class="panel-value">{{ datamesfidu.vdescbruto | currency }}</p>
               </div>
-            </div>
+            </div> -->
 
           </template>
 
