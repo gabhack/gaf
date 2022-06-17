@@ -11,33 +11,45 @@
             <div class="row">
               <div class="col-6">
                 <b class="panel-label">NOMBRES Y APELLIDOS:</b>
-                <input required class="form-control text-center" type="text" v-model="dataclient.name" />
+                <input required class="form-control text-center" type="text" v-model="dataclient.name"/>
               </div>
               <div class="col-6">
                 <b class="panel-label">CEDULA:</b>
-                <input required class="form-control text-center" type="number" v-model="dataclient.doc" />
+                <input required class="form-control text-center" type="number" v-model="dataclient.doc"/>
               </div>
               <div class="col-6">
                 <b class="panel-label">NUMERO DE PAGARE:</b>
-                <input required class="form-control text-center" type="number" v-model="dataclient.doc" />
+                <input required class="form-control text-center" type="number" v-model="dataclient.doc"/>
               </div>
               <div class="col-6">
                 <b class="panel-label">ENTIDAD O CARTERA:</b>
-                <input required class="form-control text-center" type="number" v-model="dataclient.doc" />
+                <input required class="form-control text-center" type="number" v-model="dataclient.doc"/>
               </div>
               <div class="col-6">
                 <b class="panel-label">FECHA INICIO CREDITO:</b>
-                <input required class="form-control text-center" type="number" v-model="dataclient.doc" />
+                <input required class="form-control text-center" type="number" v-model="dataclient.doc"/>
               </div>
               <div class="col-6">
                 <b class="panel-label">FECHA FINAL CREDITO:</b>
-                <input required class="form-control text-center" type="number" v-model="dataclient.doc" />
+                <input required class="form-control text-center" type="number" v-model="dataclient.doc"/>
+              </div>
+              <div class="col-6">
+                <b class="panel-label">TASA:</b>
+                <input required class="form-control text-center" step="0.01%" type="number" v-model="dataclient.tasa"/>
+              </div>
+              <div class="col-6">
+                <b class="panel-label">DOCUMENTOS LB</b>
+                <b-form-file
+                    v-model="dataclient.file"
+                    :state="Boolean(dataclient.file)"
+                    drop-placeholder="Suelta el archivo aquí..."
+                ></b-form-file>
               </div>
               <div class="col-6 mt-4">
                 <button
-                  type="button"
-                  class="btn btn-primary"
-                  v-on:click="getData"
+                    type="button"
+                    class="btn btn-primary"
+                    v-on:click="getData"
                 >
                   CONSULTAR
                 </button>
@@ -53,19 +65,25 @@
 .table-text {
   font-size: 12px;
 }
+
 .tables-space {
   margin-top: 15px !important;
 }
 </style>
 <script src="print.js"></script>
-<script rel="stylesheet" type="text/css" href="print.css" />
+<script rel="stylesheet" type="text/css" href="print.css"/>
 <script>
 import printJS from 'print-js';
+
 export default {
   props: ['user'],
   data() {
     return {
-      dataclient: {},
+      dataclient: {
+        name: '',
+        tasa: null,
+        file: 0,
+      },
       plan: 'basico',
       enableFirstStep: false,
       enableSecondStep: false,
@@ -74,6 +92,7 @@ export default {
       dataPlusFopep: false,
       dataPlusFidu: false,
       dataPlusFode: false,
+      file1: false,
       consultaDescapli: [],
       actualDate: new Date().toLocaleString(),
       pagare: [],
@@ -135,12 +154,12 @@ export default {
       });
     },
     getDatamesfidu() {
-      axios.post('/datamesfidu/consultaUnitaria', { doc: this.dataclient.doc }).then(response => {
+      axios.post('/datamesfidu/consultaUnitaria', {doc: this.dataclient.doc}).then(response => {
         this.datamesfidu = response.data.data;
       });
     },
     getDatamesseceduc() {
-      axios.post('/datamesseceduc/consultaUnitaria', { doc: this.dataclient.doc }).then(response => {
+      axios.post('/datamesseceduc/consultaUnitaria', {doc: this.dataclient.doc}).then(response => {
         console.log(response.data);
         this.datamesseceduc = response.data.data;
       });
@@ -158,29 +177,29 @@ export default {
     },
     getDataClient() {
       axios
-        .post('consultaDescnoap', { data: this.dataclient })
-        .then(response => {
-          if (response.data.message === 'El cliente seleccionado tiene inconsistencias.') {
-            this.consultaDescapli = response.data.data;
-          } else {
-            axios
-              .post('consultaUnitaria', { data: this.dataclient })
-              .then(response => {
-                if (response.data.message === 'El cliente seleccionado tiene inconsistencias.') {
-                  toastr.success(response.data.message);
-                  this.consultaDescapli = response.data.data;
-                } else {
-                  this.consultaDescapli = response.data.data;
-                }
-              })
-              .catch(error => {
-                toastr.success(response.data.message);
-              });
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
+          .post('consultaDescnoap', {data: this.dataclient})
+          .then(response => {
+            if (response.data.message === 'El cliente seleccionado tiene inconsistencias.') {
+              this.consultaDescapli = response.data.data;
+            } else {
+              axios
+                  .post('consultaUnitaria', {data: this.dataclient})
+                  .then(response => {
+                    if (response.data.message === 'El cliente seleccionado tiene inconsistencias.') {
+                      toastr.success(response.data.message);
+                      this.consultaDescapli = response.data.data;
+                    } else {
+                      this.consultaDescapli = response.data.data;
+                    }
+                  })
+                  .catch(error => {
+                    toastr.success(response.data.message);
+                  });
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
     },
 
     vAplicado(value, data, pagareSelect, nomterSelected) {
@@ -210,22 +229,22 @@ export default {
           return item !== nomterSelected;
         });
         this.dataclient.nomterSelect =
-          nomterSelect.length === 0 ? nomterSelected : this.nomterSelect.push(nomterSelected);
+            nomterSelect.length === 0 ? nomterSelected : this.nomterSelect.push(nomterSelected);
       }
       console.log(this.dataclient);
     },
 
     sendPagare() {
       axios
-        .post('resultadoAprobacion', { data: this.dataclient })
-        .then(response => {
-          toastr.success(response.data.message);
-          this.id_consulta = response.data.data.id_consulta;
-          this.resultPagare = response.data.data;
-        })
-        .catch(error => {
-          console.log(error);
-        });
+          .post('resultadoAprobacion', {data: this.dataclient})
+          .then(response => {
+            toastr.success(response.data.message);
+            this.id_consulta = response.data.data.id_consulta;
+            this.resultPagare = response.data.data;
+          })
+          .catch(error => {
+            console.log(error);
+          });
     },
 
     print() {

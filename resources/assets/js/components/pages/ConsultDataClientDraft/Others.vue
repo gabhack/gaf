@@ -36,7 +36,7 @@
           <div class="col-12 tables-space mb-4" v-if="pagadurias.datamesfidu && pagaduriaType != 'FIDUPREVISORA'">
             <b class="panel-label">OTRO POSIBLE INGRESO: datamesfidu FIDUPREVISORA</b>
             <div>
-              <p class="panel-value">{{ pagadurias.datamesfidu.vpension | currency }}</p>
+              <p class="panel-value">{{ pagadurias.datamesfidu.vpension  | currency }}</p>
             </div>
             <button type="button" class="btn btn-primary"
                     v-on:click="modalConfirmConsultPag('showDatamesFidu','FIDUPREVISORA')">

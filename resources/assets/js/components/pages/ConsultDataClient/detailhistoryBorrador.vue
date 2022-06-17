@@ -84,7 +84,7 @@ import Datames from "../ConsultDataClientDraft/Datames";
 import DatamesFiduComponent from "../ConsultDataClientDraft/DatamesFidu";
 import DatamesSeducComponent from "../ConsultDataClientDraft/DatamesSeduc";
 import DatamesCali from "../ConsultDataClientDraft/DatamesCali";
-import EmploymentHistory from "../ConsultDataClientDraft/EmploymentHistory";
+import EmploymentHistory from "./EmploymentHistory";
 import Descapli from "../ConsultDataClientDraft/Descapli";
 import DescapliEmpty from "../ConsultDataClientDraft/DescapliEmpty";
 import Descnoap from "../ConsultDataClientDraft/Descnoap";

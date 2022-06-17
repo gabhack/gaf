@@ -16,7 +16,9 @@
           <th scope="col" class="text-center">Tipo de Consulta</th>
           <th scope="col" class="text-center">Score</th>
           <th scope="col" class="text-center">Fecha de Consulta</th>
-          <th scope="col" class="text-center"></th>
+          <th scope="col" class="text-center">Nombre del consultante</th>
+          <th scope="col" class="text-center">Correo del consultante</th>
+          <th scope="col" class="text-center">Acciones</th>
         </tr>
         </thead>
         <tbody>
@@ -28,6 +30,8 @@
           <td>{{ history.tipo_consulta }}</td>
           <td></td>
           <td>{{ history.created_at }}</td>
+          <td>{{ history.consultant_name ? history.consultant_name : '-' }}</td>
+          <td>{{ history.consultant_email ? history.consultant_email : '-' }}</td>
           <td>
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
                     v-on:click="getData(history)">Observar
@@ -163,7 +167,7 @@
     </div>
     <div v-else>
       <button class="btn btn-primary mb-4" v-on:click="back">Volver</button>
-<!--      <detail-history-component :id="id_consult" :user="user"></detail-history-component>-->
+      <!--      <detail-history-component :id="id_consult" :user="user"></detail-history-component>-->
       <detail-history-component-draft :id="id_consult" :user="user" :pagaduriaType="pagaduriaType"/>
     </div>
   </div>

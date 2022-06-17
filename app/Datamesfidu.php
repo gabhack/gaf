@@ -52,4 +52,9 @@ class Datamesfidu extends Model
       'mesdata',
       'anodata',
     ];
+    
+    
+    
+    
+    
 }

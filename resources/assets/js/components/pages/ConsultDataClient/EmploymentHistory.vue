@@ -22,7 +22,7 @@
           <!--============================
                  FOPEP
           ==============================-->
-          <template v-if="datames">
+          <template v-if="datames && pagaduriaType == 'FOPEP'">
 
             <div class="col-6">
               <b class="panel-label">TIPO PENSION:</b>
@@ -70,7 +70,7 @@
                 FODE VALLE
           ==============================-->
 
-          <template v-if="datamesseceduc">
+          <template v-if="datamesseceduc && pagaduriaType == 'FODE VALLE'">
 
 
             <div class="col-6">
@@ -142,7 +142,7 @@
           <!--============================
                FIDUPREVISORA
           ==============================-->
-          <template v-if="datamesfidu">
+          <template v-if="datamesfidu  && pagaduriaType == 'FIDUPREVISORA'">
 
             <div class="col-6">
               <b class="panel-label">VALOR INGRESO:</b>
@@ -171,30 +171,13 @@
                 <p class="panel-value">{{ datamesfidu.vdescbruto | currency }}</p>
               </div>
             </div>
-
-
-            <div class="col-6">
-              <b class="panel-label">VALOR POSIBLE DESCUENTO:</b>
-              <div>
-                <p class="panel-value">{{ datamesfidu.vdescbruto | currency }}</p>
-              </div>
-            </div>
-
-
-            <div class="col-6">
-              <b class="panel-label">VALOR POSIBLE DESCUENTO SALUD:</b>
-              <div>
-                <p class="panel-value">{{ datamesfidu.vdescbruto | currency }}</p>
-              </div>
-            </div>
-
           </template>
 
 
           <!--============================
             DATAMESCALI SECCALI
           ==============================-->
-          <template v-if="datamesseccali">
+          <template v-if="datamesseccali && pagaduriaType == 'SECCALI'">
 
             <div class="col-6">
               <b class="panel-label">VALOR INGRESO:</b>

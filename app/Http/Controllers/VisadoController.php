@@ -51,7 +51,7 @@ class VisadoController extends Controller
         $datamesseccali = Datamesseccali::where('doc', $detalle_consulta->ced)->first();
         $embargosedu = Embargosseceduc::where('doc', $detalle_consulta->ced)->get();
         $descapli = Descapli::where('doc', $detalle_consulta->ced)->get();
-        $descnoap = Descnoap::where('doc',$detalle_consulta->ced)->get();
+        $descnoap = Descnoap::where('doc', $detalle_consulta->ced)->get();
         $resultado = [];
         $info_obligaciones = $detalle_consulta->info_obligaciones;
         $resultado['info_datames'] = $info_datames;
@@ -147,6 +147,7 @@ class VisadoController extends Controller
     {
         $data = $this->buildData($request);
         $info = $data[$request->pagaduria];
+        $user = auth()->user();
 
         $nombre = "";
         if (isset($info['nombenef'])) {
@@ -161,6 +162,8 @@ class VisadoController extends Controller
             'pagaduria' => $request->pagaduria,
             'entidad' => $request->pagaduria,
             'tipo_consulta' => 'Individual',
+            'consultant_email' => $user->email,
+            'consultant_name' => $user->name,
         ]);
 
         return response()->json($response);

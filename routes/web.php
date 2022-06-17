@@ -14,20 +14,13 @@
 use App\Http\Controllers\PagaduriasController;
 use App\Http\Controllers\VisadoController;
 
-Route::get('/tests', function() {
+Route::get('/tests', function () {
 
-    $ch = curl_init('https://coderbyte.com/api/challenges/json/age-counting');
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HEADER, 0);
-    $data = curl_exec($ch);
-    curl_close($ch);
+    return "test";
 
-    return json_encode($data);
-
- });
+});
 
 Auth::routes(['register' => true]);
-
 
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -35,340 +28,338 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/logout', 'Auth\LoginController@logout');
 
-Route::group(["prefix" => "profile"], function(){
-	Route::get('/', 'ProfileController@profile');
-	Route::post('/store', 'ProfileController@saveProfile');
+Route::group(["prefix" => "profile"], function () {
+    Route::get('/', 'ProfileController@profile');
+    Route::post('/store', 'ProfileController@saveProfile');
 });
 
 
-
 // Roles
-Route::group(["prefix" => "roles"], function(){
-	Route::get('/', 'RolesController@index');
+Route::group(["prefix" => "roles"], function () {
+    Route::get('/', 'RolesController@index');
 
-	Route::get('/crear', 'RolesController@create');
-	Route::post('/store', 'RolesController@store');
+    Route::get('/crear', 'RolesController@create');
+    Route::post('/store', 'RolesController@store');
 
-	Route::get('/edit/{id}', 'RolesController@edit');
-	Route::post('/update/{id}', 'RolesController@update');
+    Route::get('/edit/{id}', 'RolesController@edit');
+    Route::post('/update/{id}', 'RolesController@update');
 
-	Route::get('/delete/{id}', 'RolesController@destroy');
+    Route::get('/delete/{id}', 'RolesController@destroy');
 });
 
 
 // Usuarios
-Route::group(["prefix" => "usuarios"], function(){
-	Route::get('/', 'UserController@index');
+Route::group(["prefix" => "usuarios"], function () {
+    Route::get('/', 'UserController@index');
 
-	Route::get('/crear', 'UserController@create');
-	Route::post('/store', 'UserController@store');
+    Route::get('/crear', 'UserController@create');
+    Route::post('/store', 'UserController@store');
 
-	Route::get('/edit/{id}', 'UserController@edit');
-	Route::post('/update/{id}', 'UserController@update');
+    Route::get('/edit/{id}', 'UserController@edit');
+    Route::post('/update/{id}', 'UserController@update');
 
-	Route::get('/delete/{id}', 'UserController@destroy');
+    Route::get('/delete/{id}', 'UserController@destroy');
 });
 
 
 // Parámetros
-Route::group(["prefix" => "parametros"], function(){
-	Route::get('/', 'ParametrosController@index');
+Route::group(["prefix" => "parametros"], function () {
+    Route::get('/', 'ParametrosController@index');
 
-	Route::get('/crear', 'ParametrosController@create');
-	Route::post('/store', 'ParametrosController@store');
+    Route::get('/crear', 'ParametrosController@create');
+    Route::post('/store', 'ParametrosController@store');
 
-	Route::get('/edit/{id}', 'ParametrosController@edit');
-	Route::post('/update/{id}', 'ParametrosController@update');
+    Route::get('/edit/{id}', 'ParametrosController@edit');
+    Route::post('/update/{id}', 'ParametrosController@update');
 
-	Route::get('/delete/{id}', 'ParametrosController@destroy');
+    Route::get('/delete/{id}', 'ParametrosController@destroy');
 });
 
 
 // Factores x millon Kredit
-Route::group(["prefix" => "factorxmillonkredit"], function(){
-	Route::get('/', 'FactoresXMillonKreditController@index');
+Route::group(["prefix" => "factorxmillonkredit"], function () {
+    Route::get('/', 'FactoresXMillonKreditController@index');
 
-	Route::get('/crear', 'FactoresXMillonKreditController@create');
-	Route::post('/store', 'FactoresXMillonKreditController@store');
+    Route::get('/crear', 'FactoresXMillonKreditController@create');
+    Route::post('/store', 'FactoresXMillonKreditController@store');
 
-	Route::get('/edit/{id}', 'FactoresXMillonKreditController@edit');
-	Route::post('/update/{id}', 'FactoresXMillonKreditController@update');
+    Route::get('/edit/{id}', 'FactoresXMillonKreditController@edit');
+    Route::post('/update/{id}', 'FactoresXMillonKreditController@update');
 
-	Route::get('/delete/{id}', 'FactoresXMillonKreditController@destroy');
+    Route::get('/delete/{id}', 'FactoresXMillonKreditController@destroy');
 });
 
 
 // Demandantes
-Route::group(["prefix" => "demandantes"], function(){
-	Route::get('/', 'DemandantesController@index');
+Route::group(["prefix" => "demandantes"], function () {
+    Route::get('/', 'DemandantesController@index');
 
-	Route::get('/crear', 'DemandantesController@create');
-	Route::post('/store', 'DemandantesController@store');
+    Route::get('/crear', 'DemandantesController@create');
+    Route::post('/store', 'DemandantesController@store');
 
-	Route::get('/edit/{id}', 'DemandantesController@edit');
-	Route::post('/update/{id}', 'DemandantesController@update');
+    Route::get('/edit/{id}', 'DemandantesController@edit');
+    Route::post('/update/{id}', 'DemandantesController@update');
 
-	Route::get('/delete/{id}', 'DemandantesController@destroy');
+    Route::get('/delete/{id}', 'DemandantesController@destroy');
 });
 
 
 // Pagadurias
-Route::group(["prefix" => "pagadurias"], function(){
-	Route::get('/', 'PagaduriasController@index');
+Route::group(["prefix" => "pagadurias"], function () {
+    Route::get('/', 'PagaduriasController@index');
 
-	Route::get('/crear', 'PagaduriasController@create');
-	Route::post('/store', 'PagaduriasController@store');
+    Route::get('/crear', 'PagaduriasController@create');
+    Route::post('/store', 'PagaduriasController@store');
 
-	Route::get('/edit/{id}', 'PagaduriasController@edit');
-	Route::post('/update/{id}', 'PagaduriasController@update');
+    Route::get('/edit/{id}', 'PagaduriasController@edit');
+    Route::post('/update/{id}', 'PagaduriasController@update');
 
-	Route::get('/delete/{id}', 'PagaduriasController@destroy');
+    Route::get('/delete/{id}', 'PagaduriasController@destroy');
 });
 
 
 // Aliados
-Route::group(["prefix" => "aliados"], function(){
-	Route::get('/', 'AliadosController@index');
+Route::group(["prefix" => "aliados"], function () {
+    Route::get('/', 'AliadosController@index');
 
-	Route::get('/crear', 'AliadosController@create');
-	Route::post('/store', 'AliadosController@store');
+    Route::get('/crear', 'AliadosController@create');
+    Route::post('/store', 'AliadosController@store');
 
-	Route::get('/edit/{id}', 'AliadosController@edit');
-	Route::post('/update/{id}', 'AliadosController@update');
+    Route::get('/edit/{id}', 'AliadosController@edit');
+    Route::post('/update/{id}', 'AliadosController@update');
 
-	Route::get('/delete/{id}', 'AliadosController@destroy');
+    Route::get('/delete/{id}', 'AliadosController@destroy');
 
-	Route::get('/parametrizar', 'AliadosvalidosController@index');
+    Route::get('/parametrizar', 'AliadosvalidosController@index');
 });
 
 
 // Aliados Validos
-Route::group(["prefix" => "aliadosvalidos"], function(){
-	Route::get('/', 'AliadosvalidosController@index');
+Route::group(["prefix" => "aliadosvalidos"], function () {
+    Route::get('/', 'AliadosvalidosController@index');
 
-	Route::get('/crear', 'AliadosvalidosController@create');
-	Route::post('/store', 'AliadosvalidosController@store');
+    Route::get('/crear', 'AliadosvalidosController@create');
+    Route::post('/store', 'AliadosvalidosController@store');
 
-	Route::get('/edit/{id}', 'AliadosvalidosController@edit');
-	Route::post('/update/{id}', 'AliadosvalidosController@update');
+    Route::get('/edit/{id}', 'AliadosvalidosController@edit');
+    Route::post('/update/{id}', 'AliadosvalidosController@update');
 
-	Route::get('/delete/{id}', 'AliadosvalidosController@destroy');
+    Route::get('/delete/{id}', 'AliadosvalidosController@destroy');
 });
 
 
 // Entidades
-Route::group(["prefix" => "entidades"], function(){
-	Route::get('/', 'EntidadesController@index');
+Route::group(["prefix" => "entidades"], function () {
+    Route::get('/', 'EntidadesController@index');
 
-	Route::get('/crear', 'EntidadesController@create');
-	Route::post('/store', 'EntidadesController@store');
+    Route::get('/crear', 'EntidadesController@create');
+    Route::post('/store', 'EntidadesController@store');
 
-	Route::get('/edit/{id}', 'EntidadesController@edit');
-	Route::post('/update/{id}', 'EntidadesController@update');
+    Route::get('/edit/{id}', 'EntidadesController@edit');
+    Route::post('/update/{id}', 'EntidadesController@update');
 
-	Route::get('/delete/{id}', 'EntidadesController@destroy');
+    Route::get('/delete/{id}', 'EntidadesController@destroy');
 });
 
 
 // Estados Cartera
-Route::group(["prefix" => "estadoscartera"], function(){
-	Route::get('/', 'EstadoscarteraController@index');
+Route::group(["prefix" => "estadoscartera"], function () {
+    Route::get('/', 'EstadoscarteraController@index');
 
-	Route::get('/crear', 'EstadoscarteraController@create');
-	Route::post('/store', 'EstadoscarteraController@store');
+    Route::get('/crear', 'EstadoscarteraController@create');
+    Route::post('/store', 'EstadoscarteraController@store');
 
-	Route::get('/edit/{id}', 'EstadoscarteraController@edit');
-	Route::post('/update/{id}', 'EstadoscarteraController@update');
+    Route::get('/edit/{id}', 'EstadoscarteraController@edit');
+    Route::post('/update/{id}', 'EstadoscarteraController@update');
 
-	Route::get('/delete/{id}', 'EstadoscarteraController@destroy');
+    Route::get('/delete/{id}', 'EstadoscarteraController@destroy');
 });
 
 
 // Tipos de Embargo
-Route::group(["prefix" => "tiposembargo"], function(){
-	Route::get('/', 'TiposembargoController@index');
+Route::group(["prefix" => "tiposembargo"], function () {
+    Route::get('/', 'TiposembargoController@index');
 
-	Route::get('/crear', 'TiposembargoController@create');
-	Route::post('/store', 'TiposembargoController@store');
+    Route::get('/crear', 'TiposembargoController@create');
+    Route::post('/store', 'TiposembargoController@store');
 
-	Route::get('/edit/{id}', 'TiposembargoController@edit');
-	Route::post('/update/{id}', 'TiposembargoController@update');
+    Route::get('/edit/{id}', 'TiposembargoController@edit');
+    Route::post('/update/{id}', 'TiposembargoController@update');
 
-	Route::get('/delete/{id}', 'TiposembargoController@destroy');
+    Route::get('/delete/{id}', 'TiposembargoController@destroy');
 });
 
 
 // Sectores
-Route::group(["prefix" => "sectores"], function(){
-	Route::get('/', 'SectoresController@index');
+Route::group(["prefix" => "sectores"], function () {
+    Route::get('/', 'SectoresController@index');
 
-	Route::get('/crear', 'SectoresController@create');
-	Route::post('/store', 'SectoresController@store');
+    Route::get('/crear', 'SectoresController@create');
+    Route::post('/store', 'SectoresController@store');
 
-	Route::get('/edit/{id}', 'SectoresController@edit');
-	Route::post('/update/{id}', 'SectoresController@update');
+    Route::get('/edit/{id}', 'SectoresController@edit');
+    Route::post('/update/{id}', 'SectoresController@update');
 
-	Route::get('/delete/{id}', 'SectoresController@destroy');
+    Route::get('/delete/{id}', 'SectoresController@destroy');
 });
 
 
 // Oficinas
-Route::group(["prefix" => "oficinas"], function(){
-	Route::get('/', 'OficinasController@index');
+Route::group(["prefix" => "oficinas"], function () {
+    Route::get('/', 'OficinasController@index');
 
-	Route::get('/crear', 'OficinasController@create');
-	Route::post('/store', 'OficinasController@store');
+    Route::get('/crear', 'OficinasController@create');
+    Route::post('/store', 'OficinasController@store');
 
-	Route::get('/edit/{id}', 'OficinasController@edit');
-	Route::post('/update/{id}', 'OficinasController@update');
+    Route::get('/edit/{id}', 'OficinasController@edit');
+    Route::post('/update/{id}', 'OficinasController@update');
 
-	Route::get('/delete/{id}', 'OficinasController@destroy');
+    Route::get('/delete/{id}', 'OficinasController@destroy');
 });
 
 
 // Cargos
-Route::group(["prefix" => "cargos"], function(){
-	Route::get('/', 'CargosController@index');
+Route::group(["prefix" => "cargos"], function () {
+    Route::get('/', 'CargosController@index');
 
-	Route::get('/crear', 'CargosController@create');
-	Route::post('/store', 'CargosController@store');
+    Route::get('/crear', 'CargosController@create');
+    Route::post('/store', 'CargosController@store');
 
-	Route::get('/edit/{id}', 'CargosController@edit');
-	Route::post('/update/{id}', 'CargosController@update');
+    Route::get('/edit/{id}', 'CargosController@edit');
+    Route::post('/update/{id}', 'CargosController@update');
 
-	Route::get('/delete/{id}', 'CargosController@destroy');
+    Route::get('/delete/{id}', 'CargosController@destroy');
 });
 
 
 // Departamentos
-Route::group(["prefix" => "departamentos"], function(){
-	Route::get('/', 'DepartamentosController@index');
+Route::group(["prefix" => "departamentos"], function () {
+    Route::get('/', 'DepartamentosController@index');
 
-	Route::get('/crear', 'DepartamentosController@create');
-	Route::post('/store', 'DepartamentosController@store');
+    Route::get('/crear', 'DepartamentosController@create');
+    Route::post('/store', 'DepartamentosController@store');
 
-	Route::get('/edit/{id}', 'DepartamentosController@edit');
-	Route::post('/update/{id}', 'DepartamentosController@update');
+    Route::get('/edit/{id}', 'DepartamentosController@edit');
+    Route::post('/update/{id}', 'DepartamentosController@update');
 
-	Route::get('/delete/{id}', 'DepartamentosController@destroy');
+    Route::get('/delete/{id}', 'DepartamentosController@destroy');
 });
 
 
 // Ciudades
-Route::group(["prefix" => "ciudades"], function(){
-	Route::get('/', 'CiudadesController@index');
+Route::group(["prefix" => "ciudades"], function () {
+    Route::get('/', 'CiudadesController@index');
 
-	Route::get('/crear', 'CiudadesController@create');
-	Route::post('/store', 'CiudadesController@store');
+    Route::get('/crear', 'CiudadesController@create');
+    Route::post('/store', 'CiudadesController@store');
 
-	Route::get('/edit/{id}', 'CiudadesController@edit');
-	Route::post('/update/{id}', 'CiudadesController@update');
+    Route::get('/edit/{id}', 'CiudadesController@edit');
+    Route::post('/update/{id}', 'CiudadesController@update');
 
-	Route::get('/delete/{id}', 'CiudadesController@destroy');
+    Route::get('/delete/{id}', 'CiudadesController@destroy');
 });
 
 
 // Estudios de clientes
-Route::group(["prefix" => "terecuperamos"], function(){
-	Route::get('/', 'TerecuperamosController@index');
+Route::group(["prefix" => "terecuperamos"], function () {
+    Route::get('/', 'TerecuperamosController@index');
 
-	Route::get('/crear', 'TerecuperamosController@create');
-	Route::post('/store', 'TerecuperamosController@store');
+    Route::get('/crear', 'TerecuperamosController@create');
+    Route::post('/store', 'TerecuperamosController@store');
 
-	Route::get('/edit/{id}', 'TerecuperamosController@edit');
-	Route::post('/update/{id}', 'TerecuperamosController@update');
+    Route::get('/edit/{id}', 'TerecuperamosController@edit');
+    Route::post('/update/{id}', 'TerecuperamosController@update');
 
-	Route::get('/delete/{id}', 'TerecuperamosController@destroy');
+    Route::get('/delete/{id}', 'TerecuperamosController@destroy');
 
-	Route::post('/saveObservaciones/{id}', 'TerecuperamosController@saveObservaciones');
+    Route::post('/saveObservaciones/{id}', 'TerecuperamosController@saveObservaciones');
 });
 
 
 // Comerciales
-Route::group(["prefix" => "comerciales"], function(){
-	Route::get('/', 'ComercialController@index');
+Route::group(["prefix" => "comerciales"], function () {
+    Route::get('/', 'ComercialController@index');
 
-	Route::get('/crear', 'ComercialController@create');
-	Route::post('/store', 'ComercialController@store');
+    Route::get('/crear', 'ComercialController@create');
+    Route::post('/store', 'ComercialController@store');
 
-	Route::get('/edit/{id}', 'ComercialController@edit');
-	Route::post('/update/{id}', 'ComercialController@update');
+    Route::get('/edit/{id}', 'ComercialController@edit');
+    Route::post('/update/{id}', 'ComercialController@update');
 
-	Route::get('/delete/{id}', 'ComercialController@destroy');
+    Route::get('/delete/{id}', 'ComercialController@destroy');
 });
 
 
 // Factores
-Route::group(["prefix" => "factores"], function(){
-	Route::get('/', 'FactoresController@index');
+Route::group(["prefix" => "factores"], function () {
+    Route::get('/', 'FactoresController@index');
 
-	Route::get('/crear', 'FactoresController@create');
-	Route::post('/store', 'FactoresController@store');
+    Route::get('/crear', 'FactoresController@create');
+    Route::post('/store', 'FactoresController@store');
 
-	Route::get('/edit/{id}', 'FactoresController@edit');
-	Route::post('/update/{id}', 'FactoresController@update');
+    Route::get('/edit/{id}', 'FactoresController@edit');
+    Route::post('/update/{id}', 'FactoresController@update');
 
-	Route::get('/delete/{id}', 'FactoresController@destroy');
+    Route::get('/delete/{id}', 'FactoresController@destroy');
 });
 
 
 // Reportes
-Route::group(["prefix" => "reportes"], function(){
-	Route::get('/', 'ReportesController@index');
-	Route::get('/consultas', 'ReportesController@consultas');
-	Route::get('/personalizados', 'ReportesController@personalizados');
+Route::group(["prefix" => "reportes"], function () {
+    Route::get('/', 'ReportesController@index');
+    Route::get('/consultas', 'ReportesController@consultas');
+    Route::get('/personalizados', 'ReportesController@personalizados');
 
 });
-
 
 
 // Archivos Planos
-Route::group(["prefix" => "planos"], function(){
-	Route::get('/', 'PlanosController@index');
+Route::group(["prefix" => "planos"], function () {
+    Route::get('/', 'PlanosController@index');
 
-	Route::get('/crear', 'PlanosController@create');
-	Route::post('/store', 'PlanosController@store');
+    Route::get('/crear', 'PlanosController@create');
+    Route::post('/store', 'PlanosController@store');
 
-	Route::get('/crear_gcp', 'PlanosController@create_gcp');
-	Route::get('/ver_gcp/{id}', 'PlanosController@ver_gcp')->name('ver_archivo');
-	Route::post('/store_gcp_cedula', 'PlanosController@store_gcp_cedula');
-	Route::post('/store_gcp_masivo', 'PlanosController@store_gcp_masivo');
+    Route::get('/crear_gcp', 'PlanosController@create_gcp');
+    Route::get('/ver_gcp/{id}', 'PlanosController@ver_gcp')->name('ver_archivo');
+    Route::post('/store_gcp_cedula', 'PlanosController@store_gcp_cedula');
+    Route::post('/store_gcp_masivo', 'PlanosController@store_gcp_masivo');
 
-	Route::get('/edit/{id}', 'PlanosController@edit');
-	Route::post('/update/{id}', 'PlanosController@update');
+    Route::get('/edit/{id}', 'PlanosController@edit');
+    Route::post('/update/{id}', 'PlanosController@update');
 
-	Route::get('/delete/{id}', 'PlanosController@destroy');
+    Route::get('/delete/{id}', 'PlanosController@destroy');
 });
 
 // Consultas
-Route::group(["prefix" => "consultas"], function(){
-	Route::get('/', 'ConsultasController@index');
-	Route::get('/list', 'ConsultasController@list');
-	Route::post('/{id}', 'ConsultasController@consultar');
+Route::group(["prefix" => "consultas"], function () {
+    Route::get('/', 'ConsultasController@index');
+    Route::get('/list', 'ConsultasController@list');
+    Route::post('/{id}', 'ConsultasController@consultar');
 });
 
 // Estudios
-Route::group(["prefix" => "estudios"], function(){
+Route::group(["prefix" => "estudios"], function () {
 
-	Route::get('/', 'EstudiosController@index');
-	//
-	Route::get('/nuevoestudio', 'EstudiosController@paso1');
-	Route::post('/iniciar', 'EstudiosController@iniciar');
-	Route::get('/iniciar/{documento}', 'EstudiosController@iniciar');
-	Route::post('/guardar', 'EstudiosController@guardar');
-	//
-	Route::get('/editar/{id}', 'EstudiosController@editar');
-	Route::post('/actualizar', 'EstudiosController@actualizar');
-	//
-	Route::get('/borrar/{id}', 'EstudiosController@eliminar');
+    Route::get('/', 'EstudiosController@index');
+    //
+    Route::get('/nuevoestudio', 'EstudiosController@paso1');
+    Route::post('/iniciar', 'EstudiosController@iniciar');
+    Route::get('/iniciar/{documento}', 'EstudiosController@iniciar');
+    Route::post('/guardar', 'EstudiosController@guardar');
+    //
+    Route::get('/editar/{id}', 'EstudiosController@editar');
+    Route::post('/actualizar', 'EstudiosController@actualizar');
+    //
+    Route::get('/borrar/{id}', 'EstudiosController@eliminar');
 });
 
 //Clientes
-Route::group(["prefix" => "clientes"], function(){
-	Route::post('/crear', 'ClientesController@crear');
-	//
-	Route::get('/editar/{id}', 'ClientesController@editar');
-	Route::post('/actualizar', 'ClientesController@actualizar');
+Route::group(["prefix" => "clientes"], function () {
+    Route::post('/crear', 'ClientesController@crear');
+    //
+    Route::get('/editar/{id}', 'ClientesController@editar');
+    Route::post('/actualizar', 'ClientesController@actualizar');
 });
 
 Route::get('/dataset', 'DatasetController@index');
@@ -381,67 +372,64 @@ Route::view('/hego', 'hego');
 Route::view('/hegoinformation', 'hegoinformation');
 Route::view('/integration', 'integration');
 
-Route::post('datamesImport','DataMesController@import');
-Route::post('fechaVincImport','FechaVincController@import');
-Route::post('descapliImport','DescapliController@import');
-Route::post('descnoapController','DescnoapController@import');
-Route::post('datamesfiduImport','DatamesfiduController@import');
-Route::post('datamesseceducImport','DatamesseceducController@import');
+Route::post('datamesImport', 'DataMesController@import');
+Route::post('fechaVincImport', 'FechaVincController@import');
+Route::post('descapliImport', 'DescapliController@import');
+Route::post('descnoapController', 'DescnoapController@import');
+Route::post('datamesfiduImport', 'DatamesfiduController@import');
+Route::post('datamesseceducImport', 'DatamesseceducController@import');
 
-Route::get('dumpDataMes','DataMesController@dumpDataMes');
-Route::get('dumpDataMesFidu','DatamesfiduController@dumpDatamesfidu');
-Route::get('dumpDataMesSeceduc','DatamesseceducController@dumpDatamesseceduc');
+Route::get('dumpDataMes', 'DataMesController@dumpDataMes');
+Route::get('dumpDataMesFidu', 'DatamesfiduController@dumpDatamesfidu');
+Route::get('dumpDataMesSeceduc', 'DatamesseceducController@dumpDatamesseceduc');
 
-Route::post('consultaDescnoap','DescnoapController@consultaUnitaria');
-Route::post('consultaUnitaria','DescapliController@consultaUnitaria');
-Route::post('resultadoAprobacion','DescapliController@resultadoAprobacion');
+Route::post('consultaDescnoap', 'DescnoapController@consultaUnitaria');
+Route::post('consultaUnitaria', 'DescapliController@consultaUnitaria');
+Route::post('resultadoAprobacion', 'DescapliController@resultadoAprobacion');
 
 // Nuevas rutas agregadas //
-Route::post('consultaDatamesseccali','DatamesseccaliController@consultaUnitaria');
-Route::post('consultaDeduccionesseccali','DeduccionesseccaliController@consultaUnitaria');
-Route::post('consultaSabana','SabanaController@consultaUnitaria');
-Route::post('consultaMensajedeliquidacionseceduc','MensajedeliquidacionseceducController@consultaUnitaria');
-Route::post('consultaEmbargosseccali','EmbargosseccaliController@consultaUnitaria');
-Route::post('consultaEmbargosseceduc','EmbargosseceducController@consultaUnitaria');
+Route::post('consultaDatamesseccali', 'DatamesseccaliController@consultaUnitaria');
+Route::post('consultaDeduccionesseccali', 'DeduccionesseccaliController@consultaUnitaria');
+Route::post('consultaSabana', 'SabanaController@consultaUnitaria');
+Route::post('consultaMensajedeliquidacionseceduc', 'MensajedeliquidacionseceducController@consultaUnitaria');
+Route::post('consultaEmbargosseccali', 'EmbargosseccaliController@consultaUnitaria');
+Route::post('consultaEmbargosseceduc', 'EmbargosseceducController@consultaUnitaria');
 
-Route::resource('datamesseccali','DatamesseccaliController');
-Route::resource('deduccionesseccali','DeduccionesseccaliController');
-Route::resource('sabana','SabanaController');
-Route::resource('mensajedeliquidacionseceduc','MensajedeliquidacionseceducController');
-Route::resource('embargosseccali','EmbargosseccaliController');
-Route::resource('embargosseceduc','EmbargosseceducController');
-
-
+Route::resource('datamesseccali', 'DatamesseccaliController');
+Route::resource('deduccionesseccali', 'DeduccionesseccaliController');
+Route::resource('sabana', 'SabanaController');
+Route::resource('mensajedeliquidacionseceduc', 'MensajedeliquidacionseceducController');
+Route::resource('embargosseccali', 'EmbargosseccaliController');
+Route::resource('embargosseceduc', 'EmbargosseceducController');
 
 
 //FIN //
-Route::resource('datames','DataMesController');
-Route::resource('fechavinc','FechaVincController');
-Route::resource('descapli','DescapliController');
-Route::resource('descnoap','DescnoapController');
-Route::post('detalleConsulta','VisadoController@detalleConsulta');
-Route::post('pdfDetalle','VisadoController@pdfDetalle');
+Route::resource('datames', 'DataMesController');
+Route::resource('fechavinc', 'FechaVincController');
+Route::resource('descapli', 'DescapliController');
+Route::resource('descnoap', 'DescnoapController');
+Route::post('detalleConsulta', 'VisadoController@detalleConsulta');
+Route::post('pdfDetalle', 'VisadoController@pdfDetalle');
 
-Route::get('getHistoryConsults','VisadoController@historialConsultas');
-Route::post('visados',[VisadoController::class,'store']);
-Route::view('/historyClient','historyClient');
-Route::view('/dataClient','dataClient');
-Route::view('/dataClientDraft','dataClientDraft');
-Route::view('/refundCartera','refundCartera');
-Route::view('/massiveCharge','massive');
-Route::resource('/validate','SolicitudValidacionController');
+Route::get('getHistoryConsults', 'VisadoController@historialConsultas');
+Route::post('visados', [VisadoController::class, 'store']);
+Route::view('/historyClient', 'historyClient');
+Route::view('/dataClient', 'dataClient');
+Route::view('/dataClientDraft', 'dataClientDraft');
+Route::view('/refundCartera', 'refundCartera');
+Route::view('/massiveCharge', 'massive');
+Route::resource('/validate', 'SolicitudValidacionController');
 
-Route::resource('/datamesfidu','DatamesfiduController');
-Route::post('/datamesfidu/consultaUnitaria','DatamesfiduController@consultaUnitaria');
-Route::post('/datamesseceduc/consultaUnitaria','DatamesseceducController@consultaUnitaria');
-Route::post('/pagadurias/consultaUnitaria','DatamesseceducController@allPagadurias');
-Route::resource('/datamesseceduc','DatamesseceducController');
+Route::resource('/datamesfidu', 'DatamesfiduController');
+Route::post('/datamesfidu/consultaUnitaria', 'DatamesfiduController@consultaUnitaria');
+Route::post('/datamesseceduc/consultaUnitaria', 'DatamesseceducController@consultaUnitaria');
+Route::post('/pagadurias/consultaUnitaria', 'DatamesseceducController@allPagadurias');
+Route::resource('/datamesseceduc', 'DatamesseceducController');
 
 
-
-Route::resource('/cotizer-data', dataCotizerController::class)->only(['store', 'index', 'show', 'update','destroy']);
-Route::view('/solicitud','creditCalculator');
-Route::view('/RegisterCredit','registerCredit');
+Route::resource('/cotizer-data', dataCotizerController::class)->only(['store', 'index', 'show', 'update', 'destroy']);
+Route::view('/solicitud', 'creditCalculator');
+Route::view('/RegisterCredit', 'registerCredit');
 
 
 

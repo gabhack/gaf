@@ -28,8 +28,7 @@
             </select>
           </template>
           <select class="form-control" v-else>
-            <option class="text-muted" selected disabled :value="null">Ingresa una cedula y presiona consultar para ver
-              las pagadurias disponibles
+            <option class="text-muted" selected disabled :value="null">Ingresa una cedula y presiona consultar
             </option>
           </select>
         </div>
