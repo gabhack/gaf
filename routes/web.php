@@ -117,6 +117,19 @@ Route::group(["prefix" => "pagadurias"], function () {
     Route::get('/delete/{id}', 'PagaduriasController@destroy');
 });
 
+//Pagos
+Route::group(["prefix" => "pagos"], function () {
+    Route::get('/', 'PagosController@index');
+
+    Route::get('/pagar', 'PagosController@pagar');
+    Route::post('/pay', 'PagosController@pay');
+
+    Route::get('/edit/{id}', 'PagosController@edit');
+    Route::post('/update/{id}', 'PagosController@update');
+
+    Route::get('/delete/{id}', 'PagosController@destroy');
+});
+
 
 // Aliados
 Route::group(["prefix" => "aliados"], function () {

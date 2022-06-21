@@ -83,7 +83,6 @@ export default {
     async getAllPagadurias() {
       this.isLoading = true;
       const response = await axios.post('/pagadurias/consultaUnitaria', {doc: this.dataclient.doc});
-      toastr.success('Pagadurias consultadas');
       this.dataclient.pagadurias = response.data;
       this.isLoading = false;
       return Promise.resolve(response.data);
@@ -115,7 +114,6 @@ export default {
         const response = await axios.post('/visados', {...this.dataclient});
         return Promise.resolve(response.status);
       } catch (e) {
-        toastr.error('No se pudo realizar la consulta');
       } finally {
         this.isLoading = false
       }

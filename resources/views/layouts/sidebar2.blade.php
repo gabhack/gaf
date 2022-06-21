@@ -45,6 +45,12 @@
 			</div>
 		</div>
 	</li>
+	<li class="nav-item">
+		<a class="nav-link" href="{{ url('pagos') }}">
+			<ami-icon></ami-icon>
+			<span>Pagos</span>
+		</a>
+	</li>
 	@endif
 
 	@if (HEGOAccess())

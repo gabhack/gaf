@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.23, for Linux (x86_64)
 --
--- Host: localhost    Database: ckcomerc_ami
+-- Host: localhost    Database: ckcomerc_amicarteras
 -- ------------------------------------------------------
 -- Server version	8.0.23-0ubuntu0.20.04.1
 
