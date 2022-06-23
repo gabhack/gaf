@@ -71,7 +71,7 @@ class PagosController extends Controller
         ]);
         $pagos = new Pagos;
         $orderId=DB::table('pagos')->max('id');
-        $orderId='Dev-'.($orderId+1);
+        $orderId='DevOL1-'.($orderId+1);
 
         $nombre=$request->nombre;
         $apellido=$request->apellido;
