@@ -71,7 +71,7 @@ class PagosController extends Controller
         ]);
         $pagos = new Pagos;
         $orderId=DB::table('pagos')->max('id');
-        $orderId='prueba-'.($orderId+1);
+        $orderId='Dev-'.($orderId+1);
 
         $nombre=$request->nombre;
         $apellido=$request->apellido;
@@ -156,7 +156,7 @@ class PagosController extends Controller
             "telefono" => $telefono,
             "concepto" => $concepto,
             "monto" => $monto,
-            "tajeta" => $card_number,
+            "tarjeta" => $card_number,
             "mes" => $expiration_month,
             "year" => $expiration_year,
             "cvv" => $cvv,

@@ -20,7 +20,7 @@ class Pagos extends Authenticatable
 		'telefono',
 		'concepto',
 		'monto',
-		'tajeta',
+		'tarjeta',
 		'mes',
 		'year',
 		'cvv',
