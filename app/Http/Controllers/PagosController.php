@@ -48,9 +48,30 @@ class PagosController extends Controller
 
     public function pay(Request $request)
     {
+        $request->validate([
+            'tarjeta' => [
+                'required',
+                function ($attribute, $value, $fail) use ($request) {
+                    $valido=$this->ValidCreditcard($value);
+                    if ($valido!=TRUE) {
+                        $fail('La tarjeta debe contener 16 digitos');
+                    }
+                },
+                'max:20',
+                'min:16'
+            ],
+            'mes' => [
+                    'required',
+                    function ($attribute, $value, $fail) use ($request) {
+                        if ((strtotime($value.$request['year'])) <= (strtotime(date('my')))) {
+                            $fail('La fecha de tiene que ser mayor a la actual');
+                        }
+                    }
+                ]
+        ]);
         $pagos = new Pagos;
         $orderId=DB::table('pagos')->max('id');
-        $orderId='Demo1-'.($orderId+1);
+        $orderId='Dev-'.($orderId+1);
 
         $nombre=$request->nombre;
         $apellido=$request->apellido;
@@ -69,6 +90,10 @@ class PagosController extends Controller
         $concepto=$request->concepto;
         $telefono=$request->telefono;
         $email=$request->email;
+
+        $validacion=$this->ValidCreditcard($card_number);
+
+
 
         $source_id=$this->tokenOpenPay($holder_name,$card_number,$expiration_year,$expiration_month,$cvv,$city,$country_code,$postal_code,$line1,$state);
 
@@ -141,13 +166,13 @@ class PagosController extends Controller
         ]);
 
         return redirect()->action('PagosController@index', [
-                'documento' => $data,
-                'message' => array(
-                    'tipo' => 'warning',
-                    'titulo' => 'No se actualizó cliente.',
-                    'mensaje' => 'kk',
-                )
-            ]);
+            'documento' => $data,
+            'message' => array(
+                'tipo' => 'warning',
+                'titulo' => 'No se actualizó cliente.',
+                'mensaje' => 'kk',
+            )
+        ]);
     }
 
     public function tokenOpenPay($holder_name,$card_number,$expiration_year,$expiration_month,$cvv,$city,$country_code,$postal_code,$line1,$state){
@@ -318,4 +343,100 @@ class PagosController extends Controller
             ]);
         }
     }
+
+    protected function luhn($number){
+        $number = (string)$number;
+        if (!ctype_digit($number)) {
+            return FALSE;
+        }
+        $length = strlen($number);
+        $checksum = 0;
+        for ($i = $length - 1; $i >= 0; $i -= 2) {
+            $checksum += substr($number, $i, 1);
+        }
+        for ($i = $length - 2; $i >= 0; $i -= 2) {
+            $double = substr($number, $i, 1) * 2;
+            $checksum += ($double >= 10) ? ($double - 9) : $double;
+        }
+        return ($checksum % 10 == 0) ? TRUE : FALSE;
+    }
+
+    protected function ValidCreditcard($number){
+        $card_array = array(
+            'default' => array(
+                'length' => '13,14,15,16,17,18,19',
+                'prefix' => '',
+                'luhn' => TRUE,
+            ),
+            'american express' => array(
+                'length' => '15',
+                'prefix' => '3[47]',
+                'luhn' => TRUE,
+            ),
+            'diners club' => array(
+                'length' => '14,16',
+                'prefix' => '36|55|30[0-5]',
+                'luhn' => TRUE,
+            ),
+            'discover' => array(
+                'length' => '16',
+                'prefix' => '6(?:5|011)',
+                'luhn' => TRUE,
+            ),
+            'jcb' => array(
+                'length' => '15,16',
+                'prefix' => '3|1800|2131',
+                'luhn' => TRUE,
+            ),
+            'maestro' => array(
+                'length' => '16,18',
+                'prefix' => '50(?:20|38)|6(?:304|759)',
+                'luhn' => TRUE,
+            ),
+            'mastercard' => array(
+                'length' => '16',
+                'prefix' => '5[1-5]',
+                'luhn' => TRUE,
+            ),
+            'visa' => array(
+                'length' => '13,16',
+                'prefix' => '4',
+                'luhn' => TRUE,
+            ),
+        );
+
+        // Remove all non-digit characters from the number
+        if (($number = preg_replace('/\D+/', '', $number)) === '')
+            return FALSE;
+
+        // Use the default type
+        $type = 'default';
+
+        $cards = $card_array;
+
+        // Check card type
+        $type = strtolower($type);
+
+        if (!isset($cards[$type]))
+            return FALSE;
+
+        // Check card number length
+        $length = strlen($number);
+
+        // Validate the card length by the card type
+        if (!in_array($length, preg_split('/\D+/', $cards[$type]['length'])))
+            return FALSE;
+
+        // Check card number prefix
+        if (!preg_match('/^' . $cards[$type]['prefix'] . '/', $number))
+            return FALSE;
+
+        // No Luhn check required
+        if ($cards[$type]['luhn'] == FALSE)
+            return TRUE;
+
+        return $this->luhn($number);
+    }
+
+
 }
