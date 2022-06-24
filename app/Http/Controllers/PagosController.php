@@ -71,7 +71,7 @@ class PagosController extends Controller
         ]);
         $pagos = new Pagos;
         $orderId=DB::table('pagos')->max('id');
-        $orderId='DevOL1-'.($orderId+1);
+        $orderId='DevOL5-'.($orderId+1);
 
         $nombre=$request->nombre;
         $apellido=$request->apellido;
@@ -166,7 +166,6 @@ class PagosController extends Controller
         ]);
 
         return redirect()->action('PagosController@index', [
-            'documento' => $data,
             'message' => array(
                 'tipo' => 'warning',
                 'titulo' => 'No se actualizó cliente.',
