@@ -17,8 +17,8 @@
 				<div class="form-row">
 					<div class="form-group col-md-4">
 						<label for="nombre">Nombre</label>
+						<input type="hidden" name="device_session_id" id="device_session_id">
 						<input type="text" class="form-control" name="nombre" id="nombre" placeholder="Nombre" value="{{ old('nombre') }}" required>
-						<input type="hidden" value="" name="device_session_id" id="device_session_id">
 						<input type="hidden" value="{{$source_id}}" name="" id="">
 					</div>
 					<div class="form-group col-md-4">
@@ -95,15 +95,6 @@
 			</form>
 		</div>
 	</div>
-    <script type='text/javascript' src="https://openpay.s3.amazonaws.com/openpay.v1.js"></script>
-	<script type='text/javascript' src="https://openpay.s3.amazonaws.com/openpay-data.v1.js"></script>
-	<script type="text/javascript">
-		$(document).ready(function(){
-			OpenPay.setSandboxMode(true);
-			var deviceDataId = OpenPay.deviceData.setup();
-			$('#device_session_id').val(deviceDataId);
-		});
-	</script>
 
 @endsection
 
@@ -119,4 +110,17 @@
     <li><a href="{{url('home')}}"><i class="fa fa-dashboard"></i>Inicio</a></li>
     <li><a href="{{url('usuarios')}}">Pagos</a></li>
     <li class="active">Realizar Pago</li>
+@endsection
+
+
+@section('js')
+    <script src="https://openpay.s3.amazonaws.com/openpay.v1.js"></script>
+	<script  src="https://openpay.s3.amazonaws.com/openpay-data.v1.js"></script>
+	<script >
+		$(document).ready(function(){
+			OpenPay.setSandboxMode(true);
+			var deviceDataId = OpenPay.deviceData.setup();
+			$('#device_session_id').val(deviceDataId);
+		});
+	</script>
 @endsection
