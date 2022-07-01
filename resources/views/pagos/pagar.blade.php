@@ -12,6 +12,8 @@
 		</ul>
 		<br/>
 		<div class="panel-body">
+			<a href="{{url('pagos/pagar')}}" class="btn btn-secondary btn-lg disabled" role="button" aria-disabled="true">Pago con Tarjeta</a>
+			<a href="{{url('pagos/pagarpse')}}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Pagar con PSE</a>
 			<form method="POST" action="{{url('pagos/pay')}}">
 				{{ csrf_field() }}
 				<div class="form-row">
@@ -115,8 +117,8 @@
 
 @section('js')
     <script src="https://openpay.s3.amazonaws.com/openpay.v1.js"></script>
-	<script  src="https://openpay.s3.amazonaws.com/openpay-data.v1.js"></script>
-	<script >
+	<script src="https://openpay.s3.amazonaws.com/openpay-data.v1.js"></script>
+	<script>
 		$(document).ready(function(){
 			OpenPay.setSandboxMode(true);
 			var deviceDataId = OpenPay.deviceData.setup();

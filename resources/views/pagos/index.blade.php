@@ -51,6 +51,7 @@
         @endforeach
       </tbody>
     </table>
+    {{ $links }}
   @else
     <div class="col-md-12">
       <h4>Aún no hay usuarios para mostrar.</h4>

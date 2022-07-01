@@ -122,7 +122,10 @@ Route::group(["prefix" => "pagos"], function () {
     Route::get('/', 'PagosController@index');
 
     Route::get('/pagar', 'PagosController@pagar');
+    Route::get('/pagarpse', 'PagosController@pagarpse');
     Route::post('/pay', 'PagosController@pay');
+    Route::post('/payPSE', 'PagosController@payPSE');
+    Route::get('/payPSE', 'PagosController@getPayPSE');
 
     Route::get('/edit/{id}', 'PagosController@edit');
     Route::post('/update/{id}', 'PagosController@update');

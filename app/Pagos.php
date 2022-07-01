@@ -14,11 +14,13 @@ class Pagos extends Authenticatable
 
 	protected $fillable = [	'id',
 		'usuarioid',
+		'idtransaccion',
 		'nombre',
 		'apellido',
 		'email',
 		'telefono',
 		'concepto',
+		'tipopago',
 		'monto',
 		'tarjeta',
 		'mes',

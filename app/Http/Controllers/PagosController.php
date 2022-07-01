@@ -27,12 +27,13 @@ class PagosController extends Controller
     public function index()
     {
         if (IsSuperAdmin() || IsAMIAdmin() || IsHEGOAdmin()) {
-            $lista = Pagos::all();
+            $lista = Pagos::all()->orderBy('id', 'DESC')->paginate(20);
         } else {
-            $lista = Pagos::where('usuarioid', Auth::user()->id)->get();
+            $lista = Pagos::where('usuarioid', Auth::user()->id)->orderBy('id', 'DESC')->paginate(15);
         }
+        $links = $lista->links();
 
-        return view("pagos/index")->with(["lista" => $lista]);
+        return view("pagos/index")->with(["links" => $links, "lista" => $lista]);
     }
 
 
@@ -41,6 +42,45 @@ class PagosController extends Controller
         $roles = \App\Roles::OrderBy('rol')->get();
         //$source_id=\App\Pagos::idOpenPay();
         return view('pagos/pagar')->with([
+            'source_id' => 'demo'
+        ]);
+    }
+
+    public function getPayPSE()
+    {
+        $pagos = new Pagos;
+        $roles = \App\Roles::OrderBy('rol')->get();
+        $create_dt = date("Y-m-d H:i:s");
+        $idtransaccion=$_GET['id'];
+
+        $url = "https://sandbox-api.openpay.co/v1/mbj7d0ylmxkrlg4m1tcu/charges/".$idtransaccion;
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        $headers = array(
+           "Authorization: Basic c2tfMzgyY2NmY2IzMzU2NDc0MDgyZDU3NWM0ZmFjZmVmYjY6IA==",
+        );
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        $resp = curl_exec($curl);
+        curl_close($curl);
+        $dato = json_decode($resp, true);
+        $status=$dato["status"];
+        $user = Pagos::where('idtransaccion', $idtransaccion)
+            ->update([ 
+                'status' =>$status, 
+                'respuesta' => $resp
+            ]);
+
+        return redirect()->action('PagosController@index');
+    }
+
+    public function pagarpse()
+    {
+        $roles = \App\Roles::OrderBy('rol')->get();
+        //$source_id=\App\Pagos::idOpenPay();
+        return view('pagos/pagarpse')->with([
             'source_id' => 'demo'
         ]);
     }
@@ -70,8 +110,10 @@ class PagosController extends Controller
                 ]
         ]);
         $pagos = new Pagos;
-        $orderId=DB::table('pagos')->max('id');
-        $orderId='DevOL5-'.($orderId+1);
+        $resultado=$this->tokenOpenPay($request);
+        $idPago=$resultado[1];
+        $orderId='DevJJ-'.($idPago);
+        $source_id=$resultado[0];
 
         $nombre=$request->nombre;
         $apellido=$request->apellido;
@@ -91,11 +133,6 @@ class PagosController extends Controller
         $telefono=$request->telefono;
         $email=$request->email;
 
-        $validacion=$this->ValidCreditcard($card_number);
-
-
-
-        $source_id=$this->tokenOpenPay($holder_name,$card_number,$expiration_year,$expiration_month,$cvv,$city,$country_code,$postal_code,$line1,$state);
 
         $pagos->usuarioid = $request->usuarioid;
         $pagos->nombre = $holder_name;
@@ -148,22 +185,22 @@ class PagosController extends Controller
         $status=$dato["status"];
 
         $create_dt = date("Y-m-d H:i:s");
-        $user = Pagos::create([
-            "usuarioid" => Auth::id(),
-            "nombre" => $nombre,
-            "apellido" => $apellido,
-            "email" => $email,
-            "telefono" => $telefono,
-            "concepto" => $concepto,
-            "monto" => $monto,
-            "tarjeta" => $card_number,
-            "mes" => $expiration_month,
-            "year" => $expiration_year,
-            "cvv" => $cvv,
-            "status" => $status,
-            "respuesta" => $resp,
-            'created_at' => $create_dt,
-        ]);
+        $user = Pagos::find($idPago);
+            $user->nombre = $nombre;
+            $user->idtransaccion = $source_id;
+            $user->apellido = $apellido;
+            $user->email = $email;
+            $user->telefono = $telefono;
+            $user->concepto = $concepto;
+            $user->monto = $monto;
+            $user->tarjeta = $card_number;
+            $user->mes = $expiration_month;
+            $user->year = $expiration_year;
+            $user->cvv = $cvv;
+            $user->status = $status;
+            $user->respuesta = $resp;
+            $user->updated_at = $create_dt;
+        $user->save();
 
         return redirect()->action('PagosController@index', [
             'message' => array(
@@ -174,7 +211,113 @@ class PagosController extends Controller
         ]);
     }
 
-    public function tokenOpenPay($holder_name,$card_number,$expiration_year,$expiration_month,$cvv,$city,$country_code,$postal_code,$line1,$state){
+    public function payPSE(Request $request)
+    {
+        
+        //$pagos = new Pagos;
+
+        $nombre=$request->nombre;
+        $apellido=$request->apellido;
+        $city="Manizales";
+        $country_code="CO";
+        $postal_code="170001";
+        $line1="Conocida";
+        $state="Medallin";
+        $device_session_id=$request->device_session_id;
+        $monto=$request->monto;
+        $concepto=$request->concepto;
+        $telefono=$request->telefono;
+        $email=$request->email;
+        $create_dt = date("Y-m-d H:i:s");
+        $user = Pagos::create([
+            "usuarioid" => Auth::id(),
+            "nombre" => $nombre,
+            "apellido" => $apellido,
+            "email" => $email,
+            "telefono" => $telefono,
+            "concepto" => $concepto,
+            "tipopago" => 'PSE',
+            "monto" => $monto,
+            "status" => 'Pendiente',
+            'created_at' => $create_dt,
+        ]);
+        $idPago=$user->id;
+        $orderId='DevJJ1-'.($idPago);
+
+
+        $url = "https://sandbox-api.openpay.co/v1/mbj7d0ylmxkrlg4m1tcu/charges";
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        $headers = array(
+           "Content-type: application/json",
+           "Authorization: Basic c2tfMzgyY2NmY2IzMzU2NDc0MDgyZDU3NWM0ZmFjZmVmYjY6IA==",
+        );
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        $data = '
+        {
+           "method" : "bank_account",
+           "amount" : "'.$monto.'",
+           "currency" : "COP",
+           "description" : "'.$concepto.'",
+           "order_id" : "'.$orderId.'",
+           "iva" : "0",
+           "redirect_url":"http://ami-project.test/pagos/payPSE",
+           "customer" : {
+                "name" : "'.$nombre.'",
+                "last_name" : "'.$apellido.'",
+                "email" : "'.$email.'",
+                "phone_number" : "'.$telefono.'",
+                "requires_account" : false,
+                "customer_address" : {
+                    "department" : "'.$state.'",
+                    "city" : "'.$city.'",
+                    "additional" : "'.$line1.'"
+                }
+           }
+        }';
+
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+
+        //for debug only!
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+        $datos = curl_exec($curl);
+        curl_close($curl);
+        $dato = json_decode($datos, true);
+        //var_dump($dato);
+        $url=$dato["payment_method"]["url"];
+        $source_id=$dato["id"];
+
+        $user = Pagos::find($idPago);
+            $user->idtransaccion = $source_id;
+        $user->save();
+
+
+        return $url;
+    }
+
+    public function tokenOpenPay($request){
+        $nombre=$request->nombre;
+        $apellido=$request->apellido;
+        $holder_name=$nombre.' '.$apellido;
+        $card_number=$request->tarjeta;
+        $expiration_year=$request->year;
+        $expiration_month=$request->mes;
+        $cvv=$request->cvv;
+        $city="Manizales";
+        $country_code="CO";
+        $postal_code="170001";
+        $line1="Conocida";
+        $state="Medallin";
+        $device_session_id=$request->device_session_id;
+        $monto=$request->monto;
+        $concepto=$request->concepto;
+        $telefono=$request->telefono;
+        $email=$request->email;
+
         $url = "https://sandbox-api.openpay.co/v1/mbj7d0ylmxkrlg4m1tcu/tokens";
         $headers = array(
            "Content-type: application/json",
@@ -206,8 +349,56 @@ class PagosController extends Controller
         $datos = curl_exec($curl);
         curl_close($curl);
         $dato = json_decode($datos, true);
-        $response=$dato["id"];
-        return $response;
+
+        if (isset($dato["error_code"])) {
+            $response=$dato["id"];
+            $create_dt = date("Y-m-d H:i:s");
+            $user = Pagos::create([
+                "usuarioid" => Auth::id(),
+                "nombre" => $nombre,
+                "apellido" => $apellido,
+                "email" => $email,
+                "telefono" => $telefono,
+                "tipopago" => 'Tarjeta',
+                "concepto" => $concepto,
+                "monto" => $monto,
+                "tarjeta" => $card_number,
+                "mes" => $expiration_month,
+                "year" => $expiration_year,
+                "cvv" => $cvv,
+                "status" => 'Error',
+                'created_at' => $create_dt,
+            ]);
+            $idPago=$user->id;
+            return redirect()->action('PagosController@index', [
+                'message' => array(
+                    'tipo' => 'warning',
+                    'titulo' => 'No se puedo completar el pago',
+                    'mensaje' => $dato["description"],
+                )
+            ]);
+        } else {
+            $response=$dato["id"];
+            $create_dt = date("Y-m-d H:i:s");
+            $user = Pagos::create([
+                "usuarioid" => Auth::id(),
+                "nombre" => $nombre,
+                "apellido" => $apellido,
+                "email" => $email,
+                "telefono" => $telefono,
+                "tipopago" => 'Tarjeta',
+                "concepto" => $concepto,
+                "monto" => $monto,
+                "tarjeta" => $card_number,
+                "mes" => $expiration_month,
+                "year" => $expiration_year,
+                "cvv" => $cvv,
+                "status" => 'Pendiente',
+                'created_at' => $create_dt,
+            ]);
+            $idPago=$user->id;
+            return array($response, $idPago);
+        }
     }
 
     public function consultaOpenPay(){
