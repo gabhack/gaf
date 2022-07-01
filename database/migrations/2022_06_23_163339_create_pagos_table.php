@@ -16,11 +16,13 @@ class CreatePagosTable extends Migration
         Schema::create('pagos', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('usuarioid');
+            $table->integer('idtransaccion');
             $table->string('nombre', 250);
             $table->string('apellido', 200);
             $table->string('email', 50);
             $table->string('telefono', 15);
             $table->string('concepto', 200);
+            $table->string('tipopago', 100);
             $table->double('monto');
             $table->string('tarjeta', 25);
             $table->string('mes', 2);

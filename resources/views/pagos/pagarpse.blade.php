@@ -92,6 +92,8 @@
 	<script src="https://openpay.s3.amazonaws.com/openpay-data.v1.js"></script>
 	<script>
 		$(document).ready(function(){
+			OpenPay.setId('mbj7d0ylmxkrlg4m1tcu');
+			OpenPay.setApiKey('sk_382ccfcb3356474082d575c4facfefb6');
 			OpenPay.setSandboxMode(true);
 			var deviceDataId = OpenPay.deviceData.setup();
 			$('#device_session_id').val(deviceDataId);

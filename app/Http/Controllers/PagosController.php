@@ -114,15 +114,10 @@ class PagosController extends Controller
                 ]
         ]);
         $pagos = new Pagos;
-<<<<<<< HEAD
         $resultado=$this->tokenOpenPay($request);
         $idPago=$resultado[1];
         $orderId=$this->identifiacador.'-'.($idPago);
         $source_id=$resultado[0];
-=======
-        $orderId=DB::table('pagos')->max('id');
-        $orderId='DevOL6-'.($orderId+1);
->>>>>>> aa110d353a6ab2f91f547fafb618ac8f41558a7d
 
         $nombre=$request->nombre;
         $apellido=$request->apellido;
