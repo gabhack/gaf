@@ -13,6 +13,10 @@ class PagosController extends Controller
      *
      * @return void
      */
+    private $idOpenpay="mbj7d0ylmxkrlg4m1tcu";
+    private $keyOpenpay="sk_382ccfcb3356474082d575c4facfefb6: ";
+    private $identifiacador="DEVJJ";
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -53,12 +57,12 @@ class PagosController extends Controller
         $create_dt = date("Y-m-d H:i:s");
         $idtransaccion=$_GET['id'];
 
-        $url = "https://sandbox-api.openpay.co/v1/mbj7d0ylmxkrlg4m1tcu/charges/".$idtransaccion;
+        $url = "https://sandbox-api.openpay.co/v1/".$this->idOpenpay."/charges/".$idtransaccion;
         $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         $headers = array(
-           "Authorization: Basic c2tfMzgyY2NmY2IzMzU2NDc0MDgyZDU3NWM0ZmFjZmVmYjY6IA==",
+           "Authorization: Basic ".base64_encode($this->keyOpenpay),
         );
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
@@ -112,7 +116,7 @@ class PagosController extends Controller
         $pagos = new Pagos;
         $resultado=$this->tokenOpenPay($request);
         $idPago=$resultado[1];
-        $orderId='DevJJ-'.($idPago);
+        $orderId=$this->identifiacador.'-'.($idPago);
         $source_id=$resultado[0];
 
         $nombre=$request->nombre;
@@ -143,7 +147,7 @@ class PagosController extends Controller
         $pagos->cvv = $cvv;
         $pagos->monto = $monto;
 
-        $url = "https://sandbox-api.openpay.co/v1/mbj7d0ylmxkrlg4m1tcu/charges";
+        $url = "https://sandbox-api.openpay.co/v1/".$this->idOpenpay."/charges";
         $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_POST, true);
@@ -151,7 +155,7 @@ class PagosController extends Controller
 
         $headers = array(
            "Content-type: application/json",
-           "Authorization: Basic c2tfMzgyY2NmY2IzMzU2NDc0MDgyZDU3NWM0ZmFjZmVmYjY6IA==",
+           "Authorization: Basic ".base64_encode($this->keyOpenpay),
         );
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
@@ -242,17 +246,17 @@ class PagosController extends Controller
             'created_at' => $create_dt,
         ]);
         $idPago=$user->id;
-        $orderId='DevJJ1-'.($idPago);
+        $orderId=$this->identifiacador.'-'.($idPago);
 
 
-        $url = "https://sandbox-api.openpay.co/v1/mbj7d0ylmxkrlg4m1tcu/charges";
+        $url = "https://sandbox-api.openpay.co/v1/".$this->idOpenpay."/charges";
         $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_POST, true);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         $headers = array(
            "Content-type: application/json",
-           "Authorization: Basic c2tfMzgyY2NmY2IzMzU2NDc0MDgyZDU3NWM0ZmFjZmVmYjY6IA==",
+           "Authorization: Basic ".base64_encode($this->keyOpenpay),
         );
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         $data = '
@@ -318,10 +322,10 @@ class PagosController extends Controller
         $telefono=$request->telefono;
         $email=$request->email;
 
-        $url = "https://sandbox-api.openpay.co/v1/mbj7d0ylmxkrlg4m1tcu/tokens";
+        $url = "https://sandbox-api.openpay.co/v1/".$this->idOpenpay."/tokens";
         $headers = array(
            "Content-type: application/json",
-           "Authorization: Basic c2tfMzgyY2NmY2IzMzU2NDc0MDgyZDU3NWM0ZmFjZmVmYjY6IA==",
+           "Authorization: Basic ".base64_encode($this->keyOpenpay),
         );
         $data = '
         {
@@ -402,13 +406,13 @@ class PagosController extends Controller
     }
 
     public function consultaOpenPay(){
-        $url = "https://sandbox-api.openpay.co/v1/mbj7d0ylmxkrlg4m1tcu/charges";
+        $url = "https://sandbox-api.openpay.co/v1/".$this->idOpenpay."/charges";
         $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
         $headers = array(
-           "Authorization: Basic c2tfMzgyY2NmY2IzMzU2NDc0MDgyZDU3NWM0ZmFjZmVmYjY6IA==",
+           "Authorization: Basic ".base64_encode($this->keyOpenpay),
         );
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         //for debug only!

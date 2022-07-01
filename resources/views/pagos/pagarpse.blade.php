@@ -106,6 +106,7 @@
 			var telefono = $("#telefono").val();
 			var concepto = $("#concepto").val();
 			var monto = $("#monto").val();
+            $("#page-top").fadeOut(1000);
 
 			$.ajax({
 				headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
@@ -124,7 +125,7 @@
 			    	//$('#smallModal').modal("show");
                     //$('#smallBody').html(data).show();
                     //$('#linkPago').attr('src',data);
-                    window.open(data, '_blank');
+                    location.href=data;
                 },
                 //complete: function() {
                     //$('#loader').hide();
