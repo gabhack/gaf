@@ -21,7 +21,6 @@ class AlterNullToPagos extends Migration
             $table->string('telefono', 15)->nullable()->change();
             $table->string('concepto', 200)->nullable()->change();
             $table->string('tipopago', 100)->nullable()->change();
-            $table->double('monto')->nullable()->change();
             $table->string('tarjeta', 25)->nullable()->change();
             $table->string('mes', 2)->nullable()->change();
             $table->string('year', 2)->nullable()->change();
