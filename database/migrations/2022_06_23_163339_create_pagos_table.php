@@ -16,20 +16,20 @@ class CreatePagosTable extends Migration
         Schema::create('pagos', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('usuarioid');
-            $table->integer('idtransaccion')->nullable();;
-            $table->string('nombre', 250)->nullable();;
-            $table->string('apellido', 200)->nullable();;
-            $table->string('email', 50)->nullable();;
-            $table->string('telefono', 15)->nullable();;
-            $table->string('concepto', 200)->nullable();;
-            $table->string('tipopago', 100)->nullable();;
-            $table->double('monto')->nullable();;
-            $table->string('tarjeta', 25)->nullable();;
-            $table->string('mes', 2)->nullable();;
-            $table->string('year', 2)->nullable();;
-            $table->string('cvv', 5)->nullable();;
+            $table->integer('idtransaccion')->nullable();
+            $table->string('nombre', 250)->nullable();
+            $table->string('apellido', 200)->nullable();
+            $table->string('email', 50)->nullable();
+            $table->string('telefono', 15)->nullable();
+            $table->string('concepto', 200)->nullable();
+            $table->string('tipopago', 100)->nullable();
+            $table->double('monto')->nullable();
+            $table->string('tarjeta', 25)->nullable();
+            $table->string('mes', 2)->nullable();
+            $table->string('year', 2)->nullable();
+            $table->string('cvv', 5)->nullable();
             $table->string('status', 250);
-            $table->text('respuesta')->nullable();;
+            $table->text('respuesta')->nullable();
             $table->timestamps();
         });
     }
