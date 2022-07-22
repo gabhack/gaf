@@ -299,7 +299,6 @@ class PagosController extends Controller
             $user->idtransaccion = $source_id;
         $user->save();
 
-
         return $url;
     }
 
