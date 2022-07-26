@@ -13,7 +13,7 @@ class CreateTableCifin extends Migration
      */
     public function up()
     {
-        Schema::create('table_cifin', function (Blueprint $table) {
+        Schema::create('cifin', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('usuarioid')->references('id')->on('users');
             $table->integer('idtransaccion')->nullable();
@@ -33,6 +33,6 @@ class CreateTableCifin extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('table_cifin');
+        Schema::dropIfExists('cifin');
     }
 }
