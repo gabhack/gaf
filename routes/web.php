@@ -381,12 +381,15 @@ Route::group(["prefix" => "clientes"], function () {
 Route::get('/dataset', 'DatasetController@index');
 Route::get('/dataset/get', 'DatasetController@get');
 
+
+//Paginas de informacion
 Route::view('/welcome', 'welcome');
 Route::view('/amipersonas', 'amipersonas');
 Route::view('/moreinformation', 'moreinformation');
 Route::view('/hego', 'hego');
 Route::view('/hegoinformation', 'hegoinformation');
 Route::view('/integration', 'integration');
+Route::view('/contact', 'contact');
 
 Route::post('datamesImport', 'DataMesController@import');
 Route::post('fechaVincImport', 'FechaVincController@import');

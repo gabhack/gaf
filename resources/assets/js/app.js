@@ -46,6 +46,7 @@ Vue.component('loading',Loading)
 // Vue Components
 Vue.component('CustomHeader', require('./components/CustomHeader').default);
 Vue.component('HomePage', require('./components/pages/HomePage').default);
+Vue.component('Contact', require('./components/pages/Contact').default);
 Vue.component('AmiPersonas', require('./components/pages/AmiPersonas').default);
 Vue.component('MoreInformation', require('./components/pages/MoreInformation').default);
 Vue.component('Hego', require('./components/pages/Hego').default);
