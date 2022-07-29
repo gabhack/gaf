@@ -38,6 +38,7 @@
 				<!-- <a class="collapse-item btn-list" href="{{ url('consultas/list' )}}">Listado de consultas</a>		 -->
 				<!-- <a class="collapse-item" href="/massiveCharge">Carga Masiva</a> -->
 				<a class="collapse-item" href="{{ url('dataClientDraft') }}">Nueva consulta +</a>
+				<a class="collapse-item" href="{{ url('cifin') }}">Nueva consulta CIFIN</a>
 				<!-- <a class="collapse-item" href="#">Consulta bloque</a> 				 -->
 				<a class="collapse-item" href="{{ url('refundCartera') }}">Recuperacion de Cartera </a>
 				<!-- <a class="collapse-item" href="#">Prospección de Mercado</a> -->
