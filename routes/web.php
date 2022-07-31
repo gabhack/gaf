@@ -126,6 +126,10 @@ Route::group(["prefix" => "pagos"], function () {
     Route::post('/pay', 'PagosController@pay');
     Route::post('/payPSE', 'PagosController@payPSE');
     Route::get('/payPSE', 'PagosController@getPayPSE');
+    Route::post('/pagarefectivo', 'PagosController@payEfectivo');
+    Route::get('/pagarefectivo', 'PagosController@getPayEfectivo');
+    Route::get('/download', 'PagosController@download');
+    Route::get('/pdfpago', 'PagosController@pdfpago');
 
     Route::get('/edit/{id}', 'PagosController@edit');
     Route::post('/update/{id}', 'PagosController@update');
@@ -137,14 +141,6 @@ Route::group(["prefix" => "cifin"], function () {
     Route::get('/', 'CifinController@index');
     Route::post('/consultar', 'CifinController@consultar');
     Route::get('/consulta', 'CifinController@consulta');
-
-    Route::post('/pagarpse', 'PagosController@pagarpse');
-    Route::post('/pay', 'PagosController@pay');
-    Route::post('/payPSE', 'PagosController@payPSE');
-    Route::get('/payPSE', 'PagosController@getPayPSE');
-    Route::get('/edit/{id}', 'PagosController@edit');
-    Route::post('/update/{id}', 'PagosController@update');
-    Route::get('/delete/{id}', 'PagosController@destroy');
 });
 
 

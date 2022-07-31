@@ -5,6 +5,7 @@ use App\Pagos;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class PagosController extends Controller
 {
@@ -87,6 +88,135 @@ class PagosController extends Controller
         return view('pagos/pagarpse')->with([
             'source_id' => 'demo'
         ]);
+    }
+
+    public function getPayEfectivo()
+    {
+        $roles = \App\Roles::OrderBy('rol')->get();
+        //$source_id=\App\Pagos::idOpenPay();
+        return view('pagos/pagarefectivo');
+    }
+
+    public function pdfpago()
+    {
+        return view('pagos/pdfpago');
+    }
+
+    public function payEfectivo(Request $request)
+    {
+        $pagos = new Pagos;
+        $idPago=Pagos::select('orders')->max('id');
+        $orderId=$this->identifiacador.'-'.($idPago+1);
+
+        date_default_timezone_set('America/Bogota');
+        $due_date=date('Y-m-d\T24:00:00');
+
+        $nombre=$request->nombre;
+        $apellido=$request->apellido;
+        $email=$request->email;
+        $telefono=$request->telefono;
+        $monto=$request->monto;
+        $concepto=$request->concepto;
+        $city="Manizales";
+        $country_code="CO";
+        $postal_code="170001";
+        $line1="Conocida";
+        $state="Medallin";
+        $url = "https://sandbox-api.openpay.co/v1/".$this->idOpenpay."/customers";
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+        $headers = array(
+           "Content-type: application/json",
+           "Authorization: Basic ".base64_encode($this->keyOpenpay),
+        );
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+
+        $data = '{
+           "external_id" : "'.$orderId.'",
+           "name": "'.$nombre.'",
+           "last_name": "'.$apellido.'",
+           "email": "'.$email.'",
+           "phone_number" : "'.$telefono.'",
+           "customer_address" : {
+                "department" : "'.$state.'",
+                "city" : "'.$city.'",
+                "additional" : "'.$line1.'"
+            }
+        }';
+
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+
+        //for debug only!
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+        $resp = curl_exec($curl);
+        curl_close($curl);
+        $dato = json_decode($resp, true);
+        $CUSTOMER_ID=$dato["id"];
+
+        $pago = Pagos::create([
+            "usuarioid" => Auth::id(),
+            "nombre" => $nombre,
+            "apellido" => $apellido,
+            "email" => $email,
+            "telefono" => $telefono,
+            "concepto" => $concepto,
+            "tipopago" => 'EFECTIVO',
+            "monto" => $monto,
+            "status" => 'Pendiente',
+        ]);
+        $idPago=$pago->id;
+
+        $url = "https://sandbox-api.openpay.co/v1/".$this->idOpenpay."/customers/".$CUSTOMER_ID."/charges";
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+        $headers = array(
+           "Content-type: application/json",
+           "Authorization: Basic ".base64_encode($this->keyOpenpay),
+        );
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+
+        $data = '{
+            "method" : "store",
+            "amount" : '.$monto.',
+            "currency" : "COP",
+            "iva" : "0",
+            "description" : "'.$concepto.'",
+            "order_id" : "'.$orderId.'",
+            "due_date" : "'.$due_date.'"
+        }';
+
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+
+        //for debug only!
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        $resp = curl_exec($curl);
+        curl_close($curl);
+        $dato = json_decode($resp, true);
+        //var_dump($dato);
+        $idCliente=$dato["id"];
+
+        $user = Pagos::find($idPago);
+            $user->idtransaccion = $idCliente;
+            $user->respuesta = $resp;
+        $user->save();
+
+        return redirect()->action('PagosController@download',$dato);
+    }
+
+    public function download(Request $request)
+    {
+        //$pdf = \PDF::loadView('pagos/pdfpago', $data);
+        //return $pdf->download('archivo.pdf');
+        return PDF::loadView('pagos/pdfpago', $request)->stream('archivo.pdf');
     }
 
 

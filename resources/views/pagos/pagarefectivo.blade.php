@@ -13,16 +13,15 @@
 		<br/>
 		<div class="panel-body">
 			<a href="{{url('pagos/pagar')}}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Pago con Tarjeta</a>
-			<a href="{{url('pagos/pagarpse')}}" class="btn btn-primary btn-lg disabled" role="button" aria-disabled="true">Pagar con PSE</a>
-			<a href="{{url('pagos/pagarefectivo')}}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Pago en Efectivo</a>
-			<form method="POST" action="{{url('pagos/payPSE')}}">
+			<a href="{{url('pagos/pagarpse')}}" class="btn btn-primary btn-lg active" role="button" aria-disabled="true">Pagar con PSE</a>
+			<a href="{{url('pagos/pagarefectivo')}}" class="btn btn-primary btn-lg disabled" role="button" aria-pressed="true">Pago en Efectivo</a>
+			<form method="POST" action="{{url('pagos/pagarefectivo')}}">
 				{{ csrf_field() }}
 				<div class="form-row">
 					<div class="form-group col-md-4">
 						<label for="nombre">Nombre</label>
 						<input type="hidden" name="device_session_id" id="device_session_id">
 						<input type="text" class="form-control" name="nombre" id="nombre" placeholder="Nombre" value="{{ old('nombre') }}" required>
-						<input type="hidden" value="{{$source_id}}" name="" id="">
 					</div>
 					<div class="form-group col-md-4">
 						<label for="apellido">Apellidos</label>
@@ -47,7 +46,7 @@
 						<input type="number" min="0.00" max="10000.00" step="0.01" class="form-control" name="monto" id="monto" value="{{ old('monto') }}" placeholder="Total" required>
 					</div>
 				</div>
-				<button id="payPSE" type="submit" class="btn btn-primary">Pagar PSE</button>
+				<button id="payPSE" type="submit" class="btn btn-primary">Generar orden de Pago</button>
 			</form>
 		</div>
 	</div>
@@ -98,45 +97,6 @@
 			OpenPay.setSandboxMode(true);
 			var deviceDataId = OpenPay.deviceData.setup();
 			$('#device_session_id').val(deviceDataId);
-		});
-
-		$("#payPSE").click(function(e){
-			e.preventDefault();
-			var device_session_id = $("#device_session_id").val();
-			var nombre = $("#nombre").val();
-			var apellido = $("#apellido").val();
-			var email = $("#email").val();
-			var telefono = $("#telefono").val();
-			var concepto = $("#concepto").val();
-			var monto = $("#monto").val();
-            $("#page-top").fadeOut(1000);
-
-			$.ajax({
-				headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-			    type: 'post',
-			    url:'/pagos/payPSE',
-			    data: {
-			        device_session_id: device_session_id,
-			        nombre : nombre,
-			        apellido : apellido,
-			        email : email,
-			        telefono : telefono,
-			        concepto : concepto,
-			        monto : monto
-			    },
-			    success:function(data){
-			    	//$('#smallModal').modal("show");
-                    //$('#smallBody').html(data).show();
-                    //$('#linkPago').attr('src',data);
-                    location.href=data;
-                },
-                //complete: function() {
-                    //$('#loader').hide();
-                //},
-			    error:function (data) {
-			        $('.btn-submit').prop('disabled', false);
-			    }
-			});
 		});
 	</script>
 @endsection
