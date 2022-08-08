@@ -11,17 +11,13 @@
 |
 */
 
-use App\Http\Controllers\PagaduriasController;
 use App\Http\Controllers\VisadoController;
 
 Route::get('/tests', function () {
-
     return "test";
-
 });
 
 Auth::routes(['register' => true]);
-
 
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -32,7 +28,6 @@ Route::group(["prefix" => "profile"], function () {
     Route::get('/', 'ProfileController@profile');
     Route::post('/store', 'ProfileController@saveProfile');
 });
-
 
 // Roles
 Route::group(["prefix" => "roles"], function () {
@@ -47,7 +42,6 @@ Route::group(["prefix" => "roles"], function () {
     Route::get('/delete/{id}', 'RolesController@destroy');
 });
 
-
 // Usuarios
 Route::group(["prefix" => "usuarios"], function () {
     Route::get('/', 'UserController@index');
@@ -60,7 +54,6 @@ Route::group(["prefix" => "usuarios"], function () {
 
     Route::get('/delete/{id}', 'UserController@destroy');
 });
-
 
 // Parámetros
 Route::group(["prefix" => "parametros"], function () {
@@ -75,7 +68,6 @@ Route::group(["prefix" => "parametros"], function () {
     Route::get('/delete/{id}', 'ParametrosController@destroy');
 });
 
-
 // Factores x millon Kredit
 Route::group(["prefix" => "factorxmillonkredit"], function () {
     Route::get('/', 'FactoresXMillonKreditController@index');
@@ -89,7 +81,6 @@ Route::group(["prefix" => "factorxmillonkredit"], function () {
     Route::get('/delete/{id}', 'FactoresXMillonKreditController@destroy');
 });
 
-
 // Demandantes
 Route::group(["prefix" => "demandantes"], function () {
     Route::get('/', 'DemandantesController@index');
@@ -102,7 +93,6 @@ Route::group(["prefix" => "demandantes"], function () {
 
     Route::get('/delete/{id}', 'DemandantesController@destroy');
 });
-
 
 // Pagadurias
 Route::group(["prefix" => "pagadurias"], function () {
@@ -143,7 +133,6 @@ Route::group(["prefix" => "cifin"], function () {
     Route::get('/consulta', 'CifinController@consulta');
 });
 
-
 // Aliados
 Route::group(["prefix" => "aliados"], function () {
     Route::get('/', 'AliadosController@index');
@@ -159,7 +148,6 @@ Route::group(["prefix" => "aliados"], function () {
     Route::get('/parametrizar', 'AliadosvalidosController@index');
 });
 
-
 // Aliados Validos
 Route::group(["prefix" => "aliadosvalidos"], function () {
     Route::get('/', 'AliadosvalidosController@index');
@@ -172,7 +160,6 @@ Route::group(["prefix" => "aliadosvalidos"], function () {
 
     Route::get('/delete/{id}', 'AliadosvalidosController@destroy');
 });
-
 
 // Entidades
 Route::group(["prefix" => "entidades"], function () {
@@ -187,7 +174,6 @@ Route::group(["prefix" => "entidades"], function () {
     Route::get('/delete/{id}', 'EntidadesController@destroy');
 });
 
-
 // Estados Cartera
 Route::group(["prefix" => "estadoscartera"], function () {
     Route::get('/', 'EstadoscarteraController@index');
@@ -200,7 +186,6 @@ Route::group(["prefix" => "estadoscartera"], function () {
 
     Route::get('/delete/{id}', 'EstadoscarteraController@destroy');
 });
-
 
 // Tipos de Embargo
 Route::group(["prefix" => "tiposembargo"], function () {
@@ -215,7 +200,6 @@ Route::group(["prefix" => "tiposembargo"], function () {
     Route::get('/delete/{id}', 'TiposembargoController@destroy');
 });
 
-
 // Sectores
 Route::group(["prefix" => "sectores"], function () {
     Route::get('/', 'SectoresController@index');
@@ -228,7 +212,6 @@ Route::group(["prefix" => "sectores"], function () {
 
     Route::get('/delete/{id}', 'SectoresController@destroy');
 });
-
 
 // Oficinas
 Route::group(["prefix" => "oficinas"], function () {
@@ -243,7 +226,6 @@ Route::group(["prefix" => "oficinas"], function () {
     Route::get('/delete/{id}', 'OficinasController@destroy');
 });
 
-
 // Cargos
 Route::group(["prefix" => "cargos"], function () {
     Route::get('/', 'CargosController@index');
@@ -256,7 +238,6 @@ Route::group(["prefix" => "cargos"], function () {
 
     Route::get('/delete/{id}', 'CargosController@destroy');
 });
-
 
 // Departamentos
 Route::group(["prefix" => "departamentos"], function () {
@@ -271,7 +252,6 @@ Route::group(["prefix" => "departamentos"], function () {
     Route::get('/delete/{id}', 'DepartamentosController@destroy');
 });
 
-
 // Ciudades
 Route::group(["prefix" => "ciudades"], function () {
     Route::get('/', 'CiudadesController@index');
@@ -284,7 +264,6 @@ Route::group(["prefix" => "ciudades"], function () {
 
     Route::get('/delete/{id}', 'CiudadesController@destroy');
 });
-
 
 // Estudios de clientes
 Route::group(["prefix" => "terecuperamos"], function () {
@@ -301,7 +280,6 @@ Route::group(["prefix" => "terecuperamos"], function () {
     Route::post('/saveObservaciones/{id}', 'TerecuperamosController@saveObservaciones');
 });
 
-
 // Comerciales
 Route::group(["prefix" => "comerciales"], function () {
     Route::get('/', 'ComercialController@index');
@@ -314,7 +292,6 @@ Route::group(["prefix" => "comerciales"], function () {
 
     Route::get('/delete/{id}', 'ComercialController@destroy');
 });
-
 
 // Factores
 Route::group(["prefix" => "factores"], function () {
@@ -329,15 +306,12 @@ Route::group(["prefix" => "factores"], function () {
     Route::get('/delete/{id}', 'FactoresController@destroy');
 });
 
-
 // Reportes
 Route::group(["prefix" => "reportes"], function () {
     Route::get('/', 'ReportesController@index');
     Route::get('/consultas', 'ReportesController@consultas');
     Route::get('/personalizados', 'ReportesController@personalizados');
-
 });
-
 
 // Archivos Planos
 Route::group(["prefix" => "planos"], function () {
@@ -391,7 +365,6 @@ Route::group(["prefix" => "clientes"], function () {
 Route::get('/dataset', 'DatasetController@index');
 Route::get('/dataset/get', 'DatasetController@get');
 
-
 //Paginas de informacion
 Route::view('/welcome', 'welcome');
 Route::view('/amipersonas', 'amipersonas');
@@ -431,7 +404,6 @@ Route::resource('mensajedeliquidacionseceduc', 'MensajedeliquidacionseceducContr
 Route::resource('embargosseccali', 'EmbargosseccaliController');
 Route::resource('embargosseceduc', 'EmbargosseceducController');
 
-
 //FIN //
 Route::resource('datames', 'DataMesController');
 Route::resource('fechavinc', 'FechaVincController');
@@ -455,10 +427,6 @@ Route::post('/datamesseceduc/consultaUnitaria', 'DatamesseceducController@consul
 Route::post('/pagadurias/consultaUnitaria', 'DatamesseceducController@allPagadurias');
 Route::resource('/datamesseceduc', 'DatamesseceducController');
 
-
 Route::resource('/cotizer-data', dataCotizerController::class)->only(['store', 'index', 'show', 'update', 'destroy']);
 Route::view('/solicitud', 'creditCalculator');
 Route::view('/RegisterCredit', 'registerCredit');
-
-
-

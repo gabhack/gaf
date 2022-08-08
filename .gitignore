@@ -21,10 +21,9 @@ public/.htaccess
 .history
 /public/css/app.css
 /public/js/app.js
+/public/js/*
 /public/css/pages
 /public/mix-manifest.json
 /public/fonts/vendor
 
-composer.lock
 package-lock.json
-yarn.lock

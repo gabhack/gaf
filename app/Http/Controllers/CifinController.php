@@ -1,13 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-use Orchestra\Parser\Xml\Facade as XmlParser;
+
 use App\Cifin;
 use Auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-use DOMDocument;
 class CifinController extends Controller
 {
     /**
@@ -15,16 +13,13 @@ class CifinController extends Controller
      *
      * @return void
      */
-    private $idOpenpay="mbj7d0ylmxkrlg4m1tcu";
-    private $keyOpenpay="sk_382ccfcb3356474082d575c4facfefb6: ";
-    private $identifiacador="DEVJR";
 
     public function __construct()
     {
         $this->middleware('auth');
         $this->middleware('role:ADMIN_SISTEMA,ADMIN_HEGO,ADMIN_AMI,COMPANY,CREAUSUARIOS');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -37,6 +32,7 @@ class CifinController extends Controller
         } else {
             $lista = Cifin::where('usuarioid', Auth::user()->id)->orderBy('id', 'DESC')->paginate(15);
         }
+
         $links = $lista->links();
 
         return view("cifin/index")->with(["links" => $links, "lista" => $lista]);
@@ -45,8 +41,8 @@ class CifinController extends Controller
 
     public function consultar(Request $request)
     {
-        $cedula=$request->cedula;
-        $apellido=$request->apellido;
+        $cedula = $request->cedula;
+        $apellido = $request->apellido;
         $soapUser = "405485";  //  username
         $soapPassword = "2AMIG*"; // password
         $url = "http://webservicecf.herokuapp.com/CifinWS?wsdl";
@@ -59,14 +55,14 @@ class CifinController extends Controller
                     <!--Optional:-->
                     <motivoConsulta>24</motivoConsulta>
                     <!--Optional:-->
-                    <numeroIdentificacion>'.$cedula.'</numeroIdentificacion>
+                    <numeroIdentificacion>' . $cedula . '</numeroIdentificacion>
                     <!--Optional:-->
-                    <primerApellido>'.$apellido.'</primerApellido>
+                    <primerApellido>' . $apellido . '</primerApellido>
                     <!--Optional:-->
                     <tipoIdentificacion>1</tipoIdentificacion>
                 </ws:consultaXml>
             </soapenv:Body>
-        </soapenv:Envelope>'; 
+        </soapenv:Envelope>';
 
         $headers = array(
             "Content-type: text/xml;charset=\"utf-8\"",
@@ -76,25 +72,25 @@ class CifinController extends Controller
             "Accept-Encoding: gzip,deflate",
             "Pragma: no-cache",
             "X-Atlassian-Token: no-check",
-            "SOAPAction: http://webservicecf.herokuapp.com/CifinWS", 
-            "Content-length: ".strlen($xml_post_string),
+            "SOAPAction: http://webservicecf.herokuapp.com/CifinWS",
+            "Content-length: " . strlen($xml_post_string),
         );
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_USERPWD, $soapUser.":".$soapPassword); // username and password - declared at the top of the doc
+        curl_setopt($ch, CURLOPT_USERPWD, $soapUser . ":" . $soapPassword); // username and password - declared at the top of the doc
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $xml_post_string); // the SOAP request
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
-        $response = curl_exec($ch); 
+        $response = curl_exec($ch);
         curl_close($ch);
         $array = XmlaPhp::createArray($response);
-        $demo= $array['S:Envelope']['S:Body']['ns2:consultaXmlResponse']['return'];
+        $demo = $array['S:Envelope']['S:Body']['ns2:consultaXmlResponse']['return'];
         $resultado = XmlaPhp::createArray($demo);
 
         return view("cifin/consulta")->with([
