@@ -14,7 +14,7 @@ class CreateSolicitudValidacionsTable extends Migration
     public function up()
     {
         Schema::create('solicitud_validacions', function (Blueprint $table) {
-            $table->increments('id');            
+            $table->bigIncrements('id');
             $table->string('GuidConv')->nullable();
             $table->string('TipoValidacion')->nullable();
             $table->string('Asesor')->nullable();
