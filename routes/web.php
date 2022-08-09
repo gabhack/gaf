@@ -13,9 +13,6 @@
 
 use App\Http\Controllers\VisadoController;
 
-Route::get('/tests', function () {
-    return "test";
-});
 
 Auth::routes(['register' => true]);
 
@@ -131,6 +128,29 @@ Route::group(["prefix" => "cifin"], function () {
     Route::get('/', 'CifinController@index');
     Route::post('/consultar', 'CifinController@consultar');
     Route::get('/consulta', 'CifinController@consulta');
+
+    Route::post('/pagarpse', 'PagosController@pagarpse');
+    Route::post('/pay', 'PagosController@pay');
+    Route::post('/payPSE', 'PagosController@payPSE');
+    Route::get('/payPSE', 'PagosController@getPayPSE');
+    Route::get('/edit/{id}', 'PagosController@edit');
+    Route::post('/update/{id}', 'PagosController@update');
+    Route::get('/delete/{id}', 'PagosController@destroy');
+});
+
+//Daceval
+Route::group(["prefix" => "deceval"], function () {
+    Route::get('/', 'DecevalController@index');
+    Route::post('/consultar', 'DecevalController@consultar');
+    Route::get('/consulta', 'DecevalController@consulta');
+
+    Route::post('/pagarpse', 'PagosController@pagarpse');
+    Route::post('/pay', 'PagosController@pay');
+    Route::post('/payPSE', 'PagosController@payPSE');
+    Route::get('/payPSE', 'PagosController@getPayPSE');
+    Route::get('/edit/{id}', 'PagosController@edit');
+    Route::post('/update/{id}', 'PagosController@update');
+    Route::get('/delete/{id}', 'PagosController@destroy');
 });
 
 // Aliados

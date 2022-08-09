@@ -13,7 +13,7 @@
     <br />
     <div class="panel-body">
         <a href="{{ url('pagos/pagar') }}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Pago con Tarjeta</a>
-        <a href="{{ url('pagos/pagarpse') }}" class="btn btn-primary btn-lg disabled" role="button" aria-disabled="true">Pagar con PSE</a>
+        <a href="{{ url('pagos/pagarpse') }}" class="btn btn-secondary btn-lg disabled" role="button" aria-disabled="true">Pagar con PSE</a>
         <a href="{{ url('pagos/pagarefectivo') }}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Pago en Efectivo</a>
         <form method="POST" action="{{ url('pagos/payPSE') }}">
             {{ csrf_field() }}

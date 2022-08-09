@@ -28,6 +28,7 @@
                 <!-- <a class="collapse-item" href="/massiveCharge">Carga Masiva</a> -->
                 <a class="collapse-item" href="{{ url('dataClientDraft') }}">Nueva consulta +</a>
                 <a class="collapse-item" href="{{ url('cifin') }}">Nueva consulta CIFIN</a>
+                <a class="collapse-item" href="{{ url('deceval') }}">Nuevo Pagare Deceval</a>
                 <!-- <a class="collapse-item" href="#">Consulta bloque</a> 				 -->
                 <a class="collapse-item" href="{{ url('refundCartera') }}">Recuperacion de Cartera </a>
                 <!-- <a class="collapse-item" href="#">Prospección de Mercado</a> -->
