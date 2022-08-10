@@ -133,7 +133,7 @@ class DecevalController extends Controller
       $pdf_content = fread($pdf_base64_handler, filesize($pdf_base64));
       fclose($pdf_base64_handler);
       $pdf_decoded = base64_decode($pdf_content);
-      $pdf = fopen('Pagare.pdf', 'w');
+      $pdf = fopen('pagare.pdf', 'w');
       fwrite($pdf, $pdf_decoded);
       fclose($pdf);
       $link = asset($nombreArchivo);
