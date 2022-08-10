@@ -29,7 +29,7 @@
                         </div>
                     </div>
                 </div>
-                <iframe scrolling="auto" height="1100" width="850" src="{{asset('pagare.pdf')}}" frameborder="0"></iframe>
+                <iframe scrolling="auto" height="1100" width="850" src="{{ asset('pagare.pdf') }}" frameborder="0"></iframe>
             </div>
         </div>
         @else

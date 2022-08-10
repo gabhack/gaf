@@ -42,7 +42,6 @@ class PagosController extends Controller
         return view("pagos/index")->with(["links" => $links, "lista" => $lista]);
     }
 
-
     public function pagar()
     {
         $roles = \App\Roles::OrderBy('rol')->get();
@@ -135,8 +134,9 @@ class PagosController extends Controller
         );
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
+        // "external_id" : "' . $orderId . '",
+
         $data = '{
-           "external_id" : "' . $orderId . '",
            "name": "' . $nombre . '",
            "last_name": "' . $apellido . '",
            "email": "' . $email . '",
@@ -184,13 +184,13 @@ class PagosController extends Controller
         );
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
+        // "order_id" : "' . $orderId . '",
         $data = '{
             "method" : "store",
             "amount" : ' . $monto . ',
             "currency" : "COP",
             "iva" : "0",
             "description" : "' . $concepto . '",
-            "order_id" : "' . $orderId . '",
             "due_date" : "' . $due_date . '"
         }';
 
