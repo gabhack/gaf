@@ -16,7 +16,7 @@ class PagosController extends Controller
      */
     private $idOpenpay = "mbj7d0ylmxkrlg4m1tcu";
     private $keyOpenpay = "sk_382ccfcb3356474082d575c4facfefb6: ";
-    private $identifiacador = "DEVJR";
+    private $identifiacador = 'DEVPROD';
 
     public function __construct()
     {
