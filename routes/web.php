@@ -450,3 +450,5 @@ Route::resource('/datamesseceduc', 'DatamesseceducController');
 Route::resource('/cotizer-data', dataCotizerController::class)->only(['store', 'index', 'show', 'update', 'destroy']);
 Route::view('/solicitud', 'creditCalculator');
 Route::view('/RegisterCredit', 'registerCredit');
+
+Route::apiResource('/whatsapp-bot', 'WhatsAppBotController');

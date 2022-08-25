@@ -53,6 +53,7 @@ Vue.component('HegoInformation', require('./components/pages/HegoInformation').d
 
 // Pages
 Vue.component('ConsultasIndex', require('./components/pages/Consultas/Index').default);
+Vue.component('whatsapp-bot', require('./components/pages/WhatsAppBot.vue').default);
 
 // Vue Icons
 Vue.component('AdminSettingsIcon', require('./components/icons/AdminSettingsIcon').default);

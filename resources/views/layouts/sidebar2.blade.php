@@ -31,6 +31,7 @@
                 <a class="collapse-item" href="{{ url('deceval') }}">Nuevo Pagare Deceval</a>
                 <!-- <a class="collapse-item" href="#">Consulta bloque</a> 				 -->
                 <a class="collapse-item" href="{{ url('refundCartera') }}">Recuperacion de Cartera </a>
+                <a class="collapse-item" href="{{ url('whatsapp-bot') }}">WhatsApp Bot</a>
                 <!-- <a class="collapse-item" href="#">Prospección de Mercado</a> -->
                 <!-- <a class="collapse-item" href="{{ url('consultas') }}">Nueva Consulta</a> -->
             </div>
