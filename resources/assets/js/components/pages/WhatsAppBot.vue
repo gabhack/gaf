@@ -41,7 +41,7 @@ export default {
         reader.onload = e => {
           const contents = e.target.result;
           const lines = contents.split('\r' + '\n');
-          const headers = lines[0].split(';');
+          const headers = lines[0].toLowerCase().split(';');
 
           for (let i = 1; i < lines.length; i++) {
             if (lines[i]) {
