@@ -12,9 +12,14 @@
     </ul>
     <br />
     <div class="panel-body">
-        <a href="{{ url('pagos/pagar') }}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Pago con Tarjeta</a>
-        <a href="{{ url('pagos/pagarpse') }}" class="btn btn-secondary btn-lg disabled" role="button" aria-disabled="true">Pagar con PSE</a>
-        <a href="{{ url('pagos/pagarefectivo') }}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Pago en Efectivo</a>
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <div>
+                <a href="{{ url('pagos/pagar') }}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Pago con Tarjeta</a>
+                <a href="{{ url('pagos/pagarpse') }}" class="btn btn-secondary btn-lg disabled" role="button" aria-disabled="true">Pagar con PSE</a>
+                <a href="{{ url('pagos/pagarefectivo') }}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Pago en Efectivo</a>
+            </div>
+            <img src="{{ asset('img/logo-openpay.png') }}" alt="" width="220">
+        </div>
         <form method="POST" action="{{ url('pagos/payPSE') }}">
             {{ csrf_field() }}
             <div class="form-row">
@@ -81,9 +86,9 @@ Realizar Pago
 @endsection
 
 @section('breadcrumb')
-<li><a href="{{ url('home') }}"><i class="fa fa-dashboard"></i>Inicio</a></li>
-<li><a href="{{ url('usuarios') }}">Pagos</a></li>
-<li class="active">Realizar Pago</li>
+<li class="breadcrumb-item"><a href="{{ url('home') }}"><i class="fa fa-dashboard mr-2"></i>Inicio</a></li>
+<li class="breadcrumb-item"><a href="{{ url('usuarios') }}">Pagos</a></li>
+<li class="breadcrumb-item active">Realizar Pago</li>
 @endsection
 
 

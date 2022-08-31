@@ -1,64 +1,56 @@
 <template>
   <div class="container-fluid">
-    <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="true" color="#0CEDB0"/>
+    <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="true" color="#0CEDB0" />
 
     <div v-if="type_consult === 'individual'">
-
-      <div class="row mb-5" v-if="datames">
+      <div class="row mb-5">
         <div class="col-12 d-flex align-items-center justify-content-between">
-          <div class="d-flex align-items-end">
-            <img src="/img/avatar-img.svg" width="90" class="mr-3"/>
+          <div class="d-flex align-items-end" v-if="datames">
+            <img src="/img/avatar-img.svg" width="90" class="mr-3" />
             <div>
               <h2 class="h3 text-black-pearl font-weight-exbold d-inline-block mb-0">{{ datames.nomp }}</h2>
             </div>
           </div>
-          <!--          <button type="button" v-on:click="print" class="btn btn-black-pearl px-3">-->
-          <!--            <span>Descargar PDF</span>-->
-          <!--            <download-icon></download-icon>-->
-          <!--          </button>-->
+          <button type="button" v-on:click="print" class="btn btn-black-pearl ml-auto px-3">
+            <span>Descargar PDF</span>
+            <download-icon></download-icon>
+          </button>
         </div>
       </div>
 
       <div id="consulta-container" class="row">
-
-
-        <FormConsult @emitInfo="emitInfo"/>
-
+        <FormConsult @emitInfo="emitInfo" />
 
         <!--============================
           DATAMES FOPEP -
         ==============================-->
-        <DatamesComponent v-if="pagaduriaType == 'FOPEP' && datames"
-                          :user="user"
-                          :datames="datames"
-        />
-
+        <DatamesComponent v-if="pagaduriaType == 'FOPEP' && datames" :user="user" :datames="datames" />
 
         <!--============================
             FIDUPREVISORA datamesfidu
         ==============================-->
-        <DatamesFiduComponent v-if="pagaduriaType == 'FIDUPREVISORA' && datamesfidu"
-                              :user="user"
-                              :datamesfidu="datamesfidu"
+        <DatamesFiduComponent
+          v-if="pagaduriaType == 'FIDUPREVISORA' && datamesfidu"
+          :user="user"
+          :datamesfidu="datamesfidu"
         />
-
 
         <!--============================
           DATAMESSEDUC FODE VALLE
       ==============================-->
-        <DatamesSeducComponent v-if="pagaduriaType == 'FODE VALLE' && datamesseceduc"
-                               :user="user"
-                               :datamesseceduc="datamesseceduc"
+        <DatamesSeducComponent
+          v-if="pagaduriaType == 'FODE VALLE' && datamesseceduc"
+          :user="user"
+          :datamesseceduc="datamesseceduc"
         />
-
 
         <!--================================
          SECCALI datamesseccali
         ===================================-->
-        <DatamesCali v-if="pagaduriaType == 'SECCALI' && datamesseccali"
-                     :user="user"
-                     :datamesseccali="datamesseccali"
-
+        <DatamesCali
+          v-if="pagaduriaType == 'SECCALI' && datamesseccali"
+          :user="user"
+          :datamesseccali="datamesseccali"
         />
 
         <!--============================
@@ -66,47 +58,38 @@
         ==============================-->
         <template v-if="fechavinc">
           <EmploymentHistory
-              :fechavinc="fechavinc"
-              :pagaduriaType="pagaduriaType"
-              :datames="datames"
-              :datamesseceduc="datamesseceduc"
-              :datamesfidu="datamesfidu"
-              :datamesseccali="datamesseccali"
-              :user="user"
+            :fechavinc="fechavinc"
+            :pagaduriaType="pagaduriaType"
+            :datames="datames"
+            :datamesseceduc="datamesseceduc"
+            :datamesfidu="datamesfidu"
+            :datamesseccali="datamesseccali"
+            :user="user"
           />
         </template>
 
-
         <template v-if="showOthers">
-
-          <DescapliEmpty v-if="pagaduriaType == 'FIDUPREVISORA' || pagaduriaType == 'FODE VALLE'"/>
-          <Descapli v-else :descapli="descapli"/>
-
+          <DescapliEmpty v-if="pagaduriaType == 'FIDUPREVISORA' || pagaduriaType == 'FODE VALLE'" />
+          <Descapli v-else :descapli="descapli" />
 
           <!--===================================
                 OBLIGACIONES VIGENTES EN MORA
           ========================================-->
-          <DescnoapEmpty v-if="pagaduriaType == 'FIDUPREVISORA'"/>
-          <EmbargosSeceduc
-              v-else-if="pagaduriaType == 'FODE VALLE'"
-              :embargosseceduc="embargosseceduc"
-          />
-          <Descnoap v-else :descnoap="descnoap"/>
-
+          <DescnoapEmpty v-if="pagaduriaType == 'FIDUPREVISORA'" />
+          <EmbargosSeceduc v-else-if="pagaduriaType == 'FODE VALLE'" :embargosseceduc="embargosseceduc" />
+          <Descnoap v-else :descnoap="descnoap" />
         </template>
 
-
         <Others
-            v-if="showOthers && pagadurias"
-            :pagaduriaType="pagaduriaType"
-            :pagadurias="pagadurias"
-            :fechavinc="fechavinc"
-            :descapli="descapli"
-            :descnoap="descnoap"
-            :embargosseceduc="embargosseceduc"
-            :user="user"
+          v-if="showOthers && pagadurias"
+          :pagaduriaType="pagaduriaType"
+          :pagadurias="pagadurias"
+          :fechavinc="fechavinc"
+          :descapli="descapli"
+          :descnoap="descnoap"
+          :embargosseceduc="embargosseceduc"
+          :user="user"
         />
-
       </div>
     </div>
   </div>
@@ -115,26 +98,24 @@
 <script rel="stylesheet" type="text/css" href="print.css"/>
 <script>
 import printJS from 'print-js';
-import FormConsult from "./FormConsult";
-import EmploymentHistory from "./EmploymentHistory";
-import DatamesComponent from "./Datames";
-import DatamesSeducComponent from "./DatamesSeduc";
-import DatamesFiduComponent from "./DatamesFidu";
-import DatamesCali from "./DatamesCali";
-import Descapli from "./Descapli";
-import DescapliEmpty from "./DescapliEmpty";
-import Descnoap from "./Descnoap";
-import DescnoapEmpty from "./DescnoapEmpty";
-import Others from "./Others";
-import EmbargosSeceduc from "./EmbargosSeceduc";
+import FormConsult from './FormConsult';
+import EmploymentHistory from './EmploymentHistory';
+import DatamesComponent from './Datames';
+import DatamesSeducComponent from './DatamesSeduc';
+import DatamesFiduComponent from './DatamesFidu';
+import DatamesCali from './DatamesCali';
+import Descapli from './Descapli';
+import DescapliEmpty from './DescapliEmpty';
+import Descnoap from './Descnoap';
+import DescnoapEmpty from './DescnoapEmpty';
+import Others from './Others';
+import EmbargosSeceduc from './EmbargosSeceduc';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
   props: ['user'],
-  created() {
-
-  },
+  created() {},
   components: {
     FormConsult,
     EmploymentHistory,
@@ -167,8 +148,7 @@ export default {
       pagaduriaType: '',
       showOthers: false,
       pagadurias: null,
-      isLoading: false,
-
+      isLoading: false
     };
   },
   computed: {},
@@ -177,7 +157,7 @@ export default {
       this.isLoading = true;
       this.pagadurias = payload.pagadurias;
       this.pagaduriaType = payload.pagaduria;
-      if (payload.pagaduria == "FOPEP") {
+      if (payload.pagaduria == 'FOPEP') {
         this.getDatames(payload);
       } else if (payload.pagaduria == 'FODE VALLE') {
         this.getDatamesseceduc(payload);
@@ -194,7 +174,6 @@ export default {
         this.showOthers = true;
         this.isLoading = false;
       });
-
     },
     async getDatames(payload) {
       const response = await axios.get(`datames/${payload.doc}`);
@@ -204,21 +183,21 @@ export default {
       this.datamesseccali = null;
     },
     async getDatamesseceduc(payload) {
-      const response = await axios.post('/datamesseceduc/consultaUnitaria', {doc: payload.doc});
+      const response = await axios.post('/datamesseceduc/consultaUnitaria', { doc: payload.doc });
       this.datamesseceduc = response.data.data;
       this.datames = null;
       this.datamesfidu = null;
       this.datamesseccali = null;
     },
     async getDatamesfidu(payload) {
-      const response = await axios.post('/datamesfidu/consultaUnitaria', {doc: payload.doc});
+      const response = await axios.post('/datamesfidu/consultaUnitaria', { doc: payload.doc });
       this.datamesfidu = response.data.data;
       this.datames = null;
       this.datamesseceduc = null;
       this.datamesseccali = null;
     },
     async getDatamesseccali(payload) {
-      const response = await axios.post('/consultaDatamesseccali', {doc: payload.doc});
+      const response = await axios.post('/consultaDatamesseccali', { doc: payload.doc });
       this.datamesseccali = response.data.data;
       this.datames = null;
       this.datamesseceduc = null;
@@ -237,17 +216,17 @@ export default {
       this.descnoap = response.data;
     },
     async getEmbargosseceduc(payload) {
-      const response = await axios.post('/consultaEmbargosseceduc', {doc: payload.doc});
+      const response = await axios.post('/consultaEmbargosseceduc', { doc: payload.doc });
       console.log(response.data.data);
       this.embargosseceduc = response.data.data;
     },
     async getMensajedeliquidacionseceduc(payload) {
-      const response = await axios.post('/consultaMensajedeliquidacionseceduc', {doc: payload.doc});
+      const response = await axios.post('/consultaMensajedeliquidacionseceduc', { doc: payload.doc });
       this.mensajedeliquidacionseceduc = response.data.data;
     },
-
-
-
+    print() {
+      window.print();
+    }
   }
 };
 </script>

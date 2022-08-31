@@ -1,5 +1,5 @@
 // Variables
-@import "colors";
+@import 'colors';
 
 html,
 body {
@@ -130,6 +130,11 @@ body {
     line-height: 0.6;
     display: inline-block;
   }
+}
+
+.text-medium {
+  font-size: 2vw;
+  line-height: 1.3;
 }
 
 .btn-more {

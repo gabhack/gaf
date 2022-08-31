@@ -54,7 +54,7 @@
                                 </div>
                             </div>
                             <div class="form-group col-md-12">
-                                <button type="submit" class="btn btn-primary float-right">Consultar</button>
+                                <button type="submit" class="btn btn-black-pearl px-4 float-right">Consultar</button>
                             </div>
                         </form>
                     </div>

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Pagos;
 use Auth;
 use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade as PDF;
 
 class PagosController extends Controller
 {
@@ -95,11 +94,6 @@ class PagosController extends Controller
         $roles = \App\Roles::OrderBy('rol')->get();
         //$source_id=\App\Pagos::idOpenPay();
         return view('pagos/pagarefectivo');
-    }
-
-    public function pdfpago()
-    {
-        return view('pagos/pdfpago');
     }
 
     public function payEfectivo(Request $request)
@@ -202,24 +196,19 @@ class PagosController extends Controller
         $resp = curl_exec($curl);
         curl_close($curl);
         $dato = json_decode($resp, true);
-        //var_dump($dato);
+
         $idCliente = $dato["id"];
+        $paymentRerence = $dato["payment_method"]["reference"];
 
         $user = Pagos::find($idPago);
         $user->idtransaccion = $idCliente;
         $user->respuesta = $resp;
         $user->save();
 
-        return redirect()->action('PagosController@download', $dato);
+        // Generate Order PDF
+        $orderUrl = "https://sandbox-dashboard.openpay.co/paynet-pdf/" . $this->idOpenpay . "/" . $paymentRerence;
+        return redirect()->away($orderUrl);
     }
-
-    public function download(Request $request)
-    {
-        //$pdf = \PDF::loadView('pagos/pdfpago', $data);
-        //return $pdf->download('archivo.pdf');
-        return PDF::loadView('pagos/pdfpago', $request)->stream('archivo.pdf');
-    }
-
 
     public function pay(Request $request)
     {
@@ -244,8 +233,18 @@ class PagosController extends Controller
                 }
             ]
         ]);
+
         $pagos = new Pagos;
         $resultado = $this->tokenOpenPay($request);
+
+        if (isset($resultado['error'])) {
+            return back()->with('error', [
+                'type' => 'danger',
+                'title' => 'No se puedo completar el pago',
+                'message' => $resultado['message']
+            ]);
+        }
+
         $idPago = $resultado[1];
         $orderId = $this->identifiacador . '-' . ($idPago);
         $source_id = $resultado[0];
@@ -290,6 +289,7 @@ class PagosController extends Controller
         );
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
+        // "order_id" : "' . $orderId . '",
         $data = '
         {
            "source_id" : "' . $source_id . '",
@@ -298,7 +298,6 @@ class PagosController extends Controller
            "currency" : "COP",
            "iva" : "0",
            "description" : "' . $concepto . '",
-           "order_id" : "' . $orderId . '",
            "device_session_id" : "' . $device_session_id . '",
                "customer" : {
                     "name" : "' . $nombre . '",
@@ -317,6 +316,15 @@ class PagosController extends Controller
         $resp = curl_exec($curl);
         curl_close($curl);
         $dato = json_decode($resp, true);
+
+        if (isset($dato["error_code"])) {
+            return back()->with('error', [
+                'type' => 'danger',
+                'title' => 'No se puedo completar el pago',
+                'message' => $dato["description"]
+            ]);
+        }
+
         $status = $dato["status"];
 
         $create_dt = date("Y-m-d H:i:s");
@@ -348,7 +356,6 @@ class PagosController extends Controller
 
     public function payPSE(Request $request)
     {
-
         //$pagos = new Pagos;
 
         $nombre = $request->nombre;
@@ -398,7 +405,7 @@ class PagosController extends Controller
            "description" : "' . $concepto . '",
            "order_id" : "' . $orderId . '",
            "iva" : "0",
-           "redirect_url":"http://ami-project.test/pagos/payPSE",
+           "redirect_url": "' . config('app.url') . '/pagos/payPSE",
            "customer" : {
                 "name" : "' . $nombre . '",
                 "last_name" : "' . $apellido . '",
@@ -486,7 +493,6 @@ class PagosController extends Controller
         $dato = json_decode($datos, true);
 
         if (isset($dato["error_code"])) {
-            $response = $dato["id"];
             $create_dt = date("Y-m-d H:i:s");
             $user = Pagos::create([
                 "usuarioid" => Auth::id(),
@@ -504,14 +510,11 @@ class PagosController extends Controller
                 "status" => 'Error',
                 'created_at' => $create_dt,
             ]);
-            $idPago = $user->id;
-            return redirect()->action('PagosController@index', [
-                'message' => array(
-                    'tipo' => 'warning',
-                    'titulo' => 'No se puedo completar el pago',
-                    'mensaje' => $dato["description"],
-                )
-            ]);
+
+            return [
+                'error' => true,
+                'message' => $dato["description"]
+            ];
         } else {
             $response = $dato["id"];
             $create_dt = date("Y-m-d H:i:s");

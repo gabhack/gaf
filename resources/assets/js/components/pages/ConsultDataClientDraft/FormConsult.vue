@@ -5,15 +5,15 @@
       <!--      <pre><code>{{ dataclient}}</code></pre>-->
     </div>
     <div class="panel-body">
-      <loading :active.sync="isLoading" color="#0CEDB0" :can-cancel="true" :is-full-page="true"/>
+      <loading :active.sync="isLoading" color="#0CEDB0" :can-cancel="true" :is-full-page="true" />
       <div class="row">
         <div class="col-6">
           <b class="panel-label">CEDULA:</b>
-          <input required class="form-control text-center" type="number" v-model="dataclient.doc"/>
+          <input required class="form-control text-center" type="number" v-model="dataclient.doc" />
         </div>
         <div class="col-6">
           <b class="panel-label">NOMBRES Y APELLIDOS:</b>
-          <input required class="form-control text-center" type="text" v-model="dataclient.name"/>
+          <input required class="form-control text-center" type="text" v-model="dataclient.name" />
         </div>
 
         <div class="col-6">
@@ -28,21 +28,21 @@
             </select>
           </template>
           <select class="form-control" v-else>
-            <option class="text-muted" selected disabled :value="null">Ingresa una cedula y presiona consultar
-            </option>
+            <option class="text-muted" selected disabled :value="null">Ingresa una cedula y presiona consultar</option>
           </select>
         </div>
 
         <div class="col-6 mt-4">
-          <button
-              type="button"
-              v-if="dataclient.doc && dataclient.name"
-              class="btn btn-primary"
-              @click="getAllPagadurias">
+          <b-button
+            type="button"
+            variant="black-pearl"
+            v-if="dataclient.doc && dataclient.name"
+            class="px-4"
+            @click="getAllPagadurias"
+          >
             CONSULTAR PAGADURIAS
-          </button>
+          </b-button>
         </div>
-
 
         <!--        <div class="col-6 mt-4">-->
         <!--          <button-->
@@ -53,8 +53,6 @@
         <!--            CONSULTAR-->
         <!--          </button>-->
         <!--        </div>-->
-
-
       </div>
     </div>
   </div>
@@ -62,18 +60,18 @@
 
 <script>
 export default {
-  name: "FormConsult",
+  name: 'FormConsult',
   data() {
     return {
       dataclient: {
         doc: '',
         name: '',
         pagaduria: null,
-        pagadurias: null,
+        pagadurias: null
       },
       isLoading: false,
       isFirstTime: false
-    }
+    };
   },
   methods: {
     emitInfo() {
@@ -82,42 +80,43 @@ export default {
     },
     async getAllPagadurias() {
       this.isLoading = true;
-      const response = await axios.post('/pagadurias/consultaUnitaria', {doc: this.dataclient.doc});
+      const response = await axios.post('/pagadurias/consultaUnitaria', { doc: this.dataclient.doc });
       this.dataclient.pagadurias = response.data;
       this.isLoading = false;
       return Promise.resolve(response.data);
     },
     modalConfirmConsultPag(val) {
-      this.$bvModal.msgBoxConfirm('Esta acción tiene un costo', {
-        title: '¿Está seguro que desea realizar la consulta?',
-        size: 'sm',
-        buttonSize: 'sm',
-        okVariant: 'success',
-        okTitle: 'Consultar',
-        cancelTitle: 'Cancelar',
-        cancelVariant: "danger",
-        headerClass: 'p-2 border-bottom-0',
-        footerClass: 'p-2 border-top-0',
-        centered: true
-      })
-          .then(value => {
-            if (!value) return;
-            this.saveVisados(val).then(status => {
-              if (status != 200) return;
-              this.$emit('emitInfo', this.dataclient);
-            });
+      this.$bvModal
+        .msgBoxConfirm('Esta acción tiene un costo', {
+          title: '¿Está seguro que desea realizar la consulta?',
+          size: 'sm',
+          buttonSize: 'sm',
+          okVariant: 'success',
+          okTitle: 'Consultar',
+          cancelTitle: 'Cancelar',
+          cancelVariant: 'danger',
+          headerClass: 'p-2 border-bottom-0',
+          footerClass: 'p-2 border-top-0',
+          centered: true
+        })
+        .then(value => {
+          if (!value) return;
+          this.saveVisados(val).then(status => {
+            if (status != 200) return;
+            this.$emit('emitInfo', this.dataclient);
           });
+        });
     },
     async saveVisados(val) {
       try {
-        this.isLoading = true
-        const response = await axios.post('/visados', {...this.dataclient});
+        this.isLoading = true;
+        const response = await axios.post('/visados', { ...this.dataclient });
         return Promise.resolve(response.status);
       } catch (e) {
       } finally {
-        this.isLoading = false
+        this.isLoading = false;
       }
-    },
+    }
   },
   watch: {
     'dataclient.pagaduria': function (val) {
@@ -125,9 +124,8 @@ export default {
       //
     }
   }
-}
+};
 </script>
 
 <style scoped>
-
 </style>

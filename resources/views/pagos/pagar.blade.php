@@ -12,9 +12,26 @@
     </ul>
     <br />
     <div class="panel-body">
-        <a href="{{ url('pagos/pagar') }}" class="btn btn-secondary btn-lg disabled" role="button" aria-disabled="true">Pago con Tarjeta</a>
-        <a href="{{ url('pagos/pagarpse') }}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Pagar con PSE</a>
-        <a href="{{ url('pagos/pagarefectivo') }}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Pago en Efectivo</a>
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <div>
+                <a href="{{ url('pagos/pagar') }}" class="btn btn-secondary btn-lg disabled" role="button" aria-disabled="true">Pago con Tarjeta</a>
+                <a href="{{ url('pagos/pagarpse') }}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Pagar con PSE</a>
+                <a href="{{ url('pagos/pagarefectivo') }}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Pago en Efectivo</a>
+            </div>
+            <img src="{{ asset('img/logo-openpay.png') }}" alt="" width="220">
+        </div>
+
+        @if(session('error'))
+        <div class="alert alert-{{ session('error')['type'] }} custom-alert-toast alert-dismissible" role="alert">
+            <h5 class="alert-heading">{{ session('error')['title'] }}</h5>
+            <hr>
+            <p class="mb-0">{{ session('error')['message'] }}</p>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        @endif
+
         <form method="POST" action="{{ url('pagos/pay') }}">
             {{ csrf_field() }}
             <div class="form-row">
@@ -110,9 +127,9 @@ Realizar Pago
 @endsection
 
 @section('breadcrumb')
-<li><a href="{{ url('home') }}"><i class="fa fa-dashboard"></i>Inicio</a></li>
-<li><a href="{{ url('usuarios') }}">Pagos</a></li>
-<li class="active">Realizar Pago</li>
+<li class="breadcrumb-item"><a href="{{ url('home') }}"><i class="fa fa-dashboard mr-2"></i>Inicio</a></li>
+<li class="breadcrumb-item"><a href="{{ url('usuarios') }}">Pagos</a></li>
+<li class="breadcrumb-item active">Realizar Pago</li>
 @endsection
 
 

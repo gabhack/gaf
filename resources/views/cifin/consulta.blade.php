@@ -27,7 +27,7 @@
                     <div data-v-1fb519a4="" class="panel-body">
                         <div data-v-1fb519a4="" class="row">
                             <!---->
-                            @if ($dato["Tercero"]["TipoIdentificacion"])
+                            @if (isset($dato["Tercero"]["TipoIdentificacion"]))
                             <div data-v-1fb519a4="" class="col-6">
                                 <b data-v-1fb519a4="" class="panel-label">TIPO IDENTIFICACIÓN:</b>
                                 <div data-v-1fb519a4="">

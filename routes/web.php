@@ -115,8 +115,6 @@ Route::group(["prefix" => "pagos"], function () {
     Route::get('/payPSE', 'PagosController@getPayPSE');
     Route::post('/pagarefectivo', 'PagosController@payEfectivo');
     Route::get('/pagarefectivo', 'PagosController@getPayEfectivo');
-    Route::get('/download', 'PagosController@download');
-    Route::get('/pdfpago', 'PagosController@pdfpago');
 
     Route::get('/edit/{id}', 'PagosController@edit');
     Route::post('/update/{id}', 'PagosController@update');

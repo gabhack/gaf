@@ -100,6 +100,6 @@ class CifinController extends Controller
 
     public function consulta()
     {
-        return view('cifin/consulta')->with();
+        return view('cifin/consulta');
     }
 }

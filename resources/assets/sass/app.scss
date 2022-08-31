@@ -38,7 +38,13 @@
   top: calc(50%);
 }
 
-.btn-list{
-  color:#fff;
+.btn-list {
+  color: #fff;
   background-color: #0cedb0;
+}
+
+.custom-alert-toast {
+  position: fixed !important;
+  top: 12px;
+  right: 20px;
 }
