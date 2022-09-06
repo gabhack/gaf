@@ -76,6 +76,52 @@
             </div>
           </div>
         </div>
+
+        <div class="row">
+          <div class="col-12 mb-3">
+            <div class="panel-heading"><b>CUPONES DE PAGO</b></div>
+          </div>
+          <div class="col-md-2">
+            <b class="panel-label table-text">CODIGO:</b>
+            <div v-for="(coupon, key) in coupons" :key="key">
+              <p class="panel-value">
+                {{ coupon.code }}
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <b class="panel-label table-text">CONCEPTO:</b>
+            <div v-for="(coupon, key) in coupons" :key="key">
+              <p class="panel-value">
+                {{ coupon.concept }}
+              </p>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <b class="panel-label table-text">INGRESOS:</b>
+            <div v-for="(coupon, key) in coupons" :key="key">
+              <p class="panel-value">
+                {{ coupon.ingresos | currency }}
+              </p>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <b class="panel-label table-text">EGRESOS:</b>
+            <div v-for="(coupon, key) in coupons" :key="key">
+              <p class="panel-value">
+                {{ coupon.egresos | currency }}
+              </p>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <b class="panel-label table-text">PERIODO:</b>
+            <div v-for="(coupon, key) in coupons" :key="key">
+              <p class="panel-value">
+                {{ coupon.period }}
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -83,11 +129,7 @@
 
 <script>
 export default {
-  name: "Descapli",
-  props: ['descapli']
-}
+  name: 'Descapli',
+  props: ['descapli', 'coupons']
+};
 </script>
-
-<style scoped>
-
-</style>

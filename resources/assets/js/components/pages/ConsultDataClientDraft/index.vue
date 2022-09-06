@@ -69,15 +69,21 @@
         </template>
 
         <template v-if="showOthers">
-          <DescapliEmpty v-if="pagaduriaType == 'FIDUPREVISORA' || pagaduriaType == 'FODE VALLE'" />
-          <Descapli v-else :descapli="descapli" />
+          <DescapliEmpty v-if="pagaduriaType == 'FIDUPREVISORA' || pagaduriaType == 'FODE VALLE'" :coupons="coupons" />
+          <Descapli v-else :descapli="descapli" :coupons="coupons" />
 
           <!--===================================
                 OBLIGACIONES VIGENTES EN MORA
           ========================================-->
           <DescnoapEmpty v-if="pagaduriaType == 'FIDUPREVISORA'" />
-          <EmbargosSeceduc v-else-if="pagaduriaType == 'FODE VALLE'" :embargosseceduc="embargosseceduc" />
+          <EmbargosSeccali v-else-if="pagaduriaType == 'SECCALI'" :embargosseccali="embargosseccali" />
           <Descnoap v-else :descnoap="descnoap" />
+          <EmbargosSeceduc :embargosseceduc="embargosseceduc" />
+
+          <LiquidacionesSeceduc
+            v-if="pagaduriaType == 'FODE VALLE'"
+            :mensajedeliquidacionseceduc="mensajedeliquidacionseceduc"
+          />
         </template>
 
         <Others
@@ -110,6 +116,8 @@ import Descnoap from './Descnoap';
 import DescnoapEmpty from './DescnoapEmpty';
 import Others from './Others';
 import EmbargosSeceduc from './EmbargosSeceduc';
+import EmbargosSeccali from './EmbargosSeccali';
+import LiquidacionesSeceduc from './LiquidacionesSeceduc';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 
@@ -129,6 +137,8 @@ export default {
     DescnoapEmpty,
     Others,
     EmbargosSeceduc,
+    EmbargosSeccali,
+    LiquidacionesSeceduc,
     Loading
   },
 
@@ -143,7 +153,9 @@ export default {
       descapli: [],
       descnoap: [],
       embargosseceduc: [],
+      embargosseccali: [],
       mensajedeliquidacionseceduc: [],
+      coupons: [],
 
       pagaduriaType: '',
       showOthers: false,
@@ -168,8 +180,10 @@ export default {
         this.getDatamesseccali(payload);
       }
       this.getEmbargosseceduc(payload);
+      this.getEmbargosseccali(payload);
       this.getDescapli(payload);
       this.getDescnoap(payload);
+      this.getCoupons(payload);
       this.getFechaVinc(payload).then(response => {
         this.showOthers = true;
         this.isLoading = false;
@@ -217,12 +231,24 @@ export default {
     },
     async getEmbargosseceduc(payload) {
       const response = await axios.post('/consultaEmbargosseceduc', { doc: payload.doc });
-      console.log(response.data.data);
       this.embargosseceduc = response.data.data;
+    },
+    async getEmbargosseccali(payload) {
+      const response = await axios.post('/consultaEmbargosseccali', { doc: payload.doc });
+      this.embargosseccali = response.data.data;
     },
     async getMensajedeliquidacionseceduc(payload) {
       const response = await axios.post('/consultaMensajedeliquidacionseceduc', { doc: payload.doc });
       this.mensajedeliquidacionseceduc = response.data.data;
+    },
+    async getCoupons(payload) {
+      const data = {
+        doc: payload.doc,
+        pagaduria: payload.pagaduria
+      };
+
+      const response = await axios.post('/get-coupons', data);
+      this.coupons = response.data;
     },
     print() {
       window.print();

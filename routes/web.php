@@ -450,3 +450,5 @@ Route::view('/solicitud', 'creditCalculator');
 Route::view('/RegisterCredit', 'registerCredit');
 
 Route::apiResource('/whatsapp-bot', 'WhatsAppBotController');
+
+Route::post('/get-coupons', 'CouponsController@index')->name('coupons.index');
