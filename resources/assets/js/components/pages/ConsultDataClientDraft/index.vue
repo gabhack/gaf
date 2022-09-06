@@ -64,13 +64,14 @@
             :datamesseceduc="datamesseceduc"
             :datamesfidu="datamesfidu"
             :datamesseccali="datamesseccali"
+            :coupons="coupons"
             :user="user"
           />
         </template>
 
         <template v-if="showOthers">
           <DescapliEmpty v-if="pagaduriaType == 'FIDUPREVISORA' || pagaduriaType == 'FODE VALLE'" :coupons="coupons" />
-          <Descapli v-else :descapli="descapli" :coupons="coupons" />
+          <Descapli v-else :descapli="descapli" />
 
           <!--===================================
                 OBLIGACIONES VIGENTES EN MORA

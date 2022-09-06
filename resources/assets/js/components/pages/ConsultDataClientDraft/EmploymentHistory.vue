@@ -23,7 +23,6 @@
                  FOPEP
           ==============================-->
           <template v-if="datames">
-
             <div class="col-6">
               <b class="panel-label">TIPO PENSION:</b>
               <div>
@@ -62,24 +61,44 @@
                 <p class="panel-value">{{ datames.venbargos | currency }}</p>
               </div>
             </div>
-
           </template>
-
 
           <!--============================
                 FODE VALLE
           ==============================-->
 
           <template v-if="datamesseceduc">
-
-
             <div class="col-6">
               <b class="panel-label">VALOR INGRESO:</b>
               <div>
-                <p class="panel-value">{{ datamesseceduc.vpension | currency }}</p>
+                <p class="panel-value" v-if="salarioBasico">{{ salarioBasico | currency }}</p>
+                <p class="panel-value" v-else>{{ datamesseceduc.vpension | currency }}</p>
               </div>
             </div>
 
+            <div class="col-12" v-if="ingresosExtras.length > 0">
+              <b class="panel-label">INGRESOS EXTRAS:</b>
+              <div class="row">
+                <div class="col-6">
+                  <b class="panel-label table-text">CONCEPTO:</b>
+                </div>
+                <div class="col-6">
+                  <b class="panel-label table-text">VALOR:</b>
+                </div>
+              </div>
+              <div class="row" v-for="extra in ingresosExtras" :key="extra.code">
+                <div class="col-6">
+                  <div>
+                    <p class="panel-value">{{ extra.concept }}</p>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div>
+                    <p class="panel-value">{{ extra.ingresos | currency }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <div class="col-6">
               <b class="panel-label">FECHA INGRESO:</b>
@@ -136,18 +155,16 @@
                 <p class="panel-value">{{ datamesseceduc.sedecoleg }}</p>
               </div>
             </div>
-
           </template>
 
           <!--============================
                FIDUPREVISORA
           ==============================-->
           <template v-if="datamesfidu">
-
             <div class="col-6">
               <b class="panel-label">VALOR INGRESO:</b>
               <div>
-                <p class="panel-value">{{ datamesfidu.vpension  | currency }}</p>
+                <p class="panel-value">{{ datamesfidu.vpension | currency }}</p>
               </div>
             </div>
 
@@ -172,7 +189,6 @@
               </div>
             </div>
 
-
             <!-- <div class="col-6">
               <b class="panel-label">VALOR POSIBLE DESCUENTO:</b>
               <div>
@@ -187,15 +203,12 @@
                 <p class="panel-value">{{ datamesfidu.vdescbruto | currency }}</p>
               </div>
             </div> -->
-
           </template>
-
 
           <!--============================
             DATAMESCALI SECCALI
           ==============================-->
           <template v-if="datamesseccali">
-
             <div class="col-6">
               <b class="panel-label">VALOR INGRESO:</b>
               <div>
@@ -232,17 +245,16 @@
             </div>
           </template>
 
-
           <div
-              class="col-6"
-              v-if="
-                    user.roles_id === 1 ||
-                    user.roles_id === '1' ||
-                    user.roles_id === 4 ||
-                    user.roles_id === '4' ||
-                    user.roles_id === 5 ||
-                    user.roles_id === '5'
-                  "
+            class="col-6"
+            v-if="
+              user.roles_id === 1 ||
+              user.roles_id === '1' ||
+              user.roles_id === 4 ||
+              user.roles_id === '4' ||
+              user.roles_id === 5 ||
+              user.roles_id === '5'
+            "
           >
             <b class="panel-label">FECHA CARGA DATA:</b>
             <div>
@@ -250,15 +262,15 @@
             </div>
           </div>
           <div
-              class="col-6"
-              v-if="
-                    user.roles_id === 1 ||
-                    user.roles_id === '1' ||
-                    user.roles_id === 4 ||
-                    user.roles_id === '4' ||
-                    user.roles_id === 5 ||
-                    user.roles_id === '5'
-                  "
+            class="col-6"
+            v-if="
+              user.roles_id === 1 ||
+              user.roles_id === '1' ||
+              user.roles_id === 4 ||
+              user.roles_id === '4' ||
+              user.roles_id === 5 ||
+              user.roles_id === '5'
+            "
           >
             <b class="panel-label">MES CARGA DATA:</b>
             <div>
@@ -266,15 +278,15 @@
             </div>
           </div>
           <div
-              class="col-6"
-              v-if="
-                    user.roles_id === 1 ||
-                    user.roles_id === '1' ||
-                    user.roles_id === 4 ||
-                    user.roles_id === '4' ||
-                    user.roles_id === 5 ||
-                    user.roles_id === '5'
-                  "
+            class="col-6"
+            v-if="
+              user.roles_id === 1 ||
+              user.roles_id === '1' ||
+              user.roles_id === 4 ||
+              user.roles_id === '4' ||
+              user.roles_id === 5 ||
+              user.roles_id === '5'
+            "
           >
             <b class="panel-label">AÑO CARGA DATA:</b>
             <div>
@@ -289,14 +301,25 @@
 
 <script>
 export default {
-  name: "EmploymentHistory",
-  props: ['fechavinc', 'pagaduriaType', 'datames', 'datamesseceduc', 'datamesfidu', 'datamesseccali', 'user'],
-  created() {
-
-  },
-}
+  name: 'EmploymentHistory',
+  props: [
+    'fechavinc',
+    'pagaduriaType',
+    'datames',
+    'datamesseceduc',
+    'datamesfidu',
+    'datamesseccali',
+    'user',
+    'coupons'
+  ],
+  computed: {
+    ingresosExtras() {
+      return this.coupons.filter(coupon => coupon.code !== 'SUEBA' && Number(coupon.ingresos) > 0);
+    },
+    salarioBasico() {
+      const item = this.coupons ? this.coupons.find(coupon => coupon.code === 'SUEBA') : null;
+      return item && item.ingresos;
+    }
+  }
+};
 </script>
-
-<style scoped>
-
-</style>

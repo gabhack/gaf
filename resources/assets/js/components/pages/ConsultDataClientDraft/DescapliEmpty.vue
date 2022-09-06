@@ -1,125 +1,32 @@
 <template>
   <div class="col-md-12">
     <div class="panel panel-primary mb-3">
-      <div class="panel-heading"><b>OBLIGACIONES VIGENTES AL DIA</b></div>
+      <div class="panel-heading d-flex justify-content-between">
+        <b>OBLIGACIONES VIGENTES AL DIA</b>
+        <b v-if="periodDate">PERIODO: {{ periodDate }}</b>
+      </div>
       <div class="panel-body">
         <div class="row">
-          <div class="col-md-2">
-            <b class="panel-label table-text">TIPO ENTIDAD:</b>
-            <!--            <template v-if="descapli.length">-->
-            <!--              <div v-for="(descapli, key) in descapli" :key="key">-->
-            <!--                <p class="panel-value">{{ descapli.clase }}</p>-->
-            <!--              </div>-->
-            <!--            </template>-->
-            <div>
+          <div :class="label.colClass || 'col-2'" v-for="label in labels" :key="label.field">
+            <b class="panel-label table-text">{{ label.label }}:</b>
+            <template v-if="data.length > 0">
+              <div v-for="(item, key) in data" :key="key">
+                <p class="panel-value">
+                  <template v-if="item[label.field]">
+                    <template v-if="label.currency">
+                      {{ item[label.field] | currency }}
+                    </template>
+                    <template v-else>
+                      {{ item[label.field] }}
+                    </template>
+                  </template>
+                  <template v-else> - </template>
+                </p>
+              </div>
+            </template>
+            <template v-else>
               <p class="panel-value">-</p>
-            </div>
-          </div>
-
-          <div class="col-md-2">
-            <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
-            <!--            <template v-if="descapli.length">-->
-            <!--              <div v-for="(descapli, key) in descapli" :key="key">-->
-            <!--                <p class="panel-value">{{ descapli.nomtercero }}</p>-->
-            <!--              </div>-->
-            <!--            </template>-->
-            <div>
-              <p class="panel-value">-</p>
-            </div>
-          </div>
-
-          <div class="col-md-2">
-            <b class="panel-label table-text">NUMERO PAGARE:</b>
-            <!--            <template v-if="descapli.length">-->
-            <!--              <div v-for="(descapli, key) in descapli" :key="key">-->
-            <!--                <p class="panel-value">{{ descapli.pagare }}</p>-->
-            <!--              </div>-->
-            <!--            </template>-->
-            <div>
-              <p class="panel-value">-</p>
-            </div>
-          </div>
-
-          <div class="col-md-2">
-            <b class="panel-label table-text">CUOTA:</b>
-            <!--            <template v-if="descapli.length">-->
-            <!--              <div v-for="(descapli, key) in descapli" :key="key">-->
-            <!--                <p class="panel-value">{{ descapli.vaplicado | currency }}</p>-->
-            <!--              </div>-->
-            <!--            </template>-->
-            <div>
-              <p class="panel-value">-</p>
-            </div>
-          </div>
-
-          <div class="col-md-2">
-            <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
-            <!--            <template v-if="descapli.length">-->
-            <!--              <div v-for="(descapli, key) in descapli" :key="key">-->
-            <!--                <p class="panel-value">{{ descapli.fgrab }}</p>-->
-            <!--              </div>-->
-            <!--            </template>-->
-            <div>
-              <p class="panel-value">-</p>
-            </div>
-          </div>
-
-          <div class="col-md-2">
-            <b class="panel-label table-text">NOMBRE ENTIDAD CEDIENTE:</b>
-            <!--            <template v-if="descapli.length">-->
-            <!--              <div v-for="(descapli, key) in descapli" :key="key">-->
-            <!--                <p class="panel-value">{{ descapli.nonentant }}</p>-->
-            <!--              </div>-->
-            <!--            </template>-->
-            <div>
-              <p class="panel-value">-</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-12 mb-3">
-            <div class="panel-heading"><b>CUPONES DE PAGO</b></div>
-          </div>
-          <div class="col-md-2">
-            <b class="panel-label table-text">CODIGO:</b>
-            <div v-for="(coupon, key) in coupons" :key="key">
-              <p class="panel-value">
-                {{ coupon.code }}
-              </p>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <b class="panel-label table-text">CONCEPTO:</b>
-            <div v-for="(coupon, key) in coupons" :key="key">
-              <p class="panel-value">
-                {{ coupon.concept }}
-              </p>
-            </div>
-          </div>
-          <div class="col-md-2">
-            <b class="panel-label table-text">INGRESOS:</b>
-            <div v-for="(coupon, key) in coupons" :key="key">
-              <p class="panel-value">
-                {{ coupon.ingresos | currency }}
-              </p>
-            </div>
-          </div>
-          <div class="col-md-2">
-            <b class="panel-label table-text">EGRESOS:</b>
-            <div v-for="(coupon, key) in coupons" :key="key">
-              <p class="panel-value">
-                {{ coupon.egresos | currency }}
-              </p>
-            </div>
-          </div>
-          <div class="col-md-2">
-            <b class="panel-label table-text">PERIODO:</b>
-            <div v-for="(coupon, key) in coupons" :key="key">
-              <p class="panel-value">
-                {{ coupon.period }}
-              </p>
-            </div>
+            </template>
           </div>
         </div>
       </div>
@@ -130,6 +37,35 @@
 <script>
 export default {
   name: 'Descapli',
-  props: ['descapli', 'coupons']
+  props: ['descapli', 'coupons'],
+  data() {
+    return {
+      labels: [
+        { label: 'TIPO ENTIDAD', field: 'clase' },
+        { label: 'NOMBRE ENTIDAD', field: 'nomtercero', colClass: 'col-4' },
+        { label: 'CUOTA', field: 'vaplicado', currency: true },
+        { label: 'FECHA INICIO DEUDA', field: 'fgrab' },
+        { label: 'NOMBRE ENTIDAD CEDIENTE', field: 'nonentant' }
+      ]
+    };
+  },
+  computed: {
+    periodDate() {
+      return this.coupons.length > 0 ? this.coupons[0].period : null;
+    },
+    couponsAsDescapli() {
+      const items = this.coupons.filter(item => item.code !== 'SUEBA' && Number(item.egresos) > 0);
+      return items.map(item => {
+        return {
+          nomtercero: item.concept,
+          vaplicado: item.egresos
+        };
+      });
+    },
+    data() {
+      const descaplis = this.descapli ? this.descapli : [];
+      return [...descaplis, ...this.couponsAsDescapli];
+    }
+  }
 };
 </script>
