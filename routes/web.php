@@ -140,6 +140,7 @@ Route::group(["prefix" => "cifin"], function () {
 Route::group(["prefix" => "deceval"], function () {
     Route::get('/', 'DecevalController@index');
     Route::post('/consultar', 'DecevalController@consultar');
+    Route::post('/firmar', 'DecevalController@firmar');
     Route::get('/consulta', 'DecevalController@consulta');
 
     Route::post('/pagarpse', 'PagosController@pagarpse');
