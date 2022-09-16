@@ -43,9 +43,10 @@ class CifinController extends Controller
     {
         $cedula = $request->cedula;
         $apellido = $request->apellido;
-        $soapUser = "405485";  //  username
-        $soapPassword = "2AMIG*"; // password
-        $url = "http://webservicecf.herokuapp.com/CifinWS?wsdl";
+        $soapUser = env('CIFIN_USER');  //  username
+        $soapPassword = env('CIFIN_PASSWORD'); // password
+        $url = env('CIFIN_URL') . "?wsdl";
+
         $xml_post_string = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws/">
             <soapenv:Header/>
                 <soapenv:Body>
@@ -72,7 +73,7 @@ class CifinController extends Controller
             "Accept-Encoding: gzip,deflate",
             "Pragma: no-cache",
             "X-Atlassian-Token: no-check",
-            "SOAPAction: http://webservicecf.herokuapp.com/CifinWS",
+            "SOAPAction: " . env('CIFIN_URL'),
             "Content-length: " . strlen($xml_post_string),
         );
 
