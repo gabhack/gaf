@@ -25,10 +25,32 @@
                     <div data-v-1fb519a4="" class="panel-heading"><b data-v-1fb519a4="">RESULTADO DE LA CONSULTA</b></div>
                     <div data-v-1fb519a4="" class="panel-body">
                         <div data-v-1fb519a4="" class="row">
-                            <a href="{{ asset('pagare.pdf') }}">abrir Pagare</a>
+                            <div data-v-1fb519a4=""  class="form-group col-md-4">
+                                <a href="{{ asset('pagare.pdf') }}" class="btn btn-primary"><i class="fa fa-envelope-open"></i> Abrir Pagare</a>
+                            </div>
+                            <div data-v-1fb519a4=""  class="form-group col-md-6">
+                                <form action="{{ url('deceval/firmar') }}" method="post" class="form-group col-md-12">
+                                    {{ csrf_field() }}
+                                    <input type="hidden" id="idDocumentoPagare" name="idDocumentoPagare" value="{{$idDocumentoPagare}}" />
+                                    <input type="hidden" id="otorganteTipoId" name="otorganteTipoId" value="{{$otorganteTipoId}}" />
+                                    <input type="hidden" id="otorganteNumId" name="otorganteNumId" value="{{$otorganteNumId}}" />
+                                    <input type="hidden" id="numPagareEntidad" name="numPagareEntidad" value="{{$numPagareEntidad}}" />
+                                    <input type="hidden" id="codigoDepositante" name="codigoDepositante" value="{{$codigoDepositante}}" />
+                                    <input type="hidden" id="fecha" name="fecha" value="{{$fecha}}" />
+                                    <input type="hidden" id="hora" name="hora" value="{{$hora}}" />
+                                    <button type="submit" class="btn btn-secondary"><i class="fa fa-pencil"></i> Firmar Pagare</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
+                @if ($errorFirma)
+                    <div data-v-1fb519a4="" class="row">
+                        {{$errorFirma}}
+                    </div>
+                @else
+                    <div data-v-1fb519a4="" class="row"></div>
+                @endif
                 <iframe scrolling="auto" height="1100" width="850" src="{{ asset('pagare.pdf') }}" frameborder="0"></iframe>
             </div>
         </div>
