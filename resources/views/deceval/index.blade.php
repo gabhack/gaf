@@ -81,6 +81,18 @@
                                     <input required="required" name="otorganteCuenta" type="text" placeholder="yyyy-mm-dd" value="103869" class="form-control text-center">
                                 </div>
                             </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <b class="panel-label">FECHA EXPEDICION ID OTORGANTE:</b>
+                                    <input required="required" name="expeditionDate" type="text" placeholder="dd/MM/yyyy" value="27/09/2011" class="form-control text-center">
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <b class="panel-label">TELEFONO:</b>
+                                    <input required="required" name="phone" type="number" placeholder="3115879658" value="3115879658" class="form-control text-center">
+                                </div>
+                            </div>
+
                             <div class="form-group col-md-12">
                                 <button type="submit" class="btn btn-primary float-right">Generar</button>
                             </div>
