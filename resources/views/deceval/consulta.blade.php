@@ -87,7 +87,7 @@
                                         <button type="submit" class="btn btn-secondary">
                                             <i class="fa fa-pencil"></i> Regenerar Flujo
                                         </button>
-                                        @elseif($step==='confirmCode2')
+                                    
                                     @else
                                         <button type="submit" class="btn btn-secondary">
                                             <i class="fa fa-pencil"></i> Firmar Documento

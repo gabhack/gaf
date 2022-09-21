@@ -8,15 +8,15 @@ use DOMDocument;
 class DecevalController extends Controller
 {
 
-   public $ambiente=1;
-   /*public $urlTransUnion="https://www.transuniondecisioncentreuat.com.mx/TU.IDS.ExternalServices_mex_latam/SolutionExecution/ExternalSolutionExecution.svc";
+   public $ambiente=0;
+   public $urlTransUnion="https://www.transuniondecisioncentreuat.com.mx/TU.IDS.ExternalServices_mex_latam/SolutionExecution/ExternalSolutionExecution.svc";
    public $userTransUnion="IDV_Ckcomercializadora.DEV1";
-   public $passTransUnion="CK%comer2022*";*/
+   public $passTransUnion="CK%comer2022*";
 
-   public $urlTransUnion="https://www.transuniondecisioncentre.com.mx/TU.IDS.ExternalServices_latam_prod/SolutionExecution/ExternalSolutionExecution.svc";
+   /*public $urlTransUnion="https://www.transuniondecisioncentre.com.mx/TU.IDS.ExternalServices_latam_prod/SolutionExecution/ExternalSolutionExecution.svc";
    public $userTransUnion="IDV_CKcomercilizadora.PROD1";
    public $passTransUnion="]LLB&5FYyPmd[";
-
+*/
 
 
 
@@ -718,7 +718,7 @@ class DecevalController extends Controller
          $OTPCode="";
          
          if($docResponse->getElementsByTagName('Status')->item(0)->nodeValue === 'Success' && 
-            $docResponse->getElementsByTagName('Status')->item(0)->nodeValue === 'PinVerification_OTPInput'){
+            $docResponse->getElementsByTagName('CurrentQueue')->item(0)->nodeValue === 'PinVerification_OTPInput'){
             if($this->ambiente ===0){
                foreach ($docResponse->getElementsByTagName('Field') as $valor){
                   if ($valor->hasAttributes()) {
