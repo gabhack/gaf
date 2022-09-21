@@ -198,7 +198,7 @@ class DecevalController extends Controller
          "hora"=>$request->hora,
          "application"=>$application,
          "phoneList"=>$phoneList,
-         "step"=>"confirmCode2",
+         "step"=>"firmado",
          "phoneListStr"=>$request->phoneListStr,
          "ambiente"=>$this->ambiente
       ]);
