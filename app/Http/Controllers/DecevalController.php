@@ -7,6 +7,15 @@ use DOMDocument;
 
 class DecevalController extends Controller
 {
+   public $ambiente = 1; // 0 = pruebas, 1 = produccion
+
+   // public $urlTransUnion = "https://www.transuniondecisioncentreuat.com.mx/TU.IDS.ExternalServices_mex_latam/SolutionExecution/ExternalSolutionExecution.svc";
+   // public $userTransUnion = "IDV_Ckcomercializadora.DEV1";
+   // public $passTransUnion = "CK%comer2022*";
+
+   public $urlTransUnion = "https://www.transuniondecisioncentre.com.mx/TU.IDS.ExternalServices_latam_prod/SolutionExecution/ExternalSolutionExecution.svc";
+   public $userTransUnion = "IDV_CKcomercilizadora.PROD1";
+   public $passTransUnion = "]LLB&5FYyPmd[";
 
    public function __construct()
    {
@@ -18,80 +27,191 @@ class DecevalController extends Controller
    {
       return view("deceval/index");
    }
-   public function firmar(Request $request){
+
+   public function firmar(Request $request)
+   {
       $usuario = '90043262901';
-      $nombreArchivo ="pagare.pdf";
-      try{
-         //======================FIRMAR PAGARE
-         $firma = $this->firmarPagareCaracteres($request->idDocumentoPagare, 
-                                                   $request->otorganteNumId, 
-                                                   $request->codigoDepositante, 
-                                                   $request->fecha, 
-                                                   $request->hora, 
-                                                   $usuario);
-         $firma->save('firma.xml');
-      }catch(\Exception $ex){
+      $nombreArchivo = "pagare.pdf";
+
+      try {
+         if ($this->ambiente === 0) {
+            $expeditionDate = "27/09/2011";
+            $recentPhone = "3115879658";
+            $cedula = "1216713792";
+            $lastName = "VERGARA";
+         } else {
+            $expeditionDate = $request->expeditionDate;
+            $recentPhone = $request->phone;
+            $cedula = "1216713792";
+            $lastName = explode(" ", $response2->getElementsByTagName('nombreOtorgante'))[2];
+         }
+
+         $inicioFlujoFirma = $this->iniciarFlujoFirma($cedula, $expeditionDate, $recentPhone, $lastName);
+      } catch (\Exception $ex) {
+         $errorFirma = "Ocurrio un error al solicitar el numero de aplicacion, para continuar el proceso puede hacer click en el boton 'Regenerar Flujo'    ";
+         $step = "failCreateFlow";
          $link = asset($nombreArchivo);
          $resul = [$link];
          return view("deceval/consulta")->with([
-            "resultado" => null,
-            "errorFirma"=> "Ocurrio un error al firmar el documento",
-            "idDocumentoPagare"=>$request->idDocumentoPagare,
-            "otorganteTipoId"=>$request->otorganteTipoId,
-            "otorganteNumId"=>$request->otorganteNumId,
-            "numPagareEntidad"=>$request->numPagareEntidad,
-            "codigoDepositante"=>$request->codigoDepositante,
-            "fecha"=>$request->fecha,
-            "hora"=>$request->hora
+            "resultado" => $resul,
+            "errorFirma" => $errorFirma,
+            "idDocumentoPagare" => $request->idDocumentoPagare,
+            "otorganteTipoId" => $request->otorganteTipoId,
+            "otorganteNumId" => $request->otorganteNumId,
+            "numPagareEntidad" => $request->numPagareEntidad,
+            "codigoDepositante" => $request->codigoDepositante,
+            "fecha" => $request->fecha,
+            "hora" => $request->hora,
+            "application" => null,
+            "phoneList" => null,
+            "phoneListStr" => null,
+            "step" => $step,
+            "confirmCode" => "",
+            "ambiente" => $this->ambiente
          ]);
       }
 
-      try{
+      $application  = $request->application;
+      $phoneList = explode(",", $request->phoneListStr);
+
+      // Se genera codigo
+      if ($request->step === 'initial') {
+         $code = "";
+
+         try {
+            $code = $this->generarCode($application, $request->phone);
+         } catch (Exeption $ex) {
+            //
+         }
+
+         $link = asset($nombreArchivo);
+         $resul = [$link];
+
+         return view("deceval/consulta")->with([
+            "resultado" => $resul,
+            "errorFirma" => "",
+            "idDocumentoPagare" => $request->idDocumentoPagare,
+            "otorganteTipoId" => $request->otorganteTipoId,
+            "otorganteNumId" => $request->otorganteNumId,
+            "numPagareEntidad" => $request->numPagareEntidad,
+            "codigoDepositante" => $request->codigoDepositante,
+            "fecha" => $request->fecha,
+            "hora" => $request->hora,
+            "application" => $application,
+            "phoneList" => $phoneList,
+            "phoneListStr" => $request->phoneListStr,
+            "step" => "confirmCode",
+            "code" => $code,
+            "confirmCode" => "confirmCode",
+            "ambiente" => $this->ambiente
+         ]);
+      }
+
+      if ($request->step === 'confirmCode') {
+         $this->confirmarCode($application, $request->code);
+         $link = asset($nombreArchivo);
+         $resul = [$link];
+
+         return view("deceval/consulta")->with([
+            "resultado" => $resul,
+            "errorFirma" => "",
+            "idDocumentoPagare" => $request->idDocumentoPagare,
+            "otorganteTipoId" => $request->otorganteTipoId,
+            "otorganteNumId" => $request->otorganteNumId,
+            "numPagareEntidad" => $request->numPagareEntidad,
+            "codigoDepositante" => $request->codigoDepositante,
+            "fecha" => $request->fecha,
+            "hora" => $request->hora,
+            "application" => $application,
+            "phoneList" => $phoneList,
+            "phoneListStr" => $request->phoneListStr,
+            "step" => "confirmCode2",
+            "code" => $request->code,
+            "confirmCode" => "confirmCode",
+            "ambiente" => $this->ambiente
+         ]);
+      }
+
+
+
+      try {
+         //======================FIRMAR PAGARE
+         try {
+            $firma = $this->firmarPagareCaracteres(
+               $request->idDocumentoPagare,
+               $request->otorganteNumId,
+               $request->codigoDepositante,
+               $request->fecha,
+               $request->hora,
+               $usuario
+            );
+            $firma->save('firmaExecutionResponse.xml');
+         } catch (\Exception $ex) {
+            //
+         }
+
          //=======================CONSULTAR NUEVO PAGARE
-         $response2 = $this->consultarPagares($request->idDocumentoPagare, 
-                                          $request->otorganteTipoId, 
-                                          $request->otorganteNumId, 
-                                          $request->numPagareEntidad, 
-                                          $request->codigoDepositante, 
-                                          $request->fecha, 
-                                          $request->hora, $usuario);                              
-         $response2->save('consulta.xml');
+         $response2 = $this->consultarPagares(
+            $request->idDocumentoPagare,
+            $request->otorganteTipoId,
+            $request->otorganteNumId,
+            $request->numPagareEntidad,
+            $request->codigoDepositante,
+            $request->fecha,
+            $request->hora,
+            $usuario
+         );
+
+         $response2->save('consultaFirmadoResponse.xml');
          $contenido = $response2->getElementsByTagName('contenido')->item(0)->nodeValue;
          $nombreArchivo = $response2->getElementsByTagName('nombreArchivo')->item(0)->nodeValue;
          $this->generatePdf($contenido, $nombreArchivo);
-      }catch(\Exception $ex){
+      } catch (\Exception $ex) {
          $link = asset($nombreArchivo);
          $resul = [$link];
+
          return view("deceval/consulta")->with([
-                  "resultado" => $resul ,
-                  "errorFirma"=> "Ocurrio error consultando el documento firmado:".$ex->getMessage(),
-                  "idDocumentoPagare"=>$request->idDocumentoPagare,
-                  "otorganteTipoId"=>$request->otorganteTipoId,
-                  "otorganteNumId"=>$request->otorganteNumId,
-                  "numPagareEntidad"=>$request->numPagareEntidad,
-                  "codigoDepositante"=>$request->codigoDepositante,
-                  "fecha"=>$request->fecha,
-                  "hora"=>$request->hora
-               ]);
+            "resultado" => $resul,
+            "errorFirma" => "Error ejecutando la firma del documento, favor intente mas tarde...",
+            "idDocumentoPagare" => $request->idDocumentoPagare,
+            "otorganteTipoId" => $request->otorganteTipoId,
+            "otorganteNumId" => $request->otorganteNumId,
+            "numPagareEntidad" => $request->numPagareEntidad,
+            "codigoDepositante" => $request->codigoDepositante,
+            "fecha" => $request->fecha,
+            "hora" => $request->hora,
+            "application" => $application,
+            "phoneList" => $phoneList,
+            "step" => "confirmCode2",
+            "phoneListStr" => $request->phoneListStr,
+            "ambiente" => $this->ambiente
+         ]);
       }
 
       $link = asset($nombreArchivo);
       $resul = [$link];
+
       return view("deceval/consulta")->with([
          "resultado" => $resul,
-         "errorFirma"=>"",
-         "idDocumentoPagare"=>$request->idDocumentoPagare,
-         "otorganteTipoId"=>$request->otorganteTipoId,
-         "otorganteNumId"=>$request->otorganteNumId,
-         "numPagareEntidad"=>$request->numPagareEntidad,
-         "codigoDepositante"=>$request->codigoDepositante,
-         "fecha"=>$request->fecha,
-         "hora"=>$request->hora
+         "errorFirma" => "",
+         "idDocumentoPagare" => $request->idDocumentoPagare,
+         "otorganteTipoId" => $request->otorganteTipoId,
+         "otorganteNumId" => $request->otorganteNumId,
+         "numPagareEntidad" => $request->numPagareEntidad,
+         "codigoDepositante" => $request->codigoDepositante,
+         "fecha" => $request->fecha,
+         "hora" => $request->hora,
+         "application" => $application,
+         "phoneList" => $phoneList,
+         "step" => "firmado",
+         "phoneListStr" => $request->phoneListStr,
+         "ambiente" => $this->ambiente
       ]);
    }
+
    public function consultar(Request $request)
    {
-      try{
+      try {
          $nitEmisor = $request->nitEmisor;
          $idClaseDefinicionDocumento = $request->idClaseDefinicionDocumento;
          $fechaGrabacionPagare = $request->fechaGrabacionPagare;
@@ -154,8 +274,8 @@ class DecevalController extends Controller
                </header>
             </arg0>
          </ser:creacionPagaresCodificado>
-      </soapenv:Body>
-      </soapenv:Envelope>';
+         </soapenv:Body>
+         </soapenv:Envelope>';
          //echo $xml_post_string;
          $headers = array(
             "Content-type: text/xml; charset=\"utf-8\"",
@@ -181,24 +301,69 @@ class DecevalController extends Controller
          //echo  $response ;
          $doc = new DOMDocument();
          $doc->loadXML($response);
-         $doc->save('demo.xml');
+         $doc->save('demoxds.xml');
 
          $idDocumentoPagare = $doc->getElementsByTagName('idDocumentoPagare')->item(0)->nodeValue;
          $numPagareEntidad = $doc->getElementsByTagName('numPagareEntidad')->item(0)->nodeValue;
-      
-         $response2 = $this->consultarPagares($idDocumentoPagare, 
-                                             $otorganteTipoId, 
-                                             $otorganteNumId, 
-                                             $numPagareEntidad, 
-                                             $codigoDepositante, 
-                                             $fecha, 
-                                             $hora, 
-                                             $usuario);
+
+         $response2 = $this->consultarPagares(
+            $idDocumentoPagare,
+            $otorganteTipoId,
+            $otorganteNumId,
+            $numPagareEntidad,
+            $codigoDepositante,
+            $fecha,
+            $hora,
+            $usuario
+         );
+
          $response2->save('consulta.xml');
 
          $contenido = $response2->getElementsByTagName('contenido')->item(0)->nodeValue;
          $nombreArchivo = $response2->getElementsByTagName('nombreArchivo')->item(0)->nodeValue;
-       
+
+         $step = "initial";
+         $errorFirma = "";
+
+         try {
+            if ($this->ambiente === 0) {
+               $expeditionDate = "27/09/2011";
+               $recentPhone = "3115879658";
+               $cedula = "1216713792";
+               $lastName = "VERGARA";
+            } else {
+               $expeditionDate = $request->expeditionDate;
+               $recentPhone = $request->phone;
+               $cedula = "1216713792";
+               $lastName = explode(" ", $response2->getElementsByTagName('nombreOtorgante'))[2];
+            }
+
+            $inicioFlujoFirma = $this->iniciarFlujoFirma($cedula, $expeditionDate, $recentPhone, $lastName);
+         } catch (\Exception $ex) {
+            $link = asset($nombreArchivo);
+            $resul = [$link];
+            $errorFirma = "Ocurrio un error al solicitar el numero de aplicacion, para continuar el proceso puede hacer click en el boton 'Regenerar Flujo'    ";
+            $step = "failCreateFlow";
+
+            return view("deceval/consulta")->with([
+               "resultado" => $resul,
+               "errorFirma" => $errorFirma,
+               "idDocumentoPagare" => $idDocumentoPagare,
+               "otorganteTipoId" => $otorganteTipoId,
+               "otorganteNumId" => $otorganteNumId,
+               "numPagareEntidad" => $numPagareEntidad,
+               "codigoDepositante" => $codigoDepositante,
+               "fecha" => $fecha,
+               "hora" => $hora,
+               "application" => null,
+               "phoneList" => null,
+               "phoneListStr" => null,
+               "step" => $step,
+               "confirmCode" => "",
+               "ambiente" => $this->ambiente
+            ]);
+         }
+
          $this->generatePdf($contenido, $nombreArchivo);
 
          $link = asset($nombreArchivo);
@@ -206,27 +371,40 @@ class DecevalController extends Controller
 
          return view("deceval/consulta")->with([
             "resultado" => $resul,
-            "errorFirma"=>"",
-            "idDocumentoPagare"=>$idDocumentoPagare,
-            "otorganteTipoId"=>$otorganteTipoId,
-            "otorganteNumId"=>$otorganteNumId,
-            "numPagareEntidad"=>$numPagareEntidad,
-            "codigoDepositante"=>$codigoDepositante,
-            "fecha"=>$fecha,
-            "hora"=>$hora,
+            "errorFirma" => $errorFirma,
+            "idDocumentoPagare" => $idDocumentoPagare,
+            "otorganteTipoId" => $otorganteTipoId,
+            "otorganteNumId" => $otorganteNumId,
+            "numPagareEntidad" => $numPagareEntidad,
+            "codigoDepositante" => $codigoDepositante,
+            "fecha" => $fecha,
+            "hora" => $hora,
+            "application" => $inicioFlujoFirma['application'],
+            "phoneList" => $inicioFlujoFirma['phoneList'],
+            "phoneListStr" => implode(",", $inicioFlujoFirma['phoneList']),
+            "step" => $step,
+            "confirmCode" => "",
+            "ambiente" => $this->ambiente
          ]);
-      }catch(Exception $e){
+      } catch (Exception $e) {
          $error = $e->getMessage();
       }
+
       return view("deceval/consulta")->with([
          "resultado" => null,
-         "errorFirma"=>"",
-         "error"=> $error
+         "errorFirma" => "",
+         "application" => $inicioFlujoFirma['application'],
+         "phoneList" => $inicioFlujoFirma['phoneList'],
+         "phoneListStr" => implode(",", $inicioFlujoFirma['phoneList']),
+         "error" => $error,
+         "step" => "initial",
+         "confirmCode" => "",
+         "ambiente" => $this->ambiente
       ]);
-      
    }
 
-   private function generatePdf($contenido, $nombreArchivo){
+   private function generatePdf($contenido, $nombreArchivo)
+   {
       // Se escribe contenido en token.txt
       $tempArchivo = "token.txt";
       $archivo = fopen($tempArchivo, "w");
@@ -283,7 +461,7 @@ class DecevalController extends Controller
      </soapenv:Envelope>';
       $doc = new DOMDocument();
       $doc->loadXML($xml_post_string);
-      $doc->save('consultaresponse.xml');
+      $doc->save('consultaRequest.xml');
 
       $headers = array(
          "Content-type: text/xml; charset=\"utf-8\"",
@@ -299,16 +477,18 @@ class DecevalController extends Controller
       curl_setopt($ch, CURLOPT_URL, $url);
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
       curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
-      curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+      curl_setopt($ch, CURLOPT_TIMEOUT, 100);
       curl_setopt($ch, CURLOPT_POST, true);
       curl_setopt($ch, CURLOPT_POSTFIELDS, $xml_post_string); // the SOAP request
       curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
       $response = curl_exec($ch);
+
       curl_close($ch);
       $doc = new DOMDocument();
       //echo $response;
       $doc->loadXML($response);
+      $doc->save('consultaResponseFrm.xml');
       return $doc;
    }
 
@@ -375,5 +555,267 @@ class DecevalController extends Controller
    public function consulta()
    {
       return view('deceval/consulta')->with();
+   }
+
+   public function iniciarFlujoFirma($documentId, $expeditionDate, $recentPhone, $lastName)
+   {
+      //DocumentId:1216713792
+      //expeditionDate27/09/2011
+      //ResentPhone 3115879658
+
+      $xml_post_string = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/">
+         <soapenv:Header/>
+         <soapenv:Body>
+            <tem:ExecuteXMLString>
+               <!--Optional:-->
+               <tem:request>
+                     <![CDATA[
+                  <DCRequest xmlns="http://transunion.com/dc/extsvc">
+                        <Authentication type="OnDemand">
+                           <UserId>' . $this->userTransUnion . '</UserId>
+                           <Password>' . $this->passTransUnion . '</Password>
+                        </Authentication>
+                        ' . $this->createRequestInfoFlow("NewWithContext") . '
+                        <UserData></UserData>
+                        <Fields>
+                           <Field key="PrimaryApplicant">
+                              &lt;Applicant&gt;
+                                 &lt;IdNumber&gt;' . $documentId . '&lt;/IdNumber&gt;
+                                 &lt;IdType&gt;1&lt;/IdType&gt;
+                                 &lt;IdExpeditionDate&gt;' . $expeditionDate . '&lt;/IdExpeditionDate&gt;
+                                 &lt;RecentPhoneNumber&gt;' . $recentPhone . '&lt;/RecentPhoneNumber&gt;
+                                 &lt;LastName&gt;' . $lastName . '&lt;/LastName&gt;
+                              &lt;/Applicant&gt;
+                           </Field>	
+                        </Fields>	
+                     </DCRequest>
+                  ]]>
+               </tem:request>
+            </tem:ExecuteXMLString>
+         </soapenv:Body>
+      </soapenv:Envelope>';
+      //echo $xml_post_string;
+      $headers = array(
+         "Content-type: text/xml; charset=\"utf-8\"",
+         "Accept: text/xml",
+         "Cache-Control: no-cache",
+         'SOAPAction: "http://tempuri.org/IExternalSolutionExecution/ExecuteXMLString"',
+         "Pragma: no-cache",
+         "Content-lenght: " . strlen($xml_post_string)
+      );
+
+      $doc = new DOMDocument();
+      $doc->loadXML($xml_post_string);
+      $doc->save('initialRequest.xml');
+
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+      curl_setopt($ch, CURLOPT_URL, $this->urlTransUnion);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      //curl_setopt($ch, CURLOPT_USERPWD, $username . ":" . $password);
+      //curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+      curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+      curl_setopt($ch, CURLOPT_POST, true);
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $xml_post_string); // the SOAP request
+      curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+      $response = curl_exec($ch);
+
+      curl_close($ch);
+      //echo  $response ;
+      $doc = new DOMDocument();
+      $doc->loadXML($response);
+      $doc->save('initialFirmProcess.xml');
+
+      $dataUNScape = $doc->getElementsByTagName('ExecuteXMLStringResult')->item(0)->nodeValue;
+      $docResponse = new DOMDocument();
+      $docResponse->loadXML($dataUNScape);
+      $docResponse->save('initialFirmProcessContent.xml');
+      $application = null;
+      $phoneList[] = "";
+
+      if ($docResponse->getElementsByTagName('Status')->item(0)->nodeValue === 'Success') {
+         $application = $docResponse->getElementsByTagName('ApplicationId')->item(0)->nodeValue;
+         foreach ($docResponse->getElementsByTagName('Field') as $valor) {
+            if ($valor->hasAttributes()) {
+               foreach ($valor->attributes as $attr) {
+                  $name = $attr->nodeName;
+                  $value = $attr->nodeValue;
+                  if ($name === 'key' && $value === 'MobilePhoneList') {
+                     $phoneList = explode(",", $valor->nodeValue);
+                  }
+               }
+            }
+         }
+      }
+
+      if ($application === null) {
+         throw new Exception('Aplicaicon no creada');
+      }
+
+      $retorno['application'] = $application;
+      $retorno['phoneList'] = $phoneList;
+
+      return  $retorno;
+   }
+
+   public function generarCode($application, $phoneSelection)
+   {
+      $xml_post_string = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/">
+      <soapenv:Header/>
+      <soapenv:Body>
+         <tem:ExecuteXMLString>
+            <!--Optional:-->
+            <tem:request>
+                  <![CDATA[
+               <DCRequest xmlns="http://transunion.com/dc/extsvc">
+                     <Authentication type="OnDemand">
+                     <UserId>' . $this->userTransUnion . '</UserId>
+                     <Password>' . $this->passTransUnion . '</Password>
+                     </Authentication>
+                     ' . $this->createRequestInfoFlow("Send", "PhoneSelection", $application) . '
+                     <Fields>
+                        <Field key="PhoneType">Mobile</Field>	
+                        <Field key="SelectedPhoneNumber">' . $phoneSelection . '</Field>	
+                  <Field key="ValidationMethod">SMS</Field>
+                     </Fields>	
+                  </DCRequest>
+               ]]>
+            </tem:request>
+         </tem:ExecuteXMLString>
+      </soapenv:Body>
+      </soapenv:Envelope>';
+      //echo $xml_post_string;
+      $headers = array(
+         "Content-type: text/xml; charset=\"utf-8\"",
+         "Accept: text/xml",
+         "Cache-Control: no-cache",
+         'SOAPAction: "http://tempuri.org/IExternalSolutionExecution/ExecuteXMLString"',
+         "Pragma: no-cache",
+         "Content-lenght: " . strlen($xml_post_string)
+      );
+
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+      curl_setopt($ch, CURLOPT_URL,  $this->urlTransUnion);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      //curl_setopt($ch, CURLOPT_USERPWD, $username . ":" . $password);
+      //curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+      curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+      curl_setopt($ch, CURLOPT_POST, true);
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $xml_post_string); // the SOAP request
+      curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+      $response = curl_exec($ch);
+      curl_close($ch);
+      //echo  $response ;
+      $doc = new DOMDocument();
+      $doc->loadXML($response);
+      $doc->save('generateCodeResponse.xml');
+
+      $dataUNScape = $doc->getElementsByTagName('ExecuteXMLStringResult')->item(0)->nodeValue;
+      $docResponse = new DOMDocument();
+      $docResponse->loadXML($dataUNScape);
+      $docResponse->save('generateCodeResponseContent.xml');
+      $OTPCode = "";
+
+      if (
+         $docResponse->getElementsByTagName('Status')->item(0)->nodeValue === 'Success' &&
+         $docResponse->getElementsByTagName('CurrentQueue')->item(0)->nodeValue === 'PinVerification_OTPInput'
+      ) {
+         if ($this->ambiente === 0) {
+            foreach ($docResponse->getElementsByTagName('Field') as $valor) {
+               if ($valor->hasAttributes()) {
+                  foreach ($valor->attributes as $attr) {
+                     $name = $attr->nodeName;
+                     $value = $attr->nodeValue;
+                     if ($name === 'key' && $value === 'OTPCode') {
+                        $OTPCode = $valor->nodeValue;
+                     }
+                  }
+               }
+            }
+         }
+      }
+      return $OTPCode;
+   }
+
+   private function confirmarCode($application, $code)
+   {
+      $xml_post_string = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/">
+      <soapenv:Header/>
+      <soapenv:Body>
+         <tem:ExecuteXMLString>
+            <!--Optional:-->
+            <tem:request>
+                  <![CDATA[
+               <DCRequest xmlns="http://transunion.com/dc/extsvc">
+                     <Authentication type="OnDemand">
+                        <UserId>' . $this->userTransUnion . '</UserId>
+                        <Password>' . $this->passTransUnion . '</Password>
+                     </Authentication>
+                     ' . $this->createRequestInfoFlow("Send", "PinVerification_OTPInput", $application) . '
+                     <Fields>
+                      <Field key="PinNumber">' . $code . '</Field>	
+         				   <Field key="Action">Continue</Field>
+                     </Fields>	
+                  </DCRequest>
+               ]]>
+            </tem:request>
+         </tem:ExecuteXMLString>
+      </soapenv:Body>
+      </soapenv:Envelope>';
+      //echo $xml_post_string;
+      $headers = array(
+         "Content-type: text/xml; charset=\"utf-8\"",
+         "Accept: text/xml",
+         "Cache-Control: no-cache",
+         'SOAPAction: "http://tempuri.org/IExternalSolutionExecution/ExecuteXMLString"',
+         "Pragma: no-cache",
+         "Content-lenght: " . strlen($xml_post_string)
+      );
+
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+      curl_setopt($ch, CURLOPT_URL,  $this->urlTransUnion);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      //curl_setopt($ch, CURLOPT_USERPWD, $username . ":" . $password);
+      //curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+      curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+      curl_setopt($ch, CURLOPT_POST, true);
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $xml_post_string); // the SOAP request
+      curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+      $response = curl_exec($ch);
+      curl_close($ch);
+      //echo  $response ;
+      $doc = new DOMDocument();
+      $doc->loadXML($response);
+      $doc->save('confirmarCodeResponse.xml');
+   }
+
+   private function createRequestInfoFlow($executionMode, $queuestep = null, $application = null)
+   {
+      if ($application !== null) {
+         return "<RequestInfo>
+                     <QueueName>" . $queuestep . "</QueueName>
+                     <ApplicationId>" . $application . "</ApplicationId>
+                     <ExecutionMode>" . $executionMode . "</ExecutionMode>
+                  </RequestInfo>";
+      }
+
+      if ($this->ambiente === 0) {
+         return "<RequestInfo>
+                  <SolutionSetId>156</SolutionSetId>
+                  <SolutionSetVersion>250</SolutionSetVersion>
+                  <ExecutionMode>" . $executionMode . "</ExecutionMode>
+              </RequestInfo>";
+      }
+
+      return "<RequestInfo>
+                     <SolutionSetId>156</SolutionSetId>
+                     <ExecutelatestVersion>true</ExecutelatestVersion>
+                     <ExecutionMode>" . $executionMode . "</ExecutionMode>
+               </RequestInfo>";
    }
 }
