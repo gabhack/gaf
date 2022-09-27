@@ -53,6 +53,8 @@
           :datamesseccali="datamesseccali"
         />
 
+        <DatamesData v-if="pagaduriaType == 'SEDCAUCA' || pagaduriaType == 'SEDCHOCO'" />
+
         <!--============================
           COMPONENTE HISTORIAL LABORAL
         ==============================-->
@@ -108,6 +110,9 @@ import printJS from 'print-js';
 import FormConsult from './FormConsult';
 import EmploymentHistory from './EmploymentHistory';
 import DatamesComponent from './Datames';
+
+import DatamesData from './DatamesData';
+
 import DatamesSeducComponent from './DatamesSeduc';
 import DatamesFiduComponent from './DatamesFidu';
 import DatamesCali from './DatamesCali';
@@ -129,6 +134,7 @@ export default {
     FormConsult,
     EmploymentHistory,
     DatamesComponent,
+    DatamesData,
     DatamesSeducComponent,
     DatamesFiduComponent,
     DatamesCali,

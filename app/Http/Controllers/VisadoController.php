@@ -145,20 +145,11 @@ class VisadoController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $this->buildData($request);
-        $info = $data[$request->pagaduria];
         $user = auth()->user();
 
-        $nombre = "";
-        if (isset($info['nombenef'])) {
-            $nombre = $info['nombenef'];
-        } elseif (isset($info['nomp'])) {
-            $nombre = $info['nomp'];
-        }
-
         $response = Visado::create([
-            'ced' => $info['doc'],
-            'nombre' => $nombre,
+            'ced' => $request->doc,
+            'nombre' => $request->nombre,
             'pagaduria' => $request->pagaduria,
             'entidad' => $request->pagaduria,
             'tipo_consulta' => 'Individual',
@@ -167,19 +158,6 @@ class VisadoController extends Controller
         ]);
 
         return response()->json($response);
-    }
-
-
-    protected function buildData($request)
-    {
-        $data = [
-            'FOPEP' => $request->pagadurias['datames'],
-            'FIDUPREVISORA' => $request->pagadurias['datamesfidu'],
-            'FODE VALLE' => $request->pagadurias['datamesseceduc'],
-            'SECCALI' => $request->pagadurias['datamesseccali'],
-        ];
-
-        return $data;
     }
 
     /**

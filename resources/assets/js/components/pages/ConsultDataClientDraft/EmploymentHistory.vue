@@ -245,6 +245,43 @@
             </div>
           </template>
 
+          <template v-if="datamesSed">
+            <div class="col-6">
+              <b class="panel-label">VALOR INGRESO:</b>
+              <div>
+                <p class="panel-value">{{ datamesSed.vingreso | currency }}</p>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <b class="panel-label">FECHA INGRESO:</b>
+              <div>
+                <p class="panel-value">{{ datamesSed.fingr }}</p>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <b class="panel-label">FECHA VINCULACION:</b>
+              <div>
+                <p class="panel-value">{{ datamesSed.fnombramiento }}</p>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <b class="panel-label">AREA DE DESEMPEÑO:</b>
+              <div>
+                <p class="panel-value">{{ datamesSed.esquema }}</p>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <b class="panel-label">CARGO:</b>
+              <div>
+                <p class="panel-value">{{ datamesSed.cargo }}</p>
+              </div>
+            </div>
+          </template>
+
           <div
             class="col-6"
             v-if="
@@ -300,6 +337,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   name: 'EmploymentHistory',
   props: [
@@ -313,6 +352,7 @@ export default {
     'coupons'
   ],
   computed: {
+    ...mapState('datamesModule', ['datamesSed']),
     ingresosExtras() {
       return this.coupons.filter(coupon => coupon.code !== 'SUEBA' && Number(coupon.ingresos) > 0);
     },

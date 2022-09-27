@@ -102,6 +102,8 @@ Route::group(["prefix" => "pagadurias"], function () {
     Route::post('/update/{id}', 'PagaduriasController@update');
 
     Route::get('/delete/{id}', 'PagaduriasController@destroy');
+
+    Route::get('/per-doc/{doc}', 'PagaduriasController@perDoc');
 });
 
 //Pagos
@@ -443,7 +445,6 @@ Route::resource('/validate', 'SolicitudValidacionController');
 Route::resource('/datamesfidu', 'DatamesfiduController');
 Route::post('/datamesfidu/consultaUnitaria', 'DatamesfiduController@consultaUnitaria');
 Route::post('/datamesseceduc/consultaUnitaria', 'DatamesseceducController@consultaUnitaria');
-Route::post('/pagadurias/consultaUnitaria', 'DatamesseceducController@allPagadurias');
 Route::resource('/datamesseceduc', 'DatamesseceducController');
 
 Route::resource('/cotizer-data', dataCotizerController::class)->only(['store', 'index', 'show', 'update', 'destroy']);

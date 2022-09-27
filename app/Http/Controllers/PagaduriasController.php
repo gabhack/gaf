@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\DataMes;
+use App\DatamesSedCauca;
+use App\DatamesSedChoco;
 use App\Datamesfidu;
 use App\Datamesseccali;
 use App\Datamesseceduc;
+use App\Pagadurias;
 use Illuminate\Http\Request;
 
 class PagaduriasController extends Controller
@@ -18,7 +21,7 @@ class PagaduriasController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('role:ADMIN_SISTEMA');
+        // $this->middleware('role:ADMIN_SISTEMA');
     }
 
     /**
@@ -28,7 +31,7 @@ class PagaduriasController extends Controller
      */
     public function index()
     {
-        $lista = \App\Pagadurias::all();
+        $lista = Pagadurias::all();
         return view("pagadurias/index")->with(["lista" => $lista]);
     }
 
@@ -50,7 +53,7 @@ class PagaduriasController extends Controller
      */
     public function store(Request $request)
     {
-        $pagaduria = new \App\Pagadurias;
+        $pagaduria = new Pagadurias;
         $pagaduria->codigo = strtoupper(str_replace(" ", "_", $request->input('pagaduria')));
         $pagaduria->pagaduria = strtoupper($request->input('pagaduria'));
         $pagaduria->save();
@@ -77,7 +80,7 @@ class PagaduriasController extends Controller
      */
     public function edit($id)
     {
-        $pagaduria = \App\Pagadurias::find($id);
+        $pagaduria = Pagadurias::find($id);
         return view("pagadurias/editar")->with(["pagaduria" => $pagaduria]);
     }
 
@@ -90,7 +93,7 @@ class PagaduriasController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $pagaduria = \App\Pagadurias::find($id);
+        $pagaduria = Pagadurias::find($id);
         $pagaduria->pagaduria = strtoupper($request->input('pagaduria'));
         $pagaduria->save();
 
@@ -105,11 +108,28 @@ class PagaduriasController extends Controller
      */
     public function destroy($id)
     {
-        \App\Pagadurias::find($id)->delete();
+        Pagadurias::find($id)->delete();
         return redirect('pagadurias');
     }
 
+    public function perDoc($doc)
+    {
+        $datames = DataMes::where('doc', $doc)->first();
+        $datamesSedCauca = DatamesSedCauca::where('doc', $doc)->first();
+        $datamesSedChoco = DatamesSedChoco::where('doc', $doc)->first();
+        $datamesfidu = Datamesfidu::where('doc', $doc)->first();
+        $datamesseccali = Datamesseccali::where('doc', $doc)->first();
+        $datamesseceduc = Datamesseceduc::where('doc', $doc)->first();
 
+        $results = [
+            'datames' => $datames,
+            'datamesSedCauca' => $datamesSedCauca,
+            'datamesSedChoco' => $datamesSedChoco,
+            'datamesfidu' => $datamesfidu,
+            'datamesseccali' => $datamesseccali,
+            'datamesseceduc' => $datamesseceduc,
+        ];
 
-
+        return response()->json($results, 200);
+    }
 }

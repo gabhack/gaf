@@ -18,18 +18,24 @@
 
         <div class="col-6">
           <b class="panel-label">PAGADURIAS:</b>
-          <template v-if="dataclient.pagadurias">
-            <select required class="form-control" v-model="dataclient.pagaduria">
-              <option disabled :value="null">Elija una pagaduria</option>
-              <option v-if="dataclient.pagadurias.datames" value="FOPEP">FOPEP</option>
-              <option v-if="dataclient.pagadurias.datamesfidu" value="FIDUPREVISORA">FIDUPREVISORA</option>
-              <option v-if="dataclient.pagadurias.datamesseceduc" value="FODE VALLE">FODE VALLE</option>
-              <option v-if="dataclient.pagadurias.datamesseccali" value="SECCALI">SEM CALI</option>
-            </select>
-          </template>
-          <select class="form-control" v-else>
-            <option class="text-muted" selected disabled :value="null">Ingresa una cedula y presiona consultar</option>
-          </select>
+          <b-form-select
+            v-if="dataclient.pagadurias"
+            v-model="dataclient.pagaduria"
+            class="text-center"
+            required
+            @change="modalConfirmConsultPag"
+          >
+            <option :value="null" disabled hidden>Elija una pagaduria</option>
+            <template v-for="type in pagaduriasType">
+              <option v-if="dataclient.pagadurias[type.key]" :value="type.value" :key="type.key">
+                {{ type.label }}
+              </option>
+            </template>
+          </b-form-select>
+
+          <b-form-select v-else v-model="dataclient.pagaduria" class="text-center">
+            <option :value="null" disabled>Ingresa una cedula y presiona consultar</option>
+          </b-form-select>
         </div>
 
         <div class="col-6 mt-4">
@@ -43,45 +49,56 @@
             CONSULTAR PAGADURIAS
           </b-button>
         </div>
-
-        <!--        <div class="col-6 mt-4">-->
-        <!--          <button-->
-        <!--              type="button"-->
-        <!--              v-if="dataclient.pagaduria && dataclient.name && dataclient.doc"-->
-        <!--              class="btn btn-primary"-->
-        <!--              @click="emitInfo">-->
-        <!--            CONSULTAR-->
-        <!--          </button>-->
-        <!--        </div>-->
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex';
+
 export default {
   name: 'FormConsult',
   data() {
     return {
       dataclient: {
-        doc: '',
-        name: '',
+        doc: '255283',
+        name: 'xavier',
         pagaduria: null,
         pagadurias: null
       },
       isLoading: false,
-      isFirstTime: false
+      pagaduriasType: [
+        { label: 'FOPEP', value: 'FOPEP', key: 'datames' },
+        { label: 'FIDUPREVISORA', value: 'FIDUPREVISORA', key: 'datamesfidu' },
+        { label: 'FODE VALLE', value: 'FODE VALLE', key: 'datamesseceduc' },
+        { label: 'SEM CALI', value: 'SECCALI', key: 'datamesseccali' },
+        { label: 'SED CAUCA', value: 'SEDCAUCA', key: 'datamesSedCauca' },
+        { label: 'SED CHOCO', value: 'SEDCHOCO', key: 'datamesSedChoco' }
+      ]
     };
   },
+  computed: {
+    ...mapState('datamesModule', ['datamesSed'])
+  },
   methods: {
+    ...mapMutations('datamesModule', ['setDatamesSed']),
+    selectedPagaduria() {
+      if (this.dataclient.pagaduria) {
+        const type = this.pagaduriasType.find(type => type.value === this.dataclient.pagaduria);
+        const pagaduria = this.dataclient.pagadurias[type.key];
+        this.setDatamesSed(pagaduria);
+      }
+    },
     emitInfo() {
       this.getAllPagadurias();
-      // this.$emit('emitInfo', this.dataclient);
     },
     async getAllPagadurias() {
       this.isLoading = true;
-      const response = await axios.post('/pagadurias/consultaUnitaria', { doc: this.dataclient.doc });
+
+      const response = await axios.get(`/pagadurias/per-doc/${this.dataclient.doc}`);
       this.dataclient.pagadurias = response.data;
+
       this.isLoading = false;
       return Promise.resolve(response.data);
     },
@@ -107,25 +124,25 @@ export default {
           });
         });
     },
-    async saveVisados(val) {
+    async saveVisados() {
       try {
         this.isLoading = true;
-        const response = await axios.post('/visados', { ...this.dataclient });
+
+        this.selectedPagaduria();
+
+        const data = {
+          pagaduria: this.dataclient.pagaduria,
+          nombre: this.datamesSed.nombenef ? this.datamesSed.nombenef : this.datamesSed.nomp,
+          doc: this.datamesSed.doc
+        };
+
+        const response = await axios.post('/visados', data);
         return Promise.resolve(response.status);
       } catch (e) {
       } finally {
         this.isLoading = false;
       }
     }
-  },
-  watch: {
-    'dataclient.pagaduria': function (val) {
-      this.modalConfirmConsultPag(val);
-      //
-    }
   }
 };
 </script>
-
-<style scoped>
-</style>

@@ -3,45 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\CouponsSedCauca;
-use App\CouponsSedChoco;
+use App\DatamesSedCauca;
 use Illuminate\Http\Request;
 
-use App\Coupunsseccali;
-use App\Coupunssecedu;
-
-class CouponsController extends Controller
+class DatamesDataController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $userDoc = $request->doc;
-        $pagaduriaType = $request->pagaduria;
-
-        $coupons = [];
-
-        switch ($pagaduriaType) {
-            case 'SECCALI':
-                $coupons = Coupunsseccali::where('doc', $userDoc)->get();
-                break;
-            case 'SEDCAUCA':
-                $coupons = CouponsSedCauca::where('doc', $userDoc)->get();
-                break;
-            case 'SEDCHOCO':
-                $coupons = CouponsSedChoco::where('doc', $userDoc)->get();
-                break;
-            case 'FODE VALLE':
-                $coupons = Coupunssecedu::where('doc', $userDoc)->get();
-                break;
-            default:
-                $coupons = [];
-                break;
-        }
-
-        return response()->json($coupons);
+        //
     }
 
     /**
@@ -61,9 +35,10 @@ class CouponsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($doc)
     {
-        //
+        $x = DatamesSedCauca::where('doc', $doc)->first();
+        dd($x);
     }
 
     /**
