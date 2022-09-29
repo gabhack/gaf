@@ -78,23 +78,23 @@ class EstudiosController extends Controller
         }
         //Query
         $lista = Estudios::orderBy('id', 'desc')
-            ->WhereHas('asesor', function($q) use($asesor) {
+            ->WhereHas('asesor', function ($q) use ($asesor) {
                 if (!is_array($asesor)) {
                     $q->where('id', $asesor);
                 }
             })
-            ->where(function($q) use($decision) {
+            ->where(function ($q) use ($decision) {
                 if ($decision !== '') {
                     $q->where('decision', $decision);
                 }
             })
-            ->where(function($q) use($periodo) {
+            ->where(function ($q) use ($periodo) {
                 if ($periodo !== '') {
                     $q->where('periodo_estudio', $periodo);
                 }
             })
             ->whereBetween('fecha', [$fechadesde, $fechahasta])
-            ->WhereHas('cliente', function($q) use($search) {
+            ->WhereHas('cliente', function ($q) use ($search) {
                 $q->where('nombres', 'like', '%' . $search . '%');
                 $q->orWhere('apellidos', 'like', '%' . $search . '%');
                 $q->orWhere('documento', 'like', '%' . $search . '%');
@@ -129,7 +129,7 @@ class EstudiosController extends Controller
         }
         return view("estudios/index")->with($options);
     }
-    
+
     /**
      * Display the studies list.
      *
@@ -185,25 +185,22 @@ class EstudiosController extends Controller
                 $adicional = 0;
                 if ($cliente->cargo) {
                     if (strpos($cliente->cargo, 'Rector') !== false) {
-                        $adicional = ($cliente->ingresos*.3);
+                        $adicional = ($cliente->ingresos * .3);
                     } elseif (strpos($cliente->cargo, 'Coordinador') !== false) {
-                        $adicional = ($cliente->ingresos*.2);
+                        $adicional = ($cliente->ingresos * .2);
                     }
                 }
 
                 $aportes = 0;
-                $vinculacion = '';		
-                if($registro->pagaduria->de_pensiones)
-                {
+                $vinculacion = '';
+                if ($registro->pagaduria->de_pensiones) {
                     $vinculacion = 'PENS';
                     $aportes = Parametros::where('llave', 'APORTES_PENSIONADOS')->first();
-                }	
-                else
-                {
+                } else {
                     $aportes = Parametros::where('llave', 'APORTES_ACTIVOS')->first();
                 }
-                $aportes = $aportes->valor * ($sueldobasico + $adicional) ;
-                
+                $aportes = $aportes->valor * ($sueldobasico + $adicional);
+
                 $totaldescuentos = totalizar_concepto(descuentos_por_registro($registro->id));
 
                 $cupos = calcularCapacidad(
@@ -215,7 +212,7 @@ class EstudiosController extends Controller
                     $smlv->valor
                 );
 
-                $sueldocompleto = $sueldobasico+$adicional;
+                $sueldocompleto = $sueldobasico + $adicional;
 
                 $options = array(
                     "cliente" => $cliente,
@@ -253,7 +250,7 @@ class EstudiosController extends Controller
                         'mensaje' => 'Por favor ingrese la información del cliente para iniciar un estudio.',
                     )
                 ]);
-            }            
+            }
         } catch (\Exception $e) {
             return view("estudios/paso1")->with([
                 "message" => array(
@@ -274,7 +271,7 @@ class EstudiosController extends Controller
     public function guardar(Request $request)
     {
         try {
-            
+
             //Deformateo
             $request->costo_certificados = deformat_autonumeric($request->costo_certificados);
             $cuota_mensual = deformat_autonumeric($request->AF1['cuota_mensual']);
@@ -296,7 +293,7 @@ class EstudiosController extends Controller
             }
             if ($request->asesor_id == 'nuevo') {
                 $asesor = \App\Clientes::where("nombres", "=", $request->nuevo_asesor)->first();
-				if ($asesor === null) {
+                if ($asesor === null) {
                     $newasesor = new Asesores;
                     $newasesor->nombres = $request->nuevo_asesor;
                     $newasesor->save();
@@ -308,9 +305,9 @@ class EstudiosController extends Controller
                 $newestudio->asesores_id = $request->asesor_id;
             }
             // if ($request->fecha_estudio !== '') {
-                // $newestudio->fecha = $request->fecha_estudio;
+            // $newestudio->fecha = $request->fecha_estudio;
             // } else {
-                $newestudio->fecha = date("Y-m-d");
+            $newestudio->fecha = date("Y-m-d");
             // }
             $newestudio->periodo_estudio = date("Ym");
             $newestudio->save();
@@ -390,7 +387,7 @@ class EstudiosController extends Controller
                 $newcondicionAF1->intereses_anticipados = $request->AF1['intereses_anticipados'];
                 $newcondicionAF1->costo = $request->AF1['costos'];
                 $newcondicionAF1->save();
-                
+
                 //AF2
                 $newcondicionAF2 = new Condicionesaf;
                 $newcondicionAF2->estudios_id = $newestudio->id;
@@ -401,7 +398,7 @@ class EstudiosController extends Controller
                 $newcondicionAF2->save();
             }
 
-            if (Auth::user()->rol->id == 1 || Auth::user()->rol->id == 5 ) {
+            if (Auth::user()->rol->id == 1 || Auth::user()->rol->id == 5) {
                 $lista = Estudios::orderBy('id', 'desc')->paginate(20);
             } else {
                 $lista = Estudios::orderBy('id', 'desc')->where('user_id', Auth::user()->id)->paginate(20);
@@ -417,9 +414,8 @@ class EstudiosController extends Controller
                 )
             );
             return view("estudios/index")->with($options);
-
         } catch (\Exception $e) {
-            if (Auth::user()->rol->id == 1 || Auth::user()->rol->id == 5 ) {
+            if (Auth::user()->rol->id == 1 || Auth::user()->rol->id == 5) {
                 $lista = Estudios::orderBy('id', 'desc')->paginate(20);
             } else {
                 $lista = Estudios::orderBy('id', 'desc')->where('user_id', Auth::user()->id)->paginate(20);
@@ -475,7 +471,7 @@ class EstudiosController extends Controller
                 $factores_x_millon_gnb[$factor->pagaduria][$factor->plazo]['saneamiento'] = $factor->saneamiento;
             }
             $viabilidad = calcula_viabilidad_inicial($cliente);
-            
+
             if (sizeof($datacarteras) > 0) {
                 // Se comenta las siguientes líneas porque actualmente se modificó la funcionalidad del aliado financiero 2, antes se podía tener al aliado 1 sin aliado 2, ahora, si o si se tienen a los dos aliados o sólo el aliado 2
                 /*if (isset(array_values(array_unique(array_filter($datacarteras->pluck('compraAF1_id')->toArray(), "strlen")))[0])) {
@@ -517,7 +513,7 @@ class EstudiosController extends Controller
             $cont = 0;
 
             foreach ($datacarteras as $key => $cartera) {
-                
+
                 $date = new DateTime($cartera->fecha_vence);
                 $cont++;
                 $carteras[] = array(
@@ -545,24 +541,21 @@ class EstudiosController extends Controller
             $adicional = 0;
             if ($cliente->cargo) {
                 if (strpos($cliente->cargo, 'Rector') !== false) {
-                    $adicional = ($cliente->ingresos*.3);
+                    $adicional = ($cliente->ingresos * .3);
                 } elseif (strpos($cliente->cargo, 'Coordinador') !== false) {
-                    $adicional = ($cliente->ingresos*.2);
+                    $adicional = ($cliente->ingresos * .2);
                 }
             }
 
             $aportes = 0;
             $vinculacion = '';
-            if($estudio->registro->pagaduria->de_pensiones)
-            {
+            if ($estudio->registro->pagaduria->de_pensiones) {
                 $vinculacion = 'PENS';
                 $aportes = Parametros::where('llave', 'APORTES_PENSIONADOS')->first();
-            }	
-            else
-            {
+            } else {
                 $aportes = Parametros::where('llave', 'APORTES_ACTIVOS')->first();
             }
-            $aportes = $aportes->valor * ($sueldobasico + $adicional) ;
+            $aportes = $aportes->valor * ($sueldobasico + $adicional);
 
             $totaldescuentos = totalizar_concepto(descuentos_por_registro($registro->id));
 
@@ -575,7 +568,7 @@ class EstudiosController extends Controller
                 $smlv->valor
             );
 
-            $sueldocompleto = $sueldobasico+$adicional;
+            $sueldocompleto = $sueldobasico + $adicional;
 
             return view("estudios/editar")->with([
                 "estudio" => $estudio,
@@ -603,7 +596,7 @@ class EstudiosController extends Controller
                 "viabilidad" => $viabilidad
             ]);
         } catch (\Exception $e) {
-            if (Auth::user()->rol->id == 1 || Auth::user()->rol->id == 5 ) {
+            if (Auth::user()->rol->id == 1 || Auth::user()->rol->id == 5) {
                 $lista = Estudios::all();
             } else {
                 $lista = Estudios::where('user_id', Auth::user()->id)->get();
@@ -629,7 +622,7 @@ class EstudiosController extends Controller
     public function actualizar(Request $request)
     {
         try {
-            
+
             //Deformateo
             $request->costo_certificados = deformat_autonumeric($request->costo_certificados);
             $cuota_mensual = deformat_autonumeric($request->AF1['cuota_mensual']);
@@ -642,7 +635,7 @@ class EstudiosController extends Controller
             $estudio->observaciones = $request->observaciones;
             if ($request->asesor_id == 'nuevo') {
                 $asesor = \App\Clientes::where("nombres", "=", $request->nuevo_asesor)->first();
-				if ($asesor === null) {
+                if ($asesor === null) {
                     $newasesor = new Asesores;
                     $newasesor->nombres = $request->nuevo_asesor;
                     $newasesor->save();
@@ -654,7 +647,7 @@ class EstudiosController extends Controller
                 $estudio->asesores_id = $request->asesor_id;
             }
             $estudio->save();
-            
+
             //Registro de centrales
             $central = $estudio->central;
             $central->calificacion_data = $request->calif_wab;
@@ -768,7 +761,7 @@ class EstudiosController extends Controller
                 }
             }
 
-            if (Auth::user()->rol->id == 1 || Auth::user()->rol->id == 5 ) {
+            if (Auth::user()->rol->id == 1 || Auth::user()->rol->id == 5) {
                 $lista = Estudios::orderBy('id', 'desc')->paginate(20);
             } else {
                 $lista = Estudios::orderBy('id', 'desc')->where('user_id', Auth::user()->id)->paginate(20);
@@ -784,9 +777,8 @@ class EstudiosController extends Controller
                 )
             );
             return view("estudios/index")->with($options);
-
         } catch (\Exception $e) {
-            if (Auth::user()->rol->id == 1 || Auth::user()->rol->id == 5 ) {
+            if (Auth::user()->rol->id == 1 || Auth::user()->rol->id == 5) {
                 $lista = Estudios::orderBy('id', 'desc')->paginate(20);
             } else {
                 $lista = Estudios::orderBy('id', 'desc')->where('user_id', Auth::user()->id)->paginate(20);
@@ -803,7 +795,6 @@ class EstudiosController extends Controller
             );
             return view("estudios/index")->with($options);
         }
-        
     }
 
     /**
@@ -814,8 +805,8 @@ class EstudiosController extends Controller
      */
     public function eliminar($id)
     {
-        Estudios::find($id)->delete();		
-		return redirect('estudios');
+        Estudios::find($id)->delete();
+        return redirect('estudios');
     }
 
     public function validarCarteras($carteras)

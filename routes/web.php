@@ -446,7 +446,8 @@ Route::post('/datamesseceduc/consultaUnitaria', 'DatamesseceducController@consul
 Route::post('/pagadurias/consultaUnitaria', 'DatamesseceducController@allPagadurias');
 Route::resource('/datamesseceduc', 'DatamesseceducController');
 
-Route::resource('/cotizer-data', dataCotizerController::class)->only(['store', 'index', 'show', 'update', 'destroy']);
+Route::resource('/cotizer-data', dataCotizerController::class)->only(['store', 'index', 'show', 'update']);
+Route::get('/cotizer-data/borrar/{id}', 'dataCotizerController@destroy');
 Route::view('/solicitud', 'creditCalculator')->middleware('auth');
 Route::view('/RegisterCredit', 'registerCredit')->name('register.credit');
 
