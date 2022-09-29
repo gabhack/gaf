@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Cifin;
 use Auth;
+use App\DataCotizer;
 use Illuminate\Http\Request;
 
 class CifinController extends Controller
@@ -38,11 +39,15 @@ class CifinController extends Controller
         return view("cifin/index")->with(["links" => $links, "lista" => $lista]);
     }
 
-
     public function consultar(Request $request)
     {
-        $cedula = $request->cedula;
-        $apellido = $request->apellido;
+        $cotizer = DataCotizer::find($request->cotizerId);
+
+        $cedula = $cotizer->idNumber;
+        $apellido = $cotizer->firstLastname;
+        $typeDocument = $cotizer->idType == 'CC' ? '1' : '2';
+        $phone = $cotizer->phoneNumber;
+
         $soapUser = env('CIFIN_USER');  //  username
         $soapPassword = env('CIFIN_PASSWORD'); // password
         $url = env('CIFIN_URL') . "?wsdl";
@@ -94,9 +99,34 @@ class CifinController extends Controller
         $demo = $array['S:Envelope']['S:Body']['ns2:consultaXmlResponse']['return'];
         $resultado = XmlaPhp::createArray($demo);
 
-        return view("cifin/consulta")->with([
-            "resultado" => (object)$resultado
-        ]);
+        $score = $resultado['CIFIN']['Tercero']['Score']['Puntaje'];
+
+        $data = [
+            'nitEmisor' => "9004326290",
+            'idClaseDefinicionDocumento' => "4115",
+            'fechaGrabacionPagare' => date('Y-m-d'),
+            'numPagareEntidad' => date('Y-m-d-h:i') . '2_PAG',
+            'fechaDesembolso' => date('Y-m-d'),
+            'otorganteTipoId' => $typeDocument,
+            'otorganteNumId' => "1144200155",
+            'otorganteCuenta' => "103869",
+            'expeditionDate' => "27/09/2011",
+            'phone' => $phone,
+        ];
+
+        // $cifin = Cifin::create([
+        //     'usuarioid' => Auth::user()->id,
+        //     'cedula' => $cedula,
+        //     'apellido' => $apellido,
+        //     'score' => $score,
+        //     'data' => json_encode($data),
+        // ]);
+
+        if ($score >= 100) {
+            return redirect()->route('deceval.consultar', $data);
+        } else {
+            return redirect()->route('register.credit', ['status' => 'awaiting']);
+        }
     }
 
     public function consulta()

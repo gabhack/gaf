@@ -33,75 +33,75 @@
             {{ csrf_field() }}
 
             <div id="consulta-container" class="row">
-                <div data-v-1fb519a4="" class="col-6">
-                    <div data-v-1fb519a4="" class="panel mb-3">
+                <div class="col-6">
+                    <div class="panel mb-3">
 
-                        <div data-v-1fb519a4="" class="panel-heading">
-                            <b data-v-1fb519a4="">RESULTADO DE LA CONSULTA</b>
+                        <div class="panel-heading">
+                            <b>RESULTADO DE LA CONSULTA</b>
                         </div>
 
-                        <div data-v-1fb519a4="" class="panel-body">
+                        <div class="panel-body">
                             @if ($errorFirma)
-                                <div data-v-1fb519a4="" class="row" style="font-size:60%;color:red;">
-                                    {{$errorFirma}}
-                                </div>
+                            <div class="row" style="font-size:60%;color:red;">
+                                {{$errorFirma}}
+                            </div>
                             @else
-                                <div data-v-1fb519a4="" class="row"></div>
+                            <div class="row"></div>
                             @endif
                             @if ($step==='confirmCode' || $step==='initial')
-                                <div data-v-1fb519a4="" class="row">
-                                    <div class="form-group col-md-4">
-                                        <b class="panel-label">TELEFONO DE CONFIRMACION:</b>
-                                        <select name="phone" required="required" id="phone" class="form-control text-center">
-                                            @foreach ($phoneList as $phone)
-                                            <option value="{{$phone}}">{{$phone}}</option> 
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        @if ($confirmCode==='confirmCode')
-                                        <b class="panel-label">CODIGO DE CONFIRMACION:</b>
-                                        <input type="text" id="code" required="required" name="code" value="" />
-                                            @if($ambiente===0)
-                                                <span>Codigo Generado Para UAT:{{$code}}</span>
-                                            @else
-                                            @endif
-                                        @else
-
-                                        @endif
-                                    </div>
+                            <div class="row">
+                                <div class="form-group col-md-4">
+                                    <b class="panel-label">TELEFONO DE CONFIRMACION:</b>
+                                    <select name="phone" required="required" id="phone" class="form-control text-center">
+                                        @foreach ($phoneList as $phone)
+                                        <option value="{{$phone}}">{{$phone}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
+                                <div class="form-group col-md-4">
+                                    @if ($confirmCode==='confirmCode')
+                                    <b class="panel-label">CODIGO DE CONFIRMACION:</b>
+                                    <input type="text" id="code" required="required" name="code" value="" />
+                                    @if($ambiente===0)
+                                    <span>Codigo Generado Para UAT:{{$code}}</span>
+                                    @else
+                                    @endif
+                                    @else
+
+                                    @endif
+                                </div>
+                            </div>
                             @else
                             @endif
-                            <div data-v-1fb519a4="" class="row">
-                                <div data-v-1fb519a4=""  class="form-group col-md-6">
+                            <div class="row">
+                                <div class="form-group col-md-6">
                                     @if ($step==='confirmCode')
-                                        <button type="submit" class="btn btn-secondary">
-                                            <i class="fa fa-pencil"></i> Confirmar Codigo
-                                        </button>
+                                    <button type="submit" class="btn btn-secondary">
+                                        <i class="fa fa-pencil"></i> Confirmar Codigo
+                                    </button>
                                     @elseif ($step ==='initial')
-                                        <button type="submit" class="btn btn-secondary">
-                                            <i class="fa fa-pencil"></i> Generar Codigo
-                                        </button>    
+                                    <button type="submit" class="btn btn-secondary">
+                                        <i class="fa fa-pencil"></i> Generar Codigo
+                                    </button>
                                     @elseif($step==='failCreateFlow')
-                                        <button type="submit" class="btn btn-secondary">
-                                            <i class="fa fa-pencil"></i> Regenerar Flujo
-                                        </button>
+                                    <button type="submit" class="btn btn-secondary">
+                                        <i class="fa fa-pencil"></i> Regenerar Flujo
+                                    </button>
                                     @elseif($step==='firmado')
                                     @else
-                                        <button type="submit" class="btn btn-secondary">
-                                            <i class="fa fa-pencil"></i> Firmar Documento
-                                        </button>
+                                    <button type="submit" class="btn btn-secondary">
+                                        <i class="fa fa-pencil"></i> Firmar Documento
+                                    </button>
                                     @endif
                                 </div>
 
-                                <div data-v-1fb519a4=""  class="form-group col-md-4">
+                                <div class="form-group col-md-4">
                                     <a href="{{ asset('pagare.pdf') }}" class="btn btn-primary"><i class="fa fa-envelope-open"></i> Abrir Pagare</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                   
+
                     <iframe scrolling="auto" height="1100" width="850" src="{{ asset('pagare.pdf') }}?alternate={{$step}}" frameborder="0"></iframe>
                 </div>
             </div>

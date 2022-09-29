@@ -223,6 +223,9 @@ class DecevalController extends Controller
          $otorganteNumId = $request->otorganteNumId;
          $otorganteCuenta = $request->otorganteCuenta;
 
+         // crear otorgante
+         $this->crearOtorgante();
+
          //datos header
          $hoy = date("Y-m-d");
          $hora = date("H:i:s");
@@ -422,6 +425,82 @@ class DecevalController extends Controller
       $pdf = fopen('pagare.pdf', 'w');
       fwrite($pdf, $pdf_decoded);
       fclose($pdf);
+   }
+
+   public function crearOtorgante()
+   {
+      $url = "http://34.171.55.31/DecevalProxy/services/ProxyServicesImplPort?wsdl";
+
+      $xml_post_string = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://services.proxy.deceval.com/">
+            <soapenv:Header/>
+            <soapenv:Body>
+               <ser:creacionGiradoresCodificados>
+                  <!--Optional:-->
+                  <arg0>
+                     <!--Optional:-->
+                     <crearGiradorDTO>
+                        <!--Optional:-->
+                        <identificacionEmisor>9004326290</identificacionEmisor>
+                        <fkIdClasePersona>1</fkIdClasePersona>
+                        <fkIdTipoDocumento>1</fkIdTipoDocumento>
+                        <numeroDocumento>800941010</numeroDocumento>
+                        <correoElectronico>demo@bvc.com.co</correoElectronico>
+                        <direccion1PersonaGrupo_PGP>Calle 1#1-1</direccion1PersonaGrupo_PGP>
+                        <telefono1PersonaGrupo_PGP>1111111</telefono1PersonaGrupo_PGP>
+                        <fax1PersonaGrupo_PGP>1111111</fax1PersonaGrupo_PGP>
+                        <fkIdPaisExpedicion_Nat>CO</fkIdPaisExpedicion_Nat>
+                        <fkIdDepartamentoExpedicion_Nat>11</fkIdDepartamentoExpedicion_Nat>
+                        <fkIdCiudadExpedicion_Nat>11001</fkIdCiudadExpedicion_Nat>
+                        <fkIdPaisDomicilio_Nat>CO</fkIdPaisDomicilio_Nat>
+                        <fkIdDepartamentoDomicilio_Nat>11</fkIdDepartamentoDomicilio_Nat>
+                        <fkIdCiudadDomicilio_Nat>11001</fkIdCiudadDomicilio_Nat>
+                        <fechaExpedicion_Nat>2000-12-24T00:00:00</fechaExpedicion_Nat>
+                        <fechaNacimiento_Nat>1980-12-24T00:00:00</fechaNacimiento_Nat>
+                        <nombresNat_Nat>JUAN</nombresNat_Nat>
+                        <primerApellido_Nat>PEREZ</primerApellido_Nat>
+                        <segundoApellido_Nat>MARTINEZ</segundoApellido_Nat>
+                        <fkIdPaisNacionalidad_Nat>CO</fkIdPaisNacionalidad_Nat>
+                        <mensajeRespuesta>?</mensajeRespuesta>
+                     </crearGiradorDTO>
+                     <!--Optional:-->
+                     <header>
+                        <!--Optional:-->
+                        <codigoDepositante>680</codigoDepositante>
+                        <!--Optional:-->
+                        <fecha>2022-08-02T11:01:00</fecha>
+                        <!--Optional:-->
+                        <hora>11:01</hora>
+                        <!--Optional:-->
+                        <usuario>90043262901</usuario>
+                     </header>
+                  </arg0>
+               </ser:creacionGiradoresCodificados>
+            </soapenv:Body>
+         </soapenv:Envelope>';
+
+      $headers = array(
+         "Content-type: text/xml; charset=\"utf-8\"",
+         "Accept: text/xml",
+         "Cache-Control: no-cache",
+         "Pragma: no-cache",
+         "SOAPAction: \"\"",
+         "Content-lenght: " . strlen($xml_post_string)
+      );
+
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
+      curl_setopt($ch, CURLOPT_URL, $url);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+      curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+      curl_setopt($ch, CURLOPT_POST, true);
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $xml_post_string); // the SOAP request
+      curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+      $response = curl_exec($ch);
+      curl_close($ch);
+
+      return $response;
    }
 
    public function consultarPagares($idDocumentoPagare, $otorganteTipoId, $otorganteNumId, $numPagareEntidad, $codigoDepositante, $fecha, $hora, $usuario)

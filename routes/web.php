@@ -124,7 +124,7 @@ Route::group(["prefix" => "pagos"], function () {
 //Cifin
 Route::group(["prefix" => "cifin"], function () {
     Route::get('/', 'CifinController@index');
-    Route::post('/consultar', 'CifinController@consultar');
+    Route::get('/consultar', 'CifinController@consultar')->name('cifin.consultar');
     Route::get('/consulta', 'CifinController@consulta');
 
     Route::post('/pagarpse', 'PagosController@pagarpse');
@@ -139,7 +139,7 @@ Route::group(["prefix" => "cifin"], function () {
 //Daceval
 Route::group(["prefix" => "deceval"], function () {
     Route::get('/', 'DecevalController@index');
-    Route::post('/consultar', 'DecevalController@consultar');
+    Route::get('/consultar', 'DecevalController@consultar')->name('deceval.consultar');
     Route::post('/firmar', 'DecevalController@firmar');
     Route::get('/consulta', 'DecevalController@consulta');
 
@@ -447,8 +447,8 @@ Route::post('/pagadurias/consultaUnitaria', 'DatamesseceducController@allPagadur
 Route::resource('/datamesseceduc', 'DatamesseceducController');
 
 Route::resource('/cotizer-data', dataCotizerController::class)->only(['store', 'index', 'show', 'update', 'destroy']);
-Route::view('/solicitud', 'creditCalculator');
-Route::view('/RegisterCredit', 'registerCredit');
+Route::view('/solicitud', 'creditCalculator')->middleware('auth');
+Route::view('/RegisterCredit', 'registerCredit')->name('register.credit');
 
 Route::apiResource('/whatsapp-bot', 'WhatsAppBotController');
 

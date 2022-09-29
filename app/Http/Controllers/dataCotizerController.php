@@ -25,7 +25,7 @@ class dataCotizerController extends Controller
      */
     public function create()
     {
-        
+        //
     }
 
     /**
