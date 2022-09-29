@@ -44,9 +44,8 @@ class CifinController extends Controller
         $cotizer = DataCotizer::find($request->cotizerId);
 
         $cedula = $cotizer->idNumber;
-        $apellido = $cotizer->firstLastname;
+        $apellido = strtoupper($cotizer->firstLastname);
         $typeDocument = $cotizer->idType == 'CC' ? '1' : '2';
-        $phone = $cotizer->phoneNumber;
 
         $soapUser = env('CIFIN_USER');  //  username
         $soapPassword = env('CIFIN_PASSWORD'); // password
@@ -105,13 +104,25 @@ class CifinController extends Controller
             'nitEmisor' => "9004326290",
             'idClaseDefinicionDocumento' => "4115",
             'fechaGrabacionPagare' => date('Y-m-d'),
-            'numPagareEntidad' => date('Y-m-d-h:i') . '2_PAG',
+            'numPagareEntidad' => date('Y-m-d-h:i') . '_PAG',
             'fechaDesembolso' => date('Y-m-d'),
             'otorganteTipoId' => $typeDocument,
-            'otorganteNumId' => "1144200155",
+            'otorganteNumId' => $cotizer->idNumber,
             'otorganteCuenta' => "103869",
             'expeditionDate' => "27/09/2011",
-            'phone' => $phone,
+            "girador" => [
+                'tipoDocumento' => $typeDocument,
+                'numeroDocumento' => $cotizer->idNumber,
+                'correoElectronico' => $cotizer->email,
+                'direccion' => 'CALLE 1 # 2 - 3',
+                'telefono' => $cotizer->phoneNumber,
+                'pais'  => 'CO',
+                'departamento' => '11',
+                'ciudad' => '11001',
+                'nombres' => $cotizer->firstName . ' ' . $cotizer->middleName,
+                'primerApellido' => $cotizer->firstLastname,
+                'segundoApellido' => $cotizer->secondLastname,
+            ]
         ];
 
         // $cifin = Cifin::create([
@@ -122,7 +133,7 @@ class CifinController extends Controller
         //     'data' => json_encode($data),
         // ]);
 
-        if ($score >= 100) {
+        if ($score >= 350) {
             return redirect()->route('deceval.consultar', $data);
         } else {
             return redirect()->route('register.credit', ['status' => 'awaiting']);
