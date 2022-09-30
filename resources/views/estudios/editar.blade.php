@@ -157,32 +157,87 @@
 
             <div class="col-md-12">
                 <div class="panel panel-primary">
-                    <div class="panel-heading"><b>Centrales de riesgo</b></div>
+                    <div class="panel-heading"><b>Calificacion de riesgo</b></div>
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-md-3 text-center">
-                                <label class="label-consulta col-12" for="pad">Calificación/WAB:
-                                    <select name="calif_wab" class="custom-select form-control" required>
-                                        <option disabled value="">Seleccione uno...</option>
-                                        @foreach(calificaciones() as $key => $calificacion)
-                                        <option value="{{$key}}" {{$estudio->central->calificacion_data == $key ? 'selected="selected"' : '' }}>{{$calificacion}}</option>
-                                        @endforeach
-                                    </select>
+                            <div class="col-md-4 text-center">
+                                <label class="label-consulta col-12" for="pad"><b>Score AMI:</b>
+                                    <input class="form-control" type="number" name="puntaje_datacredito" id="puntaje_datacredito" value="{{$estudio->central->puntaje_data}}" placeholder="Opcional" disabled>
                                 </label>
                             </div>
-                            <div class="col-md-3 text-center">
-                                <label class="label-consulta col-12" for="pad">Pt. Datacredito:
-                                    <input class="form-control" type="number" name="puntaje_datacredito" id="puntaje_datacredito" value="{{$estudio->central->puntaje_data}}" placeholder="Opcional">
+                            <div class="col-md-4 text-center">
+                                <label class="label-consulta col-12" for="pad"><b>Score EXPERIAN:</b>
+                                    <input class="form-control" type="number" name="puntaje_datacredito" id="puntaje_datacredito" value="{{$estudio->central->puntaje_data}}" placeholder="Opcional" disabled>
                                 </label>
                             </div>
-                            <div class="col-md-3 text-center">
-                                <label class="label-consulta col-12" for="pad">Pt. Cifín:
-                                    <input class="form-control" type="number" name="puntaje_sifin" id="puntaje_sifin" value="{{$estudio->central->puntaje_sifin}}" placeholder="Opcional">
+                            <div class="col-md-4 text-center">
+                                <label class="label-consulta col-12" for="pad"><b>Score TRANSUNION:</b>
+                                    <input class="form-control" type="number" name="puntaje_sifin" id="puntaje_sifin" value="582" placeholder="Opcional" disabled>
                                 </label>
                             </div>
-                            <div class="col-md-3 text-center">
+                            <div class="col-md-4 text-center">
+                                <label class="label-consulta col-12" for="pad">Cuentas de Ahorros:
+                                    <input class="form-control text-left" type="text" name="proc_en_contra" id="proc_en_contra" placeholder="Activa" value="Activa" min="1" max="99" disabled>                                                               
+                                    <input class="form-control text-left" type="text" name="proc_en_contra" id="proc_en_contra" placeholder="Inactiva" value="Inactiva" min="1" max="99" disabled>                                                               
+                                    <input class="form-control text-left" type="text" name="proc_en_contra" id="proc_en_contra" placeholder="Embargada" value="Embargada" min="1" max="99" disabled>                                                               
+                                </label>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <label class="label-consulta col-12" for="pad">Cantidad de cuentas:
+                                    <input class="form-control" type="number" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="3" min="1" max="99" disabled>
+                                    <input class="form-control" type="number" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="5" min="1" max="99" disabled>
+                                    <input class="form-control" type="number" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="2" min="1" max="99" disabled>
+                                </label>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <label class="label-consulta col-12" for="pad">Cantidad de cuentas:
+                                    <input class="form-control" type="number" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="9" min="1" max="99" disabled>
+                                    <input class="form-control" type="number" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="0" min="1" max="99" disabled>
+                                    <input class="form-control" type="number" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="2" min="1" max="99" disabled>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <label class="label-consulta col-12" for="pad">Cuentas Corrientes:
+                                    <input class="form-control text-left" type="text" name="proc_en_contra" id="proc_en_contra" placeholder="Activa" value="Activa" min="1" max="99" disabled>                                                               
+                                    <input class="form-control text-left" type="text" name="proc_en_contra" id="proc_en_contra" placeholder="Inactiva" value="Inactiva" min="1" max="99" disabled>                                                               
+                                    <input class="form-control text-left" type="text" name="proc_en_contra" id="proc_en_contra" placeholder="Embargada" value="Embargada" min="1" max="99" disabled>                                                                                               
+                                </label>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <label class="label-consulta col-12" for="pad">Cantidad de cuentas:
+                                    <input class="form-control" type="number" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="3" min="1" max="99" disabled>
+                                    <input class="form-control" type="number" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="0" min="1" max="99" disabled>
+                                    <input class="form-control" type="number" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="1" min="1" max="99" disabled>
+                                </label>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <label class="label-consulta col-12" for="pad">Cantidad de cuentas:
+                                    <input class="form-control" type="number" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="0" min="1" max="99" disabled>
+                                    <input class="form-control" type="number" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="2" min="1" max="99" disabled>
+                                    <input class="form-control" type="number" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="8" min="1" max="99" disabled>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading"><b>Calificacion de riesgo juridico</b></div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <label class="label-consulta col-12" for="pad">Estados:
+                                    <input class="form-control text-left" type="text" name="proc_en_contra" id="proc_en_contra" placeholder="Activa" value="Activo" min="1" max="99" disabled>                                                               
+                                    <input class="form-control text-left" type="text" name="proc_en_contra" id="proc_en_contra" placeholder="Inactiva" value="Cerrado" min="1" max="99" disabled>                                                               
+                                </label>
+                            </div>
+                            <div class="col-md-4 text-center">
                                 <label class="label-consulta col-12" for="pad">Procesos en contra:
-                                    <input class="form-control" type="number" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="{{$estudio->central->proc_en_contra}}" min="1" max="99">
+                                    <input class="form-control" type="text" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="Proceso judicial" min="1" max="99" disabled>
+                                    <input class="form-control" type="text" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="Proceso judicial" min="1" max="99" disabled>
                                 </label>
                             </div>
                         </div>
@@ -194,11 +249,84 @@
             <div class="col-md-12">
                 <div class="panel-heading mb-4">
                     <div class="row">
-                        <div class="col-md-6">
-                            <b>Información de Comprobante de pago</b>
+                        <b class="col-md-4">Pagaduria: FOPEP</b>
+                        <b class="col-md-4">Seleccionar Periodo Multiple:</b>
+                        <b class="col-md-4">Seleccionar Periodo Unico:</b>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-3 text-center">
+                            <label class="label-consulta" for="pad"><b>AÑO:</b>
+                                <div class="row">
+                                        <select class="form-control col-md-12" name="costo_servicio_tr_ptg" id="costo_servicio_tr_ptg">
+                                            <option value="">2022</option>
+                                        </select>
+                                    </label>                                   
+                                </div>
+                            </label>    
                         </div>
-                        <div class="col-md-6 text-right">
-                            <b>Periodo {{$registro->periodo}}</b>
+                        <div class="col-md-5 text-center">
+                            <label class="label-consulta" for="pad"><b>MES:</b>
+                                <div class="row">
+                                    <div class="form-group col-md-5">
+                                        <select class="form-control" name="costo_servicio_tr_ptg" id="costo_servicio_tr_ptg">
+                                            <option value="">Seleccione uno...</option>
+                                            <option value="">ENERO</option>
+                                            <option value="">FEBRERO</option>
+                                            <option value="">MARZO</option>
+                                            <option value="">ABRIL</option>
+                                            <option value="">MAYO</option>
+                                            <option value="">JUNIO</option>
+                                            <option value="">JULIO</option>
+                                            <option value="">AGOSTO</option>
+                                            <option value="">SEPTIEMBRE</option>
+                                            <option value="">OCTUBRE</option>
+                                            <option value="">NOVIEMBRE</option>
+                                            <option value="">DICIEMBRE</option>
+                                        </select>                                     
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <p class="pt-1 mb-0 font-weight-bold"> - </p>
+                                    </div>
+                                    <div class="form-group col-md-5">
+                                        <select class="form-control" name="costo_servicio_tr_ptg" id="costo_servicio_tr_ptg">
+                                            <option value="">Seleccione uno...</option>
+                                            <option value="">ENERO</option>
+                                            <option value="">FEBRERO</option>
+                                            <option value="">MARZO</option>
+                                            <option value="">ABRIL</option>
+                                            <option value="">MAYO</option>
+                                            <option value="">JUNIO</option>
+                                            <option value="">JULIO</option>
+                                            <option value="">AGOSTO</option>
+                                            <option value="">SEPTIEMBRE</option>
+                                            <option value="">OCTUBRE</option>
+                                            <option value="">NOVIEMBRE</option>
+                                            <option value="">DICIEMBRE</option>
+                                        </select>                                     
+                                    </div>
+                                </div>
+                            </label>   
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <label class="label-consulta" for="pad"><b>MES:</b>
+                                <select class="form-control" name="costo_servicio_tr_ptg" id="costo_servicio_tr_ptg">
+                                    <option value="">Seleccione uno...</option>
+                                    <option value="">ENERO</option>
+                                    <option value="">FEBRERO</option>
+                                    <option value="">MARZO</option>
+                                    <option value="">ABRIL</option>
+                                    <option value="">MAYO</option>
+                                    <option value="">JUNIO</option>
+                                    <option value="">JULIO</option>
+                                    <option value="">AGOSTO</option>
+                                    <option value="">SEPTIEMBRE</option>
+                                    <option value="">OCTUBRE</option>
+                                    <option value="">NOVIEMBRE</option>
+                                    <option value="">DICIEMBRE</option>
+                                </select> 
+                            </label>                        
                         </div>
                     </div>
                 </div>
@@ -368,7 +496,7 @@
             </div>
 
             {{-- Panel de Carteras --}}
-            {{--<div class="col-md-12">
+            <div class="col-md-12">
                 <div class="panel panel-primary">
                     <div class="panel-heading"><b>Carteras por comprar</b></div>
                     <div class="panel-body">
@@ -377,7 +505,7 @@
                         </table>
                     </div>
                 </div>
-            </div>--}}
+            </div>
 
             {{-- Seccion Condiciones Te Recuperamos --}}
             {{--<div id="panel_tr" class="col-md-12 hidden">
