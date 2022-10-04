@@ -48,75 +48,74 @@
                     <a type="button" class="btn btn-secondary" href="{{url('estudios')}}"><i class="fa fa-arrow-left"></i> Atrás</a>
                     <input class="btn btn-success" type="submit" value="Actualizar">
                 </div>
-                <h3 ><b>CLIENTE: </b>{{$cliente->nombres}}</h3>
+                <h3><b>CLIENTE: </b>{{$cliente->nombres}} {{ $cliente->apellidos}}</h3>
+                <h6><b>TIPO DE DOCUMENTO: </b>CC</h6>
+                <h6><b>FECHA EXPEDICION CC: </b>{{ $cliente->fechanto }}</h6>
+                <h6><b>DOCUMENTO: </b>1.022.440.600</h6>
             </div>
             <div class="col-md-7">
                 <div class="panel panel-primary">
-                    <div class="panel-heading"><b>Información básica</b></div>
+                    <div class="panel-heading"><b>Encuentra</b></div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-4">
-                                <label class="label-consulta{{ $cliente->nombres == '' ? ' label-warning' : '' }}" for="pad"><b>Nombres:</b>
-                                    <p class="pad">{{ $cliente->nombres == '' ? 'No proporcionado' : $cliente->nombres }}</p>
+                                <label class="label-consulta{{ $cliente->tipodocumento == '' ? ' label-warning' : '' }}" for="pad"><b>PAIS:</b>
+                                    <p class="pad">COLOMBIA</p>
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                <label class="label-consulta{{ $cliente->apellidos == '' ? ' label-warning' : '' }}" for="pad"><b>Apellidos:</b>
-                                    <p class="pad">{{ $cliente->apellidos == '' ? 'No proporcionado' : $cliente->apellidos }}</p>
+                                <label class="label-consulta{{ $cliente->direccion == '' ? ' label-warning' : '' }}" for="pad"><b>DIRECCIÓN:</b>
+                                    <p class="pad">CALLE 50 #15-45</p>
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                <label class="label-consulta{{ $cliente->tipodocumento == '' ? ' label-warning' : '' }}" for="pad"><b>Tipo de Documento:</b>
-                                    <p class="pad">{{ $cliente->tipodocumento == '' ? 'No proporcionado' : $cliente->tipodocumento }}</p>
+                                <label class="label-consulta{{ $cliente->nombres == '' ? ' label-warning' : '' }}" for="pad"><b>TIEMPO DE RESIDENCIA:</b>
+                                    <p class="pad">1 AÑO</p>
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                <label class="label-consulta{{ $cliente->documento == '' ? ' label-warning' : '' }}" for="pad"><b>Documento:</b>
-                                    <p class="pad">{{ $cliente->documento == '' ? 'No proporcionado' : $cliente->documento }}</p>
+                                <label class="label-consulta{{ $cliente->nombres == '' ? ' label-warning' : '' }}" for="pad"><b>BARRIO:</b>
+                                    <p class="pad">CHAPINERO</p>
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                <label class="label-consulta{{ $cliente->sexo == '' ? ' label-warning' : '' }}" for="pad"><b>Sexo:</b>
-                                    <p class="pad">{{ $cliente->sexo == 'F' ? 'Femenino' : 'Masculino' }}</p>
+                                <label class="label-consulta{{ $cliente->apellidos == '' ? ' label-warning' : '' }}" for="pad"><b>CIUDAD:</b>
+                                    <p class="pad">BOGOTA</p>
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                <label class="label-consulta{{ $cliente->fechanto == '' ? ' label-warning' : '' }}" for="pad"><b>Fecha de nacimiento:</b>
-                                    @if ($cliente->fechanto == '')
-                                    <p class="pad">No proporcionado</p>
-                                    @else
-                                    <p class="pad">{{ $cliente->fechanto }} (<b>{{ $viabilidad['edad']->y }} años y {{ $viabilidad['edad']->m }} meses</b>)</p>
-                                    @endif
+                                <label class="label-consulta{{ $cliente->documento == '' ? ' label-warning' : '' }}" for="pad"><b>ESTRATO:</b>
+                                    <p class="pad">5</p>
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                <label class="label-consulta{{ $cliente->ciudad == '' ? ' label-warning' : '' }}" for="pad"><b>Ciudad:</b>
-                                    <p class="pad">{{ $cliente->ciudad == '' ? 'No proporcionado' : $cliente->ciudad->ciudad }}</p>
+                                <label class="label-consulta{{ $cliente->sexo == '' ? ' label-warning' : '' }}" for="pad"><b>DIRECCIÓN LABORAL:</b>
+                                    <p class="pad">CALLE 49 #6-60</p>
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                <label class="label-consulta{{ $cliente->estado_civil == '' ? ' label-warning' : '' }}" for="pad"><b>Estado Civil:</b>
-                                    <p class="pad">{{ $cliente->estado_civil == '' ? 'No proporcionado' : $cliente->estado_civil }}</p>
+                                <label class="label-consulta{{ $cliente->sexo == '' ? ' label-warning' : '' }}" for="pad"><b>SEDE/LUGAR DE TRABAJO:</b>
+                                    <p class="pad">SEDE GALERIAS</p>
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                <label class="label-consulta{{ $cliente->centro_costo == '' ? ' label-warning' : '' }}" for="pad"><b>Centro de Costo:</b>
-                                    <p class="pad">{{ $cliente->centro_costo == '' ? 'No proporcionado' : $cliente->centro_costo }}</p>
+                                <label class="label-consulta{{ $cliente->telefono == '' ? ' label-warning' : '' }}" for="pad"><b>TELÉFONO PERSONAL:</b>
+                                    <p class="pad">7189025</p>
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                <label class="label-consulta{{ $cliente->cargo == '' ? ' label-warning' : '' }}" for="pad"><b>Cargo:</b>
-                                    <p class="pad">{{ $cliente->cargo == '' ? 'No proporcionado' : $cliente->cargo }}</p>
+                                <label class="label-consulta{{ $cliente->telefono == '' ? ' label-warning' : '' }}" for="pad"><b>TELÉFONO LABORAL:</b>
+                                    <p class="pad">7189025</p>
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                <label class="label-consulta{{ $cliente->tipo_contratacion == '' ? ' label-warning' : '' }}" for="pad"><b>Tipo de Contratación:</b>
-                                    <p class="pad">{{ $cliente->tipo_contratacion == '' ? 'No proporcionado' : $cliente->tipo_contratacion }}</p>
+                                <label class="label-consulta{{ $cliente->celular == '' ? ' label-warning' : '' }}" for="pad"><b>CELULAR:</b>
+                                    <p class="pad">3004253257</p>
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                <label class="label-consulta{{ $cliente->grado == '' ? ' label-warning' : '' }}" for="pad"><b>Grado:</b>
-                                    <p class="pad">{{ $cliente->grado == '' ? 'No proporcionado' : $cliente->grado }}</p>
+                                <label class="label-consulta{{ $cliente->correo == '' ? ' label-warning' : '' }}" for="pad"><b>CORREO ELECTRONICO:</b>
+                                    <p class="pad">{{ $cliente->correo == '' ? '-' : $cliente->correo }}</p>
                                 </label>
                             </div>
                         </div>
@@ -127,7 +126,139 @@
 
             <div class="col-md-5">
                 <div class="panel panel-primary">
-                    <div class="panel-heading"><b>Información de contacto</b></div>
+                    <div class="panel-heading"><b>Conocer</b></div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label class="label-consulta{{ $cliente->sexo == '' ? ' label-warning' : '' }}" for="pad"><b>GENERO:</b>
+                                    <p class="pad">{{ $cliente->sexo == 'F' ? 'Femenino' : 'Masculino' }}</p>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="label-consulta{{ $cliente->fechanto == '' ? ' label-warning' : '' }}" for="pad"><b>FECHA DE NACIMIENTO:</b>
+                                    @if ($cliente->fechanto == '')
+                                    <p class="pad">No proporcionado</p>
+                                    @else
+                                    <p class="pad">{{ $cliente->fechanto }}</p>
+                                    @endif
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="label-consulta{{ $cliente->sexo == '' ? ' label-warning' : '' }}" for="pad"><b>EDAD:</b>
+                                    <p class="pad">{{ $viabilidad['edad']->y }}</p>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="label-consulta{{ $cliente->sexo == '' ? ' label-warning' : '' }}" for="pad"><b>TIPO DE VIVIENDA:</b>
+                                    <p class="pad">CASA</p>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="label-consulta{{ $cliente->sexo == '' ? ' label-warning' : '' }}" for="pad"><b>NIVEL EDUCATIVO:</b>
+                                    <p class="pad">BACHILLER</p>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="label-consulta{{ $cliente->sexo == '' ? ' label-warning' : '' }}" for="pad"><b>PERSONAS A CARGO:</b>
+                                    <p class="pad">4</p>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="label-consulta{{ $cliente->sexo == '' ? ' label-warning' : '' }}" for="pad"><b>CANTIDAD DE HIJOS:</b>
+                                    <p class="pad">3</p>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="label-consulta{{ $cliente->sexo == '' ? ' label-warning' : '' }}" for="pad"><b>ESTADO CIVIL:</b>
+                                    <p class="pad">CASADO</p>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="label-consulta{{ $cliente->fechanto == '' ? ' label-warning' : '' }}" for="pad"><b>FECHA EXPEDICION CC:</b>
+                                    @if ($cliente->fechanto == '')
+                                    <p class="pad">No proporcionado</p>
+                                    @else
+                                    <p class="pad">{{ $cliente->fechanto }}</p>
+                                    @endif
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="panel panel-primary">
+                    <div class="panel-heading"><b>Habitos</b></div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <label class="label-consulta col-12" for="pad"><b>Score AMI:</b>
+                                    <input class="form-control" type="number" name="puntaje_datacredito" id="puntaje_datacredito" value="{{$estudio->central->puntaje_data}}" placeholder="Opcional" disabled>
+                                </label>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <label class="label-consulta col-12" for="pad"><b>Score EXPERIAN:</b>
+                                    <input class="form-control" type="number" name="puntaje_datacredito" id="puntaje_datacredito" value="{{$estudio->central->puntaje_data}}" placeholder="Opcional" disabled>
+                                </label>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <label class="label-consulta col-12" for="pad"><b>Score TRANSUNION:</b>
+                                    <input class="form-control" type="number" name="puntaje_sifin" id="puntaje_sifin" value="582" placeholder="Opcional" disabled>
+                                </label>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <label class="label-consulta col-12" for="pad">Cuentas de Ahorros:
+                                    <input class="form-control text-left" type="text" name="proc_en_contra" id="proc_en_contra" placeholder="Activa" value="Activa" min="1" max="99" disabled>                                                               
+                                    <input class="form-control text-left" type="text" name="proc_en_contra" id="proc_en_contra" placeholder="Inactiva" value="Inactiva" min="1" max="99" disabled>                                                               
+                                    <input class="form-control text-left" type="text" name="proc_en_contra" id="proc_en_contra" placeholder="Embargada" value="Embargada" min="1" max="99" disabled>                                                               
+                                </label>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <label class="label-consulta col-12" for="pad">Cantidad de cuentas:
+                                    <input class="form-control" type="number" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="3" min="1" max="99" disabled>
+                                    <input class="form-control" type="number" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="5" min="1" max="99" disabled>
+                                    <input class="form-control" type="number" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="2" min="1" max="99" disabled>
+                                </label>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <label class="label-consulta col-12" for="pad">Cantidad de cuentas:
+                                    <input class="form-control" type="number" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="9" min="1" max="99" disabled>
+                                    <input class="form-control" type="number" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="0" min="1" max="99" disabled>
+                                    <input class="form-control" type="number" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="2" min="1" max="99" disabled>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <label class="label-consulta col-12" for="pad">Cuentas Corrientes:
+                                    <input class="form-control text-left" type="text" name="proc_en_contra" id="proc_en_contra" placeholder="Activa" value="Activa" min="1" max="99" disabled>                                                               
+                                    <input class="form-control text-left" type="text" name="proc_en_contra" id="proc_en_contra" placeholder="Inactiva" value="Inactiva" min="1" max="99" disabled>                                                               
+                                    <input class="form-control text-left" type="text" name="proc_en_contra" id="proc_en_contra" placeholder="Embargada" value="Embargada" min="1" max="99" disabled>                                                                                               
+                                </label>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <label class="label-consulta col-12" for="pad">Cantidad de cuentas:
+                                    <input class="form-control" type="number" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="3" min="1" max="99" disabled>
+                                    <input class="form-control" type="number" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="0" min="1" max="99" disabled>
+                                    <input class="form-control" type="number" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="1" min="1" max="99" disabled>
+                                </label>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <label class="label-consulta col-12" for="pad">Cantidad de cuentas:
+                                    <input class="form-control" type="number" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="0" min="1" max="99" disabled>
+                                    <input class="form-control" type="number" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="2" min="1" max="99" disabled>
+                                    <input class="form-control" type="number" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="8" min="1" max="99" disabled>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-7">
+                <div class="panel panel-primary">
+                    <div class="panel-heading"><b>Comportamientos</b></div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-6">
@@ -157,7 +288,7 @@
 
             <div class="col-md-12">
                 <div class="panel panel-primary">
-                    <div class="panel-heading"><b>Calificacion de riesgo</b></div>
+                    <div class="panel-heading"><b>Calificacion de riesgo comercial</b></div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-4 text-center">
@@ -235,9 +366,15 @@
                                 </label>
                             </div>
                             <div class="col-md-4 text-center">
-                                <label class="label-consulta col-12" for="pad">Procesos en contra:
+                                <label class="label-consulta col-12" for="pad">Cantidad de procesos:
                                     <input class="form-control" type="text" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="Proceso judicial" min="1" max="99" disabled>
                                     <input class="form-control" type="text" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="Proceso judicial" min="1" max="99" disabled>
+                                </label>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <label class="label-consulta col-12" for="pad">Numero de proceso:
+                                    <input class="form-control" type="text" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="5" min="1" max="99" disabled>
+                                    <input class="form-control" type="text" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="0" min="1" max="99" disabled>
                                 </label>
                             </div>
                         </div>
@@ -247,7 +384,7 @@
 
             @if ($registro)
             <div class="col-md-12">
-                <div class="panel-heading mb-4">
+                <div class="panel-heading mb-4 text-center">
                     <div class="row">
                         <b class="col-md-4">Pagaduria: FOPEP</b>
                         <b class="col-md-4">Seleccionar Periodo Multiple:</b>
