@@ -12,32 +12,38 @@ use Excel;
 
 class DatamesseceducController extends Controller
 {
-  public function import (Request $request){
-    set_time_limit(0);
-    if($request->hasFile('file')){
-      $path = $request->file('file')->getRealPath();
-      $data = Excel::import(new DatamesseceducImport, request()->file('file'));
-      return response()->json(['message'=>'Importación Realizada'],200);
-    }else{
-      return response()->json(['message'=>'Debe Seleccionar un archivo'],400);
+    public function import(Request $request)
+    {
+        set_time_limit(0);
+        if ($request->hasFile('file')) {
+            $path = $request->file('file')->getRealPath();
+            $data = Excel::import(new DatamesseceducImport, request()->file('file'));
+            return response()->json(['message' => 'Importación Realizada'], 200);
+        } else {
+            return response()->json(['message' => 'Debe Seleccionar un archivo'], 400);
+        }
     }
-  }
-  public function consultaUnitaria(Request $request){
-    $data_formulario = $request->data;
-    $doc = $request->doc;
-    $consulta_cedula =Datamesseceduc::where('doc',$doc)->first();
-    $resultados = json_decode($consulta_cedula);
-    if($resultados == "" or $resultados == null ){
-      return response()->json(['message'=>'No se encontraron registros con el numero seleccionado.', 'data'=>$resultados],200);
+
+    public function consultaUnitaria(Request $request)
+    {
+        $data_formulario = $request->data;
+        $doc = $request->doc;
+        $consulta_cedula = Datamesseceduc::where('doc', $doc)->first();
+        $resultados = json_decode($consulta_cedula);
+        if ($resultados == "" or $resultados == null) {
+            return response()->json(['message' => 'No se encontraron registros con el numero seleccionado.', 'data' => $resultados], 200);
+        } else {
+            return response()->json(['message' => 'Consulta exitosa.', 'data' => $resultados], 200);
+        }
     }
-    else{
-      return response()->json(['message'=>'Consulta exitosa.','data'=>$resultados],200);
-    }
-  }
-    public function dumpDatamesseceduc(){
+
+    public function dumpDatamesseceduc()
+    {
         Datamesseceduc::truncate();
-        return response()->json(['message'=>'Datos de tabla Datamesseceduc Borrada'],200);
+
+        return response()->json(['message' => 'Datos de tabla Datamesseceduc Borrada'], 200);
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -45,7 +51,7 @@ class DatamesseceducController extends Controller
      */
     public function index(Request $request)
     {
-
+        //
     }
 
     /**
@@ -77,7 +83,7 @@ class DatamesseceducController extends Controller
      */
     public function show($doc)
     {
-        $Datamesseceduc = Datamesseceduc::where('doc',$doc)->get();
+        $Datamesseceduc = Datamesseceduc::where('doc', $doc)->get();
         return response()->json($Datamesseceduc);
     }
 
@@ -115,7 +121,6 @@ class DatamesseceducController extends Controller
         //
     }
 
-
     public function allPagadurias(Request $request)
     {
         $doc = $request->doc;
@@ -131,7 +136,6 @@ class DatamesseceducController extends Controller
             'datamesseccali' => $datamesseccali,
         ];
 
-        return response()->json($results,200);
-
+        return response()->json($results, 200);
     }
 }

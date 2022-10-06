@@ -36,7 +36,7 @@
 
 <script>
 export default {
-  name: 'Descapli',
+  name: 'Descapli Empty',
   props: ['descapli', 'coupons'],
   data() {
     return {
