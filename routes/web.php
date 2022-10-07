@@ -454,3 +454,8 @@ Route::view('/RegisterCredit', 'registerCredit')->name('register.credit');
 Route::apiResource('/whatsapp-bot', 'WhatsAppBotController');
 
 Route::post('/get-coupons', 'CouponsController@index')->name('coupons.index');
+
+// Get csrf token
+// Route::get('/csrf-token', function () {
+//     return csrf_token();
+// });

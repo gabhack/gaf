@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 
 use App\Coupunsseccali;
 use App\Coupunssecedu;
+use App\Couponssedcauca;
+use App\Couponssedchoco;
+use App\Couponssedpopayan;
+use App\Couponssedquibdo;
 
 class CouponsController extends Controller
 {
@@ -22,8 +26,16 @@ class CouponsController extends Controller
         $coupons = [];
         if ($pagaduriaType == 'SECCALI') {
             $coupons = Coupunsseccali::where('doc', $userDoc)->get();
-        } else if ($pagaduriaType == 'FODE VALLE') {
+        } else if ($pagaduriaType == 'SECEDUC' || $pagaduriaType == 'FODE VALLE') {
             $coupons = Coupunssecedu::where('doc', $userDoc)->get();
+        } else if ($pagaduriaType == 'SEDCAUCA') {
+            $coupons = Couponssedcauca::where('doc', $userDoc)->get();
+        } else if ($pagaduriaType == 'SEDCHOCO') {
+            $coupons = Couponssedchoco::where('doc', $userDoc)->get();
+        } else if ($pagaduriaType == 'SEDPOPAYAN') {
+            $coupons = Couponssedpopayan::where('doc', $userDoc)->get();
+        } else if ($pagaduriaType == 'SEDQUIBDO') {
+            $coupons = Couponssedquibdo::where('doc', $userDoc)->get();
         }
 
         return response()->json($coupons);
