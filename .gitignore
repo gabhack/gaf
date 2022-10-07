@@ -27,3 +27,18 @@ public/.htaccess
 /public/fonts/vendor
 
 package-lock.json
+
+public/consulta.xml
+public/consultaRequest.xml
+public/consultaResponseFrm.xml
+public/demoxds.xml
+public/initialFirmProcess.xml
+public/initialFirmProcessContent.xml
+public/initialRequest.xml
+public/pagare.pdf
+public/token.txt
+public/confirmarCodeResponse.xml
+public/consultaFirmadoResponse.xml
+public/firmaExecutionResponse.xml
+public/generateCodeResponse.xml
+public/generateCodeResponseContent.xml

@@ -12,10 +12,24 @@ class dataCotizerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $dataCotizers = dataCotizer::all();
-        return $dataCotizers;
+        //Query
+        $lista = dataCotizer::orderBy('id', 'desc');
+
+        //Preparar la salida
+        $listaOut = $lista->paginate(20)->appends(request()->except('page'));
+        $links = $listaOut->links();
+        $options = array(
+            "lista" => $listaOut,
+            "links" => $links
+        );
+        //Parametros de busqueda y filtrado para front
+        if (isset($request->busq) && $request->busq !== '') {
+            $options['busq'] = $request->busq;
+        }
+
+        return view("cotizer/index")->with($options);
     }
 
     /**
@@ -25,7 +39,7 @@ class dataCotizerController extends Controller
      */
     public function create()
     {
-        
+        //
     }
 
     /**
@@ -50,6 +64,7 @@ class dataCotizerController extends Controller
     public function show(dataCotizer $dataCotizer)
     {
         //
+        echo 'hola';
     }
 
     /**
@@ -81,8 +96,9 @@ class dataCotizerController extends Controller
      * @param  \App\Models\dataCotizer  $dataCotizer
      * @return \Illuminate\Http\Response
      */
-    public function destroy(dataCotizer $dataCotizer)
+    public function destroy($id)
     {
-        //
+        dataCotizer::find($id)->delete();
+        return redirect()->route('cotizer-data.index');
     }
 }

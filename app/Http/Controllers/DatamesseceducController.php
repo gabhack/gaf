@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\DataMes;
+use App\Datamesfidu;
+use App\Datamesseccali;
 use App\Datamesseceduc;
 use App\Imports\DatamesseceducImport;
 use Illuminate\Http\Request;
@@ -116,5 +119,23 @@ class DatamesseceducController extends Controller
     public function destroy(Datamesseceduc $Datamesseceduc)
     {
         //
+    }
+
+    public function allPagadurias(Request $request)
+    {
+        $doc = $request->doc;
+        $datames = DataMes::where('doc', $doc)->first();
+        $datamesseceduc = Datamesseceduc::where('doc', $doc)->first();
+        $datamesfidu = Datamesfidu::where('doc', $doc)->first();
+        $datamesseccali = Datamesseccali::where('doc', $doc)->first();
+
+        $results = [
+            'datames' => $datames,
+            'datamesseceduc' => $datamesseceduc,
+            'datamesfidu' => $datamesfidu,
+            'datamesseccali' => $datamesseccali,
+        ];
+
+        return response()->json($results, 200);
     }
 }

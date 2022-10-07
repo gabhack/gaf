@@ -218,11 +218,6 @@ class DecevalController extends Controller
          $numPagareEntidad = $request->numPagareEntidad;
          $fechaDesembolso = $request->fechaDesembolso;
 
-         //Datos girador
-         $otorganteTipoId = $request->otorganteTipoId;
-         $otorganteNumId = $request->otorganteNumId;
-         $otorganteCuenta = $request->otorganteCuenta;
-
          //datos header
          $hoy = date("Y-m-d");
          $hora = date("H:i:s");
@@ -230,6 +225,24 @@ class DecevalController extends Controller
          $fecha = $hoy . 'T' . $hora;
          //$hora = '11:01';
          $usuario = '90043262901';
+
+         $header = (object) [
+            "hoy" => $hoy,
+            "hora" => $hora,
+            "codigoDepositante" => $codigoDepositante,
+            "fecha" => $fecha,
+            "usuario" => $usuario
+         ];
+
+         // crear otorgante
+         $datosGirador = (object) $request->girador;
+         $otorganteResponse = $this->crearOtorgante($header, $datosGirador, $nitEmisor);
+         $otorganteData = (object) $otorganteResponse['respuesta'];
+
+         //Datos girador
+         $otorganteTipoId = $otorganteData->fkIdTipoDocumento;
+         $otorganteNumId = $otorganteData->numeroDocumento;
+         $otorganteCuenta = $otorganteData->cuentaGirador;
 
          $url = "http://34.171.55.31/DecevalProxy/services/ProxyServicesImplPort?wsdl";
          $xml_post_string = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://services.proxy.deceval.com/">
@@ -240,15 +253,15 @@ class DecevalController extends Controller
                <arg0>
                   <!--Optional:-->
                   <documentoPagareServiceDTO>
-                     <nitEmisor>' . $nitEmisor . '</nitEmisor>
+                     <nitEmisor>' . $otorganteData->identificacionEmisor . '</nitEmisor>
                      <idClaseDefinicionDocumento>' . $idClaseDefinicionDocumento . '</idClaseDefinicionDocumento>
                      <fechaGrabacionPagare>' . $fechaGrabacionPagare . '</fechaGrabacionPagare>
                      <tipoPagare>2</tipoPagare>
                      <numPagareEntidad>' . $numPagareEntidad . '</numPagareEntidad>
                      <fechaDesembolso>' . $fechaDesembolso . '</fechaDesembolso>
-                     <otorganteTipoId>' . $otorganteTipoId . '</otorganteTipoId>
-                     <otorganteNumId>' . $otorganteNumId . '</otorganteNumId>
-                     <otorganteCuenta>' . $otorganteCuenta . '</otorganteCuenta>
+                     <otorganteTipoId>' . $otorganteData->fkIdTipoDocumento . '</otorganteTipoId>
+                     <otorganteNumId>' . $otorganteData->numeroDocumento . '</otorganteNumId>
+                     <otorganteCuenta>' . $otorganteData->cuentaGirador . '</otorganteCuenta>
                      <creditoReembolsableEn>2</creditoReembolsableEn>
                      <valorPesosDesembolso>1500000</valorPesosDesembolso>
                      <ciudadDesembolso>11001</ciudadDesembolso>
@@ -422,6 +435,85 @@ class DecevalController extends Controller
       $pdf = fopen('pagare.pdf', 'w');
       fwrite($pdf, $pdf_decoded);
       fclose($pdf);
+   }
+
+   public function crearOtorgante($header, $girador, $nitEmisor)
+   {
+      $url = "http://34.171.55.31/DecevalProxy/services/ProxyServicesImplPort?wsdl";
+
+      $xml_post_string = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://services.proxy.deceval.com/">
+            <soapenv:Header/>
+            <soapenv:Body>
+               <ser:creacionGiradoresCodificados>
+                  <!--Optional:-->
+                  <arg0>
+                     <!--Optional:-->
+                     <crearGiradorDTO>
+                        <!--Optional:-->
+                        <identificacionEmisor>' . $nitEmisor . '</identificacionEmisor>
+                        <fkIdClasePersona>1</fkIdClasePersona>
+                        <fkIdTipoDocumento>' . $girador->tipoDocumento . '</fkIdTipoDocumento>
+                        <numeroDocumento>' . $girador->numeroDocumento . '</numeroDocumento>
+                        <correoElectronico>' . $girador->correoElectronico . '</correoElectronico>
+                        <direccion1PersonaGrupo_PGP>' . $girador->direccion . '</direccion1PersonaGrupo_PGP>
+                        <telefono1PersonaGrupo_PGP>' . $girador->telefono . '</telefono1PersonaGrupo_PGP>
+                        <fax1PersonaGrupo_PGP>1111111</fax1PersonaGrupo_PGP>
+                        <fkIdPaisExpedicion_Nat>CO</fkIdPaisExpedicion_Nat>
+                        <fkIdDepartamentoExpedicion_Nat>11</fkIdDepartamentoExpedicion_Nat>
+                        <fkIdCiudadExpedicion_Nat>11001</fkIdCiudadExpedicion_Nat>
+                        <fkIdPaisDomicilio_Nat>CO</fkIdPaisDomicilio_Nat>
+                        <fkIdDepartamentoDomicilio_Nat>11</fkIdDepartamentoDomicilio_Nat>
+                        <fkIdCiudadDomicilio_Nat>11001</fkIdCiudadDomicilio_Nat>
+                        <fechaExpedicion_Nat>2000-12-24T00:00:00</fechaExpedicion_Nat>
+                        <fechaNacimiento_Nat>1980-12-24T00:00:00</fechaNacimiento_Nat>
+                        <nombresNat_Nat>' . $girador->nombres . '</nombresNat_Nat>
+                        <primerApellido_Nat>' . $girador->primerApellido . '</primerApellido_Nat>
+                        <segundoApellido_Nat>' . $girador->segundoApellido . '</segundoApellido_Nat>
+                        <fkIdPaisNacionalidad_Nat>CO</fkIdPaisNacionalidad_Nat>
+                        <mensajeRespuesta>?</mensajeRespuesta>
+                     </crearGiradorDTO>
+                     <!--Optional:-->
+                     <header>
+                        <!--Optional:-->
+                        <codigoDepositante>' . $header->codigoDepositante . '</codigoDepositante>
+                        <!--Optional:-->
+                        <fecha>' . $header->fecha . '</fecha>
+                        <!--Optional:-->
+                        <hora>' . $header->hora . '</hora>
+                        <!--Optional:-->
+                        <usuario>' . $header->usuario . '</usuario>
+                     </header>
+                  </arg0>
+               </ser:creacionGiradoresCodificados>
+            </soapenv:Body>
+         </soapenv:Envelope>';
+
+      $headers = array(
+         "Content-type: text/xml; charset=\"utf-8\"",
+         "Accept: text/xml",
+         "Cache-Control: no-cache",
+         "Pragma: no-cache",
+         "SOAPAction: \"\"",
+         "Content-lenght: " . strlen($xml_post_string)
+      );
+
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
+      curl_setopt($ch, CURLOPT_URL, $url);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+      curl_setopt($ch, CURLOPT_TIMEOUT, 100);
+      curl_setopt($ch, CURLOPT_POST, true);
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $xml_post_string); // the SOAP request
+      curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+      $response = curl_exec($ch);
+      curl_close($ch);
+
+      $array = XmlaPhp::createArray($response);
+      $resultado = $array['soap:Envelope']['soap:Body']['ns2:creacionGiradoresCodificadosResponse']['return'];
+
+      return $resultado;
    }
 
    public function consultarPagares($idDocumentoPagare, $otorganteTipoId, $otorganteNumId, $numPagareEntidad, $codigoDepositante, $fecha, $hora, $usuario)

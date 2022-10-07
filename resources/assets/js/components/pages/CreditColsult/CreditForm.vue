@@ -788,9 +788,9 @@
               <p class="detailsSub">Plazo de pago</p>
               <h3 class="dateSub">31 - Dic - 2023</h3>
               <div class="btnContainer">
-                <b-button type="submit" v-b-modal.modal-1 class="btnAceptCredit">Aceptar</b-button>
+                <b-button type="submit" class="btnAceptCredit">Aceptar</b-button>
 
-                <b-modal id="modal-1" class="modalFinalCredit" @ok="aproveValue" centered>
+                <b-modal id="modal-1" class="modalFinalCredit" @ok="approveValue" centered>
                   <!-- <img
                     src="/img/logoKapital_White.png"
                     alt="Logo KapitalBank White "
@@ -811,7 +811,7 @@
                     </p>
                   </div>
                   <template #modal-footer="{ ok }">
-                    <b-button class="btnAceptCredit" :to="{ name: 'Home' }" v-on:click="ok()">Aceptar</b-button>
+                    <b-button class="btnAceptCredit" @click="ok()"> Aceptar </b-button>
                   </template>
                 </b-modal>
               </div>
@@ -957,8 +957,20 @@ export default {
     let localCreditInfo = window.localStorage.getItem('creditInfo');
     let creditInfo = this.creditInfo ? this.creditInfo : JSON.parse(localCreditInfo);
     this.creditInfo = creditInfo;
+
+    if (this.isAwaiting) {
+      this.$swal({
+        icon: 'success',
+        title: 'Su solicitud ha sido enviada'
+      }).then(() => {
+        window.location.href = '/home';
+      });
+    }
   },
   computed: {
+    isAwaiting() {
+      return new URLSearchParams(window.location.search).get('status') === 'awaiting';
+    },
     items() {
       return {
         FOPEP: {
@@ -1000,11 +1012,18 @@ export default {
       return $dirty ? !$error : null;
     },
     submitData() {
-      let params = this.form;
-      console.log(params, 'esto es params');
-      axios.post('/cotizer-data', params).then().catch();
+      const params = this.form;
+      axios
+        .post('/cotizer-data', params)
+        .then(response => {
+          const cotizerId = response.data.id;
+          window.location.href = `/cifin/consultar?cotizerId=${cotizerId}`;
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
-    aproveValue() {
+    approveValue() {
       if (this.creditInfo.total.value <= 250000) {
         this.$swal({
           icon: 'success',
@@ -1045,6 +1064,9 @@ export default {
           .catch(err => {
             console.log(err);
             reject(err);
+          })
+          .finally(() => {
+            this.savingData = false;
           });
       });
     }
