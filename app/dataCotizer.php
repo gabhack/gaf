@@ -54,4 +54,8 @@ class dataCotizer extends Model
         'referenceFParent',
         'referenceFState',
     ];
+
+    protected $attributes = [
+        'nit' => '-',
+    ];
 }
