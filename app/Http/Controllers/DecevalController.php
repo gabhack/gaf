@@ -7,15 +7,15 @@ use DOMDocument;
 
 class DecevalController extends Controller
 {
-   public $ambiente = 1; // 0 = pruebas, 1 = produccion
+   public $ambiente = 0; // 0 = pruebas, 1 = produccion
 
-   // public $urlTransUnion = "https://www.transuniondecisioncentreuat.com.mx/TU.IDS.ExternalServices_mex_latam/SolutionExecution/ExternalSolutionExecution.svc";
-   // public $userTransUnion = "IDV_Ckcomercializadora.DEV1";
-   // public $passTransUnion = "CK%comer2022*";
+   public $urlTransUnion = "https://www.transuniondecisioncentreuat.com.mx/TU.IDS.ExternalServices_mex_latam/SolutionExecution/ExternalSolutionExecution.svc";
+   public $userTransUnion = "IDV_Ckcomercializadora.DEV1";
+   public $passTransUnion = "CK%comer2022*";
 
-   public $urlTransUnion = "https://www.transuniondecisioncentre.com.mx/TU.IDS.ExternalServices_latam_prod/SolutionExecution/ExternalSolutionExecution.svc";
-   public $userTransUnion = "IDV_CKcomercilizadora.PROD1";
-   public $passTransUnion = "]LLB&5FYyPmd[";
+   // public $urlTransUnion = "https://www.transuniondecisioncentre.com.mx/TU.IDS.ExternalServices_latam_prod/SolutionExecution/ExternalSolutionExecution.svc";
+   // public $userTransUnion = "IDV_CKcomercilizadora.PROD1";
+   // public $passTransUnion = "]LLB&5FYyPmd[";
 
    public function __construct()
    {
@@ -263,7 +263,7 @@ class DecevalController extends Controller
                      <otorganteNumId>' . $otorganteData->numeroDocumento . '</otorganteNumId>
                      <otorganteCuenta>' . $otorganteData->cuentaGirador . '</otorganteCuenta>
                      <creditoReembolsableEn>2</creditoReembolsableEn>
-                     <valorPesosDesembolso>1500000</valorPesosDesembolso>
+                     <valorPesosDesembolso></valorPesosDesembolso>
                      <ciudadDesembolso>11001</ciudadDesembolso>
                      <departamento>11</departamento>
                      <pais>CO</pais>
