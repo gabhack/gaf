@@ -53,7 +53,9 @@
           :datamesseccali="datamesseccali"
         />
 
-        <DatamesData v-if="pagaduriaType == 'SEDCAUCA' || pagaduriaType == 'SEDCHOCO'" />
+        <DatamesData
+          v-if="pagaduriaType == 'SEDCAUCA' || pagaduriaType == 'SEDCHOCO' || pagaduriaType == 'SEDQUIBDO'"
+        />
 
         <!--============================
           COMPONENTE HISTORIAL LABORAL
@@ -176,6 +178,12 @@ export default {
       this.isLoading = true;
       this.pagadurias = payload.pagadurias;
       this.pagaduriaType = payload.pagaduria;
+
+      this.datames = null;
+      this.datamesseceduc = null;
+      this.datamesfidu = null;
+      this.datamesseccali = null;
+
       if (payload.pagaduria == 'FOPEP') {
         this.getDatames(payload);
       } else if (payload.pagaduria == 'FODE VALLE') {
@@ -186,6 +194,7 @@ export default {
       } else if (payload.pagaduria == 'SECCALI') {
         this.getDatamesseccali(payload);
       }
+
       this.getEmbargosseceduc(payload);
       this.getEmbargosseccali(payload);
       this.getDescapli(payload);
@@ -199,30 +208,18 @@ export default {
     async getDatames(payload) {
       const response = await axios.get(`datames/${payload.doc}`);
       this.datames = response.data;
-      this.datamesseceduc = null;
-      this.datamesfidu = null;
-      this.datamesseccali = null;
     },
     async getDatamesseceduc(payload) {
       const response = await axios.post('/datamesseceduc/consultaUnitaria', { doc: payload.doc });
       this.datamesseceduc = response.data.data;
-      this.datames = null;
-      this.datamesfidu = null;
-      this.datamesseccali = null;
     },
     async getDatamesfidu(payload) {
       const response = await axios.post('/datamesfidu/consultaUnitaria', { doc: payload.doc });
       this.datamesfidu = response.data.data;
-      this.datames = null;
-      this.datamesseceduc = null;
-      this.datamesseccali = null;
     },
     async getDatamesseccali(payload) {
       const response = await axios.post('/consultaDatamesseccali', { doc: payload.doc });
       this.datamesseccali = response.data.data;
-      this.datames = null;
-      this.datamesseceduc = null;
-      this.datamesfidu = null;
     },
     async getFechaVinc(payload) {
       const response = await axios.get(`fechavinc/${payload.doc}`);

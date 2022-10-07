@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\DataMes;
-use App\DatamesSedCauca;
-use App\DatamesSedChoco;
 use App\Datamesfidu;
 use App\Datamesseccali;
 use App\Datamesseceduc;
+use App\DatamesSedCauca;
+use App\DatamesSedChoco;
+use App\DatamesSedQuibdo;
 use App\Pagadurias;
 use Illuminate\Http\Request;
 
@@ -115,19 +116,21 @@ class PagaduriasController extends Controller
     public function perDoc($doc)
     {
         $datames = DataMes::where('doc', $doc)->first();
-        $datamesSedCauca = DatamesSedCauca::where('doc', $doc)->first();
-        $datamesSedChoco = DatamesSedChoco::where('doc', $doc)->first();
         $datamesfidu = Datamesfidu::where('doc', $doc)->first();
         $datamesseccali = Datamesseccali::where('doc', $doc)->first();
         $datamesseceduc = Datamesseceduc::where('doc', $doc)->first();
+        $datamesSedCauca = DatamesSedCauca::where('doc', $doc)->first();
+        $datamesSedChoco = DatamesSedChoco::where('doc', $doc)->first();
+        $datamesSedQuibdo = DatamesSedQuibdo::where('doc', $doc)->first();
 
         $results = [
             'datames' => $datames,
-            'datamesSedCauca' => $datamesSedCauca,
-            'datamesSedChoco' => $datamesSedChoco,
             'datamesfidu' => $datamesfidu,
             'datamesseccali' => $datamesseccali,
             'datamesseceduc' => $datamesseceduc,
+            'datamesSedCauca' => $datamesSedCauca,
+            'datamesSedChoco' => $datamesSedChoco,
+            'datamesSedQuibdo' => $datamesSedQuibdo,
         ];
 
         return response()->json($results, 200);

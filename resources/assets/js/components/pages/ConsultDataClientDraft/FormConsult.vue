@@ -71,10 +71,11 @@ export default {
       pagaduriasType: [
         { label: 'FOPEP', value: 'FOPEP', key: 'datames' },
         { label: 'FIDUPREVISORA', value: 'FIDUPREVISORA', key: 'datamesfidu' },
-        { label: 'FODE VALLE', value: 'FODE VALLE', key: 'datamesseceduc' },
         { label: 'SEM CALI', value: 'SECCALI', key: 'datamesseccali' },
+        { label: 'FODE VALLE', value: 'FODE VALLE', key: 'datamesseceduc' },
         { label: 'SED CAUCA', value: 'SEDCAUCA', key: 'datamesSedCauca' },
-        { label: 'SED CHOCO', value: 'SEDCHOCO', key: 'datamesSedChoco' }
+        { label: 'SED CHOCO', value: 'SEDCHOCO', key: 'datamesSedChoco' },
+        { label: 'SED QUIBDO', value: 'SEDQUIBDO', key: 'datamesSedQuibdo' }
       ]
     };
   },
