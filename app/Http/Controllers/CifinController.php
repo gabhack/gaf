@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Cifin;
 use Auth;
-use App\DataCotizer;
+use App\dataCotizer;
 use Illuminate\Http\Request;
 
 class CifinController extends Controller
