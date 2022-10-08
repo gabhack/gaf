@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
+use App\CouponsSedCauca;
+use App\CouponsSedChoco;
+use App\CouponsSedPopayan;
+use App\CouponsSedQuibdo;
 use App\Coupunsseccali;
 use App\Coupunssecedu;
+use Illuminate\Http\Request;
 
 class CouponsController extends Controller
 {
@@ -20,10 +23,32 @@ class CouponsController extends Controller
         $pagaduriaType = $request->pagaduria;
 
         $coupons = [];
-        if ($pagaduriaType == 'SECCALI') {
-            $coupons = Coupunsseccali::where('doc', $userDoc)->get();
-        } else if ($pagaduriaType == 'FODE VALLE') {
-            $coupons = Coupunssecedu::where('doc', $userDoc)->get();
+
+        switch ($pagaduriaType) {
+            case 'SEDCAUCA':
+                $coupons = CouponsSedCauca::where('doc', $userDoc)->get();
+                break;
+            case 'SEDCHOCO':
+                $coupons = CouponsSedChoco::where('doc', $userDoc)->get();
+                break;
+            case 'SEDPOPAYAN':
+                $coupons = CouponsSedPopayan::where('doc', $userDoc)->get();
+                break;
+            case 'SEDQUIBDO':
+                $coupons = CouponsSedQuibdo::where('doc', $userDoc)->get();
+                break;
+            case 'SECCALI':
+                $coupons = Coupunsseccali::where('doc', $userDoc)->get();
+                break;
+            case 'SECEDUC':
+                $coupons = Coupunssecedu::where('doc', $userDoc)->get();
+                break;
+            case 'FODE VALLE':
+                $coupons = Coupunssecedu::where('doc', $userDoc)->get();
+                break;
+            default:
+                $coupons = [];
+                break;
         }
 
         return response()->json($coupons);

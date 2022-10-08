@@ -8,6 +8,10 @@ require('./bootstrap');
 
 // Vue
 import Vue from 'vue';
+
+// Vuex
+import store from './store';
+
 // BootstrapVue
 import 'jspdf-autotable';
 import 'bootstrap';
@@ -81,5 +85,6 @@ Vue.component('credit-calculator', require('./components/pages/CreditColsult/Cre
 Vue.component('register-credit', require('./components/pages/CreditColsult/CreditForm.vue').default);
 /* Vue Init */
 const app = new Vue({
-  el: '#app'
+  el: '#app',
+  store
 });

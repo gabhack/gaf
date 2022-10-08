@@ -30,6 +30,7 @@ class DatamesseceducController extends Controller
         $doc = $request->doc;
         $consulta_cedula = Datamesseceduc::where('doc', $doc)->first();
         $resultados = json_decode($consulta_cedula);
+
         if ($resultados == "" or $resultados == null) {
             return response()->json(['message' => 'No se encontraron registros con el numero seleccionado.', 'data' => $resultados], 200);
         } else {
@@ -40,7 +41,6 @@ class DatamesseceducController extends Controller
     public function dumpDatamesseceduc()
     {
         Datamesseceduc::truncate();
-
         return response()->json(['message' => 'Datos de tabla Datamesseceduc Borrada'], 200);
     }
 

@@ -53,6 +53,10 @@
           :datamesseccali="datamesseccali"
         />
 
+        <DatamesData
+          v-if="pagaduriaType == 'SEDCAUCA' || pagaduriaType == 'SEDCHOCO' || pagaduriaType == 'SEDQUIBDO'"
+        />
+
         <!--============================
           COMPONENTE HISTORIAL LABORAL
         ==============================-->
@@ -70,21 +74,46 @@
         </template>
 
         <template v-if="showOthers">
-          <DescapliEmpty v-if="pagaduriaType == 'FIDUPREVISORA' || pagaduriaType == 'FODE VALLE'" :coupons="coupons" />
-          <Descapli v-else :descapli="descapli" />
+          <DescapliEmpty v-if="pagaduriaType == 'FODE VALLE' || pagaduriaType == 'SEDCAUCA' || pagaduriaType == 'SEDCHOCO' || 
+            pagaduriaType == 'SEDQUIBDO' || pagaduriaType == 'SECCALI'" :coupons="coupons" />
+          <Descapli v-if="pagaduriaType == 'FOPEP'" :descapli="descapli" />
 
           <!--===================================
                 OBLIGACIONES VIGENTES EN MORA
           ========================================-->
           <DescnoapEmpty v-if="pagaduriaType == 'FIDUPREVISORA'" />
           <EmbargosSeccali v-else-if="pagaduriaType == 'SECCALI'" :embargosseccali="embargosseccali" />
-          <Descnoap v-else :descnoap="descnoap" />
-          <EmbargosSeceduc :embargosseceduc="embargosseceduc" />
+          <Descnoap v-if="pagaduriaType == 'FOPEP'" :descnoap="descnoap" />
+          <EmbargosSeceduc v-if="pagaduriaType == 'FODE VALLE'" :embargosseceduc="embargosseceduc" />
+          <EmbargosSedchoco v-if="pagaduriaType == 'SEDCHOCO'" :embargossedchoco="embargossedchoco" />
+          <EmbargosSedcauca v-if="pagaduriaType == 'SEDCAUCA'" :embargossedcauca="embargossedcauca" />
+          <EmbargosSedquibdo v-if="pagaduriaType == 'SEDQUIBDO'" :embargossedquibdo="embargossedquibdo" />
+          <!--<EmbargosSedpopayan v-if="pagaduriaType == ''" :embargossedpopayan="embargossedpopayan" /> -->
 
           <LiquidacionesSeceduc
             v-if="pagaduriaType == 'FODE VALLE'"
             :mensajedeliquidacionseceduc="mensajedeliquidacionseceduc"
           />
+          <Descuentossedchoco
+            v-if="pagaduriaType == 'SEDCHOCO'"
+            :descuentossedchoco="descuentossedchoco"
+          />
+          <Descuentossedcauca
+            v-if="pagaduriaType == 'SEDCAUCA'"
+            :descuentossedcauca="descuentossedcauca"
+          />
+          <Descuentosseccali
+            v-if="pagaduriaType == 'SECCALI'"
+            :descuentosseccali="descuentosseccali"
+          />
+          <Descuentossedquibdo
+            v-if="pagaduriaType == 'SEDQUIBDO'"
+            :descuentossedquibdo="descuentossedquibdo"
+          />
+          <!-- <Descuentossedpopayan
+            v-if="pagaduriaType == 'SEDPOPAYAN'"
+            :descuentossedpopayan="descuentossedpopayan"
+          /> -->
         </template>
 
         <Others
@@ -108,6 +137,9 @@ import printJS from 'print-js';
 import FormConsult from './FormConsult';
 import EmploymentHistory from './EmploymentHistory';
 import DatamesComponent from './Datames';
+
+import DatamesData from './DatamesData';
+
 import DatamesSeducComponent from './DatamesSeduc';
 import DatamesFiduComponent from './DatamesFidu';
 import DatamesCali from './DatamesCali';
@@ -117,8 +149,17 @@ import Descnoap from './Descnoap';
 import DescnoapEmpty from './DescnoapEmpty';
 import Others from './Others';
 import EmbargosSeceduc from './EmbargosSeceduc';
+import EmbargosSedchoco from './EmbargosSedchoco';
+import EmbargosSedquibdo from './EmbargosSedquibdo';
+import EmbargosSedcauca from './EmbargosSedcauca';
+//import EmbargosSedpopayan from './EmbargosSedpopayan';
 import EmbargosSeccali from './EmbargosSeccali';
 import LiquidacionesSeceduc from './LiquidacionesSeceduc';
+import Descuentossedchoco from './Descuentossedchoco';
+import Descuentossedcauca from './Descuentossedcauca';
+import Descuentosseccali from './Descuentosseccali';
+import Descuentossedquibdo from './Descuentossedquibdo';
+//import Descuentossedpopayan from './Descuentossedpopayan';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 
@@ -129,6 +170,7 @@ export default {
     FormConsult,
     EmploymentHistory,
     DatamesComponent,
+    DatamesData,
     DatamesSeducComponent,
     DatamesFiduComponent,
     DatamesCali,
@@ -138,8 +180,15 @@ export default {
     DescnoapEmpty,
     Others,
     EmbargosSeceduc,
+    EmbargosSedchoco,
+    EmbargosSedcauca,
+    EmbargosSedquibdo,
     EmbargosSeccali,
     LiquidacionesSeceduc,
+    Descuentossedchoco,
+    Descuentossedcauca,
+    Descuentosseccali,
+    Descuentossedquibdo,
     Loading
   },
 
@@ -154,8 +203,15 @@ export default {
       descapli: [],
       descnoap: [],
       embargosseceduc: [],
+      embargossedchoco: [],
+      embargossedcauca: [],
+      embargossedquibdo: [],
       embargosseccali: [],
       mensajedeliquidacionseceduc: [],
+      descuentossedchoco: [],
+      descuentossedcauca: [],
+      descuentosseccali: [],
+      descuentossedquibdo: [],
       coupons: [],
 
       pagaduriaType: '',
@@ -170,6 +226,12 @@ export default {
       this.isLoading = true;
       this.pagadurias = payload.pagadurias;
       this.pagaduriaType = payload.pagaduria;
+
+      this.datames = null;
+      this.datamesseceduc = null;
+      this.datamesfidu = null;
+      this.datamesseccali = null;
+
       if (payload.pagaduria == 'FOPEP') {
         this.getDatames(payload);
       } else if (payload.pagaduria == 'FODE VALLE') {
@@ -180,8 +242,16 @@ export default {
       } else if (payload.pagaduria == 'SECCALI') {
         this.getDatamesseccali(payload);
       }
+
       this.getEmbargosseceduc(payload);
+      this.getEmbargossedchoco(payload);
+      this.getEmbargossedquibdo(payload);
+      this.getEmbargossedcauca(payload);
       this.getEmbargosseccali(payload);
+      this.getDescuentossedchoco(payload);
+      this.getDescuentossedcauca(payload);
+      this.getDescuentosseccali(payload);
+      this.getDescuentossedquibdo(payload);
       this.getDescapli(payload);
       this.getDescnoap(payload);
       this.getCoupons(payload);
@@ -193,30 +263,18 @@ export default {
     async getDatames(payload) {
       const response = await axios.get(`datames/${payload.doc}`);
       this.datames = response.data;
-      this.datamesseceduc = null;
-      this.datamesfidu = null;
-      this.datamesseccali = null;
     },
     async getDatamesseceduc(payload) {
       const response = await axios.post('/datamesseceduc/consultaUnitaria', { doc: payload.doc });
       this.datamesseceduc = response.data.data;
-      this.datames = null;
-      this.datamesfidu = null;
-      this.datamesseccali = null;
     },
     async getDatamesfidu(payload) {
       const response = await axios.post('/datamesfidu/consultaUnitaria', { doc: payload.doc });
       this.datamesfidu = response.data.data;
-      this.datames = null;
-      this.datamesseceduc = null;
-      this.datamesseccali = null;
     },
     async getDatamesseccali(payload) {
       const response = await axios.post('/consultaDatamesseccali', { doc: payload.doc });
       this.datamesseccali = response.data.data;
-      this.datames = null;
-      this.datamesseceduc = null;
-      this.datamesfidu = null;
     },
     async getFechaVinc(payload) {
       const response = await axios.get(`fechavinc/${payload.doc}`);
@@ -234,6 +292,18 @@ export default {
       const response = await axios.post('/consultaEmbargosseceduc', { doc: payload.doc });
       this.embargosseceduc = response.data.data;
     },
+    async getEmbargossedchoco(payload) {
+      const response = await axios.post('/consultaEmbargossedchoco', { doc: payload.doc });
+      this.embargossedchoco = response.data.data;
+    },
+    async getEmbargossedcauca(payload) {
+      const response = await axios.post('/consultaEmbargossedcauca', { doc: payload.doc });
+      this.embargossedcauca = response.data.data;
+    },
+    async getEmbargossedquibdo(payload) {
+      const response = await axios.post('/consultaEmbargossedquibdo', { doc: payload.doc });
+      this.embargossedquibdo = response.data.data;
+    },
     async getEmbargosseccali(payload) {
       const response = await axios.post('/consultaEmbargosseccali', { doc: payload.doc });
       this.embargosseccali = response.data.data;
@@ -241,6 +311,22 @@ export default {
     async getMensajedeliquidacionseceduc(payload) {
       const response = await axios.post('/consultaMensajedeliquidacionseceduc', { doc: payload.doc });
       this.mensajedeliquidacionseceduc = response.data.data;
+    },
+    async getDescuentossedchoco(payload) {
+      const response = await axios.post('/consultaDescuentossedchoco', { doc: payload.doc });
+      this.descuentossedchoco = response.data.data;
+    },
+    async getDescuentossedcauca(payload) {
+      const response = await axios.post('/consultaDescuentossedcauca', { doc: payload.doc });
+      this.descuentossedcauca = response.data.data;
+    },
+    async getDescuentosseccali(payload) {
+      const response = await axios.post('/consultaDescuentosseccali', { doc: payload.doc });
+      this.descuentosseccali = response.data.data;
+    },
+    async getDescuentossedquibdo(payload) {
+      const response = await axios.post('/consultaDescuentossedquibdo', { doc: payload.doc });
+      this.descuentossedquibdo = response.data.data;
     },
     async getCoupons(payload) {
       const data = {
