@@ -208,7 +208,7 @@
           <!--============================
             DATAMESCALI SECCALI
           ==============================-->
-          <template v-if="datamesseccali">
+          <!-- <template v-if="datamesseccali">
             <div class="col-6">
               <b class="panel-label">VALOR INGRESO:</b>
               <div>
@@ -243,13 +243,42 @@
                 <p class="panel-value">{{ datamesseccali.cargo }}</p>
               </div>
             </div>
-          </template>
+          </template> -->
 
-          <template v-if="datamesSed">
+          
+          <!-- DATAMES SED -->
+          <template v-if="(datamesfidu || datames || datamesseceduc)">
+          </template>
+          <template v-else-if="datamesSed">
             <div class="col-6">
               <b class="panel-label">VALOR INGRESO:</b>
               <div>
-                <p class="panel-value">{{ datamesSed.vingreso | currency }}</p>
+                <p class="panel-value" v-if="salarioBasico">{{ salarioBasico | currency }}</p>
+                <p class="panel-value" v-else>{{ datamesSed.vingresos | currency }}</p>
+              </div>
+            </div>
+
+            <div class="col-12" v-if="ingresosExtras.length > 0">
+              <b class="panel-label">INGRESOS EXTRAS:</b>
+              <div class="row">
+                <div class="col-6">
+                  <b class="panel-label table-text">CONCEPTO:</b>
+                </div>
+                <div class="col-6">
+                  <b class="panel-label table-text">VALOR:</b>
+                </div>
+              </div>
+              <div class="row" v-for="extra in ingresosExtras" :key="extra.code">
+                <div class="col-6">
+                  <div>
+                    <p class="panel-value">{{ extra.concept }}</p>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div>
+                    <p class="panel-value">{{ extra.ingresos | currency }}</p>
+                  </div>
+                </div>
               </div>
             </div>
 
