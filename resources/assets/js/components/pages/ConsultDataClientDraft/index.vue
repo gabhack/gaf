@@ -74,8 +74,17 @@
         </template>
 
         <template v-if="showOthers">
-          <DescapliEmpty v-if="pagaduriaType == 'FODE VALLE' || pagaduriaType == 'SEDCAUCA' || pagaduriaType == 'SEDCHOCO' || 
-            pagaduriaType == 'SEDQUIBDO' || pagaduriaType == 'SECCALI'" :coupons="coupons" />
+          <DescapliEmpty
+            v-if="
+              pagaduriaType == 'FIDUPREVISORA' ||
+              pagaduriaType == 'FODE VALLE' ||
+              pagaduriaType == 'SEDCAUCA' ||
+              pagaduriaType == 'SEDCHOCO' ||
+              pagaduriaType == 'SEDQUIBDO' ||
+              pagaduriaType == 'SECCALI'
+            "
+            :coupons="coupons"
+          />
           <Descapli v-if="pagaduriaType == 'FOPEP'" :descapli="descapli" />
 
           <!--===================================
@@ -94,22 +103,10 @@
             v-if="pagaduriaType == 'FODE VALLE'"
             :mensajedeliquidacionseceduc="mensajedeliquidacionseceduc"
           />
-          <Descuentossedchoco
-            v-if="pagaduriaType == 'SEDCHOCO'"
-            :descuentossedchoco="descuentossedchoco"
-          />
-          <Descuentossedcauca
-            v-if="pagaduriaType == 'SEDCAUCA'"
-            :descuentossedcauca="descuentossedcauca"
-          />
-          <Descuentosseccali
-            v-if="pagaduriaType == 'SECCALI'"
-            :descuentosseccali="descuentosseccali"
-          />
-          <Descuentossedquibdo
-            v-if="pagaduriaType == 'SEDQUIBDO'"
-            :descuentossedquibdo="descuentossedquibdo"
-          />
+          <Descuentossedchoco v-if="pagaduriaType == 'SEDCHOCO'" :descuentossedchoco="descuentossedchoco" />
+          <Descuentossedcauca v-if="pagaduriaType == 'SEDCAUCA'" :descuentossedcauca="descuentossedcauca" />
+          <Descuentosseccali v-if="pagaduriaType == 'SECCALI'" :descuentosseccali="descuentosseccali" />
+          <Descuentossedquibdo v-if="pagaduriaType == 'SEDQUIBDO'" :descuentossedquibdo="descuentossedquibdo" />
           <!-- <Descuentossedpopayan
             v-if="pagaduriaType == 'SEDPOPAYAN'"
             :descuentossedpopayan="descuentossedpopayan"

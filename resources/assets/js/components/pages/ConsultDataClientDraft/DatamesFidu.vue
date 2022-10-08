@@ -7,7 +7,7 @@
           <div class="col-6">
             <b class="panel-label">TIPO DE DOCUMENTO:</b>
             <div>
-              <p class="panel-value">{{ datamesfidu.td ? datamesfidu.td : '-' }}</p>
+              <p class="panel-value">{{ datamesfidu.tdd ? datamesfidu.tdd : '-' }}</p>
             </div>
           </div>
           <div class="col-6">
@@ -72,15 +72,15 @@
                           </div>-->
 
           <div
-              class="col-6"
-              v-if="
-                          user.roles_id === 1 ||
-                          user.roles_id === '1' ||
-                          user.roles_id === 4 ||
-                          user.roles_id === '4' ||
-                          user.roles_id === 5 ||
-                          user.roles_id === '5'
-                        "
+            class="col-6"
+            v-if="
+              user.roles_id === 1 ||
+              user.roles_id === '1' ||
+              user.roles_id === 4 ||
+              user.roles_id === '4' ||
+              user.roles_id === 5 ||
+              user.roles_id === '5'
+            "
           >
             <b class="panel-label">DESCRIPCIÓN:</b>
             <div>
@@ -89,15 +89,15 @@
           </div>
 
           <div
-              class="col-6"
-              v-if="
-                          user.roles_id === 1 ||
-                          user.roles_id === '1' ||
-                          user.roles_id === 4 ||
-                          user.roles_id === '4' ||
-                          user.roles_id === 5 ||
-                          user.roles_id === '5'
-                        "
+            class="col-6"
+            v-if="
+              user.roles_id === 1 ||
+              user.roles_id === '1' ||
+              user.roles_id === 4 ||
+              user.roles_id === '4' ||
+              user.roles_id === 5 ||
+              user.roles_id === '5'
+            "
           >
             <b class="panel-label">RECURSOS:</b>
             <div>
@@ -106,15 +106,15 @@
           </div>
 
           <div
-              class="col-6"
-              v-if="
-                          user.roles_id === 1 ||
-                          user.roles_id === '1' ||
-                          user.roles_id === 4 ||
-                          user.roles_id === '4' ||
-                          user.roles_id === 5 ||
-                          user.roles_id === '5'
-                        "
+            class="col-6"
+            v-if="
+              user.roles_id === 1 ||
+              user.roles_id === '1' ||
+              user.roles_id === 4 ||
+              user.roles_id === '4' ||
+              user.roles_id === 5 ||
+              user.roles_id === '5'
+            "
           >
             <b class="panel-label">FECHA DE CARGA DATA:</b>
             <div>
@@ -123,15 +123,15 @@
           </div>
 
           <div
-              class="col-6"
-              v-if="
-                          user.roles_id === 1 ||
-                          user.roles_id === '1' ||
-                          user.roles_id === 4 ||
-                          user.roles_id === '4' ||
-                          user.roles_id === 5 ||
-                          user.roles_id === '5'
-                        "
+            class="col-6"
+            v-if="
+              user.roles_id === 1 ||
+              user.roles_id === '1' ||
+              user.roles_id === 4 ||
+              user.roles_id === '4' ||
+              user.roles_id === 5 ||
+              user.roles_id === '5'
+            "
           >
             <b class="panel-label">MES DE CARGA DATA:</b>
             <div>
@@ -140,15 +140,15 @@
           </div>
 
           <div
-              class="col-6"
-              v-if="
-                          user.roles_id === 1 ||
-                          user.roles_id === '1' ||
-                          user.roles_id === 4 ||
-                          user.roles_id === '4' ||
-                          user.roles_id === 5 ||
-                          user.roles_id === '5'
-                        "
+            class="col-6"
+            v-if="
+              user.roles_id === 1 ||
+              user.roles_id === '1' ||
+              user.roles_id === 4 ||
+              user.roles_id === '4' ||
+              user.roles_id === 5 ||
+              user.roles_id === '5'
+            "
           >
             <b class="panel-label">AÑO DE CARGA DATA:</b>
             <div>
@@ -163,11 +163,10 @@
 
 <script>
 export default {
-  name: "DatamesFidu",
-  props: ['datamesfidu', 'user'],
-}
+  name: 'DatamesFidu',
+  props: ['datamesfidu', 'user']
+};
 </script>
 
 <style scoped>
-
 </style>

@@ -62,8 +62,8 @@ export default {
   data() {
     return {
       dataclient: {
-        doc: '29992160',
-        name: 'xavier',
+        doc: '',
+        name: '',
         pagaduria: null,
         pagadurias: null
       },
@@ -98,18 +98,12 @@ export default {
       this.isLoading = true;
 
       const response = await axios.get(`/pagadurias/per-doc/${this.dataclient.doc}`);
-      // if(response.data.datames == null || response.data.datamesSedCauca == null || response.data.datamesSedChoco == null || response.data.datamesSedQuibdo == null
-      //   || response.data.datamesfidu == null || response.data.datamesseccali == null || response.data.datamesseceduc == null ) {
-
-      //   }
       const mensaje = Object.entries(response.data).every(item => item[1] == null);
-      if(mensaje){
-        // alert("Upss no tenemos data en estos momentos :(");
+      if (mensaje) {
         toastr.info('No tenemos informacion de este documento en el momento');
       } else {
         this.dataclient.pagadurias = response.data;
-      };
-      this.dataclient.pagadurias = response.data;
+      }
 
       this.isLoading = false;
       return Promise.resolve(response.data);

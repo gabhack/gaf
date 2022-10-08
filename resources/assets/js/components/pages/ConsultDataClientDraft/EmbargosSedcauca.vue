@@ -1,7 +1,7 @@
 <template>
   <div class="col-md-12">
     <div class="panel panel-primary mb-3">
-      <div class="panel-heading"><b>EMBARGOS</b></div>
+      <div class="panel-heading"><b>OBLIGACIONES VIGENTES EN MORA</b></div>
       <div class="panel-body">
         <div class="row">
           <div :class="label.colClass || 'col-2'" v-for="label in labels" :key="label.field">
