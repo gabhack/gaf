@@ -92,7 +92,7 @@ class DataCreditoController extends Controller
         $demo = $array['SOAP-ENV:Envelope']['SOAP-ENV:Body']['ns2:getInformationClientResponse']['ns2:data'];
         $demo2 = str_replace("&lt;","<",$demo);
         $resultado = XmlaPhp::createArray($demo2)['Informes']['Informe'];
-        dd($resultado);
+        //dd($resultado);
         return view('datacredito/consulta',['resultado'=>$resultado]);
     }
 

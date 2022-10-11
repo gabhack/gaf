@@ -8,221 +8,679 @@
             <download-pdf-button></download-pdf-button>
         </div>
         <div id="consulta-container" class="row">
-            <div class="col-6">
+
+            <!-- INFORMACION BASICA -->
+            <div class="col-12">
                 <div class="panel mb-3">
-                    <div class="panel-heading"><b>RESULTADO DE LA CONSULTA</b></div>
+                    <div class="panel-heading text-center"><b>INFORMACION BASICA</b></div>
                     <div class="panel-body">
                         <div class="row">
                             <!---->
-
-                            @if (isset( $resultado["JuridicaNacional"]))
-                            <div class="col-6">
-                                <b class="panel-label">NOMBRES APELLIDOS - RAZÓN SOCIAL:</b>
-                                <div>
-                                    <p class="panel-value">{{ $resultado["JuridicaNacional"]["@attributes"]["razonSocial"] }}</p>
-                                </div>
-                            </div>
-                            @endif
-                            @if (isset($dato["Tercero"]["TipoIdentificacion"]))
-                            <div class="col-6">
+                            @if (isset($resultado))
+                            <div class="col-2">
                                 <b class="panel-label">TIPO IDENTIFICACIÓN:</b>
                                 <div>
-                                    <p class="panel-value">{{ $dato["Tercero"]["TipoIdentificacion"] }}</p>
-                                </div>
-                            </div>
-                            @endif
-                            @if (isset($dato["Tercero"]["Estado"]))
-                            <div class="col-6">
-                                <b class="panel-label">EST. DOCUMENTO:</b>
-                                <div>
-                                    <p class="panel-value">{{ $dato["Tercero"]["Estado"] }}</p>
-                                </div>
-                            </div>
-                            @endif
-                            @if (isset($dato["Tercero"]["Fecha"]))
-                            <div class="col-6">
-                                <b class="panel-label">FECHA:</b>
-                                <div>
-                                    <p class="panel-value">{{ $dato["Tercero"]["Fecha"] }}</p>
+                                    <p class="panel-value">{{ $resultado["@attributes"]["tipoIdDigitado"] }}</p>
                                 </div>
                             </div>
                             @endif
                             @if (isset($resultado["JuridicaNacional"]["@attributes"]["identificacion"]))
-                            <div class="col-6">
-                                <b class="panel-label">No. IDENTIFICACIÓN:</b>
+                            <div class="col-2">
+                                <b class="panel-label">IDENTIFICACIÓN:</b>
                                 <div>
                                     <p class="panel-value">{{  $resultado["JuridicaNacional"]["@attributes"]["identificacion"] }}</p>
                                 </div>
                             </div>
                             @endif
-                            @if (isset($dato["Tercero"]["FechaExpedicion"]))
-                            <div class="col-6">
+                            <!-- @if (isset($resultado["NaturalNacional"]["Identificacion"]))
+                            <div class="col-2">
+                                <b class="panel-label">IDENTIFICACIÓN:</b>
+                                <div>
+                                    <p class="panel-value">{{  $resultado["NaturalNacional"]["Identificacion"]["numero"] }}</p>
+                                </div>
+                            </div>
+                            @endif -->
+                            @if (isset($resultado["JuridicaNacional"]))
+                            <div class="col-2">
+                                <b class="panel-label">ESTADO DOCUMENTO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $resultado["JuridicaNacional"]["@attributes"]["validada"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            <div class="col-3">
+                                <b class="panel-label">LUGAR:</b>
+                                <div>
+                                    <p class="panel-value">-</p>
+                                </div>
+                            </div>
+                            <div class="col-3">
                                 <b class="panel-label">FECHA EXPEDICIÓN:</b>
                                 <div>
-                                    <p class="panel-value">{{ $dato["Tercero"]["FechaExpedicion"] }}</p>
+                                    <p class="panel-value">-</p>
                                 </div>
                             </div>
-                            @endif
-                            @if (isset($dato["Tercero"]["Hora"]))
-                            <div class="col-6">
-                                <b class="panel-label">HORA:</b>
+                            <div class="col-4">
+                                <b class="panel-label">NOMBRES APELLIDOS - RAZÓN SOCIAL:</b>
                                 <div>
-                                    <p class="panel-value">{{ $dato["Tercero"]["Hora"] }}</p>
+                                    <p class="panel-value">{{ $resultado["JuridicaNacional"]["@attributes"]["razonSocial"] }}</p>
                                 </div>
                             </div>
-                            @endif
+                            <div class="col-2">
+                                <b class="panel-label">RANGO EDAD:</b>
+                                <div>
+                                    <p class="panel-value">-</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label">GENERO:</b>
+                                <div>
+                                    <p class="panel-value">-</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label">TIENE RUT?:</b>
+                                <div>
+                                    <p class="panel-value">-</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label">ANTIGUEDAD:</b>
+                                <div>
+                                    <p class="panel-value">-</p>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <b class="panel-label">ACTIVIDAD ECONOMICA:</b>
+                                <div>
+                                    <p class="panel-value">-</p>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <b class="panel-label">EMPLEADOR:</b>
+                                <div>
+                                    <p class="panel-value">-</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label">TIPO DE CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">-</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label">FECHA CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">-</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label">OPER INTERNACIONALES:</b>
+                                <div>
+                                    <p class="panel-value">-</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!---->
-            <!---->
-            <!---->
-            <div class="col-6">
+
+            <!-- DETALLE SOCIO DEMOGRAFICO -->
+            <div class="col-12">
                 <div class="panel mb-3">
-                    <div class="panel-heading"><b>RESUMEN</b></div>
+                    <div class="panel-heading">Detalle Información Socio Demográfica</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <!---->
+                            <div class="col-2">
+                                <b class="panel-label">REPORTADO POR:</b>
+                                <div>
+                                    <p class="panel-value">-</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label">FECHA REPORTE:</b>
+                                <div>
+                                    <p class="panel-value">-</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label">ACT ECONOMICA:</b>
+                                <div>
+                                    <p class="panel-value">-</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label">EMPLEADOR:</b>
+                                <div>
+                                    <p class="panel-value">-</p>
+                                </div>
+                            </div>                            
+                            <div class="col-2">
+                                <b class="panel-label">TIPO CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">-</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label">FECHA CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">-</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- RESUMEN -->
+            <div class="col-12">
+                <div class="panel mb-3">
+                    <div class="panel-heading mb-1 text-center"><b>RESUMEN</b></div>
+                    <div class="panel-heading">Perfil General</div>
                     <div class="panel-body">
                     @php $field = $resultado["InfoAgregada"]["Resumen"]["Principales"]["@attributes"]; @endphp
                         <div class="row">
-                            <div class="col-md-6">
-                                <b class="panel-label">CREDITOS VIGENTES:</b>
+                            <div class="col-md-2">
+                                <b class="panel-label">SECTORES</b>
                                 <div>
-                                    <p class="panel-value">{{ $field["creditoVigentes"] }}</p>
+                                    <p class="panel-value">CREDITOS VIGENTES</p>
+                                    <p class="panel-value">CREDITOS CERRADOS</p>
+                                    <p class="panel-value">CREDITOS RESTRUCTURADOS</p>
+                                    <p class="panel-value">CREDITOS REFINANCIADOS</p>
+                                    <p class="panel-value">CONSULTAS ULTIMOS 6 MESES</p>
+                                    <p class="panel-value">DESCUENTOS VIGENTES A LA FECHA</p>
+                                    <p class="panel-value">ANTIGUEDAD DESDE</p>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <b class="panel-label">CREDITOS CERRADOS:</b>
+                            <div class="col-md-2">
+                                <b class="panel-label">SECTOR FINANCIERO</b>
                                 <div>
                                     <p class="panel-value">{{ $field["creditosCerrados"] }}</p>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <b class="panel-label">CREDITOS ACTUALIES NEGATIVOS:</b>
-                                <div>
-                                <p class="panel-value">{{ $field["creditosActualesNegativos"] }}</p>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <b class="panel-label">HIST ULTIMOS 12 MESES:</b>
-                                <div>
-                                <p class="panel-value">{{ $field["histNegUlt12Meses"] }}</p>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <b class="panel-label">CUENTAS ABIERTAS AHOCCB:</b>
-                                <div>
-                                <p class="panel-value">{{ $field["cuentasAbiertasAHOCCB"] }}</p>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <b class="panel-label">CUENTAS CERRADAS AHOCCB:</b>
-                                <div>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <b class="panel-label">CONSULTAS ULTIMOS 6 MESES:</b>
-                                <div>
+                                    <p class="panel-value">{{ $field["creditoVigentes"] }}</p>
+                                    <p class="panel-value">{{ $field["creditosCerrados"] }}</p>
+                                    <p class="panel-value">{{ $field["creditosActualesNegativos"] }}</p>
                                     <p class="panel-value">{{ $field["consultadasUlt6meses"] }}</p>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <b class="panel-label">DESACUERDOS A LA FECHA:</b>
-                                <div>
                                     <p class="panel-value">{{ $field["desacuerdosALaFecha"] }}</p>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <b class="panel-label">ANTIGUEDAD:</b>
-                                <div>
                                     <p class="panel-value">{{ $field["antiguedadDesde"] }}</p>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <b class="panel-label">RECLAMOS VIGENTES:</b>
+                            <div class="col-md-2">
+                                <b class="panel-label">SECTOR COOPERATIVO</b>
                                 <div>
-                                    <p class="panel-value">{{ $field["reclamosVigentes"] }}</p>
+                                    <p class="panel-value">{{ $field["creditosActualesNegativos"] }}</p>
+                                    <p class="panel-value">{{ $field["creditoVigentes"] }}</p>
+                                    <p class="panel-value">{{ $field["creditosCerrados"] }}</p>
+                                    <p class="panel-value">{{ $field["creditosActualesNegativos"] }}</p>
+                                    <p class="panel-value">{{ $field["consultadasUlt6meses"] }}</p>
+                                    <p class="panel-value">{{ $field["desacuerdosALaFecha"] }}</p>
+                                    <p class="panel-value">{{ $field["antiguedadDesde"] }}</p>
                                 </div>
+                            </div>
+                            <div class="col-md-1">
+                                <b class="panel-label">SECTOR REAL</b>
+                                <div>
+                                    <p class="panel-value">{{ $field["cuentasAbiertasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["creditoVigentes"] }}</p>
+                                    <p class="panel-value">{{ $field["creditosCerrados"] }}</p>
+                                    <p class="panel-value">{{ $field["creditosActualesNegativos"] }}</p>
+                                    <p class="panel-value">{{ $field["consultadasUlt6meses"] }}</p>
+                                    <p class="panel-value">{{ $field["desacuerdosALaFecha"] }}</p>
+                                    <p class="panel-value">{{ $field["antiguedadDesde"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <b class="panel-label">SECTOR TELCOS</b>
+                                <div>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["creditoVigentes"] }}</p>
+                                    <p class="panel-value">{{ $field["creditosCerrados"] }}</p>
+                                    <p class="panel-value">{{ $field["creditosActualesNegativos"] }}</p>
+                                    <p class="panel-value">{{ $field["consultadasUlt6meses"] }}</p>
+                                    <p class="panel-value">{{ $field["desacuerdosALaFecha"] }}</p>
+                                    <p class="panel-value">{{ $field["antiguedadDesde"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <b class="panel-label">TOTAL COMO PRINCIPAL</b>
+                                <div>
+                                    <p class="panel-value">{{ $field["consultadasUlt6meses"] }}</p>
+                                    <p class="panel-value">{{ $field["creditoVigentes"] }}</p>
+                                    <p class="panel-value">{{ $field["creditosCerrados"] }}</p>
+                                    <p class="panel-value">{{ $field["creditosActualesNegativos"] }}</p>
+                                    <p class="panel-value">{{ $field["consultadasUlt6meses"] }}</p>
+                                    <p class="panel-value">{{ $field["desacuerdosALaFecha"] }}</p>
+                                    <p class="panel-value">{{ $field["antiguedadDesde"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <b class="panel-label">TOTAL COMO CODEUDOR - OTROS</b>
+                                <div>
+                                    <p class="panel-value">{{ $field["consultadasUlt6meses"] }}</p>
+                                    <p class="panel-value">{{ $field["creditoVigentes"] }}</p>
+                                    <p class="panel-value">{{ $field["creditosCerrados"] }}</p>
+                                    <p class="panel-value">{{ $field["creditosActualesNegativos"] }}</p>
+                                    <p class="panel-value">{{ $field["consultadasUlt6meses"] }}</p>
+                                    <p class="panel-value">{{ $field["desacuerdosALaFecha"] }}</p>
+                                    <p class="panel-value">{{ $field["antiguedadDesde"] }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel mb-3">
+                    <div class="panel-heading">Tendencia de endeudamiento</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <b class="panel-label">SALDOS Y MORAS</b>
+                                <div>
+                                    <p class="panel-value">Saldo Deuda Total en Mora (en miles)</p>
+                                    <p class="panel-value">Saldo Deuda Total (en miles)</p>
+                                    <p class="panel-value">Moras máx Sector Financiero</p>
+                                    <p class="panel-value">Moras máx Sector Cooperativo</p>
+                                    <p class="panel-value">Moras máx Sector Real</p>
+                                    <p class="panel-value">Moras máx Sector Telcos</p>
+                                    <p class="panel-value"><b>Total Moras Máximas</b></p>
+                                    <p class="panel-value">Núm créditos con mora =30</p>
+                                    <p class="panel-value">Núm créditos con mora >= 60</p>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <b class="panel-label">JUL 22</b>
+                                <div>
+                                    <p class="panel-value">{{ $field["creditosCerrados"] }}</p>
+                                    <p class="panel-value">{{ $field["creditosCerrados"] }}</p>
+                                    <p class="panel-value">{{ $field["creditosCerrados"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <b class="panel-label">JUN 22</b>
+                                <div>
+                                <p class="panel-value">{{ $field["creditosActualesNegativos"] }}</p>
+                                <p class="panel-value">{{ $field["creditosActualesNegativos"] }}</p>
+                                <p class="panel-value">{{ $field["creditosActualesNegativos"] }}</p>
+                                <p class="panel-value">{{ $field["creditosActualesNegativos"] }}</p>
+                                <p class="panel-value">{{ $field["creditosActualesNegativos"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <b class="panel-label">MAY 22</b>
+                                <div>
+                                <p class="panel-value">{{ $field["cuentasAbiertasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasAbiertasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasAbiertasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasAbiertasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasAbiertasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasAbiertasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasAbiertasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasAbiertasAHOCCB"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <b class="panel-label">ABR 22</b>
+                                <div>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <b class="panel-label">MAR 22</b>
+                                <div>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <b class="panel-label">FEB 22</b>
+                                <div>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <b class="panel-label">ENE 22</b>
+                                <div>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <b class="panel-label">DEC 21</b>
+                                <div>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <b class="panel-label">NOV 21</b>
+                                <div>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel mb-1">
+                    <div class="panel-heading">Endeudamiento Actual</div>
+                    <div class="panel-body text-center">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <b class="panel-label">CARTERAS</b>
+                            </div>
+                            <div class="col-md-1">
+                                <b class="panel-label">CALIDAD</b>
+                            </div>
+                            <div class="col-md-1">
+                                <b class="panel-label">NUM</b>
+                            </div>
+                            <div class="col-md-1">
+                                <b class="panel-label">ESTADO ACTUAL</b>
+                            </div>
+                            <div class="col-md-1">
+                                <b class="panel-label">CALF</b>
+                            </div>
+                            <div class="col-md-1">
+                                <b class="panel-label">CUPO INICIAL</b>
+                            </div>
+                            <div class="col-md-1">
+                                <b class="panel-label">SALDO ACTUAL</b>
+                            </div>
+                            <div class="col-md-1">
+                                <b class="panel-label">SALDO EN MORA</b>
+                            </div>
+                            <div class="col-md-1">
+                                <b class="panel-label">VALOR CUOTA</b>
+                            </div>
+                            <div class="col-md-1">
+                                <b class="panel-label">% PART</b>
+                            </div>
+                            <div class="col-md-1">
+                                <b class="panel-label">% DEUDA</b>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel mb-3">
+                    <div class="panel-heading">Sector Financiero</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <p class="panel-value">Cartera bancaria</p>
+                                <b class="panel-value">Total Sector Financiero</b>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-value">Principal</p>
+                                <p class="panel-value"></p>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">{{ $field["desacuerdosALaFecha"] }}</p>
+                                <p class="panel-value"></p>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">Esta en mora 120</p>
+                                <p class="panel-value"></p>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">D</p>
+                                <p class="panel-value"></p>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">93,742</p>
+                                <b class="panel-label">93,742</b>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">94,971</p>
+                                <b class="panel-label">94,971</b>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">12,069</p>
+                                <b class="panel-label">12,069</b>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">1,543</p>
+                                <b class="panel-label">1,543</b>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">87.3%</p>
+                                <b class="panel-label">87.3%</b>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">101.3%</p>
+                                <b class="panel-label">101.3%</b>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel mb-3">
+                    <div class="panel-heading">Sector Cooperativo</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <p class="panel-value">Cartera bancaria</p>
+                                <b class="panel-value">Total Sector Financiero</b>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-value">Principal</p>
+                                <p class="panel-value"></p>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">{{ $field["desacuerdosALaFecha"] }}</p>
+                                <p class="panel-value"></p>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">Esta en mora 120</p>
+                                <p class="panel-value"></p>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">D</p>
+                                <p class="panel-value"></p>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">93,742</p>
+                                <b class="panel-label">93,742</b>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">94,971</p>
+                                <b class="panel-label">94,971</b>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">12,069</p>
+                                <b class="panel-label">12,069</b>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">1,543</p>
+                                <b class="panel-label">1,543</b>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">87.3%</p>
+                                <b class="panel-label">87.3%</b>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">101.3%</p>
+                                <b class="panel-label">101.3%</b>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel mb-3">
+                    <div class="panel-heading">Sector Real</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <p class="panel-value">Cartera bancaria</p>
+                                <b class="panel-value">Total Sector Financiero</b>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-value">Principal</p>
+                                <p class="panel-value"></p>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">{{ $field["desacuerdosALaFecha"] }}</p>
+                                <p class="panel-value"></p>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">Esta en mora 120</p>
+                                <p class="panel-value"></p>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">D</p>
+                                <p class="panel-value"></p>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">93,742</p>
+                                <b class="panel-label">93,742</b>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">94,971</p>
+                                <b class="panel-label">94,971</b>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">12,069</p>
+                                <b class="panel-label">12,069</b>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">1,543</p>
+                                <b class="panel-label">1,543</b>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">87.3%</p>
+                                <b class="panel-label">87.3%</b>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">101.3%</p>
+                                <b class="panel-label">101.3%</b>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel mb-3">
+                    <div class="panel-heading">Sector Telcos</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <p class="panel-value">Cartera bancaria</p>
+                                <b class="panel-value">Total Sector Financiero</b>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-value">Principal</p>
+                                <p class="panel-value"></p>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">{{ $field["desacuerdosALaFecha"] }}</p>
+                                <p class="panel-value"></p>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">Esta en mora 120</p>
+                                <p class="panel-value"></p>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">D</p>
+                                <p class="panel-value"></p>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">93,742</p>
+                                <b class="panel-label">93,742</b>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">94,971</p>
+                                <b class="panel-label">94,971</b>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">12,069</p>
+                                <b class="panel-label">12,069</b>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">1,543</p>
+                                <b class="panel-label">1,543</b>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">87.3%</p>
+                                <b class="panel-label">87.3%</b>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">101.3%</p>
+                                <b class="panel-label">101.3%</b>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            @if (isset($dato["Tercero"]["Consolidado"]["ResumenPrincipal"]["Registro"]) and count($dato["Tercero"]["Consolidado"]["ResumenPrincipal"]["Registro"])>0 and count( $dato["Tercero"]["Consolidado"]["ResumenPrincipal"]["Registro"]) != count($dato["Tercero"]["Consolidado"]["ResumenPrincipal"]["Registro"], 1))
+            <!-- HÁBITO DE PAGO DE OBLIGACIONES ABIERTAS / VIGENTES  -->
             <div class="col-md-12">
                 <div class="panel panel-primary mb-3">
-                    <div class="panel-heading"><b>REGISTROS</b></div>
-                    @foreach($dato["Tercero"]["Consolidado"]["ResumenPrincipal"]["Registro"] as $Registro)
+                    <div class="panel-heading text-center"><b>HÁBITO DE PAGO DE OBLIGACIONES ABIERTAS / VIGENTES</b></div>
+                    <div class="panel-heading">Perfil General</div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-2">
-                                <b class="panel-label table-text">PAQUETE INFORMACIÓN:</b>
-                                <div>
-                                    <p class="panel-value">{{ $Registro["PaqueteInformacion"] }}</p>
-                                </div>
+                                <p class="panel-value">Cartera bancaria</p>
+                                <b class="panel-value">Total Sector Financiero</b>
                             </div>
-                            <div class="col-md-2">
-                                <b class="panel-label table-text">NUMERO OBLIGACIONES:</b>
-                                <div>
-                                    <p class="panel-value">{{ $Registro["NumeroObligaciones"] }}</p>
-                                </div>
+                            <div class="col-md-1">
+                                <p class="panel-value">Principal</p>
+                                <p class="panel-value"></p>
                             </div>
-                            <div class="col-md-2">
-                                <b class="panel-label table-text">TOTAL SALDO:</b>
-                                <div>
-                                    <p class="panel-value">{{ $Registro["TotalSaldo"] }}</p>
-                                </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">{{ $field["desacuerdosALaFecha"] }}</p>
+                                <p class="panel-value"></p>
                             </div>
-                            <div class="col-md-2">
-                                <b class="panel-label table-text">PARTICIPACIÓN DEUDA:</b>
-                                <div>
-                                    <p class="panel-value">{{ $Registro["ParticipacionDeuda"] }}</p>
-                                </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">Esta en mora 120</p>
+                                <p class="panel-value"></p>
                             </div>
-                            <div class="col-md-2">
-                                <b class="panel-label table-text">NUMERO OBLIGACIONES DIA:</b>
-                                <div>
-                                    <p class="panel-value">{{ $Registro["NumeroObligacionesDia"] }}</p>
-                                </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">D</p>
+                                <p class="panel-value"></p>
                             </div>
-                            <div class="col-md-2">
-                                <b class="panel-label table-text">SALDO OBLIGACIONES DIA:</b>
-                                <div>
-                                    <p class="panel-value">{{ $Registro["SaldoObligacionesDia"] }}</p>
-                                </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">93,742</p>
+                                <b class="panel-label">93,742</b>
                             </div>
-                            <div class="col-md-2">
-                                <b class="panel-label table-text">CUOTA OBLIGACIONES DIA:</b>
-                                <div>
-                                    <p class="panel-value">{{ $Registro["CuotaObligacionesDia"] }}</p>
-                                </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">94,971</p>
+                                <b class="panel-label">94,971</b>
                             </div>
-
-
-                            <div class="col-md-2">
-                                <b class="panel-label table-text">CANTIDAD OBLIGACIONES MORA:</b>
-                                <div>
-                                    <p class="panel-value">{{ $Registro["CantidadObligacionesMora"] }}</p>
-                                </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">12,069</p>
+                                <b class="panel-label">12,069</b>
                             </div>
-                            <div class="col-md-2">
-                                <b class="panel-label table-text">SALDO OBLIGACIONES MORA:</b>
-                                <div>
-                                    <p class="panel-value">{{ $Registro["SaldoObligacionesMora"] }}</p>
-                                </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">1,543</p>
+                                <b class="panel-label">1,543</b>
                             </div>
-                            <div class="col-md-2">
-                                <b class="panel-label table-text">CUOTA OBLIGACIONES MORA:</b>
-                                <div>
-                                    <p class="panel-value">{{ $Registro["CuotaObligacionesMora"] }}</p>
-                                </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">87.3%</p>
+                                <b class="panel-label">87.3%</b>
                             </div>
-                            <div class="col-md-2">
-                                <b class="panel-label table-text">VALOR MORA:</b>
-                                <div>
-                                    <p class="panel-value">{{ $Registro["ValorMora"] }}</p>
-                                </div>
+                            <div class="col-md-1">
+                                <p class="panel-label">101.3%</p>
+                                <b class="panel-label">101.3%</b>
                             </div>
                         </div>
                     </div>
@@ -230,7 +688,7 @@
                     @endforeach
                 </div>
             </div>
-            @endif
+            
 
             @if (isset($resultado["Score"]["@attributes"]["puntaje"]))
             <div class="col-md-6">
