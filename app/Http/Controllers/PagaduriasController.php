@@ -8,6 +8,7 @@ use App\Datamesseccali;
 use App\Datamesseceduc;
 use App\DatamesSedCauca;
 use App\DatamesSedChoco;
+use App\DatamesSedPopayan;
 use App\DatamesSedQuibdo;
 use App\Pagadurias;
 use Illuminate\Http\Request;
@@ -121,6 +122,7 @@ class PagaduriasController extends Controller
         $datamesseceduc = Datamesseceduc::where('doc', $doc)->first();
         $datamesSedCauca = DatamesSedCauca::where('doc', $doc)->first();
         $datamesSedChoco = DatamesSedChoco::where('doc', $doc)->first();
+        $datamesSedPopayan = DatamesSedPopayan::where('doc', $doc)->first();
         $datamesSedQuibdo = DatamesSedQuibdo::where('doc', $doc)->first();
 
         $results = [
@@ -130,6 +132,7 @@ class PagaduriasController extends Controller
             'datamesseceduc' => $datamesseceduc,
             'datamesSedCauca' => $datamesSedCauca,
             'datamesSedChoco' => $datamesSedChoco,
+            'datamesSedPopayan' => $datamesSedPopayan,
             'datamesSedQuibdo' => $datamesSedQuibdo,
         ];
 

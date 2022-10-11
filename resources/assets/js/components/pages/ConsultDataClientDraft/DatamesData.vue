@@ -37,7 +37,7 @@ export default {
     return {
       labels: [
         { label: 'TIPO DOCUMENTO', field: '' },
-        { label: 'NúMERO DOCUMENTO', field: 'nvinc' },
+        { label: 'NÚMERO DOCUMENTO', field: 'nvinc' },
         { label: 'NOMBRE Y APELLIDO', field: 'nomp' },
         { label: 'FECHA DE NACIMIENTO', field: 'fecnacimient' },
         { label: 'DIRECCIÓN', field: 'dir' },

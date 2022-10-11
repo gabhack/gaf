@@ -75,6 +75,7 @@ export default {
         { label: 'FODE VALLE', value: 'FODE VALLE', key: 'datamesseceduc' },
         { label: 'SED CAUCA', value: 'SEDCAUCA', key: 'datamesSedCauca' },
         { label: 'SED CHOCO', value: 'SEDCHOCO', key: 'datamesSedChoco' },
+        { label: 'SED POPAYAN', value: 'SEDPOPAYAN', key: 'datamesSedPopayan' },
         { label: 'SED QUIBDO', value: 'SEDQUIBDO', key: 'datamesSedQuibdo' }
       ]
     };
@@ -103,12 +104,12 @@ export default {
 
       //   }
       const mensaje = Object.entries(response.data).every(item => item[1] == null);
-      if(mensaje){
+      if (mensaje) {
         // alert("Upss no tenemos data en estos momentos :(");
         toastr.info('No tenemos informacion de este documento en el momento');
       } else {
         this.dataclient.pagadurias = response.data;
-      };
+      }
       this.dataclient.pagadurias = response.data;
 
       this.isLoading = false;
