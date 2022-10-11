@@ -128,14 +128,24 @@ Route::group(["prefix" => "cifin"], function () {
     Route::get('/', 'CifinController@index');
     Route::get('/consultar', 'CifinController@consultar')->name('cifin.consultar');
     Route::get('/consulta', 'CifinController@consulta');
+    Route::post('/consultarAdmin', 'CifinController@consultarAdmin')->name('cifin.consultarAdmin');
+});
 
-    Route::post('/pagarpse', 'PagosController@pagarpse');
-    Route::post('/pay', 'PagosController@pay');
-    Route::post('/payPSE', 'PagosController@payPSE');
-    Route::get('/payPSE', 'PagosController@getPayPSE');
-    Route::get('/edit/{id}', 'PagosController@edit');
-    Route::post('/update/{id}', 'PagosController@update');
-    Route::get('/delete/{id}', 'PagosController@destroy');
+// BBVA
+
+Route::post('/pagarpse', 'PagosController@pagarpse');
+Route::post('/pay', 'PagosController@pay');
+Route::post('/payPSE', 'PagosController@payPSE');
+Route::get('/payPSE', 'PagosController@getPayPSE');
+Route::get('/edit/{id}', 'PagosController@edit');
+Route::post('/update/{id}', 'PagosController@update');
+Route::get('/delete/{id}', 'PagosController@destroy');
+
+//Datacredito
+Route::group(["prefix" => "datacredito"], function () {
+    Route::get('/', 'DataCreditoController@index');
+    Route::get('/consultar', 'DataCreditoController@consultar')->name('datacredito.consultar');
+    Route::get('/consulta', 'DataCreditoController@consulta');
 });
 
 //Daceval
@@ -419,6 +429,7 @@ Route::post('consultaDescuentossedchoco', 'DescuentossedchocoController@consulta
 Route::post('consultaDescuentossedquibdo', 'DescuentossedquibdoController@consultaUnitaria');
 Route::post('consultaDescuentossedpopayan', 'DescuentossedpopayanController@consultaUnitaria');
 Route::post('consultaDescuentossedcauca', 'DescuentossedcaucaController@consultaUnitaria');
+Route::post('consultaDetalledecliente', 'DetalledeclienteController@consultaUnitaria');
 Route::post('consultaDescuentosseccali', 'DescuentosseccaliController@consultaUnitaria');
 Route::post('consultaEmbargosseccali', 'EmbargosseccaliController@consultaUnitaria');
 Route::post('consultaEmbargosseceduc', 'EmbargosseceducController@consultaUnitaria');
@@ -435,6 +446,7 @@ Route::resource('Descuentossedchoco', 'DescuentossedchocoController');
 Route::resource('Descuentossedquibdo', 'DescuentossedquibdoController');
 Route::resource('Descuentossedpopayan', 'DescuentossedpopayanController');
 Route::resource('Descuentossedcauca', 'DescuentossedcaucaController');
+Route::resource('Detalledecliente', 'DetalledeclienteController');
 Route::resource('Descuentosseccali', 'DescuentosseccaliController');
 Route::resource('embargosseccali', 'EmbargosseccaliController');
 Route::resource('embargosseceduc', 'EmbargosseceducController');

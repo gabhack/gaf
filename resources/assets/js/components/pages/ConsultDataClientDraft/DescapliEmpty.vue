@@ -56,11 +56,14 @@ export default {
     couponsAsDescapli() {
       const items = this.coupons.filter(item => item.code !== 'SUEBA' && Number(item.egresos) > 0);
       return items.map(item => {
+              console.log(items);
+
         return {
           nomtercero: item.concept,
           vaplicado: item.egresos
         };
       });
+
     },
     data() {
       const descaplis = this.descapli ? this.descapli : [];

@@ -62,7 +62,7 @@ export default {
   data() {
     return {
       dataclient: {
-        doc: '29992160',
+        doc: '25529289',
         name: 'xavier',
         pagaduria: null,
         pagadurias: null

@@ -71,6 +71,7 @@
             :coupons="coupons"
             :user="user"
           />
+          <Detallecliente :descuentossedcauca="descuentossedcauca" />
         </template>
 
         <template v-if="showOthers">
@@ -157,6 +158,7 @@ import EmbargosSeccali from './EmbargosSeccali';
 import LiquidacionesSeceduc from './LiquidacionesSeceduc';
 import Descuentossedchoco from './Descuentossedchoco';
 import Descuentossedcauca from './Descuentossedcauca';
+import Detallecliente from './Detallecliente';
 import Descuentosseccali from './Descuentosseccali';
 import Descuentossedquibdo from './Descuentossedquibdo';
 //import Descuentossedpopayan from './Descuentossedpopayan';
@@ -187,6 +189,7 @@ export default {
     LiquidacionesSeceduc,
     Descuentossedchoco,
     Descuentossedcauca,
+    Detallecliente,
     Descuentosseccali,
     Descuentossedquibdo,
     Loading
