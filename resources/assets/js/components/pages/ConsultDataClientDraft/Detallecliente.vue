@@ -24,6 +24,7 @@
                                   <label class="label-consulta" for="pad"><b>CUPO APROXIMADO:</b>
                                     <input class="form-control" type="text" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="LIBRE INVERSION" min="1" max="99" disabled>
                                     <input class="form-control" type="text" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="COMPRA CARTERA" min="1" max="99" disabled>
+                                    <input class="form-control" type="text" name="proc_en_contra" id="proc_en_contra" placeholder="Opcional" value="CUOTA" min="1" max="99" disabled>
                                 </label>
                                 </div>
                                 <div class="col-6">
