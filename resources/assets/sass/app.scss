@@ -48,3 +48,43 @@
   top: 12px;
   right: 20px;
 }
+
+.panel-table-title {
+  background-color: #0cedb0;
+  font-weight: 800;
+  font-size: 20px;
+  padding: 8px 12px;
+}
+
+.panel-table-subtitle {
+  background-color: #0cedb0;
+  font-weight: 800;
+  font-size: 18px;
+  padding: 8px 12px !important;
+}
+
+.panel-table {
+  tbody td {
+    border: 1px solid #e3e6f0;
+  }
+
+  thead th {
+    background-color: rgba(#0cedb0, 0.3);
+    font-weight: 800;
+    padding: 8px 12px;
+    text-align: center;
+    border-top: 0 !important;
+    border-bottom: 0 !important;
+  }
+
+  &-foot {
+    border-top: 2px solid #0cedb0;
+
+    td {
+      background-color: rgba(#0cedb0, 0.3);
+      font-weight: 800;
+      padding: 8px 12px !important;
+      text-align: center;
+    }
+  }
+}

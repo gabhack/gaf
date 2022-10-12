@@ -28,7 +28,7 @@
                             <div class="col-2">
                                 <b class="panel-label">IDENTIFICACIÓN:</b>
                                 <div>
-                                    <p class="panel-value">{{  $resultado["JuridicaNacional"]["@attributes"]["identificacion"] }}</p>
+                                    <p class="panel-value">{{ $resultado["JuridicaNacional"]["@attributes"]["identificacion"] }}</p>
                                 </div>
                             </div>
                             @endif
@@ -155,7 +155,7 @@
                                 <div>
                                     <p class="panel-value">-</p>
                                 </div>
-                            </div>                            
+                            </div>
                             <div class="col-2">
                                 <b class="panel-label">TIPO CONTRATO:</b>
                                 <div>
@@ -210,14 +210,14 @@
                 </div>
             </div>
             @endif
-            
+
             <!-- RESUMEN -->
             <div class="col-12">
                 <div class="panel mb-3">
                     <div class="panel-heading mb-1 text-center"><b>RESUMEN</b></div>
                     <div class="panel-heading">Perfil General</div>
                     <div class="panel-body">
-                    @php $field = $resultado["InfoAgregada"]["Resumen"]["Principales"]["@attributes"]; @endphp
+                        @php $field = $resultado["InfoAgregada"]["Resumen"]["Principales"]["@attributes"]; @endphp
                         <div class="row">
                             <div class="col-md-2">
                                 <b class="panel-label">SECTORES</b>
@@ -335,89 +335,89 @@
                             <div class="col-md-1">
                                 <b class="panel-label">JUN 22</b>
                                 <div>
-                                <p class="panel-value">{{ $field["creditosActualesNegativos"] }}</p>
-                                <p class="panel-value">{{ $field["creditosActualesNegativos"] }}</p>
-                                <p class="panel-value">{{ $field["creditosActualesNegativos"] }}</p>
-                                <p class="panel-value">{{ $field["creditosActualesNegativos"] }}</p>
-                                <p class="panel-value">{{ $field["creditosActualesNegativos"] }}</p>
+                                    <p class="panel-value">{{ $field["creditosActualesNegativos"] }}</p>
+                                    <p class="panel-value">{{ $field["creditosActualesNegativos"] }}</p>
+                                    <p class="panel-value">{{ $field["creditosActualesNegativos"] }}</p>
+                                    <p class="panel-value">{{ $field["creditosActualesNegativos"] }}</p>
+                                    <p class="panel-value">{{ $field["creditosActualesNegativos"] }}</p>
                                 </div>
                             </div>
                             <div class="col-md-1">
                                 <b class="panel-label">MAY 22</b>
                                 <div>
-                                <p class="panel-value">{{ $field["cuentasAbiertasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasAbiertasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasAbiertasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasAbiertasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasAbiertasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasAbiertasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasAbiertasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasAbiertasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasAbiertasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasAbiertasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasAbiertasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasAbiertasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasAbiertasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasAbiertasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasAbiertasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasAbiertasAHOCCB"] }}</p>
                                 </div>
                             </div>
                             <div class="col-md-1">
                                 <b class="panel-label">ABR 22</b>
                                 <div>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
                                 </div>
                             </div>
                             <div class="col-md-1">
                                 <b class="panel-label">MAR 22</b>
                                 <div>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
                                 </div>
                             </div>
                             <div class="col-md-1">
                                 <b class="panel-label">FEB 22</b>
                                 <div>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
                                 </div>
                             </div>
                             <div class="col-md-1">
                                 <b class="panel-label">ENE 22</b>
                                 <div>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
                                 </div>
                             </div>
                             <div class="col-md-1">
                                 <b class="panel-label">DEC 21</b>
                                 <div>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
                                 </div>
                             </div>
                             <div class="col-md-1">
                                 <b class="panel-label">NOV 21</b>
                                 <div>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
-                                <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
+                                    <p class="panel-value">{{ $field["cuentasCerradasAHOCCB"] }}</p>
                                 </div>
                             </div>
                         </div>
@@ -825,6 +825,7 @@
                             </div>
                         </div>
                     </div>
+
                     <!-- SECTOR COOPERATIVO -->
                     <div class="panel-heading">Sector Cooperativo</div>
                     <div class="panel-body text-center">
@@ -1899,73 +1900,72 @@
                 </div>
             </div>
 
-
-
             <!-- @if (isset($resultado["CuentaCorriente"]))
             <div class="col-md-12">
                 <div class="panel panel-primary mb-3">
                     <div class="panel-heading"><b>CUENTAS CORRIENTE</b></div>
                     @foreach($resultado["CuentaCorriente"] as $CuentaCorriente )
                     <div class="panel-body">
+                        @php $field = $CuentaCorriente["@attributes"]; @endphp
                         <div class="row">
                             <div class="col-2">
                                 <b class="panel-label table-text">BLOQUEADA:</b>
                                 <div>
-                                    <p class="panel-value">{{ $CuentaCorriente["@attributes"]["bloqueada"] }}</p>
+                                    <p class="panel-value">{{ $field["bloqueada"] }}</p>
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <b class="panel-label table-text">ENTIDAD:</b>
                                 <div>
-                                    <p class="panel-value">{{ $CuentaCorriente["@attributes"]["entidad"] }}</p>
+                                    <p class="panel-value">{{ $field["entidad"] }}</p>
                                 </div>
                             </div>
                             <div class="col-2">
                                 <b class="panel-label table-text">NUMERO:</b>
                                 <div>
-                                    <p class="panel-value">{{ $CuentaCorriente["@attributes"]["numero"] }}</p>
+                                    <p class="panel-value">{{ $field["numero"] }}</p>
                                 </div>
                             </div>
                             <div class="col-2">
                                 <b class="panel-label table-text">FECHA APERTURA:</b>
                                 <div>
-                                    <p class="panel-value">{{ $CuentaCorriente["@attributes"]["fechaApertura"] }}</p>
+                                    <p class="panel-value">{{ $field["fechaApertura"] }}</p>
                                 </div>
                             </div>
                             <div class="col-2">
-                                <b class="panel-label table-text">CALIFICACION:</b>
+                                <b class="panel-label table-text">CALIFICACIÓN:</b>
                                 <div>
-                                    <p class="panel-value">{{ $CuentaCorriente["@attributes"]["calificacion"] }}</p>
+                                    <p class="panel-value">{{ $field["calificacion"] }}</p>
                                 </div>
                             </div>
                             <div class="col-2">
-                                <b class="panel-label table-text">SITUACION TITULAR:</b>
+                                <b class="panel-label table-text">SITUACIÓN TITULAR:</b>
                                 <div>
-                                    <p class="panel-value">{{ $CuentaCorriente["@attributes"]["situacionTitular"] }}</p>
+                                    <p class="panel-value">{{ $field["situacionTitular"] }}</p>
                                 </div>
                             </div>
                             <div class="col-2">
                                 <b class="panel-label table-text">OFICINA:</b>
                                 <div>
-                                    <p class="panel-value">{{ $CuentaCorriente["@attributes"]["oficina"] }}</p>
+                                    <p class="panel-value">{{ $field["oficina"] }}</p>
                                 </div>
                             </div>
                             <div class="col-2">
                                 <b class="panel-label table-text">CIUDAD:</b>
                                 <div>
-                                    <p class="panel-value">{{ $CuentaCorriente["@attributes"]["ciudad"] }}</p>
+                                    <p class="panel-value">{{ $field["ciudad"] }}</p>
                                 </div>
                             </div>
                             <div class="col-2">
-                                <b class="panel-label table-text">IDENTIFICACION:</b>
+                                <b class="panel-label table-text">IDENTIFICACIÓN:</b>
                                 <div>
-                                    <p class="panel-value">{{ $CuentaCorriente["@attributes"]["identificacion"] }}</p>
+                                    <p class="panel-value">{{ $field["identificacion"] }}</p>
                                 </div>
                             </div>
                             <div class="col-2">
                                 <b class="panel-label table-text">SECTOR:</b>
                                 <div>
-                                    <p class="panel-value">{{ $CuentaCorriente["@attributes"]["sector"] }}</p>
+                                    <p class="panel-value">{{ $field["sector"] }}</p>
                                 </div>
                             </div>
                         </div>
@@ -1981,101 +1981,102 @@
                     <div class="panel-heading"><b>CUENTAS CARTERA</b></div>
                     @foreach($resultado["CuentaCartera"] as $CuentaCartera )
                     <div class="panel-body">
+                        @php $field = $CuentaCartera["@attributes"]; @endphp
                         <div class="row">
                             <div class="col-2">
                                 <b class="panel-label table-text">BLOQUEADA:</b>
                                 <div>
-                                    <p class="panel-value">{{ $CuentaCartera["@attributes"]["bloqueada"] }}</p>
+                                    <p class="panel-value">{{ $field["bloqueada"] === "true" ? "Sí" : "NO" }}</p>
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <b class="panel-label table-text">ENTIDAD:</b>
                                 <div>
-                                    <p class="panel-value">{{ $CuentaCartera["@attributes"]["entidad"] }}</p>
+                                    <p class="panel-value">{{ $field["entidad"] }}</p>
                                 </div>
                             </div>
                             <div class="col-2">
-                                <b class="panel-label table-text">NUMERO:</b>
+                                <b class="panel-label table-text">NÚMERO:</b>
                                 <div>
-                                    <p class="panel-value">{{ $CuentaCartera["@attributes"]["numero"] }}</p>
+                                    <p class="panel-value">{{ $field["numero"] }}</p>
                                 </div>
                             </div>
                             <div class="col-2">
                                 <b class="panel-label table-text">FECHA APERTURA:</b>
                                 <div>
-                                    <p class="panel-value">{{ $CuentaCartera["@attributes"]["fechaApertura"] }}</p>
+                                    <p class="panel-value">{{ $field["fechaApertura"] }}</p>
                                 </div>
                             </div>
                             <div class="col-2">
                                 <b class="panel-label table-text">FECHA VENCIMIENTO:</b>
                                 <div>
-                                    <p class="panel-value">{{ $CuentaCartera["@attributes"]["fechaVencimiento"] }}</p>
+                                    <p class="panel-value">{{ $field["fechaVencimiento"] }}</p>
                                 </div>
                             </div>
                             <div class="col-12 text-center">
                                 <b class="panel-label text-center">COMPORTAMIENTO:</b>
                                 <div>
-                                    <p class="panel-value">{{ $CuentaCartera["@attributes"]["comportamiento"] }}</p>
+                                    <p class="panel-value">{{ $field["comportamiento"] }}</p>
                                 </div>
                             </div>
                             <div class="col-2">
                                 <b class="panel-label table-text">FORMA DE PAGO:</b>
                                 <div>
-                                    <p class="panel-value">{{ $CuentaCartera["@attributes"]["formaPago"] }}</p>
+                                    <p class="panel-value">{{ $field["formaPago"] }}</p>
                                 </div>
                             </div>
                             <div class="col-2">
                                 <b class="panel-label table-text">PROBABILIDAD DE INCUMPLIMIENTO:</b>
                                 <div>
-                                    <p class="panel-value">{{ $CuentaCartera["@attributes"]["probabilidadIncumplimiento"] }}</p>
+                                    <p class="panel-value">{{ $field["probabilidadIncumplimiento"] }}</p>
                                 </div>
                             </div>
                             <div class="col-2">
-                                <b class="panel-label table-text">CALIFICACION:</b>
+                                <b class="panel-label table-text">CALIFICACIÓN:</b>
                                 <div>
-                                    <p class="panel-value">{{ $CuentaCartera["@attributes"]["calificacion"] }}</p>
+                                    <p class="panel-value">{{ $field["calificacion"] }}</p>
                                 </div>
                             </div>
                             <div class="col-2">
-                                <b class="panel-label table-text">SITUACION TITULAR:</b>
+                                <b class="panel-label table-text">SITUACIÓN TITULAR:</b>
                                 <div>
-                                    <p class="panel-value">{{ $CuentaCartera["@attributes"]["situacionTitular"] }}</p>
+                                    <p class="panel-value">{{ $field["situacionTitular"] }}</p>
                                 </div>
                             </div>
                             <div class="col-2">
                                 <b class="panel-label table-text">OFICINA:</b>
                                 <div>
-                                    <p class="panel-value">{{ $CuentaCartera["@attributes"]["oficina"] }}</p>
+                                    <p class="panel-value">{{ $field["oficina"] }}</p>
                                 </div>
                             </div>
                             <div class="col-2">
                                 <b class="panel-label table-text">CIUDAD:</b>
                                 <div>
-                                    <p class="panel-value">{{ $CuentaCartera["@attributes"]["ciudad"] }}</p>
+                                    <p class="panel-value">{{ $field["ciudad"] }}</p>
                                 </div>
                             </div>
                             <div class="col-2">
-                                <b class="panel-label table-text">TIPO DE IDENTIFICACION:</b>
+                                <b class="panel-label table-text">TIPO DE IDENTIFICACIÓN:</b>
                                 <div>
-                                    <p class="panel-value">{{ $CuentaCartera["@attributes"]["tipoIdentificacion"] }}</p>
+                                    <p class="panel-value">{{ $field["tipoIdentificacion"] }}</p>
                                 </div>
                             </div>
                             <div class="col-2">
-                                <b class="panel-label table-text">IDENTIFICACION:</b>
+                                <b class="panel-label table-text">IDENTIFICACIÓN:</b>
                                 <div>
-                                    <p class="panel-value">{{ $CuentaCartera["@attributes"]["identificacion"] }}</p>
+                                    <p class="panel-value">{{ $field["identificacion"] }}</p>
                                 </div>
                             </div>
                             <div class="col-2">
                                 <b class="panel-label table-text">SECTOR:</b>
                                 <div>
-                                    <p class="panel-value">{{ $CuentaCartera["@attributes"]["sector"] }}</p>
+                                    <p class="panel-value">{{ $field["sector"] }}</p>
                                 </div>
                             </div>
                             <div class="col-2">
-                                <b class="panel-label table-text">CALIFICACION HD:</b>
+                                <b class="panel-label table-text">CALIFICACIÓN HD:</b>
                                 <div>
-                                    <p class="panel-value">{{ $CuentaCartera["@attributes"]["calificacionHD"] }}</p>
+                                    <p class="panel-value">{{ $field["calificacionHD"] === "true" ? "Sí" : "NO" }}</p>
                                 </div>
                             </div>
                         </div>
@@ -2085,6 +2086,179 @@
             </div>
             @endif -->
 
+            <!-- EVOLUCIÓN DE LA DEUDA -->
+            <div class="col-12">
+                <div class="panel-table-title">
+                    EVOLUCIÓN DE LA DEUDA
+                </div>
+                <table class="table panel-table">
+                    <thead>
+                        <tr>
+                            <th>Tipo Cuenta</th>
+                            <th>Valores</th>
+                            <th>Trimestre 2022/09</th>
+                            <th>Trimestre 2022/06</th>
+                            <th>Trimestre 2022/03</th>
+                            <th>Trimestre 2021/12</th>
+                            <th>Trimestre 2021/09</th>
+                        </tr>
+                    </thead>
+                    <!-- Sector Financiero -->
+                    <tbody>
+                        <tr>
+                            <td colspan="7" class="panel-table-subtitle">
+                                Sector Financiero
+                            </td>
+                        </tr>
+                        <tr>
+                            <td rowspan="7" class="align-middle">
+                                Cartera bancaria
+                            </td>
+                            <td>Num</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td>Vlr o Cupo Inicial</td>
+                            <td>93,742</td>
+                            <td>93,742</td>
+                            <td>93,742</td>
+                            <td>93,742</td>
+                            <td>174,742</td>
+                        </tr>
+                        <tr>
+                            <td>Saldo</td>
+                            <td>94,971</td>
+                            <td>95,551</td>
+                            <td>95,551</td>
+                            <td>95,551</td>
+                            <td>93,921</td>
+                        </tr>
+                        <tr>
+                            <td>Saldo en Mora</td>
+                            <td>12,069</td>
+                            <td>13,015</td>
+                            <td>8,118</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>Valor Cuota</td>
+                            <td>1,543</td>
+                            <td>1,543</td>
+                            <td>1,349</td>
+                            <td>1,349</td>
+                            <td>1,349</td>
+                        </tr>
+                        <tr>
+                            <td>% Deuda</td>
+                            <td>101.3%</td>
+                            <td>101.9%</td>
+                            <td>101.9%</td>
+                            <td>101.9%</td>
+                            <td>53.7%</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                &lt; Calificación
+                            </td>
+                            <td>D</td>
+                            <td>D</td>
+                            <td>D</td>
+                            <td>A</td>
+                            <td>AA</td>
+                        </tr>
+                        <tr class="panel-table-foot">
+                            <td>Total</td>
+                            <td>Saldo Financiero </td>
+                            <td>94,971</td>
+                            <td>95,551</td>
+                            <td>95,551</td>
+                            <td>95,551</td>
+                            <td>93,921</td>
+                        </tr>
+                        <!-- Sector Financiero -->
+                        <tr>
+                            <td colspan="7" class="panel-table-subtitle">
+                                Sector Financiero
+                            </td>
+                        </tr>
+                        <tr>
+                            <td rowspan="7" class="align-middle">
+                                Cartera bancaria
+                            </td>
+                            <td>Num</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td>Vlr o Cupo Inicial</td>
+                            <td>93,742</td>
+                            <td>93,742</td>
+                            <td>93,742</td>
+                            <td>93,742</td>
+                            <td>174,742</td>
+                        </tr>
+                        <tr>
+                            <td>Saldo</td>
+                            <td>94,971</td>
+                            <td>95,551</td>
+                            <td>95,551</td>
+                            <td>95,551</td>
+                            <td>93,921</td>
+                        </tr>
+                        <tr>
+                            <td>Saldo en Mora</td>
+                            <td>12,069</td>
+                            <td>13,015</td>
+                            <td>8,118</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>Valor Cuota</td>
+                            <td>1,543</td>
+                            <td>1,543</td>
+                            <td>1,349</td>
+                            <td>1,349</td>
+                            <td>1,349</td>
+                        </tr>
+                        <tr>
+                            <td>% Deuda</td>
+                            <td>101.3%</td>
+                            <td>101.9%</td>
+                            <td>101.9%</td>
+                            <td>101.9%</td>
+                            <td>53.7%</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                &lt; Calificación
+                            </td>
+                            <td>D</td>
+                            <td>D</td>
+                            <td>D</td>
+                            <td>A</td>
+                            <td>AA</td>
+                        </tr>
+                        <tr class="panel-table-foot">
+                            <td>Total</td>
+                            <td>Saldo Financiero </td>
+                            <td>94,971</td>
+                            <td>95,551</td>
+                            <td>95,551</td>
+                            <td>95,551</td>
+                            <td>93,921</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         @else
         <div class="col-md-12">
