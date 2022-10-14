@@ -226,7 +226,7 @@
                         </tr>
                         <tr>
                             <td>
-                            ANTIGUEDAD DESDE
+                                ANTIGUEDAD DESDE
                             </td>
                             <td>1997-12-01</td>
                             <td>-</td>
@@ -236,7 +236,6 @@
                             <td>1997-12-01</td>
                             <td>-</td>
                         </tr>
-                        
                     </tbody>
                 </table>
                 <!-- Tendencia de endeudamiento -->
@@ -563,7 +562,7 @@
                                 Sector Financiero
                             </td>
                         </tr>
-                        <tr class="panel-table-foot text-center" >
+                        <tr class="panel-table-foot text-center">
                             <td>Entidad Informante</td>
                             <td>Tipo Cuenta</td>
                             <td>Num cta 9 digitos</td>
@@ -593,7 +592,7 @@
                 </table>
                 <table class="table panel-table mb-0">
                     <tbody>
-                        <tr class="panel-table-foot text-center" >
+                        <tr class="panel-table-foot text-center">
                             <td>Desacuerdo con la inform</td>
                             <td>Estado del Titular</td>
                             <td>Marca/Clase</td>
@@ -635,7 +634,7 @@
                                 Sector Cooperativo
                             </td>
                         </tr>
-                        <tr class="panel-table-foot text-center" >
+                        <tr class="panel-table-foot text-center">
                             <td>Entidad Informante</td>
                             <td>Tipo Cuenta</td>
                             <td>Num cta 9 digitos</td>
@@ -665,7 +664,7 @@
                 </table>
                 <table class="table panel-table mb-0">
                     <tbody>
-                        <tr class="panel-table-foot text-center" >
+                        <tr class="panel-table-foot text-center">
                             <td>Desacuerdo con la inform</td>
                             <td>Estado del Titular</td>
                             <td>Marca/Clase</td>
@@ -707,7 +706,7 @@
                                 Sector Real
                             </td>
                         </tr>
-                        <tr class="panel-table-foot text-center" >
+                        <tr class="panel-table-foot text-center">
                             <td>Entidad Informante</td>
                             <td>Tipo Cuenta</td>
                             <td>Num cta 9 digitos</td>
@@ -737,7 +736,7 @@
                 </table>
                 <table class="table panel-table mb-0">
                     <tbody>
-                        <tr class="panel-table-foot text-center" >
+                        <tr class="panel-table-foot text-center">
                             <td>Desacuerdo con la inform</td>
                             <td>Estado del Titular</td>
                             <td>Marca/Clase</td>
@@ -779,7 +778,7 @@
                                 Sector Telcos
                             </td>
                         </tr>
-                        <tr class="panel-table-foot text-center" >
+                        <tr class="panel-table-foot text-center">
                             <td>Entidad Informante</td>
                             <td>Tipo Cuenta</td>
                             <td>Num cta 9 digitos</td>
@@ -809,7 +808,7 @@
                 </table>
                 <table class="table panel-table">
                     <tbody>
-                        <tr class="panel-table-foot text-center" >
+                        <tr class="panel-table-foot text-center">
                             <td>Desacuerdo con la inform</td>
                             <td>Estado del Titular</td>
                             <td>Marca/Clase</td>
@@ -858,7 +857,7 @@
                                 Sector Financiero
                             </td>
                         </tr>
-                        <tr class="panel-table-foot text-center" >
+                        <tr class="panel-table-foot text-center">
                             <td>Entidad Informante</td>
                             <td>Tipo Cuenta</td>
                             <td>Estado de la Obligacion</td>
@@ -928,7 +927,7 @@
                                 Sector Cooperativo
                             </td>
                         </tr>
-                        <tr class="panel-table-foot text-center" >
+                        <tr class="panel-table-foot text-center">
                             <td>Entidad Informante</td>
                             <td>Tipo Cuenta</td>
                             <td>Estado de la Obligacion</td>
@@ -984,7 +983,7 @@
                                 Sector Real
                             </td>
                         </tr>
-                        <tr class="panel-table-foot text-center" >
+                        <tr class="panel-table-foot text-center">
                             <td>Entidad Informante</td>
                             <td>Tipo Cuenta</td>
                             <td>Estado de la Obligacion</td>
@@ -1085,7 +1084,7 @@
                                 Sector Telcos
                             </td>
                         </tr>
-                        <tr class="panel-table-foot text-center" >
+                        <tr class="panel-table-foot text-center">
                             <td>Entidad Informante</td>
                             <td>Tipo Cuenta</td>
                             <td>Estado de la Obligacion</td>
@@ -1336,7 +1335,7 @@
             @endif -->
 
             <!-- EVOLUCIÓN DE LA DEUDA -->
-            <div class="col-12">
+            <div class="col-12 mb-3">
                 <div class="panel-table-title">
                     EVOLUCIÓN DE LA DEUDA
                 </div>
@@ -1429,30 +1428,30 @@
                             <td>95,551</td>
                             <td>93,921</td>
                         </tr>
-                        <!-- Sector Financiero -->
+                        <!-- Sector Cooperativo -->
                         <tr>
                             <td colspan="7" class="panel-table-subtitle">
-                                Sector Financiero
+                                Sector Cooperativo
                             </td>
                         </tr>
                         <tr>
                             <td rowspan="7" class="align-middle">
-                                Cartera bancaria
+                                Cartera Libranza
                             </td>
                             <td>Num</td>
                             <td>1</td>
                             <td>1</td>
                             <td>1</td>
-                            <td>1</td>
-                            <td>2</td>
+                            <td>0</td>
+                            <td>0</td>
                         </tr>
                         <tr>
                             <td>Vlr o Cupo Inicial</td>
-                            <td>93,742</td>
-                            <td>93,742</td>
-                            <td>93,742</td>
-                            <td>93,742</td>
-                            <td>174,742</td>
+                            <td>9,871</td>
+                            <td>9,871</td>
+                            <td>9,871</td>
+                            <td>9,871</td>
+                            <td>0</td>
                         </tr>
                         <tr>
                             <td>Saldo</td>
@@ -1498,7 +1497,159 @@
                         </tr>
                         <tr class="panel-table-foot">
                             <td>Total</td>
-                            <td>Saldo Financiero </td>
+                            <td>Saldo Cooperativo</td>
+                            <td>94,971</td>
+                            <td>95,551</td>
+                            <td>95,551</td>
+                            <td>95,551</td>
+                            <td>93,921</td>
+                        </tr>
+                        <!-- Sector Real -->
+                        <tr>
+                            <td colspan="7" class="panel-table-subtitle">
+                                Sector Real
+                            </td>
+                        </tr>
+                        <tr>
+                            <td rowspan="7" class="align-middle">
+                                Servicios financieros
+                            </td>
+                            <td>Num</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>Vlr o Cupo Inicial</td>
+                            <td>9,871</td>
+                            <td>9,871</td>
+                            <td>9,871</td>
+                            <td>9,871</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>Saldo</td>
+                            <td>94,971</td>
+                            <td>95,551</td>
+                            <td>95,551</td>
+                            <td>95,551</td>
+                            <td>93,921</td>
+                        </tr>
+                        <tr>
+                            <td>Saldo en Mora</td>
+                            <td>12,069</td>
+                            <td>13,015</td>
+                            <td>8,118</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>Valor Cuota</td>
+                            <td>1,543</td>
+                            <td>1,543</td>
+                            <td>1,349</td>
+                            <td>1,349</td>
+                            <td>1,349</td>
+                        </tr>
+                        <tr>
+                            <td>% Deuda</td>
+                            <td>101.3%</td>
+                            <td>101.9%</td>
+                            <td>101.9%</td>
+                            <td>101.9%</td>
+                            <td>53.7%</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                &lt; Calificación
+                            </td>
+                            <td>D</td>
+                            <td>D</td>
+                            <td>D</td>
+                            <td>A</td>
+                            <td>AA</td>
+                        </tr>
+                        <tr class="panel-table-foot">
+                            <td>Total</td>
+                            <td>Saldo Real </td>
+                            <td>94,971</td>
+                            <td>95,551</td>
+                            <td>95,551</td>
+                            <td>95,551</td>
+                            <td>93,921</td>
+                        </tr>
+                        <!-- Sector Telcos -->
+                        <tr>
+                            <td colspan="7" class="panel-table-subtitle">
+                                Sector Telcos
+                            </td>
+                        </tr>
+                        <tr>
+                            <td rowspan="7" class="align-middle">
+                                Cartera telefonía celular
+                            </td>
+                            <td>Num</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>Vlr o Cupo Inicial</td>
+                            <td>9,871</td>
+                            <td>9,871</td>
+                            <td>9,871</td>
+                            <td>9,871</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>Saldo</td>
+                            <td>94,971</td>
+                            <td>95,551</td>
+                            <td>95,551</td>
+                            <td>95,551</td>
+                            <td>93,921</td>
+                        </tr>
+                        <tr>
+                            <td>Saldo en Mora</td>
+                            <td>12,069</td>
+                            <td>13,015</td>
+                            <td>8,118</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>Valor Cuota</td>
+                            <td>1,543</td>
+                            <td>1,543</td>
+                            <td>1,349</td>
+                            <td>1,349</td>
+                            <td>1,349</td>
+                        </tr>
+                        <tr>
+                            <td>% Deuda</td>
+                            <td>101.3%</td>
+                            <td>101.9%</td>
+                            <td>101.9%</td>
+                            <td>101.9%</td>
+                            <td>53.7%</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                &lt; Calificación
+                            </td>
+                            <td>D</td>
+                            <td>D</td>
+                            <td>D</td>
+                            <td>A</td>
+                            <td>AA</td>
+                        </tr>
+                        <tr class="panel-table-foot">
+                            <td>Total</td>
+                            <td>Saldo Telcos </td>
                             <td>94,971</td>
                             <td>95,551</td>
                             <td>95,551</td>
@@ -1507,6 +1658,1151 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+
+            <!-- DEMANDAS JUDICIALES -->
+            <div class="col-12 mb-3">
+                <div class="panel-table-title">
+                    <span>DEMANDAS JUDICIALES</span>
+                    <span>9QQ4586</span>
+                </div>
+                <!-- Procesos Judiciales -->
+                <table class="table panel-table">
+                    <thead>
+                        <tr>
+                            <th class="text-left">Procesos Judiciales</th>
+                            <th>2022</th>
+                            <th>2021</th>
+                            <th>2020</th>
+                            <th>2019</th>
+                            <th>2018</th>
+                            <th>2017</th>
+                            <th>Años Anteriores</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th class="text-left">Demandado</th>
+                            <td>1</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <th class="text-left">Demandante</th>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table class="table panel-table">
+                    <thead>
+                        <tr>
+                            <th colspan="12" class="subtitle">
+                                Procesos Judiciales como Demandado
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>Fecha – última novedad procesal</th>
+                            <th>Nombre del Demandante</th>
+                            <th>Nit Demandante</th>
+                            <th>Jurisdicción</th>
+                            <th>Tipo de Juzgado</th>
+                            <th>Tipo de Proceso</th>
+                            <th>Fecha de Inicio del Proceso</th>
+                            <th>Rango de Pretensiones</th>
+                            <th>Instancia del Proceso</th>
+                            <th>Estado del Proceso</th>
+                            <th>Tiene Garantías</th>
+                            <th>Tipo de Garantías</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>11/07/2022</td>
+                            <td>COOPERATIVA DE CREDITO Y SERVICIO COMUNIDAD SIGLA COOMUNIDAD</td>
+                            <td>804015582</td>
+                            <td>Cali</td>
+                            <td>Municipal Civil</td>
+                            <td>Ejecución Singular</td>
+                            <td>01/06/2022</td>
+                            <td>hasta 40 SMLMV</td>
+                            <td>1° Instancia</td>
+                            <td>Activo</td>
+                            <td>NO</td>
+                            <td>-</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table panel-table">
+                    <thead>
+                        <tr>
+                            <th class="subtitle">
+                                Procesos Judiciales como Demandante
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>No existe información Judicial para esta CC como Demandante</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- HISTÓRICO DE CONSULTAS -->
+            <div class="col-12 mb-3">
+                <div class="panel-table-title">
+                    <span>HISTÓRICO DE CONSULTAS</span>
+                    <span>9QQ4586</span>
+                </div>
+                <table class="table panel-table mb-2">
+                    <thead>
+                        <tr>
+                            <th>Fecha Ult. Consulta</th>
+                            <th>Consultante</th>
+                            <th>No. de Consultas mes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>12/07/2022</td>
+                            <td>CK COMERCIALIZ ADORA</td>
+                            <td>01</td>
+                        </tr>
+                        <tr>
+                            <td>12/07/2022</td>
+                            <td>KREDIT PLUS SAS</td>
+                            <td>01</td>
+                        </tr>
+                        <tr>
+                            <td>12/07/2022</td>
+                            <td>EXCELCREDIT SA</td>
+                            <td>01</td>
+                        </tr>
+                        <tr>
+                            <td>12/07/2022</td>
+                            <td>LABOR FINAN CIERA</td>
+                            <td>01</td>
+                        </tr>
+                        <tr>
+                            <td>12/07/2022</td>
+                            <td>KREDIT PLUS SAS</td>
+                            <td>01</td>
+                        </tr>
+                        <tr>
+                            <td>12/07/2022</td>
+                            <td>FINANCIERA JURISCOOP S.A</td>
+                            <td>01</td>
+                        </tr>
+                        <tr>
+                            <td>12/07/2022</td>
+                            <td>BCO AVVILLAS COMERCIAL</td>
+                            <td>01</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>
+                    <small>*CONSULTAS LOTE: corresponden a consultas realizadas por las Entidades para la supervisión y control del riesgo crediticio.</small>
+                </p>
+            </div>
+
+            <!-- ENDEUDAMIENTO GLOBAL CLASIFICADO -->
+            <div class="col-12 mb-3">
+                <div class="panel-table-title">
+                    <span>ENDEUDAMIENTO GLOBAL CLASIFICADO</span>
+                    <span>9QQ4586</span>
+                </div>
+                <table class="table panel-table">
+                    <!-- Sector Financiero -->
+                    <tr>
+                        <th colspan="17" class="subtitle-max">
+                            TRIMESTRE 2021/09
+                        </th>
+                    </tr>
+                    <tr>
+                        <th colspan="17" class="subtitle">
+                            Sector Financiero
+                        </th>
+                    </tr>
+                    <tr>
+                        <th rowspan="2">Entidad Informante</th>
+                        <th rowspan="2">Calf</th>
+                        <th rowspan="2">Num</th>
+                        <th rowspan="2">Saldo total</th>
+                        <th colspan="2">Comercial</th>
+                        <th colspan="2">Hipotecario</th>
+                        <th colspan="2">Consumo y Tarjeta de Crédito</th>
+                        <th colspan="2">Microcrédito</th>
+                        <th colspan="3">Garantías</th>
+                        <th rowspan="2">Moneda</th>
+                        <th rowspan="2">Fuente</th>
+                    </tr>
+                    <tr>
+                        <th>Nro</th>
+                        <th>Miles $</th>
+                        <th>Nro</th>
+                        <th>Miles $</th>
+                        <th>Nro</th>
+                        <th>Miles $</th>
+                        <th>Nro</th>
+                        <th>Miles $</th>
+                        <th>Tipo</th>
+                        <th>Fecha Avalúo</th>
+                        <th>Valor</th>
+                    </tr>
+                    <tr>
+                        <td>AVVILLAS - BC</td>
+                        <td>A</td>
+                        <td>1</td>
+                        <td>$95,295</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>1</td>
+                        <td>$95,295</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>SIN GAR</td>
+                        <td>-</td>
+                        <td>$0</td>
+                        <td>ML</td>
+                        <td>S</td>
+                    </tr>
+                    <tr class="panel-table-foot">
+                        <td>TOTAL</td>
+                        <td colspan="2">1</td>
+                        <td>$95,295</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>1</td>
+                        <td>$95,295</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <!-- Sector Real -->
+                    <tr>
+                        <th colspan="17" class="subtitle">
+                            Sector Real
+                        </th>
+                    </tr>
+                    <tr>
+                        <th rowspan="2">Entidad Informante</th>
+                        <th rowspan="2">Calf</th>
+                        <th rowspan="2">Num</th>
+                        <th rowspan="2">Saldo total</th>
+                        <th colspan="2">Comercial</th>
+                        <th colspan="2">Hipotecario</th>
+                        <th colspan="2">Consumo y Tarjeta de Crédito</th>
+                        <th colspan="2">Microcrédito</th>
+                        <th colspan="3">Garantías</th>
+                        <th rowspan="2">Moneda</th>
+                        <th rowspan="2">Fuente</th>
+                    </tr>
+                    <tr>
+                        <th>Nro</th>
+                        <th>Miles $</th>
+                        <th>Nro</th>
+                        <th>Miles $</th>
+                        <th>Nro</th>
+                        <th>Miles $</th>
+                        <th>Nro</th>
+                        <th>Miles $</th>
+                        <th>Tipo</th>
+                        <th>Fecha Avalúo</th>
+                        <th>Valor</th>
+                    </tr>
+                    <tr>
+                        <td>CREDIVALORES - CREDISERVICIOS</td>
+                        <td>A</td>
+                        <td>1</td>
+                        <td>$95,295</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>1</td>
+                        <td>$95,295</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>SIN GAR</td>
+                        <td>-</td>
+                        <td>$0</td>
+                        <td>ML</td>
+                        <td>S</td>
+                    </tr>
+                    <tr class="panel-table-foot">
+                        <td>TOTAL</td>
+                        <td colspan="2">1</td>
+                        <td>$95,295</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>1</td>
+                        <td>$95,295</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <!-- Sector Telcos -->
+                    <tr>
+                        <th colspan="17" class="subtitle">
+                            Sector Telcos
+                        </th>
+                    </tr>
+                    <tr>
+                        <th rowspan="2">Entidad Informante</th>
+                        <th rowspan="2">Calf</th>
+                        <th rowspan="2">Num</th>
+                        <th rowspan="2">Saldo total</th>
+                        <th colspan="2">Comercial</th>
+                        <th colspan="2">Hipotecario</th>
+                        <th colspan="2">Consumo y Tarjeta de Crédito</th>
+                        <th colspan="2">Microcrédito</th>
+                        <th colspan="3">Garantías</th>
+                        <th rowspan="2">Moneda</th>
+                        <th rowspan="2">Fuente</th>
+                    </tr>
+                    <tr>
+                        <th>Nro</th>
+                        <th>Miles $</th>
+                        <th>Nro</th>
+                        <th>Miles $</th>
+                        <th>Nro</th>
+                        <th>Miles $</th>
+                        <th>Nro</th>
+                        <th>Miles $</th>
+                        <th>Tipo</th>
+                        <th>Fecha Avalúo</th>
+                        <th>Valor</th>
+                    </tr>
+                    <tr>
+                        <td>CLARO - SERVICIO MOVIL</td>
+                        <td>A</td>
+                        <td>1</td>
+                        <td>$95,295</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>1</td>
+                        <td>$95,295</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>SIN GAR</td>
+                        <td>-</td>
+                        <td>$0</td>
+                        <td>ML</td>
+                        <td>S</td>
+                    </tr>
+                    <tr class="panel-table-foot">
+                        <td>TOTAL</td>
+                        <td colspan="2">1</td>
+                        <td>$95,295</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>1</td>
+                        <td>$95,295</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- RESUMEN ENDEUDAMIENTO GLOBAL -->
+            <div class="col-12 mb-3">
+                <div class="panel-table-title">
+                    <span>RESUMEN ENDEUDAMIENTO GLOBAL</span>
+                    <span>9QQ4586</span>
+                </div>
+                <table class="table panel-table">
+                    <tr>
+                        <th rowspan="2">Fecha Corte</th>
+                        <th rowspan="2">Sector</th>
+                        <th colspan="2">Comercial</th>
+                        <th colspan="2">Hipotecario</th>
+                        <th colspan="2">Consumo y Tarjeta de Crédito</th>
+                        <th colspan="2">Microcrédito</th>
+                        <th rowspan="2">% Participación</th>
+                    </tr>
+                    <tr>
+                        <th>Nro</th>
+                        <th>Miles $</th>
+                        <th>Nro</th>
+                        <th>Miles $</th>
+                        <th>Nro</th>
+                        <th>Miles $</th>
+                        <th>Nro</th>
+                        <th>Miles $</th>
+                    </tr>
+                    <tr>
+                        <td rowspan="4">2021/09</td>
+                        <td>Financiero</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>1</td>
+                        <td>$95,295</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>91.4%</td>
+                    </tr>
+                    <tr>
+                        <td>Cooperativo</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>1</td>
+                        <td>$95,295</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>91.4%</td>
+                    </tr>
+                    <tr>
+                        <td>Real</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>1</td>
+                        <td>$95,295</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>91.4%</td>
+                    </tr>
+                    <tr>
+                        <td>Telcos</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>1</td>
+                        <td>$95,295</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>91.4%</td>
+                    </tr>
+                    <tr class="panel-table-foot">
+                        <td></td>
+                        <td>Total</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>1</td>
+                        <td>$95,295</td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td>100%</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- RECONOCER+ -->
+            <div class="col-12 mb-3">
+                <div class="panel-table-title">
+                    <span>RECONOCER+</span>
+                    <span>9QQ4586</span>
+                </div>
+                <table class="table panel-table">
+                    <tr>
+                        <th>#</th>
+                        <th>Dirección</th>
+                        <th>Estrato</th>
+                        <th>Tipo</th>
+                        <th>Zona</th>
+                        <th>Ciudad</th>
+                        <th>Departamento</th>
+                        <th>Reportado</th>
+                        <th>Ultimo Reporte</th>
+                        <th># de Reportes</th>
+                        <th># de Entidades</th>
+                        <th>Fuente</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>KR 15 9 18 LA LIBERTAD</td>
+                        <td>-</td>
+                        <td>RES - LAB - CRR</td>
+                        <td>URB</td>
+                        <td>PRADERA</td>
+                        <td>VALLE DEL CAUCA</td>
+                        <td>FEB - 2018</td>
+                        <td>JUN - 2022</td>
+                        <td>21</td>
+                        <td>9</td>
+                        <td>SUS</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>KR 15 9 18 LA LIBERTAD</td>
+                        <td>-</td>
+                        <td>RES - LAB - CRR</td>
+                        <td>URB</td>
+                        <td>PRADERA</td>
+                        <td>VALLE DEL CAUCA</td>
+                        <td>FEB - 2018</td>
+                        <td>JUN - 2022</td>
+                        <td>21</td>
+                        <td>9</td>
+                        <td>SUS</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>KR 15 9 18 LA LIBERTAD</td>
+                        <td>-</td>
+                        <td>RES - LAB - CRR</td>
+                        <td>URB</td>
+                        <td>PRADERA</td>
+                        <td>VALLE DEL CAUCA</td>
+                        <td>FEB - 2018</td>
+                        <td>JUN - 2022</td>
+                        <td>21</td>
+                        <td>9</td>
+                        <td>SUS</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>KR 15 9 18 LA LIBERTAD</td>
+                        <td>-</td>
+                        <td>RES - LAB - CRR</td>
+                        <td>URB</td>
+                        <td>PRADERA</td>
+                        <td>VALLE DEL CAUCA</td>
+                        <td>FEB - 2018</td>
+                        <td>JUN - 2022</td>
+                        <td>21</td>
+                        <td>9</td>
+                        <td>SUS</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>KR 15 9 18 LA LIBERTAD</td>
+                        <td>-</td>
+                        <td>RES - LAB - CRR</td>
+                        <td>URB</td>
+                        <td>PRADERA</td>
+                        <td>VALLE DEL CAUCA</td>
+                        <td>FEB - 2018</td>
+                        <td>JUN - 2022</td>
+                        <td>21</td>
+                        <td>9</td>
+                        <td>SUS</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>KR 15 9 18 LA LIBERTAD</td>
+                        <td>-</td>
+                        <td>RES - LAB - CRR</td>
+                        <td>URB</td>
+                        <td>PRADERA</td>
+                        <td>VALLE DEL CAUCA</td>
+                        <td>FEB - 2018</td>
+                        <td>JUN - 2022</td>
+                        <td>21</td>
+                        <td>9</td>
+                        <td>SUS</td>
+                    </tr>
+                </table>
+
+                <table class="table panel-table">
+                    <tr>
+                        <th colspan="25" class="subtitle">
+                            Vector de Direcciones
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Ago 20</th>
+                        <th>Sep 20</th>
+                        <th>Oct 20</th>
+                        <th>Nov 20</th>
+                        <th>Dic 20</th>
+                        <th>Ene 21</th>
+                        <th>Feb 21</th>
+                        <th>Mar 21</th>
+                        <th>Abr 21</th>
+                        <th>May 21</th>
+                        <th>Jun 21</th>
+                        <th>Jul 21</th>
+                        <th>Ago 21</th>
+                        <th>Sep 21</th>
+                        <th>Oct 21</th>
+                        <th>Nov 21</th>
+                        <th>Dic 21</th>
+                        <th>Ene 22</th>
+                        <th>Feb 22</th>
+                        <th>Mar 22</th>
+                        <th>Abr 22</th>
+                        <th>May 22</th>
+                        <th>Jun 22</th>
+                        <th>Jul 22</th>
+                    </tr>
+                    <tr>
+                        <td>RES</td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>LAB</td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-warning">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-warning">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>CRR</td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-icon bg-success">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+                <table class="table panel-table">
+                    <tr>
+                        <th>#</th>
+                        <th>Teléfono Fijo</th>
+                        <th>Tipo</th>
+                        <th>Ciudad</th>
+                        <th>Departamento</th>
+                        <th>Reportado Desde</th>
+                        <th>Ultimo Reporte</th>
+                        <th># de Reportes</th>
+                        <th># de Entidades F</th>
+                        <th>Fuente</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>2642106 </td>
+                        <td>LAB</td>
+                        <td>PRADERA</td>
+                        <td>VALLE DEL CAUCA</td>
+                        <td>AGO - 2019</td>
+                        <td>JUL - 2022</td>
+                        <td>4</td>
+                        <td>2</td>
+                        <td>SUS</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>2642106 </td>
+                        <td>LAB</td>
+                        <td>PRADERA</td>
+                        <td>VALLE DEL CAUCA</td>
+                        <td>AGO - 2019</td>
+                        <td>JUL - 2022</td>
+                        <td>4</td>
+                        <td>2</td>
+                        <td>SUS</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>2642106 </td>
+                        <td>LAB</td>
+                        <td>PRADERA</td>
+                        <td>VALLE DEL CAUCA</td>
+                        <td>AGO - 2019</td>
+                        <td>JUL - 2022</td>
+                        <td>4</td>
+                        <td>2</td>
+                        <td>SUS</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>2642106 </td>
+                        <td>LAB</td>
+                        <td>PRADERA</td>
+                        <td>VALLE DEL CAUCA</td>
+                        <td>AGO - 2019</td>
+                        <td>JUL - 2022</td>
+                        <td>4</td>
+                        <td>2</td>
+                        <td>SUS</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>2642106 </td>
+                        <td>LAB</td>
+                        <td>PRADERA</td>
+                        <td>VALLE DEL CAUCA</td>
+                        <td>AGO - 2019</td>
+                        <td>JUL - 2022</td>
+                        <td>4</td>
+                        <td>2</td>
+                        <td>SUS</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>2642106 </td>
+                        <td>LAB</td>
+                        <td>PRADERA</td>
+                        <td>VALLE DEL CAUCA</td>
+                        <td>AGO - 2019</td>
+                        <td>JUL - 2022</td>
+                        <td>4</td>
+                        <td>2</td>
+                        <td>SUS</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>2642106</td>
+                        <td>LAB</td>
+                        <td>PRADERA</td>
+                        <td>VALLE DEL CAUCA</td>
+                        <td>AGO - 2019</td>
+                        <td>JUL - 2022</td>
+                        <td>4</td>
+                        <td>2</td>
+                        <td>SUS</td>
+                    </tr>
+                </table>
+
+                <table class="table panel-table">
+                    <tr>
+                        <th>#</th>
+                        <th>Celular</th>
+                        <th>Reportado Por</th>
+                        <th>Reportado Desde</th>
+                        <th>Último Reporte</th>
+                        <th># de Reportes</th>
+                        <th># de Entidades</th>
+                        <th>Fuente</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>3117422598</td>
+                        <td>-</td>
+                        <td>FEB - 2018</td>
+                        <td>JUL - 2022</td>
+                        <td>14</td>
+                        <td>8</td>
+                        <td>SUS</td>
+                    </tr>
+                    <tr>
+                        <th>#</th>
+                        <th colspan="2">Correo Electrónico</th>
+                        <th>Reportado Por</th>
+                        <th>Reportado Desde</th>
+                        <th>Último Reporte</th>
+                        <th># de Reportes</th>
+                        <th>Fuente</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td colspan="2">evecaor@hotmail.com</td>
+                        <td>-</td>
+                        <td>NOV - 2008</td>
+                        <td>JUN - 2022</td>
+                        <td>8</td>
+                        <td>SUS</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td colspan="2">evecaor@hotmail.com</td>
+                        <td>-</td>
+                        <td>NOV - 2008</td>
+                        <td>JUN - 2022</td>
+                        <td>8</td>
+                        <td>SUS</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td colspan="2">evecaor@hotmail.com</td>
+                        <td>-</td>
+                        <td>NOV - 2008</td>
+                        <td>JUN - 2022</td>
+                        <td>8</td>
+                        <td>SUS</td>
+                    </tr>
+                </table>
+                <div class="panel-table-title">
+                    Fin-consulta Tipo 1. La consulta fue efectiva.
+                </div>
             </div>
         </div>
         @else
