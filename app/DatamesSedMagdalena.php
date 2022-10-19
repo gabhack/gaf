@@ -1,0 +1,27 @@
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class DatamesSedMagdalena extends Model
+{
+    protected $connection = 'pgsql';
+
+    protected $table = 'datamesmagdalena';
+
+    protected $guarded = ['id'];
+
+    protected $fillable = [
+      'codempleado',
+      'empleado',
+      'cargo_codigo',
+      'cargo',
+      'basico',
+      'nivelcontratacion',
+      'ciudad',
+      'ie_sede_area',
+      'telefono',
+      'email',
+    ];
+}

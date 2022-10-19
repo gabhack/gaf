@@ -32,19 +32,19 @@
 import { mapState } from 'vuex';
 
 export default {
-  name: 'DatamesData',
+  name: 'DatamesSedMagdalena',
   data() {
     return {
       labels: [
         { label: 'TIPO DOCUMENTO', field: '' },
-        { label: 'NÚMERO DOCUMENTO', field: 'nvinc' },
-        { label: 'NOMBRE Y APELLIDO', field: 'nomp' },
-        { label: 'FECHA DE NACIMIENTO', field: 'fecnacimient' },
-        { label: 'DIRECCIÓN', field: 'dir' },
+        { label: 'NÚMERO DOCUMENTO', field: 'codempleado' },
+        { label: 'NOMBRE Y APELLIDO', field: 'empleado' },
+        { label: 'FECHA DE NACIMIENTO', field: '' },
+        { label: 'DIRECCIÓN', field: '' },
         { label: 'DEPARTAMENTO', field: '' },
-        { label: 'MUNICIPIO', field: '' },
-        { label: 'TELÉFONO', field: 'tel' },
-        { label: 'CELULAR', field: '' }
+        { label: 'CIUDAD', field: 'ciudad' },
+        { label: 'EMAIL', field: 'email' },
+        { label: 'CELULAR', field: 'telefono' }
       ]
     };
   },

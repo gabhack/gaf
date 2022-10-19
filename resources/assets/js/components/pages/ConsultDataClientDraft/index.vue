@@ -54,8 +54,19 @@
         />
 
         <DatamesData
-          v-if="pagaduriaType == 'SEDCAUCA' || pagaduriaType == 'SEDCHOCO' || pagaduriaType == 'SEDQUIBDO'"
+          v-if="
+            pagaduriaType == 'SEDCAUCA' ||
+            pagaduriaType == 'SEDCHOCO' ||
+            pagaduriaType == 'SEDQUIBDO' ||
+            pagaduriaType == 'SEDPOPAYAN' ||
+            pagaduriaType == 'SEDBOLIVAR' ||
+            pagaduriaType == 'SEDBARRANQUILLA' ||
+            pagaduriaType == 'SEDATLANTICO' ||
+            pagaduriaType == 'SEDNARINO'
+          "
         />
+
+        <DatamesSedMagdalena v-if="pagaduriaType == 'SEDMAGDALENA'" />
 
         <!--============================
           COMPONENTE HISTORIAL LABORAL
@@ -71,6 +82,7 @@
             :coupons="coupons"
             :user="user"
           />
+          <Detallecliente :descuentossedcauca="descuentossedcauca" />
         </template>
 
         <template v-if="showOthers">
@@ -97,7 +109,7 @@
           <EmbargosSedchoco v-if="pagaduriaType == 'SEDCHOCO'" :embargossedchoco="embargossedchoco" />
           <EmbargosSedcauca v-if="pagaduriaType == 'SEDCAUCA'" :embargossedcauca="embargossedcauca" />
           <EmbargosSedquibdo v-if="pagaduriaType == 'SEDQUIBDO'" :embargossedquibdo="embargossedquibdo" />
-          <!--<EmbargosSedpopayan v-if="pagaduriaType == ''" :embargossedpopayan="embargossedpopayan" /> -->
+          <EmbargosSedpopayan v-if="pagaduriaType == 'SEDPOPAYAN'" :embargossedpopayan="embargossedpopayan" />
 
           <LiquidacionesSeceduc
             v-if="pagaduriaType == 'FODE VALLE'"
@@ -107,10 +119,7 @@
           <Descuentossedcauca v-if="pagaduriaType == 'SEDCAUCA'" :descuentossedcauca="descuentossedcauca" />
           <Descuentosseccali v-if="pagaduriaType == 'SECCALI'" :descuentosseccali="descuentosseccali" />
           <Descuentossedquibdo v-if="pagaduriaType == 'SEDQUIBDO'" :descuentossedquibdo="descuentossedquibdo" />
-          <!-- <Descuentossedpopayan
-            v-if="pagaduriaType == 'SEDPOPAYAN'"
-            :descuentossedpopayan="descuentossedpopayan"
-          /> -->
+          <Descuentossedpopayan v-if="pagaduriaType == 'SEDPOPAYAN'" :descuentossedpopayan="descuentossedpopayan" />
         </template>
 
         <Others
@@ -136,6 +145,7 @@ import EmploymentHistory from './EmploymentHistory';
 import DatamesComponent from './Datames';
 
 import DatamesData from './DatamesData';
+import DatamesSedMagdalena from './DatamesSedMagdalena';
 
 import DatamesSeducComponent from './DatamesSeduc';
 import DatamesFiduComponent from './DatamesFidu';
@@ -149,14 +159,15 @@ import EmbargosSeceduc from './EmbargosSeceduc';
 import EmbargosSedchoco from './EmbargosSedchoco';
 import EmbargosSedquibdo from './EmbargosSedquibdo';
 import EmbargosSedcauca from './EmbargosSedcauca';
-//import EmbargosSedpopayan from './EmbargosSedpopayan';
+import EmbargosSedpopayan from './EmbargosSedpopayan';
 import EmbargosSeccali from './EmbargosSeccali';
 import LiquidacionesSeceduc from './LiquidacionesSeceduc';
 import Descuentossedchoco from './Descuentossedchoco';
 import Descuentossedcauca from './Descuentossedcauca';
+import Detallecliente from './Detallecliente';
 import Descuentosseccali from './Descuentosseccali';
 import Descuentossedquibdo from './Descuentossedquibdo';
-//import Descuentossedpopayan from './Descuentossedpopayan';
+import Descuentossedpopayan from './Descuentossedpopayan';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 
@@ -168,6 +179,7 @@ export default {
     EmploymentHistory,
     DatamesComponent,
     DatamesData,
+    DatamesSedMagdalena,
     DatamesSeducComponent,
     DatamesFiduComponent,
     DatamesCali,
@@ -179,13 +191,16 @@ export default {
     EmbargosSeceduc,
     EmbargosSedchoco,
     EmbargosSedcauca,
+    EmbargosSedpopayan,
     EmbargosSedquibdo,
     EmbargosSeccali,
     LiquidacionesSeceduc,
     Descuentossedchoco,
     Descuentossedcauca,
+    Detallecliente,
     Descuentosseccali,
     Descuentossedquibdo,
+    Descuentossedpopayan,
     Loading
   },
 
@@ -203,12 +218,14 @@ export default {
       embargossedchoco: [],
       embargossedcauca: [],
       embargossedquibdo: [],
+      embargossedpopayan: [],
       embargosseccali: [],
       mensajedeliquidacionseceduc: [],
       descuentossedchoco: [],
       descuentossedcauca: [],
       descuentosseccali: [],
       descuentossedquibdo: [],
+      descuentossedpopayan: [],
       coupons: [],
 
       pagaduriaType: '',
@@ -243,12 +260,14 @@ export default {
       this.getEmbargosseceduc(payload);
       this.getEmbargossedchoco(payload);
       this.getEmbargossedquibdo(payload);
+      this.getEmbargossedpopayan(payload);
       this.getEmbargossedcauca(payload);
       this.getEmbargosseccali(payload);
       this.getDescuentossedchoco(payload);
       this.getDescuentossedcauca(payload);
       this.getDescuentosseccali(payload);
       this.getDescuentossedquibdo(payload);
+      this.getDescuentossedpopayan(payload);
       this.getDescapli(payload);
       this.getDescnoap(payload);
       this.getCoupons(payload);
@@ -301,6 +320,10 @@ export default {
       const response = await axios.post('/consultaEmbargossedquibdo', { doc: payload.doc });
       this.embargossedquibdo = response.data.data;
     },
+    async getEmbargossedpopayan(payload) {
+      const response = await axios.post('/consultaEmbargossedpopayan', { doc: payload.doc });
+      this.embargossedpopayan = response.data.data;
+    },
     async getEmbargosseccali(payload) {
       const response = await axios.post('/consultaEmbargosseccali', { doc: payload.doc });
       this.embargosseccali = response.data.data;
@@ -324,6 +347,10 @@ export default {
     async getDescuentossedquibdo(payload) {
       const response = await axios.post('/consultaDescuentossedquibdo', { doc: payload.doc });
       this.descuentossedquibdo = response.data.data;
+    },
+    async getDescuentossedpopayan(payload) {
+      const response = await axios.post('/consultaDescuentossedpopayan', { doc: payload.doc });
+      this.descuentossedpopayan = response.data.data;
     },
     async getCoupons(payload) {
       const data = {

@@ -41,7 +41,7 @@
                 </div>
                 <div class="panel-body">
                     <div class="row">
-                        <form action="{{ url('cifin/consultarAdmin') }}" method="post" class="form-group col-md-12">
+                        <form action="{{ url('datacredito/consultar') }}" method="post" class="form-group col-md-12">
                             {{ csrf_field() }}
                             <div class="form-row">
                                 <div class="form-group col-md-6">
@@ -66,16 +66,16 @@
 @endsection
 
 @section('title')
-Consulta Cifin
+Consulta Datacredito
 @endsection
 
 @section('header-content')
-Consulta Cifin
+Consulta Datacredito
 @endsection
 
 @section('breadcrumb')
 <li><a href="{{ url('home') }}"><i class="fa fa-dashboard"></i>Inicio</a></li>
-<li class="active">Cifin</li>
+<li class="active">Datacredito</li>
 @endsection
 
 @section('js')

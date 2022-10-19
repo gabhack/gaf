@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\CouponsSedCauca;
+use App\CouponsSedBarranquilla;
+use App\CouponsSedAtlantico;
+use App\CouponsSedBolivar;
+use App\CouponsSedMagdalena;
 use App\CouponsSedChoco;
 use App\CouponsSedPopayan;
 use App\CouponsSedQuibdo;
@@ -25,8 +29,20 @@ class CouponsController extends Controller
         $coupons = [];
 
         switch ($pagaduriaType) {
+            case 'SEDBARRANQUILLA':
+                $coupons = CouponsSedBarranquilla::where('doc', $userDoc)->get();
+                break;
+            case 'SEDATLANTICO':
+                $coupons = CouponsSedAtlantico::where('doc', $userDoc)->get();
+                break;
             case 'SEDCAUCA':
                 $coupons = CouponsSedCauca::where('doc', $userDoc)->get();
+                break;
+            case 'SEDMAGDALENA':
+                $coupons = CouponsSedMagdalena::where('doc', $userDoc)->get();
+                break;
+            case 'SEDBOLIVAR':
+                $coupons = CouponsSedBolivar::where('doc', $userDoc)->get();
                 break;
             case 'SEDCHOCO':
                 $coupons = CouponsSedChoco::where('doc', $userDoc)->get();
