@@ -7,8 +7,13 @@ use App\Datamesfidu;
 use App\Datamesseccali;
 use App\Datamesseceduc;
 use App\DatamesSedCauca;
+use App\DatamesSedMagdalena;
 use App\DatamesSedChoco;
 use App\DatamesSedPopayan;
+use App\DatamesSedBolivar;
+use App\DatamesSedBarranquilla;
+use App\DatamesSedAtlantico;
+use App\DatamesSedNarino;
 use App\DatamesSedQuibdo;
 use App\Pagadurias;
 use Illuminate\Http\Request;
@@ -124,6 +129,11 @@ class PagaduriasController extends Controller
         $datamesSedChoco = DatamesSedChoco::where('doc', $doc)->first();
         $datamesSedPopayan = DatamesSedPopayan::where('doc', $doc)->first();
         $datamesSedQuibdo = DatamesSedQuibdo::where('doc', $doc)->first();
+        $datamesSedBolivar = DatamesSedBolivar::where('doc', $doc)->first();
+        $datamesSedBarranquilla = DatamesSedBarranquilla::where('doc', $doc)->first();
+        $datamesSedAtlantico = DatamesSedAtlantico::where('doc', $doc)->first();
+        $datamesSedNarino = DatamesSedNarino::where('doc', $doc)->first();
+        $datamesSedMagdalena = datamesSedMagdalena::where('codempleado', $doc)->first();
 
         $results = [
             'datames' => $datames,
@@ -134,6 +144,11 @@ class PagaduriasController extends Controller
             'datamesSedChoco' => $datamesSedChoco,
             'datamesSedPopayan' => $datamesSedPopayan,
             'datamesSedQuibdo' => $datamesSedQuibdo,
+            'datamesSedBolivar' => $datamesSedBolivar,
+            'datamesSedBarranquilla' => $datamesSedBarranquilla,
+            'datamesSedAtlantico' => $datamesSedAtlantico,
+            'datamesSedNarino' => $datamesSedNarino,
+            'datamesSedMagdalena' => $datamesSedMagdalena,
         ];
 
         return response()->json($results, 200);

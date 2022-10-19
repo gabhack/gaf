@@ -58,10 +58,18 @@
             pagaduriaType == 'SEDCAUCA' ||
             pagaduriaType == 'SEDCHOCO' ||
             pagaduriaType == 'SEDQUIBDO' ||
-            pagaduriaType == 'SEDPOPAYAN'
+            pagaduriaType == 'SEDPOPAYAN' ||
+            pagaduriaType == 'SEDBOLIVAR' ||
+            pagaduriaType == 'SEDBARRANQUILLA' ||
+            pagaduriaType == 'SEDATLANTICO' ||
+            pagaduriaType == 'SEDNARINO' 
           "
         />
 
+        <DatamesSedMagdalena
+          v-if="pagaduriaType == 'SEDMAGDALENA'"
+        />
+        
         <!--============================
           COMPONENTE HISTORIAL LABORAL
         ==============================-->
@@ -87,7 +95,12 @@
               pagaduriaType == 'SEDCHOCO' ||
               pagaduriaType == 'SEDQUIBDO' ||
               pagaduriaType == 'SECCALI' ||
-              pagaduriaType == 'SEDPOPAYAN'
+              pagaduriaType == 'SEDPOPAYAN' ||
+              pagaduriaType == 'SEDMAGDALENA' ||
+              pagaduriaType == 'SEDBOLIVAR' ||
+              pagaduriaType == 'SEDBARRANQUILLA' ||
+              pagaduriaType == 'SEDATLANTICO' ||
+              pagaduriaType == 'SEDNARINO' 
             "
             :coupons="coupons"
           />
@@ -139,6 +152,7 @@ import EmploymentHistory from './EmploymentHistory';
 import DatamesComponent from './Datames';
 
 import DatamesData from './DatamesData';
+import DatamesSedMagdalena from './DatamesSedMagdalena';
 
 import DatamesSeducComponent from './DatamesSeduc';
 import DatamesFiduComponent from './DatamesFidu';
@@ -172,6 +186,7 @@ export default {
     EmploymentHistory,
     DatamesComponent,
     DatamesData,
+    DatamesSedMagdalena,
     DatamesSeducComponent,
     DatamesFiduComponent,
     DatamesCali,
@@ -247,7 +262,7 @@ export default {
         this.getDatamesfidu(payload);
       } else if (payload.pagaduria == 'SECCALI') {
         this.getDatamesseccali(payload);
-      }
+      } 
 
       this.getEmbargosseceduc(payload);
       this.getEmbargossedchoco(payload);

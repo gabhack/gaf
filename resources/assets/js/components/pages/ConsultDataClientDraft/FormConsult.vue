@@ -76,7 +76,12 @@ export default {
         { label: 'SED CAUCA', value: 'SEDCAUCA', key: 'datamesSedCauca' },
         { label: 'SED CHOCO', value: 'SEDCHOCO', key: 'datamesSedChoco' },
         { label: 'SED POPAYAN', value: 'SEDPOPAYAN', key: 'datamesSedPopayan' },
-        { label: 'SED QUIBDO', value: 'SEDQUIBDO', key: 'datamesSedQuibdo' }
+        { label: 'SED QUIBDO', value: 'SEDQUIBDO', key: 'datamesSedQuibdo' },
+        { label: 'SED MAGDALENA', value: 'SEDMAGDALENA', key: 'datamesSedMagdalena' },
+        { label: 'SED BOLIVAR', value: 'SEDBOLIVAR', key: 'datamesSedBolivar' },
+        { label: 'SED BARRANQUILLA', value: 'SEDBARRANQUILLA', key: 'datamesSedBarranquilla' },
+        { label: 'SED ATLANTICO', value: 'SEDATLANTICO', key: 'datamesSedAtlantico' },
+        { label: 'SED NARIÑO', value: 'SEDNARINO', key: 'datamesSedNarino' }
       ]
     };
   },
@@ -145,8 +150,8 @@ export default {
 
         const data = {
           pagaduria: this.dataclient.pagaduria,
-          nombre: this.datamesSed.nombenef ? this.datamesSed.nombenef : this.datamesSed.nomp,
-          doc: this.datamesSed.doc
+          nombre: this.datamesSed.nombenef || this.datamesSed.empleado || this.datamesSed.nomp,
+          doc: this.datamesSed.doc || this.datamesSed.codempleado
         };
 
         const response = await axios.post('/visados', data);
