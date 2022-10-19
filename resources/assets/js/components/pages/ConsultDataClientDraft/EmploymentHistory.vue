@@ -238,10 +238,8 @@
             </div>
           </template> -->
 
-          
           <!-- DATAMES SED -->
-          <template v-if="(datamesfidu || datames || datamesseceduc)">
-          </template>
+          <template v-if="datamesfidu || datames || datamesseceduc"> </template>
           <template v-else-if="datamesSed">
             <div class="col-12" v-if="ingresosExtras.length > 0">
               <div class="row">
@@ -251,7 +249,7 @@
                 <div class="col-6">
                   <div>
                     <p class="panel-value" v-if="salarioBasico">{{ salarioBasico | currency }}</p>
-                    <p class="panel-value" v-else>{{ datamesSed.vingresos | currency }}</p>                  
+                    <p class="panel-value" v-else>{{ datamesSed.vingresos | currency }}</p>
                   </div>
                 </div>
               </div>
@@ -314,7 +312,7 @@
             </div>
 
             <div class="col-6">
-              <b class="panel-label">FECHA VINCULACION:</b>
+              <b class="panel-label">FECHA VINCULACIÓN:</b>
               <div>
                 <p class="panel-value">{{ datamesSed.fnombramiento }}</p>
               </div>
@@ -413,7 +411,9 @@ export default {
   computed: {
     ...mapState('datamesModule', ['datamesSed']),
     ingresosExtras() {
-      return this.coupons.filter(coupon => coupon.code !== 'SUEBA' && Number(coupon.ingresos) > 0);
+      return this.coupons.filter(
+        coupon => coupon.code !== 'SUEBA' && coupon.code !== 'INGCUP' && Number(coupon.ingresos) > 0
+      );
     },
     salarioBasico() {
       const item = this.coupons ? this.coupons.find(coupon => coupon.code === 'SUEBA') : null;

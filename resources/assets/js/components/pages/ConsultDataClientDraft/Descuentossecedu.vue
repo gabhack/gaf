@@ -6,8 +6,8 @@
         <div class="row">
           <div :class="label.colClass || 'col-2'" v-for="label in labels" :key="label.field">
             <b class="panel-label table-text">{{ label.label }}</b>
-            <template v-if="mensajedeliquidacionseceduc.length > 0">
-              <div v-for="(item, key) in mensajedeliquidacionseceduc" :key="key">
+            <template v-if="descuentossecedu.length > 0">
+              <div v-for="(item, key) in descuentossecedu" :key="key">
                 <p class="panel-value">
                   <template v-if="item[label.field]">
                     {{ item[label.field] }}
@@ -31,8 +31,8 @@
 
 <script>
 export default {
-  name: 'LiquidacionesSeceduc',
-  props: ['mensajedeliquidacionseceduc'],
+  name: 'Descuentossecedu',
+  props: ['descuentossecedu'],
   data() {
     return {
       labels: [

@@ -3,7 +3,15 @@
     <div class="panel panel-primary mb-3">
       <div class="panel-heading d-flex justify-content-between">
         <b>OBLIGACIONES VIGENTES AL DIA</b>
-        <b v-if="periodDate">PERIODO: {{ periodDate }}</b>
+        <div class="d-flex align-items-center">
+          <b>PERIODO:</b>
+          <select class="form-control mr-2" v-model="selectedPeriod">
+            <option :value="period" v-for="period in periods" :key="period">
+              {{ period }}
+            </option>
+          </select>
+          <b-button @click="selectedPeriod = ''" variant="black-pearl">X</b-button>
+        </div>
       </div>
       <div class="panel-body">
         <div class="row">
@@ -46,10 +54,22 @@ export default {
         { label: 'CUOTA', field: 'vaplicado', currency: true },
         { label: 'FECHA INICIO DEUDA', field: 'fgrab' },
         { label: 'NOMBRE ENTIDAD CEDIENTE', field: 'nonentant' }
-      ]
+      ],
+      selectedPeriod: ''
     };
   },
   computed: {
+    periods() {
+      return this.coupons.reduce((acc, coupon) => {
+        // if (acc.indexOf(coupon.finperiodo) === -1) {
+        //   acc.push(coupon.finperiodo);
+        // }
+        if (acc.indexOf(coupon.inicioperiodo) === -1) {
+          acc.push(coupon.inicioperiodo);
+        }
+        return acc;
+      }, []);
+    },
     periodDate() {
       return this.coupons.length > 0 ? this.coupons[0].period : null;
     },
@@ -57,6 +77,7 @@ export default {
       const items = this.coupons.filter(item => item.code !== 'SUEBA' && Number(item.egresos) > 0);
       return items.map(item => {
         return {
+          ...item,
           nomtercero: item.concept,
           vaplicado: item.egresos
         };
@@ -64,7 +85,15 @@ export default {
     },
     data() {
       const descaplis = this.descapli ? this.descapli : [];
-      return [...descaplis, ...this.couponsAsDescapli];
+      const items = [...descaplis, ...this.couponsAsDescapli];
+
+      if (this.selectedPeriod) {
+        return items.filter(
+          item => item.finperiodo === this.selectedPeriod || item.inicioperiodo === this.selectedPeriod
+        );
+      } else {
+        return items;
+      }
     }
   }
 };

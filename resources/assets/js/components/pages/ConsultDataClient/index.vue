@@ -1,7 +1,6 @@
 <template>
   <div class="container-fluid">
     <div v-if="type_consult === 'individual'">
-
       <!-- DESCARGAR PDF -->
       <div class="row mb-5">
         <div class="col-12 d-flex align-items-center justify-content-between">
@@ -45,10 +44,10 @@
               </div>
               <div class="col-6 mt-4">
                 <button
-                    type="button"
-                    v-if="dataclient.pagaduria && dataclient.name && dataclient.doc"
-                    class="btn btn-primary"
-                    v-on:click="getData"
+                  type="button"
+                  v-if="dataclient.pagaduria && dataclient.name && dataclient.doc"
+                  class="btn btn-primary"
+                  v-on:click="getData"
                 >
                   CONSULTAR
                 </button>
@@ -66,8 +65,8 @@
             <div class="panel-body">
               <div class="row">
                 <div
-                    class="col-6"
-                    v-if="
+                  class="col-6"
+                  v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -106,7 +105,7 @@
                   </div>
                 </div>
                 <div class="col-6">
-                  <b class="panel-label">DIRECCIÃ“N:</b>
+                  <b class="panel-label">DIRECCIÓN:</b>
                   <div v-for="(datames, key) in datames" :key="key">
                     <p class="panel-value">{{ datames.dir }}</p>
                   </div>
@@ -124,8 +123,8 @@
                   </div>
                 </div>
                 <div
-                    class="col-md-6"
-                    v-if="
+                  class="col-md-6"
+                  v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -140,8 +139,8 @@
                   </div>
                 </div>
                 <div
-                    class="col-md-6"
-                    v-if="
+                  class="col-md-6"
+                  v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -252,8 +251,8 @@
                                 </div>-->
 
                 <div
-                    class="col-6"
-                    v-if="
+                  class="col-6"
+                  v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -269,8 +268,8 @@
                 </div>
 
                 <div
-                    class="col-6"
-                    v-if="
+                  class="col-6"
+                  v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -286,8 +285,8 @@
                 </div>
 
                 <div
-                    class="col-6"
-                    v-if="
+                  class="col-6"
+                  v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -303,8 +302,8 @@
                 </div>
 
                 <div
-                    class="col-6"
-                    v-if="
+                  class="col-6"
+                  v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -320,8 +319,8 @@
                 </div>
 
                 <div
-                    class="col-6"
-                    v-if="
+                  class="col-6"
+                  v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -408,8 +407,8 @@
                 </div>
 
                 <div
-                    class="col-6"
-                    v-if="
+                  class="col-6"
+                  v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -425,8 +424,8 @@
                 </div>
 
                 <div
-                    class="col-6"
-                    v-if="
+                  class="col-6"
+                  v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -442,8 +441,8 @@
                 </div>
 
                 <div
-                    class="col-6"
-                    v-if="
+                  class="col-6"
+                  v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -529,8 +528,8 @@
                   </div>
                 </div>
                 <div
-                    class="col-6"
-                    v-if="
+                  class="col-6"
+                  v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -546,8 +545,8 @@
                 </div>
 
                 <div
-                    class="col-6"
-                    v-if="
+                  class="col-6"
+                  v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -563,8 +562,8 @@
                 </div>
 
                 <div
-                    class="col-6"
-                    v-if="
+                  class="col-6"
+                  v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -580,8 +579,8 @@
                 </div>
 
                 <div
-                    class="col-6"
-                    v-if="
+                  class="col-6"
+                  v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -597,8 +596,8 @@
                 </div>
 
                 <div
-                    class="col-6"
-                    v-if="
+                  class="col-6"
+                  v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -793,8 +792,8 @@
                   </div>
                 </div>
                 <div
-                    class="col-6"
-                    v-if="
+                  class="col-6"
+                  v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -809,8 +808,8 @@
                   </div>
                 </div>
                 <div
-                    class="col-6"
-                    v-if="
+                  class="col-6"
+                  v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -825,8 +824,8 @@
                   </div>
                 </div>
                 <div
-                    class="col-6"
-                    v-if="
+                  class="col-6"
+                  v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -1015,8 +1014,8 @@
                 </div>
 
                 <div
-                    class="col-md-6"
-                    v-if="
+                  class="col-md-6"
+                  v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -1044,8 +1043,8 @@
                                 </div>-->
 
                 <div
-                    class="col-md-6"
-                    v-if="
+                  class="col-md-6"
+                  v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -1083,8 +1082,8 @@
             <div class="panel-body">
               <div class="row">
                 <div
-                    class="col-3"
-                    v-if="
+                  class="col-3"
+                  v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -1096,8 +1095,8 @@
                   <b class="panel-label">SELECCIONE PERIODO DE DATA:</b>
                   <div v-for="(descnoap, key) in descnoap" :key="key">
                     <input
-                        type="checkbox"
-                        v-on:click="e => vAplicado(e.target.checked, descnoap, descnoap.pagare, descnoap.nomtercero)"
+                      type="checkbox"
+                      v-on:click="e => vAplicado(e.target.checked, descnoap, descnoap.pagare, descnoap.nomtercero)"
                     />
                     <p>{{ descnoap.clase }}</p>
                   </div>
@@ -1234,8 +1233,8 @@
                 </div>
 
                 <div
-                    class="col-6"
-                    v-if="
+                  class="col-6"
+                  v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -1251,8 +1250,8 @@
                 </div>
 
                 <div
-                    class="col-6"
-                    v-if="
+                  class="col-6"
+                  v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -1268,8 +1267,8 @@
                 </div>
 
                 <div
-                    class="col-6"
-                    v-if="
+                  class="col-6"
+                  v-if="
                     user.roles_id === 1 ||
                     user.roles_id === '1' ||
                     user.roles_id === 4 ||
@@ -1319,7 +1318,6 @@
           <div class="panel panel-primary mb-3">
             <div class="panel-heading"><b>OTROS POSIBLES INGRESOS Y DEDUCCIONES</b></div>
             <div class="panel-body">
-
               <!-- OTROS INGRESOS FOPEP -->
               <div class="row" v-if="dataclient.pagaduria === 'FOPEP'">
                 <div class="col-12">
@@ -1382,8 +1380,8 @@
                                 </div>
                               </div>
                               <div
-                                  class="col-md-6"
-                                  v-if="
+                                class="col-md-6"
+                                v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -1398,8 +1396,8 @@
                                 </div>
                               </div>
                               <div
-                                  class="col-md-6"
-                                  v-if="
+                                class="col-md-6"
+                                v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -1642,8 +1640,8 @@
                                 </div>
                               </div>
                               <div
-                                  class="col-md-6"
-                                  v-if="
+                                class="col-md-6"
+                                v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -1658,8 +1656,8 @@
                                 </div>
                               </div>
                               <div
-                                  class="col-md-6"
-                                  v-if="
+                                class="col-md-6"
+                                v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -1955,8 +1953,8 @@
                                 </div>
                               </div>
                               <div
-                                  class="col-6"
-                                  v-if="
+                                class="col-6"
+                                v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -1972,8 +1970,8 @@
                               </div>
 
                               <div
-                                  class="col-6"
-                                  v-if="
+                                class="col-6"
+                                v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -1989,8 +1987,8 @@
                               </div>
 
                               <div
-                                  class="col-6"
-                                  v-if="
+                                class="col-6"
+                                v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -2006,8 +2004,8 @@
                               </div>
 
                               <div
-                                  class="col-6"
-                                  v-if="
+                                class="col-6"
+                                v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -2023,8 +2021,8 @@
                               </div>
 
                               <div
-                                  class="col-6"
-                                  v-if="
+                                class="col-6"
+                                v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -2258,8 +2256,8 @@
                                 </div>
                               </div>
                               <div
-                                  class="col-md-6"
-                                  v-if="
+                                class="col-md-6"
+                                v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -2274,8 +2272,8 @@
                                 </div>
                               </div>
                               <div
-                                  class="col-md-6"
-                                  v-if="
+                                class="col-md-6"
+                                v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -2530,8 +2528,8 @@
                                 </div>
                               </div>
                               <div
-                                  class="col-md-6"
-                                  v-if="
+                                class="col-md-6"
+                                v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -2546,8 +2544,8 @@
                                 </div>
                               </div>
                               <div
-                                  class="col-md-6"
-                                  v-if="
+                                class="col-md-6"
+                                v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -2844,8 +2842,8 @@
                                 </div>
                               </div>
                               <div
-                                  class="col-6"
-                                  v-if="
+                                class="col-6"
+                                v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -2861,8 +2859,8 @@
                               </div>
 
                               <div
-                                  class="col-6"
-                                  v-if="
+                                class="col-6"
+                                v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -2878,8 +2876,8 @@
                               </div>
 
                               <div
-                                  class="col-6"
-                                  v-if="
+                                class="col-6"
+                                v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -2895,8 +2893,8 @@
                               </div>
 
                               <div
-                                  class="col-6"
-                                  v-if="
+                                class="col-6"
+                                v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -2912,8 +2910,8 @@
                               </div>
 
                               <div
-                                  class="col-6"
-                                  v-if="
+                                class="col-6"
+                                v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -3147,8 +3145,8 @@
                                 </div>
                               </div>
                               <div
-                                  class="col-md-6"
-                                  v-if="
+                                class="col-md-6"
+                                v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -3163,8 +3161,8 @@
                                 </div>
                               </div>
                               <div
-                                  class="col-md-6"
-                                  v-if="
+                                class="col-md-6"
+                                v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -3419,8 +3417,8 @@
                                 </div>
                               </div>
                               <div
-                                  class="col-md-6"
-                                  v-if="
+                                class="col-md-6"
+                                v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -3435,8 +3433,8 @@
                                 </div>
                               </div>
                               <div
-                                  class="col-md-6"
-                                  v-if="
+                                class="col-md-6"
+                                v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -3683,8 +3681,8 @@
                                 </div>
                               </div>
                               <div
-                                  class="col-md-6"
-                                  v-if="
+                                class="col-md-6"
+                                v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -3699,8 +3697,8 @@
                                 </div>
                               </div>
                               <div
-                                  class="col-md-6"
-                                  v-if="
+                                class="col-md-6"
+                                v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -3955,8 +3953,8 @@
                                 </div>
                               </div>
                               <div
-                                  class="col-md-6"
-                                  v-if="
+                                class="col-md-6"
+                                v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -3971,8 +3969,8 @@
                                 </div>
                               </div>
                               <div
-                                  class="col-md-6"
-                                  v-if="
+                                class="col-md-6"
+                                v-if="
                                   user.roles_id === 1 ||
                                   user.roles_id === '1' ||
                                   user.roles_id === 4 ||
@@ -4417,7 +4415,7 @@ export default {
       datamesseceduc: [],
       datamesseccali: [],
       deduccionesseccali: [],
-      mensajedeliquidacionseceduc: [],
+      Descuentossecedu: [],
       embargosseccali: [],
       embargosseceduc: [],
       id_consulta: null
@@ -4444,7 +4442,7 @@ export default {
       this.getDatamesfidu();
       this.getDatamesseceduc();
       this.getDeduccionesseccali();
-      this.getMensajedeliquidacionseceduc();
+      this.getDescuentossecedu();
       this.getEmbargosseccali();
       this.getEmbargosseceduc();
       this.getDatamesseccali();
@@ -4466,7 +4464,7 @@ export default {
     },
     getDatamesseccali() {
       axios.post('/consultaDatamesseccali', { doc: this.dataclient.doc }).then(response => {
-        console.log("Esto es datamesseccali",response.data);
+        console.log('Esto es datamesseccali', response.data);
         this.datamesseccali = response.data.data;
       });
     },
@@ -4487,26 +4485,26 @@ export default {
     },
     getDeduccionesseccali() {
       axios.post('/consultaDeduccionesseccali', { doc: this.dataclient.doc }).then(response => {
-        console.log("Esto es deduccionesseccali",response.data);
+        console.log('Esto es deduccionesseccali', response.data);
         this.deduccionesseccali = response.data.data;
       });
     },
     getEmbargosseccali() {
       axios.post('/consultaEmbargosseccali', { doc: this.dataclient.doc }).then(response => {
-        console.log("Esto es embargosseccali",response.data);
+        console.log('Esto es embargosseccali', response.data);
         this.embargosseccali = response.data.data;
       });
     },
     getEmbargosseceduc() {
       axios.post('/consultaEmbargosseceduc', { doc: this.dataclient.doc }).then(response => {
-        console.log("Esto es embargosseceduc",response.data);
+        console.log('Esto es embargosseceduc', response.data);
         this.embargosseceduc = response.data.data;
       });
     },
-    getMensajedeliquidacionseceduc() {
-      axios.post('/consultaMensajedeliquidacionseceduc', { doc: this.dataclient.doc }).then(response => {
-        console.log("Esto es mensajedeliquidacionseceduc",response.data);
-        this.mensajedeliquidacionseceduc = response.data.data;
+    getDescuentossecedu() {
+      axios.post('/consultaDescuentosseceduc', { doc: this.dataclient.doc }).then(response => {
+        console.log('Esto es Descuentossecedu', response.data);
+        this.Descuentossecedu = response.data.data;
       });
     },
     enableSteps(enable) {
@@ -4522,30 +4520,30 @@ export default {
     },
     getDataClient() {
       axios
-          .post('consultaDescnoap', { data: this.dataclient })
-          .then(response => {
-            console.log(response,"pagadura");
-            if (response.data.message === 'El cliente seleccionado tiene inconsistencias.') {
-              this.consultaDescapli = response.data.data;
-            } else {
-              axios
-                  .post('consultaUnitaria', { data: this.dataclient })
-                  .then(response => {
-                    if (response.data.message === 'El cliente seleccionado tiene inconsistencias.') {
-                      toastr.success(response.data.message);
-                      this.consultaDescapli = response.data.data;
-                    } else {
-                      this.consultaDescapli = response.data.data;
-                    }
-                  })
-                  .catch(error => {
-                    toastr.success(response.data.message);
-                  });
-            }
-          })
-          .catch(error => {
-            console.log(error);
-          });
+        .post('consultaDescnoap', { data: this.dataclient })
+        .then(response => {
+          console.log(response, 'pagadura');
+          if (response.data.message === 'El cliente seleccionado tiene inconsistencias.') {
+            this.consultaDescapli = response.data.data;
+          } else {
+            axios
+              .post('consultaUnitaria', { data: this.dataclient })
+              .then(response => {
+                if (response.data.message === 'El cliente seleccionado tiene inconsistencias.') {
+                  toastr.success(response.data.message);
+                  this.consultaDescapli = response.data.data;
+                } else {
+                  this.consultaDescapli = response.data.data;
+                }
+              })
+              .catch(error => {
+                toastr.success(response.data.message);
+              });
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
 
     vAplicado(value, data, pagareSelect, nomterSelected) {
@@ -4575,23 +4573,23 @@ export default {
           return item !== nomterSelected;
         });
         this.dataclient.nomterSelect =
-            nomterSelect.length === 0 ? nomterSelected : this.nomterSelect.push(nomterSelected);
+          nomterSelect.length === 0 ? nomterSelected : this.nomterSelect.push(nomterSelected);
       }
       //console.log(this.dataclient, "pagadurias");
     },
 
     sendPagare() {
       axios
-          .post('resultadoAprobacion', { data: this.dataclient })
-          .then(response => {
-            console.log(response, "pagadurias");
-            toastr.success(response.data.message);
-            this.id_consulta = response.data.data.id_consulta;
-            this.resultPagare = response.data.data;
-          })
-          .catch(error => {
-            console.log(error);
-          });
+        .post('resultadoAprobacion', { data: this.dataclient })
+        .then(response => {
+          console.log(response, 'pagadurias');
+          toastr.success(response.data.message);
+          this.id_consulta = response.data.data.id_consulta;
+          this.resultPagare = response.data.data;
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
 
     print() {

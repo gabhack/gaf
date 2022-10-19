@@ -65,7 +65,8 @@ export default {
         doc: '',
         name: '',
         pagaduria: null,
-        pagadurias: null
+        pagadurias: null,
+        pagaduriaKey: null
       },
       isLoading: false,
       pagaduriasType: [
@@ -94,6 +95,7 @@ export default {
       if (this.dataclient.pagaduria) {
         const type = this.pagaduriasType.find(type => type.value === this.dataclient.pagaduria);
         const pagaduria = this.dataclient.pagadurias[type.key];
+        this.dataclient.pagaduriaKey = type.key.slice(7).toLowerCase();
         this.setDatamesSed(pagaduria);
       }
     },

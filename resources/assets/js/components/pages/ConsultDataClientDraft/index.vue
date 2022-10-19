@@ -82,7 +82,7 @@
             :coupons="coupons"
             :user="user"
           />
-          <Detallecliente :descuentossedcauca="descuentossedcauca" />
+          <Detallecliente :descuentossedcauca="descuentossedcauca" :totales="totales" />
         </template>
 
         <template v-if="showOthers">
@@ -111,10 +111,7 @@
           <EmbargosSedquibdo v-if="pagaduriaType == 'SEDQUIBDO'" :embargossedquibdo="embargossedquibdo" />
           <EmbargosSedpopayan v-if="pagaduriaType == 'SEDPOPAYAN'" :embargossedpopayan="embargossedpopayan" />
 
-          <LiquidacionesSeceduc
-            v-if="pagaduriaType == 'FODE VALLE'"
-            :mensajedeliquidacionseceduc="mensajedeliquidacionseceduc"
-          />
+          <Descuentossecedu v-if="pagaduriaType == 'FODE VALLE'" :descuentossecedu="descuentosseceduc" />
           <Descuentossedchoco v-if="pagaduriaType == 'SEDCHOCO'" :descuentossedchoco="descuentossedchoco" />
           <Descuentossedcauca v-if="pagaduriaType == 'SEDCAUCA'" :descuentossedcauca="descuentossedcauca" />
           <Descuentosseccali v-if="pagaduriaType == 'SECCALI'" :descuentosseccali="descuentosseccali" />
@@ -161,7 +158,7 @@ import EmbargosSedquibdo from './EmbargosSedquibdo';
 import EmbargosSedcauca from './EmbargosSedcauca';
 import EmbargosSedpopayan from './EmbargosSedpopayan';
 import EmbargosSeccali from './EmbargosSeccali';
-import LiquidacionesSeceduc from './LiquidacionesSeceduc';
+import Descuentossecedu from './Descuentossecedu';
 import Descuentossedchoco from './Descuentossedchoco';
 import Descuentossedcauca from './Descuentossedcauca';
 import Detallecliente from './Detallecliente';
@@ -194,7 +191,7 @@ export default {
     EmbargosSedpopayan,
     EmbargosSedquibdo,
     EmbargosSeccali,
-    LiquidacionesSeceduc,
+    Descuentossecedu,
     Descuentossedchoco,
     Descuentossedcauca,
     Detallecliente,
@@ -220,7 +217,7 @@ export default {
       embargossedquibdo: [],
       embargossedpopayan: [],
       embargosseccali: [],
-      mensajedeliquidacionseceduc: [],
+      descuentosseceduc: [],
       descuentossedchoco: [],
       descuentossedcauca: [],
       descuentosseccali: [],
@@ -229,17 +226,98 @@ export default {
       coupons: [],
 
       pagaduriaType: '',
+      pagaduriaKey: '',
       showOthers: false,
       pagadurias: null,
       isLoading: false
     };
   },
-  computed: {},
+  computed: {
+    totales() {
+      const valrSM = 1000000;
+
+      let valorIngreso = 0;
+      if (this.pagaduriaType === 'FOPEP') {
+        valorIngreso = Number(this.datames.vpension.replace(/[^0-9]/g, '').slice(0, -2));
+      } else if (this.pagaduriaType == 'FIDUPREVISORA') {
+        valorIngreso = Number(this.datamesfidu.vpension.replace(/[^0-9]/g, '').slice(0, -2));
+      } else {
+        valorIngreso = this.coupons.filter(item => item.code === 'INGCUP')[0].ingresos;
+      }
+
+      console.log('valorIngreso', valorIngreso);
+
+      let disccount = 0.08;
+      if (this.pagaduriaType === 'FOPEP' || this.pagaduriaType == 'FIDUPREVISORA') {
+        if (valorIngreso == valrSM) {
+          disccount = 0.04;
+        } else if (valorIngreso > valrSM && valorIngreso < valrSM * 2) {
+          disccount = 0.1;
+        } else if (valorIngreso >= valrSM * 2) {
+          disccount = 0.12;
+        }
+      }
+
+      const valorIngresoTemp = valorIngreso - valorIngreso * disccount;
+
+      let items = [];
+
+      let totalEgresos = 0;
+      if (this.pagaduriaType === 'FOPEP' || this.pagaduriaType == 'FIDUPREVISORA') {
+        items = this.descapli;
+        totalEgresos = items.reduce((a, b) => a + Number(b.vaplicado), 0);
+      } else {
+        items = this.coupons.filter(item => item.code !== 'SUEBA' && Number(item.egresos) > 0);
+        totalEgresos = items.reduce((total, item) => total + Number(item.egresos), 0);
+      }
+
+      let totalDescuentos = 0;
+      if (this.pagaduriaType === 'FOPEP' || this.pagaduriaType == 'FIDUPREVISORA') {
+        totalDescuentos = this.descapli.length;
+      } else {
+        totalDescuentos = this[`descuentos${this.pagaduriaKey}`].length;
+      }
+
+      let totalEmbargos = 0;
+      if (this.pagaduriaType === 'FOPEP' || this.pagaduriaType == 'FIDUPREVISORA') {
+        totalEmbargos = 0; // this.descnoap.length
+      } else {
+        totalEmbargos = this[`embargos${this.pagaduriaKey}`].length;
+      }
+
+      let compraCartera =
+        valorIngresoTemp < valrSM * 2
+          ? valorIngresoTemp - valrSM
+          : valorIngresoTemp >= valrSM * 2
+          ? valorIngresoTemp / 2
+          : valorIngresoTemp;
+
+      const libreInversionTemp = compraCartera - totalEgresos;
+
+      return {
+        itemsTotal: items.length,
+        descuentos: totalDescuentos,
+        embargos: totalEmbargos,
+        libreInversion: libreInversionTemp < 0 ? 0 : libreInversionTemp,
+        compraCartera: compraCartera < 0 ? 0 : compraCartera
+      };
+    }
+    // totales() {
+    //   return {
+    //     cupones: 0,
+    //     descuentos: 0,
+    //     embargos: 0,
+    //     compraCartera: 0,
+    //     libreInversion: 0
+    //   };
+    // }
+  },
   methods: {
     emitInfo(payload) {
       this.isLoading = true;
       this.pagadurias = payload.pagadurias;
       this.pagaduriaType = payload.pagaduria;
+      this.pagaduriaKey = payload.pagaduriaKey;
 
       this.datames = null;
       this.datamesseceduc = null;
@@ -250,7 +328,7 @@ export default {
         this.getDatames(payload);
       } else if (payload.pagaduria == 'FODE VALLE') {
         this.getDatamesseceduc(payload);
-        this.getMensajedeliquidacionseceduc(payload);
+        this.getDescuentossecedu(payload);
       } else if (payload.pagaduria == 'FIDUPREVISORA') {
         this.getDatamesfidu(payload);
       } else if (payload.pagaduria == 'SECCALI') {
@@ -263,6 +341,7 @@ export default {
       this.getEmbargossedpopayan(payload);
       this.getEmbargossedcauca(payload);
       this.getEmbargosseccali(payload);
+      this.getDescuentossecedu(payload);
       this.getDescuentossedchoco(payload);
       this.getDescuentossedcauca(payload);
       this.getDescuentosseccali(payload);
@@ -328,9 +407,9 @@ export default {
       const response = await axios.post('/consultaEmbargosseccali', { doc: payload.doc });
       this.embargosseccali = response.data.data;
     },
-    async getMensajedeliquidacionseceduc(payload) {
-      const response = await axios.post('/consultaMensajedeliquidacionseceduc', { doc: payload.doc });
-      this.mensajedeliquidacionseceduc = response.data.data;
+    async getDescuentossecedu(payload) {
+      const response = await axios.post('/consultaDescuentosseceduc', { doc: payload.doc });
+      this.descuentosseceduc = response.data.data;
     },
     async getDescuentossedchoco(payload) {
       const response = await axios.post('/consultaDescuentossedchoco', { doc: payload.doc });
