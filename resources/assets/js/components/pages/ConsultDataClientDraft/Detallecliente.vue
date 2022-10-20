@@ -118,6 +118,17 @@
                     max="99"
                     disabled
                   />
+                  <input
+                    class="form-control"
+                    type="text"
+                    name="proc_en_contra"
+                    id="proc_en_contra"
+                    placeholder="Opcional"
+                    value="CUOTA DESEADA"
+                    min="1"
+                    max="99"
+                    disabled
+                  />
                 </label>
               </div>
               <div class="col-6">
@@ -128,6 +139,15 @@
                 <p class="panel-value">
                   {{ totales.compraCartera | currency }}
                 </p>
+                <p class="panel-value">
+                  {{ (totales.compraCartera - conteoEgresos) | currency }}
+                </p>
+                <input
+                  type="number"
+                  class="form-control"
+                  :value="cuotadeseada"
+                  @input="event => setCuotaDeseada(event.target.value)"
+                />
               </div>
             </div>
           </div>
@@ -159,6 +179,8 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex';
+
 export default {
   name: 'DetalleCliente',
   props: ['descuentossedcauca', 'totales'],
@@ -169,6 +191,12 @@ export default {
         { label: 'FECHA', field: 'fecdata' }
       ]
     };
+  },
+  computed: {
+    ...mapState('datamesModule', ['cuotadeseada', 'conteoEgresos'])
+  },
+  methods: {
+    ...mapMutations('datamesModule', ['setCuotaDeseada'])
   }
 };
 </script>

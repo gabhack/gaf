@@ -53,6 +53,11 @@
           :datamesseccali="datamesseccali"
         />
 
+
+        <!--================================
+         DATAMES SECRETARIAS
+        ===================================-->
+
         <DatamesData
           v-if="
             pagaduriaType == 'SEDCAUCA' ||
@@ -93,7 +98,11 @@
               pagaduriaType == 'SEDCAUCA' ||
               pagaduriaType == 'SEDCHOCO' ||
               pagaduriaType == 'SEDQUIBDO' ||
-              pagaduriaType == 'SECCALI'
+              pagaduriaType == 'SECCALI' ||
+              pagaduriaType == 'SEDMAGDALENA' ||
+              pagaduriaType == 'SEDBARRANQUILLA' ||
+              pagaduriaType == 'SEDATLANTICO' ||
+              pagaduriaType == 'SEDBOLIVAR' 
             "
             :coupons="coupons"
           />
@@ -110,6 +119,16 @@
           <EmbargosSedcauca v-if="pagaduriaType == 'SEDCAUCA'" :embargossedcauca="embargossedcauca" />
           <EmbargosSedquibdo v-if="pagaduriaType == 'SEDQUIBDO'" :embargossedquibdo="embargossedquibdo" />
           <EmbargosSedpopayan v-if="pagaduriaType == 'SEDPOPAYAN'" :embargossedpopayan="embargossedpopayan" />
+          <EmbargosEmpty  
+            v-if="
+              pagaduriaType == 'SEDMAGDALENA' ||
+              pagaduriaType == 'SEDBARRANQUILLA' ||
+              pagaduriaType == 'SEDATLANTICO' ||
+              pagaduriaType == 'SEDBOLIVAR' ||
+              pagaduriaType == 'SEDNARINO'
+            " 
+            :embargosempty="embargosempty" 
+          />
 
           <Descuentossecedu v-if="pagaduriaType == 'FODE VALLE'" :descuentossecedu="descuentosseceduc" />
           <Descuentossedchoco v-if="pagaduriaType == 'SEDCHOCO'" :descuentossedchoco="descuentossedchoco" />
@@ -117,6 +136,16 @@
           <Descuentosseccali v-if="pagaduriaType == 'SECCALI'" :descuentosseccali="descuentosseccali" />
           <Descuentossedquibdo v-if="pagaduriaType == 'SEDQUIBDO'" :descuentossedquibdo="descuentossedquibdo" />
           <Descuentossedpopayan v-if="pagaduriaType == 'SEDPOPAYAN'" :descuentossedpopayan="descuentossedpopayan" />
+          <DescuentosEmpty 
+            v-if="
+              pagaduriaType == 'SEDMAGDALENA' ||
+              pagaduriaType == 'SEDBARRANQUILLA' ||
+              pagaduriaType == 'SEDATLANTICO' ||
+              pagaduriaType == 'SEDBOLIVAR' ||
+              pagaduriaType == 'SEDNARINO'
+            " 
+            :descuentosempty="descuentosempty"
+          />
         </template>
 
         <Others
@@ -158,7 +187,9 @@ import EmbargosSedquibdo from './EmbargosSedquibdo';
 import EmbargosSedcauca from './EmbargosSedcauca';
 import EmbargosSedpopayan from './EmbargosSedpopayan';
 import EmbargosSeccali from './EmbargosSeccali';
+import EmbargosEmpty from './EmbargosEmpty';
 import Descuentossecedu from './Descuentossecedu';
+import DescuentosEmpty from './DescuentosEmpty';
 import Descuentossedchoco from './Descuentossedchoco';
 import Descuentossedcauca from './Descuentossedcauca';
 import Detallecliente from './Detallecliente';
@@ -198,6 +229,8 @@ export default {
     Descuentosseccali,
     Descuentossedquibdo,
     Descuentossedpopayan,
+    DescuentosEmpty,
+    EmbargosEmpty,
     Loading
   },
 
@@ -217,7 +250,9 @@ export default {
       embargossedquibdo: [],
       embargossedpopayan: [],
       embargosseccali: [],
+      embargosempty: [],
       descuentosseceduc: [],
+      descuentosempty: [],
       descuentossedchoco: [],
       descuentossedcauca: [],
       descuentosseccali: [],
@@ -241,39 +276,50 @@ export default {
         valorIngreso = Number(this.datames.vpension.replace(/[^0-9]/g, '').slice(0, -2));
       } else if (this.pagaduriaType == 'FIDUPREVISORA') {
         valorIngreso = Number(this.datamesfidu.vpension.replace(/[^0-9]/g, '').slice(0, -2));
+      } else if (this.pagaduriaType === 'SEDNARINO') {
+        valorIngreso = Number(this.pagadurias.datamesSedNarino.vingreso.replace(/[^0-9]/g, '').slice(0));
+        console.log(valorIngreso);
       } else {
         valorIngreso = this.coupons.filter(item => item.code === 'INGCUP')[0].ingresos;
       }
 
-      console.log('valorIngreso', valorIngreso);
 
       let disccount = 0.08;
       if (this.pagaduriaType === 'FOPEP' || this.pagaduriaType == 'FIDUPREVISORA') {
         if (valorIngreso == valrSM) {
           disccount = 0.04;
         } else if (valorIngreso > valrSM && valorIngreso < valrSM * 2) {
-          disccount = 0.1;
+          disccount = 0.08;
         } else if (valorIngreso >= valrSM * 2) {
           disccount = 0.12;
         }
       }
 
-      const valorIngresoTemp = valorIngreso - valorIngreso * disccount;
+      const valorIngresoTemp = valorIngreso - (valorIngreso * disccount);
+
 
       let items = [];
+      let itemslength = [];
 
       let totalEgresos = 0;
       if (this.pagaduriaType === 'FOPEP' || this.pagaduriaType == 'FIDUPREVISORA') {
         items = this.descapli;
+        itemslength = items.length;
         totalEgresos = items.reduce((a, b) => a + Number(b.vaplicado), 0);
       } else {
-        items = this.coupons.filter(item => item.code !== 'SUEBA' && Number(item.egresos) > 0);
+        items = this.coupons.filter(item => item.code !== 'INGCUP' && Number(item.egresos) > 0);
+        itemslength = items.length;
         totalEgresos = items.reduce((total, item) => total + Number(item.egresos), 0);
       }
 
       let totalDescuentos = 0;
       if (this.pagaduriaType === 'FOPEP' || this.pagaduriaType == 'FIDUPREVISORA') {
         totalDescuentos = this.descapli.length;
+      } else if(this.pagaduriaType === 'SEDATLANTICO' || this.pagaduriaType === 'SEDBARRANQUILLA' 
+      || this.pagaduriaType === 'SEDMAGDALENA' 
+      || this.pagaduriaType === 'SEDBOLIVAR' 
+      || this.pagaduriaType === 'SEDNARINO'){
+        totalDescuentos = 0;
       } else {
         totalDescuentos = this[`descuentos${this.pagaduriaKey}`].length;
       }
@@ -281,6 +327,11 @@ export default {
       let totalEmbargos = 0;
       if (this.pagaduriaType === 'FOPEP' || this.pagaduriaType == 'FIDUPREVISORA') {
         totalEmbargos = 0; // this.descnoap.length
+      }  else if(this.pagaduriaType === 'SEDATLANTICO' || this.pagaduriaType === 'SEDBARRANQUILLA' 
+      || this.pagaduriaType === 'SEDMAGDALENA' 
+      || this.pagaduriaType === 'SEDBOLIVAR' 
+      || this.pagaduriaType === 'SEDNARINO'){
+        totalEmbargos = 0;
       } else {
         totalEmbargos = this[`embargos${this.pagaduriaKey}`].length;
       }
@@ -295,7 +346,7 @@ export default {
       const libreInversionTemp = compraCartera - totalEgresos;
 
       return {
-        itemsTotal: items.length,
+        itemsTotal: itemslength,
         descuentos: totalDescuentos,
         embargos: totalEmbargos,
         libreInversion: libreInversionTemp < 0 ? 0 : libreInversionTemp,

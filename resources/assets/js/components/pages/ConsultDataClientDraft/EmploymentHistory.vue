@@ -241,7 +241,7 @@
           <!-- DATAMES SED -->
           <template v-if="datamesfidu || datames || datamesseceduc"> </template>
           <template v-else-if="datamesSed">
-            <div class="col-12" v-if="ingresosExtras.length > 0">
+            <div class="col-12" v-if="ingresosExtras.length >= 0">
               <div class="row">
                 <div class="col-6">
                   <b class="panel-label">VALOR INGRESO:</b>
@@ -249,6 +249,7 @@
                 <div class="col-6">
                   <div>
                     <p class="panel-value" v-if="salarioBasico">{{ salarioBasico | currency }}</p>
+                    <p class="panel-value" v-else-if="datamesSed.vingreso">{{ datamesSed.vingreso | currency }}</p>
                     <p class="panel-value" v-else>{{ datamesSed.vingresos | currency }}</p>
                   </div>
                 </div>

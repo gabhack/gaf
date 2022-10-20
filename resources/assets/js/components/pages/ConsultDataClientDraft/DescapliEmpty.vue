@@ -15,6 +15,20 @@
       </div>
       <div class="panel-body">
         <div class="row">
+          <div v-for="label in labels" :key="label.field">
+            <template v-for="(item, key) in data">
+              <div class="col-1" v-if="label.currency" :key="key">
+                <div class="panel-value">
+                  <input
+                    type="checkbox"
+                    :value="item.id"
+                    :disabled="Number(item[label.field]) > Number(cuotadeseada)"
+                    @input="event => AddItem(event.target.value)"
+                  />
+                </div>
+              </div>
+            </template>
+          </div>
           <div :class="label.colClass || 'col-2'" v-for="label in labels" :key="label.field">
             <b class="panel-label table-text">{{ label.label }}:</b>
             <template v-if="data.length > 0">
@@ -43,6 +57,7 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex';
 export default {
   name: 'DescapliEmpty',
   props: ['descapli', 'coupons'],
@@ -50,17 +65,19 @@ export default {
     return {
       labels: [
         { label: 'TIPO ENTIDAD', field: 'clase' },
-        { label: 'NOMBRE ENTIDAD', field: 'nomtercero', colClass: 'col-4' },
+        { label: 'NOMBRE ENTIDAD', field: 'nomtercero', colClass: 'col-3' },
         { label: 'CUOTA', field: 'vaplicado', currency: true },
         { label: 'FECHA INICIO DEUDA', field: 'fgrab' },
         { label: 'NOMBRE ENTIDAD CEDIENTE', field: 'nonentant' }
       ],
-      selectedPeriod: ''
+      selectedPeriod: '',
+      itemsCheckbox: []
     };
   },
   computed: {
+    ...mapState('datamesModule', ['cuotadeseada']),
     periods() {
-      return this.coupons.reduce((acc, coupon) => {
+      const periodos = this.coupons.reduce((acc, coupon) => {
         // if (acc.indexOf(coupon.finperiodo) === -1) {
         //   acc.push(coupon.finperiodo);
         // }
@@ -69,6 +86,7 @@ export default {
         }
         return acc;
       }, []);
+      return periodos.sort();
     },
     periodDate() {
       return this.coupons.length > 0 ? this.coupons[0].period : null;
@@ -95,6 +113,29 @@ export default {
         return items;
       }
     }
+  },
+  methods: {
+    ...mapMutations('datamesModule', ['setConteoEgresos']),
+    AddItem(value) {
+      const index = this.itemsCheckbox.findIndex(item => item.id == value);
+      if (index == -1) {
+        this.data.find(item => {
+          if (item.id == value) {
+            this.itemsCheckbox.push(item);
+          }
+        });
+      } else {
+        this.itemsCheckbox.splice(index, 1);
+      }
+      this.ValueEgresos();
+    },
+    ValueEgresos() {
+      const total = this.itemsCheckbox.reduce((a, b) => a + Number(b.vaplicado), 0);
+      this.setConteoEgresos(total);
+    }
+  },
+  mounted() {
+    this.selectedPeriod = this.periods.length > 0 ? this.periods[this.periods.length - 1] : '';
   }
 };
 </script>

@@ -146,7 +146,7 @@ class PagaduriasController extends Controller
             'datamesSedQuibdo' => $datamesSedQuibdo,
             'datamesSedBolivar' => $datamesSedBolivar,
             'datamesSedBarranquilla' => $datamesSedBarranquilla,
-            'datamesSedAtlantico' => $datamesSedAtlantico,
+            'datamessedatlantico' => $datamesSedAtlantico,
             'datamesSedNarino' => $datamesSedNarino,
             'datamesSedMagdalena' => $datamesSedMagdalena,
         ];

@@ -15,6 +15,18 @@
           <b class="panel-label">NOMBRES Y APELLIDOS:</b>
           <input required class="form-control text-center" type="text" v-model="dataclient.name" />
         </div>
+        <div class="col-6">
+          <b class="panel-label">CUOTA DESEADA:</b>
+          <input required class="form-control text-center" type="number" v-model.number="dataclient.cuotadeseada" />
+        </div>
+        <div class="col-6">
+          <b class="panel-label">MONTO:</b>
+          <input required class="form-control text-center" type="text" />
+        </div>
+        <div class="col-6">
+          <b class="panel-label">PLAZO:</b>
+          <input required class="form-control text-center" type="text" />
+        </div>
 
         <div class="col-6">
           <b class="panel-label">PAGADURIAS:</b>
@@ -64,6 +76,7 @@ export default {
       dataclient: {
         doc: '',
         name: '',
+        cuotadeseada: 0,
         pagaduria: null,
         pagadurias: null,
         pagaduriaKey: null
@@ -81,16 +94,16 @@ export default {
         { label: 'SED MAGDALENA', value: 'SEDMAGDALENA', key: 'datamesSedMagdalena' },
         { label: 'SED BOLIVAR', value: 'SEDBOLIVAR', key: 'datamesSedBolivar' },
         { label: 'SED BARRANQUILLA', value: 'SEDBARRANQUILLA', key: 'datamesSedBarranquilla' },
-        { label: 'SED ATLANTICO', value: 'SEDATLANTICO', key: 'datamesSedAtlantico' },
+        { label: 'SED ATLANTICO', value: 'SEDATLANTICO', key: 'datamessedatlantico' },
         { label: 'SED NARIÑO', value: 'SEDNARINO', key: 'datamesSedNarino' }
       ]
     };
   },
   computed: {
-    ...mapState('datamesModule', ['datamesSed'])
+    ...mapState('datamesModule', ['datamesSed', 'cuotadeseada'])
   },
   methods: {
-    ...mapMutations('datamesModule', ['setDatamesSed']),
+    ...mapMutations('datamesModule', ['setDatamesSed', 'setCuotaDeseada']),
     selectedPagaduria() {
       if (this.dataclient.pagaduria) {
         const type = this.pagaduriasType.find(type => type.value === this.dataclient.pagaduria);
@@ -111,6 +124,7 @@ export default {
         toastr.info('No tenemos informacion de este documento en el momento');
       } else {
         this.dataclient.pagadurias = response.data;
+        this.setCuotaDeseada(this.dataclient.cuotadeseada);
       }
 
       this.isLoading = false;
