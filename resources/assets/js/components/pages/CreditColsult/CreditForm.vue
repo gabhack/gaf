@@ -1057,7 +1057,7 @@ export default {
     getAllPagadurias() {
       return new Promise((resolve, reject) => {
         axios
-          .post('/pagadurias/consultaUnitaria', { doc: this.form.idNumber })
+          .get(`/pagadurias/per-doc/${this.form.idNumber}`)
           .then(res => {
             resolve(res.data);
           })

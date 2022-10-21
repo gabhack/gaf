@@ -41,7 +41,7 @@
                 </div>
                 <div class="panel-body">
                     <div class="row">
-                        <form action="{{ url('deceval/consultar') }}" method="post" class="form-group col-md-12">
+                        <form action="{{ url('deceval/consultar') }}" method="get" class="form-group col-md-12">
                             {{ csrf_field() }}
                             <div class="form-row">
                                 <div class="form-group col-md-4">

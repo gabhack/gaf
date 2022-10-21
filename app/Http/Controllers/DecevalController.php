@@ -244,7 +244,7 @@ class DecevalController extends Controller
          $otorganteNumId = $otorganteData->numeroDocumento;
          $otorganteCuenta = $otorganteData->cuentaGirador;
 
-         $url = "http://34.171.55.31/DecevalProxy/services/ProxyServicesImplPort?wsdl";
+         $url = "http://34.171.55.31:8080/DecevalProxy/services/ProxyServicesImplPort?wsdl";
          $xml_post_string = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://services.proxy.deceval.com/">
          <soapenv:Header/>
          <soapenv:Body>
@@ -439,7 +439,7 @@ class DecevalController extends Controller
 
    public function crearOtorgante($header, $girador, $nitEmisor)
    {
-      $url = "http://34.171.55.31/DecevalProxy/services/ProxyServicesImplPort?wsdl";
+      $url = "http://34.171.55.31:8080/DecevalProxy/services/ProxyServicesImplPort?wsdl";
 
       $xml_post_string = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://services.proxy.deceval.com/">
             <soapenv:Header/>
@@ -518,7 +518,7 @@ class DecevalController extends Controller
 
    public function consultarPagares($idDocumentoPagare, $otorganteTipoId, $otorganteNumId, $numPagareEntidad, $codigoDepositante, $fecha, $hora, $usuario)
    {
-      $url = "http://34.171.55.31/DecevalProxy/services/ProxyServicesImplPort?wsdl";
+      $url = "http://34.171.55.31:8080/DecevalProxy/services/ProxyServicesImplPort?wsdl";
       $xml_post_string = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://services.proxy.deceval.com/">
         <soapenv:Header/>
         <soapenv:Body>
@@ -586,7 +586,7 @@ class DecevalController extends Controller
 
    public function firmarPagareCaracteres($idDocumentoPagare, $otorganteNumId, $codigoDepositante, $fecha, $hora, $usuario)
    {
-      $url = "http://34.171.55.31/DecevalProxy/services/ProxyServicesImplPort?wsdl";
+      $url = "http://34.171.55.31:8080/DecevalProxy/services/ProxyServicesImplPort?wsdl";
       $xml_post_string = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://services.proxy.deceval.com/">
         <soapenv:Header/>
         <soapenv:Body>
