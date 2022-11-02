@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use DOMDocument;
 
@@ -311,10 +312,12 @@ class DecevalController extends Controller
 
          $response = curl_exec($ch);
          curl_close($ch);
+
+         $xml_name = $otorganteData->numeroDocumento . '_' . Carbon::parse($fecha)->format('d-m-Y') . '.xml';
          //echo  $response ;
          $doc = new DOMDocument();
          $doc->loadXML($response);
-         $doc->save('demoxds.xml');
+         $doc->save('pagareRequest_' . $xml_name);
 
          $idDocumentoPagare = $doc->getElementsByTagName('idDocumentoPagare')->item(0)->nodeValue;
          $numPagareEntidad = $doc->getElementsByTagName('numPagareEntidad')->item(0)->nodeValue;
@@ -330,7 +333,7 @@ class DecevalController extends Controller
             $usuario
          );
 
-         $response2->save('consulta.xml');
+         $response2->save('pagareResponse_' . $xml_name);
 
          $contenido = $response2->getElementsByTagName('contenido')->item(0)->nodeValue;
          $nombreArchivo = $response2->getElementsByTagName('nombreArchivo')->item(0)->nodeValue;
@@ -488,6 +491,12 @@ class DecevalController extends Controller
             </soapenv:Body>
          </soapenv:Envelope>';
 
+      $xml_name = $girador->numeroDocumento . '_' . Carbon::parse($header->fecha)->format('d-m-Y') . '.xml';
+
+      $doc = new DOMDocument();
+      $doc->loadXML($xml_post_string);
+      $doc->save('giradorRequest_' . $xml_name);
+
       $headers = array(
          "Content-type: text/xml; charset=\"utf-8\"",
          "Accept: text/xml",
@@ -509,6 +518,9 @@ class DecevalController extends Controller
 
       $response = curl_exec($ch);
       curl_close($ch);
+
+      $doc->loadXML($response);
+      $doc->save('giradorResponse_' . $xml_name);
 
       $array = XmlaPhp::createArray($response);
       $resultado = $array['soap:Envelope']['soap:Body']['ns2:creacionGiradoresCodificadosResponse']['return'];
@@ -551,9 +563,12 @@ class DecevalController extends Controller
            </ser:consultarPagares>
         </soapenv:Body>
      </soapenv:Envelope>';
+
+      $xml_name = $otorganteNumId . '_' . Carbon::parse($fecha)->format('d-m-Y') . '.xml';
+
       $doc = new DOMDocument();
       $doc->loadXML($xml_post_string);
-      $doc->save('consultaRequest.xml');
+      $doc->save('consultaRequest_' . $xml_name);
 
       $headers = array(
          "Content-type: text/xml; charset=\"utf-8\"",
@@ -580,7 +595,7 @@ class DecevalController extends Controller
       $doc = new DOMDocument();
       //echo $response;
       $doc->loadXML($response);
-      $doc->save('consultaResponseFrm.xml');
+      $doc->save('consultaResponseFrm_' . $xml_name);
       return $doc;
    }
 
@@ -618,6 +633,12 @@ class DecevalController extends Controller
         </soapenv:Body>
      </soapenv:Envelope>';
 
+      $xml_name = $idDocumentoPagare . '_' . Carbon::parse($fecha)->format('d-m-Y') . '.xml';
+
+      $doc = new DOMDocument();
+      $doc->loadXML($xml_post_string);
+      $doc->save('firmaPagareCaracteresRequest_' . $xml_name);
+
       $headers = array(
          "Content-type: text/xml; charset=\"utf-8\"",
          "Accept: text/xml",
@@ -639,8 +660,11 @@ class DecevalController extends Controller
 
       $response = curl_exec($ch);
       curl_close($ch);
+
       $doc = new DOMDocument();
       $doc->loadXML($response);
+      $doc->save('firmaPagareCaracteresResponse_' . $xml_name);
+
       return $doc;
    }
 
@@ -696,9 +720,11 @@ class DecevalController extends Controller
          "Content-lenght: " . strlen($xml_post_string)
       );
 
+      $xml_name = $documentId . '_' . '.xml';
+
       $doc = new DOMDocument();
       $doc->loadXML($xml_post_string);
-      $doc->save('initialRequest.xml');
+      $doc->save('initialRequest_' . $xml_name);
 
       $ch = curl_init();
       curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
@@ -717,7 +743,7 @@ class DecevalController extends Controller
       //echo  $response ;
       $doc = new DOMDocument();
       $doc->loadXML($response);
-      $doc->save('initialFirmProcess.xml');
+      $doc->save('initialFirmProcess_' . $xml_name);
 
       $dataUNScape = $doc->getElementsByTagName('ExecuteXMLStringResult')->item(0)->nodeValue;
       $docResponse = new DOMDocument();
@@ -767,10 +793,10 @@ class DecevalController extends Controller
                      </Authentication>
                      ' . $this->createRequestInfoFlow("Send", "PhoneSelection", $application) . '
                      <Fields>
-                        <Field key="PhoneType">Mobile</Field>	
+                        <Field key="PhoneType">Mobile</Field>
                         <Field key="SelectedPhoneNumber">' . $phoneSelection . '</Field>	
                   <Field key="ValidationMethod">SMS</Field>
-                     </Fields>	
+                     </Fields>
                   </DCRequest>
                ]]>
             </tem:request>
@@ -848,16 +874,20 @@ class DecevalController extends Controller
                      </Authentication>
                      ' . $this->createRequestInfoFlow("Send", "PinVerification_OTPInput", $application) . '
                      <Fields>
-                      <Field key="PinNumber">' . $code . '</Field>	
+                      <Field key="PinNumber">' . $code . '</Field>
          				   <Field key="Action">Continue</Field>
-                     </Fields>	
+                     </Fields>
                   </DCRequest>
                ]]>
             </tem:request>
          </tem:ExecuteXMLString>
       </soapenv:Body>
       </soapenv:Envelope>';
-      //echo $xml_post_string;
+
+      $doc = new DOMDocument();
+      $doc->loadXML($xml_post_string);
+      $doc->save('confirmarCodeRequest.xml');
+
       $headers = array(
          "Content-type: text/xml; charset=\"utf-8\"",
          "Accept: text/xml",
@@ -880,8 +910,7 @@ class DecevalController extends Controller
 
       $response = curl_exec($ch);
       curl_close($ch);
-      //echo  $response ;
-      $doc = new DOMDocument();
+
       $doc->loadXML($response);
       $doc->save('confirmarCodeResponse.xml');
    }
