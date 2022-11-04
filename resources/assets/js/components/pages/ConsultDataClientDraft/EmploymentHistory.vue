@@ -262,9 +262,7 @@
                 </div>
                 <div class="col-6">
                   <div>
-                    <p class="panel-value" v-if="salarioBasico">{{ salarioBasico | currency }}</p>
-                    <p class="panel-value" v-else-if="datamesSed.vingreso">{{ datamesSed.vingreso | currency }}</p>
-                    <p class="panel-value" v-else>{{ datamesSed.vingresos | currency }}</p>
+                    <p class="panel-value">{{ valorIngresos | currency }}</p>
                   </div>
                 </div>
               </div>
@@ -467,6 +465,10 @@ export default {
     },
     salarioBasico() {
       const item = this.coupons ? this.coupons.find(coupon => coupon.code === 'SUEBA') : null;
+      return item && item.ingresos;
+    },
+    valorIngresos() {
+      const item = this.coupons ? this.coupons.find(coupon => coupon.code === 'INGCUP') : null;
       return item && item.ingresos;
     }
   }
