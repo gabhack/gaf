@@ -122,6 +122,20 @@
             </div>
 
             <div class="col-6">
+              <b class="panel-label"> TIPO DE CONTRATO:</b>
+              <div>
+                <p class="panel-value">{{ datamesseceduc.ncontr }}</p>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <b class="panel-label"> PRINCIPAL :</b>
+              <div>
+                <p class="panel-value">{{ datamesseceduc.dependencia ? datamesseceduc.dependencia : '-' }}</p>
+              </div>
+            </div>
+
+            <div class="col-6">
               <b class="panel-label">TIPO VINCULACIÓN:</b>
               <div>
                 <p class="panel-value">{{ datamesseceduc.nivcontr }}</p>
@@ -330,6 +344,41 @@
               <b class="panel-label">CARGO:</b>
               <div>
                 <p class="panel-value">{{ datamesSed.cargo }}</p>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <b class="panel-label"> TIPO DE CONTRATO:</b>
+              <div>
+                <p class="panel-value">{{ datamesSed.ncontr }}</p>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <b class="panel-label"> GRADO:</b>
+              <div>
+                <p class="panel-value">{{ datamesSed.grado }}</p>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <b class="panel-label"> PRINCIPAL :</b>
+              <div>
+                <p class="panel-value">{{ datamesSed.depen ? datamesSed.depen : '-' }}</p>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <b class="panel-label"> SEDE:</b>
+              <div>
+                <p class="panel-value">{{ datamesSed.cencosto ? datamesSed.cencosto : '-' }}</p>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <b class="panel-label"> CIUDAD LABORAL:</b>
+              <div>
+                <p class="panel-value">{{ datamesSed.ciudad }}</p>
               </div>
             </div>
           </template>
