@@ -122,6 +122,20 @@
             </div>
 
             <div class="col-6">
+              <b class="panel-label"> TIPO DE CONTRATO:</b>
+              <div>
+                <p class="panel-value">{{ datamesseceduc.ncontr }}</p>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <b class="panel-label"> PRINCIPAL :</b>
+              <div>
+                <p class="panel-value">{{ datamesseceduc.dependencia ? datamesseceduc.dependencia : '-' }}</p>
+              </div>
+            </div>
+
+            <div class="col-6">
               <b class="panel-label">TIPO VINCULACIÓN:</b>
               <div>
                 <p class="panel-value">{{ datamesseceduc.nivcontr }}</p>
@@ -248,9 +262,7 @@
                 </div>
                 <div class="col-6">
                   <div>
-                    <p class="panel-value" v-if="salarioBasico">{{ salarioBasico | currency }}</p>
-                    <p class="panel-value" v-else-if="datamesSed.vingreso">{{ datamesSed.vingreso | currency }}</p>
-                    <p class="panel-value" v-else>{{ datamesSed.vingresos | currency }}</p>
+                    <p class="panel-value">{{ valorIngresos | currency }}</p>
                   </div>
                 </div>
               </div>
@@ -330,6 +342,41 @@
               <b class="panel-label">CARGO:</b>
               <div>
                 <p class="panel-value">{{ datamesSed.cargo }}</p>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <b class="panel-label"> TIPO DE CONTRATO:</b>
+              <div>
+                <p class="panel-value">{{ datamesSed.ncontr }}</p>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <b class="panel-label"> GRADO:</b>
+              <div>
+                <p class="panel-value">{{ datamesSed.grado }}</p>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <b class="panel-label"> PRINCIPAL :</b>
+              <div>
+                <p class="panel-value">{{ datamesSed.depen ? datamesSed.depen : '-' }}</p>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <b class="panel-label"> SEDE:</b>
+              <div>
+                <p class="panel-value">{{ datamesSed.cencosto ? datamesSed.cencosto : '-' }}</p>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <b class="panel-label"> CIUDAD LABORAL:</b>
+              <div>
+                <p class="panel-value">{{ datamesSed.ciudad }}</p>
               </div>
             </div>
           </template>
@@ -418,6 +465,10 @@ export default {
     },
     salarioBasico() {
       const item = this.coupons ? this.coupons.find(coupon => coupon.code === 'SUEBA') : null;
+      return item && item.ingresos;
+    },
+    valorIngresos() {
+      const item = this.coupons ? this.coupons.find(coupon => coupon.code === 'INGCUP') : null;
       return item && item.ingresos;
     }
   }
