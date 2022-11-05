@@ -5,18 +5,18 @@
         <b>OBLIGACIONES VIGENTES AL DIA</b>
         <div class="d-flex align-items-center">
           <b>PERIODO:</b>
-          <select class="form-control mr-2" v-model="selectedPeriod">
-            <option :value="period" v-for="period in periods" :key="period">
+          <select class="form-control mr-2" @change="setSelectedPeriod($event.target.value)">
+            <option :value="period" v-for="period in pagaduriaPeriodos" :key="period">
               {{ period }}
             </option>
           </select>
-          <b-button @click="selectedPeriod = ''" variant="black-pearl">X</b-button>
+          <b-button @click="setSelectedPeriod('')" variant="black-pearl">X</b-button>
         </div>
       </div>
       <div class="panel-body">
         <div class="row">
           <div v-for="label in labels" :key="label.field">
-            <template v-for="(item, key) in data">
+            <template v-for="(item, key) in couponsIngresos.items">
               <div class="col-1" v-if="label.currency" :key="key">
                 <div class="panel-value">
                   <input
@@ -31,8 +31,8 @@
           </div>
           <div :class="label.colClass || 'col-2'" v-for="label in labels" :key="label.field">
             <b class="panel-label table-text">{{ label.label }}:</b>
-            <template v-if="data.length > 0">
-              <div v-for="(item, key) in data" :key="key">
+            <template v-if="couponsIngresos.items.length > 0">
+              <div v-for="(item, key) in couponsIngresos.items" :key="key">
                 <p class="panel-value">
                   <template v-if="item[label.field]">
                     <template v-if="label.currency">
@@ -57,10 +57,9 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex';
+import { mapState, mapGetters, mapMutations } from 'vuex';
 export default {
   name: 'DescapliEmpty',
-  props: ['descapli', 'coupons'],
   data() {
     return {
       labels: [
@@ -70,56 +69,24 @@ export default {
         { label: 'FECHA INICIO DEUDA', field: 'fgrab' },
         { label: 'NOMBRE ENTIDAD CEDIENTE', field: 'nonentant' }
       ],
-      selectedPeriod: '',
       itemsCheckbox: []
     };
   },
   computed: {
     ...mapState('datamesModule', ['cuotadeseada']),
-    periods() {
-      const periodos = this.coupons.reduce((acc, coupon) => {
-        // if (acc.indexOf(coupon.finperiodo) === -1) {
-        //   acc.push(coupon.finperiodo);
-        // }
-        if (acc.indexOf(coupon.inicioperiodo) === -1) {
-          acc.push(coupon.inicioperiodo);
-        }
-        return acc;
-      }, []);
-      return periodos.sort();
-    },
-    periodDate() {
-      return this.coupons.length > 0 ? this.coupons[0].period : null;
-    },
-    couponsAsDescapli() {
-      const items = this.coupons.filter(item => item.code !== 'SUEBA' && Number(item.egresos) > 0);
-      return items.map(item => {
-        return {
-          ...item,
-          nomtercero: item.concept,
-          vaplicado: item.egresos
-        };
-      });
-    },
-    data() {
-      const descaplis = this.descapli ? this.descapli : [];
-      const items = [...descaplis, ...this.couponsAsDescapli];
-
-      if (this.selectedPeriod) {
-        return items.filter(
-          item => item.finperiodo === this.selectedPeriod || item.inicioperiodo === this.selectedPeriod
-        );
-      } else {
-        return items;
-      }
-    }
+    ...mapState('pagaduriasModule', ['coupons']),
+    ...mapGetters('pagaduriasModule', ['couponsIngresos', 'pagaduriaPeriodos'])
+  },
+  mounted() {
+    this.setSelectedPeriod(this.pagaduriaPeriodos[0]);
   },
   methods: {
     ...mapMutations('datamesModule', ['setConteoEgresos']),
+    ...mapMutations('pagaduriasModule', ['setSelectedPeriod']),
     AddItem(value) {
       const index = this.itemsCheckbox.findIndex(item => item.id == value);
       if (index == -1) {
-        this.data.find(item => {
+        this.couponsIngresos.items.find(item => {
           if (item.id == value) {
             this.itemsCheckbox.push(item);
           }
@@ -133,9 +100,6 @@ export default {
       const total = this.itemsCheckbox.reduce((a, b) => a + Number(b.vaplicado), 0);
       this.setConteoEgresos(total);
     }
-  },
-  mounted() {
-    this.selectedPeriod = this.periods.length > 0 ? this.periods[this.periods.length - 1] : '';
   }
 };
 </script>

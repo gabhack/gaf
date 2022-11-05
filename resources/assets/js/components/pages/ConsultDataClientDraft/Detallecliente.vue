@@ -51,7 +51,7 @@
                 name="proc_en_contra"
                 id="proc_en_contra"
                 placeholder="Opcional"
-                :value="totales.itemsTotal"
+                :value="couponsIngresos.total"
                 min="1"
                 max="99"
                 disabled
@@ -179,7 +179,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex';
+import { mapState, mapMutations, mapGetters } from 'vuex';
 
 export default {
   name: 'DetalleCliente',
@@ -193,7 +193,8 @@ export default {
     };
   },
   computed: {
-    ...mapState('datamesModule', ['cuotadeseada', 'conteoEgresos'])
+    ...mapState('datamesModule', ['cuotadeseada', 'conteoEgresos']),
+    ...mapGetters('pagaduriasModule', ['couponsIngresos'])
   },
   methods: {
     ...mapMutations('datamesModule', ['setCuotaDeseada'])

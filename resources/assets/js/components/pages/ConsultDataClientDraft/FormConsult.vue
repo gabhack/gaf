@@ -104,7 +104,10 @@ export default {
   },
   methods: {
     ...mapMutations('datamesModule', ['setDatamesSed', 'setCuotaDeseada']),
+    ...mapMutations('pagaduriasModule', ['setPagaduriaType']),
     selectedPagaduria() {
+      this.setPagaduriaType(this.dataclient.pagaduria);
+
       if (this.dataclient.pagaduria) {
         const type = this.pagaduriasType.find(type => type.value === this.dataclient.pagaduria);
         const pagaduria = this.dataclient.pagadurias[type.key];
