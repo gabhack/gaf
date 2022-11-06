@@ -14,6 +14,7 @@
                   <template v-if="label.currency">
                     {{ datamesSed[label.field] | currency }}
                   </template>
+                  <template v-if="label.field == 'documentType'"> CÉDULA DE CIUDADANÍA </template>
                   <template v-else>
                     {{ datamesSed[label.field] }}
                   </template>
@@ -36,7 +37,7 @@ export default {
   data() {
     return {
       labels: [
-        { label: 'TIPO DOCUMENTO', field: '' },
+        { label: 'TIPO DOCUMENTO', field: 'documentType' },
         { label: 'NÚMERO DOCUMENTO', field: 'nvinc' },
         { label: 'NOMBRE Y APELLIDO', field: 'nomp' },
         { label: 'FECHA DE NACIMIENTO', field: 'fecnacimient' },
