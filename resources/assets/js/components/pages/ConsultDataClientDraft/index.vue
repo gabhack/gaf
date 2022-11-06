@@ -2,6 +2,14 @@
   <div class="container-fluid">
     <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="true" color="#0CEDB0" />
 
+    <b-toast id="toast-incapacidad-month" title="Alerta del Sistema" solid no-auto-hide variant="info">
+      Cliente con incapacidad mayor a 3 meses.
+    </b-toast>
+
+    <b-toast id="toast-incapacidad" title="Alerta del Sistema" solid no-auto-hide variant="info">
+      Cliente no apto para Incapacidad.
+    </b-toast>
+
     <div v-if="type_consult === 'individual'">
       <div class="row mb-5">
         <div class="col-12 d-flex align-items-center justify-content-between">
@@ -266,7 +274,7 @@ export default {
   },
   computed: {
     ...mapState('pagaduriasModule', ['coupons', 'pagaduriaType']),
-    ...mapGetters('pagaduriasModule', ['couponsPerPeriod']),
+    ...mapGetters('pagaduriasModule', ['couponsPerPeriod', 'valorIngreso', 'ingresosIncapacidad', 'incapacidadValida']),
     totales() {
       const valrSM = 1000000;
 
@@ -332,7 +340,7 @@ export default {
       ) {
         totalDescuentos = 0;
       } else {
-        totalDescuentos = this[`descuentos${this.pagaduriaKey}`].length;
+        totalDescuentos = this.pagaduriaKey ? this[`descuentos${this.pagaduriaKey}`].length : 0;
       }
 
       let totalEmbargos = 0;
@@ -347,7 +355,7 @@ export default {
       ) {
         totalEmbargos = 0;
       } else {
-        totalEmbargos = this[`embargos${this.pagaduriaKey}`].length;
+        totalEmbargos = this.pagaduriaKey ? this[`embargos${this.pagaduriaKey}`].length : 0;
       }
 
       let compraCartera =
@@ -504,6 +512,18 @@ export default {
 
       const response = await axios.post('/get-coupons', data);
       this.setCoupons(response.data);
+
+      setTimeout(() => {
+        // Valida si el tiene incapacidades
+        if (this.incapacidadValida === false) {
+          this.$bvToast.show('toast-incapacidad-month');
+        }
+
+        // Valida si el valor de la incapacidad es mayor al valor del ingreso
+        if (this.ingresosIncapacidad.amount >= Number(this.valorIngreso)) {
+          this.$bvToast.show('toast-incapacidad');
+        }
+      }, 1000);
     },
     print() {
       window.print();

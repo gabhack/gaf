@@ -262,7 +262,7 @@
                 </div>
                 <div class="col-6">
                   <div>
-                    <p class="panel-value">{{ valorIngresos | currency }}</p>
+                    <p class="panel-value">{{ valorIngreso | currency }}</p>
                   </div>
                 </div>
               </div>
@@ -449,11 +449,7 @@ export default {
   props: ['fechavinc', 'datames', 'datamesseceduc', 'datamesfidu', 'datamesseccali', 'user'],
   computed: {
     ...mapState('datamesModule', ['datamesSed']),
-    ...mapGetters('pagaduriasModule', ['ingresosExtras', 'salarioBasico']),
-    valorIngresos() {
-      const item = this.coupons ? this.coupons.find(coupon => coupon.code === 'INGCUP') : null;
-      return item && item.ingresos;
-    }
+    ...mapGetters('pagaduriasModule', ['ingresosExtras', 'salarioBasico', 'valorIngreso'])
   }
 };
 </script>
