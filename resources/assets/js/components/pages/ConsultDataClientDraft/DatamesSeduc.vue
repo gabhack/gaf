@@ -7,7 +7,7 @@
           <div class="col-6">
             <b class="panel-label">TIPO DE DOCUMENTO:</b>
             <div>
-              <p class="panel-value">{{ datamesseceduc.td ? datamesseceduc.td : 'Cédula de Ciudadania' }}</p>
+              <p class="panel-value">{{ datamesseceduc.td ? datamesseceduc.td : 'CÉDULA DE CIUDADANÍA' }}</p>
             </div>
           </div>
           <div class="col-6">
@@ -66,15 +66,15 @@
           </div>
 
           <div
-              class="col-6"
-              v-if="
-                    user.roles_id === 1 ||
-                    user.roles_id === '1' ||
-                    user.roles_id === 4 ||
-                    user.roles_id === '4' ||
-                    user.roles_id === 5 ||
-                    user.roles_id === '5'
-                  "
+            class="col-6"
+            v-if="
+              user.roles_id === 1 ||
+              user.roles_id === '1' ||
+              user.roles_id === 4 ||
+              user.roles_id === '4' ||
+              user.roles_id === 5 ||
+              user.roles_id === '5'
+            "
           >
             <b class="panel-label">FECHA CARGA DATA:</b>
             <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
@@ -83,15 +83,15 @@
           </div>
 
           <div
-              class="col-6"
-              v-if="
-                    user.roles_id === 1 ||
-                    user.roles_id === '1' ||
-                    user.roles_id === 4 ||
-                    user.roles_id === '4' ||
-                    user.roles_id === 5 ||
-                    user.roles_id === '5'
-                  "
+            class="col-6"
+            v-if="
+              user.roles_id === 1 ||
+              user.roles_id === '1' ||
+              user.roles_id === 4 ||
+              user.roles_id === '4' ||
+              user.roles_id === 5 ||
+              user.roles_id === '5'
+            "
           >
             <b class="panel-label">MES CARGA DATA:</b>
             <div>
@@ -100,15 +100,15 @@
           </div>
 
           <div
-              class="col-6"
-              v-if="
-                    user.roles_id === 1 ||
-                    user.roles_id === '1' ||
-                    user.roles_id === 4 ||
-                    user.roles_id === '4' ||
-                    user.roles_id === 5 ||
-                    user.roles_id === '5'
-                  "
+            class="col-6"
+            v-if="
+              user.roles_id === 1 ||
+              user.roles_id === '1' ||
+              user.roles_id === 4 ||
+              user.roles_id === '4' ||
+              user.roles_id === 5 ||
+              user.roles_id === '5'
+            "
           >
             <b class="panel-label">AÑO CARGA DATA:</b>
             <div>
@@ -123,11 +123,10 @@
 
 <script>
 export default {
-  name: "DatamesSeduc",
-  props: ['datamesseceduc', 'user'],
-}
+  name: 'DatamesSeduc',
+  props: ['datamesseceduc', 'user']
+};
 </script>
 
 <style scoped>
-
 </style>

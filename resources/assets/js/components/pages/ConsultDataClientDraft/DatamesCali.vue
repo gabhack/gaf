@@ -7,7 +7,7 @@
           <div class="col-6">
             <b class="panel-label">TIPO DE DOCUMENTO:</b>
             <div>
-              <p class="panel-value">Cédula de Ciudadania</p>
+              <p class="panel-value">CÉDULA DE CIUDADANÍA</p>
             </div>
           </div>
           <div class="col-6">
@@ -58,110 +58,108 @@
               <p class="panel-value">-</p>
             </div>
           </div>
-<!--          <div class="col-md-6">-->
-<!--            <b class="panel-label">CORREO:</b>-->
-<!--            <div v-for="(datamesseccali, key) in datames" :key="key">-->
-<!--              <p class="panel-value">{{ datamesseccali.email }}</p>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <div-->
-<!--              class="col-6"-->
-<!--              v-if="-->
-<!--                    user.roles_id === 1 ||-->
-<!--                    user.roles_id === '1' ||-->
-<!--                    user.roles_id === 4 ||-->
-<!--                    user.roles_id === '4' ||-->
-<!--                    user.roles_id === 5 ||-->
-<!--                    user.roles_id === '5'-->
-<!--                  "-->
-<!--          >-->
-<!--            <b class="panel-label">DESCRIPCIÓN:</b>-->
-<!--            <div v-for="(datamesfidu, key) in datamesfidu" :key="key">-->
-<!--              <p class="panel-value">{{ datamesfidu.desctipvinc }}</p>-->
-<!--            </div>-->
-<!--          </div>-->
+          <!--          <div class="col-md-6">-->
+          <!--            <b class="panel-label">CORREO:</b>-->
+          <!--            <div v-for="(datamesseccali, key) in datames" :key="key">-->
+          <!--              <p class="panel-value">{{ datamesseccali.email }}</p>-->
+          <!--            </div>-->
+          <!--          </div>-->
+          <!--          <div-->
+          <!--              class="col-6"-->
+          <!--              v-if="-->
+          <!--                    user.roles_id === 1 ||-->
+          <!--                    user.roles_id === '1' ||-->
+          <!--                    user.roles_id === 4 ||-->
+          <!--                    user.roles_id === '4' ||-->
+          <!--                    user.roles_id === 5 ||-->
+          <!--                    user.roles_id === '5'-->
+          <!--                  "-->
+          <!--          >-->
+          <!--            <b class="panel-label">DESCRIPCIÓN:</b>-->
+          <!--            <div v-for="(datamesfidu, key) in datamesfidu" :key="key">-->
+          <!--              <p class="panel-value">{{ datamesfidu.desctipvinc }}</p>-->
+          <!--            </div>-->
+          <!--          </div>-->
 
-<!--          <div-->
-<!--              class="col-6"-->
-<!--              v-if="-->
-<!--                    user.roles_id === 1 ||-->
-<!--                    user.roles_id === '1' ||-->
-<!--                    user.roles_id === 4 ||-->
-<!--                    user.roles_id === '4' ||-->
-<!--                    user.roles_id === 5 ||-->
-<!--                    user.roles_id === '5'-->
-<!--                  "-->
-<!--          >-->
-<!--            <b class="panel-label">RECURSOS:</b>-->
-<!--            <div v-for="(datamesfidu, key) in datamesfidu" :key="key">-->
-<!--              <p class="panel-value">{{ datamesfidu.descfuenrecurso }}</p>-->
-<!--            </div>-->
-<!--          </div>-->
+          <!--          <div-->
+          <!--              class="col-6"-->
+          <!--              v-if="-->
+          <!--                    user.roles_id === 1 ||-->
+          <!--                    user.roles_id === '1' ||-->
+          <!--                    user.roles_id === 4 ||-->
+          <!--                    user.roles_id === '4' ||-->
+          <!--                    user.roles_id === 5 ||-->
+          <!--                    user.roles_id === '5'-->
+          <!--                  "-->
+          <!--          >-->
+          <!--            <b class="panel-label">RECURSOS:</b>-->
+          <!--            <div v-for="(datamesfidu, key) in datamesfidu" :key="key">-->
+          <!--              <p class="panel-value">{{ datamesfidu.descfuenrecurso }}</p>-->
+          <!--            </div>-->
+          <!--          </div>-->
 
-<!--          <div-->
-<!--              class="col-6"-->
-<!--              v-if="-->
-<!--                    user.roles_id === 1 ||-->
-<!--                    user.roles_id === '1' ||-->
-<!--                    user.roles_id === 4 ||-->
-<!--                    user.roles_id === '4' ||-->
-<!--                    user.roles_id === 5 ||-->
-<!--                    user.roles_id === '5'-->
-<!--                  "-->
-<!--          >-->
-<!--            <b class="panel-label">FECHA DE CARGA DATA:</b>-->
-<!--            <div v-for="(datamesfidu, key) in datamesfidu" :key="key">-->
-<!--              <p class="panel-value">{{ datamesfidu.fecdata }}</p>-->
-<!--            </div>-->
-<!--          </div>-->
+          <!--          <div-->
+          <!--              class="col-6"-->
+          <!--              v-if="-->
+          <!--                    user.roles_id === 1 ||-->
+          <!--                    user.roles_id === '1' ||-->
+          <!--                    user.roles_id === 4 ||-->
+          <!--                    user.roles_id === '4' ||-->
+          <!--                    user.roles_id === 5 ||-->
+          <!--                    user.roles_id === '5'-->
+          <!--                  "-->
+          <!--          >-->
+          <!--            <b class="panel-label">FECHA DE CARGA DATA:</b>-->
+          <!--            <div v-for="(datamesfidu, key) in datamesfidu" :key="key">-->
+          <!--              <p class="panel-value">{{ datamesfidu.fecdata }}</p>-->
+          <!--            </div>-->
+          <!--          </div>-->
 
-<!--          <div-->
-<!--              class="col-6"-->
-<!--              v-if="-->
-<!--                    user.roles_id === 1 ||-->
-<!--                    user.roles_id === '1' ||-->
-<!--                    user.roles_id === 4 ||-->
-<!--                    user.roles_id === '4' ||-->
-<!--                    user.roles_id === 5 ||-->
-<!--                    user.roles_id === '5'-->
-<!--                  "-->
-<!--          >-->
-<!--            <b class="panel-label">MES DE CARGA DATA:</b>-->
-<!--            <div v-for="(datamesfidu, key) in datamesfidu" :key="key">-->
-<!--              <p class="panel-value">{{ datamesfidu.mesdata }}</p>-->
-<!--            </div>-->
-<!--          </div>-->
+          <!--          <div-->
+          <!--              class="col-6"-->
+          <!--              v-if="-->
+          <!--                    user.roles_id === 1 ||-->
+          <!--                    user.roles_id === '1' ||-->
+          <!--                    user.roles_id === 4 ||-->
+          <!--                    user.roles_id === '4' ||-->
+          <!--                    user.roles_id === 5 ||-->
+          <!--                    user.roles_id === '5'-->
+          <!--                  "-->
+          <!--          >-->
+          <!--            <b class="panel-label">MES DE CARGA DATA:</b>-->
+          <!--            <div v-for="(datamesfidu, key) in datamesfidu" :key="key">-->
+          <!--              <p class="panel-value">{{ datamesfidu.mesdata }}</p>-->
+          <!--            </div>-->
+          <!--          </div>-->
 
-<!--          <div-->
-<!--              class="col-6"-->
-<!--              v-if="-->
-<!--                    user.roles_id === 1 ||-->
-<!--                    user.roles_id === '1' ||-->
-<!--                    user.roles_id === 4 ||-->
-<!--                    user.roles_id === '4' ||-->
-<!--                    user.roles_id === 5 ||-->
-<!--                    user.roles_id === '5'-->
-<!--                  "-->
-<!--          >-->
-<!--            <b class="panel-label">AÑO DE CARGA DATA:</b>-->
-<!--            <div v-for="(datamesfidu, key) in datamesfidu" :key="key">-->
-<!--              <p class="panel-value">{{ datamesfidu.anodata }}</p>-->
-<!--            </div>-->
-<!--          </div>-->
+          <!--          <div-->
+          <!--              class="col-6"-->
+          <!--              v-if="-->
+          <!--                    user.roles_id === 1 ||-->
+          <!--                    user.roles_id === '1' ||-->
+          <!--                    user.roles_id === 4 ||-->
+          <!--                    user.roles_id === '4' ||-->
+          <!--                    user.roles_id === 5 ||-->
+          <!--                    user.roles_id === '5'-->
+          <!--                  "-->
+          <!--          >-->
+          <!--            <b class="panel-label">AÑO DE CARGA DATA:</b>-->
+          <!--            <div v-for="(datamesfidu, key) in datamesfidu" :key="key">-->
+          <!--              <p class="panel-value">{{ datamesfidu.anodata }}</p>-->
+          <!--            </div>-->
+          <!--          </div>-->
         </div>
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
 export default {
-  name: "Datames",
-  props: ['datamesseccali', 'user'],
-}
+  name: 'Datames',
+  props: ['datamesseccali', 'user']
+};
 </script>
 
 <style scoped>
-
 </style>
