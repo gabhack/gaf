@@ -258,6 +258,7 @@ export default {
       descuentossedpopayan: [],
 
       pagaduriaKey: '',
+      cargo: null,
       showOthers: false,
       pagadurias: null,
       isLoading: false
@@ -276,10 +277,21 @@ export default {
         valorIngreso = Number(this.datamesfidu.vpension.replace(/[^0-9]/g, '').slice(0, -2));
       } else if (this.pagaduriaType === 'SEDNARINO') {
         valorIngreso = Number(this.pagadurias.datamesSedNarino.vingreso.replace(/[^0-9]/g, '').slice(0));
-        console.log(valorIngreso);
       } else {
         valorIngreso = this.couponsPerPeriod.items.filter(item => item.code === 'INGCUP')[0]?.ingresos || 0;
       }
+
+      let increase = 0
+      if(this.cargo == 'RECTOR') {
+        increase = valorIngreso * 0.3
+        valorIngreso = parseFloat(valorIngreso) + parseFloat(increase)
+      } else if(this.cargo == 'CORDINADOR'){
+        increase = valorIngreso * 0.2
+        valorIngreso = parseFloat(valorIngreso) + parseFloat(increase)
+      } else if(this.cargo == 'DIRECTOR DE NUCLEO'){
+        increase = valorIngreso * 0.35
+        valorIngreso = parseFloat(valorIngreso) + parseFloat(increase)
+      }    
 
       let disccount = 0.08;
       if (this.pagaduriaType === 'FOPEP' || this.pagaduriaType == 'FIDUPREVISORA') {
@@ -370,6 +382,7 @@ export default {
       this.isLoading = true;
       this.pagadurias = payload.pagadurias;
       this.pagaduriaKey = payload.pagaduriaKey;
+      this.cargo = payload.cargo;
 
       this.datames = null;
       this.datamesseceduc = null;

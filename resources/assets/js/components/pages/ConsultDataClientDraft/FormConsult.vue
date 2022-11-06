@@ -112,6 +112,7 @@ export default {
         const type = this.pagaduriasType.find(type => type.value === this.dataclient.pagaduria);
         const pagaduria = this.dataclient.pagadurias[type.key];
         this.dataclient.pagaduriaKey = type.key.slice(7).toLowerCase();
+        this.dataclient.cargo = pagaduria.cargo
         this.setDatamesSed(pagaduria);
       }
     },
