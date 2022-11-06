@@ -7,7 +7,7 @@
           <div class="col-6">
             <b class="panel-label">TIPO DE DOCUMENTO:</b>
             <div>
-              <p class="panel-value">-</p>
+              <p class="panel-value">Cédula de Ciudadania</p>
             </div>
           </div>
           <div class="col-6">

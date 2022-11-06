@@ -24,7 +24,7 @@
           <div class="col-6">
             <b class="panel-label">TIPO DE DOCUMENTO:</b>
             <div>
-              <p class="panel-value">{{ datames.td ? datames.td : '-' }}</p>
+              <p class="panel-value">{{ datames.td ? datames.td : 'Cédula de Ciudadania' }}</p>
             </div>
           </div>
           <div class="col-6">
