@@ -262,7 +262,7 @@
                 </div>
                 <div class="col-6">
                   <div>
-                    <p class="panel-value">{{ valorIngresos | currency }}</p>
+                    <p class="panel-value">{{ valorIngreso | currency }}</p>
                   </div>
                 </div>
               </div>
@@ -442,35 +442,14 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
   name: 'EmploymentHistory',
-  props: [
-    'fechavinc',
-    'pagaduriaType',
-    'datames',
-    'datamesseceduc',
-    'datamesfidu',
-    'datamesseccali',
-    'user',
-    'coupons'
-  ],
+  props: ['fechavinc', 'datames', 'datamesseceduc', 'datamesfidu', 'datamesseccali', 'user'],
   computed: {
     ...mapState('datamesModule', ['datamesSed']),
-    ingresosExtras() {
-      return this.coupons.filter(
-        coupon => coupon.code !== 'SUEBA' && coupon.code !== 'INGCUP' && Number(coupon.ingresos) > 0
-      );
-    },
-    salarioBasico() {
-      const item = this.coupons ? this.coupons.find(coupon => coupon.code === 'SUEBA') : null;
-      return item && item.ingresos;
-    },
-    valorIngresos() {
-      const item = this.coupons ? this.coupons.find(coupon => coupon.code === 'INGCUP') : null;
-      return item && item.ingresos;
-    }
+    ...mapGetters('pagaduriasModule', ['ingresosExtras', 'salarioBasico', 'valorIngreso'])
   }
 };
 </script>

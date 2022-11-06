@@ -6,15 +6,16 @@
       </div>
       <div class="panel-body">
         <div class="row">
-          <div class="col-6"
-               v-if="
-                    user.roles_id === 1 ||
-                    user.roles_id === '1' ||
-                    user.roles_id === 4 ||
-                    user.roles_id === '4' ||
-                    user.roles_id === 5 ||
-                    user.roles_id === '5'
-                  "
+          <div
+            class="col-6"
+            v-if="
+              user.roles_id === 1 ||
+              user.roles_id === '1' ||
+              user.roles_id === 4 ||
+              user.roles_id === '4' ||
+              user.roles_id === 5 ||
+              user.roles_id === '5'
+            "
           >
             <b class="panel-label">FONDO:</b>
             <div>
@@ -24,7 +25,7 @@
           <div class="col-6">
             <b class="panel-label">TIPO DE DOCUMENTO:</b>
             <div>
-              <p class="panel-value">{{ datames.td ? datames.td : '-' }}</p>
+              <p class="panel-value">{{ datames.td ? datames.td : 'CÉDULA DE CIUDADANÍA' }}</p>
             </div>
           </div>
           <div class="col-6">
@@ -63,30 +64,32 @@
               <p class="panel-value">{{ datames.mnpio ? datames.mnpio : '-' }}</p>
             </div>
           </div>
-          <div class="col-md-6"
-               v-if="
-                    user.roles_id === 1 ||
-                    user.roles_id === '1' ||
-                    user.roles_id === 4 ||
-                    user.roles_id === '4' ||
-                    user.roles_id === 5 ||
-                    user.roles_id === '5'
-                  "
+          <div
+            class="col-md-6"
+            v-if="
+              user.roles_id === 1 ||
+              user.roles_id === '1' ||
+              user.roles_id === 4 ||
+              user.roles_id === '4' ||
+              user.roles_id === 5 ||
+              user.roles_id === '5'
+            "
           >
             <b class="panel-label">NOMBRE DEL BANCO DONDE LE CONSIGNAN:</b>
             <div>
               <p class="panel-value">{{ datames.nbanco ? datames.nbanco : '-' }}</p>
             </div>
           </div>
-          <div class="col-md-6"
-               v-if="
-                    user.roles_id === 1 ||
-                    user.roles_id === '1' ||
-                    user.roles_id === 4 ||
-                    user.roles_id === '4' ||
-                    user.roles_id === 5 ||
-                    user.roles_id === '5'
-                  "
+          <div
+            class="col-md-6"
+            v-if="
+              user.roles_id === 1 ||
+              user.roles_id === '1' ||
+              user.roles_id === 4 ||
+              user.roles_id === '4' ||
+              user.roles_id === 5 ||
+              user.roles_id === '5'
+            "
           >
             <b class="panel-label">SUCURSAL BANCO:</b>
             <div>
@@ -119,11 +122,10 @@
 
 <script>
 export default {
-  name: "Datames",
-  props: ['datames', 'user'],
-}
+  name: 'Datames',
+  props: ['datames', 'user']
+};
 </script>
 
 <style scoped>
-
 </style>

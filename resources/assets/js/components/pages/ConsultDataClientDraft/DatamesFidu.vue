@@ -7,7 +7,7 @@
           <div class="col-6">
             <b class="panel-label">TIPO DE DOCUMENTO:</b>
             <div>
-              <p class="panel-value">{{ datamesfidu.tdd ? datamesfidu.tdd : '-' }}</p>
+              <p class="panel-value">{{ datamesfidu.tdd ? datamesfidu.tdd : 'CÉDULA DE CIUDADANÍA' }}</p>
             </div>
           </div>
           <div class="col-6">
