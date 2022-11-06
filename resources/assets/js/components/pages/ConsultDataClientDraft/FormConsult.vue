@@ -113,6 +113,7 @@ export default {
         const pagaduria = this.dataclient.pagadurias[type.key];
         this.dataclient.pagaduriaKey = type.key.slice(7).toLowerCase();
         pagaduria.documentType = 'documentType';
+        this.dataclient.cargo = pagaduria.cargo;
         this.setDatamesSed(pagaduria);
       }
     },
