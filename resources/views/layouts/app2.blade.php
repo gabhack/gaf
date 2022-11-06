@@ -26,10 +26,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.2/js/toastr.min.js"></script>
-    <script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
-    <script src="https://printjs-4de6.kxcdn.com/print.min.css"></script>
 
-    <script src="vue-swal/dist/vue-swal.js"></script>
+    <link rel="stylesheet" href="https://printjs-4de6.kxcdn.com/print.min.css">
+    <script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
+
     <!-- From CDN -->
     <script src="https://unpkg.com/vue-swal"></script>
     @yield('css')
