@@ -61,11 +61,24 @@ const pagaduriasModule = {
         amount: amount
       };
     },
+    ingresosIncapacidadPerPeriod: (state, getters) => {
+      const items = getters.couponsPerPeriod.items.filter(
+        item => (item.code === 'PGINC' || item.code === 'PGINC100') && Number(item.ingresos) > 0
+      );
+
+      const amount = items.reduce((ingresos, item) => ingresos + Number(item.ingresos), 0);
+
+      return {
+        items: items,
+        total: items.length,
+        amount: amount
+      };
+    },
     incapacidadValida: (state, getters) => {
-      const monthsNumber = 3;
+      const monthsNumber = 2;
 
       const actualYear = new Date().getFullYear();
-      const actualMonth = new Date().getMonth() + 1;
+      const actualMonth = 9; //new Date().getMonth() + 1;
 
       // Se obtienen los valores de año y mes por separado
       const newItems = getters.ingresosIncapacidad.items.map(item => {

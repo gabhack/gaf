@@ -61,11 +61,23 @@
           ==============================-->
 
           <template v-if="datamesseceduc">
-            <div class="col-6">
-              <b class="panel-label">VALOR INGRESO:</b>
-              <div>
-                <p class="panel-value" v-if="salarioBasico">{{ salarioBasico | currency }}</p>
-                <p class="panel-value" v-else>{{ datamesseceduc.vpension | currency }}</p>
+            <div class="col-12">
+              <div class="row">
+                <div class="col-6">
+                  <b class="panel-label">VALOR INGRESO:</b>
+                </div>
+                <div class="col-6">
+                  <p class="panel-value">{{ valorIngreso | currency }}</p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <b class="panel-label">SUELDO BASICO:</b>
+                </div>
+                <div class="col-6">
+                  <p class="panel-value" v-if="salarioBasico">{{ salarioBasico | currency }}</p>
+                  <p class="panel-value" v-else>{{ datamesseceduc.vpension | currency }}</p>
+                </div>
               </div>
             </div>
 
@@ -129,9 +141,23 @@
             </div>
 
             <div class="col-6">
-              <b class="panel-label"> PRINCIPAL :</b>
+              <b class="panel-label">GRADO:</b>
+              <div>
+                <p class="panel-value">{{ datamesseceduc.grado ? datamesseceduc.grado : '-' }}</p>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <b class="panel-label">PRINCIPAL :</b>
               <div>
                 <p class="panel-value">{{ datamesseceduc.dependencia ? datamesseceduc.dependencia : '-' }}</p>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <b class="panel-label">SEDE:</b>
+              <div>
+                <p class="panel-value">{{ datamesseceduc.centrocosto ? datamesseceduc.centrocosto : '-' }}</p>
               </div>
             </div>
 
@@ -160,6 +186,13 @@
               <b class="panel-label">SEDE EN LA QUE PRESTA EL SERVICIO:</b>
               <div>
                 <p class="panel-value">{{ datamesseceduc.sedecoleg }}</p>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <b class="panel-label">CIUDAD LABORAL:</b>
+              <div>
+                <p class="panel-value">{{ datamesseceduc.ciudad ? datamesseceduc.ciudad : '-' }}</p>
               </div>
             </div>
           </template>
@@ -272,7 +305,8 @@
                 </div>
                 <div class="col-6">
                   <div>
-                    <p class="panel-value">{{ salarioBasico | currency }}</p>
+                    <p class="panel-value" v-if="salarioBasico">{{ salarioBasico | currency }}</p>
+                    <p class="panel-value" v-else>{{ datamesSed.vingresos || datamesSed.basico | currency }}</p>
                   </div>
                 </div>
               </div>
