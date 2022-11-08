@@ -104,7 +104,7 @@ export default {
   },
   methods: {
     ...mapMutations('datamesModule', ['setDatamesSed', 'setCuotaDeseada']),
-    ...mapMutations('pagaduriasModule', ['setPagaduriaType']),
+    ...mapMutations('pagaduriasModule', ['setPagaduriaType', 'setSelectedPeriod']),
     selectedPagaduria() {
       this.setPagaduriaType(this.dataclient.pagaduria);
 
@@ -122,6 +122,9 @@ export default {
     },
     async getAllPagadurias() {
       this.isLoading = true;
+      this.setDatamesSed(null);
+      this.setPagaduriaType('');
+      this.setSelectedPeriod('');
 
       const response = await axios.get(`/pagadurias/per-doc/${this.dataclient.doc}`);
       const mensaje = Object.entries(response.data).every(item => item[1] == null);
