@@ -204,7 +204,7 @@ import Descuentossedpopayan from './Descuentossedpopayan';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 
-import { mapState, mapMutations, mapGetters } from 'vuex';
+import { mapActions, mapState, mapGetters } from 'vuex';
 
 export default {
   props: ['user'],
@@ -391,7 +391,7 @@ export default {
     // }
   },
   methods: {
-    ...mapMutations('pagaduriasModule', ['setCoupons']),
+    ...mapActions('pagaduriasModule', ['fetchCoupons']),
     emitInfo(payload) {
       this.isLoading = true;
       this.pagadurias = payload.pagadurias;
@@ -517,7 +517,7 @@ export default {
       };
 
       const response = await axios.post('/get-coupons', data);
-      this.setCoupons(response.data);
+      this.fetchCoupons(response.data);
 
       setTimeout(() => {
         // Valida si el tiene incapacidades

@@ -4,20 +4,19 @@
       <div class="panel-heading d-flex justify-content-between">
         <b>OBLIGACIONES VIGENTES AL DIA</b>
         <div class="d-flex align-items-center">
-          <b>PERIODO:</b>
-          <select class="form-control mr-2" @change="setSelectedPeriod($event.target.value)">
+          <b class="mr-2">PERIODO:</b>
+          <select class="form-control" @change="setSelectedPeriod($event.target.value)">
             <option :value="period" v-for="period in pagaduriaPeriodos" :key="period">
               {{ period }}
             </option>
           </select>
-          <b-button @click="setSelectedPeriod('')" variant="black-pearl">X</b-button>
         </div>
       </div>
       <div class="panel-body">
         <div class="row">
           <div v-for="label in labels" :key="label.field">
             <template v-for="(item, key) in couponsIngresos.items">
-              <div class="col-1" v-if="label.currency" :key="key">
+              <div class="col-1" v-if="label.currency" :key="`check-${key}`">
                 <div class="panel-value">
                   <input
                     type="checkbox"
@@ -29,10 +28,10 @@
               </div>
             </template>
           </div>
-          <div :class="label.colClass || 'col-2'" v-for="label in labels" :key="label.field">
+          <div :class="label.colClass || 'col-2'" v-for="label in labels" :key="`label-${label.field}`">
             <b class="panel-label table-text">{{ label.label }}:</b>
             <template v-if="couponsIngresos.items.length > 0">
-              <div v-for="(item, key) in couponsIngresos.items" :key="key">
+              <div v-for="(item, key) in couponsIngresos.items" :key="`field-${key}`">
                 <p class="panel-value">
                   <template v-if="item[label.field]">
                     <template v-if="label.currency">
@@ -76,9 +75,6 @@ export default {
     ...mapState('datamesModule', ['cuotadeseada']),
     ...mapState('pagaduriasModule', ['coupons']),
     ...mapGetters('pagaduriasModule', ['couponsIngresos', 'pagaduriaPeriodos'])
-  },
-  mounted() {
-    this.setSelectedPeriod(this.pagaduriaPeriodos[0]);
   },
   methods: {
     ...mapMutations('datamesModule', ['setConteoEgresos']),
