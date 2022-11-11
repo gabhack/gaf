@@ -274,9 +274,16 @@ export default {
   },
   computed: {
     ...mapState('pagaduriasModule', ['coupons', 'pagaduriaType']),
-    ...mapGetters('pagaduriasModule', ['couponsPerPeriod', 'valorIngreso', 'ingresosIncapacidad', 'incapacidadValida']),
+    ...mapGetters('pagaduriasModule', ['couponsPerPeriod', 'valorIngreso', 'ingresosIncapacidad', 'incapacidadValida','couponsIngresos']),
     totales() {
       const valrSM = 1000000;
+
+      let totalWithoutHealthPension = 0
+      this.couponsIngresos.items.forEach(item => {
+        if(item.code !== 'APFPM' && item.code !== 'APFSM'){
+          totalWithoutHealthPension += Number(item.vaplicado)
+        } 
+      })
 
       let valorIngreso = 0;
       if (this.pagaduriaType === 'FOPEP') {
@@ -358,31 +365,37 @@ export default {
         totalEmbargos = this.pagaduriaKey ? this[`embargos${this.pagaduriaKey}`].length : 0;
       }
 
-      let compraCartera =
-        valorIngresoTemp < valrSM * 2
-          ? valorIngresoTemp - valrSM
-          : valorIngresoTemp >= valrSM * 2
-          ? valorIngresoTemp / 2
-          : valorIngresoTemp;
+      let previousDiscount = valorIngresoTemp / 2
 
-      const libreInversionTemp = compraCartera - totalEgresos;
+      let libreInversion = 0
+      if(previousDiscount < valrSM) {
+        libreInversion = valorIngresoTemp - valrSM - totalWithoutHealthPension 
+      } else {
+        libreInversion = valorIngresoTemp / 2 - totalWithoutHealthPension
+      }
+
+      let compraCartera = 0
+      if(previousDiscount < valrSM) {
+        compraCartera = valorIngresoTemp - valrSM
+      } else {
+        compraCartera = valorIngresoTemp / 2
+      }
+
+      let cuotaMaxima = 0
+      if(previousDiscount < valrSM) {
+        cuotaMaxima = valorIngresoTemp - valrSM 
+      } else {
+        cuotaMaxima = valorIngresoTemp / 2
+      }
 
       return {
         descuentos: totalDescuentos,
         embargos: totalEmbargos,
-        libreInversion: libreInversionTemp < 0 ? 0 : libreInversionTemp,
-        compraCartera: compraCartera < 0 ? 0 : compraCartera
-      };
+        libreInversion: libreInversion < 0 ? 0 : libreInversion,
+        compraCartera: compraCartera < 0 ? 0 : compraCartera,
+        cuotaMaxima: cuotaMaxima < 0 ? 0 : cuotaMaxima,
+      }
     }
-    // totales() {
-    //   return {
-    //     cupones: 0,
-    //     descuentos: 0,
-    //     embargos: 0,
-    //     compraCartera: 0,
-    //     libreInversion: 0
-    //   };
-    // }
   },
   methods: {
     ...mapMutations('pagaduriasModule', ['setCoupons']),

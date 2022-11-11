@@ -113,7 +113,7 @@
                     name="proc_en_contra"
                     id="proc_en_contra"
                     placeholder="Opcional"
-                    value="CUOTA"
+                    value="CUOTA MÁXIMA"
                     min="1"
                     max="99"
                     disabled
@@ -140,13 +140,15 @@
                   {{ totales.compraCartera | currency }}
                 </p>
                 <p class="panel-value">
-                  {{ (totales.compraCartera - conteoEgresos) | currency }}
+                  {{conteoEgresos}}
+                  {{ (totales.cuotaMaxima - conteoEgresos) | currency }}
                 </p>
                 <input
                   type="number"
                   class="form-control"
                   :value="cuotadeseada"
                   @input="event => setCuotaDeseada(event.target.value)"
+                  @blur="handleBlur"
                 />
               </div>
             </div>
@@ -197,7 +199,12 @@ export default {
     ...mapGetters('pagaduriasModule', ['couponsIngresos'])
   },
   methods: {
-    ...mapMutations('datamesModule', ['setCuotaDeseada'])
+    ...mapMutations('datamesModule', ['setCuotaDeseada']),
+    handleBlur(){
+      if(this.cuotadeseada > this.totales.cuotaMaxima){
+        this.setCuotaDeseada(0)
+      }
+    }
   }
 };
 </script>
