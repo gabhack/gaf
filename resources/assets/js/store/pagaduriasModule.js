@@ -48,7 +48,7 @@ const pagaduriasModule = {
       // Ordenar periodos de forma descendente
       return periodos.sort((a, b) => b - a);
     },
-    ingresosIncapacidad: (state, getters) => {
+    ingresosIncapacidad: state => {
       const items = state.coupons.filter(
         item => (item.code === 'PGINC' || item.code === 'PGINC100') && Number(item.ingresos) > 0
       );
@@ -115,7 +115,15 @@ const pagaduriasModule = {
       state.pagaduriaType = payload;
     },
     setCoupons: (state, payload) => {
-      const items = payload.map(item => {
+      state.coupons = payload;
+    },
+    setSelectedPeriod: (state, payload) => {
+      state.selectedPeriod = payload;
+    }
+  },
+  actions: {
+    fetchCoupons: (ctx, data) => {
+      const items = data.map(item => {
         return {
           ...item,
           nomtercero: item.concept,
@@ -123,10 +131,10 @@ const pagaduriasModule = {
         };
       });
 
-      state.coupons = items;
-    },
-    setSelectedPeriod: (state, payload) => {
-      state.selectedPeriod = payload;
+      ctx.commit('setCoupons', items);
+
+      // Seleccionar el primer periodo por defecto
+      ctx.commit('setSelectedPeriod', ctx.getters.pagaduriaPeriodos[0]);
     }
   }
 };
