@@ -2,12 +2,12 @@
   <div class="container-fluid">
     <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="true" color="#0CEDB0" />
 
-    <b-toast id="toast-incapacidad-month" title="Alerta del Sistema" solid no-auto-hide variant="info">
-      Cliente con incapacidad mayor a 3 meses.
+    <b-toast id="toast-incapacidad-month" title="Alerta del Sistema" solid auto-hide-delay="10000" variant="info">
+      Cliente con incapacidad mayor a 2 meses.
     </b-toast>
 
-    <b-toast id="toast-incapacidad" title="Alerta del Sistema" solid no-auto-hide variant="info">
-      Cliente no apto para Incapacidad.
+    <b-toast id="toast-incapacidad" title="Alerta del Sistema" solid auto-hide-delay="10000" variant="info">
+      Cliente no apto por Incapacidad.
     </b-toast>
 
     <div v-if="type_consult === 'individual'">
@@ -107,7 +107,8 @@
               pagaduriaType == 'SEDMAGDALENA' ||
               pagaduriaType == 'SEDBARRANQUILLA' ||
               pagaduriaType == 'SEDATLANTICO' ||
-              pagaduriaType == 'SEDBOLIVAR'
+              pagaduriaType == 'SEDBOLIVAR' ||
+              pagaduriaType == 'SEDPOPAYAN'
             "
           />
           <Descapli v-if="pagaduriaType == 'FOPEP'" :descapli="descapli" />
@@ -274,7 +275,13 @@ export default {
   },
   computed: {
     ...mapState('pagaduriasModule', ['coupons', 'pagaduriaType']),
-    ...mapGetters('pagaduriasModule', ['couponsPerPeriod', 'valorIngreso', 'ingresosIncapacidad', 'incapacidadValida','couponsIngresos']),
+    ...mapGetters('pagaduriasModule', [
+      'couponsPerPeriod',
+      'valorIngreso',
+      'ingresosIncapacidadPerPeriod',
+      'incapacidadValida',
+      'couponsIngresos'
+    ]),
     totales() {
       const valrSM = 1000000;
 
@@ -533,7 +540,7 @@ export default {
         }
 
         // Valida si el valor de la incapacidad es mayor al valor del ingreso
-        if (this.ingresosIncapacidad.amount >= Number(this.valorIngreso)) {
+        if (this.ingresosIncapacidadPerPeriod.amount >= Number(this.valorIngreso)) {
           this.$bvToast.show('toast-incapacidad');
         }
       }, 1000);
