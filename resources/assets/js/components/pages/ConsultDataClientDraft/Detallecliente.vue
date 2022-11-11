@@ -140,7 +140,6 @@
                   {{ totales.compraCartera | currency }}
                 </p>
                 <p class="panel-value">
-                  {{conteoEgresos}}
                   {{ (totales.cuotaMaxima - conteoEgresos) | currency }}
                 </p>
                 <input
