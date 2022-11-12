@@ -40,7 +40,7 @@
             <input
               type="checkbox"
               :value="item.id"
-              :disabled="Number(item.vaplicado) > Number(cuotadeseada)"
+              :disabled="(Number(item.vaplicado) > Number(cuotadeseada)) || disabledProspect"
               @input="event => AddItem(event.target.value)"
             />
           </div>
@@ -113,6 +113,12 @@
 import { mapState, mapGetters, mapMutations } from 'vuex';
 export default {
   name: 'DescapliEmpty',
+  props: {
+    disabledProspect: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       labels: [
