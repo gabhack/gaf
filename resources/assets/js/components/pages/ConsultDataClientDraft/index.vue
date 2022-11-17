@@ -6,10 +6,6 @@
       Cliente con incapacidad mayor a 2 meses.
     </b-toast>
 
-    <b-toast id="toast-incapacidad" title="Alerta del Sistema" solid auto-hide-delay="10000" variant="info">
-      Cliente no apto por Incapacidad.
-    </b-toast>
-
     <div v-if="type_consult === 'individual'">
       <div class="row mb-5">
         <div class="col-12 d-flex align-items-center justify-content-between">
@@ -91,6 +87,8 @@
             :datamesfidu="datamesfidu"
             :datamesseccali="datamesseccali"
             :user="user"
+            @alertIncapacidad="alertIncapacidad"
+            @alertDefinitiva="alertDefinitiva"
           />
           <Detallecliente :descuentossedcauca="descuentossedcauca" :totales="totales" />
         </template>
@@ -110,6 +108,7 @@
               pagaduriaType == 'SEDBOLIVAR' ||
               pagaduriaType == 'SEDPOPAYAN'
             "
+            :disabledProspect="disabledProspect"
           />
           <Descapli v-if="pagaduriaType == 'FOPEP'" :descapli="descapli" />
 
@@ -270,7 +269,8 @@ export default {
       cargo: null,
       showOthers: false,
       pagadurias: null,
-      isLoading: false
+      isLoading: false,
+      disabledProspect: false
     };
   },
   computed: {
@@ -537,16 +537,28 @@ export default {
         // Valida si el tiene incapacidades
         if (this.incapacidadValida === false) {
           this.$bvToast.show('toast-incapacidad-month');
-        }
-
-        // Valida si el valor de la incapacidad es mayor al valor del ingreso
-        if (this.ingresosIncapacidadPerPeriod.amount >= Number(this.valorIngreso)) {
-          this.$bvToast.show('toast-incapacidad');
-        }
+        }        
       }, 1000);
     },
     print() {
       window.print();
+    },
+    alertIncapacidad(data){
+      this.$bvToast.toast(`${data.message}`, {
+        title: data.title ? data.title : 'Alerta del sistema',
+        autoHideDelay: 10000,
+        variant: data.variant,
+        solid: true
+      })
+    },
+    alertDefinitiva(data){
+      this.disabledProspect = true
+      this.$bvToast.toast(`${data.message}`, {
+        title: data.title ? data.title : 'Alerta del sistema',
+        autoHideDelay: 10000,
+        variant: data.variant,
+        solid: true
+      })
     }
   }
 };
