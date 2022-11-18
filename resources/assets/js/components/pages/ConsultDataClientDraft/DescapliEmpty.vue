@@ -34,14 +34,18 @@
           </div>
         </div>
 
-        <div v-for="(item, key) in couponsIngresos.items" :key="key" class="row panel-br-light-green pt-3">
+        <div v-for="(item, key) in arrayCoupons" :key="key" class="row panel-br-light-green pt-3">
           <div class="col-1 pr-0" >
             <input
+              v-model="item.check"
               type="checkbox"
-              :value="item.id"
-              :disabled="(Number(item.vaplicado) > Number(cuotadeseada)) || disabledProspect"
-              @input="event => AddItem(event.target.value)"
+              :disabled="(Number(item.vaplicado) > Number(cuotadeseada)) || disabledProspect || item.code == 'APFPM' || item.code == 'APFSM'"
+              @change="calcularEgresos"
             />
+            <!--
+              :value="item.id"
+              @input="event => AddItem(event.target.value)"
+            -->
           </div>
           <div class="col-2 px-0" >
             <p>{{ item.clase ? item.clase : '-'}}</p>
@@ -127,17 +131,34 @@ export default {
         { label: 'FECHA INICIO DEUDA', field: 'fgrab' },
         { label: 'NOMBRE ENTIDAD CEDIENTE', field: 'nonentant' }
       ],
-      itemsCheckbox: []
+      itemsCheckbox: [],
+      arrayCoupons: []
     };
+  },
+  mounted() {
+    this.arrayCoupons = [...this.couponsIngresos.items]
+    this.arrayCoupons.map(item => {
+      item.check = false
+      return item
+    })
   },
   computed: {
     ...mapState('datamesModule', ['cuotadeseada']),
     ...mapState('pagaduriasModule', ['coupons']),
-    ...mapGetters('pagaduriasModule', ['couponsIngresos', 'pagaduriaPeriodos'])
+    ...mapGetters('pagaduriasModule', ['couponsIngresos', 'pagaduriaPeriodos']),
+    /* arrayCouponsIngresos(){
+      console.log('computed')
+      let array = [...this.couponsIngresos.items]
+      return array.map(item => {
+        item.check = false
+        return item
+      })
+    }, */
   },
   methods: {
     ...mapMutations('datamesModule', ['setConteoEgresos']),
     ...mapMutations('pagaduriasModule', ['setSelectedPeriod']),
+    /*
     AddItem(value) {
       const index = this.itemsCheckbox.findIndex(item => item.id == value);
       if (index == -1) {
@@ -149,12 +170,33 @@ export default {
       } else {
         this.itemsCheckbox.splice(index, 1);
       }
-      this.ValueEgresos();
+      //this.ValueEgresos();
     },
     ValueEgresos() {
       const total = this.itemsCheckbox.reduce((a, b) => a + Number(b.vaplicado), 0);
       this.setConteoEgresos(total);
+    },
+    */
+    calcularEgresos(){
+      let totalEgresos = 0 
+      this.couponsIngresos.items.forEach(item => {
+        if(!item.check && item.code !== 'APFPM' && item.code !== 'APFSM'){
+          totalEgresos += Number(item.vaplicado)
+        }
+      })
+      this.setConteoEgresos(totalEgresos);
     }   
+  },
+  watch:{
+    couponsIngresos(){
+      this.arrayCoupons = []
+      this.arrayCoupons = [...this.couponsIngresos.items]
+      this.arrayCoupons.map(item => {
+        item.check = false
+        return item
+      })
+      this.setConteoEgresos(0);
+    }
   }
 };
 </script>
