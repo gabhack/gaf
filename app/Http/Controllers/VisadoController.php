@@ -28,9 +28,11 @@ class VisadoController extends Controller
         // $data_formulario = $request->data;
         // $doc = $request->data['doc'];
         // $historial_consultas = \App\Descapli::Where('doc',$doc)->get();
-        $historial_consultas = \App\Visado::query()->orderByDesc('created_at')->get();
+        $historial_consultas = \App\Visado::query()
+            ->orderByDesc('created_at')
+            ->get();
         $resultados = json_decode($historial_consultas);
-        if ($resultados == "" or $resultados == null) {
+        if ($resultados == '' or $resultados == null) {
             return response()->json(['message' => 'No se encontraron registros.', 'data' => $resultados], 200);
         } else {
             return response()->json(['message' => 'Consulta exitosa.', 'data' => $resultados], 200);
@@ -64,7 +66,7 @@ class VisadoController extends Controller
         $resultado['embargosedu'] = $embargosedu;
         $resultado['descapli'] = $descapli;
         $resultado['descnoap'] = $descnoap;
-        if ($resultado == "" or $resultado == null) {
+        if ($resultado == '' or $resultado == null) {
             return response()->json(['message' => 'No se encontraron registros.', 'data' => $resultado], 200);
         } else {
             return response()->json(['message' => 'Consulta exitosa.', 'data' => $resultado], 200);
@@ -189,9 +191,12 @@ class VisadoController extends Controller
      * @param \App\Visado $visado
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Visado $visado)
+    public function update(Request $request, $id)
     {
-        //
+        //dd(Visado::find($id));
+        $visado = Visado::find($id);
+        $visado->estado = $request->estado;
+        $visado->save();
     }
 
     /**

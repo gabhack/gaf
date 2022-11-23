@@ -133,6 +133,9 @@
             "
             :embargosempty="embargosempty"
           />
+          <div>
+            <b-button variant="black-pearl" @click="visadoFunction">Visar</b-button>
+          </div>
 
           <!--===================================
                 LIQUIDACIONES
@@ -273,7 +276,9 @@ export default {
       showOthers: false,
       pagadurias: null,
       isLoading: false,
-      disabledProspect: false
+      disabledProspect: false,
+      visado: null,
+      visadoValido: 'rechazado'
     };
   },
   computed: {
@@ -419,6 +424,7 @@ export default {
       this.datamesseceduc = null;
       this.datamesfidu = null;
       this.datamesseccali = null;
+      this.visado = payload.visado;
 
       if (payload.pagaduria == 'FOPEP') {
         this.getDatames(payload);
@@ -562,6 +568,21 @@ export default {
         variant: data.variant,
         solid: true
       });
+    },
+
+    //Visando consulta
+    visadoFunction() {
+      const aceptado = {
+        estado: this.visadoValido
+      };
+      axios
+        .post(`visados/${this.visado.id}`, aceptado)
+        .then(response => {
+          console.log('response', response);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   }
 };

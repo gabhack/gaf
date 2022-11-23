@@ -4,7 +4,7 @@
       <div class="col-12">
         <template v-if="id_consult === null">
           <h2 class="title text-center">Historial de Consultas</h2>
-          <div style="float: right" class="form-group col-md-2">
+          <div style="float: right;" class="form-group col-md-2">
             <label for="">Buscar</label>
             <input class="form-control" placeholder="Buscar" v-model="filter" />
           </div>
@@ -17,6 +17,7 @@
                   <th scope="col" class="text-center">Nombre Completo</th>
                   <th scope="col" class="text-center">Pagaduria</th>
                   <th scope="col" class="text-center">Tipo de Consulta</th>
+                  <th scope="col" class="text-center">Resultado</th>
                   <th scope="col" class="text-center">Score</th>
                   <th scope="col" class="text-center">Fecha de Consulta</th>
                   <th scope="col" class="text-center">Nombre del consultante</th>
@@ -31,6 +32,7 @@
                   <td>{{ history.nombre }}</td>
                   <td>{{ history.pagaduria }}</td>
                   <td>{{ history.tipo_consulta }}</td>
+                  <td>{{ history.estado }}</td>
                   <td></td>
                   <td>{{ history.created_at }}</td>
                   <td>{{ history.consultant_name ? history.consultant_name : '-' }}</td>
