@@ -134,6 +134,9 @@
             :embargosempty="embargosempty"
           />
 
+          <!--===================================
+                LIQUIDACIONES
+          ========================================-->
           <Descuentossecedu v-if="pagaduriaType == 'FODE VALLE'" :descuentossecedu="descuentosseceduc" />
           <Descuentossedchoco v-if="pagaduriaType == 'SEDCHOCO'" :descuentossedchoco="descuentossedchoco" />
           <Descuentossedcauca v-if="pagaduriaType == 'SEDCAUCA'" :descuentossedcauca="descuentossedcauca" />
@@ -167,7 +170,7 @@
   </div>
 </template>
 <script src="print.js"></script>
-<script rel="stylesheet" type="text/css" href="print.css"/>
+<script rel="stylesheet" type="text/css" href="print.css" />
 <script>
 import printJS from 'print-js';
 import FormConsult from './FormConsult';
@@ -285,12 +288,12 @@ export default {
     totales() {
       const valrSM = 1000000;
 
-      let totalWithoutHealthPension = 0
+      let totalWithoutHealthPension = 0;
       this.couponsIngresos.items.forEach(item => {
-        if(item.code !== 'APFPM' && item.code !== 'APFSM'){
-          totalWithoutHealthPension += Number(item.vaplicado)
-        } 
-      })
+        if (item.code !== 'APFPM' && item.code !== 'APFSM') {
+          totalWithoutHealthPension += Number(item.vaplicado);
+        }
+      });
 
       let valorIngreso = 0;
       if (this.pagaduriaType === 'FOPEP') {
@@ -372,27 +375,27 @@ export default {
         totalEmbargos = this.pagaduriaKey ? this[`embargos${this.pagaduriaKey}`].length : 0;
       }
 
-      let previousDiscount = valorIngresoTemp / 2
+      let previousDiscount = valorIngresoTemp / 2;
 
-      let libreInversion = 0
-      if(previousDiscount < valrSM) {
-        libreInversion = valorIngresoTemp - valrSM - totalWithoutHealthPension 
+      let libreInversion = 0;
+      if (previousDiscount < valrSM) {
+        libreInversion = valorIngresoTemp - valrSM - totalWithoutHealthPension;
       } else {
-        libreInversion = valorIngresoTemp / 2 - totalWithoutHealthPension
+        libreInversion = valorIngresoTemp / 2 - totalWithoutHealthPension;
       }
 
-      let compraCartera = 0
-      if(previousDiscount < valrSM) {
-        compraCartera = valorIngresoTemp - valrSM
+      let compraCartera = 0;
+      if (previousDiscount < valrSM) {
+        compraCartera = valorIngresoTemp - valrSM;
       } else {
-        compraCartera = valorIngresoTemp / 2
+        compraCartera = valorIngresoTemp / 2;
       }
 
-      let cuotaMaxima = 0
-      if(previousDiscount < valrSM) {
-        cuotaMaxima = valorIngresoTemp - valrSM 
+      let cuotaMaxima = 0;
+      if (previousDiscount < valrSM) {
+        cuotaMaxima = valorIngresoTemp - valrSM;
       } else {
-        cuotaMaxima = valorIngresoTemp / 2
+        cuotaMaxima = valorIngresoTemp / 2;
       }
 
       return {
@@ -400,8 +403,8 @@ export default {
         embargos: totalEmbargos,
         libreInversion: libreInversion < 0 ? 0 : libreInversion,
         compraCartera: compraCartera < 0 ? 0 : compraCartera,
-        cuotaMaxima: cuotaMaxima < 0 ? 0 : cuotaMaxima,
-      }
+        cuotaMaxima: cuotaMaxima < 0 ? 0 : cuotaMaxima
+      };
     }
   },
   methods: {
@@ -537,28 +540,28 @@ export default {
         // Valida si el tiene incapacidades
         if (this.incapacidadValida === false) {
           this.$bvToast.show('toast-incapacidad-month');
-        }        
+        }
       }, 1000);
     },
     print() {
       window.print();
     },
-    alertIncapacidad(data){
+    alertIncapacidad(data) {
       this.$bvToast.toast(`${data.message}`, {
         title: data.title ? data.title : 'Alerta del sistema',
         autoHideDelay: 10000,
         variant: data.variant,
         solid: true
-      })
+      });
     },
-    alertDefinitiva(data){
-      this.disabledProspect = true
+    alertDefinitiva(data) {
+      this.disabledProspect = true;
       this.$bvToast.toast(`${data.message}`, {
         title: data.title ? data.title : 'Alerta del sistema',
         autoHideDelay: 10000,
         variant: data.variant,
         solid: true
-      })
+      });
     }
   }
 };
