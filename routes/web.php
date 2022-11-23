@@ -13,7 +13,6 @@
 
 use App\Http\Controllers\VisadoController;
 
-
 Auth::routes(['register' => true]);
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -21,13 +20,13 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/logout', 'Auth\LoginController@logout');
 
-Route::group(["prefix" => "profile"], function () {
+Route::group(['prefix' => 'profile'], function () {
     Route::get('/', 'ProfileController@profile');
     Route::post('/store', 'ProfileController@saveProfile');
 });
 
 // Roles
-Route::group(["prefix" => "roles"], function () {
+Route::group(['prefix' => 'roles'], function () {
     Route::get('/', 'RolesController@index');
 
     Route::get('/crear', 'RolesController@create');
@@ -40,7 +39,7 @@ Route::group(["prefix" => "roles"], function () {
 });
 
 // Usuarios
-Route::group(["prefix" => "usuarios"], function () {
+Route::group(['prefix' => 'usuarios'], function () {
     Route::get('/', 'UserController@index');
 
     Route::get('/crear', 'UserController@create');
@@ -53,7 +52,7 @@ Route::group(["prefix" => "usuarios"], function () {
 });
 
 // Parámetros
-Route::group(["prefix" => "parametros"], function () {
+Route::group(['prefix' => 'parametros'], function () {
     Route::get('/', 'ParametrosController@index');
 
     Route::get('/crear', 'ParametrosController@create');
@@ -66,7 +65,7 @@ Route::group(["prefix" => "parametros"], function () {
 });
 
 // Factores x millon Kredit
-Route::group(["prefix" => "factorxmillonkredit"], function () {
+Route::group(['prefix' => 'factorxmillonkredit'], function () {
     Route::get('/', 'FactoresXMillonKreditController@index');
 
     Route::get('/crear', 'FactoresXMillonKreditController@create');
@@ -79,7 +78,7 @@ Route::group(["prefix" => "factorxmillonkredit"], function () {
 });
 
 // Demandantes
-Route::group(["prefix" => "demandantes"], function () {
+Route::group(['prefix' => 'demandantes'], function () {
     Route::get('/', 'DemandantesController@index');
 
     Route::get('/crear', 'DemandantesController@create');
@@ -92,7 +91,7 @@ Route::group(["prefix" => "demandantes"], function () {
 });
 
 // Pagadurias
-Route::group(["prefix" => "pagadurias"], function () {
+Route::group(['prefix' => 'pagadurias'], function () {
     Route::get('/', 'PagaduriasController@index');
 
     Route::get('/crear', 'PagaduriasController@create');
@@ -107,7 +106,7 @@ Route::group(["prefix" => "pagadurias"], function () {
 });
 
 //Pagos
-Route::group(["prefix" => "pagos"], function () {
+Route::group(['prefix' => 'pagos'], function () {
     Route::get('/', 'PagosController@index');
 
     Route::get('/pagar', 'PagosController@pagar');
@@ -124,7 +123,7 @@ Route::group(["prefix" => "pagos"], function () {
 });
 
 //Cifin
-Route::group(["prefix" => "cifin"], function () {
+Route::group(['prefix' => 'cifin'], function () {
     Route::get('/', 'CifinController@index');
     Route::get('/consultar', 'CifinController@consultar')->name('cifin.consultar');
     Route::get('/consulta', 'CifinController@consulta');
@@ -142,14 +141,14 @@ Route::post('/update/{id}', 'PagosController@update');
 Route::get('/delete/{id}', 'PagosController@destroy');
 
 //Datacredito
-Route::group(["prefix" => "datacredito"], function () {
+Route::group(['prefix' => 'datacredito'], function () {
     Route::get('/', 'DataCreditoController@index');
     Route::get('/consultar', 'DataCreditoController@consultar')->name('datacredito.consultar');
     Route::get('/consulta', 'DataCreditoController@consulta');
 });
 
 //Daceval
-Route::group(["prefix" => "deceval"], function () {
+Route::group(['prefix' => 'deceval'], function () {
     Route::get('/', 'DecevalController@index');
     Route::get('/consultar', 'DecevalController@consultar')->name('deceval.consultar');
     Route::post('/firmar', 'DecevalController@firmar');
@@ -165,7 +164,7 @@ Route::group(["prefix" => "deceval"], function () {
 });
 
 // Aliados
-Route::group(["prefix" => "aliados"], function () {
+Route::group(['prefix' => 'aliados'], function () {
     Route::get('/', 'AliadosController@index');
 
     Route::get('/crear', 'AliadosController@create');
@@ -180,7 +179,7 @@ Route::group(["prefix" => "aliados"], function () {
 });
 
 // Aliados Validos
-Route::group(["prefix" => "aliadosvalidos"], function () {
+Route::group(['prefix' => 'aliadosvalidos'], function () {
     Route::get('/', 'AliadosvalidosController@index');
 
     Route::get('/crear', 'AliadosvalidosController@create');
@@ -193,7 +192,7 @@ Route::group(["prefix" => "aliadosvalidos"], function () {
 });
 
 // Entidades
-Route::group(["prefix" => "entidades"], function () {
+Route::group(['prefix' => 'entidades'], function () {
     Route::get('/', 'EntidadesController@index');
 
     Route::get('/crear', 'EntidadesController@create');
@@ -206,7 +205,7 @@ Route::group(["prefix" => "entidades"], function () {
 });
 
 // Estados Cartera
-Route::group(["prefix" => "estadoscartera"], function () {
+Route::group(['prefix' => 'estadoscartera'], function () {
     Route::get('/', 'EstadoscarteraController@index');
 
     Route::get('/crear', 'EstadoscarteraController@create');
@@ -219,7 +218,7 @@ Route::group(["prefix" => "estadoscartera"], function () {
 });
 
 // Tipos de Embargo
-Route::group(["prefix" => "tiposembargo"], function () {
+Route::group(['prefix' => 'tiposembargo'], function () {
     Route::get('/', 'TiposembargoController@index');
 
     Route::get('/crear', 'TiposembargoController@create');
@@ -232,7 +231,7 @@ Route::group(["prefix" => "tiposembargo"], function () {
 });
 
 // Sectores
-Route::group(["prefix" => "sectores"], function () {
+Route::group(['prefix' => 'sectores'], function () {
     Route::get('/', 'SectoresController@index');
 
     Route::get('/crear', 'SectoresController@create');
@@ -245,7 +244,7 @@ Route::group(["prefix" => "sectores"], function () {
 });
 
 // Oficinas
-Route::group(["prefix" => "oficinas"], function () {
+Route::group(['prefix' => 'oficinas'], function () {
     Route::get('/', 'OficinasController@index');
 
     Route::get('/crear', 'OficinasController@create');
@@ -258,7 +257,7 @@ Route::group(["prefix" => "oficinas"], function () {
 });
 
 // Cargos
-Route::group(["prefix" => "cargos"], function () {
+Route::group(['prefix' => 'cargos'], function () {
     Route::get('/', 'CargosController@index');
 
     Route::get('/crear', 'CargosController@create');
@@ -271,7 +270,7 @@ Route::group(["prefix" => "cargos"], function () {
 });
 
 // Departamentos
-Route::group(["prefix" => "departamentos"], function () {
+Route::group(['prefix' => 'departamentos'], function () {
     Route::get('/', 'DepartamentosController@index');
 
     Route::get('/crear', 'DepartamentosController@create');
@@ -284,7 +283,7 @@ Route::group(["prefix" => "departamentos"], function () {
 });
 
 // Ciudades
-Route::group(["prefix" => "ciudades"], function () {
+Route::group(['prefix' => 'ciudades'], function () {
     Route::get('/', 'CiudadesController@index');
 
     Route::get('/crear', 'CiudadesController@create');
@@ -297,7 +296,7 @@ Route::group(["prefix" => "ciudades"], function () {
 });
 
 // Estudios de clientes
-Route::group(["prefix" => "terecuperamos"], function () {
+Route::group(['prefix' => 'terecuperamos'], function () {
     Route::get('/', 'TerecuperamosController@index');
 
     Route::get('/crear', 'TerecuperamosController@create');
@@ -312,7 +311,7 @@ Route::group(["prefix" => "terecuperamos"], function () {
 });
 
 // Comerciales
-Route::group(["prefix" => "comerciales"], function () {
+Route::group(['prefix' => 'comerciales'], function () {
     Route::get('/', 'ComercialController@index');
 
     Route::get('/crear', 'ComercialController@create');
@@ -325,7 +324,7 @@ Route::group(["prefix" => "comerciales"], function () {
 });
 
 // Factores
-Route::group(["prefix" => "factores"], function () {
+Route::group(['prefix' => 'factores'], function () {
     Route::get('/', 'FactoresController@index');
 
     Route::get('/crear', 'FactoresController@create');
@@ -338,14 +337,14 @@ Route::group(["prefix" => "factores"], function () {
 });
 
 // Reportes
-Route::group(["prefix" => "reportes"], function () {
+Route::group(['prefix' => 'reportes'], function () {
     Route::get('/', 'ReportesController@index');
     Route::get('/consultas', 'ReportesController@consultas');
     Route::get('/personalizados', 'ReportesController@personalizados');
 });
 
 // Archivos Planos
-Route::group(["prefix" => "planos"], function () {
+Route::group(['prefix' => 'planos'], function () {
     Route::get('/', 'PlanosController@index');
 
     Route::get('/crear', 'PlanosController@create');
@@ -363,15 +362,14 @@ Route::group(["prefix" => "planos"], function () {
 });
 
 // Consultas
-Route::group(["prefix" => "consultas"], function () {
+Route::group(['prefix' => 'consultas'], function () {
     Route::get('/', 'ConsultasController@index');
     Route::get('/list', 'ConsultasController@list');
     Route::post('/{id}', 'ConsultasController@consultar');
 });
 
 // Estudios
-Route::group(["prefix" => "estudios"], function () {
-
+Route::group(['prefix' => 'estudios'], function () {
     Route::get('/', 'EstudiosController@index');
     //
     Route::get('/nuevoestudio', 'EstudiosController@paso1');
@@ -386,7 +384,7 @@ Route::group(["prefix" => "estudios"], function () {
 });
 
 //Clientes
-Route::group(["prefix" => "clientes"], function () {
+Route::group(['prefix' => 'clientes'], function () {
     Route::post('/crear', 'ClientesController@crear');
     //
     Route::get('/editar/{id}', 'ClientesController@editar');
@@ -465,6 +463,7 @@ Route::post('pdfDetalle', 'VisadoController@pdfDetalle');
 
 Route::get('getHistoryConsults', 'VisadoController@historialConsultas');
 Route::post('visados', [VisadoController::class, 'store']);
+Route::post('visados/{id}', [VisadoController::class, 'update']);
 Route::view('/historyClient', 'historyClient')->middleware('auth');
 Route::view('/dataClient', 'dataClient');
 Route::view('/dataClientDraft', 'dataClientDraft');

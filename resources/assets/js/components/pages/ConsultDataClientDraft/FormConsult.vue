@@ -79,7 +79,8 @@ export default {
         cuotadeseada: 0,
         pagaduria: null,
         pagadurias: null,
-        pagaduriaKey: null
+        pagaduriaKey: null,
+        visado: null
       },
       isLoading: false,
       pagaduriasType: [
@@ -173,6 +174,7 @@ export default {
         };
 
         const response = await axios.post('/visados', data);
+        this.dataclient.visado = response.data;
         return Promise.resolve(response.status);
       } catch (e) {
       } finally {

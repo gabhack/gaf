@@ -71,7 +71,7 @@ class VisadoController extends Controller
         $resultado['embargosedu'] = $embargosedu;
         $resultado['descapli'] = $descapli;
         $resultado['descnoap'] = $descnoap;
-        if ($resultado == "" or $resultado == null) {
+        if ($resultado == '' or $resultado == null) {
             return response()->json(['message' => 'No se encontraron registros.', 'data' => $resultado], 200);
         } else {
             return response()->json(['message' => 'Consulta exitosa.', 'data' => $resultado], 200);
@@ -196,9 +196,12 @@ class VisadoController extends Controller
      * @param \App\Visado $visado
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Visado $visado)
+    public function update(Request $request, $id)
     {
-        //
+        //dd(Visado::find($id));
+        $visado = Visado::find($id);
+        $visado->estado = $request->estado;
+        $visado->save();
     }
 
     /**
