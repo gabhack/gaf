@@ -5,23 +5,27 @@ namespace App\Http\Controllers;
 use App\Detalledecliente;
 use Illuminate\Http\Request;
 
-class Detalledecliente extends Controller
+class DetalledeclienteController extends Controller
 {
-  public function consultaUnitaria(Request $request){
-    $data_formulario = $request->data;
-    $doc = $request->doc;
-    $consulta_cedula = Detalledecliente::where('doc',$doc)->get();
-    $resultados = json_decode($consulta_cedula);
-    if($resultados == "" or $resultados == null ){
-      return response()->json(['message'=>'No se encontraron registros con el numero seleccionado.', 'data'=>$resultados],200);
+    public function consultaUnitaria(Request $request)
+    {
+        $data_formulario = $request->data;
+        $doc = $request->doc;
+        $consulta_cedula = Detalledecliente::where('doc', $doc)->get();
+        $resultados = json_decode($consulta_cedula);
+        if ($resultados == '' or $resultados == null) {
+            return response()->json(
+                ['message' => 'No se encontraron registros con el numero seleccionado.', 'data' => $resultados],
+                200
+            );
+        } else {
+            return response()->json(['message' => 'Consulta exitosa.', 'data' => $resultados], 200);
+        }
     }
-    else{
-      return response()->json(['message'=>'Consulta exitosa.','data'=>$resultados],200);
-    }
-  }
-    public function dumpDetalledecliente(){
-      Detalledecliente::truncate();
-        return response()->json(['message'=>'Datos de tabla Detalledecliente Borrada'],200);
+    public function dumpDetalledecliente()
+    {
+        Detalledecliente::truncate();
+        return response()->json(['message' => 'Datos de tabla Detalledecliente Borrada'], 200);
     }
     /**
      * Display a listing of the resource.
@@ -30,7 +34,6 @@ class Detalledecliente extends Controller
      */
     public function index(Request $request)
     {
-
     }
 
     /**
@@ -62,7 +65,7 @@ class Detalledecliente extends Controller
      */
     public function show($doc)
     {
-        $Descuentossedcauca = Detalledecliente::where('doc',$doc)->get();
+        $Descuentossedcauca = Detalledecliente::where('doc', $doc)->get();
         return response()->json($Detalledecliente);
     }
 
