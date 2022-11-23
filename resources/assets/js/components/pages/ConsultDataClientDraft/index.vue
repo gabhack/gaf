@@ -278,7 +278,7 @@ export default {
       isLoading: false,
       disabledProspect: false,
       visado: null,
-      visadoValido: 'rechazado'
+      visadoValido: 'NO FACTIBLE'
     };
   },
   computed: {
@@ -288,8 +288,10 @@ export default {
       'valorIngreso',
       'ingresosIncapacidadPerPeriod',
       'incapacidadValida',
-      'couponsIngresos'
+      'couponsIngresos',
+      'ingresosExtras'
     ]),
+    ...mapState('datamesModule', ['cuotadeseada', 'conteoEgresos']),
     totales() {
       const valrSM = 1000000;
 
@@ -569,9 +571,60 @@ export default {
         solid: true
       });
     },
+    alertNegadoCupo(data) {
+      this.$bvToast.toast(`${data.message}`, {
+        title: data.title ? data.title : 'Alerta del sistema',
+        autoHideDelay: 10000,
+        variant: data.variant,
+        solid: true
+      });
+    },
 
     //Visando consulta
     visadoFunction() {
+      if (this.cuotadeseada > this.totales.cuotaMaxima - this.conteoEgresos) {
+        let data = {
+          message: 'Negado por cupo',
+          variant: 'danger'
+        };
+        this.visadoValido = 'NO FACTIBLE';
+        this.alertNegadoCupo(data);
+      } else {
+        this.visadoValido = 'FACTIBLE';
+      }
+
+      let valido = false;
+
+      if (this.pagaduriaType == 'FODE VALLE') {
+        valido = this.embargosseceduc.every(item => item.check == true);
+      } else if (this.pagaduriaType == 'SECCALI') {
+        valido = this.embargosseccali.every(item => item.check == true);
+      } else if (this.pagaduriaType == 'SEDCHOCO') {
+        valido = this.embargossedchoco.every(item => item.check == true);
+      } else if (this.pagaduriaType == 'SEDCAUCA') {
+        valido = this.embargossedcauca.every(item => item.check == true);
+      } else if (this.pagaduriaType == 'SEDQUIBDO') {
+        valido = this.embargossedquibdo.every(item => item.check == true);
+      } else if (this.pagaduriaType == 'SEDPOPAYAN') {
+        valido = this.embargossedpopayan.every(item => item.check == true);
+      } else if (this.pagaduriaType == 'FOPEP') {
+        valido = this.descnoap.every(item => item.check == true);
+      }
+      this.visadoValido = valido == true ? 'FACTIBLE' : 'NO FACTIBLE';
+
+      const definitivaAlerta = this.ingresosExtras.some(
+        item => item.concept.includes('Definitiva') || item.concept.includes('definitiva')
+      );
+
+      if (definitivaAlerta) {
+        let data = {
+          message: 'Cliente en proceso de retiro',
+          variant: 'danger'
+        };
+        this.visadoValido = 'NO FACTIBLE';
+        this.alertDefinitiva(data);
+      }
+
       const aceptado = {
         estado: this.visadoValido
       };
