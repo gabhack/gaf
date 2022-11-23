@@ -465,7 +465,7 @@ Route::post('pdfDetalle', 'VisadoController@pdfDetalle');
 
 Route::get('getHistoryConsults', 'VisadoController@historialConsultas');
 Route::post('visados', [VisadoController::class, 'store']);
-Route::view('/historyClient', 'historyClient');
+Route::view('/historyClient', 'historyClient')->middleware('auth');
 Route::view('/dataClient', 'dataClient');
 Route::view('/dataClientDraft', 'dataClientDraft');
 Route::view('/refundCartera', 'refundCartera');

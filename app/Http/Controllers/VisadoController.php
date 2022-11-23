@@ -28,12 +28,19 @@ class VisadoController extends Controller
         // $data_formulario = $request->data;
         // $doc = $request->data['doc'];
         // $historial_consultas = \App\Descapli::Where('doc',$doc)->get();
-        $historial_consultas = \App\Visado::query()->orderByDesc('created_at')->get();
-        $resultados = json_decode($historial_consultas);
-        if ($resultados == "" or $resultados == null) {
-            return response()->json(['message' => 'No se encontraron registros.', 'data' => $resultados], 200);
+        $historial_consultas = \App\Visado::query()->orderByDesc('created_at')->paginate(15);
+
+        $resultados = $historial_consultas;
+
+        if (count($historial_consultas) == 0) {
+            return response()->json([
+                'message' => 'No se encontraron resultados',
+            ], 200);
         } else {
-            return response()->json(['message' => 'Consulta exitosa.', 'data' => $resultados], 200);
+            return response()->json([
+                'message' => 'Se encontraron resultados',
+                'data' => $resultados,
+            ], 200);
         }
     }
 
@@ -152,7 +159,7 @@ class VisadoController extends Controller
             'nombre' => $request->nombre,
             'pagaduria' => $request->pagaduria,
             'entidad' => $request->pagaduria,
-            'tipo_consulta' => 'Individual',
+            'tipo_consulta' => 'Diamond',
             'consultant_email' => $user->email,
             'consultant_name' => $user->name,
         ]);

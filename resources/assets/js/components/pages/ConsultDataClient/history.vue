@@ -4,52 +4,84 @@
       <div class="col-12">
         <template v-if="id_consult === null">
           <h2 class="title text-center">Historial de Consultas</h2>
-          <div style="float: right" class="form-group col-md-2">
+          <div class="form-group col-md-2">
             <label for="">Buscar</label>
             <input class="form-control" placeholder="Buscar" v-model="filter" />
           </div>
-          <div class="table-responsive">
-            <table class="table table-hover table-striped table-condensed table-bordered">
-              <thead>
-                <tr>
-                  <th scope="col" class="text-center">Id Consulta</th>
-                  <th scope="col" class="text-center">Cedula</th>
-                  <th scope="col" class="text-center">Nombre Completo</th>
-                  <th scope="col" class="text-center">Pagaduria</th>
-                  <th scope="col" class="text-center">Tipo de Consulta</th>
-                  <th scope="col" class="text-center">Score</th>
-                  <th scope="col" class="text-center">Fecha de Consulta</th>
-                  <th scope="col" class="text-center">Nombre del consultante</th>
-                  <th scope="col" class="text-center">Correo del consultante</th>
-                  <th scope="col" class="text-center">Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(history, key) in filteredRows" :key="key">
-                  <td scope="row">{{ history.id }}</td>
-                  <td>{{ history.ced }}</td>
-                  <td>{{ history.nombre }}</td>
-                  <td>{{ history.pagaduria }}</td>
-                  <td>{{ history.tipo_consulta }}</td>
-                  <td></td>
-                  <td>{{ history.created_at }}</td>
-                  <td>{{ history.consultant_name ? history.consultant_name : '-' }}</td>
-                  <td>{{ history.consultant_email ? history.consultant_email : '-' }}</td>
-                  <td>
-                    <button
-                      type="button"
-                      class="btn btn-primary"
-                      data-toggle="modal"
-                      data-target="#exampleModal"
-                      v-on:click="getData(history)"
-                    >
-                      Observar
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <div class="d-flex">
+            <div class="mr-2">
+              <label class="mr-2" for="inline-form-custom-select-pref">Fechas</label>
+              <div class="d-flex align-items-center">
+                <b-form-input
+                  id="input-anio"
+                  placeholder="Año"
+                  v-model.number="queryParams.empresaOUsuario"
+                  type="number"
+                  class="small-input"
+                />
+                <strong class="mx-2">-</strong>
+                <b-form-input
+                  id="input-mes"
+                  placeholder="Mes"
+                  v-model.number="queryParams.empresaOUsuario"
+                  type="number"
+                  class="small-input"
+                />
+              </div>
+            </div>
+            <b-form-group label="Tipo de Pagadurias" label-for="select-pagadurias" class="mr-2">
+              <b-form-select
+                id="select-pagadurias"
+                :options="pagaduriasOptions"
+                v-model="queryParams.pagadurias"
+              ></b-form-select>
+            </b-form-group>
+            <b-form-group label="Empresa o Usuario" label-for="input-empresa-usuario" class="mr-2">
+              <b-form-input
+                id="input-empresa-usuario"
+                placeholder="Empresa o Usuario"
+                v-model="queryParams.empresaOUsuario"
+              ></b-form-input>
+            </b-form-group>
+            <b-form-group label="Resultado" label-for="input-resultado" class="mr-2">
+              <b-form-input id="input-resultado" placeholder="Resultado" v-model="queryParams.resultado"></b-form-input>
+            </b-form-group>
+            <b-form-group label="Tipo de Consulta" label-for="select-tipo-consulta" class="mr-2">
+              <b-form-select
+                id="select-tipo-consulta"
+                :options="tipoConsultaOptions"
+                v-model="queryParams.tipoConsulta"
+              ></b-form-select>
+            </b-form-group>
+            <b-button type="submit" variant="info" class="align-self-end mb-3">
+              <i class="fa fa-filter" aria-hidden="true"></i>
+              Filtrar
+            </b-button>
           </div>
+
+          <div class="table-responsive">
+            <b-table striped hover :fields="fields" :items="HistoryConsult.data" :busy="isBusy">
+              <template #table-busy>
+                <div class="text-center text-black-pearl my-2">
+                  <b-spinner class="align-middle"></b-spinner>
+                  <strong>Cargando...</strong>
+                </div>
+              </template>
+              <template #cell(actions)="data">
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  data-toggle="modal"
+                  data-target="#exampleModal"
+                  @click="getData(data)"
+                >
+                  Observar
+                </button>
+              </template>
+            </b-table>
+          </div>
+          <b-pagination v-if="HistoryConsult" v-model="currentPage" :per-page="perPage" :total-rows="totalRows">
+          </b-pagination>
           <!-- Modal -->
           <div
             class="modal fade"
@@ -198,15 +230,117 @@ export default {
   props: ['user'],
   data() {
     return {
-      HistoryConsult: [],
+      HistoryConsult: null,
       detailHistory: {},
       filter: '',
       id_consult: null,
-      pagaduriaType: ''
+      pagaduriaType: '',
+      fields: [
+        {
+          key: 'id',
+          label: 'Id',
+          sortable: true
+        },
+        {
+          key: 'created_at',
+          label: 'Fecha y Hora',
+          sortable: true
+        },
+        {
+          key: 'ced',
+          label: 'Cedula',
+          sortable: true
+        },
+        {
+          key: 'nombre',
+          label: 'Nombre Completo',
+          sortable: true
+        },
+        {
+          key: 'tipo_consulta',
+          label: 'Tipo de Consulta',
+          sortable: true
+        },
+        {
+          key: 'score',
+          label: 'Puntaje',
+          sortable: true
+        },
+        {
+          key: 'cuotacredito',
+          label: 'Cuota',
+          sortable: true
+        },
+        {
+          key: 'monto',
+          label: 'Monto',
+          sortable: true
+        },
+        {
+          key: 'estado',
+          label: 'Resultado',
+          sortable: true
+        },
+        {
+          key: 'causal',
+          label: 'Causal',
+          sortable: true
+        },
+        {
+          key: 'consultant_name',
+          label: 'Usuario',
+          sortable: true
+        },
+        {
+          key: 'consultant_email',
+          label: 'Empresa',
+          sortable: true
+        },
+        {
+          key: 'actions',
+          label: 'Acciones'
+        }
+      ],
+      pagaduriasOptions: [
+        { text: 'Pagadurias', value: null },
+        { text: 'FOPEP', value: 'FOPEP', key: 'datames' },
+        { text: 'FIDUPREVISORA', value: 'FIDUPREVISORA', key: 'datamesfidu' },
+        { text: 'SEM CALI', value: 'SECCALI', key: 'datamesseccali' },
+        { text: 'FODE VALLE', value: 'FODE VALLE', key: 'datamesseceduc' },
+        { text: 'SED CAUCA', value: 'SEDCAUCA', key: 'datamesSedCauca' },
+        { text: 'SED CHOCO', value: 'SEDCHOCO', key: 'datamesSedChoco' },
+        { text: 'SED POPAYAN', value: 'SEDPOPAYAN', key: 'datamesSedPopayan' },
+        { text: 'SED QUIBDO', value: 'SEDQUIBDO', key: 'datamesSedQuibdo' },
+        { text: 'SED MAGDALENA', value: 'SEDMAGDALENA', key: 'datamesSedMagdalena' },
+        { text: 'SED BOLIVAR', value: 'SEDBOLIVAR', key: 'datamesSedBolivar' },
+        { text: 'SED BARRANQUILLA', value: 'SEDBARRANQUILLA', key: 'datamesSedBarranquilla' },
+        { text: 'SED ATLANTICO', value: 'SEDATLANTICO', key: 'datamessedatlantico' },
+        { text: 'SED NARIÑO', value: 'SEDNARINO', key: 'datamesSedNarino' }
+      ],
+      tipoConsultaOptions: [{ text: 'Consulta', value: null }, 'Silver', 'Gold', 'Diamond'],
+
+      isBusy: false,
+
+      // pagination
+      perPage: 15,
+      totalRows: 0,
+      currentPage: 1,
+
+      queryParams: {
+        pagadurias: null,
+        tipoConsulta: null,
+        empresaOUsuario: null,
+        resultado: null
+      }
     };
   },
   mounted() {
     this.getHistoryConsults();
+  },
+  watch: {
+    currentPage() {
+      this.getHistoryConsults();
+    }
   },
   computed: {
     filteredRows() {
@@ -260,9 +394,19 @@ export default {
   },
   methods: {
     getHistoryConsults() {
-      axios.get('getHistoryConsults').then(response => {
-        this.HistoryConsult = response.data.data;
-      });
+      this.isBusy = true;
+      const url = `getHistoryConsults?page=${this.currentPage}`;
+
+      axios
+        .get(url)
+        .then(response => {
+          this.HistoryConsult = response.data.data;
+          this.perPage = response.data.data.per_page;
+          this.totalRows = response.data.data.total;
+        })
+        .finally(() => {
+          this.isBusy = false;
+        });
     },
     getData(data) {
       this.pagaduriaType = data.pagaduria;
@@ -275,3 +419,9 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.small-input {
+  width: 100px;
+}
+</style>
