@@ -15,6 +15,7 @@ class Visado extends Model
     protected $fillable = [
         'conc',
         'estado',
+        'causal',
         'fconsultaami',
         'ced',
         'nombre',
@@ -28,6 +29,7 @@ class Visado extends Model
         'vdesembolso',
         'plazo',
         'cuotacredito',
+        'monto',
         'aprobado',
         'porcincorp',
         'cmaxincorp',

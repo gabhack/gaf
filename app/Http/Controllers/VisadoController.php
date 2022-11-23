@@ -201,6 +201,9 @@ class VisadoController extends Controller
         //dd(Visado::find($id));
         $visado = Visado::find($id);
         $visado->estado = $request->estado;
+        $visado->cuotacredito = $request->cuotacredito;
+        $visado->monto = $request->monto;
+        $visado->causal = $request->causal;
         $visado->save();
     }
 

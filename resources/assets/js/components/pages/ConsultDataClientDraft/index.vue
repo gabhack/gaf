@@ -271,6 +271,8 @@ export default {
       descuentossedquibdo: [],
       descuentossedpopayan: [],
 
+      monto: 0,
+
       pagaduriaKey: '',
       cargo: null,
       showOthers: false,
@@ -428,6 +430,8 @@ export default {
       this.datamesseccali = null;
       this.visado = payload.visado;
 
+      this.monto = payload.monto;
+
       if (payload.pagaduria == 'FOPEP') {
         this.getDatames(payload);
       } else if (payload.pagaduria == 'FODE VALLE') {
@@ -571,24 +575,13 @@ export default {
         solid: true
       });
     },
-    alertNegadoCupo(data) {
-      this.$bvToast.toast(`${data.message}`, {
-        title: data.title ? data.title : 'Alerta del sistema',
-        autoHideDelay: 10000,
-        variant: data.variant,
-        solid: true
-      });
-    },
 
     //Visando consulta
     visadoFunction() {
+      let causal = 'Sin Causales';
       if (this.cuotadeseada > this.totales.cuotaMaxima - this.conteoEgresos) {
-        let data = {
-          message: 'Negado por cupo',
-          variant: 'danger'
-        };
         this.visadoValido = 'NO FACTIBLE';
-        this.alertNegadoCupo(data);
+        causal = 'Negado por cupo';
       } else {
         this.visadoValido = 'FACTIBLE';
       }
@@ -617,19 +610,19 @@ export default {
       );
 
       if (definitivaAlerta) {
-        let data = {
-          message: 'Cliente en proceso de retiro',
-          variant: 'danger'
-        };
         this.visadoValido = 'NO FACTIBLE';
-        this.alertDefinitiva(data);
+        causal = 'Cliente en proceso de retiro';
       }
 
-      const aceptado = {
-        estado: this.visadoValido
+      const data = {
+        estado: this.visadoValido,
+        cuotacredito: this.cuotadeseada,
+        monto: this.monto,
+        causal: causal
       };
+
       axios
-        .post(`visados/${this.visado.id}`, aceptado)
+        .post(`visados/${this.visado.id}`, data)
         .then(response => {
           console.log('response', response);
         })
