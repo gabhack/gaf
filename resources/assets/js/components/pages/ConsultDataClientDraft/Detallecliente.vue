@@ -147,7 +147,6 @@
                   class="form-control"
                   :value="cuotadeseada"
                   @input="event => setCuotaDeseada(event.target.value)"
-                  @blur="handleBlur"
                 />
               </div>
             </div>
@@ -198,12 +197,7 @@ export default {
     ...mapGetters('pagaduriasModule', ['couponsIngresos'])
   },
   methods: {
-    ...mapMutations('datamesModule', ['setCuotaDeseada']),
-    handleBlur(){
-      if(this.cuotadeseada > this.totales.cuotaMaxima){
-        this.setCuotaDeseada(0)
-      }
-    }
+    ...mapMutations('datamesModule', ['setCuotaDeseada'])
   }
 };
 </script>

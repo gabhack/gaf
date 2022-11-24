@@ -293,7 +293,7 @@ export default {
       'couponsIngresos',
       'ingresosExtras'
     ]),
-    ...mapState('datamesModule', ['cuotadeseada', 'conteoEgresos']),
+    ...mapState('datamesModule', ['cuotadeseada', 'conteoEgresosPlus']),
     totales() {
       const valrSM = 1000000;
 
@@ -578,41 +578,102 @@ export default {
 
     //Visando consulta
     visadoFunction() {
-      let causal = 'Sin Causales';
-      if (this.cuotadeseada > this.totales.cuotaMaxima - this.conteoEgresos) {
-        this.visadoValido = 'NO FACTIBLE';
-        causal = 'Negado por cupo';
-      } else {
-        this.visadoValido = 'FACTIBLE';
-      }
+      let causal = '';
+      let obligacionMarcadas = false;
+      let embargosSinMora = false;
 
-      let valido = false;
+      const cuotaMenor = this.cuotadeseada < this.totales.cuotaMaxima - this.conteoEgresosPlus;
+      const cuotaMayor = this.cuotadeseada > this.totales.cuotaMaxima - this.conteoEgresosPlus;
 
       if (this.pagaduriaType == 'FODE VALLE') {
-        valido = this.embargosseceduc.every(item => item.check == true);
+        if (this.embargosseceduc.length > 0) {
+          obligacionMarcadas = this.embargosseceduc.every(item => item.check == true);
+        } else {
+          embargosSinMora = true;
+        }
       } else if (this.pagaduriaType == 'SECCALI') {
-        valido = this.embargosseccali.every(item => item.check == true);
+        if (this.embargosseccali.length > 0) {
+          obligacionMarcadas = this.embargosseccali.every(item => item.check == true);
+        } else {
+          embargosSinMora = true;
+        }
       } else if (this.pagaduriaType == 'SEDCHOCO') {
-        valido = this.embargossedchoco.every(item => item.check == true);
+        if (this.embargossedchoco.length > 0) {
+          obligacionMarcadas = this.embargossedchoco.every(item => item.check == true);
+        } else {
+          embargosSinMora = true;
+        }
       } else if (this.pagaduriaType == 'SEDCAUCA') {
-        valido = this.embargossedcauca.every(item => item.check == true);
+        if (this.embargossedcauca.length > 0) {
+          obligacionMarcadas = this.embargossedcauca.every(item => item.check == true);
+        } else {
+          embargosSinMora = true;
+        }
       } else if (this.pagaduriaType == 'SEDQUIBDO') {
-        valido = this.embargossedquibdo.every(item => item.check == true);
+        if (this.embargossedquibdo.length > 0) {
+          obligacionMarcadas = this.embargossedquibdo.every(item => item.check == true);
+        } else {
+          embargosSinMora = true;
+        }
       } else if (this.pagaduriaType == 'SEDPOPAYAN') {
-        valido = this.embargossedpopayan.every(item => item.check == true);
+        if (this.embargossedpopayan.length > 0) {
+          obligacionMarcadas = this.embargossedpopayan.every(item => item.check == true);
+        } else {
+          embargosSinMora = true;
+        }
       } else if (this.pagaduriaType == 'FOPEP') {
-        valido = this.descnoap.every(item => item.check == true);
+        if (this.embargosfopep.length > 0) {
+          obligacionMarcadas = this.embargosfopep.every(item => item.check == true);
+        } else {
+          embargosSinMora = true;
+        }
       }
-      this.visadoValido = valido == true ? 'FACTIBLE' : 'NO FACTIBLE';
 
-      const definitivaAlerta = this.ingresosExtras.some(
-        item => item.concept.includes('Definitiva') || item.concept.includes('definitiva')
-      );
+      console.log('obligacionMarcadas', obligacionMarcadas);
+      console.log('cuotaMenor', cuotaMenor);
+      console.log('cuotaMayor', cuotaMayor);
+      console.log('embargosSinMora', embargosSinMora);
 
-      if (definitivaAlerta) {
+      if (cuotaMenor === false && obligacionMarcadas === false) {
+        console.log('hola');
         this.visadoValido = 'NO FACTIBLE';
-        causal = 'Cliente en proceso de retiro';
+        causal += 'Presenta obligaciones en mora,';
       }
+
+      if (cuotaMenor === false && obligacionMarcadas === true) {
+        console.log('hola2');
+        this.visadoValido = 'FACTIBLE';
+        causal += 'Sin causal,';
+      }
+
+      if (cuotaMayor === true && embargosSinMora === true) {
+        console.log('hola3');
+        this.visadoValido = 'NO FACTIBLE';
+        causal += 'Negado por cupo,';
+      }
+
+      if (cuotaMayor === true && obligacionMarcadas === false) {
+        console.log('hola4');
+        this.visadoValido = 'NO FACTIBLE';
+        causal = '1. Presenta obligaciones en mora, 2. Negado por cupo';
+      }
+
+      if (cuotaMayor === true && obligacionMarcadas === true) {
+        console.log('hola5');
+        this.visadoValido = 'NO FACTIBLE';
+        causal = 'Negado por cupo';
+      }
+
+      // this.visadoValido = valido == true ? 'FACTIBLE' : 'NO FACTIBLE';
+
+      // const definitivaAlerta = this.ingresosExtras.some(
+      //   item => item.concept.includes('Definitiva') || item.concept.includes('definitiva')
+      // );
+
+      // if (definitivaAlerta) {
+      //   this.visadoValido = 'NO FACTIBLE';
+      //   causal = 'Cliente en proceso de retiro';
+      // }
 
       const data = {
         estado: this.visadoValido,

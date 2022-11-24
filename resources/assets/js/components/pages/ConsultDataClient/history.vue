@@ -70,13 +70,14 @@
               <template #cell(actions)="data">
                 <button
                   type="button"
-                  class="btn btn-primary"
+                  class="btn btn-primary mb-2"
                   data-toggle="modal"
                   data-target="#exampleModal"
                   @click="getData(data)"
                 >
                   Observar
                 </button>
+                <b-button variant="black-pearl" href="/solicitud"> Proceso HEGO </b-button>
               </template>
             </b-table>
           </div>
@@ -259,6 +260,11 @@ export default {
         {
           key: 'tipo_consulta',
           label: 'Tipo de Consulta',
+          sortable: true
+        },
+        {
+          key: 'pagaduria',
+          label: 'Pagaduria',
           sortable: true
         },
         {
