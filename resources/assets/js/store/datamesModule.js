@@ -3,7 +3,8 @@ const datamesModule = {
   state: {
     datamesSed: null,
     cuotadeseada: null,
-    conteoEgresos: null
+    conteoEgresos: null,
+    conteoEgresosPlus: null
   },
   mutations: {
     setDatamesSed(state, datames) {
@@ -14,6 +15,9 @@ const datamesModule = {
     },
     setConteoEgresos(state, payload) {
       state.conteoEgresos = payload;
+    },
+    setConteoEgresosPlus(state, payload) {
+      state.conteoEgresosPlus = payload;
     }
   }
 };

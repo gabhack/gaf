@@ -14,32 +14,32 @@
       </div>
       <div class="panel-body">
         <div class="row">
-          <div class="col-1" >
+          <div class="col-1">
             <b class="panel-label table-text"></b>
           </div>
-          <div class="col-2" >
+          <div class="col-2">
             <b class="panel-label table-text">TIPO ENTIDAD:</b>
           </div>
-          <div class="col-3" >
+          <div class="col-3">
             <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
           </div>
-          <div class="col-2" >
+          <div class="col-2">
             <b class="panel-label table-text">CUOTA:</b>
           </div>
-          <div class="col-2" >
+          <div class="col-2">
             <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
           </div>
-          <div class="col-2" >
+          <div class="col-2">
             <b class="panel-label table-text">NOMBRE ENTIDAD CEDIENTE:</b>
           </div>
         </div>
 
         <div v-for="(item, key) in arrayCoupons" :key="key" class="row panel-br-light-green pt-3">
-          <div class="col-1 pr-0" >
+          <div class="col-1 pr-0">
             <input
               v-model="item.check"
               type="checkbox"
-              :disabled="(Number(item.vaplicado) > Number(cuotadeseada)) || disabledProspect || item.code == 'APFPM' || item.code == 'APFSM'"
+              :disabled="disabledProspect || item.code == 'APFPM' || item.code == 'APFSM'"
               @change="calcularEgresos"
             />
             <!--
@@ -47,25 +47,25 @@
               @input="event => AddItem(event.target.value)"
             -->
           </div>
-          <div class="col-2 px-0" >
-            <p>{{ item.clase ? item.clase : '-'}}</p>
-          </div>    
+          <div class="col-2 px-0">
+            <p>{{ item.clase ? item.clase : '-' }}</p>
+          </div>
 
-          <div class="col-3 px-0" >
+          <div class="col-3 px-0">
             <p>{{ item.nomtercero ? item.nomtercero : '-' }}</p>
-          </div>    
+          </div>
 
-          <div class="col-2" >
+          <div class="col-2">
             <p>{{ item.vaplicado | currency }}</p>
           </div>
 
-          <div class="col-2" >
+          <div class="col-2">
             <p>{{ item.fgrab ? item.fgrab : '-' }}</p>
-          </div>   
+          </div>
 
-          <div class="col-2" >
+          <div class="col-2">
             <p>{{ item.nonentant ? item.nonentant : '-' }}</p>
-          </div>    
+          </div>
         </div>
 
         <!--
@@ -136,16 +136,16 @@ export default {
     };
   },
   mounted() {
-    this.arrayCoupons = [...this.couponsIngresos.items]
+    this.arrayCoupons = [...this.couponsIngresos.items];
     this.arrayCoupons.map(item => {
-      item.check = false
-      return item
-    })
+      item.check = false;
+      return item;
+    });
   },
   computed: {
     ...mapState('datamesModule', ['cuotadeseada']),
     ...mapState('pagaduriasModule', ['coupons']),
-    ...mapGetters('pagaduriasModule', ['couponsIngresos', 'pagaduriaPeriodos']),
+    ...mapGetters('pagaduriasModule', ['couponsIngresos', 'pagaduriaPeriodos'])
     /* arrayCouponsIngresos(){
       console.log('computed')
       let array = [...this.couponsIngresos.items]
@@ -156,7 +156,7 @@ export default {
     }, */
   },
   methods: {
-    ...mapMutations('datamesModule', ['setConteoEgresos']),
+    ...mapMutations('datamesModule', ['setConteoEgresos', 'setConteoEgresosPlus']),
     ...mapMutations('pagaduriasModule', ['setSelectedPeriod']),
     /*
     AddItem(value) {
@@ -177,25 +177,31 @@ export default {
       this.setConteoEgresos(total);
     },
     */
-    calcularEgresos(){
-      let totalEgresos = 0 
+    calcularEgresos() {
+      let totalEgresos = 0;
+      let totalEgresosPlus = 0;
       this.couponsIngresos.items.forEach(item => {
-        if(!item.check && item.code !== 'APFPM' && item.code !== 'APFSM'){
-          totalEgresos += Number(item.vaplicado)
+        if (!item.check && item.code !== 'APFPM' && item.code !== 'APFSM') {
+          totalEgresos += Number(item.vaplicado);
         }
-      })
+        if (item.check && item.code !== 'APFPM' && item.code !== 'APFSM') {
+          totalEgresosPlus += Number(item.vaplicado);
+        }
+      });
       this.setConteoEgresos(totalEgresos);
-    }   
+      this.setConteoEgresosPlus(totalEgresosPlus);
+    }
   },
-  watch:{
-    couponsIngresos(){
-      this.arrayCoupons = []
-      this.arrayCoupons = [...this.couponsIngresos.items]
+  watch: {
+    couponsIngresos() {
+      this.arrayCoupons = [];
+      this.arrayCoupons = [...this.couponsIngresos.items];
       this.arrayCoupons.map(item => {
-        item.check = false
-        return item
-      })
+        item.check = false;
+        return item;
+      });
       this.setConteoEgresos(0);
+      this.setConteoEgresosPlus(0);
     }
   }
 };
