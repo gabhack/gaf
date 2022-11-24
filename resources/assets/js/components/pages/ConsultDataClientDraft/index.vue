@@ -582,8 +582,8 @@ export default {
       let obligacionMarcadas = false;
       let embargosSinMora = false;
 
-      const cuotaMenor = this.cuotadeseada < this.totales.cuotaMaxima - this.conteoEgresosPlus;
-      const cuotaMayor = this.cuotadeseada > this.totales.cuotaMaxima - this.conteoEgresosPlus;
+      const cuotaMenor = Number(this.cuotadeseada) < this.conteoEgresosPlus;
+      const cuotaMayor = Number(this.cuotadeseada) > this.conteoEgresosPlus;
 
       if (this.pagaduriaType == 'FODE VALLE') {
         if (this.embargosseceduc.length > 0) {
@@ -628,40 +628,36 @@ export default {
           embargosSinMora = true;
         }
       }
-
+      console.log('cuota maxima', this.conteoEgresosPlus);
       console.log('obligacionMarcadas', obligacionMarcadas);
       console.log('cuotaMenor', cuotaMenor);
       console.log('cuotaMayor', cuotaMayor);
       console.log('embargosSinMora', embargosSinMora);
 
-      if (cuotaMenor === false && obligacionMarcadas === false) {
+      if (cuotaMenor === true && obligacionMarcadas === false) {
         console.log('hola');
         this.visadoValido = 'NO FACTIBLE';
-        causal += 'Presenta obligaciones en mora,';
-      }
-
-      if (cuotaMenor === false && obligacionMarcadas === true) {
+        causal = 'Presenta obligaciones en mora';
+      } else if (cuotaMenor === true && obligacionMarcadas === true) {
         console.log('hola2');
         this.visadoValido = 'FACTIBLE';
-        causal += 'Sin causal,';
+        causal = 'Sin causal';
       }
 
       if (cuotaMayor === true && embargosSinMora === true) {
         console.log('hola3');
         this.visadoValido = 'NO FACTIBLE';
-        causal += 'Negado por cupo,';
-      }
-
-      if (cuotaMayor === true && obligacionMarcadas === false) {
-        console.log('hola4');
-        this.visadoValido = 'NO FACTIBLE';
-        causal = '1. Presenta obligaciones en mora, 2. Negado por cupo';
-      }
-
-      if (cuotaMayor === true && obligacionMarcadas === true) {
-        console.log('hola5');
-        this.visadoValido = 'NO FACTIBLE';
-        causal = 'Negado por cupo';
+        causal += 'Negado por cupo';
+      } else {
+        if (cuotaMayor === true && obligacionMarcadas === false && embargosSinMora === false) {
+          console.log('hola4');
+          this.visadoValido = 'NO FACTIBLE';
+          causal = '1. Presenta obligaciones en mora, 2. Negado por cupo';
+        } else if (cuotaMayor === true && obligacionMarcadas === true) {
+          console.log('hola5');
+          this.visadoValido = 'NO FACTIBLE';
+          causal = 'Negado por cupo';
+        }
       }
 
       // this.visadoValido = valido == true ? 'FACTIBLE' : 'NO FACTIBLE';
