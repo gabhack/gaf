@@ -140,7 +140,7 @@
                   {{ totales.compraCartera | currency }}
                 </p>
                 <p class="panel-value">
-                  {{ (totales.cuotaMaxima - conteoEgresos) | currency }}
+                  {{ (conteoEgresosPlus ? conteoEgresosPlus : totales.cuotaMaxima) | currency }}
                 </p>
                 <input
                   type="number"
@@ -193,7 +193,7 @@ export default {
     };
   },
   computed: {
-    ...mapState('datamesModule', ['cuotadeseada', 'conteoEgresos']),
+    ...mapState('datamesModule', ['cuotadeseada', 'conteoEgresos', 'conteoEgresosPlus']),
     ...mapGetters('pagaduriasModule', ['couponsIngresos'])
   },
   methods: {

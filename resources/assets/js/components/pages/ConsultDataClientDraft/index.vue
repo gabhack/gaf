@@ -648,13 +648,17 @@ export default {
         console.log('hola3');
         this.visadoValido = 'NO FACTIBLE';
         causal += 'Negado por cupo';
+      } else if (cuotaMenor === true && embargosSinMora === true) {
+        console.log('hola4');
+        this.visadoValido = 'FACTIBLE';
+        causal = 'Sin causal';
       } else {
         if (cuotaMayor === true && obligacionMarcadas === false && embargosSinMora === false) {
-          console.log('hola4');
+          console.log('hola5');
           this.visadoValido = 'NO FACTIBLE';
           causal = '1. Presenta obligaciones en mora, 2. Negado por cupo';
         } else if (cuotaMayor === true && obligacionMarcadas === true) {
-          console.log('hola5');
+          console.log('hola6');
           this.visadoValido = 'NO FACTIBLE';
           causal = 'Negado por cupo';
         }
