@@ -39,7 +39,13 @@
             <input
               v-model="item.check"
               type="checkbox"
-              :disabled="disabledProspect || item.code == 'APFPM' || item.code == 'APFSM'"
+              :disabled="
+                disabledProspect ||
+                item.code == 'APFPM' ||
+                item.code == 'APFSM' ||
+                item.code == 'APEPEN' ||
+                item.code == 'APESDN'
+              "
               @change="calcularEgresos"
             />
             <!--
