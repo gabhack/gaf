@@ -87,8 +87,6 @@
             :datamesfidu="datamesfidu"
             :datamesseccali="datamesseccali"
             :user="user"
-            @alertIncapacidad="alertIncapacidad"
-            @alertDefinitiva="alertDefinitiva"
           />
           <Detallecliente :descuentossedcauca="descuentossedcauca" :totales="totales" />
         </template>
@@ -282,6 +280,37 @@ export default {
       visado: null,
       visadoValido: 'NO FACTIBLE'
     };
+  },
+  watch: {
+    ingresosExtras(val) {
+      let totalIncapacidad = 0;
+
+      this.ingresosExtras.some(item => {
+        if (item.concept.includes('Definitiva') || item.concept.includes('definitiva')) {
+          let data = {
+            message: 'Cliente en proceso de retiro',
+            variant: 'danger'
+          };
+          this.alertDefinitiva(data);
+          return true;
+        }
+      });
+
+      this.ingresosExtras.forEach(item => {
+        if (item.concept.includes('Incapacidad') || item.concept.includes('incapacidad')) {
+          totalIncapacidad += Number(item.ingresos);
+        }
+      });
+
+      // Valida si el valor de la incapacidad es mayor al valor del ingreso
+      if (Number(totalIncapacidad) > Number(this.valorIngreso)) {
+        let data = {
+          message: 'Cliente no apto por incapacidad',
+          variant: 'danger'
+        };
+        this.alertIncapacidad(data);
+      }
+    }
   },
   computed: {
     ...mapState('pagaduriasModule', ['coupons', 'pagaduriaType']),
@@ -582,6 +611,10 @@ export default {
       let obligacionMarcadas = false;
       let embargosSinMora = false;
 
+      const definitivaAlerta = this.ingresosExtras.some(
+        item => item.concept.includes('Definitiva') || item.concept.includes('definitiva')
+      );
+
       const cuotaMenor = Number(this.cuotadeseada) < this.conteoEgresosPlus;
       const cuotaMayor = Number(this.cuotadeseada) > this.conteoEgresosPlus;
 
@@ -664,16 +697,11 @@ export default {
         }
       }
 
-      // this.visadoValido = valido == true ? 'FACTIBLE' : 'NO FACTIBLE';
-
-      // const definitivaAlerta = this.ingresosExtras.some(
-      //   item => item.concept.includes('Definitiva') || item.concept.includes('definitiva')
-      // );
-
-      // if (definitivaAlerta) {
-      //   this.visadoValido = 'NO FACTIBLE';
-      //   causal = 'Cliente en proceso de retiro';
-      // }
+      if (definitivaAlerta) {
+        console.log('hola7');
+        this.visadoValido = 'NO FACTIBLE';
+        causal = 'Cliente en proceso de retiro';
+      }
 
       const data = {
         estado: this.visadoValido,

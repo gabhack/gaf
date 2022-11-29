@@ -484,37 +484,6 @@ export default {
   computed: {
     ...mapState('datamesModule', ['datamesSed']),
     ...mapGetters('pagaduriasModule', ['ingresosExtras', 'salarioBasico', 'valorIngreso'])
-  },
-  watch:{
-    ingresosExtras(val){
-      let totalIncapacidad = 0
-
-      this.ingresosExtras.some((item) => {
-        if(item.concept.includes("Definitiva") || item.concept.includes("definitiva")){
-          let data = {
-            message: 'Cliente en proceso de retiro',
-            variant: 'danger'
-          }
-          this.$emit('alertDefinitiva', data)
-          return true
-        }
-      })
-
-      this.ingresosExtras.forEach((item) => {
-        if(item.concept.includes("Incapacidad") || item.concept.includes("incapacidad")){
-          totalIncapacidad += Number(item.ingresos)
-        }
-      })
-      
-      // Valida si el valor de la incapacidad es mayor al valor del ingreso
-      if(Number(totalIncapacidad) > Number(this.valorIngreso)) {
-        let data = {
-          message: 'Cliente no apto por incapacidad',
-          variant: 'danger'
-        }
-        this.$emit('alertIncapacidad', data)
-      }
-    }
   }
 };
 </script>
