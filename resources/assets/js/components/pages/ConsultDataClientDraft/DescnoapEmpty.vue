@@ -53,11 +53,9 @@
 
 <script>
 export default {
-  name: "Descnoap",
-  props: ['descnoap'],
-}
+  name: 'Descnoap',
+  props: ['descnoap']
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
