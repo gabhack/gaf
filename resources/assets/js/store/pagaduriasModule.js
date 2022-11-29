@@ -45,8 +45,8 @@ const pagaduriasModule = {
         return acc;
       }, []);
 
-      // Ordenar periodos de forma descendente
-      return periodos.sort((a, b) => b - a);
+      // Ordenar periodos de forma descendente, se convierte a fecha para poder ordenar
+      return periodos.sort((a, b) => new Date(b) - new Date(a));
     },
     ingresosIncapacidad: state => {
       const items = state.coupons.filter(
@@ -78,7 +78,7 @@ const pagaduriasModule = {
       const monthsNumber = 2;
 
       const actualYear = new Date().getFullYear();
-      const actualMonth = 9; //new Date().getMonth() + 1;
+      const actualMonth = 10; // new Date().getMonth() + 1;
 
       // Se obtienen los valores de año y mes por separado
       const newItems = getters.ingresosIncapacidad.items.map(item => {
