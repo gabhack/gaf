@@ -1,7 +1,7 @@
 <template>
   <div class="col-md-12">
     <div class="panel panel-primary mb-3">
-      <div class="panel-heading"><b>OBLIGACIONES VIGENTES EN MORA</b></div>
+      <div class="panel-heading"><b>DETALLE DE EMBARGOSO</b></div>
       <!-- <div class="panel-body">
         <div class="row">
           <div :class="label.colClass || 'col-2'" v-for="label in labels" :key="label.field">
@@ -52,7 +52,8 @@
 
         <div v-for="(item, key) in embargossedpopayan" :key="key" class="row panel-br-light-green pt-3">
           <div class="col-1 pr-0">
-            <input v-model="item.check" type="checkbox" />
+            <b class="panel-label table-text"></b>
+            <!-- <input v-model="item.check" type="checkbox" /> -->
             <!--
               :value="item.id"
               @input="event => AddItem(event.target.value)"
