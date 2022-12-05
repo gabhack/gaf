@@ -131,9 +131,6 @@
             "
             :embargosempty="embargosempty"
           />
-          <div>
-            <b-button variant="black-pearl" @click="visadoFunction">Visar</b-button>
-          </div>
 
           <!--===================================
                 LIQUIDACIONES
@@ -154,6 +151,10 @@
             "
             :descuentosempty="descuentosempty"
           />
+
+          <div class="p-20px">
+            <b-button variant="black-pearl" @click="visadoFunction">Visar</b-button>
+          </div>
         </template>
 
         <Others
@@ -619,38 +620,38 @@ export default {
       const cuotaMayor = Number(this.cuotadeseada) > this.conteoEgresosPlus;
 
       if (this.pagaduriaType == 'FODE VALLE') {
-        if (this.embargosseceduc.length > 0) {
-          obligacionMarcadas = this.embargosseceduc.every(item => item.check == true);
+        if (this.descuentosseceduc.length > 0) {
+          obligacionMarcadas = this.descuentosseceduc.every(item => item.check == true);
         } else {
           embargosSinMora = true;
         }
       } else if (this.pagaduriaType == 'SECCALI') {
-        if (this.embargosseccali.length > 0) {
-          obligacionMarcadas = this.embargosseccali.every(item => item.check == true);
+        if (this.descuentosseccali.length > 0) {
+          obligacionMarcadas = this.descuentosseccali.every(item => item.check == true);
         } else {
           embargosSinMora = true;
         }
       } else if (this.pagaduriaType == 'SEDCHOCO') {
-        if (this.embargossedchoco.length > 0) {
-          obligacionMarcadas = this.embargossedchoco.every(item => item.check == true);
+        if (this.descuentossedchoco.length > 0) {
+          obligacionMarcadas = this.descuentossedchoco.every(item => item.check == true);
         } else {
           embargosSinMora = true;
         }
       } else if (this.pagaduriaType == 'SEDCAUCA') {
-        if (this.embargossedcauca.length > 0) {
-          obligacionMarcadas = this.embargossedcauca.every(item => item.check == true);
+        if (this.descuentossedcauca.length > 0) {
+          obligacionMarcadas = this.descuentossedcauca.every(item => item.check == true);
         } else {
           embargosSinMora = true;
         }
       } else if (this.pagaduriaType == 'SEDQUIBDO') {
-        if (this.embargossedquibdo.length > 0) {
-          obligacionMarcadas = this.embargossedquibdo.every(item => item.check == true);
+        if (this.descuentossedquibdo.length > 0) {
+          obligacionMarcadas = this.descuentossedquibdo.every(item => item.check == true);
         } else {
           embargosSinMora = true;
         }
       } else if (this.pagaduriaType == 'SEDPOPAYAN') {
-        if (this.embargossedpopayan.length > 0) {
-          obligacionMarcadas = this.embargossedpopayan.every(item => item.check == true);
+        if (this.descuentossedpopayan.length > 0) {
+          obligacionMarcadas = this.descuentossedpopayan.every(item => item.check == true);
         } else {
           embargosSinMora = true;
         }
