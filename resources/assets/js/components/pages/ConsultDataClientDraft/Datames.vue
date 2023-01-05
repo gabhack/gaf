@@ -126,6 +126,3 @@ export default {
   props: ['datames', 'user']
 };
 </script>
-
-<style scoped>
-</style>

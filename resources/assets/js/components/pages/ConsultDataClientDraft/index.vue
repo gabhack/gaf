@@ -82,7 +82,6 @@
         <template v-if="fechavinc">
           <EmploymentHistory
             :fechavinc="fechavinc"
-            :datames="datames"
             :datamesseceduc="datamesseceduc"
             :datamesfidu="datamesfidu"
             :datamesseccali="datamesseccali"
@@ -104,11 +103,11 @@
               pagaduriaType == 'SEDBARRANQUILLA' ||
               pagaduriaType == 'SEDATLANTICO' ||
               pagaduriaType == 'SEDBOLIVAR' ||
-              pagaduriaType == 'SEDPOPAYAN'
+              pagaduriaType == 'SEDPOPAYAN' ||
+              pagaduriaType == 'FOPEP'
             "
             :disabledProspect="disabledProspect"
           />
-          <Descapli v-if="pagaduriaType == 'FOPEP'" :descapli="descapli" />
 
           <!--===================================
                 OBLIGACIONES VIGENTES EN MORA
@@ -152,8 +151,8 @@
             :descuentosempty="descuentosempty"
           />
 
-          <div class="p-20px">
-            <b-button variant="black-pearl" @click="visadoFunction">Visar</b-button>
+          <div class="col-12">
+            <b-button class="mb-3" variant="black-pearl" @click="visadoFunction">Visar</b-button>
           </div>
         </template>
 
