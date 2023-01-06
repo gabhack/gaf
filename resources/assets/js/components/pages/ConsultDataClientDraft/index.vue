@@ -682,8 +682,8 @@ export default {
           embargosSinMora = true;
         }
       } else if (this.pagaduriaType == 'FOPEP') {
-        if (this.embargosfopep.length > 0) {
-          obligacionMarcadas = this.embargosfopep.every(item => item.check == true);
+        if (this.descnoap.length > 0) {
+          obligacionMarcadas = this.descnoap.every(item => item.check == true);
         } else {
           embargosSinMora = true;
         }
