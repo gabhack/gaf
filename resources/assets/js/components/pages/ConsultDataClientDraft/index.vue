@@ -75,6 +75,7 @@
         />
 
         <DatamesSedMagdalena v-if="pagaduriaType == 'SEDMAGDALENA'" />
+        <DatamesSemSahagun v-if="pagaduriaType == 'SEMSAHAGUN'" />
 
         <!--============================
           COMPONENTE HISTORIAL LABORAL
@@ -100,6 +101,7 @@
               pagaduriaType == 'SEDQUIBDO' ||
               pagaduriaType == 'SECCALI' ||
               pagaduriaType == 'SEDMAGDALENA' ||
+              pagaduriaType == 'SEMSAHAGUN' ||
               pagaduriaType == 'SEDBARRANQUILLA' ||
               pagaduriaType == 'SEDATLANTICO' ||
               pagaduriaType == 'SEDBOLIVAR' ||
@@ -123,6 +125,7 @@
           <EmbargosEmpty
             v-if="
               pagaduriaType == 'SEDMAGDALENA' ||
+              pagaduriaType == 'SEMSAHAGUN' ||
               pagaduriaType == 'SEDBARRANQUILLA' ||
               pagaduriaType == 'SEDATLANTICO' ||
               pagaduriaType == 'SEDBOLIVAR' ||
@@ -139,6 +142,7 @@
           <Descuentossedcauca v-if="pagaduriaType == 'SEDCAUCA'" :descuentossedcauca="descuentossedcauca" />
           <Descuentosseccali v-if="pagaduriaType == 'SECCALI'" :descuentosseccali="descuentosseccali" />
           <Descuentossedquibdo v-if="pagaduriaType == 'SEDQUIBDO'" :descuentossedquibdo="descuentossedquibdo" />
+          <Descuentossemsahagun v-if="pagaduriaType == 'SEMSAHAGUN'" :descuentossemsahagun="descuentossemsahagun" />
           <Descuentossedpopayan v-if="pagaduriaType == 'SEDPOPAYAN'" :descuentossedpopayan="descuentossedpopayan" />
           <DescuentosEmpty
             v-if="
@@ -180,6 +184,7 @@ import DatamesComponent from './Datames';
 
 import DatamesData from './DatamesData';
 import DatamesSedMagdalena from './DatamesSedMagdalena';
+import DatamesSemSahagun from './DatamesSemSahagun';
 
 import DatamesSeducComponent from './DatamesSeduc';
 import DatamesFiduComponent from './DatamesFidu';
@@ -203,6 +208,7 @@ import Descuentossedcauca from './Descuentossedcauca';
 import Detallecliente from './Detallecliente';
 import Descuentosseccali from './Descuentosseccali';
 import Descuentossedquibdo from './Descuentossedquibdo';
+import Descuentossemsahagun from './Descuentossemsahagun';
 import Descuentossedpopayan from './Descuentossedpopayan';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
@@ -218,6 +224,7 @@ export default {
     DatamesComponent,
     DatamesData,
     DatamesSedMagdalena,
+    DatamesSemSahagun,
     DatamesSeducComponent,
     DatamesFiduComponent,
     DatamesCali,
@@ -238,6 +245,7 @@ export default {
     Detallecliente,
     Descuentosseccali,
     Descuentossedquibdo,
+    Descuentossemsahagun,
     Descuentossedpopayan,
     DescuentosEmpty,
     EmbargosEmpty,
@@ -267,6 +275,7 @@ export default {
       descuentossedcauca: [],
       descuentosseccali: [],
       descuentossedquibdo: [],
+      descuentossemsahagun: [],
       descuentossedpopayan: [],
 
       monto: 0,
@@ -390,6 +399,7 @@ export default {
         this.pagaduriaType === 'SEDATLANTICO' ||
         this.pagaduriaType === 'SEDBARRANQUILLA' ||
         this.pagaduriaType === 'SEDMAGDALENA' ||
+        this.pagaduriaType === 'SEMSAHAGUN' ||
         this.pagaduriaType === 'SEDBOLIVAR' ||
         this.pagaduriaType === 'SEDNARINO'
       ) {
@@ -405,6 +415,7 @@ export default {
         this.pagaduriaType === 'SEDATLANTICO' ||
         this.pagaduriaType === 'SEDBARRANQUILLA' ||
         this.pagaduriaType === 'SEDMAGDALENA' ||
+        this.pagaduriaType === 'SEMSAHAGUN' ||
         this.pagaduriaType === 'SEDBOLIVAR' ||
         this.pagaduriaType === 'SEDNARINO'
       ) {
@@ -483,6 +494,7 @@ export default {
       this.getDescuentossedcauca(payload);
       this.getDescuentosseccali(payload);
       this.getDescuentossedquibdo(payload);
+      this.getDescuentossemsahagun(payload);
       this.getDescuentossedpopayan(payload);
       this.getDescapli(payload);
       this.getDescnoap(payload);
@@ -564,6 +576,10 @@ export default {
       const response = await axios.post('/consultaDescuentossedquibdo', { doc: payload.doc });
       this.descuentossedquibdo = response.data.data;
     },
+    async getDescuentossemsahagun(payload) {
+      const response = await axios.post('/consultaDescuentossemsahagun', { doc: payload.doc });
+      this.descuentossemsahagun = response.data.data;
+    },
     async getDescuentossedpopayan(payload) {
       const response = await axios.post('/consultaDescuentossedpopayan', { doc: payload.doc });
       this.descuentossedpopayan = response.data.data;
@@ -611,12 +627,15 @@ export default {
       let obligacionMarcadas = false;
       let embargosSinMora = false;
 
+      const totalCuotaMaxima = this.totales.compraCartera + this.conteoEgresosPlus;
+      console.log('cuotamaximadef', totalCuotaMaxima);
+
       const definitivaAlerta = this.ingresosExtras.some(
         item => item.concept.includes('Definitiva') || item.concept.includes('definitiva')
       );
 
-      const cuotaMenor = Number(this.cuotadeseada) < this.conteoEgresosPlus;
-      const cuotaMayor = Number(this.cuotadeseada) > this.conteoEgresosPlus;
+      const cuotaMenor = Number(this.cuotadeseada) < totalCuotaMaxima;
+      const cuotaMayor = Number(this.cuotadeseada) > totalCuotaMaxima;
 
       if (this.pagaduriaType == 'FODE VALLE') {
         if (this.descuentosseceduc.length > 0) {
@@ -648,6 +667,14 @@ export default {
         } else {
           embargosSinMora = true;
         }
+      } else if (this.pagaduriaType == 'SEMSAHAGUN') {
+        if (this.descuentossemsahagun.length > 0) {
+          obligacionMarcadas = this.descuentossemsahagun.every(item => item.check == true);
+        } else {
+          embargosSinMora = true;
+        }
+      } else if (this.pagaduriaType == 'SEDMAGDALENA') {
+        embargosSinMora = true;
       } else if (this.pagaduriaType == 'SEDPOPAYAN') {
         if (this.descuentossedpopayan.length > 0) {
           obligacionMarcadas = this.descuentossedpopayan.every(item => item.check == true);

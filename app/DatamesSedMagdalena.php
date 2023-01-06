@@ -12,16 +12,18 @@ class DatamesSedMagdalena extends Model
 
     protected $guarded = ['id'];
 
+    protected $hidden = ['created_at'];
+
     protected $fillable = [
-      'codempleado',
-      'empleado',
-      'cargo_codigo',
-      'cargo',
-      'basico',
-      'nivelcontratacion',
-      'ciudad',
-      'ie_sede_area',
-      'telefono',
-      'email',
+        'codempleado',
+        'empleado',
+        'cargo_codigo',
+        'cargo',
+        'basico',
+        'nivelcontratacion',
+        'ciudad',
+        'ie_sede_area',
+        'telefono',
+        'email',
     ];
 }

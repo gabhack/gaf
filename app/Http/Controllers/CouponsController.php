@@ -11,6 +11,7 @@ use App\CouponsSedFopep;
 use App\CouponsSedMagdalena;
 use App\CouponsSedPopayan;
 use App\CouponsSedQuibdo;
+use App\CouponsSemSahagun;
 use App\Coupunsseccali;
 use App\Coupunssecedu;
 use Illuminate\Http\Request;
@@ -53,6 +54,9 @@ class CouponsController extends Controller
                 break;
             case 'SEDQUIBDO':
                 $coupons = CouponsSedQuibdo::where('doc', $userDoc)->get();
+                break;
+            case 'SEMSAHAGUN':
+                $coupons = CouponsSemSahagun::where('doc', $userDoc)->get();
                 break;
             case 'SECCALI':
                 $coupons = Coupunsseccali::where('doc', $userDoc)->get();
