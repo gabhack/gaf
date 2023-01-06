@@ -15,43 +15,91 @@
           <!--============================
                  FOPEP
           ==============================-->
-          <template v-if="datames">
+          <template v-if="pagaduriaType === 'FOPEP'">
+            <div class="col-12">
+              <div class="row">
+                <div class="col-6">
+                  <b class="panel-label">VALOR INGRESO:</b>
+                </div>
+                <div class="col-6">
+                  <div>
+                    <p class="panel-value">{{ valorIngreso | currency }}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <b class="panel-label">SUELDO BASICO:</b>
+                </div>
+                <div class="col-6">
+                  <div>
+                    <p class="panel-value" v-if="salarioBasico">{{ salarioBasico | currency }}</p>
+                    <p class="panel-value" v-else>{{ datamesSed.pension | currency }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12" v-if="ingresosExtras.length > 0">
+              <b class="panel-label">INGRESOS EXTRAS:</b>
+              <div class="row">
+                <div class="col-6">
+                  <b class="panel-label table-text">CONCEPTO:</b>
+                </div>
+                <div class="col-6">
+                  <b class="panel-label table-text">VALOR:</b>
+                </div>
+              </div>
+              <div class="row" v-for="extra in ingresosExtras" :key="extra.code">
+                <div class="col-6">
+                  <div>
+                    <p class="panel-value">{{ extra.concept }}</p>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div>
+                    <p class="panel-value">{{ extra.ingresos | currency }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div class="col-6">
               <b class="panel-label">TIPO PENSION:</b>
               <div>
-                <p class="panel-value">{{ fechavinc.tp }}</p>
+                <p class="panel-value">{{ datamesSed.tp }}</p>
               </div>
             </div>
             <div class="col-md-6">
               <b class="panel-label">VALOR INGRESO:</b>
               <div>
-                <p class="panel-value">{{ datames.vpension | currency }}</p>
+                <p class="panel-value">{{ datamesSed.vpension | currency }}</p>
               </div>
             </div>
             <div class="col-md-6">
               <b class="panel-label">VALOR SALUD:</b>
               <div>
-                <p class="panel-value">{{ datames.vsalud | currency }}</p>
+                <p class="panel-value">{{ datamesSed.vsalud | currency }}</p>
               </div>
             </div>
 
             <div class="col-md-6">
               <b class="panel-label">VALOR DESCUENTOS:</b>
               <div>
-                <p class="panel-value">{{ datames.vdesc | currency }}</p>
+                <p class="panel-value">{{ datamesSed.vdesc | currency }}</p>
               </div>
             </div>
 
             <div class="col-md-6">
               <b class="panel-label">VALOR CUPO:</b>
               <div>
-                <p class="panel-value">{{ datames.cupo | currency }}</p>
+                <p class="panel-value">{{ datamesSed.cupo | currency }}</p>
               </div>
             </div>
             <div class="col-md-6">
               <b class="panel-label">VALOR EMBARGOS:</b>
               <div>
-                <p class="panel-value">{{ datames.venbargos | currency }}</p>
+                <p class="panel-value">{{ datamesSed.vembargos | currency }}</p>
               </div>
             </div>
           </template>
@@ -286,7 +334,7 @@
           </template> -->
 
           <!-- DATAMES SED -->
-          <template v-if="datamesfidu || datames || datamesseceduc"> </template>
+          <template v-if="datamesfidu || datamesseceduc || pagaduriaType === 'FOPEP'"> </template>
           <template v-else-if="datamesSed">
             <div class="col-12" v-if="ingresosExtras.length >= 0">
               <div class="row">
@@ -480,9 +528,10 @@ import { mapState, mapGetters } from 'vuex';
 
 export default {
   name: 'EmploymentHistory',
-  props: ['fechavinc', 'datames', 'datamesseceduc', 'datamesfidu', 'datamesseccali', 'user'],
+  props: ['fechavinc', 'datamesseceduc', 'datamesfidu', 'datamesseccali', 'user'],
   computed: {
     ...mapState('datamesModule', ['datamesSed']),
+    ...mapState('pagaduriasModule', ['pagaduriaType']),
     ...mapGetters('pagaduriasModule', ['ingresosExtras', 'salarioBasico', 'valorIngreso'])
   }
 };

@@ -8,7 +8,7 @@ const pagaduriasModule = {
   getters: {
     couponsPerPeriod: state => {
       const items = state.coupons.filter(
-        item => item.finperiodo === state.selectedPeriod || item.inicioperiodo === state.selectedPeriod
+        item => item.inicioperiodo === state.selectedPeriod || item.finperiodo === state.selectedPeriod
       );
 
       return {
@@ -39,8 +39,8 @@ const pagaduriasModule = {
     },
     pagaduriaPeriodos: state => {
       const periodos = state.coupons.reduce((acc, coupon) => {
-        if (acc.indexOf(coupon.inicioperiodo) === -1) {
-          acc.push(coupon.inicioperiodo);
+        if (acc.indexOf(coupon.finperiodo) === -1) {
+          acc.push(coupon.finperiodo);
         }
         return acc;
       }, []);
@@ -82,8 +82,8 @@ const pagaduriasModule = {
 
       // Se obtienen los valores de año y mes por separado
       const newItems = getters.ingresosIncapacidad.items.map(item => {
-        const year = item.inicioperiodo.toString().substring(0, 4);
-        const month = item.inicioperiodo.toString().substring(5, 7);
+        const year = item.finperiodo.toString().substring(0, 4);
+        const month = item.finperiodo.toString().substring(5, 7);
 
         return {
           ...item,

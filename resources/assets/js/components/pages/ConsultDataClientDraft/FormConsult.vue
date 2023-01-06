@@ -93,6 +93,7 @@ export default {
         { label: 'SED CHOCO', value: 'SEDCHOCO', key: 'datamesSedChoco' },
         { label: 'SED POPAYAN', value: 'SEDPOPAYAN', key: 'datamesSedPopayan' },
         { label: 'SED QUIBDO', value: 'SEDQUIBDO', key: 'datamesSedQuibdo' },
+        { label: 'SEM SAHAGUN', value: 'SEMSAHAGUN', key: 'datamesSemSahagun' },
         { label: 'SED MAGDALENA', value: 'SEDMAGDALENA', key: 'datamesSedMagdalena' },
         { label: 'SED BOLIVAR', value: 'SEDBOLIVAR', key: 'datamesSedBolivar' },
         { label: 'SED BARRANQUILLA', value: 'SEDBARRANQUILLA', key: 'datamesSedBarranquilla' },
