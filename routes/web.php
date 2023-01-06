@@ -424,6 +424,7 @@ Route::post('consultaDeduccionesseccali', 'DeduccionesseccaliController@consulta
 Route::post('consultaSabana', 'SabanaController@consultaUnitaria');
 Route::post('consultaDescuentosseceduc', 'DescuentosseceduController@consultaUnitaria');
 Route::post('consultaDescuentossedchoco', 'DescuentossedchocoController@consultaUnitaria');
+Route::post('consultaDescuentossemsahagun', 'DescuentossemsahagunController@consultaUnitaria');
 Route::post('consultaDescuentossedquibdo', 'DescuentossedquibdoController@consultaUnitaria');
 Route::post('consultaDescuentossedpopayan', 'DescuentossedpopayanController@consultaUnitaria');
 Route::post('consultaDescuentossedcauca', 'DescuentossedcaucaController@consultaUnitaria');
@@ -442,6 +443,7 @@ Route::resource('sabana', 'SabanaController');
 Route::resource('Descuentossecedu', 'DescuentosseceduController');
 Route::resource('Descuentossedchoco', 'DescuentossedchocoController');
 Route::resource('Descuentossedquibdo', 'DescuentossedquibdoController');
+Route::resource('Descuentossemsahagun', 'DescuentossemsahagunController');
 Route::resource('Descuentossedpopayan', 'DescuentossedpopayanController');
 Route::resource('Descuentossedcauca', 'DescuentossedcaucaController');
 Route::resource('Detalledecliente', 'DetalledeclienteController');

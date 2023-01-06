@@ -15,6 +15,7 @@ use App\DatamesSedBarranquilla;
 use App\DatamesSedAtlantico;
 use App\DatamesSedNarino;
 use App\DatamesSedQuibdo;
+use App\DatamesSemSahagun;
 use App\Pagadurias;
 use Illuminate\Http\Request;
 
@@ -39,7 +40,7 @@ class PagaduriasController extends Controller
     public function index()
     {
         $lista = Pagadurias::all();
-        return view("pagadurias/index")->with(["lista" => $lista]);
+        return view('pagadurias/index')->with(['lista' => $lista]);
     }
 
     /**
@@ -60,8 +61,8 @@ class PagaduriasController extends Controller
      */
     public function store(Request $request)
     {
-        $pagaduria = new Pagadurias;
-        $pagaduria->codigo = strtoupper(str_replace(" ", "_", $request->input('pagaduria')));
+        $pagaduria = new Pagadurias();
+        $pagaduria->codigo = strtoupper(str_replace(' ', '_', $request->input('pagaduria')));
         $pagaduria->pagaduria = strtoupper($request->input('pagaduria'));
         $pagaduria->save();
 
@@ -88,7 +89,7 @@ class PagaduriasController extends Controller
     public function edit($id)
     {
         $pagaduria = Pagadurias::find($id);
-        return view("pagadurias/editar")->with(["pagaduria" => $pagaduria]);
+        return view('pagadurias/editar')->with(['pagaduria' => $pagaduria]);
     }
 
     /**
@@ -133,7 +134,8 @@ class PagaduriasController extends Controller
         $datamesSedBarranquilla = DatamesSedBarranquilla::where('doc', $doc)->first();
         $datamesSedAtlantico = DatamesSedAtlantico::where('doc', $doc)->first();
         $datamesSedNarino = DatamesSedNarino::where('doc', $doc)->first();
-        $datamesSedMagdalena = datamesSedMagdalena::where('codempleado', $doc)->first();
+        $datamesSedMagdalena = DatamesSedMagdalena::where('codempleado', $doc)->first();
+        $datamesSemSahagun = DatamesSemSahagun::where('codempleado', $doc)->first();
 
         $results = [
             'datames' => $datames,
@@ -149,6 +151,7 @@ class PagaduriasController extends Controller
             'datamessedatlantico' => $datamesSedAtlantico,
             'datamesSedNarino' => $datamesSedNarino,
             'datamesSedMagdalena' => $datamesSedMagdalena,
+            'datamesSemSahagun' => $datamesSemSahagun,
         ];
 
         return response()->json($results, 200);

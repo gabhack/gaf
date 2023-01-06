@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\CouponsSedCauca;
-use App\CouponsSedBarranquilla;
 use App\CouponsSedAtlantico;
+use App\CouponsSedBarranquilla;
 use App\CouponsSedBolivar;
-use App\CouponsSedMagdalena;
+use App\CouponsSedCauca;
 use App\CouponsSedChoco;
+use App\CouponsSedFopep;
+use App\CouponsSedMagdalena;
 use App\CouponsSedPopayan;
 use App\CouponsSedQuibdo;
+use App\CouponsSemSahagun;
 use App\Coupunsseccali;
 use App\Coupunssecedu;
 use Illuminate\Http\Request;
@@ -53,6 +55,9 @@ class CouponsController extends Controller
             case 'SEDQUIBDO':
                 $coupons = CouponsSedQuibdo::where('doc', $userDoc)->get();
                 break;
+            case 'SEMSAHAGUN':
+                $coupons = CouponsSemSahagun::where('doc', $userDoc)->get();
+                break;
             case 'SECCALI':
                 $coupons = Coupunsseccali::where('doc', $userDoc)->get();
                 break;
@@ -61,6 +66,9 @@ class CouponsController extends Controller
                 break;
             case 'FODE VALLE':
                 $coupons = Coupunssecedu::where('doc', $userDoc)->get();
+                break;
+            case 'FOPEP':
+                $coupons = CouponsSedFopep::where('doc', $userDoc)->get();
                 break;
             default:
                 $coupons = [];
