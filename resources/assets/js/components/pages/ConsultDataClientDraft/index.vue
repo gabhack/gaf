@@ -627,15 +627,15 @@ export default {
       let obligacionMarcadas = false;
       let embargosSinMora = false;
 
-      const totalCuotaMaxima = this.totales.compraCartera + this.conteoEgresosPlus;
-      console.log('cuotamaximadef', totalCuotaMaxima);
+      // const totalCuotaMaxima = this.totales.compraCartera + this.conteoEgresosPlus;
+      // console.log('cuotamaximadef', totalCuotaMaxima);
 
       const definitivaAlerta = this.ingresosExtras.some(
         item => item.concept.includes('Definitiva') || item.concept.includes('definitiva')
       );
 
-      const cuotaMenor = Number(this.cuotadeseada) < totalCuotaMaxima;
-      const cuotaMayor = Number(this.cuotadeseada) > totalCuotaMaxima;
+      const cuotaMenor = Number(this.cuotadeseada) < this.conteoEgresosPlus;
+      const cuotaMayor = Number(this.cuotadeseada) > this.conteoEgresosPlus;
 
       if (this.pagaduriaType == 'FODE VALLE') {
         if (this.descuentosseceduc.length > 0) {
