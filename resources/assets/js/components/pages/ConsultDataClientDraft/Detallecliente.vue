@@ -140,7 +140,10 @@
                   {{ totales.compraCartera | currency }}
                 </p>
                 <p class="panel-value">
-                  {{ (conteoEgresosPlus ? conteoEgresosPlus : totales.cuotaMaxima) | currency }}
+                  {{
+                    (conteoEgresosPlus ? conteoEgresosPlus + totales.libreInversionSuma : totales.libreInversionSuma)
+                      | currency
+                  }}
                 </p>
                 <input
                   type="number"
