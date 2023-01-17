@@ -68,6 +68,15 @@
           </div>
         </div>
 
+        <div class="row pt-3">
+          <div class="offset-3 col-3 text-right">
+            <b>TOTAL:</b>
+          </div>
+          <div class="col-2">
+            <b>{{ couponsIngresos.amount | currency }}</b>
+          </div>
+        </div>
+
         <!--
         <div class="row">
           <div v-for="label in labels" :key="label.field">

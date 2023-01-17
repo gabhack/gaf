@@ -21,7 +21,8 @@ const pagaduriasModule = {
 
       return {
         items: items,
-        total: items.length
+        total: items.length,
+        amount: items.reduce((egresos, item) => egresos + Number(item.egresos), 0)
       };
     },
     ingresosExtras: (state, getters) => {
