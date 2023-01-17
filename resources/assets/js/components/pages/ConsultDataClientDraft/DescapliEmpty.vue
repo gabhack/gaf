@@ -39,13 +39,7 @@
             <input
               v-model="item.check"
               type="checkbox"
-              :disabled="
-                disabledProspect ||
-                item.code == 'APFPM' ||
-                item.code == 'APFSM' ||
-                item.code == 'APEPEN' ||
-                item.code == 'APESDN'
-              "
+              :disabled="disabledProspect || item.code == 'APFPM' || item.code == 'APEPEN' || item.code == 'APESDN'"
               @change="calcularEgresos"
             />
             <!--
@@ -71,6 +65,15 @@
 
           <div class="col-2">
             <p>{{ item.nonentant ? item.nonentant : '-' }}</p>
+          </div>
+        </div>
+
+        <div class="row pt-3">
+          <div class="offset-3 col-3 text-right">
+            <b>TOTAL:</b>
+          </div>
+          <div class="col-2">
+            <b>{{ couponsIngresos.amount | currency }}</b>
           </div>
         </div>
 
@@ -187,10 +190,10 @@ export default {
       let totalEgresos = 0;
       let totalEgresosPlus = 0;
       this.couponsIngresos.items.forEach(item => {
-        if (!item.check && item.code !== 'APFPM' && item.code !== 'APFSM') {
+        if (!item.check && item.code !== 'APFPM') {
           totalEgresos += Number(item.vaplicado);
         }
-        if (item.check && item.code !== 'APFPM' && item.code !== 'APFSM') {
+        if (item.check && item.code !== 'APFPM') {
           totalEgresosPlus += Number(item.vaplicado);
         }
       });

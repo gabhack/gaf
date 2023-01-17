@@ -333,11 +333,11 @@ export default {
     ]),
     ...mapState('datamesModule', ['cuotadeseada', 'conteoEgresosPlus']),
     totales() {
-      const valrSM = 1000000;
+      const valrSM = 1160000;
 
       let totalWithoutHealthPension = 0;
       this.couponsIngresos.items.forEach(item => {
-        if (item.code !== 'APFPM' && item.code !== 'APFSM') {
+        if (item.code !== 'APFPM' && item.code !== 'APEPEN' && item.code !== 'APESDN') {
           totalWithoutHealthPension += Number(item.vaplicado);
         }
       });
@@ -427,11 +427,14 @@ export default {
       let previousDiscount = valorIngresoTemp / 2;
 
       let libreInversion = 0;
-      if (previousDiscount < valrSM) {
+      if (valorIngresoTemp < valrSM * 2) {
         libreInversion = valorIngresoTemp - valrSM - totalWithoutHealthPension;
       } else {
         libreInversion = valorIngresoTemp / 2 - totalWithoutHealthPension;
       }
+
+      let libreInversionSuma = libreInversion;
+      console.log('libreinversion original', libreInversion);
 
       let compraCartera = 0;
       if (previousDiscount < valrSM) {
@@ -451,6 +454,7 @@ export default {
         descuentos: totalDescuentos,
         embargos: totalEmbargos,
         libreInversion: libreInversion < 0 ? 0 : libreInversion,
+        libreInversionSuma: libreInversionSuma,
         compraCartera: compraCartera < 0 ? 0 : compraCartera,
         cuotaMaxima: cuotaMaxima < 0 ? 0 : cuotaMaxima
       };
@@ -627,15 +631,15 @@ export default {
       let obligacionMarcadas = false;
       let embargosSinMora = false;
 
-      // const totalCuotaMaxima = this.totales.compraCartera + this.conteoEgresosPlus;
-      // console.log('cuotamaximadef', totalCuotaMaxima);
+      const cuotaMaximaDef = this.conteoEgresosPlus + this.totales.libreInversionSuma;
+      console.log('cuotaMaximaDef', cuotaMaximaDef);
 
       const definitivaAlerta = this.ingresosExtras.some(
         item => item.concept.includes('Definitiva') || item.concept.includes('definitiva')
       );
 
-      const cuotaMenor = Number(this.cuotadeseada) < this.conteoEgresosPlus;
-      const cuotaMayor = Number(this.cuotadeseada) > this.conteoEgresosPlus;
+      const cuotaMenor = Number(this.cuotadeseada) < cuotaMaximaDef;
+      const cuotaMayor = Number(this.cuotadeseada) > cuotaMaximaDef;
 
       if (this.pagaduriaType == 'FODE VALLE') {
         if (this.descuentosseceduc.length > 0) {
@@ -688,11 +692,6 @@ export default {
           embargosSinMora = true;
         }
       }
-      console.log('cuota maxima', this.conteoEgresosPlus);
-      console.log('obligacionMarcadas', obligacionMarcadas);
-      console.log('cuotaMenor', cuotaMenor);
-      console.log('cuotaMayor', cuotaMayor);
-      console.log('embargosSinMora', embargosSinMora);
 
       if (cuotaMenor === true && obligacionMarcadas === false) {
         console.log('hola');
