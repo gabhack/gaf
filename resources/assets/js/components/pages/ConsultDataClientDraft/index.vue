@@ -354,13 +354,13 @@ export default {
       }
 
       let increase = 0;
-      if (this.cargo == 'RECTOR') {
+      if (this.cargo == 'Rector Institucion Educativa Completa') {
         increase = valorIngreso * 0.3;
         valorIngreso = parseFloat(valorIngreso) + parseFloat(increase);
-      } else if (this.cargo == 'CORDINADOR') {
+      } else if (this.cargo == 'Coordinador') {
         increase = valorIngreso * 0.2;
         valorIngreso = parseFloat(valorIngreso) + parseFloat(increase);
-      } else if (this.cargo == 'DIRECTOR DE NUCLEO') {
+      } else if (this.cargo == 'Director De Nucleo') {
         increase = valorIngreso * 0.35;
         valorIngreso = parseFloat(valorIngreso) + parseFloat(increase);
       }
@@ -377,6 +377,7 @@ export default {
       }
 
       const valorIngresoTemp = valorIngreso - valorIngreso * disccount;
+      console.log('valoringresotemp', valorIngresoTemp);
 
       let items = [];
       let itemslength = [];
