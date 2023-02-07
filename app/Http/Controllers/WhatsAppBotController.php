@@ -37,12 +37,11 @@ class WhatsAppBotController extends Controller
             "id_cbm": "1107",
             "id_transaccion": "123456789",
             "telefono": "57' . $request->telefono . '",
-            "id_mensaje": "30223",
+            "id_mensaje": "33085",
             "dt_variable": "1",
             "datos": {
                 "valor": [
-                    "' . $request->nombre . '",
-                    "' . $request->oferta . '"
+                    "' . $request->nombre . '"
                 ]
             }
         }';
