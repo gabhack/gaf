@@ -162,7 +162,7 @@ class CifinController extends Controller
 
         $data = [
             'nitEmisor' => "9004326290",
-            'idClaseDefinicionDocumento' => "4115",
+            'idClaseDefinicionDocumento' => env('DECEVEL_ID_CLASE_DOCUMENTO'),
             'fechaGrabacionPagare' => date('Y-m-d'),
             'numPagareEntidad' => date('Y-m-d-h:i') . '_PAG',
             'fechaDesembolso' => date('Y-m-d'),

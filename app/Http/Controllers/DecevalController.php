@@ -222,10 +222,10 @@ class DecevalController extends Controller
          //datos header
          $hoy = date("Y-m-d");
          $hora = date("H:i:s");
-         $codigoDepositante = '680';
+         $codigoDepositante = env('DECEVEL_CODIGO_DEPOSITANTE');
          $fecha = $hoy . 'T' . $hora;
          //$hora = '11:01';
-         $usuario = '90043262901';
+         $usuario = env('DECEVAL_USUARIO');
 
          $header = (object) [
             "hoy" => $hoy,
@@ -358,7 +358,7 @@ class DecevalController extends Controller
          } catch (\Exception $ex) {
             $link = asset($nombreArchivo);
             $resul = [$link];
-            $errorFirma = "Ocurrio un error al solicitar el numero de aplicacion, para continuar el proceso puede hacer click en el boton 'Regenerar Flujo'    ";
+            $errorFirma = "Ocurrio un error al solicitar el numero de aplicación, para continuar el proceso puede hacer click en el boton 'Regenerar Flujo'";
             $step = "failCreateFlow";
 
             return view("deceval/consulta")->with([
@@ -768,7 +768,7 @@ class DecevalController extends Controller
       }
 
       if ($application === null) {
-         throw new Exception('Aplicaicon no creada');
+         throw new Exception('Aplicación no creada');
       }
 
       $retorno['application'] = $application;
