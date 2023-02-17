@@ -966,10 +966,24 @@ export default {
         window.location.href = '/home';
       });
     }
+
+    if (this.isInvalid) {
+      const msg = 'Se presentaron errores al crear el(los) pagare(s). Por favor verifique su información.';
+
+      this.$bvToast.toast(msg, {
+        title: 'Ha ocurrido un error',
+        autoHideDelay: 5000,
+        variant: 'warning',
+        solid: true
+      });
+    }
   },
   computed: {
     isAwaiting() {
       return new URLSearchParams(window.location.search).get('status') === 'awaiting';
+    },
+    isInvalid() {
+      return new URLSearchParams(window.location.search).get('status') === 'invalid';
     },
     items() {
       return {

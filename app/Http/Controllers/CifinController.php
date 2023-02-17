@@ -98,7 +98,6 @@ class CifinController extends Controller
         return view("cifin/consulta")->with(["resultado" => (object)$resultado]);
     }
 
-
     public function consultar(Request $request)
     {
         $cotizer = DataCotizer::find($request->cotizerId);
@@ -169,7 +168,7 @@ class CifinController extends Controller
             'otorganteTipoId' => $typeDocument,
             'otorganteNumId' => $cotizer->idNumber,
             'otorganteCuenta' => "103869",
-            'expeditionDate' => "27/09/2011",
+            'expeditionDate' => $cotizer->idExpeditionDate,
             "girador" => [
                 'tipoDocumento' => $typeDocument,
                 'numeroDocumento' => $cotizer->idNumber,

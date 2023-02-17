@@ -154,7 +154,7 @@
                                             </div>
                                             <div class="form-group col-md-4">
                                                 @if ($confirmCode === 'confirmCode')
-                                                    <b class="panel-label">CODIGO DE CONFIRMACION:</b>
+                                                    <b class="panel-label">CODIGO DE CONFIRMACIÓN:</b>
                                                     <input
                                                         id="code"
                                                         name="code"
@@ -162,10 +162,6 @@
                                                         value=""
                                                         required="required"
                                                     />
-                                                    @if ($ambiente === 0)
-                                                        <span>Codigo Generado Para UAT:{{ $code }}</span>
-                                                    @else
-                                                    @endif
                                                 @else
                                                 @endif
                                             </div>
