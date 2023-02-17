@@ -10,13 +10,9 @@ class DecevalController extends Controller
 {
    public $ambiente = 0; // 0 = pruebas, 1 = produccion
 
-   public $urlTransUnion = "https://www.transuniondecisioncentreuat.com.mx/TU.IDS.ExternalServices_mex_latam/SolutionExecution/ExternalSolutionExecution.svc";
-   public $userTransUnion = "IDV_Ckcomercializadora.DEV1";
+   public $urlTransUnion = "https://www.transuniondecisioncentre.com.mx/TU.IDS.ExternalServices_latam_prod/SolutionExecution/ExternalSolutionExecution.svc";
+   public $userTransUnion = "IDV_CKcomercilizadora.PROD1";
    public $passTransUnion = "CK%comer2022*";
-
-   // public $urlTransUnion = "https://www.transuniondecisioncentre.com.mx/TU.IDS.ExternalServices_latam_prod/SolutionExecution/ExternalSolutionExecution.svc";
-   // public $userTransUnion = "IDV_CKcomercilizadora.PROD1";
-   // public $passTransUnion = "]LLB&5FYyPmd[";
 
    public function __construct()
    {
@@ -31,15 +27,33 @@ class DecevalController extends Controller
 
    public function firmar(Request $request)
    {
-      $usuario = '90043262901';
+      $usuario = env('DECEVAL_USUARIO');
       $nombreArchivo = "pagare.pdf";
 
       try {
          if ($this->ambiente === 0) {
+            $originalDate = $request->expeditionDate;
+            $expeditionDate = date("d/m/Y", strtotime($originalDate));
+
+            $recentPhone = $request->telefono;
+            $cedula = $request->numeroDocumento;
+            $lastName = $request->primerApellido;
+
+            /*
+            $expeditionDate = "11/11/2015";
+            $recentPhone = "3004253257";
+            $cedula = "1010236398";
+            $lastName = "RAMIREZ";
+
+            $expeditionDate = $request->expeditionDate;
+            $recentPhone = $request->phone;
+            $cedula = $request->cedula;
+            $lastName = $request->phone;
+
             $expeditionDate = "27/09/2011";
             $recentPhone = "3115879658";
             $cedula = "1216713792";
-            $lastName = "VERGARA";
+            $lastName = "VERGARA"; */
          } else {
             $expeditionDate = $request->expeditionDate;
             $recentPhone = $request->phone;
@@ -133,8 +147,6 @@ class DecevalController extends Controller
          ]);
       }
 
-
-
       try {
          //======================FIRMAR PAGARE
          try {
@@ -222,10 +234,10 @@ class DecevalController extends Controller
          //datos header
          $hoy = date("Y-m-d");
          $hora = date("H:i:s");
-         $codigoDepositante = '680';
+         $codigoDepositante = env('DECEVEL_CODIGO_DEPOSITANTE');
          $fecha = $hoy . 'T' . $hora;
          //$hora = '11:01';
-         $usuario = '90043262901';
+         $usuario = env('DECEVAL_USUARIO');
 
          $header = (object) [
             "hoy" => $hoy,
@@ -319,8 +331,21 @@ class DecevalController extends Controller
          $doc->loadXML($response);
          $doc->save('pagareRequest_' . $xml_name);
 
-         $idDocumentoPagare = $doc->getElementsByTagName('idDocumentoPagare')->item(0)->nodeValue;
-         $numPagareEntidad = $doc->getElementsByTagName('numPagareEntidad')->item(0)->nodeValue;
+         $arrayResponse = XmlaPhp::createArray($response);
+
+         $codigoError = $arrayResponse['soap:Envelope']['soap:Body']['ns2:creacionPagaresCodificadoResponse']['return']['codigoError'];
+
+         // Se captura el mensaje de error
+         $msgRespuesta = $arrayResponse['soap:Envelope']['soap:Body']['ns2:creacionPagaresCodificadoResponse']['return']['respuesta']['mensajeRespuesta'];
+
+         if ($codigoError == 'SDL.SE.0098') {
+            return redirect()->route('register.credit', [
+               'status' => 'invalid',
+            ]);
+         } else {
+            $idDocumentoPagare = $doc->getElementsByTagName('idDocumentoPagare')->item(0)->nodeValue;
+            $numPagareEntidad = $doc->getElementsByTagName('numPagareEntidad')->item(0)->nodeValue;
+         }
 
          $response2 = $this->consultarPagares(
             $idDocumentoPagare,
@@ -343,10 +368,18 @@ class DecevalController extends Controller
 
          try {
             if ($this->ambiente === 0) {
-               $expeditionDate = "27/09/2011";
+               /* $expeditionDate = "27/09/2011";
                $recentPhone = "3115879658";
                $cedula = "1216713792";
-               $lastName = "VERGARA";
+               $lastName = "VERGARA"; */
+
+               $originalDate = $request->expeditionDate;
+               $expeditionDate = date("d/m/Y", strtotime($originalDate));
+               $datosGirador = (object) $request->girador;
+
+               $recentPhone = $datosGirador->telefono;
+               $cedula = $datosGirador->numeroDocumento;
+               $lastName = $datosGirador->primerApellido;
             } else {
                $expeditionDate = $request->expeditionDate;
                $recentPhone = $request->phone;
@@ -358,7 +391,7 @@ class DecevalController extends Controller
          } catch (\Exception $ex) {
             $link = asset($nombreArchivo);
             $resul = [$link];
-            $errorFirma = "Ocurrio un error al solicitar el numero de aplicacion, para continuar el proceso puede hacer click en el boton 'Regenerar Flujo'    ";
+            $errorFirma = "Ocurrio un error al solicitar el numero de aplicación, para continuar el proceso puede hacer click en el boton 'Regenerar Flujo'";
             $step = "failCreateFlow";
 
             return view("deceval/consulta")->with([
@@ -702,8 +735,8 @@ class DecevalController extends Controller
                                  &lt;RecentPhoneNumber&gt;' . $recentPhone . '&lt;/RecentPhoneNumber&gt;
                                  &lt;LastName&gt;' . $lastName . '&lt;/LastName&gt;
                               &lt;/Applicant&gt;
-                           </Field>	
-                        </Fields>	
+                           </Field>
+                        </Fields>
                      </DCRequest>
                   ]]>
                </tem:request>
@@ -768,7 +801,7 @@ class DecevalController extends Controller
       }
 
       if ($application === null) {
-         throw new Exception('Aplicaicon no creada');
+         throw new Exception('Aplicación no creada');
       }
 
       $retorno['application'] = $application;
@@ -928,14 +961,14 @@ class DecevalController extends Controller
       if ($this->ambiente === 0) {
          return "<RequestInfo>
                   <SolutionSetId>156</SolutionSetId>
-                  <SolutionSetVersion>250</SolutionSetVersion>
+                  <ExecuteLatestVersion>true</ExecuteLatestVersion>
                   <ExecutionMode>" . $executionMode . "</ExecutionMode>
               </RequestInfo>";
       }
 
       return "<RequestInfo>
                      <SolutionSetId>156</SolutionSetId>
-                     <ExecutelatestVersion>true</ExecutelatestVersion>
+                     <ExecuteLatestVersion>true</ExecuteLatestVersion>
                      <ExecutionMode>" . $executionMode . "</ExecutionMode>
                </RequestInfo>";
    }
