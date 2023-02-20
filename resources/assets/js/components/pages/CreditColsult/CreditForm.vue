@@ -23,7 +23,7 @@
                   <label for="firstName" class="labelForm"> Primer Nombre </label>
                 </b-col>
                 <b-col cols="8" class="inputContenedor">
-                  <b-form-input id="firstName" class="" v-model="form.firstName" trim />
+                  <b-form-input id="firstName" class="" v-model="form.firstName" trim required/>
                   <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                 </b-col>
               </b-row>
@@ -52,7 +52,7 @@
                   <label for="firstLastname" class="labelForm"> Primer Apellido </label>
                 </b-col>
                 <b-col cols="8" class="inputContenedor">
-                  <b-form-input id="firstLastname" class="" v-model="form.firstLastname" trim />
+                  <b-form-input id="firstLastname" class="" v-model="form.firstLastname" trim required/>
                   <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                 </b-col>
               </b-row>
@@ -65,7 +65,7 @@
                   <label class="labelForm"> Segundo Apellido </label>
                 </b-col>
                 <b-col cols="8" class="inputContenedor">
-                  <b-form-input id="secondLastname" class="" v-model="form.secondLastname" trim />
+                  <b-form-input id="secondLastname" class="" v-model="form.secondLastname" trim required/>
                   <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                 </b-col>
               </b-row>
@@ -99,7 +99,7 @@
                   <p class="labelForm">Tipo de Documento</p>
                 </b-col>
                 <b-col cols="8" class="inputContenedor">
-                  <b-form-select id="idType" class="selectBorder" :options="idTypes" v-model="form.idType" />
+                  <b-form-select id="idType" class="selectBorder" :options="idTypes" v-model="form.idType" required/>
                   <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                 </b-col>
               </b-row>
@@ -112,7 +112,7 @@
                   <p class="labelForm">Número de Documento</p>
                 </b-col>
                 <b-col cols="8" class="inputContenedor">
-                  <b-form-input id="idNumber" v-model="form.idNumber" trim />
+                  <b-form-input id="idNumber" v-model="form.idNumber" trim required/>
                   <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                 </b-col>
               </b-row>
@@ -133,6 +133,7 @@
                     v-model="form.idExpeditionDate"
                     locale="es"
                     class="sizeCalendar"
+                    required
                   />
                 </b-col>
               </b-row>
@@ -272,7 +273,7 @@
                   <label class="labelForm"> Número celular </label>
                 </b-col>
                 <b-col cols="8" class="inputContenedor">
-                  <b-form-input id="phoneNumber" class="" v-model="form.phoneNumber" trim />
+                  <b-form-input id="phoneNumber" class="" v-model="form.phoneNumber" trim required/>
                   <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                 </b-col>
               </b-row>

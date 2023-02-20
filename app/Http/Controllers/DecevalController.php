@@ -266,6 +266,9 @@ class DecevalController extends Controller
                <arg0>
                   <!--Optional:-->
                   <documentoPagareServiceDTO>
+                     <paisCreacion>CO</paisCreacion>
+                     <deptoCreacion>76</deptoCreacion>
+                     <ciudadCreacion>76001</ciudadCreacion>
                      <nitEmisor>' . $otorganteData->identificacionEmisor . '</nitEmisor>
                      <idClaseDefinicionDocumento>' . $idClaseDefinicionDocumento . '</idClaseDefinicionDocumento>
                      <fechaGrabacionPagare>' . $fechaGrabacionPagare . '</fechaGrabacionPagare>
@@ -277,8 +280,8 @@ class DecevalController extends Controller
                      <otorganteCuenta>' . $otorganteData->cuentaGirador . '</otorganteCuenta>
                      <creditoReembolsableEn>2</creditoReembolsableEn>
                      <valorPesosDesembolso></valorPesosDesembolso>
-                     <ciudadDesembolso>11001</ciudadDesembolso>
-                     <departamento>11</departamento>
+                     <ciudadDesembolso>76001</ciudadDesembolso>
+                     <departamento>76</departamento>
                      <pais>CO</pais>
                      <tasaInteres>1</tasaInteres>
                      <mensajeRespuesta>?</mensajeRespuesta>
