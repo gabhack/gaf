@@ -2,22 +2,60 @@
 
 namespace App\Http\Controllers;
 
-use App\DataMes;
-use App\Datamesfidu;
-use App\Datamesseccali;
-use App\Datamesseceduc;
 use App\DatamesSedCauca;
-use App\DatamesSedMagdalena;
-use App\DatamesSedChoco;
-use App\DatamesSedPopayan;
-use App\DatamesSedBolivar;
-use App\DatamesSedBarranquilla;
+use App\DatamesSedValle;
+use App\DatamesSemCali;
 use App\DatamesSedAtlantico;
+use App\DatamesSemBarranquilla;
+use App\DatamesSedBolivar;
+use App\DatamesSedChoco;
+use App\DatamesFidu;
+use App\DatamesFopep;
+use App\DatamesSedAntioquia;
+use App\DatamesSedArauca;
+use App\DatamesSedBoyaca;
+use App\DatamesSedCaldas;
+use App\DatamesSedCasanare;
+use App\DatamesSedCesar;
+use App\DatamesSedCordoba;
+use App\DatamesSedCundinamarca;
+use App\DatamesSedGuajira;
+use App\DatamesSedHuila;
+use App\DatamesSedMagdalena;
+use App\DatamesSedMeta;
 use App\DatamesSedNarino;
-use App\DatamesSedQuibdo;
+use App\DatamesSedNorteSantander;
+use App\DatamesSedRisaralda;
+use App\DatamesSedSantander;
+use App\DatamesSedSucre;
+use App\DatamesSedTolima;
+use App\DatamesSemBuga;
+use App\DatamesSemCartagena;
+use App\DatamesSemGirardot;
+use App\DatamesSemIbague;
+use App\DatamesSemIpiales;
+use App\DatamesSemJamundi;
+use App\DatamesSemMagangue;
+use App\DatamesSemMedellin;
+use App\DatamesSemMonteria;
+use App\DatamesSemMosquera;
+use App\DatamesSemNeiva;
+use App\DatamesSemPalmira;
+use App\DatamesSemPasto;
+use App\DatamesSemPopayan;
+use App\DatamesSemQuibdo;
+use App\DatamesSemRioNegro;
+use App\DatamesSemSabaneta;
 use App\DatamesSemSahagun;
+use App\DatamesSemSincelejo;
+use App\DatamesSemSoledad;
+use App\DatamesSemValledupar;
+use App\DatamesSemYopal;
+use App\DatamesSemYumbo;
+use App\DatamesSemZipaquira;
 use App\Pagadurias;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class PagaduriasController extends Controller
 {
@@ -122,37 +160,72 @@ class PagaduriasController extends Controller
 
     public function perDoc($doc)
     {
-        $datames = DataMes::where('doc', $doc)->first();
-        $datamesfidu = Datamesfidu::where('doc', $doc)->first();
-        $datamesseccali = Datamesseccali::where('doc', $doc)->first();
-        $datamesseceduc = Datamesseceduc::where('doc', $doc)->first();
-        $datamesSedCauca = DatamesSedCauca::where('doc', $doc)->first();
-        $datamesSedChoco = DatamesSedChoco::where('doc', $doc)->first();
-        $datamesSedPopayan = DatamesSedPopayan::where('doc', $doc)->first();
-        $datamesSedQuibdo = DatamesSedQuibdo::where('doc', $doc)->first();
-        $datamesSedBolivar = DatamesSedBolivar::where('doc', $doc)->first();
-        $datamesSedBarranquilla = DatamesSedBarranquilla::where('doc', $doc)->first();
-        $datamesSedAtlantico = DatamesSedAtlantico::where('doc', $doc)->first();
-        $datamesSedNarino = DatamesSedNarino::where('doc', $doc)->first();
-        $datamesSedMagdalena = DatamesSedMagdalena::where('codempleado', $doc)->first();
-        $datamesSemSahagun = DatamesSemSahagun::where('codempleado', $doc)->first();
-
-        $results = [
-            'datames' => $datames,
-            'datamesfidu' => $datamesfidu,
-            'datamesseccali' => $datamesseccali,
-            'datamesseceduc' => $datamesseceduc,
-            'datamesSedCauca' => $datamesSedCauca,
-            'datamesSedChoco' => $datamesSedChoco,
-            'datamesSedPopayan' => $datamesSedPopayan,
-            'datamesSedQuibdo' => $datamesSedQuibdo,
-            'datamesSedBolivar' => $datamesSedBolivar,
-            'datamesSedBarranquilla' => $datamesSedBarranquilla,
-            'datamessedatlantico' => $datamesSedAtlantico,
-            'datamesSedNarino' => $datamesSedNarino,
-            'datamesSedMagdalena' => $datamesSedMagdalena,
-            'datamesSemSahagun' => $datamesSemSahagun,
+        $models = [
+            DatamesFidu::class => 'doc',
+            DatamesFopep::class => 'doc',
+            DatamesSedAntioquia::class => 'doc',
+            DatamesSedArauca::class => 'doc',
+            DatamesSedAtlantico::class => 'doc',
+            DatamesSedBolivar::class => 'doc',
+            DatamesSedBoyaca::class => 'doc',
+            DatamesSedCaldas::class => 'doc',
+            DatamesSedCasanare::class => 'doc',
+            DatamesSedCauca::class => 'doc',
+            DatamesSedCesar::class => 'doc',
+            DatamesSedChoco::class => 'doc',
+            DatamesSedCordoba::class => 'doc',
+            DatamesSedCundinamarca::class => 'doc',
+            DatamesSedGuajira::class => 'doc',
+            DatamesSedHuila::class => 'doc',
+            DatamesSedMagdalena::class => 'codempleado',
+            DatamesSedMeta::class => 'doc',
+            DatamesSedNarino::class => 'doc',
+            DatamesSedNorteSantander::class => 'doc',
+            DatamesSedRisaralda::class => 'doc',
+            DatamesSedSantander::class => 'doc',
+            DatamesSedSucre::class => 'doc',
+            DatamesSedTolima::class => 'doc',
+            DatamesSedValle::class => 'doc',
+            DatamesSemBarranquilla::class => 'doc',
+            DatamesSemBuga::class => 'doc',
+            DatamesSemCali::class => 'doc',
+            DatamesSemCartagena::class => 'doc',
+            DatamesSemGirardot::class => 'doc',
+            DatamesSemIbague::class => 'doc',
+            DatamesSemIpiales::class => 'doc',
+            DatamesSemJamundi::class => 'doc',
+            DatamesSemMagangue::class => 'doc',
+            DatamesSemMedellin::class => 'doc',
+            DatamesSemMonteria::class => 'doc',
+            DatamesSemMosquera::class => 'doc',
+            DatamesSemNeiva::class => 'doc',
+            DatamesSemPalmira::class => 'doc',
+            DatamesSemPasto::class => 'doc',
+            DatamesSemPopayan::class => 'doc',
+            DatamesSemQuibdo::class => 'doc',
+            DatamesSemRioNegro::class => 'doc',
+            DatamesSemSabaneta::class => 'doc',
+            DatamesSemSahagun::class => 'codempleado',
+            DatamesSemSincelejo::class => 'doc',
+            DatamesSemSoledad::class => 'doc',
+            DatamesSemValledupar::class => 'doc',
+            DatamesSemYopal::class => 'doc',
+            DatamesSemYumbo::class => 'doc',
+            DatamesSemZipaquira::class => 'doc',
         ];
+
+        $results = [];
+
+        foreach ($models as $model => $column) {
+            $data = $model::where($column, $doc)->first();
+
+            if ($data) {
+                $modelName = class_basename($model);
+                $results[Str::camel($modelName)] = $data;
+            }
+        }
+
+        $results = !empty($results) ? $results : (object)[];
 
         return response()->json($results, 200);
     }

@@ -8,7 +8,7 @@ class DatamesSedMagdalena extends Model
 {
     protected $connection = 'pgsql';
 
-    protected $table = 'datamesmagdalena';
+    protected $table = 'datamessedmagdalena';
 
     protected $guarded = ['id'];
 
