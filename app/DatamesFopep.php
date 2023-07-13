@@ -4,10 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class DataMes extends Model
+class DatamesFopep extends Model
 {
     protected $connection = 'pgsql';
-    protected $table = 'datames';
+
+    protected $table = 'datamesfode';
 
     protected $fillable = [
         'fondo',
