@@ -4,11 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class DatamesSedBarranquilla extends Model
+class DatamesSemPopayan extends Model
 {
     protected $connection = 'pgsql';
 
-    protected $table = 'datamessedbarranquilla';
+    protected $table = 'datamessempopayan';
 
     protected $guarded = ['id'];
 

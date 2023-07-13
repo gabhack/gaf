@@ -1,33 +1,45 @@
 <?php
 
-if(!function_exists('insertOrUpdate')) {
-	function insertOrUpdate($table, array $rows){
-        
+if (!function_exists('insertOrUpdate')) {
+	function insertOrUpdate($table, array $rows)
+	{
+
 		$first = reset($rows);
-        
-        $columns = implode( ',',
-            array_map( function( $value ) { return "$value"; } , array_keys($first) )
-        );
-        
-        $values = implode( ',', array_map( function( $row ) {
-                return '('.implode( ',',
-                    array_map( function( $value ) { return '"'.str_replace('"', '""', $value).'"'; } , $row )
-                ).')';
-            } , $rows )
-        );
-        
-        $updates = implode( ',',
-            array_map( function( $value ) { return "$value = VALUES($value)"; } , array_keys($first) )
-        );
-        
-        $sql = "INSERT INTO {$table}({$columns}) VALUES {$values} ON DUPLICATE KEY UPDATE {$updates}";
-        
-        return $sql;
-        // return \DB::statement( $sql );
+
+		$columns = implode(
+			',',
+			array_map(function ($value) {
+				return "$value";
+			}, array_keys($first))
+		);
+
+		$values = implode(
+			',',
+			array_map(function ($row) {
+				return '(' . implode(
+					',',
+					array_map(function ($value) {
+						return '"' . str_replace('"', '""', $value) . '"';
+					}, $row)
+				) . ')';
+			}, $rows)
+		);
+
+		$updates = implode(
+			',',
+			array_map(function ($value) {
+				return "$value = VALUES($value)";
+			}, array_keys($first))
+		);
+
+		$sql = "INSERT INTO {$table}({$columns}) VALUES {$values} ON DUPLICATE KEY UPDATE {$updates}";
+
+		return $sql;
+		// return \DB::statement( $sql );
 	}
 }
 
-if(!function_exists('planos')) {
+if (!function_exists('planos')) {
 	function planos()
 	{
 		return array(
@@ -43,14 +55,14 @@ if(!function_exists('planos')) {
 	}
 }
 
-if(!function_exists('format')) {
+if (!function_exists('format')) {
 	function format($number)
 	{
 		return number_format($number, 0, ',', '.');
 	}
 }
 
-if(!function_exists('mneyformat')) {
+if (!function_exists('mneyformat')) {
 	function mneyformat($number)
 	{
 		return '$ ' . number_format($number, 0, ',', '.');
@@ -74,33 +86,27 @@ if (!function_exists('consultas')) {
 if (!function_exists('calcularCapacidad')) {
 	function calcularCapacidad($vinculacion, $ingresos, $valor_aportes, $asignacion_adicional, $total_dctos, $smlv)
 	{
-		
-		if($vinculacion == 'PENS')
-		{			
-			$compraCartera 	= 	( $ingresos + $asignacion_adicional - $valor_aportes ) / 2;
-			$libreInversion = ( ( $ingresos + $asignacion_adicional - $valor_aportes ) / 2 ) - $total_dctos +  $valor_aportes;
-		}
-		else
-		{
-			$base = ( $ingresos - $valor_aportes ) / 2;
-			
-			if($base > $smlv)
-			{
+
+		if ($vinculacion == 'PENS') {
+			$compraCartera 	= 	($ingresos + $asignacion_adicional - $valor_aportes) / 2;
+			$libreInversion = (($ingresos + $asignacion_adicional - $valor_aportes) / 2) - $total_dctos +  $valor_aportes;
+		} else {
+			$base = ($ingresos - $valor_aportes) / 2;
+
+			if ($base > $smlv) {
 				$compraCartera 	= 	$base - $total_dctos + $valor_aportes;
-				$libreInversion = ( ( $ingresos + $asignacion_adicional - $valor_aportes ) / 2 ) - $total_dctos + $valor_aportes;
-			}
-			else
-			{
+				$libreInversion = (($ingresos + $asignacion_adicional - $valor_aportes) / 2) - $total_dctos + $valor_aportes;
+			} else {
 				$compraCartera 	= $ingresos + $asignacion_adicional - $valor_aportes - $smlv;
 				$libreInversion = $ingresos + $asignacion_adicional - $smlv - $total_dctos;
 			}
 		}
-		
+
 		return array(
 			'compraCartera' => array(
 				'valor' => $compraCartera,
 				'color' => ($compraCartera > 0 ? 'verde' : ($compraCartera == 0 ? 'amarillo' : 'rojo'))
-			), 
+			),
 			'libreInversion' => array(
 				'valor' => $libreInversion,
 				'color' => ($libreInversion > 0 ? 'verde' : ($libreInversion == 0 ? 'amarillo' : 'rojo'))
@@ -112,27 +118,24 @@ if (!function_exists('calcularCapacidad')) {
 if (!function_exists('calcularCapacidadAMI')) {
 	function calcularCapacidadAMI($vinculacion, $ingresos, $valor_aportes, $asignacion_adicional, $total_dctos, $smlv)
 	{
-		
-		if($vinculacion == 'PENS')
-		{			
-			$compraCartera 	= 	( $ingresos + $asignacion_adicional - $valor_aportes ) / 2;
-			$libreInversion = ( ( $ingresos + $asignacion_adicional - $valor_aportes ) / 2 ) - $total_dctos +  $valor_aportes;
-		}
-		else
-		{
-			$libreInversion = ( ( $ingresos - $valor_aportes )/2 ) - $total_dctos;
-			if ($ingresos >= $smlv*2) {
-				$compraCartera = ( $ingresos + $asignacion_adicional - $valor_aportes ) / 2;
+
+		if ($vinculacion == 'PENS') {
+			$compraCartera 	= 	($ingresos + $asignacion_adicional - $valor_aportes) / 2;
+			$libreInversion = (($ingresos + $asignacion_adicional - $valor_aportes) / 2) - $total_dctos +  $valor_aportes;
+		} else {
+			$libreInversion = (($ingresos - $valor_aportes) / 2) - $total_dctos;
+			if ($ingresos >= $smlv * 2) {
+				$compraCartera = ($ingresos + $asignacion_adicional - $valor_aportes) / 2;
 			} else {
-				$compraCartera = ( $ingresos + $asignacion_adicional - $valor_aportes ) - $smlv;
+				$compraCartera = ($ingresos + $asignacion_adicional - $valor_aportes) - $smlv;
 			}
 		}
-		
+
 		return array(
 			'compraCartera' => array(
 				'valor' => $compraCartera,
 				'color' => ($compraCartera > 0 ? 'verde' : ($compraCartera == 0 ? 'amarillo' : 'rojo'))
-			), 
+			),
 			'libreInversion' => array(
 				'valor' => $libreInversion,
 				'color' => ($libreInversion > 0 ? 'verde' : ($libreInversion == 0 ? 'amarillo' : 'rojo'))
@@ -144,7 +147,7 @@ if (!function_exists('calcularCapacidadAMI')) {
 if (!function_exists('getMessage')) {
 	function getMessage()
 	{
-		if(\Session::has('mensaje')){
+		if (\Session::has('mensaje')) {
 			return \Session::pull('mensaje');
 			\Session::forget('mensaje');
 		}
@@ -154,10 +157,10 @@ if (!function_exists('getMessage')) {
 if (!function_exists('setMessage')) {
 	function setMessage($message, $class)
 	{
-		\Session::flash('mensaje', '<div class="alert alert-'.$class.'" role="alert">
+		\Session::flash('mensaje', '<div class="alert alert-' . $class . '" role="alert">
 										<h4 class="alert-heading">Mensaje!</h4>
 										<hr />
-										<p>'.$message.'</p>
+										<p>' . $message . '</p>
 									</div>');
 	}
 }
@@ -173,7 +176,6 @@ if (!function_exists('estados_civiles')) {
 			'DIV' => 'DIVORCIADO',
 			'VIU' => 'VIUDO',
 		);
-		
 	}
 }
 
@@ -184,7 +186,6 @@ if (!function_exists('decisiones_capacidades')) {
 			'COMP' => 'COMPRA DE CARTERA',
 			'LIBR' => 'LIBRE INVERSION',
 		);
-		
 	}
 }
 
@@ -198,7 +199,6 @@ if (!function_exists('decisiones_estudios')) {
 			'AVCH' => 'PTE. APROBACION VCH',
 			'SALD' => 'PTE. SALDO CARTERA',
 		);
-		
 	}
 }
 
@@ -209,7 +209,6 @@ if (!function_exists('decisiones_aliados')) {
 			'VIAB' => 'VIABLE',
 			'NOVI' => 'NO VIABLE',
 		);
-		
 	}
 }
 
@@ -220,7 +219,6 @@ if (!function_exists('estados_cargos')) {
 			'ACTI' => 'ACTIVO',
 			'PENS' => 'PENSIONADO',
 		);
-		
 	}
 }
 
@@ -231,7 +229,6 @@ if (!function_exists('estados_aliados')) {
 			'A' => 'ACTIVO',
 			'I' => 'INACTIVO',
 		);
-		
 	}
 }
 
@@ -242,7 +239,6 @@ if (!function_exists('estados_solicitudes')) {
 			'S' => 'SOLICITADO',
 			'E' => 'EVALUADO',
 		);
-		
 	}
 }
 
@@ -301,7 +297,6 @@ if (!function_exists('calificaciones')) {
 			'J' => 'J',
 			'K' => 'K',
 		);
-		
 	}
 }
 
@@ -318,35 +313,35 @@ if (!function_exists('compradores')) {
 if (!function_exists('getentidad')) {
 	function getentidad($id)
 	{
-		return App\Entidades::find($id)->entidad;	
+		return App\Entidades::find($id)->entidad;
 	}
 }
 
 if (!function_exists('getciudad')) {
 	function getciudad($id)
 	{
-		return App\Ciudades::find($id)->ciudad;	
+		return App\Ciudades::find($id)->ciudad;
 	}
 }
 
 if (!function_exists('ciudades')) {
 	function ciudades()
 	{
-		return App\Ciudades::all();	
+		return App\Ciudades::all();
 	}
 }
 
 if (!function_exists('asesores')) {
 	function asesores()
 	{
-		return App\Asesores::all();	
+		return App\Asesores::all();
 	}
 }
 
 if (!function_exists('pagadurias')) {
 	function pagadurias()
 	{
-		return App\Pagadurias::all();	
+		return App\Pagadurias::all();
 	}
 }
 
@@ -362,43 +357,47 @@ if (!function_exists('vinculaciones')) {
 }
 
 if (!function_exists('limpiarCaracteresEspeciales')) {
-	function limpiarCaracteresEspeciales($string){
-        $string = str_replace(' ', '', $string);
-        $string = htmlentities($string);
-        $string = preg_replace('/\&(.)[^;]*;/', '\\1', $string);
-        return $string;
-    }
+	function limpiarCaracteresEspeciales($string)
+	{
+		$string = str_replace(' ', '', $string);
+		$string = htmlentities($string);
+		$string = preg_replace('/\&(.)[^;]*;/', '\\1', $string);
+		return $string;
+	}
 }
 
-if(!function_exists('descuentos_por_registro')) {
-	function descuentos_por_registro($id_registro){
+if (!function_exists('descuentos_por_registro')) {
+	function descuentos_por_registro($id_registro)
+	{
 		try {
 			return App\Descuentosaplicados::where("registros_id", "=", $id_registro)->get();
 		} catch (\Exception $ex) {
-			return $ex-getMessage();
-		}	
+			return $ex - getMessage();
+		}
 	}
 }
 
-if(!function_exists('ingresos_por_registro')) {
-	function ingresos_por_registro($id_registro){
+if (!function_exists('ingresos_por_registro')) {
+	function ingresos_por_registro($id_registro)
+	{
 		try {
 			return App\Ingresosaplicados::where("registros_id", "=", $id_registro)->get();
 		} catch (\Exception $ex) {
-			return $ex-getMessage();
-		}	
+			return $ex - getMessage();
+		}
 	}
 }
 
-if(!function_exists('get_string_between')) {
-	function get_string_between($string, $start, $end){
-        $string = ' ' . $string;
-        $ini = strpos($string, $start);
-        if ($ini == 0) return '';
-        $ini += strlen($start);
-        $len = strpos($string, $end, $ini) - $ini;
-        return substr($string, $ini, $len);
-    }
+if (!function_exists('get_string_between')) {
+	function get_string_between($string, $start, $end)
+	{
+		$string = ' ' . $string;
+		$ini = strpos($string, $start);
+		if ($ini == 0) return '';
+		$ini += strlen($start);
+		$len = strpos($string, $end, $ini) - $ini;
+		return substr($string, $ini, $len);
+	}
 }
 
 if (!function_exists('mes_esp_a_ing')) {
@@ -425,7 +424,7 @@ if (!function_exists('mes_esp_a_ing')) {
 			case 'Mayo':
 				$mesingles = 'May';
 				break;
-				
+
 			case 'Junio':
 				$mesingles = 'Jun';
 				break;
@@ -437,7 +436,7 @@ if (!function_exists('mes_esp_a_ing')) {
 			case 'Agosto':
 				$mesingles = 'Aug';
 				break;
-				
+
 			case 'Septiembre':
 				$mesingles = 'Sep';
 				break;
@@ -445,15 +444,15 @@ if (!function_exists('mes_esp_a_ing')) {
 			case 'Octubre':
 				$mesingles = 'Oct';
 				break;
-			
+
 			case 'Noviembre':
 				$mesingles = 'Nov';
 				break;
-				
+
 			case 'Diciembre':
 				$mesingles = 'Dec';
 				break;
-			
+
 			default:
 				break;
 		}
@@ -512,7 +511,7 @@ if (!function_exists('upload_personas')) {
 				}
 				$secretaria = explode(' ', $arraypersona['secretaria']);
 				$pagaduria = \App\Pagadurias::query()
-					->where('pagaduria', 'LIKE', "%{$secretaria[count($secretaria)-1]}%")
+					->where('pagaduria', 'LIKE', "%{$secretaria[count($secretaria) - 1]}%")
 					->first();
 
 				if ($arraypersona['nit'] !== '') {
@@ -521,8 +520,8 @@ if (!function_exists('upload_personas')) {
 						$pagaduria->save();
 					}
 				}
-				
-				$ciudad = \App\Ciudades::where('ciudad', $arraypersona['ciudad'] )->first();
+
+				$ciudad = \App\Ciudades::where('ciudad', $arraypersona['ciudad'])->first();
 				if ($arraypersona['ciudad'] !== '') {
 					//Crear ciudad
 					if ($ciudad === null) {
@@ -603,10 +602,10 @@ if (!function_exists('upload_personas')) {
 					if ($arraypersona['correo'] !== '') {
 						$cliente->correo 				= $arraypersona['correo'];
 					}
-					
+
 					$cliente->save();
 				} else {
-					
+
 					if ($arraypersona['nombres'] !== '') {
 						$cliente->nombres 				= $arraypersona['nombres'];
 					}
@@ -666,16 +665,16 @@ if (!function_exists('upload_personas')) {
 					if ($arraypersona['correo'] !== '') {
 						$cliente->correo 				= $arraypersona['correo'];
 					}
-					
+
 					$cliente->save();
 				}
-				
+
 				//creación de registro
 				$registro = \App\Registrosfinancieros::where("periodo", "=", $arraypersona['periodo'])
 					->where("pagadurias_id", "=", $pagaduria->id)
 					->where("clientes_id", "=", $cliente->id)
 					->first();
-				
+
 				if ($registro === null) {
 					$registro = new \App\Registrosfinancieros;
 					$registro->clientes_id		= $cliente->id;
@@ -717,7 +716,7 @@ if (!function_exists('upload_personas')) {
 						}
 					}
 				}
-			
+
 				//Descuentos
 				if (isset($arraypersona['conceptos_financieros']['detallado_conceptos']['egresos'])) {
 					foreach ($arraypersona['conceptos_financieros']['detallado_conceptos']['egresos'] as $key => $egreso) {
@@ -739,7 +738,7 @@ if (!function_exists('upload_personas')) {
 						}
 					}
 				}
-			
+
 				//Descuentos no aplicados
 				if (isset($arraypersona['conceptos_financieros']['detallado_conceptos']['desc_no_aplicados'])) {
 					//Elimino los que están en BD
@@ -760,7 +759,7 @@ if (!function_exists('upload_personas')) {
 				}
 				//-------------------
 				$resp .= 'Carga con éxito. Registro actualizado: ' . $arraypersona['documento'] . "." . ($conceptos_nan !== 0 ? (' - Advertencias: Conceptos sin procesar por falta de datos: ' . $conceptos_nan . '.') : '');
-			} catch(\Exception $ex) {
+			} catch (\Exception $ex) {
 				//-------------------
 				$resp .= 'Error. Documento #' . $arraypersona['documento'] . ': ' . $ex->getMessage() . ".";
 			}
@@ -783,7 +782,7 @@ if (!function_exists('upload_personas_without_concepts')) {
 				}
 				$secretaria = explode(' ', $arraypersona['secretaria']);
 				$pagaduria = \App\Pagadurias::query()
-					->where('pagaduria', 'LIKE', "%{$secretaria[count($secretaria)-1]}%")
+					->where('pagaduria', 'LIKE', "%{$secretaria[count($secretaria) - 1]}%")
 					->first();
 
 				if ($arraypersona['nit'] !== '') {
@@ -792,8 +791,8 @@ if (!function_exists('upload_personas_without_concepts')) {
 						$pagaduria->save();
 					}
 				}
-				
-				$ciudad = \App\Ciudades::where('ciudad', $arraypersona['ciudad'] )->first();
+
+				$ciudad = \App\Ciudades::where('ciudad', $arraypersona['ciudad'])->first();
 				if ($arraypersona['ciudad'] !== '') {
 					//Crear ciudad
 					if ($ciudad === null) {
@@ -877,10 +876,10 @@ if (!function_exists('upload_personas_without_concepts')) {
 					if ($arraypersona['correo'] !== '') {
 						$cliente->correo 				= $arraypersona['correo'];
 					}
-					
+
 					$cliente->save();
 				} else {
-					
+
 					if ($arraypersona['nombres'] !== '') {
 						$cliente->nombres 				= $arraypersona['nombres'];
 					}
@@ -943,7 +942,7 @@ if (!function_exists('upload_personas_without_concepts')) {
 					if ($arraypersona['correo'] !== '') {
 						$cliente->correo 				= $arraypersona['correo'];
 					}
-					
+
 					$cliente->save();
 
 					//Descuentos no aplicados
@@ -967,7 +966,7 @@ if (!function_exists('upload_personas_without_concepts')) {
 				}
 				//-------------------
 				$resp .= 'Carga con éxito. Registro actualizado: ' . $arraypersona['documento'] . ".";
-			} catch(\Exception $ex) {
+			} catch (\Exception $ex) {
 				//-------------------
 				$resp .= 'Error. Documento #' . $arraypersona['documento'] . ': ' . $ex->getMessage() . ".";
 			}
@@ -977,7 +976,8 @@ if (!function_exists('upload_personas_without_concepts')) {
 }
 
 if (!function_exists('calcula_viabilidad_inicial')) {
-	function calcula_viabilidad_inicial($persona, $fecha_estudio = NULL) {
+	function calcula_viabilidad_inicial($persona, $fecha_estudio = NULL)
+	{
 		//Variables
 		$faltantes = array();
 		$plazomax = 0;
@@ -988,17 +988,17 @@ if (!function_exists('calcula_viabilidad_inicial')) {
 			$fecha_estudio = new DateTime(date("Y") . "-" . date("m") . "-" . date("d"));
 		}
 		//Parámetros
-        $edadmax_admin_hombre = (\App\Parametros::where('llave', 'EDADMAX_ADMIN_H')->first()->valor)*12;
-        $edadmax_admin_mujer = (\App\Parametros::where('llave', 'EDADMAX_ADMIN_M')->first()->valor)*12;
-        $edadmax_docentes = (\App\Parametros::where('llave', 'EDADMAX_DOCENTES')->first()->valor)*12;
-		$edadmax_pensionados = (\App\Parametros::where('llave', 'EDADMAX_PENSIONADOS')->first()->valor)*12;
+		$edadmax_admin_hombre = (\App\Parametros::where('llave', 'EDADMAX_ADMIN_H')->first()->valor) * 12;
+		$edadmax_admin_mujer = (\App\Parametros::where('llave', 'EDADMAX_ADMIN_M')->first()->valor) * 12;
+		$edadmax_docentes = (\App\Parametros::where('llave', 'EDADMAX_DOCENTES')->first()->valor) * 12;
+		$edadmax_pensionados = (\App\Parametros::where('llave', 'EDADMAX_PENSIONADOS')->first()->valor) * 12;
 		$cupomax_vacantedef = \App\Parametros::where('llave', 'CUPOMAX_VACANTEDEF')->first()->valor;
 		$plazo_max_permitido = 0;
 
 		//Datos del cliente
 		$fechanac = new DateTime($persona->fechanto);
 		$edad = $fecha_estudio->diff($fechanac);
-		$meses_edad = ($edad->y*12)+$edad->m;
+		$meses_edad = ($edad->y * 12) + $edad->m;
 		$es_pensionado = $persona->registrosfinancieros->last()->pagaduria->de_pensiones;
 		if ($persona->tipo_contratacion == 'Propiedad' || $persona->tipo_contratacion == 'Indefinido') {
 			$plazo_max_permitido = 144;
@@ -1029,28 +1029,28 @@ if (!function_exists('calcula_viabilidad_inicial')) {
 				}
 			} else {
 				if ($persona->docente == '1') {
-					if ($edadmax_docentes-$meses_edad <= $plazo_max_permitido) {
-						$plazomax = $edadmax_docentes-$meses_edad; //Medida en meses
-					} elseif ($edadmax_docentes-$meses_edad > $plazo_max_permitido) {
+					if ($edadmax_docentes - $meses_edad <= $plazo_max_permitido) {
+						$plazomax = $edadmax_docentes - $meses_edad; //Medida en meses
+					} elseif ($edadmax_docentes - $meses_edad > $plazo_max_permitido) {
 						$plazomax = $plazo_max_permitido;
 					} else {
 						$analisis = "No es viable: Edad inviable";
 					}
 				} else {
 					if ($persona->sexo == 'M') {
-						if ($edadmax_admin_hombre-$meses_edad <= $plazo_max_permitido) {
-							$plazomax = $edadmax_admin_hombre-$meses_edad; //Medida en meses
-						} elseif ($edadmax_admin_hombre-$meses_edad > $plazo_max_permitido) {
+						if ($edadmax_admin_hombre - $meses_edad <= $plazo_max_permitido) {
+							$plazomax = $edadmax_admin_hombre - $meses_edad; //Medida en meses
+						} elseif ($edadmax_admin_hombre - $meses_edad > $plazo_max_permitido) {
 							$plazomax = $plazo_max_permitido;
-						} elseif ($edadmax_admin_hombre-$meses_edad <= 0) {
+						} elseif ($edadmax_admin_hombre - $meses_edad <= 0) {
 							$analisis = "No es viable: Edad inviable";
 						}
 					} elseif ($persona->sexo == 'F') {
-						if ($edadmax_admin_mujer-$meses_edad <= $plazo_max_permitido) {
-							$plazomax = $edadmax_admin_mujer-$meses_edad; //Medida en meses
-						} elseif ($edadmax_admin_mujer-$meses_edad > $plazo_max_permitido) {
+						if ($edadmax_admin_mujer - $meses_edad <= $plazo_max_permitido) {
+							$plazomax = $edadmax_admin_mujer - $meses_edad; //Medida en meses
+						} elseif ($edadmax_admin_mujer - $meses_edad > $plazo_max_permitido) {
 							$plazomax = $plazo_max_permitido;
-						} elseif ($edadmax_admin_mujer-$meses_edad <= 0) {
+						} elseif ($edadmax_admin_mujer - $meses_edad <= 0) {
 							$analisis = "No es viable: Edad inviable";
 						}
 					} else {
@@ -1071,7 +1071,8 @@ if (!function_exists('calcula_viabilidad_inicial')) {
 }
 
 if (!function_exists('deformat_autonumeric')) {
-	function deformat_autonumeric($value){
+	function deformat_autonumeric($value)
+	{
 		$valuesinpeso = str_replace("$", "", $value);
 		$valuesindecimal = str_replace(",00", "", $valuesinpeso);
 		$valuelimpio = str_replace(".", "", $valuesindecimal);
@@ -1079,8 +1080,9 @@ if (!function_exists('deformat_autonumeric')) {
 	}
 }
 
-if(!function_exists('roles_label')) {
-	function roles_label($rol){
+if (!function_exists('roles_label')) {
+	function roles_label($rol)
+	{
 		switch ($rol) {
 			case 'ADMIN_SISTEMA':
 				return 'SuperAdmin';
@@ -1098,8 +1100,9 @@ if(!function_exists('roles_label')) {
 	}
 }
 
-if(!function_exists('IsSuperAdmin')) {
-	function IsSuperAdmin() {
+if (!function_exists('IsSuperAdmin')) {
+	function IsSuperAdmin()
+	{
 		switch (Auth::user()->rol->rol) {
 			case 'ADMIN_SISTEMA':
 				return true;
@@ -1111,8 +1114,9 @@ if(!function_exists('IsSuperAdmin')) {
 	}
 }
 
-if(!function_exists('IsAMIAdmin')) {
-	function IsAMIAdmin() {
+if (!function_exists('IsAMIAdmin')) {
+	function IsAMIAdmin()
+	{
 		switch (Auth::user()->rol->rol) {
 			case 'ADMIN_AMI':
 				return true;
@@ -1124,8 +1128,9 @@ if(!function_exists('IsAMIAdmin')) {
 	}
 }
 
-if(!function_exists('IsHEGOAdmin')) {
-	function IsHEGOAdmin() {
+if (!function_exists('IsHEGOAdmin')) {
+	function IsHEGOAdmin()
+	{
 		switch (Auth::user()->rol->rol) {
 			case 'ADMIN_HEGO':
 				return true;
@@ -1137,8 +1142,9 @@ if(!function_exists('IsHEGOAdmin')) {
 	}
 }
 
-if(!function_exists('IsUser')) {
-	function IsUser() {
+if (!function_exists('IsUser')) {
+	function IsUser()
+	{
 		if (IsCompany()) {
 			return false;
 		} else {
@@ -1154,8 +1160,9 @@ if(!function_exists('IsUser')) {
 	}
 }
 
-if(!function_exists('IsUserCreator')) {
-	function IsUserCreator() {
+if (!function_exists('IsUserCreator')) {
+	function IsUserCreator()
+	{
 		if (Auth::user()->creausuarios) {
 			return true;
 		} else {
@@ -1164,8 +1171,9 @@ if(!function_exists('IsUserCreator')) {
 	}
 }
 
-if(!function_exists('IsCompany')) {
-	function IsCompany() {
+if (!function_exists('IsCompany')) {
+	function IsCompany()
+	{
 		if (!Auth::user()->id_company) {
 			return true;
 		} else {
@@ -1174,8 +1182,9 @@ if(!function_exists('IsCompany')) {
 	}
 }
 
-if(!function_exists('HEGOAccess')) {
-	function HEGOAccess() {
+if (!function_exists('HEGOAccess')) {
+	function HEGOAccess()
+	{
 		if (Auth::user()->hego) {
 			return true;
 		} else {
@@ -1191,7 +1200,7 @@ if (!function_exists('AMISilverHabilitado')) {
 			return true;
 		} else {
 			return false;
-		}	
+		}
 	}
 }
 
@@ -1202,7 +1211,7 @@ if (!function_exists('AMIGoldHabilitado')) {
 			return true;
 		} else {
 			return false;
-		}		
+		}
 	}
 }
 
@@ -1213,14 +1222,14 @@ if (!function_exists('AMIDiamondHabilitado')) {
 			return true;
 		} else {
 			return false;
-		}		
+		}
 	}
 }
 
 if (!function_exists('getConsultasXUsuario')) {
 	function getConsultasXUsuario($user)
 	{
-		return App\Consultas::where( 'users_id', $user->id )->get();	
+		return App\Consultas::where('users_id', $user->id)->get();
 	}
 }
 
@@ -1233,12 +1242,12 @@ if (!function_exists('LabelTipoConsulta')) {
 			3 => "AMI®DIAMOND"
 		);
 		return $tipos_consulta[$id];
-		
 	}
 }
 
 if (!function_exists('GetLabelEspanolMeses')) {
-	function GetLabelEspanolMeses($mes) {
+	function GetLabelEspanolMeses($mes)
+	{
 		switch ($mes) {
 			case '01':
 				return "Enero";
@@ -1276,7 +1285,7 @@ if (!function_exists('GetLabelEspanolMeses')) {
 			case '12':
 				return "Diciembre";
 				break;
-			
+
 			default:
 				# code...
 				break;
@@ -1285,9 +1294,8 @@ if (!function_exists('GetLabelEspanolMeses')) {
 }
 
 if (!function_exists('ConsultaAMI')) {
-	function ConsultaAMI(Request $request) {
-		
+	function ConsultaAMI(Request $request)
+	{
+		//
 	}
 }
-
-?>

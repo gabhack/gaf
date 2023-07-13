@@ -468,7 +468,7 @@ Route::post('visados', [VisadoController::class, 'store']);
 Route::post('visados/{id}', [VisadoController::class, 'update']);
 Route::view('/historyClient', 'historyClient')->middleware('auth');
 Route::view('/dataClient', 'dataClient');
-Route::view('/dataClientDraft', 'dataClientDraft');
+Route::view('/dataClientDraft', 'dataClientDraft')->middleware('auth');
 Route::view('/refundCartera', 'refundCartera');
 Route::view('/massiveCharge', 'massive');
 Route::resource('/validate', 'SolicitudValidacionController');
