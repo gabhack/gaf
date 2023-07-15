@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDatamesseccaliTable extends Migration
+class CreateDatamesSemCaliTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateDatamesseccaliTable extends Migration
      */
     public function up()
     {
-        Schema::connection('pgsql')->create('datamesseccali', function (Blueprint $table) {
+        Schema::connection('pgsql')->create('datamessemcali', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
             $table->text('nvinc')->nullable();
@@ -87,6 +87,6 @@ class CreateDatamesseccaliTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('datamesseccali');
+        Schema::dropIfExists('datamessemcali');
     }
 }

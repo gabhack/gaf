@@ -23,7 +23,7 @@
                   <label for="firstName" class="labelForm"> Primer Nombre </label>
                 </b-col>
                 <b-col cols="8" class="inputContenedor">
-                  <b-form-input id="firstName" class="" v-model="form.firstName" trim required/>
+                  <b-form-input id="firstName" class="" v-model="form.firstName" trim required />
                   <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                 </b-col>
               </b-row>
@@ -52,7 +52,7 @@
                   <label for="firstLastname" class="labelForm"> Primer Apellido </label>
                 </b-col>
                 <b-col cols="8" class="inputContenedor">
-                  <b-form-input id="firstLastname" class="" v-model="form.firstLastname" trim required/>
+                  <b-form-input id="firstLastname" class="" v-model="form.firstLastname" trim required />
                   <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                 </b-col>
               </b-row>
@@ -65,7 +65,7 @@
                   <label class="labelForm"> Segundo Apellido </label>
                 </b-col>
                 <b-col cols="8" class="inputContenedor">
-                  <b-form-input id="secondLastname" class="" v-model="form.secondLastname" trim required/>
+                  <b-form-input id="secondLastname" class="" v-model="form.secondLastname" trim required />
                   <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                 </b-col>
               </b-row>
@@ -99,7 +99,7 @@
                   <p class="labelForm">Tipo de Documento</p>
                 </b-col>
                 <b-col cols="8" class="inputContenedor">
-                  <b-form-select id="idType" class="selectBorder" :options="idTypes" v-model="form.idType" required/>
+                  <b-form-select id="idType" class="selectBorder" :options="idTypes" v-model="form.idType" required />
                   <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                 </b-col>
               </b-row>
@@ -112,7 +112,7 @@
                   <p class="labelForm">Número de Documento</p>
                 </b-col>
                 <b-col cols="8" class="inputContenedor">
-                  <b-form-input id="idNumber" v-model="form.idNumber" trim required/>
+                  <b-form-input id="idNumber" v-model="form.idNumber" trim required />
                   <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                 </b-col>
               </b-row>
@@ -273,7 +273,7 @@
                   <label class="labelForm"> Número celular </label>
                 </b-col>
                 <b-col cols="8" class="inputContenedor">
-                  <b-form-input id="phoneNumber" class="" v-model="form.phoneNumber" trim required/>
+                  <b-form-input id="phoneNumber" class="" v-model="form.phoneNumber" trim required />
                   <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                 </b-col>
               </b-row>
@@ -947,8 +947,8 @@ export default {
       pagaduriasTypes: [
         { text: 'FOPEP', value: 'FOPEP', keyData: 'datames' },
         { text: 'FIDUPREVISORA', value: 'FIDUPREVISORA', keyData: 'datamesfidu' },
-        { text: 'FODE VALLE', value: 'FODE_VALLE', keyData: 'datamesseceduc' },
-        { text: 'SEM CALI', value: 'SEM_CALI', keyData: 'datamesseccali' }
+        { text: 'SED VALLE', value: 'SED_VALLE', keyData: 'datamesseceduc' },
+        { text: 'SEM CALI', value: 'SEM_CALI', keyData: 'datamessemcali' }
       ],
       pagaduriasClient: null,
       selectedOffers: []
@@ -1010,7 +1010,7 @@ export default {
           amount: { key: 'Monto Solicitado', value: 2000000 },
           dues: { key: 'Cuotas', value: this.creditInfo.dues }
         },
-        FODE_VALLE: {
+        SED_VALLE: {
           amount: { key: 'Monto Solicitado', value: 1500000 },
           dues: { key: 'Cuotas', value: this.creditInfo.dues }
         },

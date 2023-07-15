@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Datamesseccali;
+use App\DatamesFidu;
+use App\DatamesFopep;
+use App\DatamesSedValle;
+use App\DatamesSemCali;
 use App\Descapli;
 use App\Descnoap;
 use App\Embargosseceduc;
+use App\FechaVinc;
 use App\Visado;
 use Illuminate\Http\Request;
 use Dompdf\Dompdf;
@@ -27,8 +31,8 @@ class VisadoController extends Controller
     {
         // $data_formulario = $request->data;
         // $doc = $request->data['doc'];
-        // $historial_consultas = \App\Descapli::Where('doc',$doc)->get();
-        $historial_consultas = \App\Visado::query()->orderByDesc('created_at')->paginate(15);
+        // $historial_consultas = Descapli::Where('doc',$doc)->get();
+        $historial_consultas = Visado::query()->orderByDesc('created_at')->paginate(15);
 
         $resultados = $historial_consultas;
 
@@ -48,14 +52,14 @@ class VisadoController extends Controller
     {
         // $data_formulario = $request->data;
         // $doc = $request->data['doc'];
-        // $historial_consultas = \App\Descapli::Where('doc',$doc)->get();
-        $detalle_consulta = \App\Visado::where('id', $request->id)->first();
+        // $historial_consultas = Descapli::Where('doc',$doc)->get();
+        $detalle_consulta = Visado::where('id', $request->id)->first();
         $detalle_consulta = json_decode($detalle_consulta);
-        $info_datames = \App\DataMes::Where('doc', $detalle_consulta->ced)->first();
-        $info_fechavinc = \App\FechaVinc::Where('doc', $detalle_consulta->ced)->first();
-        $datamesfidu = \App\Datamesfidu::Where('doc', $detalle_consulta->ced)->first();
-        $datamesseceduc = \App\Datamesseceduc::Where('doc', $detalle_consulta->ced)->first();
-        $datamesseccali = Datamesseccali::where('doc', $detalle_consulta->ced)->first();
+        $info_datames = DatamesFopep::Where('doc', $detalle_consulta->ced)->first();
+        $info_fechavinc = FechaVinc::Where('doc', $detalle_consulta->ced)->first();
+        $datamesfidu = DatamesFidu::Where('doc', $detalle_consulta->ced)->first();
+        $datamesseceduc = DatamesSedValle::Where('doc', $detalle_consulta->ced)->first();
+        $datamesSemCali = DatamesSemCali::where('doc', $detalle_consulta->ced)->first();
         $embargosedu = Embargosseceduc::where('doc', $detalle_consulta->ced)->get();
         $descapli = Descapli::where('doc', $detalle_consulta->ced)->get();
         $descnoap = Descnoap::where('doc', $detalle_consulta->ced)->get();
@@ -67,10 +71,11 @@ class VisadoController extends Controller
         $resultado['detalle_consulta'] = $detalle_consulta;
         $resultado['datamesfidu'] = $datamesfidu;
         $resultado['datamesseceduc'] = $datamesseceduc;
-        $resultado['datamesseccali'] = $datamesseccali;
+        $resultado['datamessemcali'] = $datamesSemCali;
         $resultado['embargosedu'] = $embargosedu;
         $resultado['descapli'] = $descapli;
         $resultado['descnoap'] = $descnoap;
+
         if ($resultado == '' or $resultado == null) {
             return response()->json(['message' => 'No se encontraron registros.', 'data' => $resultado], 200);
         } else {
@@ -82,7 +87,7 @@ class VisadoController extends Controller
     {
         $detalle_consulta = \App\Visado::where('id', $request->id_consulta)->first();
         $detalle_consulta = json_decode($detalle_consulta);
-        $info_datames = \App\DataMes::Where('doc', $detalle_consulta->ced)->first();
+        $info_datames = \App\DatamesFopep::Where('doc', $detalle_consulta->ced)->first();
         $info_fechavinc = \App\FechaVinc::Where('doc', $detalle_consulta->ced)->first();
         $htmldata = "
       <html>
@@ -198,7 +203,6 @@ class VisadoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //dd(Visado::find($id));
         $visado = Visado::find($id);
         $visado->estado = $request->estado;
         $visado->cuotacredito = $request->cuotacredito;

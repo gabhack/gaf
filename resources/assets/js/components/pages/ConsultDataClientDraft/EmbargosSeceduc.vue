@@ -6,14 +6,14 @@
         <div class="row">
           <div :class="label.colClass || 'col-2'" v-for="label in labels" :key="label.field">
             <b class="panel-label table-text">{{ label.label }}</b>
-            <template v-if="embargosseceduc.length > 0">
-              <div v-for="(embargosseceduc, key) in embargosseceduc" :key="key">
+            <template v-if="embargossedvalle.length > 0">
+              <div v-for="(embargossedvalle, key) in embargossedvalle" :key="key">
                 <p class="panel-value">
-                  <template v-if="embargosseceduc[label.field]">
-                    {{ embargosseceduc[label.field] }}
+                  <template v-if="embargossedvalle[label.field]">
+                    {{ embargossedvalle[label.field] }}
                   </template>
-                  <template v-else-if="embargosseceduc[label.field] || label.currency">
-                    {{ embargosseceduc[label.field] | currency }}
+                  <template v-else-if="embargossedvalle[label.field] || label.currency">
+                    {{ embargossedvalle[label.field] | currency }}
                   </template>
                   <template v-else> - </template>
                 </p>
@@ -50,7 +50,7 @@
           </div>
         </div>
 
-        <div v-for="(item, key) in embargosseceduc" :key="key" class="row panel-br-light-green pt-3">
+        <div v-for="(item, key) in embargossedvalle" :key="key" class="row panel-br-light-green pt-3">
           <div class="col-1 pr-0">
             <b class="panel-label table-text"></b>
 
@@ -92,7 +92,7 @@
 <script>
 export default {
   name: 'EmbargosSeceduc',
-  props: ['embargosseceduc'],
+  props: ['embargossedvalle'],
   data() {
     return {
       labels: [

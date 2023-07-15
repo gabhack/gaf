@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\CouponsSedAtlantico;
-use App\CouponsSedBarranquilla;
+use App\CouponsSemBarranquilla;
 use App\CouponsSedBolivar;
 use App\CouponsSedCauca;
 use App\CouponsSedChoco;
@@ -12,7 +12,7 @@ use App\CouponsSedMagdalena;
 use App\CouponsSedPopayan;
 use App\CouponsSedQuibdo;
 use App\CouponsSemSahagun;
-use App\Coupunsseccali;
+use App\CoupunsSemCali;
 use App\Coupunssecedu;
 use Illuminate\Http\Request;
 
@@ -31,8 +31,8 @@ class CouponsController extends Controller
         $coupons = [];
 
         switch ($pagaduriaType) {
-            case 'SEDBARRANQUILLA':
-                $coupons = CouponsSedBarranquilla::where('doc', $userDoc)->get();
+            case 'SEMBARRANQUILLA':
+                $coupons = CouponsSemBarranquilla::where('doc', $userDoc)->get();
                 break;
             case 'SEDATLANTICO':
                 $coupons = CouponsSedAtlantico::where('doc', $userDoc)->get();
@@ -58,13 +58,13 @@ class CouponsController extends Controller
             case 'SEMSAHAGUN':
                 $coupons = CouponsSemSahagun::where('doc', $userDoc)->get();
                 break;
-            case 'SECCALI':
-                $coupons = Coupunsseccali::where('doc', $userDoc)->get();
+            case 'SEMCALI':
+                $coupons = CoupunsSemCali::where('doc', $userDoc)->get();
                 break;
             case 'SECEDUC':
                 $coupons = Coupunssecedu::where('doc', $userDoc)->get();
                 break;
-            case 'FODE VALLE':
+            case 'SEDVALLE':
                 $coupons = Coupunssecedu::where('doc', $userDoc)->get();
                 break;
             case 'FOPEP':

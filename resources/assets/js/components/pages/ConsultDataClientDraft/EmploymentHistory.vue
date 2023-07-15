@@ -105,7 +105,7 @@
           </template>
 
           <!--============================
-                FODE VALLE
+                SED VALLE
           ==============================-->
 
           <template v-if="datamesseceduc">
@@ -294,41 +294,41 @@
           </template>
 
           <!--============================
-            DATAMESCALI SECCALI
+            DATAMESCALI SEMCALI
           ==============================-->
-          <!-- <template v-if="datamesseccali">
+          <!-- <template v-if="datamessemcali">
             <div class="col-6">
               <b class="panel-label">VALOR INGRESO:</b>
               <div>
-                <p class="panel-value">{{ datamesseccali.vingreso | currency }}</p>
+                <p class="panel-value">{{ datamessemcali.vingreso | currency }}</p>
               </div>
             </div>
 
             <div class="col-6">
               <b class="panel-label">FECHA INGRESO:</b>
               <div>
-                <p class="panel-value">{{ datamesseccali.fingr }}</p>
+                <p class="panel-value">{{ datamessemcali.fingr }}</p>
               </div>
             </div>
 
             <div class="col-6">
               <b class="panel-label">FECHA VINCULACION:</b>
               <div>
-                <p class="panel-value">{{ datamesseccali.fnombramiento }}</p>
+                <p class="panel-value">{{ datamessemcali.fnombramiento }}</p>
               </div>
             </div>
 
             <div class="col-6">
               <b class="panel-label">AREA DE DESEMPEÑO:</b>
               <div>
-                <p class="panel-value">{{ datamesseccali.esquema }}</p>
+                <p class="panel-value">{{ datamessemcali.esquema }}</p>
               </div>
             </div>
 
             <div class="col-6">
               <b class="panel-label">CARGO:</b>
               <div>
-                <p class="panel-value">{{ datamesseccali.cargo }}</p>
+                <p class="panel-value">{{ datamessemcali.cargo }}</p>
               </div>
             </div>
           </template> -->
@@ -528,7 +528,7 @@ import { mapState, mapGetters } from 'vuex';
 
 export default {
   name: 'EmploymentHistory',
-  props: ['fechavinc', 'datamesseceduc', 'datamesfidu', 'datamesseccali', 'user'],
+  props: ['fechavinc', 'datamesseceduc', 'datamesfidu', 'datamessemcali', 'user'],
   computed: {
     ...mapState('datamesModule', ['datamesSed']),
     ...mapState('pagaduriasModule', ['pagaduriaType']),

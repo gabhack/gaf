@@ -7,67 +7,67 @@
           <div class="col-6">
             <b class="panel-label">TIPO DE DOCUMENTO:</b>
             <div>
-              <p class="panel-value">{{ datamesfidu.tdd ? datamesfidu.tdd : 'CÉDULA DE CIUDADANÍA' }}</p>
+              <p class="panel-value">{{ datamesFidu.tdd ? datamesFidu.tdd : 'CÉDULA DE CIUDADANÍA' }}</p>
             </div>
           </div>
           <div class="col-6">
             <b class="panel-label">NUMERO DE DOCUMENTO:</b>
             <div>
-              <p class="panel-value">{{ datamesfidu.doc ? datamesfidu.doc : '-' }}</p>
+              <p class="panel-value">{{ datamesFidu.doc ? datamesFidu.doc : '-' }}</p>
             </div>
           </div>
           <div class="col-6">
             <b class="panel-label">NOMBRE Y APELLIDO:</b>
             <div>
-              <p class="panel-value">{{ datamesfidu.nombenef ? datamesfidu.nombenef : '-' }}</p>
+              <p class="panel-value">{{ datamesFidu.nombenef ? datamesFidu.nombenef : '-' }}</p>
             </div>
           </div>
           <div class="col-6">
             <b class="panel-label">FECHA DE NACIMIENTO:</b>
             <div>
-              <p class="panel-value">{{ datamesfidu.fecnacimient ? datamesfidu.fecnacimient : '-' }}</p>
+              <p class="panel-value">{{ datamesFidu.fecnacimient ? datamesFidu.fecnacimient : '-' }}</p>
             </div>
           </div>
           <div class="col-6">
             <b class="panel-label">DIRECCIÓN:</b>
             <div>
-              <p class="panel-value">{{ datamesfidu.dir ? datamesfidu.dir : '-' }}</p>
+              <p class="panel-value">{{ datamesFidu.dir ? datamesFidu.dir : '-' }}</p>
             </div>
           </div>
           <div class="col-6">
             <b class="panel-label">DEPARTAMENTO:</b>
             <div>
-              <p class="panel-value">{{ datamesfidu.dpto ? datamesfidu.dpto : '-' }}</p>
+              <p class="panel-value">{{ datamesFidu.dpto ? datamesFidu.dpto : '-' }}</p>
             </div>
           </div>
           <div class="col-6">
             <b class="panel-label">MUNICIPIO:</b>
             <div>
-              <p class="panel-value">{{ datamesfidu.mnpio ? datamesfidu.mnpio : '-' }}</p>
+              <p class="panel-value">{{ datamesFidu.mnpio ? datamesFidu.mnpio : '-' }}</p>
             </div>
           </div>
           <div class="col-md-6">
             <b class="panel-label">TELEFONO:</b>
             <div>
-              <p class="panel-value">{{ datamesfidu.tel ? datamesfidu.tel : '-' }}</p>
+              <p class="panel-value">{{ datamesFidu.tel ? datamesFidu.tel : '-' }}</p>
             </div>
           </div>
           <div class="col-md-6">
             <b class="panel-label">CELULAR:</b>
             <div>
-              <p class="panel-value">{{ datamesfidu.tel ? datamesfidu.tel : '-' }}</p>
+              <p class="panel-value">{{ datamesFidu.tel ? datamesFidu.tel : '-' }}</p>
             </div>
           </div>
           <div class="col-md-6">
             <b class="panel-label">CORREO:</b>
             <div>
-              <p class="panel-value">{{ datamesfidu.correo ? datamesfidu.correo : '-' }}</p>
+              <p class="panel-value">{{ datamesFidu.correo ? datamesFidu.correo : '-' }}</p>
             </div>
           </div>
           <!--<div class="col-6">
                               <b class="panel-label">ESTADO CIVIL:</b>
-                              <div v-for="(datamesfidu, key) in datamesfidu" :key="key">
-                                  <p class="panel-value">{{datamesfidu.estcivil}}</p>
+                              <div v-for="(datamesFidu, key) in datamesFidu" :key="key">
+                                  <p class="panel-value">{{datamesFidu.estcivil}}</p>
                               </div>
                           </div>-->
 
@@ -84,7 +84,7 @@
           >
             <b class="panel-label">DESCRIPCIÓN:</b>
             <div>
-              <p class="panel-value">{{ datamesfidu.desctipvinc ? datamesfidu.desctipvinc : '-' }}</p>
+              <p class="panel-value">{{ datamesFidu.desctipvinc ? datamesFidu.desctipvinc : '-' }}</p>
             </div>
           </div>
 
@@ -101,7 +101,7 @@
           >
             <b class="panel-label">RECURSOS:</b>
             <div>
-              <p class="panel-value">{{ datamesfidu.descfuenrecurso ? datamesfidu.descfuenrecurso : '-' }}</p>
+              <p class="panel-value">{{ datamesFidu.descfuenrecurso ? datamesFidu.descfuenrecurso : '-' }}</p>
             </div>
           </div>
 
@@ -118,7 +118,7 @@
           >
             <b class="panel-label">FECHA DE CARGA DATA:</b>
             <div>
-              <p class="panel-value">{{ datamesfidu.fecdata ? datamesfidu.fecdata : '-' }}</p>
+              <p class="panel-value">{{ datamesFidu.fecdata ? datamesFidu.fecdata : '-' }}</p>
             </div>
           </div>
 
@@ -135,7 +135,7 @@
           >
             <b class="panel-label">MES DE CARGA DATA:</b>
             <div>
-              <p class="panel-value">{{ datamesfidu.mesdata ? datamesfidu.mesdata : '-' }}</p>
+              <p class="panel-value">{{ datamesFidu.mesdata ? datamesFidu.mesdata : '-' }}</p>
             </div>
           </div>
 
@@ -152,7 +152,7 @@
           >
             <b class="panel-label">AÑO DE CARGA DATA:</b>
             <div>
-              <p class="panel-value">{{ datamesfidu.anodata ? datamesfidu.anodata : '-' }}</p>
+              <p class="panel-value">{{ datamesFidu.anodata ? datamesFidu.anodata : '-' }}</p>
             </div>
           </div>
         </div>
@@ -164,9 +164,8 @@
 <script>
 export default {
   name: 'DatamesFidu',
-  props: ['datamesfidu', 'user']
+  props: ['datamesFidu', 'user']
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

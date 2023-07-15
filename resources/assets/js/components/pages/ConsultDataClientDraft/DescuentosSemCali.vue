@@ -6,8 +6,8 @@
         <div class="row">
           <div :class="label.colClass || 'col-2'" v-for="label in labels" :key="label.field">
             <b class="panel-label table-text">{{ label.label }}</b>
-            <template v-if="descuentosseccali.length > 0">
-              <div v-for="(item, key) in descuentosseccali" :key="key">
+            <template v-if="descuentossemcali.length > 0">
+              <div v-for="(item, key) in descuentossemcali" :key="key">
                 <p class="panel-value">
                   <template v-if="item[label.field]">
                     {{ item[label.field] }}
@@ -38,7 +38,7 @@
           </div>
         </div>
 
-        <div v-for="(item, key) in descuentosseccali" :key="key" class="row panel-br-light-green pt-3">
+        <div v-for="(item, key) in descuentossemcali" :key="key" class="row panel-br-light-green pt-3">
           <div class="col-1 pr-0">
             <input v-model="item.check" type="checkbox" />
             <!--
@@ -60,8 +60,8 @@
 
 <script>
 export default {
-  name: 'Descuentosseccali',
-  props: ['descuentosseccali'],
+  name: 'DescuentosSemCali',
+  props: ['descuentossemcali'],
   data() {
     return {
       labels: [

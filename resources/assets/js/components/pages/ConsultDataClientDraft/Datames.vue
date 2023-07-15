@@ -19,49 +19,49 @@
           >
             <b class="panel-label">FONDO:</b>
             <div>
-              <p class="panel-value">{{ datames.fondo ? datames.fondo : '-' }}</p>
+              <p class="panel-value">{{ datamesFopep.fondo ? datamesFopep.fondo : '-' }}</p>
             </div>
           </div>
           <div class="col-6">
             <b class="panel-label">TIPO DE DOCUMENTO:</b>
             <div>
-              <p class="panel-value">{{ datames.td ? datames.td : 'CÉDULA DE CIUDADANÍA' }}</p>
+              <p class="panel-value">{{ datamesFopep.td ? datamesFopep.td : 'CÉDULA DE CIUDADANÍA' }}</p>
             </div>
           </div>
           <div class="col-6">
             <b class="panel-label">NUMERO DE DOCUMENTO:</b>
             <div>
-              <p class="panel-value">{{ datames.doc ? datames.doc : '-' }}</p>
+              <p class="panel-value">{{ datamesFopep.doc ? datamesFopep.doc : '-' }}</p>
             </div>
           </div>
           <div class="col-6">
             <b class="panel-label">NOMBRE Y APELLIDO:</b>
             <div>
-              <p class="panel-value">{{ datames.nomp ? datames.nomp : '-' }}</p>
+              <p class="panel-value">{{ datamesFopep.nomp ? datamesFopep.nomp : '-' }}</p>
             </div>
           </div>
           <div class="col-6">
             <b class="panel-label">FECHA DE NACIMIENTO:</b>
             <div>
-              <p class="panel-value">{{ datames.fecnacimient ? datames.fecnacimient : '-' }}</p>
+              <p class="panel-value">{{ datamesFopep.fecnacimient ? datamesFopep.fecnacimient : '-' }}</p>
             </div>
           </div>
           <div class="col-6">
             <b class="panel-label">DIRECCIÓN:</b>
             <div>
-              <p class="panel-value">{{ datames.dir ? datames.dir : '-' }}</p>
+              <p class="panel-value">{{ datamesFopep.dir ? datamesFopep.dir : '-' }}</p>
             </div>
           </div>
           <div class="col-6">
             <b class="panel-label">DEPARTAMENTO:</b>
             <div>
-              <p class="panel-value">{{ datames.dpto ? datames.dpto : '-' }}</p>
+              <p class="panel-value">{{ datamesFopep.dpto ? datamesFopep.dpto : '-' }}</p>
             </div>
           </div>
           <div class="col-6">
             <b class="panel-label">MUNICIPIO:</b>
             <div>
-              <p class="panel-value">{{ datames.mnpio ? datames.mnpio : '-' }}</p>
+              <p class="panel-value">{{ datamesFopep.mnpio ? datamesFopep.mnpio : '-' }}</p>
             </div>
           </div>
           <div
@@ -77,7 +77,7 @@
           >
             <b class="panel-label">NOMBRE DEL BANCO DONDE LE CONSIGNAN:</b>
             <div>
-              <p class="panel-value">{{ datames.nbanco ? datames.nbanco : '-' }}</p>
+              <p class="panel-value">{{ datamesFopep.nbanco ? datamesFopep.nbanco : '-' }}</p>
             </div>
           </div>
           <div
@@ -93,25 +93,25 @@
           >
             <b class="panel-label">SUCURSAL BANCO:</b>
             <div>
-              <p class="panel-value">{{ datames.sucursal ? datames.sucursal : '-' }}</p>
+              <p class="panel-value">{{ datamesFopep.sucursal ? datamesFopep.sucursal : '-' }}</p>
             </div>
           </div>
           <div class="col-md-6">
             <b class="panel-label">TELEFONO:</b>
             <div>
-              <p class="panel-value">{{ datames.tel ? datames.tel : '-' }}</p>
+              <p class="panel-value">{{ datamesFopep.tel ? datamesFopep.tel : '-' }}</p>
             </div>
           </div>
           <div class="col-md-6">
             <b class="panel-label">CELULAR:</b>
             <div>
-              <p class="panel-value">{{ datames.cel ? datames.cel : '-' }}</p>
+              <p class="panel-value">{{ datamesFopep.cel ? datamesFopep.cel : '-' }}</p>
             </div>
           </div>
           <div class="col-md-6">
             <b class="panel-label">CORREO:</b>
             <div>
-              <p class="panel-value">{{ datames.correo ? datames.correo : '-' }}</p>
+              <p class="panel-value">{{ datamesFopep.correo ? datamesFopep.correo : '-' }}</p>
             </div>
           </div>
         </div>
@@ -123,6 +123,6 @@
 <script>
 export default {
   name: 'Datames',
-  props: ['datames', 'user']
+  props: ['datamesFopep', 'user']
 };
 </script>

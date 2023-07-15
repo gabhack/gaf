@@ -8,7 +8,7 @@ class DatamesFopep extends Model
 {
     protected $connection = 'pgsql';
 
-    protected $table = 'datamesfode';
+    protected $table = 'datamesfopep';
 
     protected $fillable = [
         'fondo',

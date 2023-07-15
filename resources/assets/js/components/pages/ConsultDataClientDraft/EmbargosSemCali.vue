@@ -6,29 +6,29 @@
         <div class="row">
           <div class="col-2">
             <b class="panel-label table-text">NOMBRE ENTIDAD ACTUAL:</b>
-            <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-              <p class="panel-value">{{ embargosseccali.entidaddeman }}</p>
+            <div v-for="(embargossemcali, key) in embargossemcali" :key="key">
+              <p class="panel-value">{{ embargossemcali.entidaddeman }}</p>
             </div>
           </div>
 
           <div class="col-md-2">
             <b class="panel-label table-text">NUMERO DE PAGARE:</b>
-            <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-              <p class="panel-value">{{ embargosseccali.docdeman }}</p>
+            <div v-for="(embargossemcali, key) in embargossemcali" :key="key">
+              <p class="panel-value">{{ embargossemcali.docdeman }}</p>
             </div>
           </div>
 
           <div class="col-2">
             <b class="panel-label table-text">CUOTA DEUDA:</b>
-            <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-              <p class="panel-value">{{ embargosseccali.temb | currency }}</p>
+            <div v-for="(embargossemcali, key) in embargossemcali" :key="key">
+              <p class="panel-value">{{ embargossemcali.temb | currency }}</p>
             </div>
           </div>
 
           <div class="col-2">
             <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
-            <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-              <p class="panel-value">{{ embargosseccali.fembini }}</p>
+            <div v-for="(embargossemcali, key) in embargossemcali" :key="key">
+              <p class="panel-value">{{ embargossemcali.fembini }}</p>
             </div>
           </div>
 
@@ -41,8 +41,8 @@
 
           <div class="col-2">
             <b class="panel-label table-text">INCONSISTENCIA:</b>
-            <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-              <p class="panel-value">{{ embargosseccali.motemb }}</p>
+            <div v-for="(embargossemcali, key) in embargossemcali" :key="key">
+              <p class="panel-value">{{ embargossemcali.motemb }}</p>
             </div>
           </div>
         </div>
@@ -72,7 +72,7 @@
           </div>
         </div>
 
-        <div v-for="(item, key) in embargosseccali" :key="key" class="row panel-br-light-green pt-3">
+        <div v-for="(item, key) in embargossemcali" :key="key" class="row panel-br-light-green pt-3">
           <div class="col-1 pr-0">
             <!-- <input v-model="item.check" type="checkbox" /> -->
             <b class="panel-label table-text"></b>
@@ -112,7 +112,7 @@
 
 <script>
 export default {
-  name: 'EmbargosSeccali',
-  props: ['embargosseccali']
+  name: 'EmbargosSemCali',
+  props: ['embargossemcali']
 };
 </script>
