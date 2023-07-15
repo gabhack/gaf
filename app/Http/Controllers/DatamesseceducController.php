@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\DataMes;
-use App\Datamesfidu;
-use App\Datamesseccali;
-use App\Datamesseceduc;
+use App\DatamesFopep;
+use App\DatamesFidu;
+use App\DatamesSemCali;
+use App\DatamesSedValle;
 use App\Imports\DatamesseceducImport;
 use Illuminate\Http\Request;
 use Excel;
@@ -28,7 +28,7 @@ class DatamesseceducController extends Controller
     {
         $data_formulario = $request->data;
         $doc = $request->doc;
-        $consulta_cedula = Datamesseceduc::where('doc', $doc)->first();
+        $consulta_cedula = DatamesSedValle::where('doc', $doc)->first();
         $resultados = json_decode($consulta_cedula);
 
         if ($resultados == "" or $resultados == null) {
@@ -40,8 +40,8 @@ class DatamesseceducController extends Controller
 
     public function dumpDatamesseceduc()
     {
-        Datamesseceduc::truncate();
-        return response()->json(['message' => 'Datos de tabla Datamesseceduc Borrada'], 200);
+        DatamesSedValle::truncate();
+        return response()->json(['message' => 'Datos de tabla DatamesSedValle Borrada'], 200);
     }
 
     /**
@@ -78,22 +78,22 @@ class DatamesseceducController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Datamesseceduc  $Datamesseceduc
+     * @param  \App\DatamesSedValle  $datamesSedValle
      * @return \Illuminate\Http\Response
      */
     public function show($doc)
     {
-        $Datamesseceduc = Datamesseceduc::where('doc', $doc)->get();
-        return response()->json($Datamesseceduc);
+        $datamesSedValle = DatamesSedValle::where('doc', $doc)->get();
+        return response()->json($datamesSedValle);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Datamesseceduc  $Datamesseceduc
+     * @param  \App\DatamesSedValle  $datamesSedValle
      * @return \Illuminate\Http\Response
      */
-    public function edit(Datamesseceduc $Datamesseceduc)
+    public function edit(DatamesSedValle $datamesSedValle)
     {
         //
     }
@@ -102,10 +102,10 @@ class DatamesseceducController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Datamesseceduc  $Datamesseceduc
+     * @param  \App\DatamesSedValle  $datamesSedValle
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Datamesseceduc $Datamesseceduc)
+    public function update(Request $request, DatamesSedValle $datamesSedValle)
     {
         //
     }
@@ -113,10 +113,10 @@ class DatamesseceducController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Datamesseceduc  $Datamesseceduc
+     * @param  \App\DatamesSedValle  $DatamesSedValle
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Datamesseceduc $Datamesseceduc)
+    public function destroy(DatamesSedValle $DatamesSedValle)
     {
         //
     }
@@ -124,16 +124,16 @@ class DatamesseceducController extends Controller
     public function allPagadurias(Request $request)
     {
         $doc = $request->doc;
-        $datames = DataMes::where('doc', $doc)->first();
-        $datamesseceduc = Datamesseceduc::where('doc', $doc)->first();
-        $datamesfidu = Datamesfidu::where('doc', $doc)->first();
-        $datamesseccali = Datamesseccali::where('doc', $doc)->first();
+        $datamesFopep = DatamesFopep::where('doc', $doc)->first();
+        $datamesSedValle = DatamesSedValle::where('doc', $doc)->first();
+        $datamesFidu = DatamesFidu::where('doc', $doc)->first();
+        $datamesSemCali = DatamesSemCali::where('doc', $doc)->first();
 
         $results = [
-            'datames' => $datames,
-            'datamesseceduc' => $datamesseceduc,
-            'datamesfidu' => $datamesfidu,
-            'datamesseccali' => $datamesseccali,
+            'datamesFopep' => $datamesFopep,
+            'datamesSedValle' => $datamesSedValle,
+            'datamesFidu' => $datamesFidu,
+            'datamesSemCali' => $datamesSemCali,
         ];
 
         return response()->json($results, 200);

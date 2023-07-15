@@ -2,31 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Datamesseccali;
+use App\DeduccionesSemCali;
 use Illuminate\Http\Request;
 
-class DatamesseccaliController extends Controller
+class DeduccionesSemCaliController extends Controller
 {
     public function consultaUnitaria(Request $request)
     {
         $data_formulario = $request->data;
         $doc = $request->doc;
-        $consulta_cedula = Datamesseccali::where('doc', $doc)->first();
+        $consulta_cedula = DeduccionesSemCali::where('doc', $doc)->get();
         $resultados = json_decode($consulta_cedula);
+
         if ($resultados == "" or $resultados == null) {
-            return response()->json([
-                'message' => 'No se encontraron registros con el numero seleccionado.',
-                'data' => $resultados
-            ], 200);
+            return response()->json(['message' => 'No se encontraron registros con el numero seleccionado.', 'data' => $resultados], 200);
         } else {
             return response()->json(['message' => 'Consulta exitosa.', 'data' => $resultados], 200);
         }
     }
 
-    public function dumpDatamesseccali()
+    public function dumpDeduccionesSemCali()
     {
-        Datamesseccali::truncate();
-        return response()->json(['message' => 'Datos de tabla Datamesseccali Borrada'], 200);
+        DeduccionesSemCali::truncate();
+        return response()->json(['message' => 'Datos de tabla DeduccionesSemCali Borrada'], 200);
     }
 
     /**
@@ -36,7 +34,7 @@ class DatamesseccaliController extends Controller
      */
     public function index(Request $request)
     {
-
+        //
     }
 
     /**
@@ -52,7 +50,7 @@ class DatamesseccaliController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -63,22 +61,22 @@ class DatamesseccaliController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Datamesseccali $Datamesseccali
+     * @param  \App\DeduccionesSemCali  $deduccionesSemCali
      * @return \Illuminate\Http\Response
      */
     public function show($doc)
     {
-        $Datamesseccali = Datamesseccali::where('doc', $doc)->get();
-        return response()->json($Datamesseccali);
+        $deduccionesSemCali = DeduccionesSemCali::where('doc', $doc)->get();
+        return response()->json($deduccionesSemCali);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Datamesseccali $Datamesseccali
+     * @param  \App\DeduccionesSemCali  $deduccionesSemCali
      * @return \Illuminate\Http\Response
      */
-    public function edit(Datamesseccali $Datamesseccali)
+    public function edit(DeduccionesSemCali $deduccionesSemCali)
     {
         //
     }
@@ -86,11 +84,11 @@ class DatamesseccaliController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Datamesseccali $Datamesseccali
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\DeduccionesSemCali  $deduccionesSemCali
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Datamesseccali $Datamesseccali)
+    public function update(Request $request, DeduccionesSemCali $deduccionesSemCali)
     {
         //
     }
@@ -98,10 +96,10 @@ class DatamesseccaliController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Datamesseccali $Datamesseccali
+     * @param  \App\DeduccionesSemCali  $deduccionesSemCali
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Datamesseccali $Datamesseccali)
+    public function destroy(DeduccionesSemCali $deduccionesSemCali)
     {
         //
     }

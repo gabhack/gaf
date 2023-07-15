@@ -2,46 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\DatamesFidu;
-use App\Imports\DatamesfiduImport;
+use App\DescuentosSemCali;
 use Illuminate\Http\Request;
-use Excel;
 
-class DatamesfiduController extends Controller
+class DescuentosSemCaliController extends Controller
 {
-    public function import(Request $request)
-    {
-        set_time_limit(0);
-        if ($request->hasFile('file')) {
-            $path = $request->file('file')->getRealPath();
-            $data = Excel::import(new DatamesfiduImport, request()->file('file'));
-            return response()->json(['message' => 'Importación Realizada'], 200);
-        } else {
-            return response()->json(['message' => 'Debe Seleccionar un archivo'], 400);
-        }
-    }
-
     public function consultaUnitaria(Request $request)
     {
         $data_formulario = $request->data;
         $doc = $request->doc;
-        $consulta_cedula = DatamesFidu::where('doc', $doc)->first();
+        $consulta_cedula = DescuentosSemCali::where('doc', $doc)->get();
         $resultados = json_decode($consulta_cedula);
 
         if ($resultados == "" or $resultados == null) {
-            return response()->json([
-                'message' => 'No se encontraron registros con el numero seleccionado.',
-                'data' => $resultados
-            ], 200);
+            return response()->json(['message' => 'No se encontraron registros con el numero seleccionado.', 'data' => $resultados], 200);
         } else {
             return response()->json(['message' => 'Consulta exitosa.', 'data' => $resultados], 200);
         }
     }
 
-    public function dumpDatamesfidu()
+    public function dumpDescuentosSemCali()
     {
-        DatamesFidu::truncate();
-        return response()->json(['message' => 'Datos de tabla DatamesFidu Borrada'], 200);
+        DescuentosSemCali::truncate();
+        return response()->json(['message' => 'Datos de tabla DescuentosSemCali Borrada'], 200);
     }
 
     /**
@@ -67,7 +50,7 @@ class DatamesfiduController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -78,22 +61,22 @@ class DatamesfiduController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\DatamesFidu $datamesFidu
+     * @param  \App\DescuentosSemCali  $descuentosSemCali
      * @return \Illuminate\Http\Response
      */
     public function show($doc)
     {
-        $datamesFidu = DatamesFidu::where('doc', $doc)->get();
-        return response()->json($datamesFidu);
+        $descuentosSemCali = DescuentosSemCali::where('doc', $doc)->get();
+        return response()->json($descuentosSemCali);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\DatamesFidu $datamesFidu
+     * @param  \App\DescuentosSemCali  $descuentosSemCali
      * @return \Illuminate\Http\Response
      */
-    public function edit(DatamesFidu $datamesFidu)
+    public function edit(DescuentosSemCali $descuentosSemCali)
     {
         //
     }
@@ -101,11 +84,11 @@ class DatamesfiduController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\DatamesFidu $datamesFidu
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\DescuentosSemCali  $descuentosSemCali
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, DatamesFidu $datamesFidu)
+    public function update(Request $request, DescuentosSemCali $descuentosSemCali)
     {
         //
     }
@@ -113,10 +96,10 @@ class DatamesfiduController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\DatamesFidu $datamesFidu
+     * @param  \App\DescuentosSemCali  $descuentosSemCali
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DatamesFidu $datamesFidu)
+    public function destroy(DescuentosSemCali $descuentosSemCali)
     {
         //
     }

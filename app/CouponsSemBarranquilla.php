@@ -4,11 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class CouponsSedBarranquilla extends Model
+class CouponsSemBarranquilla extends Model
 {
     protected $connection = 'pgsql';
 
-    protected $table = 'couponssedbarranquilla';
+    protected $table = 'couponssembarranquilla';
 
     protected $fillable = [
         'id',
