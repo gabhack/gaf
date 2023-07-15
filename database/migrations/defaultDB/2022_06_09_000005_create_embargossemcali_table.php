@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDeduccionesseccaliTable extends Migration
+class CreateEmbargosSemCaliTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,20 @@ class CreateDeduccionesseccaliTable extends Migration
      */
     public function up()
     {
-        Schema::connection('pgsql')->create('deduccionesseccali', function (Blueprint $table) {
+        Schema::connection('pgsql')->create('embargossemcali', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
             $table->text('doc');
             $table->text('nomp')->nullable();
-            $table->text('valordeduc')->nullable();
-            $table->text('centrocostdeduc')->nullable();
-            $table->text('entiddeduc')->nullable();
+            $table->text('docdeman')->nullable();
+            $table->text('entidaddeman')->nullable();
+            $table->text('fembini')->nullable();
+            $table->text('fembfin')->nullable();
+            $table->text('motemb')->nullable();
+            $table->text('tingr')->nullable();
+            $table->text('tegre')->nullable();
+            $table->text('temb')->nullable();
+            $table->text('netoemb')->nullable();
             $table->text('fecdata')->nullable();
             $table->text('mesdata')->nullable();
             $table->text('anodata')->nullable();
@@ -34,6 +40,6 @@ class CreateDeduccionesseccaliTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('deduccionesseccali');
+        Schema::dropIfExists('embargossemcali');
     }
 }

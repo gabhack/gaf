@@ -13,25 +13,25 @@
           <div class="col-6">
             <b class="panel-label">NUMERO DE DOCUMENTO:</b>
             <div>
-              <p class="panel-value">{{ datamesseccali.nvinc ? datamesseccali.nvinc : '-' }}</p>
+              <p class="panel-value">{{ datamessemcali.nvinc ? datamessemcali.nvinc : '-' }}</p>
             </div>
           </div>
           <div class="col-6">
             <b class="panel-label">NOMBRE Y APELLIDO:</b>
             <div>
-              <p class="panel-value">{{ datamesseccali.nomp ? datamesseccali.nomp : '-' }}</p>
+              <p class="panel-value">{{ datamessemcali.nomp ? datamessemcali.nomp : '-' }}</p>
             </div>
           </div>
           <div class="col-6">
             <b class="panel-label">FECHA DE NACIMIENTO:</b>
             <div>
-              <p class="panel-value">{{ datamesseccali.fecnacimient ? datamesseccali.fecnacimient : '-' }}</p>
+              <p class="panel-value">{{ datamessemcali.fecnacimient ? datamessemcali.fecnacimient : '-' }}</p>
             </div>
           </div>
           <div class="col-6">
             <b class="panel-label">DIRECCIÓN:</b>
             <div>
-              <p class="panel-value">{{ datamesseccali.dir ? datamesseccali.dir : '-' }}</p>
+              <p class="panel-value">{{ datamessemcali.dir ? datamessemcali.dir : '-' }}</p>
             </div>
           </div>
           <div class="col-6">
@@ -49,7 +49,7 @@
           <div class="col-md-6">
             <b class="panel-label">TELEFONO:</b>
             <div>
-              <p class="panel-value">{{ datamesseccali.tel ? datamesseccali.mesdata : '-' }}</p>
+              <p class="panel-value">{{ datamessemcali.tel ? datamessemcali.mesdata : '-' }}</p>
             </div>
           </div>
           <div class="col-md-6">
@@ -60,8 +60,8 @@
           </div>
           <!--          <div class="col-md-6">-->
           <!--            <b class="panel-label">CORREO:</b>-->
-          <!--            <div v-for="(datamesseccali, key) in datames" :key="key">-->
-          <!--              <p class="panel-value">{{ datamesseccali.email }}</p>-->
+          <!--            <div v-for="(datamessemcali, key) in datames" :key="key">-->
+          <!--              <p class="panel-value">{{ datamessemcali.email }}</p>-->
           <!--            </div>-->
           <!--          </div>-->
           <!--          <div-->
@@ -156,10 +156,9 @@
 
 <script>
 export default {
-  name: 'Datames',
-  props: ['datamesseccali', 'user']
+  name: 'DatamesSemCali',
+  props: ['datamessemcali', 'user']
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

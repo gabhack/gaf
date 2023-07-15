@@ -38,8 +38,8 @@
                 <select required class="form-control" v-model="dataclient.pagaduria">
                   <option value="FOPEP">FOPEP</option>
                   <option value="FIDUPREVISORA">FIDUPREVISORA</option>
-                  <option value="FODE VALLE">FODE VALLE</option>
-                  <option value="SECCALI">SEM CALI</option>
+                  <option value="SEDVALLE">SED VALLE</option>
+                  <option value="SEMCALI">SEM CALI</option>
                 </select>
               </div>
               <div class="col-6 mt-4">
@@ -339,8 +339,8 @@
           </div>
         </div>
 
-        <!-- PAGADURIA FODE VALLE -->
-        <div class="col-md-6" v-if="datamesseceduc.length > 0 && dataclient.pagaduria === 'FODE VALLE'">
+        <!-- PAGADURIA SED VALLE -->
+        <div class="col-md-6" v-if="datamesseceduc.length > 0 && dataclient.pagaduria === 'SEDVALLE'">
           <div class="panel panel-primary mb-3">
             <div class="panel-heading"><b>INFORMACIÃ“N PERSONAL</b></div>
             <div class="panel-body">
@@ -461,8 +461,8 @@
           </div>
         </div>
 
-        <!-- PAGADURIA SECCALI -->
-        <div class="col-md-6" v-if="datamesseccali.length > 0 && dataclient.pagaduria === 'SECCALI'">
+        <!-- PAGADURIA SEMCALI -->
+        <div class="col-md-6" v-if="datamessemcali.length > 0 && dataclient.pagaduria === 'SEMCALI'">
           <div class="panel panel-primary mb-3">
             <div class="panel-heading"><b>INFORMACIÃ“N PERSONAL</b></div>
             <div class="panel-body">
@@ -475,26 +475,26 @@
                 </div>
                 <div class="col-6">
                   <b class="panel-label">NUMERO DE DOCUMENTO:</b>
-                  <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                    <p class="panel-value">{{ datamesseccali.nvinc }}</p>
+                  <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                    <p class="panel-value">{{ datamessemcali.nvinc }}</p>
                   </div>
                 </div>
                 <div class="col-6">
                   <b class="panel-label">NOMBRE Y APELLIDO:</b>
-                  <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                    <p class="panel-value">{{ datamesseccali.nomp }}</p>
+                  <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                    <p class="panel-value">{{ datamessemcali.nomp }}</p>
                   </div>
                 </div>
                 <div class="col-6">
                   <b class="panel-label">FECHA DE NACIMIENTO:</b>
-                  <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                    <p class="panel-value">{{ datamesseccali.fecnacimient }}</p>
+                  <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                    <p class="panel-value">{{ datamessemcali.fecnacimient }}</p>
                   </div>
                 </div>
                 <div class="col-6">
                   <b class="panel-label">DIRECCIÃ“N:</b>
-                  <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                    <p class="panel-value">{{ datamesseccali.dir }}</p>
+                  <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                    <p class="panel-value">{{ datamessemcali.dir }}</p>
                   </div>
                 </div>
                 <div class="col-6">
@@ -511,8 +511,8 @@
                 </div>
                 <div class="col-md-6">
                   <b class="panel-label">TELEFONO:</b>
-                  <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                    <p class="panel-value">{{ datamesseccali.tel }}</p>
+                  <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                    <p class="panel-value">{{ datamessemcali.tel }}</p>
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -523,8 +523,8 @@
                 </div>
                 <div class="col-md-6">
                   <b class="panel-label">CORREO:</b>
-                  <div v-for="(datamesseccali, key) in datames" :key="key">
-                    <p class="panel-value">{{ datamesseccali.email }}</p>
+                  <div v-for="(datamessemcali, key) in datames" :key="key">
+                    <p class="panel-value">{{ datamessemcali.email }}</p>
                   </div>
                 </div>
                 <div
@@ -651,16 +651,16 @@
                     <p class="panel-value">{{ datamesfidu.vpension | currency }}</p>
                   </div>
                 </div>
-                <div class="col-6" v-if="dataclient.pagaduria === 'FODE VALLE'">
+                <div class="col-6" v-if="dataclient.pagaduria === 'SEDVALLE'">
                   <b class="panel-label">VALOR INGRESO:</b>
                   <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
                     <p class="panel-value">{{ datamesseceduc.vpension | currency }}</p>
                   </div>
                 </div>
-                <div class="col-6" v-if="dataclient.pagaduria === 'SECCALI'">
+                <div class="col-6" v-if="dataclient.pagaduria === 'SEMCALI'">
                   <b class="panel-label">VALOR INGRESO:</b>
-                  <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                    <p class="panel-value">{{ datamesseccali.vingreso | currency }}</p>
+                  <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                    <p class="panel-value">{{ datamessemcali.vingreso | currency }}</p>
                   </div>
                 </div>
                 <!-- VALOR SALUD -->
@@ -698,80 +698,80 @@
                   </div>
                 </div>
                 <!-- FECHA INGRESO -->
-                <div class="col-6" v-if="dataclient.pagaduria === 'FODE VALLE'">
+                <div class="col-6" v-if="dataclient.pagaduria === 'SEDVALLE'">
                   <b class="panel-label">FECHA INGRESO:</b>
                   <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
                     <p class="panel-value">{{ datamesseceduc.fechingr }}</p>
                   </div>
                 </div>
-                <div class="col-6" v-if="dataclient.pagaduria === 'SECCALI'">
+                <div class="col-6" v-if="dataclient.pagaduria === 'SEMCALI'">
                   <b class="panel-label">FECHA INGRESO:</b>
-                  <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                    <p class="panel-value">{{ datamesseccali.fingr }}</p>
+                  <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                    <p class="panel-value">{{ datamessemcali.fingr }}</p>
                   </div>
                 </div>
                 <!-- AREA DE DESEMPEÃ‘O -->
-                <div class="col-6" v-if="dataclient.pagaduria === 'FODE VALLE'">
+                <div class="col-6" v-if="dataclient.pagaduria === 'SEDVALLE'">
                   <b class="panel-label">AREA DE DESEMPEÃ‘O:</b>
                   <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
                     <p class="panel-value">{{ datamesseceduc.esquema }}</p>
                   </div>
                 </div>
-                <div class="col-6" v-if="dataclient.pagaduria === 'SECCALI'">
+                <div class="col-6" v-if="dataclient.pagaduria === 'SEMCALI'">
                   <b class="panel-label">AREA DE DESEMPEÃ‘O:</b>
-                  <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                    <p class="panel-value">{{ datamesseccali.esquema }}</p>
+                  <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                    <p class="panel-value">{{ datamessemcali.esquema }}</p>
                   </div>
                 </div>
                 <!-- CARGO -->
-                <div class="col-6" v-if="dataclient.pagaduria === 'FODE VALLE'">
+                <div class="col-6" v-if="dataclient.pagaduria === 'SEDVALLE'">
                   <b class="panel-label">CARGO:</b>
                   <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
                     <p class="panel-value">{{ datamesseceduc.cargo }}</p>
                   </div>
                 </div>
-                <div class="col-6" v-if="dataclient.pagaduria === 'SECCALI'">
+                <div class="col-6" v-if="dataclient.pagaduria === 'SEMCALI'">
                   <b class="panel-label">CARGO:</b>
-                  <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                    <p class="panel-value">{{ datamesseccali.cargo }}</p>
+                  <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                    <p class="panel-value">{{ datamessemcali.cargo }}</p>
                   </div>
                 </div>
                 <!-- FECHA VINVULACION -->
-                <div class="col-6" v-if="dataclient.pagaduria === 'FODE VALLE'">
+                <div class="col-6" v-if="dataclient.pagaduria === 'SEDVALLE'">
                   <b class="panel-label">FECHA VINCULACIÃ“N:</b>
                   <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
                     <p class="panel-value">{{ datamesseceduc.fecnombr }}</p>
                   </div>
                 </div>
-                <div class="col-6" v-if="dataclient.pagaduria === 'SECCALI'">
+                <div class="col-6" v-if="dataclient.pagaduria === 'SEMCALI'">
                   <b class="panel-label">FECHA VINCULACIÃ“N:</b>
-                  <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                    <p class="panel-value">{{ datamesseccali.fnombramiento }}</p>
+                  <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                    <p class="panel-value">{{ datamessemcali.fnombramiento }}</p>
                   </div>
                 </div>
                 <!-- TIPO VINCULACION  -->
-                <div class="col-6" v-if="dataclient.pagaduria === 'FODE VALLE'">
+                <div class="col-6" v-if="dataclient.pagaduria === 'SEDVALLE'">
                   <b class="panel-label">TIPO VINCULACIÃ“N:</b>
                   <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
                     <p class="panel-value">{{ datamesseceduc.nivcontr }}</p>
                   </div>
                 </div>
                 <!-- ESTADO LABORAL -->
-                <div class="col-6" v-if="dataclient.pagaduria === 'FODE VALLE'">
+                <div class="col-6" v-if="dataclient.pagaduria === 'SEDVALLE'">
                   <b class="panel-label">ESTADO LABORAL:</b>
                   <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
                     <p class="panel-value">{{ datamesseceduc.estlaboral }}</p>
                   </div>
                 </div>
                 <!-- CENTRO DE EDUCACION -->
-                <div class="col-6" v-if="dataclient.pagaduria === 'FODE VALLE'">
+                <div class="col-6" v-if="dataclient.pagaduria === 'SEDVALLE'">
                   <b class="panel-label">CENTRO DE EDUCACIÃ“N:</b>
                   <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
                     <p class="panel-value">{{ datamesseceduc.centrocosto }}</p>
                   </div>
                 </div>
                 <!-- SEDE EN LA QUE PRESTA EL SERVICIO -->
-                <div class="col-6" v-if="dataclient.pagaduria === 'FODE VALLE'">
+                <div class="col-6" v-if="dataclient.pagaduria === 'SEDVALLE'">
                   <b class="panel-label">SEDE EN LA QUE PRESTA EL SERVICIO:</b>
                   <div v-for="(datamesseceduc, key) in datamesseceduc" :key="key">
                     <p class="panel-value">{{ datamesseceduc.sedecoleg }}</p>
@@ -864,7 +864,7 @@
                     <p class="panel-value">{{ descapli.clase }}</p>
                   </div>
                 </div>
-                <div class="col-md-2" v-if="dataclient.pagaduria === 'FODE VALLE'">
+                <div class="col-md-2" v-if="dataclient.pagaduria === 'SEDVALLE'">
                   <b class="panel-label table-text">TIPO ENTIDAD:</b>
                   <div>
                     <p class="panel-value">-</p>
@@ -876,7 +876,7 @@
                     <p class="panel-value">-</p>
                   </div>
                 </div>
-                <div class="col-md-2" v-if="dataclient.pagaduria === 'SECCALI'">
+                <div class="col-md-2" v-if="dataclient.pagaduria === 'SEMCALI'">
                   <b class="panel-label table-text">TIPO ENTIDAD:</b>
                   <div>
                     <p class="panel-value">-</p>
@@ -890,7 +890,7 @@
                     <p class="panel-value">{{ descapli.nomtercero }}</p>
                   </div>
                 </div>
-                <div class="col-md-2" v-if="dataclient.pagaduria === 'FODE VALLE'">
+                <div class="col-md-2" v-if="dataclient.pagaduria === 'SEDVALLE'">
                   <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
                   <div>
                     <p class="panel-value">-</p>
@@ -902,10 +902,10 @@
                     <p class="panel-value">-</p>
                   </div>
                 </div>
-                <div class="col-md-2" v-if="dataclient.pagaduria === 'SECCALI'">
+                <div class="col-md-2" v-if="dataclient.pagaduria === 'SEMCALI'">
                   <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
-                  <div v-for="(deduccionesseccali, key) in deduccionesseccali" :key="key">
-                    <p class="panel-value">{{ deduccionesseccali.centrocostdeduc }}</p>
+                  <div v-for="(deduccionessemcali, key) in deduccionessemcali" :key="key">
+                    <p class="panel-value">{{ deduccionessemcali.centrocostdeduc }}</p>
                   </div>
                 </div>
 
@@ -916,7 +916,7 @@
                     <p class="panel-value">{{ descapli.pagare }}</p>
                   </div>
                 </div>
-                <div class="col-md-2" v-if="dataclient.pagaduria === 'FODE VALLE'">
+                <div class="col-md-2" v-if="dataclient.pagaduria === 'SEDVALLE'">
                   <b class="panel-label table-text">NUMERO PAGARE:</b>
                   <div>
                     <p class="panel-value">-</p>
@@ -928,7 +928,7 @@
                     <p class="panel-value">-</p>
                   </div>
                 </div>
-                <div class="col-md-2" v-if="dataclient.pagaduria === 'SECCALI'">
+                <div class="col-md-2" v-if="dataclient.pagaduria === 'SEMCALI'">
                   <b class="panel-label table-text">NUMERO PAGARE:</b>
                   <div>
                     <p class="panel-value">-</p>
@@ -942,7 +942,7 @@
                     <p class="panel-value">{{ descapli.vaplicado | currency }}</p>
                   </div>
                 </div>
-                <div class="col-md-2" v-if="dataclient.pagaduria === 'FODE VALLE'">
+                <div class="col-md-2" v-if="dataclient.pagaduria === 'SEDVALLE'">
                   <b class="panel-label table-text">CUOTA:</b>
                   <div>
                     <p class="panel-value">-</p>
@@ -954,10 +954,10 @@
                     <p class="panel-value">-</p>
                   </div>
                 </div>
-                <div class="col-md-2" v-if="dataclient.pagaduria === 'SECCALI'">
+                <div class="col-md-2" v-if="dataclient.pagaduria === 'SEMCALI'">
                   <b class="panel-label table-text">CUOTA:</b>
-                  <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                    <p class="panel-value">{{ datamesseccali.valordeduc | currency }}</p>
+                  <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                    <p class="panel-value">{{ datamessemcali.valordeduc | currency }}</p>
                   </div>
                 </div>
 
@@ -968,7 +968,7 @@
                     <p class="panel-value">{{ descapli.fgrab }}</p>
                   </div>
                 </div>
-                <div class="col-md-2" v-if="dataclient.pagaduria === 'FODE VALLE'">
+                <div class="col-md-2" v-if="dataclient.pagaduria === 'SEDVALLE'">
                   <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
                   <div>
                     <p class="panel-value">-</p>
@@ -980,7 +980,7 @@
                     <p class="panel-value">-</p>
                   </div>
                 </div>
-                <div class="col-md-2" v-if="dataclient.pagaduria === 'SECCALI'">
+                <div class="col-md-2" v-if="dataclient.pagaduria === 'SEMCALI'">
                   <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
                   <div>
                     <p class="panel-value">-</p>
@@ -994,7 +994,7 @@
                     <p class="panel-value">{{ descapli.nonentant }}</p>
                   </div>
                 </div>
-                <div class="col-md-2" v-if="dataclient.pagaduria === 'FODE VALLE'">
+                <div class="col-md-2" v-if="dataclient.pagaduria === 'SEDVALLE'">
                   <b class="panel-label table-text">NOMBRE ENTIDAD CEDIENTE:</b>
                   <div>
                     <p class="panel-value">-</p>
@@ -1006,7 +1006,7 @@
                     <p class="panel-value">-</p>
                   </div>
                 </div>
-                <div class="col-md-2" v-if="dataclient.pagaduria === 'SECCALI'">
+                <div class="col-md-2" v-if="dataclient.pagaduria === 'SEMCALI'">
                   <b class="panel-label table-text">NOMBRE ENTIDAD CEDIENTE:</b>
                   <div>
                     <p class="panel-value">-</p>
@@ -1029,7 +1029,7 @@
                     <p class="panel-value">{{ descapli.vtotal | currency }}</p>
                   </div>
                 </div>
-                <!-- <div class="col-md-2" v-if="dataclient.pagaduria === 'FODE VALLE'">
+                <!-- <div class="col-md-2" v-if="dataclient.pagaduria === 'SEDVALLE'">
                                     <b class="panel-label table-text">VALOR TOTAL DEUDA:</b>
                                     <div>
                                         <p class="panel-value">-</p>
@@ -1058,7 +1058,7 @@
                     <p class="panel-value">{{ descapli.vpagado | currency }}</p>
                   </div>
                 </div>
-                <!--<div class="col-md-2" v-if="dataclient.pagaduria === 'FODE VALLE'">
+                <!--<div class="col-md-2" v-if="dataclient.pagaduria === 'SEDVALLE'">
                                     <b class="panel-label table-text">VALOR PAGADO DEUDA:</b>
                                     <div>
                                         <p class="panel-value">-</p>
@@ -1109,7 +1109,7 @@
                     <p class="panel-value">{{ descnoap.nomtercero }}</p>
                   </div>
                 </div>
-                <div class="col-md-2" v-if="dataclient.pagaduria === 'FODE VALLE'">
+                <div class="col-md-2" v-if="dataclient.pagaduria === 'SEDVALLE'">
                   <b class="panel-label table-text">NOMBRE ENTIDAD ACTUAL:</b>
                   <div v-for="(embargosseceduc, key) in embargosseceduc" :key="key">
                     <p class="panel-value">{{ embargosseceduc.ndeman }}</p>
@@ -1121,10 +1121,10 @@
                     <p class="panel-value">-</p>
                   </div>
                 </div>
-                <div class="col-2" v-if="dataclient.pagaduria === 'SECCALI'">
+                <div class="col-2" v-if="dataclient.pagaduria === 'SEMCALI'">
                   <b class="panel-label table-text">NOMBRE ENTIDAD ACTUAL:</b>
-                  <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-                    <p class="panel-value">{{ embargosseccali.entidaddeman }}</p>
+                  <div v-for="(embargossemcali, key) in embargossemcali" :key="key">
+                    <p class="panel-value">{{ embargossemcali.entidaddeman }}</p>
                   </div>
                 </div>
 
@@ -1135,7 +1135,7 @@
                     <p class="panel-value">{{ descnoap.pagare }}</p>
                   </div>
                 </div>
-                <div class="col-md-2" v-if="dataclient.pagaduria === 'FODE VALLE'">
+                <div class="col-md-2" v-if="dataclient.pagaduria === 'SEDVALLE'">
                   <b class="panel-label table-text">NUMERO DE PAGARE:</b>
                   <div v-for="(embargosseceduc, key) in embargosseceduc" :key="key">
                     <p class="panel-value">{{ embargosseceduc.nitdeman }}</p>
@@ -1147,10 +1147,10 @@
                     <p class="panel-value">-</p>
                   </div>
                 </div>
-                <div class="col-md-2" v-if="dataclient.pagaduria === 'SECCALI'">
+                <div class="col-md-2" v-if="dataclient.pagaduria === 'SEMCALI'">
                   <b class="panel-label table-text">NUMERO DE PAGARE:</b>
-                  <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-                    <p class="panel-value">{{ embargosseccali.docdeman | currency }}</p>
+                  <div v-for="(embargossemcali, key) in embargossemcali" :key="key">
+                    <p class="panel-value">{{ embargossemcali.docdeman | currency }}</p>
                   </div>
                 </div>
 
@@ -1161,7 +1161,7 @@
                     <p class="panel-value">{{ descnoap.vfijo | currency }}</p>
                   </div>
                 </div>
-                <div class="col-md-2" v-if="dataclient.pagaduria === 'FODE VALLE'">
+                <div class="col-md-2" v-if="dataclient.pagaduria === 'SEDVALLE'">
                   <b class="panel-label table-text">CUOTA DEUDA:</b>
                   <div v-for="(embargosseceduc, key) in embargosseceduc" :key="key">
                     <p class="panel-value">{{ embargosseceduc.temb | currency }}</p>
@@ -1173,10 +1173,10 @@
                     <p class="panel-value">-</p>
                   </div>
                 </div>
-                <div class="col-md-2" v-if="dataclient.pagaduria === 'SECCALI'">
+                <div class="col-md-2" v-if="dataclient.pagaduria === 'SEMCALI'">
                   <b class="panel-label table-text">CUOTA DEUDA:</b>
-                  <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-                    <p class="panel-value">{{ embargosseccali.temb | currency }}</p>
+                  <div v-for="(embargossemcali, key) in embargossemcali" :key="key">
+                    <p class="panel-value">{{ embargossemcali.temb | currency }}</p>
                   </div>
                 </div>
 
@@ -1187,7 +1187,7 @@
                     <p class="panel-value">{{ descnoap.fgrab }}</p>
                   </div>
                 </div>
-                <div class="col-md-2" v-if="dataclient.pagaduria === 'FODE VALLE'">
+                <div class="col-md-2" v-if="dataclient.pagaduria === 'SEDVALLE'">
                   <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
                   <div v-for="(embargosseceduc, key) in embargosseceduc" :key="key">
                     <p class="panel-value">{{ embargosseceduc.finiemb }}</p>
@@ -1199,10 +1199,10 @@
                     <p class="panel-value">-</p>
                   </div>
                 </div>
-                <div class="col-2" v-if="dataclient.pagaduria === 'SECCALI'">
+                <div class="col-2" v-if="dataclient.pagaduria === 'SEMCALI'">
                   <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
-                  <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-                    <p class="panel-value">{{ embargosseccali.fembini }}</p>
+                  <div v-for="(embargossemcali, key) in embargossemcali" :key="key">
+                    <p class="panel-value">{{ embargossemcali.fembini }}</p>
                   </div>
                 </div>
 
@@ -1213,7 +1213,7 @@
                     <p class="panel-value">{{ descnoap.nonentant }}</p>
                   </div>
                 </div>
-                <div class="col-md-2" v-if="dataclient.pagaduria === 'FODE VALLE'">
+                <div class="col-md-2" v-if="dataclient.pagaduria === 'SEDVALLE'">
                   <b class="panel-label table-text">NOMBRE ENTIDAD CEDIENTE:</b>
                   <div>
                     <p class="panel-value">-</p>
@@ -1225,7 +1225,7 @@
                     <p class="panel-value">-</p>
                   </div>
                 </div>
-                <div class="col-md-2" v-if="dataclient.pagaduria === 'SECCALI'">
+                <div class="col-md-2" v-if="dataclient.pagaduria === 'SEMCALI'">
                   <b class="panel-label table-text">NOMBRE ENTIDAD CEDIENTE:</b>
                   <div>
                     <p class="panel-value">-</p>
@@ -1290,7 +1290,7 @@
                     <p class="panel-value">{{ descnoap.Incon }}</p>
                   </div>
                 </div>
-                <div class="col-md-2" v-if="dataclient.pagaduria === 'FODE VALLE'">
+                <div class="col-md-2" v-if="dataclient.pagaduria === 'SEDVALLE'">
                   <b class="panel-label table-text">INCONSISTENCIA:</b>
                   <div v-for="(embargosseceduc, key) in embargosseceduc" :key="key">
                     <p class="panel-value">{{ embargosseceduc.memb }}</p>
@@ -1302,10 +1302,10 @@
                     <p class="panel-value">-</p>
                   </div>
                 </div>
-                <div class="col-md-2" v-if="dataclient.pagaduria === 'SECCALI'">
+                <div class="col-md-2" v-if="dataclient.pagaduria === 'SEMCALI'">
                   <b class="panel-label table-text">INCONSISTENCIA:</b>
-                  <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-                    <p class="panel-value">{{ embargosseccali.motemb }}</p>
+                  <div v-for="(embargossemcali, key) in embargossemcali" :key="key">
+                    <p class="panel-value">{{ embargossemcali.motemb }}</p>
                   </div>
                 </div>
               </div>
@@ -1877,12 +1877,12 @@
                 </div>
                 <div class="col-12 tables-space">
                   <b class="panel-label">OTRO POSIBLE INGRESO 2:</b>
-                  <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                    <p class="panel-value">{{ datamesseccali.vingreso | currency }}</p>
+                  <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                    <p class="panel-value">{{ datamessemcali.vingreso | currency }}</p>
                   </div>
                   <button type="button" class="btn btn-primary" v-on:click="dataPlusSeca = true">Ver mas</button>
                   <button type="button" class="btn btn-secondary" v-on:click="dataPlusSeca = false">Cerrar</button>
-                  <!-- Mostrando respuesta nueva en btn Ver mas SECCALI -->
+                  <!-- Mostrando respuesta nueva en btn Ver mas SEMCALI -->
                   <div class="col-12 tables-space" v-if="dataPlusSeca">
                     <div class="row">
                       <div class="col-6">
@@ -1900,26 +1900,26 @@
                               </div>
                               <div class="col-6">
                                 <b class="panel-label">NUMERO DE DOCUMENTO:</b>
-                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                                  <p class="panel-value">{{ datamesseccali.nvinc }}</p>
+                                <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                                  <p class="panel-value">{{ datamessemcali.nvinc }}</p>
                                 </div>
                               </div>
                               <div class="col-6">
                                 <b class="panel-label">NOMBRE Y APELLIDO:</b>
-                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                                  <p class="panel-value">{{ datamesseccali.nomp }}</p>
+                                <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                                  <p class="panel-value">{{ datamessemcali.nomp }}</p>
                                 </div>
                               </div>
                               <div class="col-6">
                                 <b class="panel-label">FECHA DE NACIMIENTO:</b>
-                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                                  <p class="panel-value">{{ datamesseccali.fecnacimient }}</p>
+                                <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                                  <p class="panel-value">{{ datamessemcali.fecnacimient }}</p>
                                 </div>
                               </div>
                               <div class="col-6">
                                 <b class="panel-label">DIRECCIÃ“N:</b>
-                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                                  <p class="panel-value">{{ datamesseccali.dir }}</p>
+                                <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                                  <p class="panel-value">{{ datamessemcali.dir }}</p>
                                 </div>
                               </div>
                               <div class="col-6">
@@ -1936,8 +1936,8 @@
                               </div>
                               <div class="col-md-6">
                                 <b class="panel-label">TELEFONO:</b>
-                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                                  <p class="panel-value">{{ datamesseccali.tel }}</p>
+                                <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                                  <p class="panel-value">{{ datamessemcali.tel }}</p>
                                 </div>
                               </div>
                               <div class="col-md-6">
@@ -1948,8 +1948,8 @@
                               </div>
                               <div class="col-md-6">
                                 <b class="panel-label">CORREO:</b>
-                                <div v-for="(datamesseccali, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datamesseccali.email }}</p>
+                                <div v-for="(datamessemcali, key) in datames" :key="key">
+                                  <p class="panel-value">{{ datamessemcali.email }}</p>
                                 </div>
                               </div>
                               <div
@@ -2056,33 +2056,33 @@
 
                               <div class="col-6">
                                 <b class="panel-label">VALOR INGRESO:</b>
-                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                                  <p class="panel-value">{{ datamesseccali.vingreso | currency }}</p>
+                                <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                                  <p class="panel-value">{{ datamessemcali.vingreso | currency }}</p>
                                 </div>
                               </div>
 
                               <div class="col-6">
                                 <b class="panel-label">FECHA INGRESO:</b>
-                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                                  <p class="panel-value">{{ datamesseccali.fingr }}</p>
+                                <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                                  <p class="panel-value">{{ datamessemcali.fingr }}</p>
                                 </div>
                               </div>
                               <div class="col-6">
                                 <b class="panel-label">AREA DE DESEMPEÃ‘O:</b>
-                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                                  <p class="panel-value">{{ datamesseccali.esquema }}</p>
+                                <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                                  <p class="panel-value">{{ datamessemcali.esquema }}</p>
                                 </div>
                               </div>
                               <div class="col-6">
                                 <b class="panel-label">CARGO:</b>
-                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                                  <p class="panel-value">{{ datamesseccali.cargo }}</p>
+                                <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                                  <p class="panel-value">{{ datamessemcali.cargo }}</p>
                                 </div>
                               </div>
                               <div class="col-6">
                                 <b class="panel-label">FECHA VINCULACIÃ“N:</b>
-                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                                  <p class="panel-value">{{ datamesseccali.fnombramiento }}</p>
+                                <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                                  <p class="panel-value">{{ datamessemcali.fnombramiento }}</p>
                                 </div>
                               </div>
                             </div>
@@ -2104,8 +2104,8 @@
 
                             <div class="col-md-2">
                               <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
-                              <div v-for="(deduccionesseccali, key) in deduccionesseccali" :key="key">
-                                <p class="panel-value">{{ deduccionesseccali.centrocostdeduc }}</p>
+                              <div v-for="(deduccionessemcali, key) in deduccionessemcali" :key="key">
+                                <p class="panel-value">{{ deduccionessemcali.centrocostdeduc }}</p>
                               </div>
                             </div>
 
@@ -2118,8 +2118,8 @@
 
                             <div class="col-md-2">
                               <b class="panel-label table-text">CUOTA:</b>
-                              <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                                <p class="panel-value">{{ datamesseccali.valordeduc | currency }}</p>
+                              <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                                <p class="panel-value">{{ datamessemcali.valordeduc | currency }}</p>
                               </div>
                             </div>
 
@@ -2147,29 +2147,29 @@
                           <div class="row">
                             <div class="col-2">
                               <b class="panel-label table-text">NOMBRE ENTIDAD ACTUAL:</b>
-                              <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-                                <p class="panel-value">{{ embargosseccali.entidaddeman }}</p>
+                              <div v-for="(embargossemcali, key) in embargossemcali" :key="key">
+                                <p class="panel-value">{{ embargossemcali.entidaddeman }}</p>
                               </div>
                             </div>
 
                             <div class="col-md-2">
                               <b class="panel-label table-text">NUMERO DE PAGARE:</b>
-                              <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-                                <p class="panel-value">{{ embargosseccali.docdeman | currency }}</p>
+                              <div v-for="(embargossemcali, key) in embargossemcali" :key="key">
+                                <p class="panel-value">{{ embargossemcali.docdeman | currency }}</p>
                               </div>
                             </div>
 
                             <div class="col-2">
                               <b class="panel-label table-text">CUOTA DEUDA:</b>
-                              <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-                                <p class="panel-value">{{ embargosseccali.temb | currency }}</p>
+                              <div v-for="(embargossemcali, key) in embargossemcali" :key="key">
+                                <p class="panel-value">{{ embargossemcali.temb | currency }}</p>
                               </div>
                             </div>
 
                             <div class="col-2">
                               <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
-                              <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-                                <p class="panel-value">{{ embargosseccali.fembini }}</p>
+                              <div v-for="(embargossemcali, key) in embargossemcali" :key="key">
+                                <p class="panel-value">{{ embargossemcali.fembini }}</p>
                               </div>
                             </div>
 
@@ -2182,8 +2182,8 @@
 
                             <div class="col-2">
                               <b class="panel-label table-text">INCONSISTENCIA:</b>
-                              <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-                                <p class="panel-value">{{ embargosseccali.fembini }}</p>
+                              <div v-for="(embargossemcali, key) in embargossemcali" :key="key">
+                                <p class="panel-value">{{ embargossemcali.fembini }}</p>
                               </div>
                             </div>
                           </div>
@@ -2766,12 +2766,12 @@
 
                 <div class="col-12 tables-space">
                   <b class="panel-label">OTRO POSIBLE INGRESO 2:</b>
-                  <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                    <p class="panel-value">{{ datamesseccali.vingreso | currency }}</p>
+                  <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                    <p class="panel-value">{{ datamessemcali.vingreso | currency }}</p>
                   </div>
                   <button type="button" class="btn btn-primary" v-on:click="dataPlusSeca = true">Ver mas</button>
                   <button type="button" class="btn btn-secondary" v-on:click="dataPlusSeca = false">Cerrar</button>
-                  <!-- Mostrando respuesta nueva en btn Ver mas SECCALI -->
+                  <!-- Mostrando respuesta nueva en btn Ver mas SEMCALI -->
                   <div class="col-12 tables-space" v-if="dataPlusSeca">
                     <div class="row">
                       <div class="col-6">
@@ -2789,26 +2789,26 @@
                               </div>
                               <div class="col-6">
                                 <b class="panel-label">NUMERO DE DOCUMENTO:</b>
-                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                                  <p class="panel-value">{{ datamesseccali.nvinc }}</p>
+                                <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                                  <p class="panel-value">{{ datamessemcali.nvinc }}</p>
                                 </div>
                               </div>
                               <div class="col-6">
                                 <b class="panel-label">NOMBRE Y APELLIDO:</b>
-                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                                  <p class="panel-value">{{ datamesseccali.nomp }}</p>
+                                <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                                  <p class="panel-value">{{ datamessemcali.nomp }}</p>
                                 </div>
                               </div>
                               <div class="col-6">
                                 <b class="panel-label">FECHA DE NACIMIENTO:</b>
-                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                                  <p class="panel-value">{{ datamesseccali.fecnacimient }}</p>
+                                <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                                  <p class="panel-value">{{ datamessemcali.fecnacimient }}</p>
                                 </div>
                               </div>
                               <div class="col-6">
                                 <b class="panel-label">DIRECCIÃ“N:</b>
-                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                                  <p class="panel-value">{{ datamesseccali.dir }}</p>
+                                <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                                  <p class="panel-value">{{ datamessemcali.dir }}</p>
                                 </div>
                               </div>
                               <div class="col-6">
@@ -2825,8 +2825,8 @@
                               </div>
                               <div class="col-md-6">
                                 <b class="panel-label">TELEFONO:</b>
-                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                                  <p class="panel-value">{{ datamesseccali.tel }}</p>
+                                <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                                  <p class="panel-value">{{ datamessemcali.tel }}</p>
                                 </div>
                               </div>
                               <div class="col-md-6">
@@ -2837,8 +2837,8 @@
                               </div>
                               <div class="col-md-6">
                                 <b class="panel-label">CORREO:</b>
-                                <div v-for="(datamesseccali, key) in datames" :key="key">
-                                  <p class="panel-value">{{ datamesseccali.email }}</p>
+                                <div v-for="(datamessemcali, key) in datames" :key="key">
+                                  <p class="panel-value">{{ datamessemcali.email }}</p>
                                 </div>
                               </div>
                               <div
@@ -2945,33 +2945,33 @@
 
                               <div class="col-6">
                                 <b class="panel-label">VALOR INGRESO:</b>
-                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                                  <p class="panel-value">{{ datamesseccali.vingreso | currency }}</p>
+                                <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                                  <p class="panel-value">{{ datamessemcali.vingreso | currency }}</p>
                                 </div>
                               </div>
 
                               <div class="col-6">
                                 <b class="panel-label">FECHA INGRESO:</b>
-                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                                  <p class="panel-value">{{ datamesseccali.fingr }}</p>
+                                <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                                  <p class="panel-value">{{ datamessemcali.fingr }}</p>
                                 </div>
                               </div>
                               <div class="col-6">
                                 <b class="panel-label">AREA DE DESEMPEÃ‘O:</b>
-                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                                  <p class="panel-value">{{ datamesseccali.esquema }}</p>
+                                <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                                  <p class="panel-value">{{ datamessemcali.esquema }}</p>
                                 </div>
                               </div>
                               <div class="col-6">
                                 <b class="panel-label">CARGO:</b>
-                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                                  <p class="panel-value">{{ datamesseccali.cargo }}</p>
+                                <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                                  <p class="panel-value">{{ datamessemcali.cargo }}</p>
                                 </div>
                               </div>
                               <div class="col-6">
                                 <b class="panel-label">FECHA VINCULACIÃ“N:</b>
-                                <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                                  <p class="panel-value">{{ datamesseccali.fnombramiento }}</p>
+                                <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                                  <p class="panel-value">{{ datamessemcali.fnombramiento }}</p>
                                 </div>
                               </div>
                             </div>
@@ -2993,8 +2993,8 @@
 
                             <div class="col-md-2">
                               <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
-                              <div v-for="(deduccionesseccali, key) in deduccionesseccali" :key="key">
-                                <p class="panel-value">{{ deduccionesseccali.centrocostdeduc }}</p>
+                              <div v-for="(deduccionessemcali, key) in deduccionessemcali" :key="key">
+                                <p class="panel-value">{{ deduccionessemcali.centrocostdeduc }}</p>
                               </div>
                             </div>
 
@@ -3007,8 +3007,8 @@
 
                             <div class="col-md-2">
                               <b class="panel-label table-text">CUOTA:</b>
-                              <div v-for="(datamesseccali, key) in datamesseccali" :key="key">
-                                <p class="panel-value">{{ datamesseccali.valordeduc | currency }}</p>
+                              <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
+                                <p class="panel-value">{{ datamessemcali.valordeduc | currency }}</p>
                               </div>
                             </div>
 
@@ -3036,29 +3036,29 @@
                           <div class="row">
                             <div class="col-2">
                               <b class="panel-label table-text">NOMBRE ENTIDAD ACTUAL:</b>
-                              <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-                                <p class="panel-value">{{ embargosseccali.entidaddeman }}</p>
+                              <div v-for="(embargossemcali, key) in embargossemcali" :key="key">
+                                <p class="panel-value">{{ embargossemcali.entidaddeman }}</p>
                               </div>
                             </div>
 
                             <div class="col-md-2">
                               <b class="panel-label table-text">NUMERO DE PAGARE:</b>
-                              <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-                                <p class="panel-value">{{ embargosseccali.docdeman | currency }}</p>
+                              <div v-for="(embargossemcali, key) in embargossemcali" :key="key">
+                                <p class="panel-value">{{ embargossemcali.docdeman | currency }}</p>
                               </div>
                             </div>
 
                             <div class="col-2">
                               <b class="panel-label table-text">CUOTA DEUDA:</b>
-                              <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-                                <p class="panel-value">{{ embargosseccali.temb | currency }}</p>
+                              <div v-for="(embargossemcali, key) in embargossemcali" :key="key">
+                                <p class="panel-value">{{ embargossemcali.temb | currency }}</p>
                               </div>
                             </div>
 
                             <div class="col-2">
                               <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
-                              <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-                                <p class="panel-value">{{ embargosseccali.fembini }}</p>
+                              <div v-for="(embargossemcali, key) in embargossemcali" :key="key">
+                                <p class="panel-value">{{ embargossemcali.fembini }}</p>
                               </div>
                             </div>
 
@@ -3071,8 +3071,8 @@
 
                             <div class="col-2">
                               <b class="panel-label table-text">INCONSISTENCIA:</b>
-                              <div v-for="(embargosseccali, key) in embargosseccali" :key="key">
-                                <p class="panel-value">{{ embargosseccali.fembini }}</p>
+                              <div v-for="(embargossemcali, key) in embargossemcali" :key="key">
+                                <p class="panel-value">{{ embargossemcali.fembini }}</p>
                               </div>
                             </div>
                           </div>
@@ -3083,8 +3083,8 @@
                 </div>
               </div>
 
-              <!-- OTROS INGRESOS FODE VALLE -->
-              <div class="row" v-if="dataclient.pagaduria === 'FODE VALLE'">
+              <!-- OTROS INGRESOS SED VALLE -->
+              <div class="row" v-if="dataclient.pagaduria === 'SEDVALLE'">
                 <div class="col-12">
                   <b class="panel-label">OTRO POSIBLE INGRESO 1:</b>
                   <div v-for="(datames, key) in datames" :key="key">
@@ -3619,8 +3619,8 @@
                 </div>
               </div>
 
-              <!-- OTROS INGRESOS SECCALI -->
-              <div class="row" v-if="dataclient.pagaduria === 'SECCALI'">
+              <!-- OTROS INGRESOS SEMCALI -->
+              <div class="row" v-if="dataclient.pagaduria === 'SEMCALI'">
                 <div class="col-12">
                   <b class="panel-label">OTRO POSIBLE INGRESO 1:</b>
                   <div v-for="(datames, key) in datames" :key="key">
@@ -4413,10 +4413,10 @@ export default {
       descnoap: [],
       datamesfidu: [],
       datamesseceduc: [],
-      datamesseccali: [],
-      deduccionesseccali: [],
+      datamessemcali: [],
+      deduccionessemcali: [],
       Descuentossecedu: [],
-      embargosseccali: [],
+      embargossemcali: [],
       embargosseceduc: [],
       id_consulta: null
     };
@@ -4441,11 +4441,11 @@ export default {
       this.getDescnoap();
       this.getDatamesfidu();
       this.getDatamesseceduc();
-      this.getDeduccionesseccali();
+      this.getDeduccionesSemCali();
       this.getDescuentossecedu();
-      this.getEmbargosseccali();
+      this.getEmbargosSemCali();
       this.getEmbargosseceduc();
-      this.getDatamesseccali();
+      this.getDatamesSemCali();
     },
     getDatames() {
       axios.get(`datames/${this.dataclient.doc}`).then(response => {
@@ -4462,10 +4462,10 @@ export default {
         this.datamesseceduc = response.data.data;
       });
     },
-    getDatamesseccali() {
-      axios.post('/consultaDatamesseccali', { doc: this.dataclient.doc }).then(response => {
-        console.log('Esto es datamesseccali', response.data);
-        this.datamesseccali = response.data.data;
+    getDatamesSemCali() {
+      axios.post('/consultaDatamessemcali', { doc: this.dataclient.doc }).then(response => {
+        console.log('Esto es datamessemcali', response.data);
+        this.datamessemcali = response.data.data;
       });
     },
     getFechaVinc() {
@@ -4483,16 +4483,16 @@ export default {
         this.descnoap = response.data;
       });
     },
-    getDeduccionesseccali() {
-      axios.post('/consultaDeduccionesseccali', { doc: this.dataclient.doc }).then(response => {
-        console.log('Esto es deduccionesseccali', response.data);
-        this.deduccionesseccali = response.data.data;
+    getDeduccionesSemCali() {
+      axios.post('/consultaDeduccionessemcali', { doc: this.dataclient.doc }).then(response => {
+        console.log('Esto es deduccionessemcali', response.data);
+        this.deduccionessemcali = response.data.data;
       });
     },
-    getEmbargosseccali() {
-      axios.post('/consultaEmbargosseccali', { doc: this.dataclient.doc }).then(response => {
-        console.log('Esto es embargosseccali', response.data);
-        this.embargosseccali = response.data.data;
+    getEmbargosSemCali() {
+      axios.post('/consultaEmbargossemcali', { doc: this.dataclient.doc }).then(response => {
+        console.log('Esto es embargossemcali', response.data);
+        this.embargossemcali = response.data.data;
       });
     },
     getEmbargosseceduc() {

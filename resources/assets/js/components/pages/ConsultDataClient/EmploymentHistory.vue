@@ -23,7 +23,6 @@
                  FOPEP
           ==============================-->
           <template v-if="datames && pagaduriaType == 'FOPEP'">
-
             <div class="col-6">
               <b class="panel-label">TIPO PENSION:</b>
               <div>
@@ -62,24 +61,19 @@
                 <p class="panel-value">{{ datames.venbargos | currency }}</p>
               </div>
             </div>
-
           </template>
 
-
           <!--============================
-                FODE VALLE
+                SEDVALLE
           ==============================-->
 
-          <template v-if="datamesseceduc && pagaduriaType == 'FODE VALLE'">
-
-
+          <template v-if="datamesseceduc && pagaduriaType == 'SEDVALLE'">
             <div class="col-6">
               <b class="panel-label">VALOR INGRESO:</b>
               <div>
                 <p class="panel-value">{{ datamesseceduc.vpension | currency }}</p>
               </div>
             </div>
-
 
             <div class="col-6">
               <b class="panel-label">FECHA INGRESO:</b>
@@ -136,96 +130,91 @@
                 <p class="panel-value">{{ datamesseceduc.sedecoleg }}</p>
               </div>
             </div>
-
           </template>
 
           <!--============================
                FIDUPREVISORA
           ==============================-->
-          <template v-if="datamesfidu  && pagaduriaType == 'FIDUPREVISORA'">
-
+          <template v-if="datamesFidu && pagaduriaType == 'FIDUPREVISORA'">
             <div class="col-6">
               <b class="panel-label">VALOR INGRESO:</b>
               <div>
-                <p class="panel-value">{{ datamesfidu.vpension  | currency }}</p>
+                <p class="panel-value">{{ datamesFidu.vpension | currency }}</p>
               </div>
             </div>
 
             <div class="col-6">
               <b class="panel-label">VINCULACION:</b>
               <div>
-                <p class="panel-value">{{ datamesfidu.vinc }}</p>
+                <p class="panel-value">{{ datamesFidu.vinc }}</p>
               </div>
             </div>
 
             <div class="col-6">
               <b class="panel-label">FECHA DE PAGO PENSION:</b>
               <div>
-                <p class="panel-value">{{ datamesfidu.fechpago }}</p>
+                <p class="panel-value">{{ datamesFidu.fechpago }}</p>
               </div>
             </div>
 
             <div class="col-6">
               <b class="panel-label">VALOR DESCUENTO:</b>
               <div>
-                <p class="panel-value">{{ datamesfidu.vdescbruto | currency }}</p>
+                <p class="panel-value">{{ datamesFidu.vdescbruto | currency }}</p>
               </div>
             </div>
           </template>
 
-
           <!--============================
-            DATAMESCALI SECCALI
+            DATAMESCALI SEMCALI
           ==============================-->
-          <template v-if="datamesseccali && pagaduriaType == 'SECCALI'">
-
+          <template v-if="datamessemcali && pagaduriaType == 'SEMCALI'">
             <div class="col-6">
               <b class="panel-label">VALOR INGRESO:</b>
               <div>
-                <p class="panel-value">{{ datamesseccali.vingreso | currency }}</p>
+                <p class="panel-value">{{ datamessemcali.vingreso | currency }}</p>
               </div>
             </div>
 
             <div class="col-6">
               <b class="panel-label">FECHA INGRESO:</b>
               <div>
-                <p class="panel-value">{{ datamesseccali.fingr }}</p>
+                <p class="panel-value">{{ datamessemcali.fingr }}</p>
               </div>
             </div>
 
             <div class="col-6">
               <b class="panel-label">FECHA VINCULACION:</b>
               <div>
-                <p class="panel-value">{{ datamesseccali.fnombramiento }}</p>
+                <p class="panel-value">{{ datamessemcali.fnombramiento }}</p>
               </div>
             </div>
 
             <div class="col-6">
               <b class="panel-label">AREA DE DESEMPEÑO:</b>
               <div>
-                <p class="panel-value">{{ datamesseccali.esquema }}</p>
+                <p class="panel-value">{{ datamessemcali.esquema }}</p>
               </div>
             </div>
 
             <div class="col-6">
               <b class="panel-label">CARGO:</b>
               <div>
-                <p class="panel-value">{{ datamesseccali.cargo }}</p>
+                <p class="panel-value">{{ datamessemcali.cargo }}</p>
               </div>
             </div>
           </template>
 
-
           <div
-              class="col-6"
-              v-if="
-                    user.roles_id === 1 ||
-                    user.roles_id === '1' ||
-                    user.roles_id === 4 ||
-                    user.roles_id === '4' ||
-                    user.roles_id === 5 ||
-                    user.roles_id === '5'
-                  "
+            class="col-6"
+            v-if="
+              user.roles_id === 1 ||
+              user.roles_id === '1' ||
+              user.roles_id === 4 ||
+              user.roles_id === '4' ||
+              user.roles_id === 5 ||
+              user.roles_id === '5'
+            "
           >
             <b class="panel-label">FECHA CARGA DATA:</b>
             <div>
@@ -233,15 +222,15 @@
             </div>
           </div>
           <div
-              class="col-6"
-              v-if="
-                    user.roles_id === 1 ||
-                    user.roles_id === '1' ||
-                    user.roles_id === 4 ||
-                    user.roles_id === '4' ||
-                    user.roles_id === 5 ||
-                    user.roles_id === '5'
-                  "
+            class="col-6"
+            v-if="
+              user.roles_id === 1 ||
+              user.roles_id === '1' ||
+              user.roles_id === 4 ||
+              user.roles_id === '4' ||
+              user.roles_id === 5 ||
+              user.roles_id === '5'
+            "
           >
             <b class="panel-label">MES CARGA DATA:</b>
             <div>
@@ -249,15 +238,15 @@
             </div>
           </div>
           <div
-              class="col-6"
-              v-if="
-                    user.roles_id === 1 ||
-                    user.roles_id === '1' ||
-                    user.roles_id === 4 ||
-                    user.roles_id === '4' ||
-                    user.roles_id === 5 ||
-                    user.roles_id === '5'
-                  "
+            class="col-6"
+            v-if="
+              user.roles_id === 1 ||
+              user.roles_id === '1' ||
+              user.roles_id === 4 ||
+              user.roles_id === '4' ||
+              user.roles_id === 5 ||
+              user.roles_id === '5'
+            "
           >
             <b class="panel-label">AÑO CARGA DATA:</b>
             <div>
@@ -272,14 +261,10 @@
 
 <script>
 export default {
-  name: "EmploymentHistory",
-  props: ['fechavinc', 'pagaduriaType', 'datames', 'datamesseceduc', 'datamesfidu', 'datamesseccali', 'user'],
-  created() {
-
-  },
-}
+  name: 'EmploymentHistory',
+  props: ['fechavinc', 'pagaduriaType', 'datames', 'datamesseceduc', 'datamesFidu', 'datamessemcali', 'user'],
+  created() {}
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

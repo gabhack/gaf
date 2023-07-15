@@ -2,27 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\DataMes;
+use App\DatamesFopep;
 use App\Imports\DataMesImport;
 use Illuminate\Http\Request;
 use Excel;
 
 class DataMesController extends Controller
 {
-  public function import (Request $request){
-    set_time_limit(0);
-    if($request->hasFile('file')){
-      $path = $request->file('file')->getRealPath();
-      $data = Excel::import(new DataMesImport, request()->file('file'));
-      return response()->json(['message'=>'Importación Realizada'],200);
-    }else{
-      return response()->json(['message'=>'Debe Seleccionar un archivo'],400);
+    public function import(Request $request)
+    {
+        set_time_limit(0);
+        if ($request->hasFile('file')) {
+            $path = $request->file('file')->getRealPath();
+            $data = Excel::import(new DataMesImport, request()->file('file'));
+            return response()->json(['message' => 'Importación Realizada'], 200);
+        } else {
+            return response()->json(['message' => 'Debe Seleccionar un archivo'], 400);
+        }
     }
-  }
-    public function dumpDataMes(){
-        DataMes::truncate();
-        return response()->json(['message'=>'Datos de tabla DataMes Borrada'],200);
+
+    public function dumpDataMes()
+    {
+        DatamesFopep::truncate();
+        return response()->json(['message' => 'Datos de tabla DatamesFopep Borrada'], 200);
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -30,7 +34,7 @@ class DataMesController extends Controller
      */
     public function index(Request $request)
     {
-
+        //
     }
 
     /**
@@ -57,22 +61,22 @@ class DataMesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\DataMes  $dataMes
+     * @param  \App\DatamesFopep  $datamesFopep
      * @return \Illuminate\Http\Response
      */
     public function show($doc)
     {
-        $datames = DataMes::where('doc',$doc)->first();
+        $datames = DatamesFopep::where('doc', $doc)->first();
         return response()->json($datames);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\DataMes  $dataMes
+     * @param  \App\DatamesFopep  $datamesFopep
      * @return \Illuminate\Http\Response
      */
-    public function edit(DataMes $dataMes)
+    public function edit(DatamesFopep $datamesFopep)
     {
         //
     }
@@ -81,10 +85,10 @@ class DataMesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\DataMes  $dataMes
+     * @param  \App\DatamesFopep  $datamesFopep
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, DataMes $dataMes)
+    public function update(Request $request, DatamesFopep $datamesFopep)
     {
         //
     }
@@ -92,10 +96,10 @@ class DataMesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\DataMes  $dataMes
+     * @param  \App\DatamesFopep  $datamesFopep
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DataMes $dataMes)
+    public function destroy(DatamesFopep $datamesFopep)
     {
         //
     }
