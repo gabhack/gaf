@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Cifin;
-use Auth;
 use App\dataCotizer;
+use Auth;
+use Carbon\Carbon;
+use DOMDocument;
 use Illuminate\Http\Request;
 
 class CifinController extends Controller
@@ -110,6 +112,10 @@ class CifinController extends Controller
         $soapPassword = env('CIFIN_PASSWORD'); // password
         $url = env('CIFIN_URL') . "?wsdl";
 
+        $hoy = date("Y-m-d");
+        $hora = date("H:i:s");
+        $fecha = $hoy . 'T' . $hora;
+
         $xml_post_string = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws/">
             <soapenv:Header/>
                 <soapenv:Body>
@@ -127,6 +133,12 @@ class CifinController extends Controller
                 </ws:consultaXml>
             </soapenv:Body>
         </soapenv:Envelope>';
+
+        $xml_name = $cedula . '_' . Carbon::parse($fecha)->format('d-m-Y') . '.xml';
+
+        $doc = new DOMDocument();
+        $doc->loadXML($xml_post_string);
+        $doc->save('cifinRequest_' . $xml_name);
 
         $headers = array(
             "Content-type: text/xml;charset=\"utf-8\"",
@@ -153,6 +165,12 @@ class CifinController extends Controller
 
         $response = curl_exec($ch);
         curl_close($ch);
+
+        $xml_name = $cedula . '_' . Carbon::parse($fecha)->format('d-m-Y') . '.xml';
+        $doc = new DOMDocument();
+        $doc->loadXML($response);
+        $doc->save('cifinResponse_' . $xml_name);
+
         $array = XmlaPhp::createArray($response);
         $demo = $array['S:Envelope']['S:Body']['ns2:consultaXmlResponse']['return'];
         $resultado = XmlaPhp::createArray($demo);

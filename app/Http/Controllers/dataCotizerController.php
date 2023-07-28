@@ -24,6 +24,7 @@ class dataCotizerController extends Controller
             "lista" => $listaOut,
             "links" => $links
         );
+
         //Parametros de busqueda y filtrado para front
         if (isset($request->busq) && $request->busq !== '') {
             $options['busq'] = $request->busq;
@@ -64,7 +65,6 @@ class dataCotizerController extends Controller
     public function show(dataCotizer $dataCotizer)
     {
         //
-        echo 'hola';
     }
 
     /**
