@@ -5,5 +5,5 @@ HEGO
 @endsection
 
 @section('content')
-<register-credit></register-credit>
+    <register-credit></register-credit>
 @endsection
