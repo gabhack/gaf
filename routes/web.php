@@ -372,9 +372,9 @@ Route::group(['prefix' => 'consultas'], function () {
 
 // Estudios
 Route::group(['prefix' => 'estudios'], function () {
-    Route::get('/', 'EstudiosController@index');
+    Route::get('/', 'EstudiosController@index')->name('hego.estudios');
     //
-    Route::get('/nuevoestudio', 'EstudiosController@paso1');
+    Route::get('/nuevo-estudio', 'EstudiosController@paso1')->name('hego.nuevo-estudio');
     Route::post('/iniciar', 'EstudiosController@iniciar');
     Route::get('/iniciar/{documento}', 'EstudiosController@iniciar');
     Route::post('/guardar', 'EstudiosController@guardar');
@@ -383,6 +383,12 @@ Route::group(['prefix' => 'estudios'], function () {
     Route::post('/actualizar', 'EstudiosController@actualizar');
     //
     Route::get('/borrar/{id}', 'EstudiosController@eliminar');
+
+    Route::get('/tesoreria', 'EstudiosController@tesoreria')->name('hego.tesoreria');
+
+    Route::get('/cartera', 'EstudiosController@cartera')->name('hego.cartera');
+
+    Route::get('/venta-cartera', 'EstudiosController@ventaCartera')->name('hego.venta-cartera');
 });
 
 //Clientes
