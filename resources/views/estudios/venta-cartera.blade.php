@@ -1,7 +1,20 @@
 @extends('layouts.hego')
 
 @section('title')
-    HEGO
+    HEGO | Venta de Cartera
+@endsection
+
+@section('header-content')
+    Venta de Cartera
+@endsection
+
+@section('breadcrumb')
+    <li class="breadcrumb-item">
+        <a href="{{ url('home') }}">
+            <i class="fa fa-dashboard mr-2"></i>Inicio
+        </a>
+    </li>
+    <li class="breadcrumb-item active">Venta de Cartera</li>
 @endsection
 
 @section('panel')
@@ -14,8 +27,8 @@
                             <p class="pt-1 mb-0 font-weight-bold">Fechas:</p>
                         </div>
                         <div class="form-group col-md-1">
-                            <input type="text" class="form-control datepicker" name="filtro[fecha_desde]" id="fecha_desde"
-                                   placeholder="Desde"
+                            <input type="text" class="form-control datepicker" name="filtro[fecha_desde]"
+                                   id="fecha_desde" placeholder="Desde"
                                    value="{{ isset($filtro['fecha_desde']) ? $filtro['fecha_desde'] : '' }}">
                         </div>
                         <div class="form-group">

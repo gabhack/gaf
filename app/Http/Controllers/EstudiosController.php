@@ -45,6 +45,12 @@ class EstudiosController extends Controller
      */
     public function index(Request $request)
     {
+        $options = $this->getOptions($request);
+        return view("estudios/index")->with($options);
+    }
+
+    public function getOptions(Request $request)
+    {
         //Parametros de entrada para busqueda y filtrado
         $search = '';
         $fechadesde = '';
@@ -52,30 +58,37 @@ class EstudiosController extends Controller
         $asesor = array();
         $periodo = '';
         $decision = '';
+
         if (isset($request->busq)) {
             $search = $request->busq;
         }
+
         if (isset($request->filtro['fecha_desde']) && $request->filtro['fecha_desde'] !== '') {
             $fechadesde = $request->filtro['fecha_desde'];
         } else {
             $fechadesde = '1800-01-01';
         }
+
         if (isset($request->filtro['fecha_hasta']) && $request->filtro['fecha_hasta'] !== '') {
             $fechahasta = $request->filtro['fecha_hasta'];
         } else {
             $fechahasta = date("Y-m-d");
         }
+
         if (isset($request->filtro['asesor']) && $request->filtro['asesor'] !== '') {
             $asesor = '';
             $asesor = $request->filtro['asesor'];
         }
+
         if (isset($request->filtro['decision']) && $request->filtro['decision'] !== '') {
             $decision = '';
             $decision = $request->filtro['decision'];
         }
+
         if (isset($request->filtro['periodo']) && $request->filtro['periodo'] !== '') {
             $periodo = $request->filtro['periodo'];
         }
+
         //Query
         $lista = Estudios::orderBy('id', 'desc')
             ->WhereHas('asesor', function ($q) use ($asesor) {
@@ -108,26 +121,33 @@ class EstudiosController extends Controller
             "lista" => $listaOut,
             "links" => $links
         );
-        //Parametros de busqueda y filtrado para front 
+
+        //Parametros de busqueda y filtrado para front
         if (isset($request->busq) && $request->busq !== '') {
             $options['busq'] = $request->busq;
         }
+
         if (isset($request->filtro['fecha_desde']) && $request->filtro['fecha_desde'] !== '') {
             $options['filtro']['fecha_desde'] = $request->filtro['fecha_desde'];
         }
+
         if (isset($request->filtro['fecha_hasta']) && $request->filtro['fecha_hasta'] !== '') {
             $options['filtro']['fecha_hasta'] = $request->filtro['fecha_hasta'];
         }
+
         if (isset($request->filtro['asesor']) && $request->filtro['asesor'] !== '') {
             $options['filtro']['asesor'] = $request->filtro['asesor'];
         }
+
         if (isset($request->filtro['decision']) && $request->filtro['decision'] !== '') {
             $options['filtro']['decision'] = $request->filtro['decision'];
         }
+
         if (isset($request->filtro['periodo']) && $request->filtro['periodo'] !== '') {
             $options['filtro']['periodo'] = $request->filtro['periodo'];
         }
-        return view("estudios/index")->with($options);
+
+        return $options;
     }
 
     /**
@@ -829,5 +849,23 @@ class EstudiosController extends Controller
                 return true;
             }
         }
+    }
+
+    public function tesoreria(Request $request)
+    {
+        $options = $this->getOptions($request);
+        return view("estudios/tesoreria")->with($options);
+    }
+
+    public function cartera(Request $request)
+    {
+        $options = $this->getOptions($request);
+        return view("estudios/cartera")->with($options);
+    }
+
+    public function ventaCartera(Request $request)
+    {
+        $options = $this->getOptions($request);
+        return view("estudios/venta-cartera")->with($options);
     }
 }
