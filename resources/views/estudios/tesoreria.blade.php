@@ -1,7 +1,20 @@
 @extends('layouts.hego')
 
 @section('title')
-    HEGO
+    HEGO | Tesorería
+@endsection
+
+@section('header-content')
+    Tesorería
+@endsection
+
+@section('breadcrumb')
+    <li class="breadcrumb-item">
+        <a href="{{ url('home') }}">
+            <i class="fa fa-dashboard mr-2"></i>Inicio
+        </a>
+    </li>
+    <li class="breadcrumb-item active">Tesorería</li>
 @endsection
 
 @section('panel')
@@ -14,8 +27,8 @@
                             <p class="pt-1 mb-0 font-weight-bold">Fechas:</p>
                         </div>
                         <div class="form-group col-md-1">
-                            <input type="text" class="form-control datepicker" name="filtro[fecha_desde]" id="fecha_desde"
-                                   placeholder="Desde"
+                            <input type="text" class="form-control datepicker" name="filtro[fecha_desde]"
+                                   id="fecha_desde" placeholder="Desde"
                                    value="{{ isset($filtro['fecha_desde']) ? $filtro['fecha_desde'] : '' }}">
                         </div>
                         <div class="form-group">
@@ -70,12 +83,12 @@
                 <thead>
                     <tr>
                         <th style="width:5%;" class="text-center">#</th>
-                        <th style="width:10%;" class="text-center">Fecha</th>
-                        <th style="width:10%;" class="text-center">Periodo Estudio</th>
-                        <th style="width:10%;" class="text-center">Documento</th>
-                        <th style="width:20%;" class="text-center">Nombres Cliente</th>
-                        <th style="width:15%;" class="text-center">Asesor</th>
-                        <th style="width:10%;" class="text-center">Decisión</th>
+                        <th style="width:10%;" class="text-center">Cédula</th>
+                        <th style="width:10%;" class="text-center">Nombre</th>
+                        <th style="width:10%;" class="text-center">Pagaduría</th>
+                        <th style="width:20%;" class="text-center">Vr Solicitado</th>
+                        <th style="width:15%;" class="text-center">Comp. Cartera</th>
+                        <th style="width:10%;" class="text-center">Desemb. Cliente</th>
                         <th style="width:10%;" class="text-center">Acciones</th>
                     </tr>
                 </thead>
