@@ -121,7 +121,7 @@ class CifinController extends Controller
                 <soapenv:Body>
                 <ws:consultaXml>
                     <!--Optional:-->
-                    <codigoInformacion>154</codigoInformacion>
+                    <codigoInformacion>5702</codigoInformacion>
                     <!--Optional:-->
                     <motivoConsulta>24</motivoConsulta>
                     <!--Optional:-->
