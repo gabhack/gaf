@@ -50,12 +50,16 @@ class CifinController extends Controller
         $soapPassword = env('CIFIN_PASSWORD'); // password
         $url = env('CIFIN_URL') . "?wsdl";
 
+        $hoy = date("Y-m-d");
+        $hora = date("H:i:s");
+        $fecha = $hoy . 'T' . $hora;
+
         $xml_post_string = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws/">
             <soapenv:Header/>
                 <soapenv:Body>
                 <ws:consultaXml>
                     <!--Optional:-->
-                    <codigoInformacion>154</codigoInformacion>
+                    <codigoInformacion>5702</codigoInformacion>
                     <!--Optional:-->
                     <motivoConsulta>24</motivoConsulta>
                     <!--Optional:-->
@@ -67,6 +71,12 @@ class CifinController extends Controller
                 </ws:consultaXml>
             </soapenv:Body>
         </soapenv:Envelope>';
+
+        $xml_name = $cedula . '_' . Carbon::parse($fecha)->format('d-m-Y') . '.xml';
+
+        $doc = new DOMDocument();
+        $doc->loadXML($xml_post_string);
+        $doc->save('cifinRequestAdmin_' . $xml_name);
 
         $headers = array(
             "Content-type: text/xml;charset=\"utf-8\"",
@@ -93,6 +103,12 @@ class CifinController extends Controller
 
         $response = curl_exec($ch);
         curl_close($ch);
+
+        $xml_name = $cedula . '_' . Carbon::parse($fecha)->format('d-m-Y') . '.xml';
+        $doc = new DOMDocument();
+        $doc->loadXML($response);
+        $doc->save('cifinResponseAdmin_' . $xml_name);
+
         $array = XmlaPhp::createArray($response);
         $demo = $array['S:Envelope']['S:Body']['ns2:consultaXmlResponse']['return'];
         $resultado = XmlaPhp::createArray($demo);
@@ -121,7 +137,7 @@ class CifinController extends Controller
                 <soapenv:Body>
                 <ws:consultaXml>
                     <!--Optional:-->
-                    <codigoInformacion>154</codigoInformacion>
+                    <codigoInformacion>5702</codigoInformacion>
                     <!--Optional:-->
                     <motivoConsulta>24</motivoConsulta>
                     <!--Optional:-->
