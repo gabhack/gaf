@@ -2,7 +2,6 @@
     <div class="panel mb-3 col-md-12">
         <div class="panel-heading">
             <b>REALIZAR CONSULTA</b>
-            <!--      <pre><code>{{ dataclient}}</code></pre>-->
         </div>
         <div class="panel-body">
             <loading :active.sync="isLoading" color="#0CEDB0" :can-cancel="true" :is-full-page="true" />
@@ -79,8 +78,8 @@ export default {
     data() {
         return {
             dataclient: {
-                doc: '',
-                name: '',
+                doc: '25296244',
+                name: 'Aydee',
                 cuotadeseada: 0,
                 monto: 0,
                 pagaduria: null,

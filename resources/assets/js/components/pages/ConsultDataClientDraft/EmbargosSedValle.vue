@@ -74,10 +74,10 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 
 export default {
-    name: 'EmbargosSedcauca',
-    props: ['embargossedcauca'],
+    name: 'EmbargosSedValle',
+    props: ['embargossedvalle'],
     mounted() {
-        this.fetchEmbargos(this.embargossedcauca);
+        this.fetchEmbargos(this.embargossedvalle);
     },
     computed: {
         ...mapGetters('embargosModule', ['embargosPeriodos', 'embargosPerPeriod'])

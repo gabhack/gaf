@@ -15,7 +15,7 @@
                     </div>
                 </div>
 
-                <div v-for="(item, key) in descuentossemsahagun" :key="key" class="row panel-br-light-green pt-3">
+                <div v-for="(item, key) in descuentosSemQuibdo" :key="key" class="row panel-br-light-green pt-3">
                     <div class="col-1 pr-0">
                         <input v-model="item.check" type="checkbox" />
                     </div>
@@ -33,8 +33,8 @@
 
 <script>
 export default {
-    name: 'Descuentossemsahagun',
-    props: ['descuentossemsahagun'],
+    name: 'DescuentosSemQuibdo',
+    props: ['descuentosSemQuibdo'],
     data() {
         return {
             labels: [
