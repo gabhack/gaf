@@ -10,10 +10,10 @@ use App\CouponsSedChoco;
 use App\CouponsSedFopep;
 use App\CouponsSedMagdalena;
 use App\CouponsSedPopayan;
-use App\CouponsSedQuibdo;
+use App\CouponsSemQuibdo;
 use App\CouponsSemSahagun;
 use App\CoupunsSemCali;
-use App\Coupunssecedu;
+use App\CouponsSedValle;
 use Illuminate\Http\Request;
 
 class CouponsController extends Controller
@@ -52,8 +52,8 @@ class CouponsController extends Controller
             case 'SEDPOPAYAN':
                 $coupons = CouponsSedPopayan::where('doc', $userDoc)->get();
                 break;
-            case 'SEDQUIBDO':
-                $coupons = CouponsSedQuibdo::where('doc', $userDoc)->get();
+            case 'SEMQUIBDO':
+                $coupons = CouponsSemQuibdo::where('doc', $userDoc)->get();
                 break;
             case 'SEMSAHAGUN':
                 $coupons = CouponsSemSahagun::where('doc', $userDoc)->get();
@@ -61,11 +61,8 @@ class CouponsController extends Controller
             case 'SEMCALI':
                 $coupons = CoupunsSemCali::where('doc', $userDoc)->get();
                 break;
-            case 'SECEDUC':
-                $coupons = Coupunssecedu::where('doc', $userDoc)->get();
-                break;
             case 'SEDVALLE':
-                $coupons = Coupunssecedu::where('doc', $userDoc)->get();
+                $coupons = CouponsSedValle::where('doc', $userDoc)->get();
                 break;
             case 'FOPEP':
                 $coupons = CouponsSedFopep::where('doc', $userDoc)->get();

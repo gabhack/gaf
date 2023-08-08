@@ -6,18 +6,18 @@ use App\DatamesFopep;
 use App\DatamesFidu;
 use App\DatamesSemCali;
 use App\DatamesSedValle;
-use App\Imports\DatamesseceducImport;
+use App\Imports\DatamesSedValleImport;
 use Illuminate\Http\Request;
 use Excel;
 
-class DatamesseceducController extends Controller
+class DatamesSedValleController extends Controller
 {
     public function import(Request $request)
     {
         set_time_limit(0);
         if ($request->hasFile('file')) {
             $path = $request->file('file')->getRealPath();
-            $data = Excel::import(new DatamesseceducImport, request()->file('file'));
+            $data = Excel::import(new DatamesSedValleImport, request()->file('file'));
             return response()->json(['message' => 'Importación Realizada'], 200);
         } else {
             return response()->json(['message' => 'Debe Seleccionar un archivo'], 400);
@@ -38,7 +38,7 @@ class DatamesseceducController extends Controller
         }
     }
 
-    public function dumpDatamesseceduc()
+    public function dumpDatamesSedValle()
     {
         DatamesSedValle::truncate();
         return response()->json(['message' => 'Datos de tabla DatamesSedValle Borrada'], 200);

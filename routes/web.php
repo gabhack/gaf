@@ -416,11 +416,11 @@ Route::post('fechaVincImport', 'FechaVincController@import');
 Route::post('descapliImport', 'DescapliController@import');
 Route::post('descnoapController', 'DescnoapController@import');
 Route::post('datamesfiduImport', 'DatamesfiduController@import');
-Route::post('datamesseceducImport', 'DatamesseceducController@import');
+Route::post('datamessedvalleImport', 'DatamesSedValleController@import');
 
 Route::get('dumpDataMes', 'DataMesController@dumpDataMes');
 Route::get('dumpDataMesFidu', 'DatamesfiduController@dumpDatamesfidu');
-Route::get('dumpDataMesSeceduc', 'DatamesseceducController@dumpDatamesseceduc');
+Route::get('dumpDataMesSedValle', 'DatamesSedValleController@dumpDatamessedvalle');
 
 Route::post('consultaDescnoap', 'DescnoapController@consultaUnitaria');
 Route::post('consultaUnitaria', 'DescapliController@consultaUnitaria');
@@ -430,37 +430,37 @@ Route::post('resultadoAprobacion', 'DescapliController@resultadoAprobacion');
 Route::post('consultaDatamessemcali', 'DatamesSemCaliController@consultaUnitaria');
 Route::post('consultaDeduccionessemcali', 'DeduccionesSemCaliController@consultaUnitaria');
 Route::post('consultaSabana', 'SabanaController@consultaUnitaria');
-Route::post('consultaDescuentosseceduc', 'DescuentosseceduController@consultaUnitaria');
+Route::post('consultaDescuentossedvalle', 'DescuentossedvalleController@consultaUnitaria');
 Route::post('consultaDescuentossedchoco', 'DescuentossedchocoController@consultaUnitaria');
 Route::post('consultaDescuentossemsahagun', 'DescuentossemsahagunController@consultaUnitaria');
-Route::post('consultaDescuentossedquibdo', 'DescuentossedquibdoController@consultaUnitaria');
+Route::post('consultaDescuentossemquibdo', 'DescuentosSemQuibdoController@consultaUnitaria');
 Route::post('consultaDescuentossedpopayan', 'DescuentossedpopayanController@consultaUnitaria');
 Route::post('consultaDescuentossedcauca', 'DescuentossedcaucaController@consultaUnitaria');
 Route::post('consultaDetalledecliente', 'DetalledeclienteController@consultaUnitaria');
 Route::post('consultaDescuentossemcali', 'DescuentosSemCaliController@consultaUnitaria');
 Route::post('consultaEmbargossemcali', 'EmbargosSemCaliController@consultaUnitaria');
-Route::post('consultaEmbargosseceduc', 'EmbargosseceducController@consultaUnitaria');
+Route::post('consultaEmbargossedvalle', 'EmbargosSedValleController@consultaUnitaria');
 Route::post('consultaEmbargossedchoco', 'EmbargossedchocoController@consultaUnitaria');
 Route::post('consultaEmbargossedcauca', 'EmbargossedcaucaController@consultaUnitaria');
-Route::post('consultaEmbargossedquibdo', 'EmbargossedquibdoController@consultaUnitaria');
+Route::post('consultaEmbargossemquibdo', 'EmbargosSemQuibdoController@consultaUnitaria');
 Route::post('consultaEmbargossedpopayan', 'EmbargossedpopayanController@consultaUnitaria');
 
 Route::resource('datamessemcali', 'DatamesSemCaliController');
 Route::resource('deduccionessemcali', 'DeduccionesSemCaliController');
 Route::resource('sabana', 'SabanaController');
-Route::resource('Descuentossecedu', 'DescuentosseceduController');
+Route::resource('Descuentossedvalle', 'DescuentosSedValleController');
 Route::resource('Descuentossedchoco', 'DescuentossedchocoController');
-Route::resource('Descuentossedquibdo', 'DescuentossedquibdoController');
+Route::resource('Descuentossemquibdo', 'DescuentosSemQuibdoController');
 Route::resource('Descuentossemsahagun', 'DescuentossemsahagunController');
 Route::resource('Descuentossedpopayan', 'DescuentossedpopayanController');
 Route::resource('Descuentossedcauca', 'DescuentossedcaucaController');
 Route::resource('Detalledecliente', 'DetalledeclienteController');
 Route::resource('Descuentossemcali', 'DescuentosSemCaliController');
 Route::resource('embargossemcali', 'EmbargosSemCaliController');
-Route::resource('embargosseceduc', 'EmbargosseceducController');
+Route::resource('embargossedvalle', 'EmbargosSedValleController');
 Route::resource('embargossedchoco', 'EmbargossedchocoController');
 Route::resource('embargossedcauca', 'EmbargossedcaucaController');
-Route::resource('embargossedquibdo', 'EmbargossedquibdoController');
+Route::resource('embargossemquibdo', 'EmbargosSemQuibdoController');
 Route::resource('embargossedpopayan', 'EmbargossedpopayanController');
 
 //FIN //
@@ -483,8 +483,8 @@ Route::resource('/validate', 'SolicitudValidacionController');
 
 Route::resource('/datamesfidu', 'DatamesfiduController');
 Route::post('/datamesfidu/consultaUnitaria', 'DatamesfiduController@consultaUnitaria');
-Route::post('/datamesseceduc/consultaUnitaria', 'DatamesseceducController@consultaUnitaria');
-Route::resource('/datamesseceduc', 'DatamesseceducController');
+Route::post('/datamessedvalle/consultaUnitaria', 'DatamesSedValleController@consultaUnitaria');
+Route::resource('/datamessedvalle', 'DatamesSedValleController');
 
 Route::resource('/cotizer-data', dataCotizerController::class)->only(['store', 'index', 'show', 'update']);
 Route::get('/cotizer-data/borrar/{id}', 'dataCotizerController@destroy');
