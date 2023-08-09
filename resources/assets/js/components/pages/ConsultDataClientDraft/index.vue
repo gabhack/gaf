@@ -124,7 +124,7 @@
                     <Descnoap v-if="pagaduriaType == 'FOPEP'" :descnoap="descnoap" />
                     <EmbargosSedValle v-if="pagaduriaType == 'SEDVALLE'" :embargossedvalle="embargossedvalle" />
                     <EmbargosSedchoco v-if="pagaduriaType == 'SEDCHOCO'" :embargossedchoco="embargossedchoco" />
-                    <EmbargosSedcauca v-if="pagaduriaType == 'SEDCAUCA'" :embargossedcauca="embargossedcauca" />
+                    <EmbargosSedCauca v-if="pagaduriaType == 'SEDCAUCA'" :embargossedcauca="embargossedcauca" />
                     <EmbargosSemQuibdo v-if="pagaduriaType == 'SEMQUIBDO'" :embargosSemQuibdo="embargosSemQuibdo" />
                     <EmbargosSedpopayan v-if="pagaduriaType == 'SEDPOPAYAN'" :embargossedpopayan="embargossedpopayan" />
                     <EmbargosEmpty
@@ -144,7 +144,7 @@
                     ========================================-->
                     <DescuentosSedValle v-if="pagaduriaType == 'SEDVALLE'" :descuentossedvalle="descuentossedvalle" />
                     <Descuentossedchoco v-if="pagaduriaType == 'SEDCHOCO'" :descuentossedchoco="descuentossedchoco" />
-                    <Descuentossedcauca v-if="pagaduriaType == 'SEDCAUCA'" :descuentossedcauca="descuentossedcauca" />
+                    <DescuentosSedCauca v-if="pagaduriaType == 'SEDCAUCA'" :descuentossedcauca="descuentossedcauca" />
                     <DescuentosSemCali v-if="pagaduriaType == 'SEMCALI'" :descuentossemcali="descuentossemcali" />
                     <DescuentosSemQuibdo
                         v-if="pagaduriaType == 'SEMQUIBDO'"
@@ -213,14 +213,14 @@ import Others from './Others.vue';
 import EmbargosSedValle from './EmbargosSedValle.vue';
 import EmbargosSedchoco from './EmbargosSedchoco';
 import EmbargosSemQuibdo from './EmbargosSemQuibdo.vue';
-import EmbargosSedcauca from './EmbargosSedcauca';
+import EmbargosSedCauca from './EmbargosSedCauca.vue';
 import EmbargosSedpopayan from './EmbargosSedpopayan';
 import EmbargosSemCali from './EmbargosSemCali.vue';
 import EmbargosEmpty from './EmbargosEmpty';
 import DescuentosSedValle from './DescuentosSedValle.vue';
 import DescuentosEmpty from './DescuentosEmpty';
 import Descuentossedchoco from './Descuentossedchoco';
-import Descuentossedcauca from './Descuentossedcauca';
+import DescuentosSedCauca from './DescuentosSedCauca.vue';
 import Detallecliente from './Detallecliente';
 import DescuentosSemCali from './DescuentosSemCali.vue';
 import DescuentosSemQuibdo from './DescuentosSemQuibdo.vue';
@@ -251,13 +251,13 @@ export default {
         Others,
         EmbargosSedValle,
         EmbargosSedchoco,
-        EmbargosSedcauca,
+        EmbargosSedCauca,
         EmbargosSedpopayan,
         EmbargosSemQuibdo,
         EmbargosSemCali,
         DescuentosSedValle,
         Descuentossedchoco,
-        Descuentossedcauca,
+        DescuentosSedCauca,
         Detallecliente,
         DescuentosSemCali,
         DescuentosSemQuibdo,
