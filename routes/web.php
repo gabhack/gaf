@@ -499,3 +499,6 @@ Route::post('/get-coupons', 'CouponsController@index')->name('coupons.index');
 // Route::get('/csrf-token', function () {
 //     return csrf_token();
 // });
+
+//Rutas oara ventas de cartera 
+Route::resource('ventaCartera', 'VentaCarteraController');
