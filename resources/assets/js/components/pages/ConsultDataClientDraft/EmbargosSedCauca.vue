@@ -74,7 +74,7 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 
 export default {
-    name: 'EmbargosSedcauca',
+    name: 'EmbargosSedCauca',
     props: ['embargossedcauca'],
     mounted() {
         this.fetchEmbargos(this.embargossedcauca);

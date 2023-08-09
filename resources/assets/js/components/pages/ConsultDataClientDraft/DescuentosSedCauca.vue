@@ -45,10 +45,10 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 
 export default {
-    name: 'DescuentosSemCali',
-    props: ['descuentossemcali'],
+    name: 'DescuentosSedCauca',
+    props: ['descuentossedcauca'],
     mounted() {
-        this.fetchDescuentos(this.descuentossemcali);
+        this.fetchDescuentos(this.descuentossedcauca);
     },
     computed: {
         ...mapGetters('descuentosModule', ['descuentosPeriodos', 'descuentosPerPeriod'])

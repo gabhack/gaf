@@ -1,7 +1,17 @@
 <template>
     <div class="col-md-12">
         <div class="panel panel-primary mb-3">
-            <div class="panel-heading"><b>OBLIGACIONES VIGENTES EN MORA</b></div>
+            <div class="panel-heading d-flex justify-content-between">
+                <b>OBLIGACIONES VIGENTES EN MORA</b>
+                <div class="d-flex align-items-center">
+                    <b class="mr-2">PERIODO:</b>
+                    <select class="form-control" @change="setSelectedPeriod($event.target.value)">
+                        <option :value="period" v-for="period in descuentosPeriodos" :key="period">
+                            {{ period }}
+                        </option>
+                    </select>
+                </div>
+            </div>
             <div class="panel-body">
                 <div class="row">
                     <div class="col-1">
@@ -15,7 +25,7 @@
                     </div>
                 </div>
 
-                <div v-for="(item, key) in descuentossedvalle" :key="key" class="row panel-br-light-green pt-3">
+                <div v-for="(item, key) in descuentosPerPeriod.items" :key="key" class="row panel-br-light-green pt-3">
                     <div class="col-1 pr-0">
                         <input v-model="item.check" type="checkbox" />
                     </div>
@@ -32,16 +42,20 @@
 </template>
 
 <script>
+import { mapActions, mapGetters, mapMutations } from 'vuex';
+
 export default {
     name: 'DescuentosSedValle',
     props: ['descuentossedvalle'],
-    data() {
-        return {
-            labels: [
-                { label: 'MENSAJE', field: 'mliquid', colClass: 'col-4' },
-                { label: 'FECHA', field: 'fecdata' }
-            ]
-        };
+    mounted() {
+        this.fetchDescuentos(this.descuentossedvalle);
+    },
+    computed: {
+        ...mapGetters('descuentosModule', ['descuentosPeriodos', 'descuentosPerPeriod'])
+    },
+    methods: {
+        ...mapMutations('descuentosModule', ['setSelectedPeriod']),
+        ...mapActions('descuentosModule', ['fetchDescuentos'])
     }
 };
 </script>
