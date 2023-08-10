@@ -11,6 +11,7 @@
 |
 */
 
+use App\Http\Controllers\EmbargosController;
 use App\Http\Controllers\VisadoController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -493,7 +494,10 @@ Route::view('/RegisterCredit', 'registerCredit')->name('register.credit');
 
 Route::apiResource('/whatsapp-bot', 'WhatsAppBotController');
 
-Route::post('/get-coupons', 'CouponsController@index')->name('coupons.index');
+Route::middleware('auth')->group(function () {
+    Route::post('/get-coupons', 'CouponsController@index')->name('coupons.index');
+    Route::post('/get-embargos', [EmbargosController::class, 'index'])->name('embargos');
+});
 
 // Get csrf token
 // Route::get('/csrf-token', function () {

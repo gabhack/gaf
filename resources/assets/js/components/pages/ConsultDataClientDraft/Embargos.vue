@@ -42,19 +42,19 @@
                         <b class="panel-label table-text"></b>
                     </div>
                     <div class="col-2 px-0">
-                        <p>{{ item.entidaddeman ? item.entidaddeman : '-' }}</p>
+                        <p>{{ item.entidaddeman || item.ndem || '-' }}</p>
                     </div>
 
                     <div class="col-2 px-0">
-                        <p>{{ item.docdeman ? item.docdeman : '-' }}</p>
+                        <p>{{ item.docdeman || item.iddem || '-' }}</p>
                     </div>
 
                     <div class="col-1">
-                        <p>{{ item.temb | currency }}</p>
+                        <p>{{ (item.temb || item.valor || '0') | currency }}</p>
                     </div>
 
                     <div class="col-2">
-                        <p>{{ item.fembini ? item.fembini : '-' }}</p>
+                        <p>{{ item.fembini || '-' }}</p>
                     </div>
 
                     <div class="col-2">
@@ -62,7 +62,7 @@
                     </div>
 
                     <div class="col-2">
-                        <p>{{ item.motemb ? item.motemb : '-' }}</p>
+                        <p>{{ item.motemb || '-' }}</p>
                     </div>
                 </div>
             </div>
@@ -74,11 +74,7 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 
 export default {
-    name: 'EmbargosSedCauca',
-    props: ['embargossedcauca'],
-    mounted() {
-        this.fetchEmbargos(this.embargossedcauca);
-    },
+    name: 'Embargos',
     computed: {
         ...mapGetters('embargosModule', ['embargosPeriodos', 'embargosPerPeriod'])
     },

@@ -93,7 +93,6 @@
                             :datamessedvalle="pagadurias.datamessedvalle"
                         />
                         <DescapliEmpty />
-                        <EmbargosSedValle :embargossedvalle="embargossedvalle" />
                     </template>
 
                     <!--============================
@@ -146,7 +145,6 @@ import Descapli from './Descapli';
 import DescapliEmpty from './DescapliEmpty';
 import Descnoap from './Descnoap';
 import DescnoapEmpty from './DescnoapEmpty';
-import EmbargosSedValle from './EmbargosSedValle.vue';
 
 export default {
     name: 'Others',
@@ -160,8 +158,7 @@ export default {
         Descapli,
         DescapliEmpty,
         Descnoap,
-        DescnoapEmpty,
-        EmbargosSedValle
+        DescnoapEmpty
     },
     created() {},
     data() {

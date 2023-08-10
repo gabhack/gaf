@@ -2,6 +2,7 @@ const embargosModule = {
     namespaced: true,
     state: {
         embargos: [],
+        embargosType: '',
         selectedPeriod: ''
     },
     getters: {
@@ -31,6 +32,9 @@ const embargosModule = {
         },
         setSelectedPeriod: (state, payload) => {
             state.selectedPeriod = payload;
+        },
+        setEmbargosType: (state, payload) => {
+            state.embargosType = payload;
         }
     },
     actions: {
