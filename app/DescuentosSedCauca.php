@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Descuentossedcauca extends Model
+class DescuentosSedCauca extends Model
 {
     protected $connection = 'pgsql';
 
@@ -13,14 +13,14 @@ class Descuentossedcauca extends Model
     protected $guarded = ['id'];
 
     protected $fillable = [
-      'doc',
-      'nomp',
-      'mliquid',
-      'fecdata',
-      'mesdata',
-      'anodata',
-      'pagaduria',
-      'noent',
-      'causal',
+        'doc',
+        'nomp',
+        'mliquid',
+        'fecdata',
+        'mesdata',
+        'anodata',
+        'pagaduria',
+        'noent',
+        'causal',
     ];
 }

@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Descuentossedchoco extends Model
+class DescuentosSedChoco extends Model
 {
     protected $connection = 'pgsql';
 
@@ -13,14 +13,14 @@ class Descuentossedchoco extends Model
     protected $guarded = ['id'];
 
     protected $fillable = [
-      'doc',
-      'nomp',
-      'mliquid',
-      'fecdata',
-      'mesdata',
-      'anodata',
-      'pagaduria',
-      'noent',
-      'causal',
+        'doc',
+        'nomp',
+        'mliquid',
+        'fecdata',
+        'mesdata',
+        'anodata',
+        'pagaduria',
+        'noent',
+        'causal',
     ];
 }

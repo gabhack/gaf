@@ -7,9 +7,9 @@ const embargosModule = {
     },
     getters: {
         embargosPeriodos: state => {
-            const periodos = state.embargos.reduce((acc, coupon) => {
-                if (acc.indexOf(coupon.nomina) === -1) {
-                    acc.push(coupon.nomina);
+            const periodos = state.embargos.reduce((acc, embargo) => {
+                if (acc.indexOf(embargo.nomina) === -1) {
+                    acc.push(embargo.nomina);
                 }
                 return acc;
             }, []);
@@ -30,11 +30,11 @@ const embargosModule = {
         setEmbargos: (state, payload) => {
             state.embargos = payload;
         },
-        setSelectedPeriod: (state, payload) => {
-            state.selectedPeriod = payload;
-        },
         setEmbargosType: (state, payload) => {
             state.embargosType = payload;
+        },
+        setSelectedPeriod: (state, payload) => {
+            state.selectedPeriod = payload;
         }
     },
     actions: {

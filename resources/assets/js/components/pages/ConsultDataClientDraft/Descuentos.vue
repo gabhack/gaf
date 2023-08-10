@@ -30,10 +30,10 @@
                         <input v-model="item.check" type="checkbox" />
                     </div>
                     <div class="col-2 px-0">
-                        <p>{{ item.mliquid ? item.mliquid : '-' }}</p>
+                        <p>{{ item.mliquid || '-' }}</p>
                     </div>
                     <div class="col-2 px-0">
-                        <p>{{ item.fecdata ? item.fecdata : '-' }}</p>
+                        <p>{{ item.fecdata || '-' }}</p>
                     </div>
                 </div>
             </div>
@@ -42,20 +42,15 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 
 export default {
-    name: 'DescuentosSemCali',
-    props: ['descuentossemcali'],
-    mounted() {
-        this.fetchDescuentos(this.descuentossemcali);
-    },
+    name: 'Descuentos',
     computed: {
         ...mapGetters('descuentosModule', ['descuentosPeriodos', 'descuentosPerPeriod'])
     },
     methods: {
-        ...mapMutations('descuentosModule', ['setSelectedPeriod']),
-        ...mapActions('descuentosModule', ['fetchDescuentos'])
+        ...mapMutations('descuentosModule', ['setSelectedPeriod'])
     }
 };
 </script>
