@@ -133,19 +133,11 @@
                         "
                         :embargosempty="embargosempty"
                     />
-                    <Embargos />
+                    <Embargos v-else />
 
                     <!--===================================
                             LIQUIDACIONES
                     ========================================-->
-                    <DescuentosSedValle v-if="pagaduriaType == 'SEDVALLE'" :descuentossedvalle="descuentossedvalle" />
-                    <Descuentossedchoco v-if="pagaduriaType == 'SEDCHOCO'" :descuentossedchoco="descuentossedchoco" />
-                    <DescuentosSedCauca v-if="pagaduriaType == 'SEDCAUCA'" :descuentossedcauca="descuentossedcauca" />
-                    <DescuentosSemCali v-if="pagaduriaType == 'SEMCALI'" :descuentossemcali="descuentossemcali" />
-                    <DescuentosSemQuibdo
-                        v-if="pagaduriaType == 'SEMQUIBDO'"
-                        :descuentosSemQuibdo="descuentosSemQuibdo"
-                    />
                     <Descuentossemsahagun
                         v-if="pagaduriaType == 'SEMSAHAGUN'"
                         :descuentossemsahagun="descuentossemsahagun"
@@ -164,6 +156,7 @@
                         "
                         :descuentosempty="descuentosempty"
                     />
+                    <Descuentos v-else />
 
                     <div class="col-12">
                         <b-button class="mb-3" variant="black-pearl" @click="visadoFunction">Visar</b-button>
@@ -209,13 +202,9 @@ import Others from './Others.vue';
 import Embargos from './Embargos.vue';
 import EmbargosSedpopayan from './EmbargosSedpopayan';
 import EmbargosEmpty from './EmbargosEmpty';
-import DescuentosSedValle from './DescuentosSedValle.vue';
+import Descuentos from './Descuentos.vue';
 import DescuentosEmpty from './DescuentosEmpty';
-import Descuentossedchoco from './Descuentossedchoco';
-import DescuentosSedCauca from './DescuentosSedCauca.vue';
 import Detallecliente from './Detallecliente';
-import DescuentosSemCali from './DescuentosSemCali.vue';
-import DescuentosSemQuibdo from './DescuentosSemQuibdo.vue';
 import Descuentossemsahagun from './Descuentossemsahagun';
 import Descuentossedpopayan from './Descuentossedpopayan';
 import Loading from 'vue-loading-overlay';
@@ -243,12 +232,8 @@ export default {
         Others,
         Embargos,
         EmbargosSedpopayan,
-        DescuentosSedValle,
-        Descuentossedchoco,
-        DescuentosSedCauca,
         Detallecliente,
-        DescuentosSemCali,
-        DescuentosSemQuibdo,
+        Descuentos,
         Descuentossemsahagun,
         Descuentossedpopayan,
         DescuentosEmpty,
@@ -336,6 +321,7 @@ export default {
             'ingresosExtras'
         ]),
         ...mapState('embargosModule', ['embargosType']),
+        ...mapState('descuentosModule', ['descuentosType']),
         ...mapState('datamesModule', ['cuotadeseada', 'conteoEgresosPlus']),
         totales() {
             const valrSM = 1160000;
@@ -469,6 +455,7 @@ export default {
     methods: {
         ...mapActions('pagaduriasModule', ['fetchCoupons']),
         ...mapActions('embargosModule', ['fetchEmbargos']),
+        ...mapActions('descuentosModule', ['fetchDescuentos']),
         emitInfo(payload) {
             this.isLoading = true;
             this.pagadurias = payload.pagadurias;
@@ -487,7 +474,6 @@ export default {
                 this.getDatames(payload);
             } else if (payload.pagaduria == 'SEDVALLE') {
                 this.getDatamesSedValle(payload);
-                this.getDescuentosSedValle(payload);
             } else if (payload.pagaduria == 'FIDUPREVISORA') {
                 this.getDatamesFidu(payload);
             } else if (payload.pagaduria == 'SEMCALI') {
@@ -495,11 +481,6 @@ export default {
             }
 
             this.getEmbargossedpopayan(payload);
-            this.getDescuentosSedValle(payload);
-            this.getDescuentossedchoco(payload);
-            this.getDescuentossedcauca(payload);
-            this.getDescuentosSemCali(payload);
-            this.getDescuentosSemQuibdo(payload);
             this.getDescuentossemsahagun(payload);
             this.getDescuentossedpopayan(payload);
             this.getDescapli(payload);
@@ -508,6 +489,10 @@ export default {
             this.getEmbargos({
                 doc: payload.doc,
                 pagaduria: this.embargosType
+            });
+            this.getDescuentos({
+                doc: payload.doc,
+                pagaduria: this.descuentosType
             });
             this.getFechaVinc(payload).then(response => {
                 this.showOthers = true;
@@ -546,26 +531,6 @@ export default {
             const response = await axios.post('/consultaEmbargossedpopayan', { doc: payload.doc });
             this.embargossedpopayan = response.data.data;
         },
-        async getDescuentosSedValle(payload) {
-            const response = await axios.post('/consultaDescuentossedvalle', { doc: payload.doc });
-            this.descuentossedvalle = response.data.data;
-        },
-        async getDescuentossedchoco(payload) {
-            const response = await axios.post('/consultaDescuentossedchoco', { doc: payload.doc });
-            this.descuentossedchoco = response.data.data;
-        },
-        async getDescuentossedcauca(payload) {
-            const response = await axios.post('/consultaDescuentossedcauca', { doc: payload.doc });
-            this.descuentossedcauca = response.data.data;
-        },
-        async getDescuentosSemCali(payload) {
-            const response = await axios.post('/consultaDescuentossemcali', { doc: payload.doc });
-            this.descuentossemcali = response.data.data;
-        },
-        async getDescuentosSemQuibdo(payload) {
-            const response = await axios.post('/consultaDescuentossemquibdo', { doc: payload.doc });
-            this.descuentossemquibdo = response.data.data;
-        },
         async getDescuentossemsahagun(payload) {
             const response = await axios.post('/consultaDescuentossemsahagun', { doc: payload.doc });
             this.descuentossemsahagun = response.data.data;
@@ -598,6 +563,15 @@ export default {
 
             const response = await axios.post('/get-embargos', data);
             this.fetchEmbargos(response.data);
+        },
+        async getDescuentos(payload) {
+            const data = {
+                doc: payload.doc,
+                pagaduria: payload.pagaduria
+            };
+
+            const response = await axios.post('/get-descuentos', data);
+            this.fetchDescuentos(response.data);
         },
         print() {
             window.print();

@@ -11,6 +11,7 @@
 |
 */
 
+use App\Http\Controllers\DescuentosController;
 use App\Http\Controllers\EmbargosController;
 use App\Http\Controllers\VisadoController;
 use Illuminate\Support\Facades\Auth;
@@ -496,6 +497,7 @@ Route::apiResource('/whatsapp-bot', 'WhatsAppBotController');
 
 Route::middleware('auth')->group(function () {
     Route::post('/get-coupons', 'CouponsController@index')->name('coupons.index');
+    Route::post('/get-descuentos', [DescuentosController::class, 'index'])->name('descuentos');
     Route::post('/get-embargos', [EmbargosController::class, 'index'])->name('embargos');
 });
 

@@ -98,6 +98,7 @@ export default {
         ...mapMutations('datamesModule', ['setDatamesSed', 'setCuotaDeseada']),
         ...mapMutations('pagaduriasModule', ['setPagaduriaType', 'setSelectedPeriod']),
         ...mapMutations('embargosModule', ['setEmbargosType']),
+        ...mapMutations('descuentosModule', ['setDescuentosType']),
         selectedPagaduria() {
             this.setPagaduriaType(this.dataclient.pagaduria);
 
@@ -109,6 +110,7 @@ export default {
                 this.dataclient.cargo = pagaduria.cargo;
 
                 this.setEmbargosType(`Embargos${type.key.slice(7)}`);
+                this.setDescuentosType(`Descuentos${type.key.slice(7)}`);
 
                 this.setDatamesSed(pagaduria);
             }

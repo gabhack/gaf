@@ -2,13 +2,14 @@ const descuentosModule = {
     namespaced: true,
     state: {
         descuentos: [],
+        descuentosType: '',
         selectedPeriod: ''
     },
     getters: {
         descuentosPeriodos: state => {
-            const periodos = state.descuentos.reduce((acc, coupon) => {
-                if (acc.indexOf(coupon.nomina) === -1) {
-                    acc.push(coupon.nomina);
+            const periodos = state.descuentos.reduce((acc, descuento) => {
+                if (acc.indexOf(descuento.nomina) === -1) {
+                    acc.push(descuento.nomina);
                 }
                 return acc;
             }, []);
@@ -28,6 +29,9 @@ const descuentosModule = {
     mutations: {
         setDescuentos: (state, payload) => {
             state.descuentos = payload;
+        },
+        setDescuentosType: (state, payload) => {
+            state.descuentosType = payload;
         },
         setSelectedPeriod: (state, payload) => {
             state.selectedPeriod = payload;

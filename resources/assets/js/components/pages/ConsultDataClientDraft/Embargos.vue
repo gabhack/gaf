@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 
 export default {
     name: 'Embargos',
@@ -79,8 +79,7 @@ export default {
         ...mapGetters('embargosModule', ['embargosPeriodos', 'embargosPerPeriod'])
     },
     methods: {
-        ...mapMutations('embargosModule', ['setSelectedPeriod']),
-        ...mapActions('embargosModule', ['fetchEmbargos'])
+        ...mapMutations('embargosModule', ['setSelectedPeriod'])
     }
 };
 </script>
