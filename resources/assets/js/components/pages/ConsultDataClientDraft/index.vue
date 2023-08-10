@@ -120,12 +120,7 @@
                             OBLIGACIONES VIGENTES EN MORA
                     ========================================-->
                     <DescnoapEmpty v-if="pagaduriaType == 'FIDUPREVISORA'" />
-                    <EmbargosSemCali v-else-if="pagaduriaType == 'SEMCALI'" :embargossemcali="embargossemcali" />
                     <Descnoap v-if="pagaduriaType == 'FOPEP'" :descnoap="descnoap" />
-                    <EmbargosSedValle v-if="pagaduriaType == 'SEDVALLE'" :embargossedvalle="embargossedvalle" />
-                    <EmbargosSedchoco v-if="pagaduriaType == 'SEDCHOCO'" :embargossedchoco="embargossedchoco" />
-                    <EmbargosSedCauca v-if="pagaduriaType == 'SEDCAUCA'" :embargossedcauca="embargossedcauca" />
-                    <EmbargosSemQuibdo v-if="pagaduriaType == 'SEMQUIBDO'" :embargosSemQuibdo="embargosSemQuibdo" />
                     <EmbargosSedpopayan v-if="pagaduriaType == 'SEDPOPAYAN'" :embargossedpopayan="embargossedpopayan" />
                     <EmbargosEmpty
                         v-if="
@@ -138,6 +133,7 @@
                         "
                         :embargosempty="embargosempty"
                     />
+                    <Embargos />
 
                     <!--===================================
                             LIQUIDACIONES
@@ -210,12 +206,8 @@ import DescapliEmpty from './DescapliEmpty';
 import Descnoap from './Descnoap';
 import DescnoapEmpty from './DescnoapEmpty';
 import Others from './Others.vue';
-import EmbargosSedValle from './EmbargosSedValle.vue';
-import EmbargosSedchoco from './EmbargosSedchoco';
-import EmbargosSemQuibdo from './EmbargosSemQuibdo.vue';
-import EmbargosSedCauca from './EmbargosSedCauca.vue';
+import Embargos from './Embargos.vue';
 import EmbargosSedpopayan from './EmbargosSedpopayan';
-import EmbargosSemCali from './EmbargosSemCali.vue';
 import EmbargosEmpty from './EmbargosEmpty';
 import DescuentosSedValle from './DescuentosSedValle.vue';
 import DescuentosEmpty from './DescuentosEmpty';
@@ -249,12 +241,8 @@ export default {
         Descnoap,
         DescnoapEmpty,
         Others,
-        EmbargosSedValle,
-        EmbargosSedchoco,
-        EmbargosSedCauca,
+        Embargos,
         EmbargosSedpopayan,
-        EmbargosSemQuibdo,
-        EmbargosSemCali,
         DescuentosSedValle,
         Descuentossedchoco,
         DescuentosSedCauca,
@@ -347,6 +335,7 @@ export default {
             'couponsIngresos',
             'ingresosExtras'
         ]),
+        ...mapState('embargosModule', ['embargosType']),
         ...mapState('datamesModule', ['cuotadeseada', 'conteoEgresosPlus']),
         totales() {
             const valrSM = 1160000;
@@ -479,6 +468,7 @@ export default {
     },
     methods: {
         ...mapActions('pagaduriasModule', ['fetchCoupons']),
+        ...mapActions('embargosModule', ['fetchEmbargos']),
         emitInfo(payload) {
             this.isLoading = true;
             this.pagadurias = payload.pagadurias;
@@ -504,12 +494,7 @@ export default {
                 this.getDatamesSemCali(payload);
             }
 
-            this.getEmbargosSedValle(payload);
-            this.getEmbargossedchoco(payload);
-            this.getEmbargosSemQuibdo(payload);
             this.getEmbargossedpopayan(payload);
-            this.getEmbargossedcauca(payload);
-            this.getEmbargosSemCali(payload);
             this.getDescuentosSedValle(payload);
             this.getDescuentossedchoco(payload);
             this.getDescuentossedcauca(payload);
@@ -520,6 +505,10 @@ export default {
             this.getDescapli(payload);
             this.getDescnoap(payload);
             this.getCoupons(payload);
+            this.getEmbargos({
+                doc: payload.doc,
+                pagaduria: this.embargosType
+            });
             this.getFechaVinc(payload).then(response => {
                 this.showOthers = true;
                 this.isLoading = false;
@@ -553,29 +542,9 @@ export default {
             const response = await axios.get(`descnoap/${payload.doc}`);
             this.descnoap = response.data;
         },
-        async getEmbargosSedValle(payload) {
-            const response = await axios.post('/consultaEmbargossedvalle', { doc: payload.doc });
-            this.embargossedvalle = response.data.data;
-        },
-        async getEmbargossedchoco(payload) {
-            const response = await axios.post('/consultaEmbargossedchoco', { doc: payload.doc });
-            this.embargossedchoco = response.data.data;
-        },
-        async getEmbargossedcauca(payload) {
-            const response = await axios.post('/consultaEmbargossedcauca', { doc: payload.doc });
-            this.embargossedcauca = response.data.data;
-        },
-        async getEmbargosSemQuibdo(payload) {
-            const response = await axios.post('/consultaEmbargossemquibdo', { doc: payload.doc });
-            this.embargossemquibdo = response.data.data;
-        },
         async getEmbargossedpopayan(payload) {
             const response = await axios.post('/consultaEmbargossedpopayan', { doc: payload.doc });
             this.embargossedpopayan = response.data.data;
-        },
-        async getEmbargosSemCali(payload) {
-            const response = await axios.post('/consultaEmbargossemcali', { doc: payload.doc });
-            this.embargossemcali = response.data.data;
         },
         async getDescuentosSedValle(payload) {
             const response = await axios.post('/consultaDescuentossedvalle', { doc: payload.doc });
@@ -620,6 +589,15 @@ export default {
                     this.$bvToast.show('toast-incapacidad-month');
                 }
             }, 1000);
+        },
+        async getEmbargos(payload) {
+            const data = {
+                doc: payload.doc,
+                pagaduria: payload.pagaduria
+            };
+
+            const response = await axios.post('/get-embargos', data);
+            this.fetchEmbargos(response.data);
         },
         print() {
             window.print();

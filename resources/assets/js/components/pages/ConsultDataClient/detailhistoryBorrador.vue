@@ -62,7 +62,6 @@
                 <Descapli v-else :descapli="descapli" />
 
                 <DescnoapEmpty v-if="pagaduriaType == 'FIDUPREVISORA'" />
-                <EmbargosSedValle v-else-if="pagaduriaType == 'SEDVALLE'" :embargossedvalle="embargossedvalle" />
                 <Descnoap v-else :descnoap="descnoap" />
             </div>
         </div>
@@ -79,7 +78,6 @@ import Descapli from '../ConsultDataClientDraft/Descapli';
 import DescapliEmpty from '../ConsultDataClientDraft/DescapliEmpty';
 import Descnoap from '../ConsultDataClientDraft/Descnoap';
 import DescnoapEmpty from '../ConsultDataClientDraft/DescnoapEmpty';
-import EmbargosSedValle from '../ConsultDataClientDraft/EmbargosSedValle.vue';
 
 export default {
     props: ['id', 'user', 'pagaduriaType'],
@@ -92,7 +90,6 @@ export default {
         DescapliEmpty,
         Descapli,
         DescnoapEmpty,
-        EmbargosSedValle,
         Descnoap
     },
     name: 'detailhistory',
