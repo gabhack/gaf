@@ -6,6 +6,7 @@ use App\DescuentosSedCauca;
 use App\DescuentosSedChoco;
 use App\DescuentosSedValle;
 use App\DescuentosSemCali;
+use App\DescuentosSemPopayan;
 use App\DescuentosSemQuibdo;
 use Illuminate\Http\Request;
 
@@ -26,6 +27,7 @@ class DescuentosController extends Controller
             DescuentosSedChoco::class => 'doc',
             DescuentosSedValle::class => 'doc',
             DescuentosSemCali::class => 'doc',
+            DescuentosSemPopayan::class => 'doc',
             DescuentosSemQuibdo::class => 'doc',
         ];
 

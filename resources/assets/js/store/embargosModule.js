@@ -42,7 +42,9 @@ const embargosModule = {
             ctx.commit('setEmbargos', data);
 
             // Seleccionar el primer periodo por defecto
-            ctx.commit('setSelectedPeriod', ctx.getters.embargosPeriodos[0]);
+            if (ctx.getters.embargosPeriodos.length > 0) {
+                ctx.commit('setSelectedPeriod', ctx.getters.embargosPeriodos[0]);
+            }
         }
     }
 };
