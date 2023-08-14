@@ -6,6 +6,7 @@ use App\EmbargosSedCauca;
 use App\EmbargosSedChoco;
 use App\EmbargosSedValle;
 use App\EmbargosSemCali;
+use App\EmbargosSemPopayan;
 use App\EmbargosSemQuibdo;
 use Illuminate\Http\Request;
 
@@ -26,6 +27,7 @@ class EmbargosController extends Controller
             EmbargosSedChoco::class => 'doc',
             EmbargosSedValle::class => 'doc',
             EmbargosSemCali::class => 'doc',
+            EmbargosSemPopayan::class => 'doc',
             EmbargosSemQuibdo::class => 'idemp',
         ];
 

@@ -42,7 +42,9 @@ const descuentosModule = {
             ctx.commit('setDescuentos', data);
 
             // Seleccionar el primer periodo por defecto
-            ctx.commit('setSelectedPeriod', ctx.getters.descuentosPeriodos[0]);
+            if (ctx.getters.descuentosPeriodos.length > 0) {
+                ctx.commit('setSelectedPeriod', ctx.getters.descuentosPeriodos[0]);
+            }
         }
     }
 };

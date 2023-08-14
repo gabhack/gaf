@@ -71,7 +71,7 @@
                         pagaduriaType == 'SEDCAUCA' ||
                         pagaduriaType == 'SEDCHOCO' ||
                         pagaduriaType == 'SEMQUIBDO' ||
-                        pagaduriaType == 'SEDPOPAYAN' ||
+                        pagaduriaType == 'SEMPOPAYAN' ||
                         pagaduriaType == 'SEDBOLIVAR' ||
                         pagaduriaType == 'SEMBARRANQUILLA' ||
                         pagaduriaType == 'SEDATLANTICO' ||
@@ -93,7 +93,7 @@
                         :datamessemcali="datamessemcali"
                         :user="user"
                     />
-                    <Detallecliente :descuentossedcauca="descuentossedcauca" :totales="totales" />
+                    <Detallecliente :totales="totales" />
                 </template>
 
                 <template v-if="showOthers">
@@ -110,7 +110,7 @@
                             pagaduriaType == 'SEMBARRANQUILLA' ||
                             pagaduriaType == 'SEDATLANTICO' ||
                             pagaduriaType == 'SEDBOLIVAR' ||
-                            pagaduriaType == 'SEDPOPAYAN' ||
+                            pagaduriaType == 'SEMPOPAYAN' ||
                             pagaduriaType == 'FOPEP'
                         "
                         :disabledProspect="disabledProspect"
@@ -121,7 +121,6 @@
                     ========================================-->
                     <DescnoapEmpty v-if="pagaduriaType == 'FIDUPREVISORA'" />
                     <Descnoap v-if="pagaduriaType == 'FOPEP'" :descnoap="descnoap" />
-                    <EmbargosSedpopayan v-if="pagaduriaType == 'SEDPOPAYAN'" :embargossedpopayan="embargossedpopayan" />
                     <EmbargosEmpty
                         v-if="
                             pagaduriaType == 'SEDMAGDALENA' ||
@@ -141,10 +140,6 @@
                     <Descuentossemsahagun
                         v-if="pagaduriaType == 'SEMSAHAGUN'"
                         :descuentossemsahagun="descuentossemsahagun"
-                    />
-                    <Descuentossedpopayan
-                        v-if="pagaduriaType == 'SEDPOPAYAN'"
-                        :descuentossedpopayan="descuentossedpopayan"
                     />
                     <DescuentosEmpty
                         v-if="
@@ -200,13 +195,11 @@ import Descnoap from './Descnoap';
 import DescnoapEmpty from './DescnoapEmpty';
 import Others from './Others.vue';
 import Embargos from './Embargos.vue';
-import EmbargosSedpopayan from './EmbargosSedpopayan';
 import EmbargosEmpty from './EmbargosEmpty';
 import Descuentos from './Descuentos.vue';
 import DescuentosEmpty from './DescuentosEmpty';
 import Detallecliente from './Detallecliente';
 import Descuentossemsahagun from './Descuentossemsahagun';
-import Descuentossedpopayan from './Descuentossedpopayan';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 
@@ -231,11 +224,9 @@ export default {
         DescnoapEmpty,
         Others,
         Embargos,
-        EmbargosSedpopayan,
         Detallecliente,
         Descuentos,
         Descuentossemsahagun,
-        Descuentossedpopayan,
         DescuentosEmpty,
         EmbargosEmpty,
         Loading
@@ -255,7 +246,7 @@ export default {
             embargossedchoco: [],
             embargossedcauca: [],
             embargossemquibdo: [],
-            embargossedpopayan: [],
+            embargossempopayan: [],
             embargossemcali: [],
             embargosempty: [],
             descuentossedvalle: [],
@@ -265,7 +256,7 @@ export default {
             descuentossemcali: [],
             descuentossemquibdo: [],
             descuentossemsahagun: [],
-            descuentossedpopayan: [],
+            descuentossempopayan: [],
 
             monto: 0,
 
@@ -371,16 +362,16 @@ export default {
             console.log('valoringresotemp', valorIngresoTemp);
 
             let items = [];
-            let itemslength = [];
+            // let itemslength = [];
 
             let totalEgresos = 0;
             if (this.pagaduriaType === 'FOPEP' || this.pagaduriaType == 'FIDUPREVISORA') {
                 items = this.descapli;
-                itemslength = items.length;
+                // itemslength = items.length;
                 totalEgresos = items.reduce((a, b) => a + Number(b.vaplicado), 0);
             } else {
                 items = this.couponsPerPeriod.items.filter(item => item.code !== 'INGCUP' && Number(item.egresos) > 0);
-                itemslength = items.length;
+                // itemslength = items.length;
                 totalEgresos = items.reduce((total, item) => total + Number(item.egresos), 0);
             }
 
@@ -480,9 +471,7 @@ export default {
                 this.getDatamesSemCali(payload);
             }
 
-            this.getEmbargossedpopayan(payload);
             this.getDescuentossemsahagun(payload);
-            this.getDescuentossedpopayan(payload);
             this.getDescapli(payload);
             this.getDescnoap(payload);
             this.getCoupons(payload);
@@ -527,17 +516,9 @@ export default {
             const response = await axios.get(`descnoap/${payload.doc}`);
             this.descnoap = response.data;
         },
-        async getEmbargossedpopayan(payload) {
-            const response = await axios.post('/consultaEmbargossedpopayan', { doc: payload.doc });
-            this.embargossedpopayan = response.data.data;
-        },
         async getDescuentossemsahagun(payload) {
             const response = await axios.post('/consultaDescuentossemsahagun', { doc: payload.doc });
             this.descuentossemsahagun = response.data.data;
-        },
-        async getDescuentossedpopayan(payload) {
-            const response = await axios.post('/consultaDescuentossedpopayan', { doc: payload.doc });
-            this.descuentossedpopayan = response.data.data;
         },
         async getCoupons(payload) {
             const data = {
@@ -648,9 +629,9 @@ export default {
                 }
             } else if (this.pagaduriaType == 'SEDMAGDALENA') {
                 embargosSinMora = true;
-            } else if (this.pagaduriaType == 'SEDPOPAYAN') {
-                if (this.descuentossedpopayan.length > 0) {
-                    obligacionMarcadas = this.descuentossedpopayan.every(item => item.check == true);
+            } else if (this.pagaduriaType == 'SEMPOPAYAN') {
+                if (this.descuentossempopayan.length > 0) {
+                    obligacionMarcadas = this.descuentossempopayan.every(item => item.check == true);
                 } else {
                     embargosSinMora = true;
                 }

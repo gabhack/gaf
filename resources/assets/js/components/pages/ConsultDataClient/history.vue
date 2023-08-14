@@ -324,7 +324,7 @@ export default {
                 { text: 'SED VALLE', value: 'SEDVALLE', key: 'datamesedvalle' },
                 { text: 'SED CAUCA', value: 'SEDCAUCA', key: 'datamesSedCauca' },
                 { text: 'SED CHOCO', value: 'SEDCHOCO', key: 'datamesSedChoco' },
-                { text: 'SED POPAYAN', value: 'SEDPOPAYAN', key: 'datamesSedPopayan' },
+                { text: 'SEM POPAYAN', value: 'SEMPOPAYAN', key: 'datamesSemPopayan' },
                 { text: 'SEM QUIBDO', value: 'SEMQUIBDO', key: 'datamesSemQuibdo' },
                 { text: 'SED MAGDALENA', value: 'SEDMAGDALENA', key: 'datamesSedMagdalena' },
                 { text: 'SED BOLIVAR', value: 'SEDBOLIVAR', key: 'datamesSedBolivar' },

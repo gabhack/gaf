@@ -2,27 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Embargossedpopayan;
+use App\EmbargosSemPopayan;
 use Illuminate\Http\Request;
 
-class EmbargossedpopayanController extends Controller
+class EmbargosSemPopayanController extends Controller
 {
-  public function consultaUnitaria(Request $request){
-    $data_formulario = $request->data;
-    $doc = $request->doc;
-    $consulta_cedula = Embargossedpopayan::where('idemp',$doc)->get();
-    $resultados = json_decode($consulta_cedula);
-    if($resultados == "" or $resultados == null ){
-      return response()->json(['message'=>'No se encontraron registros con el numero seleccionado.', 'data'=>$resultados],200);
+    public function consultaUnitaria(Request $request)
+    {
+        $data_formulario = $request->data;
+        $doc = $request->doc;
+        $consulta_cedula = EmbargosSemPopayan::where('idemp', $doc)->get();
+        $resultados = json_decode($consulta_cedula);
+
+        if ($resultados == "" or $resultados == null) {
+            return response()->json(['message' => 'No se encontraron registros con el numero seleccionado.', 'data' => $resultados], 200);
+        } else {
+            return response()->json(['message' => 'Consulta exitosa.', 'data' => $resultados], 200);
+        }
     }
-    else{
-      return response()->json(['message'=>'Consulta exitosa.','data'=>$resultados],200);
+
+    public function dumpEmbargosSemPopayan()
+    {
+        EmbargosSemPopayan::truncate();
+        return response()->json(['message' => 'Datos de tabla EmbargosSemPopayan Borrada'], 200);
     }
-  }
-    public function dumpEmbargossedpopayan(){
-      Embargossedpopayan::truncate();
-        return response()->json(['message'=>'Datos de tabla Embargossedpopayan Borrada'],200);
-    }
+
     /**
      * Display a listing of the resource.
      *
@@ -30,7 +34,7 @@ class EmbargossedpopayanController extends Controller
      */
     public function index(Request $request)
     {
-
+        //
     }
 
     /**
@@ -57,22 +61,22 @@ class EmbargossedpopayanController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Embargossedpopayan  $Embargossedpopayan
+     * @param  \App\EmbargosSemPopayan  $embargosSemPopayan
      * @return \Illuminate\Http\Response
      */
     public function show($doc)
     {
-        $Embargossedpopayan = Embargossedpopayan::where('idemp',$doc)->get();
-        return response()->json($Embargossedpopayan);
+        $embargosSemPopayan = EmbargosSemPopayan::where('idemp', $doc)->get();
+        return response()->json($embargosSemPopayan);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Embargossedpopayan  $Embargossedpopayan
+     * @param  \App\EmbargosSemPopayan  $embargosSemPopayan
      * @return \Illuminate\Http\Response
      */
-    public function edit(Embargossedpopayan $Embargossedpopayan)
+    public function edit(EmbargosSemPopayan $embargosSemPopayan)
     {
         //
     }
@@ -81,10 +85,10 @@ class EmbargossedpopayanController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Embargossedpopayan  $Embargossedpopayan
+     * @param  \App\EmbargosSemPopayan  $embargosSemPopayan
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Embargossedpopayan $Embargossedpopayan)
+    public function update(Request $request, EmbargosSemPopayan $embargosSemPopayan)
     {
         //
     }
@@ -92,10 +96,10 @@ class EmbargossedpopayanController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Embargossedpopayan  $Embargossedpopayan
+     * @param  \App\EmbargosSemPopayan  $embargosSemPopayan
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Embargossedpopayan $Embargossedpopayan)
+    public function destroy(EmbargosSemPopayan $embargosSemPopayan)
     {
         //
     }

@@ -9,7 +9,7 @@ use App\CouponsSedCauca;
 use App\CouponsSedChoco;
 use App\CouponsSedFopep;
 use App\CouponsSedMagdalena;
-use App\CouponsSedPopayan;
+use App\CouponsSemPopayan;
 use App\CouponsSemQuibdo;
 use App\CouponsSemSahagun;
 use App\CoupunsSemCali;
@@ -49,8 +49,8 @@ class CouponsController extends Controller
             case 'SEDCHOCO':
                 $coupons = CouponsSedChoco::where('doc', $userDoc)->get();
                 break;
-            case 'SEDPOPAYAN':
-                $coupons = CouponsSedPopayan::where('doc', $userDoc)->get();
+            case 'SEMPOPAYAN':
+                $coupons = CouponsSemPopayan::where('doc', $userDoc)->get();
                 break;
             case 'SEMQUIBDO':
                 $coupons = CouponsSemQuibdo::where('doc', $userDoc)->get();

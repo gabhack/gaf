@@ -190,7 +190,9 @@ const pagaduriasModule = {
             ctx.commit('setCoupons', items);
 
             // Seleccionar el primer periodo por defecto
-            ctx.commit('setSelectedPeriod', ctx.getters.pagaduriaPeriodos[0]);
+            if (ctx.getters.pagaduriaPeriodos.length > 0) {
+                ctx.commit('setSelectedPeriod', ctx.getters.pagaduriaPeriodos[0]);
+            }
         }
     }
 };
