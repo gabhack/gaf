@@ -17,6 +17,11 @@ use App\Http\Controllers\VisadoController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/get-test', 'TestController@index');
+Route::get('/get-test/{doc}', 'TestController@search');
+
+
+
 Auth::routes(['register' => true]);
 
 Route::get('/home', 'HomeController@index')->name('home');
