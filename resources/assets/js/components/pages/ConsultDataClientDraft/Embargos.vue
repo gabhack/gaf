@@ -17,22 +17,19 @@
                     <div class="col-1">
                         <b class="panel-label table-text"></b>
                     </div>
-                    <div class="col-2">
+                    <div class="col-3 px-0">
                         <b class="panel-label table-text">NOMBRE ENTIDAD ACTUAL:</b>
                     </div>
-                    <div class="col-2">
+                    <div class="col-2 px-0">
                         <b class="panel-label table-text">NUMERO DE PAGARE:</b>
                     </div>
-                    <div class="col-1">
+                    <div class="col-2 px-0">
                         <b class="panel-label table-text">CUOTA DEUDA:</b>
                     </div>
-                    <div class="col-2">
+                    <div class="col-2 px-0">
                         <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
                     </div>
-                    <div class="col-2">
-                        <b class="panel-label table-text">NOMBRE ENTIDAD CEDIENTE:</b>
-                    </div>
-                    <div class="col-2">
+                    <div class="col-2 px-0">
                         <b class="panel-label table-text">INCONSISTENCIA:</b>
                     </div>
                 </div>
@@ -41,7 +38,7 @@
                     <div class="col-1 pr-0">
                         <b class="panel-label table-text"></b>
                     </div>
-                    <div class="col-2 px-0">
+                    <div class="col-3 px-0">
                         <p>{{ item.entidaddeman || item.ndem || '-' }}</p>
                     </div>
 
@@ -49,19 +46,15 @@
                         <p>{{ item.docdeman || item.iddem || '-' }}</p>
                     </div>
 
-                    <div class="col-1">
+                    <div class="col-2 px-0">
                         <p>{{ (item.temb || item.valor || '0') | currency }}</p>
                     </div>
 
-                    <div class="col-2">
+                    <div class="col-2 px-0">
                         <p>{{ item.fembini || '-' }}</p>
                     </div>
 
-                    <div class="col-2">
-                        <p>{{ '-' }}</p>
-                    </div>
-
-                    <div class="col-2">
+                    <div class="col-2 px-0">
                         <p>{{ item.motemb || '-' }}</p>
                     </div>
                 </div>
