@@ -243,7 +243,7 @@ class CifinController extends Controller
         if ($score >= 0) {
             return redirect()->route('deceval.consultar', $data);
         } else {
-            return redirect()->route('deceval.consultar', $data);
+            return redirect()->route('register.credit', ['status' => 'awaiting']);
         }
     }
 
