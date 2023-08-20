@@ -7,7 +7,7 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\Importable;
 
-class ClientCollectionImport implements  ToCollection, WithHeadingRow
+class TestCollectionImport implements  ToCollection, WithHeadingRow
 {
     use Importable;
 

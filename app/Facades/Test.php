@@ -1,92 +1,190 @@
 <?php
 namespace App\Facades;
 
+use Carbon\Carbon;
 use App\DatamesFidu;
 use App\DatamesFopep;
-use App\DatamesSedMeta;
-use App\DatamesSemBuga;
+use App\CoupunsSemCali;
 use App\DatamesSemCali;
-use App\DatamesSedCauca;
-use App\DatamesSedCesar;
-use App\DatamesSedChoco;
-use App\DatamesSedHuila;
-use App\DatamesSedSucre;
-use App\DatamesSedValle;
-use App\DatamesSemNeiva;
-use App\DatamesSemPasto;
-use App\DatamesSemYopal;
-use App\DatamesSemYumbo;
-use App\DatamesSedArauca;
-use App\DatamesSedBoyaca;
-use App\DatamesSedCaldas;
-use App\DatamesSedNarino;
-use App\DatamesSedTolima;
-use App\DatamesSemIbague;
-use App\DatamesSemQuibdo;
-use App\DatamesSedBolivar;
-use App\DatamesSedCordoba;
-use App\DatamesSedGuajira;
-use App\DatamesSemIpiales;
-use App\DatamesSemJamundi;
-use App\DatamesSemPalmira;
-use App\DatamesSemPopayan;
-use App\DatamesSemSahagun;
-use App\DatamesSemSoledad;
-use App\DatamesSedCasanare;
-use App\DatamesSemGirardot;
-use App\DatamesSemMagangue;
-use App\DatamesSemMedellin;
-use App\DatamesSemMonteria;
-use App\DatamesSemMosquera;
-use App\DatamesSemRioNegro;
-use App\DatamesSemSabaneta;
-use App\DatamesSedAntioquia;
-use App\DatamesSedAtlantico;
-use App\DatamesSedMagdalena;
-use App\DatamesSedRisaralda;
-use App\DatamesSedSantander;
-use App\DatamesSemCartagena;
-use App\DatamesSemSincelejo;
-use App\DatamesSemZipaquira;
-use App\DatamesSemValledupar;
-use App\DatamesSedCundinamarca;
-use App\DatamesSemBarranquilla;
-
-use App\EmbargosSedCauca;
-use App\EmbargosSedChoco;
-use App\EmbargosSedValle;
-use App\EmbargosSemCali;
-use App\EmbargosSemPopayan;
-use App\EmbargosSemQuibdo;
-
-use App\DescuentosSedCauca;
-use App\DescuentosSedChoco;
-use App\DescuentosSedValle;
-use App\DescuentosSemCali;
-use App\DescuentosSemPopayan;
-use App\DescuentosSemQuibdo;
-
-use App\CouponsSedAtlantico;
-use App\CouponsSemBarranquilla;
-use App\CouponsSedBolivar;
 use App\CouponsSedCauca;
 use App\CouponsSedChoco;
 use App\CouponsSedFopep;
-use App\CouponsSedMagdalena;
-use App\CouponsSemPopayan;
-use App\CouponsSemQuibdo;
-use App\CouponsSemSahagun;
-use App\CoupunsSemCali;
 use App\CouponsSedValle;
+use App\DatamesSedCauca;
+use App\DatamesSedChoco;
 
-use Illuminate\Support\Str;
-use App\Exports\NotFoundExport;
-use App\DatamesSedNorteSantander;
-use App\Imports\ClientCollectionImport;
-use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\TestCollectionImport;
+use Illuminate\Support\Facades\Storage;
+use App\Exports\NotFoundExport;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class Test{
+
+
+    public function testPagaduriaIndividual($ciudad,$documento){
+        try {
+            $dataModel = $this->getModelPagaduriaByCity($ciudad);
+            if($dataModel->status==200){
+                $pagaduria = $dataModel->data->model::where('doc',$documento)->get();
+                if(!is_null($pagaduria)){
+                    return json_encode(["status"=>200,"pagaduria"=>$pagaduria]);
+                }else{
+                    return json_encode(["status"=>404,"pagaduria"=>[]]);
+                }
+            }else{
+                return json_encode(["Cuidad no encontrada"]);
+            }
+        } catch (\Throwable $th) {
+            return json_encode(["Ocurrio un error en el test: ".$th->getMessage()]);
+        }
+    }
+
+    public function testPagaduria($ciudad){
+        try {
+            $dateInitial = Carbon::now()->toDateTimeString();
+            $dataExportFile = [];
+            $dataDB = [];
+            $count = 0;
+            $dataModel = $this->getModelPagaduriaByCity($ciudad);
+            if($dataModel->status==200){
+                $dataModel->data->model::where('doc','<>','no hay valores')->chunk(1000, function ($pagadurias) use (&$dataDB,&$count) {
+                    $count = $count + count($pagadurias); 
+                    foreach ($pagadurias as $pag) {
+                        $dataDB[]=$pag->doc;                    
+                    }
+                });
+                $dataFileExcel = $this->getDataFile($ciudad,'pagadurias');
+                $diff = array_diff($dataFileExcel, $dataDB);
+                
+                Excel::store(new NotFoundExport($diff), 'public/'.$ciudad.'/results/pagadurias-no-encontradas.xlsx');
+                $dateFinal = Carbon::now()->toDateTimeString();
+                return json_encode([
+                    "quantityDB"=>$count,
+                    "quantityExcel"=>count($dataFileExcel),
+                    "quantityNotFound"=>count($diff),
+                    "Fecha Inicial"=>$dateInitial,
+                    "Fecha Final"=>$dateFinal
+                ]);
+                
+            }else{
+                return json_encode(["Cuidad no encontrada"]);
+            }
+        } catch (\Throwable $th) {
+            return json_encode(["Ocurrio un error en el test: ".$th->getMessage()]);
+        }
+    }
+
+    
+  /*   public function searchDocumentFileInDataDB($data,$field,$value){
+        $first = Arr::first($data, function ($object) use($field,$value) {
+            return $object->toArray()[$field] == $value;
+        });
+        return is_null($first)?false:true;
+    } */
+
+    public function getModelPagaduriaByCity($ciudad){
+        try {
+            $data = NULL;
+            $ciudad = trim(strtolower($ciudad));
+            switch ($ciudad) {
+                case 'cauca':
+                    $data = (object)["model"=>DatamesSedCauca::class,'label'=>'doc'];
+                break;
+                
+                case 'valle':
+                    $data = (object)["model"=>DatamesSedValle::class,'label'=>'doc'];
+                break;
+                
+                case 'cali':
+                    $data = (object)["model"=>DatamesSemCali::class,'label'=>'doc'];
+                break;
+                
+                case 'atlantico':
+                    $data = (object)["model"=>DatamesSedAtlantico::class,'label'=>'doc'];
+                break;
+                
+                case 'barranquilla':
+                    $data = (object)["model"=>DatamesSemBarranquilla::class,'label'=>'doc'];
+                break;
+                
+                case 'bolivar':
+                    $data = (object)["model"=>DatamesSedBolivar::class,'label'=>'doc'];
+                break;
+                
+                case 'choco':
+                    $data = (object)["model"=>DatamesSedChoco::class,'label'=>'doc'];
+                break;
+                
+                case 'fidu':
+                    $data = (object)["model"=>DatamesFidu::class,'label'=>'doc'];
+                break;
+                
+                case 'fopep':
+                    $data = (object)["model"=>DatamesFopep::class,'label'=>'doc'];
+                break;
+                
+                case 'magdalena':
+                    $data = (object)["model"=>DatamesSedMagdalena::class,'label'=>'codempleado'];
+                break;
+                
+                case 'narino':
+                    $data = (object)["model"=>DatamesSedNarino::class,'label'=>'doc'];
+                break;
+                
+                case 'popayan':
+                    $data = (object)["model"=>DatamesSemPopayan::class,'label'=>'doc'];
+                break;
+                
+                case 'quibdo':
+                    $data = (object)["model"=>DatamesSemQuibdo::class,'label'=>'doc'];
+                break;
+                
+                case 'sahagun':
+                    $data = (object)["model"=>DatamesSemSahagun::class,'label'=>'codempleado'];
+                break;           
+            }
+
+            if(!is_null($data)){
+                return (object)['status'=>200,"data"=>$data];
+            }else{
+                return (object)['status'=>404,"data"=>"Datames no encontrado"];
+            }
+        } catch (\Throwable $th) {
+            return (object)['status'=>404,"data"=>"Error al consultar el datames"];
+        }
+    }
+
+    public function getDataFile($ciudad,$type){
+        $path_test = public_path().Storage::url($ciudad.'/'.$type.'.xlsx');
+        $collection = (new TestCollectionImport)->toCollection($path_test,null,\Maatwebsite\Excel\Excel::XLSX);
+        $data_list = $collection->all()[0];
+        $data_result = [];
+        foreach ($data_list as $data) {
+            $data_result[] = trim($data['documento']);
+        }
+        return $data_result;
+    }
+
+
+
+
+
+
+
+
+
+
+
+//CODIGO ANTES DE REFACTORIZAR
+
+
+
+
+
+
+
     public function individual($doc){
         $data = [];
         $pagadurias =  $this->pagaduriaPerDoc($doc);
@@ -114,7 +212,7 @@ class Test{
 
     public function masivo(){
         $path_test = public_path().Storage::url('test.xlsx');
-        $collection = (new ClientCollectionImport)->toCollection($path_test,null,\Maatwebsite\Excel\Excel::XLSX);
+        $collection = (new TestCollectionImport)->toCollection($path_test,null,\Maatwebsite\Excel\Excel::XLSX);
         $users_list = $collection->all()[0];
         $processed = 0;       
         foreach ($users_list as $user) {
@@ -131,57 +229,20 @@ class Test{
     public function pagaduriaPerDoc($doc)
     {
         $models = [
-            DatamesFidu::class => 'doc',
-            DatamesFopep::class => 'doc',
-            DatamesSedAntioquia::class => 'doc',
-            DatamesSedArauca::class => 'doc',
-            DatamesSedAtlantico::class => 'doc',
-            DatamesSedBolivar::class => 'doc',
-            DatamesSedBoyaca::class => 'doc',
-            DatamesSedCaldas::class => 'doc',
-            DatamesSedCasanare::class => 'doc',
-            DatamesSedCauca::class => 'doc',
-            DatamesSedCesar::class => 'doc',
-            DatamesSedChoco::class => 'doc',
-            DatamesSedCordoba::class => 'doc',
-            DatamesSedCundinamarca::class => 'doc',
-            DatamesSedGuajira::class => 'doc',
-            DatamesSedHuila::class => 'doc',
-            DatamesSedMagdalena::class => 'codempleado',
-            DatamesSedMeta::class => 'doc',
-            DatamesSedNarino::class => 'doc',
-            DatamesSedNorteSantander::class => 'doc',
-            DatamesSedRisaralda::class => 'doc',
-            DatamesSedSantander::class => 'doc',
-            DatamesSedSucre::class => 'doc',
-            DatamesSedTolima::class => 'doc',
-            DatamesSedValle::class => 'doc',
-            DatamesSemBarranquilla::class => 'doc',
-            DatamesSemBuga::class => 'doc',
-            DatamesSemCali::class => 'doc',
-            DatamesSemCartagena::class => 'doc',
-            DatamesSemGirardot::class => 'doc',
-            DatamesSemIbague::class => 'doc',
-            DatamesSemIpiales::class => 'doc',
-            DatamesSemJamundi::class => 'doc',
-            DatamesSemMagangue::class => 'doc',
-            DatamesSemMedellin::class => 'doc',
-            DatamesSemMonteria::class => 'doc',
-            DatamesSemMosquera::class => 'doc',
-            DatamesSemNeiva::class => 'doc',
-            DatamesSemPalmira::class => 'doc',
-            DatamesSemPasto::class => 'doc',
-            DatamesSemPopayan::class => 'doc',
-            DatamesSemQuibdo::class => 'doc',
-            DatamesSemRioNegro::class => 'doc',
-            DatamesSemSabaneta::class => 'doc',
-            DatamesSemSahagun::class => 'codempleado',
-            DatamesSemSincelejo::class => 'doc',
-            DatamesSemSoledad::class => 'doc',
-            DatamesSemValledupar::class => 'doc',
-            DatamesSemYopal::class => 'doc',
-            DatamesSemYumbo::class => 'doc',
-            DatamesSemZipaquira::class => 'doc',
+            DatamesSedCauca::class=> 'doc',
+            DatamesSedValle::class=> 'doc',
+            DatamesSemCali::class=> 'doc',
+            DatamesSedAtlantico::class=> 'doc',
+            DatamesSemBarranquilla::class=> 'doc',
+            DatamesSedBolivar::class=> 'doc',
+            DatamesSedChoco::class=> 'doc',
+            DatamesFidu::class=> 'doc',
+            DatamesFopep::class=> 'doc',
+            DatamesSedMagdalena::class=> 'codempleado',
+            DatamesSedNarino::class=> 'doc',
+            DatamesSemPopayan::class=> 'doc',
+            DatamesSemQuibdo::class=> 'doc',
+            DatamesSemSahagun::class=> 'codempleado'
         ];
 
         $results = [];

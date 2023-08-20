@@ -3,14 +3,14 @@
     <thead>
     <tr>
         <th>Documento</th>
-        <th>Pagadurias</th>
+        <th>Resultados</th>
     </tr>
     </thead>
     <tbody>
-    @foreach($clients as $client)
+    @foreach($clients as $doc)
         <tr>
-            <td>{{ $client->doc }}</td>
-            <td>{{ $client->pagadurias }}</td>
+            <td>{{ $doc }}</td>
+            <td>No se encuentran en la base de datos</td>
         </tr>
     @endforeach
     </tbody>

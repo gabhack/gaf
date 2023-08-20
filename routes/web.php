@@ -21,6 +21,11 @@ Route::get('/get-test', 'TestController@index');
 Route::get('/get-test/{doc}', 'TestController@search');
 
 
+Route::get('/test-pagadurias/{ciudad}', 'TestController@testPagaduria');
+Route::get('/test-pagadurias/{ciudad}/{documento}', 'TestController@testPagaduriaIndividual');
+
+
+
 
 Auth::routes(['register' => true]);
 
