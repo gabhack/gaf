@@ -17,8 +17,8 @@
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "~5.0",
         "maatwebsite/excel": "^3.1",
-        "smalot/pdfparser": "*",
-        "orchestra/parser": "^3.5"
+        "orchestra/parser": "^3.5",
+        "smalot/pdfparser": "*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
