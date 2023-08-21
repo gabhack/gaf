@@ -15,7 +15,7 @@ class VentaCarteraController extends Controller
      */
     public function index(Request $request)
     {
-        // necesitamos el sufijo para saver si es ventas de cartera externas o no 
+        // necesitamos el sufijo para saver si es ventas de cartera externas o no
         $sufijo = "";
         if ($request->sufijo === "ext") {
             $sufijo = $request->sufijo;

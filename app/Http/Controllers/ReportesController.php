@@ -27,13 +27,11 @@ class ReportesController extends Controller
         return view('reportes/index');
     }
 
-
     public function consultas()
     {
         $pagadurias = \App\Pagadurias::orderBy('pagaduria')->get();
         return view('reportes/consultas')->with(['pagadurias' => $pagadurias]);
     }
-
 
     public function personalizados()
     {
