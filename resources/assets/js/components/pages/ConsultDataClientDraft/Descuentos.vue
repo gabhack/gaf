@@ -17,11 +17,11 @@
                     <div class="col-1">
                         <b class="panel-label table-text"></b>
                     </div>
-                    <div class="col-2">
-                        <b class="panel-label table-text">MENSAJE:</b>
+                    <div class="col-3 px-0">
+                        <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
                     </div>
-                    <div class="col-2">
-                        <b class="panel-label table-text">FECHA:</b>
+                    <div class="col-3 px-0">
+                        <b class="panel-label table-text">VALOR CUOTA EN MORA:</b>
                     </div>
                 </div>
 
@@ -29,11 +29,11 @@
                     <div class="col-1 pr-0">
                         <input v-model="item.check" type="checkbox" />
                     </div>
-                    <div class="col-2 px-0">
+                    <div class="col-3 px-0">
                         <p>{{ item.mliquid || '-' }}</p>
                     </div>
-                    <div class="col-2 px-0">
-                        <p>{{ item.fecdata || '-' }}</p>
+                    <div class="col-3 px-0">
+                        <p>{{ (item.valor || '-') | currency }}</p>
                     </div>
                 </div>
             </div>

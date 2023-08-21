@@ -31,14 +31,18 @@ class CifinController extends Controller
     public function index()
     {
         if (IsSuperAdmin() || IsAMIAdmin() || IsHEGOAdmin()) {
-            $lista = Cifin::all()->orderBy('id', 'DESC')->paginate(20);
+            $lista = Cifin::all()
+                ->orderBy('id', 'DESC')
+                ->paginate(20);
         } else {
-            $lista = Cifin::where('usuarioid', Auth::user()->id)->orderBy('id', 'DESC')->paginate(15);
+            $lista = Cifin::where('usuarioid', Auth::user()->id)
+                ->orderBy('id', 'DESC')
+                ->paginate(15);
         }
 
         $links = $lista->links();
 
-        return view("cifin/index")->with(["links" => $links, "lista" => $lista]);
+        return view('cifin/index')->with(['links' => $links, 'lista' => $lista]);
     }
 
     public function consultarAdmin(Request $request)
@@ -46,15 +50,16 @@ class CifinController extends Controller
         $cedula = $request->cedula;
         $apellido = $request->apellido;
 
-        $soapUser = env('CIFIN_USER');  //  username
+        $soapUser = env('CIFIN_USER'); //  username
         $soapPassword = env('CIFIN_PASSWORD'); // password
-        $url = env('CIFIN_URL') . "?wsdl";
+        $url = env('CIFIN_URL') . '?wsdl';
 
-        $hoy = date("Y-m-d");
-        $hora = date("H:i:s");
+        $hoy = date('Y-m-d');
+        $hora = date('H:i:s');
         $fecha = $hoy . 'T' . $hora;
 
-        $xml_post_string = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws/">
+        $xml_post_string =
+            '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws/">
             <soapenv:Header/>
                 <soapenv:Body>
                 <ws:consultaXml>
@@ -63,9 +68,13 @@ class CifinController extends Controller
                     <!--Optional:-->
                     <motivoConsulta>24</motivoConsulta>
                     <!--Optional:-->
-                    <numeroIdentificacion>' . $cedula . '</numeroIdentificacion>
+                    <numeroIdentificacion>' .
+            $cedula .
+            '</numeroIdentificacion>
                     <!--Optional:-->
-                    <primerApellido>' . $apellido . '</primerApellido>
+                    <primerApellido>' .
+            $apellido .
+            '</primerApellido>
                     <!--Optional:-->
                     <tipoIdentificacion>1</tipoIdentificacion>
                 </ws:consultaXml>
@@ -78,23 +87,23 @@ class CifinController extends Controller
         $doc->loadXML($xml_post_string);
         $doc->save('cifinRequestAdmin_' . $xml_name);
 
-        $headers = array(
+        $headers = [
             "Content-type: text/xml;charset=\"utf-8\"",
-            "Accept: text/xml",
-            "Cache-Control: no-cache",
-            "Pragma: no-cache",
-            "Accept-Encoding: gzip,deflate",
-            "Pragma: no-cache",
-            "X-Atlassian-Token: no-check",
-            "SOAPAction: " . env('CIFIN_URL'),
-            "Content-length: " . strlen($xml_post_string),
-        );
+            'Accept: text/xml',
+            'Cache-Control: no-cache',
+            'Pragma: no-cache',
+            'Accept-Encoding: gzip,deflate',
+            'Pragma: no-cache',
+            'X-Atlassian-Token: no-check',
+            'SOAPAction: ' . env('CIFIN_URL'),
+            'Content-length: ' . strlen($xml_post_string),
+        ];
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_USERPWD, $soapUser . ":" . $soapPassword); // username and password - declared at the top of the doc
+        curl_setopt($ch, CURLOPT_USERPWD, $soapUser . ':' . $soapPassword); // username and password - declared at the top of the doc
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
         curl_setopt($ch, CURLOPT_POST, true);
@@ -113,7 +122,7 @@ class CifinController extends Controller
         $demo = $array['S:Envelope']['S:Body']['ns2:consultaXmlResponse']['return'];
         $resultado = XmlaPhp::createArray($demo);
 
-        return view("cifin/consulta")->with(["resultado" => (object)$resultado]);
+        return view('cifin/consulta')->with(['resultado' => (object) $resultado]);
     }
 
     public function consultar(Request $request)
@@ -124,15 +133,16 @@ class CifinController extends Controller
         $apellido = strtoupper($cotizer->firstLastname);
         $typeDocument = $cotizer->idType == 'CC' ? '1' : '2';
 
-        $soapUser = env('CIFIN_USER');  //  username
+        $soapUser = env('CIFIN_USER'); //  username
         $soapPassword = env('CIFIN_PASSWORD'); // password
-        $url = env('CIFIN_URL') . "?wsdl";
+        $url = env('CIFIN_URL') . '?wsdl';
 
-        $hoy = date("Y-m-d");
-        $hora = date("H:i:s");
+        $hoy = date('Y-m-d');
+        $hora = date('H:i:s');
         $fecha = $hoy . 'T' . $hora;
 
-        $xml_post_string = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws/">
+        $xml_post_string =
+            '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws/">
             <soapenv:Header/>
                 <soapenv:Body>
                 <ws:consultaXml>
@@ -141,9 +151,13 @@ class CifinController extends Controller
                     <!--Optional:-->
                     <motivoConsulta>24</motivoConsulta>
                     <!--Optional:-->
-                    <numeroIdentificacion>' . $cedula . '</numeroIdentificacion>
+                    <numeroIdentificacion>' .
+            $cedula .
+            '</numeroIdentificacion>
                     <!--Optional:-->
-                    <primerApellido>' . $apellido . '</primerApellido>
+                    <primerApellido>' .
+            $apellido .
+            '</primerApellido>
                     <!--Optional:-->
                     <tipoIdentificacion>1</tipoIdentificacion>
                 </ws:consultaXml>
@@ -156,23 +170,23 @@ class CifinController extends Controller
         $doc->loadXML($xml_post_string);
         $doc->save('cifinRequest_' . $xml_name);
 
-        $headers = array(
+        $headers = [
             "Content-type: text/xml;charset=\"utf-8\"",
-            "Accept: text/xml",
-            "Cache-Control: no-cache",
-            "Pragma: no-cache",
-            "Accept-Encoding: gzip,deflate",
-            "Pragma: no-cache",
-            "X-Atlassian-Token: no-check",
-            "SOAPAction: " . env('CIFIN_URL'),
-            "Content-length: " . strlen($xml_post_string),
-        );
+            'Accept: text/xml',
+            'Cache-Control: no-cache',
+            'Pragma: no-cache',
+            'Accept-Encoding: gzip,deflate',
+            'Pragma: no-cache',
+            'X-Atlassian-Token: no-check',
+            'SOAPAction: ' . env('CIFIN_URL'),
+            'Content-length: ' . strlen($xml_post_string),
+        ];
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_USERPWD, $soapUser . ":" . $soapPassword); // username and password - declared at the top of the doc
+        curl_setopt($ch, CURLOPT_USERPWD, $soapUser . ':' . $soapPassword); // username and password - declared at the top of the doc
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
         curl_setopt($ch, CURLOPT_POST, true);
@@ -194,28 +208,28 @@ class CifinController extends Controller
         $score = $resultado['CIFIN']['Tercero']['Score']['Puntaje'];
 
         $data = [
-            'nitEmisor' => "9004326290",
+            'nitEmisor' => '9004326290',
             'idClaseDefinicionDocumento' => env('DECEVEL_ID_CLASE_DOCUMENTO'),
             'fechaGrabacionPagare' => date('Y-m-d'),
             'numPagareEntidad' => date('Y-m-d-h:i') . '_PAG',
             'fechaDesembolso' => date('Y-m-d'),
             'otorganteTipoId' => $typeDocument,
             'otorganteNumId' => $cotizer->idNumber,
-            'otorganteCuenta' => "103869",
+            'otorganteCuenta' => '103869',
             'expeditionDate' => $cotizer->idExpeditionDate,
-            "girador" => [
+            'girador' => [
                 'tipoDocumento' => $typeDocument,
                 'numeroDocumento' => $cotizer->idNumber,
                 'correoElectronico' => $cotizer->email,
                 'direccion' => 'CALLE 1 # 2 - 3',
                 'telefono' => $cotizer->phoneNumber,
-                'pais'  => 'CO',
+                'pais' => 'CO',
                 'departamento' => '11',
                 'ciudad' => '11001',
                 'nombres' => $cotizer->firstName . ' ' . $cotizer->middleName,
                 'primerApellido' => $cotizer->firstLastname,
                 'segundoApellido' => $cotizer->secondLastname,
-            ]
+            ],
         ];
 
         // $cifin = Cifin::create([
@@ -226,7 +240,7 @@ class CifinController extends Controller
         //     'data' => json_encode($data),
         // ]);
 
-        if ($score >= 350) {
+        if ($score >= 0) {
             return redirect()->route('deceval.consultar', $data);
         } else {
             return redirect()->route('register.credit', ['status' => 'awaiting']);
