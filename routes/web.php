@@ -523,5 +523,5 @@ Route::middleware('auth')->group(function () {
 //     return csrf_token();
 // });
 
-//Rutas oara ventas de cartera 
+// Rutas para ventas de cartera
 Route::resource('ventaCartera', 'VentaCarteraController');

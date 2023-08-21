@@ -40,26 +40,27 @@ class AmiTest extends Command
     {
         $type = $this->argument('type');
         $ciudad = $this->argument('ciudad');
+
         switch ($type) {
             case 'pagaduria':
                 Test::testPagaduria($ciudad);
-            break;
+                break;
 
             case 'embargo':
                 Test::testEmbargo($ciudad);
-            break;
+                break;
 
             case 'cupon':
                 Test::testCupon($ciudad);
-            break;            
+                break;
 
             case 'descuento':
                 Test::testDescuento($ciudad);
-            break;
+                break;
 
             default:
                 echo "El tipo ingresado no existe | valores permitidos son , pagaduria, embargo, cupon y descuento";
-            break;
+                break;
         }
     }
 }
