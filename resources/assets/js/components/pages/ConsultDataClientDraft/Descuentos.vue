@@ -33,7 +33,7 @@
                         <p>{{ item.mliquid || '-' }}</p>
                     </div>
                     <div class="col-3 px-0">
-                        <p>{{ item.valor || '-' | currency }}</p>
+                        <p>{{ (item.valor || '-') | currency }}</p>
                     </div>
                 </div>
             </div>
