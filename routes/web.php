@@ -523,5 +523,11 @@ Route::middleware('auth')->group(function () {
 //     return csrf_token();
 // });
 
-// Rutas para ventas de cartera
+//Rutas para ventas de cartera
 Route::resource('ventaCartera', 'VentaCarteraController');
+
+//Rutas para carteras
+Route::resource('cartera', 'CarteraController');
+
+//Reporte de planta comercial
+Route::get('reporte-planta-comercial', 'ReportesController@reportePlantaComercial');
