@@ -17,14 +17,21 @@ use App\Http\Controllers\VisadoController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/get-test', 'TestController@index');
-Route::get('/get-test/{doc}', 'TestController@search');
+/* Route::get('/get-test', 'TestController@index');
+Route::get('/get-test/{doc}', 'TestController@search'); */
 
 
-Route::get('/test-pagadurias/{ciudad}', 'TestController@testPagaduria');
+/* Route::get('/test-pagadurias/{ciudad}', 'TestController@testPagaduria');
 Route::get('/test-pagadurias/{ciudad}/{documento}', 'TestController@testPagaduriaIndividual');
 
+Route::get('/test-embargos/{ciudad}', 'TestController@testEmbargo');
+Route::get('/test-embargos/{ciudad}/{documento}', 'TestController@testEmbargoIndividual');
 
+Route::get('/test-descuentos/{ciudad}', 'TestController@testDescuento');
+Route::get('/test-descuentos/{ciudad}/{documento}', 'TestController@testDescuentoIndividual');
+
+Route::get('/test-cupones/{ciudad}', 'TestController@testCupon');
+Route::get('/test-cupones/{ciudad}/{documento}', 'TestController@testCuponIndividual'); */
 
 
 Auth::routes(['register' => true]);

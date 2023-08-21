@@ -15,6 +15,38 @@ class TestController extends Controller
         return Test::testPagaduria($ciudad);
     }
 
+    public function testEmbagoIndividual($ciudad,$documento){
+        return Test::testEmbargoIndividual($ciudad,$documento);
+    }
+    public function testEmbargo($ciudad){
+        return Test::testEmbargo($ciudad);
+    }
+
+
+    public function testDescuentoIndividual($ciudad,$documento){
+        return Test::testDescuentoIndividual($ciudad,$documento);
+    }
+    public function testDescuento($ciudad){
+        return Test::testDescuento($ciudad);
+    }
+
+
+    public function testCuponIndividual($ciudad,$documento){
+        return Test::testCuponIndividual($ciudad,$documento);
+    }
+    public function testCupon($ciudad){
+        return Test::testCupon($ciudad);
+    }
+
+
+
+
+
+
+
+
+
+
     public function index(){
         return Test::masivo();   
     }
