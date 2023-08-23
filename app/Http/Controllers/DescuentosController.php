@@ -20,7 +20,7 @@ class DescuentosController extends Controller
     public function index(Request $request)
     {
         $doc = $request->doc;
-        $embargoType = $request->pagaduria;
+        $descuentoType = $request->pagaduria;
 
         $models = [
             DescuentosSedCauca::class => 'doc',
@@ -36,8 +36,8 @@ class DescuentosController extends Controller
         foreach ($models as $model => $column) {
             $className = class_basename($model);
 
-            if ($className == $embargoType) {
-                $results = $model::where($column, $doc)->get();
+            if ($className == $descuentoType) {
+                $results = $model::where($column, 'LIKE', '%' . $doc . '%')->get();
             }
         }
 
