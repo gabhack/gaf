@@ -37,7 +37,7 @@ class EmbargosController extends Controller
             $className = class_basename($model);
 
             if ($className == $embargoType) {
-                $results = $model::where($column, $doc)->get();
+                $results = $model::where($column, 'LIKE', '%' . $doc . '%')->get();
             }
         }
 

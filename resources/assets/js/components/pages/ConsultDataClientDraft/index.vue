@@ -302,7 +302,7 @@ export default {
         }
     },
     computed: {
-        ...mapState('pagaduriasModule', ['coupons', 'pagaduriaType']),
+        ...mapState('pagaduriasModule', ['coupons', 'couponsType', 'pagaduriaType']),
         ...mapGetters('pagaduriasModule', [
             'couponsPerPeriod',
             'valorIngreso',
@@ -474,7 +474,10 @@ export default {
             this.getDescuentossemsahagun(payload);
             this.getDescapli(payload);
             this.getDescnoap(payload);
-            this.getCoupons(payload);
+            this.getCoupons({
+                doc: payload.doc,
+                pagaduria: this.couponsType
+            });
             this.getEmbargos({
                 doc: payload.doc,
                 pagaduria: this.embargosType

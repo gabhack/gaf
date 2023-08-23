@@ -2,6 +2,7 @@ const pagaduriasModule = {
     namespaced: true,
     state: {
         coupons: [],
+        couponsType: '',
         pagaduriaType: '',
         pagaduriasTypes: [
             { label: 'FIDUPREVISORA', value: 'FIDUPREVISORA', key: 'datamesFidu' },
@@ -172,6 +173,9 @@ const pagaduriasModule = {
         },
         setCoupons: (state, payload) => {
             state.coupons = payload;
+        },
+        setCouponsType: (state, payload) => {
+            state.couponsType = payload;
         },
         setSelectedPeriod: (state, payload) => {
             state.selectedPeriod = payload;

@@ -217,7 +217,7 @@ class PagaduriasController extends Controller
         $results = [];
 
         foreach ($models as $model => $column) {
-            $data = $model::where($column, $doc)->first();
+            $data = $model::where($column, 'LIKE', '%' . $doc . '%')->first();
 
             if ($data) {
                 $modelName = class_basename($model);
