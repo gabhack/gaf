@@ -39,7 +39,7 @@
                 <!--============================
                     FIDUPREVISORA datamesFidu
                 ==============================-->
-                <DatamesFiduComponent
+                <DatamesFidu
                     v-if="pagaduriaType == 'FIDUPREVISORA' && datamesFidu"
                     :user="user"
                     :datamesFidu="datamesFidu"
@@ -48,7 +48,7 @@
                 <!--============================
                     DATAMESSEDUC SED VALLE
                 ==============================-->
-                <DatamesSedValleComponent
+                <DatamesSedValle
                     v-if="pagaduriaType == 'SEDVALLE' && datamessedvalle"
                     :user="user"
                     :datamessedvalle="datamessedvalle"
@@ -69,7 +69,6 @@
                 <DatamesData
                     v-if="
                         pagaduriaType == 'SEDCAUCA' ||
-                        pagaduriaType == 'SEDCHOCO' ||
                         pagaduriaType == 'SEMQUIBDO' ||
                         pagaduriaType == 'SEMPOPAYAN' ||
                         pagaduriaType == 'SEDBOLIVAR' ||
@@ -79,6 +78,7 @@
                     "
                 />
 
+                <DatamesSedChoco v-if="pagaduriaType == 'SEDCHOCO'" />
                 <DatamesSedMagdalena v-if="pagaduriaType == 'SEDMAGDALENA'" />
                 <DatamesSemSahagun v-if="pagaduriaType == 'SEMSAHAGUN'" />
 
@@ -183,12 +183,13 @@ import EmploymentHistory from './EmploymentHistory';
 import DatamesComponent from './Datames.vue';
 
 import DatamesData from './DatamesData';
+import DatamesFidu from './DatamesFidu';
+import DatamesSedChoco from './DatamesSedChoco.vue';
 import DatamesSedMagdalena from './DatamesSedMagdalena';
+import DatamesSedValle from './DatamesSedValle.vue';
+import DatamesSemCali from './DatamesSemCali.vue';
 import DatamesSemSahagun from './DatamesSemSahagun';
 
-import DatamesSedValleComponent from './DatamesSedValle.vue';
-import DatamesFiduComponent from './DatamesFidu';
-import DatamesSemCali from './DatamesSemCali.vue';
 import Descapli from './Descapli';
 import DescapliEmpty from './DescapliEmpty';
 import Descnoap from './Descnoap';
@@ -213,11 +214,12 @@ export default {
         EmploymentHistory,
         DatamesComponent,
         DatamesData,
+        DatamesFidu,
+        DatamesSedChoco,
         DatamesSedMagdalena,
-        DatamesSemSahagun,
-        DatamesSedValleComponent,
-        DatamesFiduComponent,
+        DatamesSedValle,
         DatamesSemCali,
+        DatamesSemSahagun,
         Descapli,
         DescapliEmpty,
         Descnoap,
