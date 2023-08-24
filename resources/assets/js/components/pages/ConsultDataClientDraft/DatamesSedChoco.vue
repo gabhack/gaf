@@ -13,27 +13,25 @@
                     <div class="col-6">
                         <b class="panel-label">NUMERO DE DOCUMENTO:</b>
                         <div>
-                            <p class="panel-value">{{ datamessemcali.nvinc ? datamessemcali.nvinc : '-' }}</p>
+                            <p class="panel-value">{{ datamesSed.doc || '-' }}</p>
                         </div>
                     </div>
                     <div class="col-6">
                         <b class="panel-label">NOMBRE Y APELLIDO:</b>
                         <div>
-                            <p class="panel-value">{{ datamessemcali.nomp ? datamessemcali.nomp : '-' }}</p>
+                            <p class="panel-value">{{ datamesSed.nomp || '-' }}</p>
                         </div>
                     </div>
                     <div class="col-6">
                         <b class="panel-label">FECHA DE NACIMIENTO:</b>
                         <div>
-                            <p class="panel-value">
-                                {{ datamessemcali.fecnacimient ? datamessemcali.fecnacimient : '-' }}
-                            </p>
+                            <p class="panel-value">{{ datamesSed.fecnacimient || '-' }}</p>
                         </div>
                     </div>
                     <div class="col-6">
                         <b class="panel-label">DIRECCIÓN:</b>
                         <div>
-                            <p class="panel-value">{{ datamessemcali.dir ? datamessemcali.dir : '-' }}</p>
+                            <p class="panel-value">{{ datamesSed.dir || '-' }}</p>
                         </div>
                     </div>
                     <div class="col-6">
@@ -49,15 +47,15 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <b class="panel-label">TELEFONO:</b>
+                        <b class="panel-label">TELÉFONO:</b>
                         <div>
-                            <p class="panel-value">{{ datamessemcali.tel ? datamessemcali.mesdata : '-' }}</p>
+                            <p class="panel-value">{{ datamesSed.tel || '-' }}</p>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <b class="panel-label">CELULAR:</b>
                         <div>
-                            <p class="panel-value">-</p>
+                            <p class="panel-value">{{ datamesSed.tel || '-' }}</p>
                         </div>
                     </div>
                 </div>
@@ -67,10 +65,12 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
-    name: 'DatamesSemCali',
-    props: ['datamessemcali', 'user']
+    name: 'DatamesSedChoco',
+    computed: {
+        ...mapState('datamesModule', ['datamesSed'])
+    }
 };
 </script>
-
-<style scoped></style>
