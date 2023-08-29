@@ -500,7 +500,7 @@ Route::post('/get-coupons', 'CouponsController@index')->name('coupons.index');
 //     return csrf_token();
 // });
 
-//Rutas para ventas de cartera 
+//Rutas para ventas de cartera
 Route::resource('ventaCartera', 'VentaCarteraController');
 
 //Rutas para carteras
