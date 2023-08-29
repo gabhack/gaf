@@ -384,7 +384,7 @@ Route::group(['prefix' => 'estudios'], function () {
     //
     Route::get('/borrar/{id}', 'EstudiosController@eliminar');
 
-    Route::get('/tesoreria', 'EstudiosController@tesoreria')->name('hego.tesoreria');
+    Route::get('/tesoreria', 'TesoreriaController@index')->name('hego.tesoreria');
 
     Route::get('/cartera', 'EstudiosController@cartera')->name('hego.cartera');
 
