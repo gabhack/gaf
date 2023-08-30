@@ -316,6 +316,7 @@ export default {
         ...mapState('embargosModule', ['embargosType']),
         ...mapState('descuentosModule', ['descuentosType']),
         ...mapState('datamesModule', ['cuotadeseada', 'conteoEgresosPlus']),
+        ...mapGetters('descuentosModule', ['descuentosPerPeriod']),
         totales() {
             const valrSM = 1160000;
 
@@ -377,38 +378,6 @@ export default {
                 totalEgresos = items.reduce((total, item) => total + Number(item.egresos), 0);
             }
 
-            let totalDescuentos = 0;
-            if (this.pagaduriaType === 'FOPEP' || this.pagaduriaType == 'FIDUPREVISORA') {
-                totalDescuentos = this.descapli.length;
-            } else if (
-                this.pagaduriaType === 'SEDATLANTICO' ||
-                this.pagaduriaType === 'SEMBARRANQUILLA' ||
-                this.pagaduriaType === 'SEDMAGDALENA' ||
-                this.pagaduriaType === 'SEMSAHAGUN' ||
-                this.pagaduriaType === 'SEDBOLIVAR' ||
-                this.pagaduriaType === 'SEDNARINO'
-            ) {
-                totalDescuentos = 0;
-            } else {
-                totalDescuentos = this.pagaduriaKey ? this[`descuentos${this.pagaduriaKey}`].length : 0;
-            }
-
-            let totalEmbargos = 0;
-            if (this.pagaduriaType === 'FOPEP' || this.pagaduriaType == 'FIDUPREVISORA') {
-                totalEmbargos = 0; // this.descnoap.length
-            } else if (
-                this.pagaduriaType === 'SEDATLANTICO' ||
-                this.pagaduriaType === 'SEMBARRANQUILLA' ||
-                this.pagaduriaType === 'SEDMAGDALENA' ||
-                this.pagaduriaType === 'SEMSAHAGUN' ||
-                this.pagaduriaType === 'SEDBOLIVAR' ||
-                this.pagaduriaType === 'SEDNARINO'
-            ) {
-                totalEmbargos = 0;
-            } else {
-                totalEmbargos = this.pagaduriaKey ? this[`embargos${this.pagaduriaKey}`].length : 0;
-            }
-
             let previousDiscount = valorIngresoTemp / 2;
 
             let libreInversion = 0;
@@ -436,8 +405,6 @@ export default {
             }
 
             return {
-                descuentos: totalDescuentos,
-                embargos: totalEmbargos,
                 libreInversion: libreInversion < 0 ? 0 : libreInversion,
                 libreInversionSuma: libreInversionSuma,
                 compraCartera: compraCartera < 0 ? 0 : compraCartera,
@@ -596,56 +563,10 @@ export default {
             const cuotaMenor = Number(this.cuotadeseada) < cuotaMaximaDef;
             const cuotaMayor = Number(this.cuotadeseada) > cuotaMaximaDef;
 
-            if (this.pagaduriaType == 'SEDVALLE') {
-                if (this.descuentossedvalle.length > 0) {
-                    obligacionMarcadas = this.descuentossedvalle.every(item => item.check == true);
-                } else {
-                    embargosSinMora = true;
-                }
-            } else if (this.pagaduriaType == 'SEMCALI') {
-                if (this.descuentossemcali.length > 0) {
-                    obligacionMarcadas = this.descuentossemcali.every(item => item.check == true);
-                } else {
-                    embargosSinMora = true;
-                }
-            } else if (this.pagaduriaType == 'SEDCHOCO') {
-                if (this.descuentossedchoco.length > 0) {
-                    obligacionMarcadas = this.descuentossedchoco.every(item => item.check == true);
-                } else {
-                    embargosSinMora = true;
-                }
-            } else if (this.pagaduriaType == 'SEDCAUCA') {
-                if (this.descuentossedcauca.length > 0) {
-                    obligacionMarcadas = this.descuentossedcauca.every(item => item.check == true);
-                } else {
-                    embargosSinMora = true;
-                }
-            } else if (this.pagaduriaType == 'SEMQUIBDO') {
-                if (this.descuentossemquibdo.length > 0) {
-                    obligacionMarcadas = this.descuentossemquibdo.every(item => item.check == true);
-                } else {
-                    embargosSinMora = true;
-                }
-            } else if (this.pagaduriaType == 'SEMSAHAGUN') {
-                if (this.descuentossemsahagun.length > 0) {
-                    obligacionMarcadas = this.descuentossemsahagun.every(item => item.check == true);
-                } else {
-                    embargosSinMora = true;
-                }
-            } else if (this.pagaduriaType == 'SEDMAGDALENA') {
+            if (this.descuentosPerPeriod.total > 0) {
+                obligacionMarcadas = this.descuentosPerPeriod.items.some(item => item.check == true);
+            } else {
                 embargosSinMora = true;
-            } else if (this.pagaduriaType == 'SEMPOPAYAN') {
-                if (this.descuentossempopayan.length > 0) {
-                    obligacionMarcadas = this.descuentossempopayan.every(item => item.check == true);
-                } else {
-                    embargosSinMora = true;
-                }
-            } else if (this.pagaduriaType == 'FOPEP') {
-                if (this.descnoap.length > 0) {
-                    obligacionMarcadas = this.descnoap.every(item => item.check == true);
-                } else {
-                    embargosSinMora = true;
-                }
             }
 
             if (cuotaMenor === true && obligacionMarcadas === false) {

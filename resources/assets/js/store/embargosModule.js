@@ -21,7 +21,7 @@ const embargosModule = {
             const items = state.embargos.filter(item => item.nomina === state.selectedPeriod);
 
             return {
-                items: items,
+                items: items.map(item => ({ ...item, check: false })),
                 total: items.length
             };
         }

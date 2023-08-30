@@ -62,7 +62,7 @@
                                 name="proc_en_contra"
                                 id="proc_en_contra"
                                 placeholder="Opcional"
-                                :value="totales.descuentos"
+                                :value="descuentosPerPeriod.total"
                                 min="1"
                                 max="99"
                                 disabled
@@ -73,7 +73,7 @@
                                 name="proc_en_contra"
                                 id="proc_en_contra"
                                 placeholder="Opcional"
-                                :value="totales.embargos"
+                                :value="embargosPerPeriod.total"
                                 min="1"
                                 max="99"
                                 disabled
@@ -169,7 +169,9 @@ export default {
     props: ['totales'],
     computed: {
         ...mapState('datamesModule', ['cuotadeseada', 'conteoEgresos', 'conteoEgresosPlus']),
-        ...mapGetters('pagaduriasModule', ['couponsIngresos'])
+        ...mapGetters('pagaduriasModule', ['couponsIngresos']),
+        ...mapGetters('embargosModule', ['embargosPerPeriod']),
+        ...mapGetters('descuentosModule', ['descuentosPerPeriod'])
     },
     methods: {
         ...mapMutations('datamesModule', ['setCuotaDeseada'])

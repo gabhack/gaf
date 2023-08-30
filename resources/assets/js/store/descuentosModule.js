@@ -18,10 +18,12 @@ const descuentosModule = {
             return periodos.sort((a, b) => new Date(b) - new Date(a));
         },
         descuentosPerPeriod: state => {
-            const items = state.descuentos.filter(item => item.nomina === state.selectedPeriod);
+            const items = state.descuentos.filter(
+                item => item.nomina === state.selectedPeriod && item.mliquid !== 'ALERTA'
+            );
 
             return {
-                items: items,
+                items: items.map(item => ({ ...item, check: false })),
                 total: items.length
             };
         }
