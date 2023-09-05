@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Clientes as Clientes;
 use App\Asesores as Asesores;
 use App\Estudiostr as Estudios;
+use App\dataCotizer;
 use App\Registrosfinancieros as Registrosfinancieros;
 use App\Parametros as Parametros;
 use App\Centrales as Centrales;
@@ -13,17 +14,14 @@ use App\Aliados as Aliados;
 use App\TiposCliente as TiposCliente;
 use App\Sectores as Sectores;
 use App\Estadoscartera as Estadoscartera;
-use App\EntidadesCentrales as EntidadesCentrales;
 use App\Condicionesaf as Condicionesaf;
 use App\Carteras as Carteras;
 use App\FactorXMillonKredit as FactorXMillonKredit;
 use App\FactorXMillonGnb as FactorXMillonGnb;
 //
 use Illuminate\Support\Facades\DB as DB;
-use Illuminate\Support\Facades\Input as Input;
 use Illuminate\Support\Facades\Auth as Auth;
 use Illuminate\Http\Request;
-use App\Helper;
 use DateTime;
 
 class EstudiosController extends Controller
@@ -117,8 +115,13 @@ class EstudiosController extends Controller
         //Preparar la salida
         $listaOut = $lista->paginate(20)->appends(request()->except('page'));
         $links = $listaOut->links();
+
+        $dataCotizer = dataCotizer::orderBy('id', 'desc');
+        $listaCotizer = $dataCotizer->paginate(20)->appends(request()->except('page'));
+
         $options = array(
-            "lista" => $listaOut,
+            //"lista" => $listaOut,
+            "lista" => $listaCotizer,
             "links" => $links
         );
 
@@ -180,15 +183,19 @@ class EstudiosController extends Controller
                 $aliadosCompleto = Aliados::all();
                 $factores_x_millon_kredit = array();
                 $factores_kredit = FactorXMillonKredit::all();
+
                 foreach ($factores_kredit as $key => $factor) {
                     $factores_x_millon_kredit[$factor->llave] = $factor->valor;
                 }
+
                 $factores_x_millon_gnb = array();
                 $factores_gnb = FactorXMillonGnb::all();
+
                 foreach ($factores_gnb as $key => $factor) {
                     $factores_x_millon_gnb[$factor->pagaduria][$factor->plazo]['normal'] = $factor->normal;
                     $factores_x_millon_gnb[$factor->pagaduria][$factor->plazo]['saneamiento'] = $factor->saneamiento;
                 }
+
                 $viabilidad = calcula_viabilidad_inicial($cliente);
 
                 $registrosf = $cliente->registrosfinancieros->pluck('periodo')->unique();
@@ -203,6 +210,7 @@ class EstudiosController extends Controller
 
                 $sueldobasico = $cliente->ingresos;
                 $adicional = 0;
+
                 if ($cliente->cargo) {
                     if (strpos($cliente->cargo, 'Rector') !== false) {
                         $adicional = ($cliente->ingresos * .3);
@@ -213,12 +221,14 @@ class EstudiosController extends Controller
 
                 $aportes = 0;
                 $vinculacion = '';
+
                 if ($registro->pagaduria->de_pensiones) {
                     $vinculacion = 'PENS';
                     $aportes = Parametros::where('llave', 'APORTES_PENSIONADOS')->first();
                 } else {
                     $aportes = Parametros::where('llave', 'APORTES_ACTIVOS')->first();
                 }
+
                 $aportes = $aportes->valor * ($sueldobasico + $adicional);
 
                 $totaldescuentos = totalizar_concepto(descuentos_por_registro($registro->id));
@@ -257,9 +267,11 @@ class EstudiosController extends Controller
                     "viabilidad" => $viabilidad,
                     "registrosf" => $registrosf
                 );
+
                 if (isset($request->message)) {
                     $options["message"] = $request->message;
                 }
+
                 return view("estudios/iniciarestudio")->with($options);
             } else {
                 return view("clientes/nuevocliente")->with([
@@ -308,11 +320,14 @@ class EstudiosController extends Controller
             $newestudio->user_id = \Auth::user()->id;
             $newestudio->registros_id = $request->registro_id;
             $newestudio->decision = strtoupper($request->desiciones);
+
             if ($request->observaciones !== '') {
                 $newestudio->observaciones = $request->observaciones;
             }
+
             if ($request->asesor_id == 'nuevo') {
                 $asesor = \App\Clientes::where("nombres", "=", $request->nuevo_asesor)->first();
+
                 if ($asesor === null) {
                     $newasesor = new Asesores;
                     $newasesor->nombres = $request->nuevo_asesor;
@@ -324,11 +339,8 @@ class EstudiosController extends Controller
             } else {
                 $newestudio->asesores_id = $request->asesor_id;
             }
-            // if ($request->fecha_estudio !== '') {
-            // $newestudio->fecha = $request->fecha_estudio;
-            // } else {
+
             $newestudio->fecha = date("Y-m-d");
-            // }
             $newestudio->periodo_estudio = date("Ym");
             $newestudio->save();
 
@@ -336,15 +348,19 @@ class EstudiosController extends Controller
             $newcentrales = new Centrales;
             $newcentrales->estudios_id = $newestudio->id;
             $newcentrales->calificacion_data = $request->calif_wab;
+
             if ($request->puntaje_datacredito !== '') {
                 $newcentrales->puntaje_data = $request->puntaje_datacredito;
             }
+
             if ($request->puntaje_sifin !== '') {
+
                 $newcentrales->puntaje_sifin = $request->puntaje_sifin;
             }
             if ($request->proc_en_contra !== '') {
                 $newcentrales->proc_en_contra = $request->proc_en_contra;
             }
+
             $newcentrales->save();
 
             //Registro de Condiciones TR
@@ -463,6 +479,12 @@ class EstudiosController extends Controller
     public function editar($id)
     {
         try {
+            $dataCotizer = dataCotizer::find($id);
+
+            return view("estudios/editar")->with([
+                "dataCotizer" => $dataCotizer
+            ]);
+
             $estudio = Estudios::find($id);
             $registro = Registrosfinancieros::find($estudio->registros_id);
             $asesor = Asesores::find($estudio->asesores_id);

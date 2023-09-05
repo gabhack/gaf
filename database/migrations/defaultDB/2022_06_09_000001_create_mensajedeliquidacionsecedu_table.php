@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMensajedeliquidacionseceduTable extends Migration
+class CreateMensajedeliquidacionSedValleTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateMensajedeliquidacionseceduTable extends Migration
      */
     public function up()
     {
-        Schema::connection('pgsql')->create('mensajedeliquidacionsecedu', function (Blueprint $table) {
+        Schema::connection('pgsql')->create('mensajedeliquidacionsedvalle', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
             $table->text('doc');
@@ -22,8 +22,6 @@ class CreateMensajedeliquidacionseceduTable extends Migration
             $table->text('fecdata')->nullable();
             $table->text('mesdata')->nullable();
             $table->text('anodata')->nullable();
-
-
         });
     }
 
@@ -34,6 +32,6 @@ class CreateMensajedeliquidacionseceduTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('mensajedeliquidacionsecedu');
+        Schema::dropIfExists('mensajedeliquidacionsedvalle');
     }
 }
