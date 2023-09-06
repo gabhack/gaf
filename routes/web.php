@@ -405,6 +405,8 @@ Route::group(['prefix' => 'estudios'], function () {
 
     Route::get('/tesoreria', 'TesoreriaController@index')->name('hego.tesoreria');
 
+    Route::get('/tesoreria/detalle/{id}', 'TesoreriaController@detalleTesoreria')->name('tesoreria.detalle');
+
     Route::get('/cartera', 'EstudiosController@cartera')->name('hego.cartera');
 
     Route::get('/venta-cartera', 'EstudiosController@ventaCartera')->name('hego.venta-cartera');

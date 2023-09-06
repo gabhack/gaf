@@ -485,6 +485,7 @@ class EstudiosController extends Controller
                 "dataCotizer" => $dataCotizer
             ]);
 
+
             $estudio = Estudios::find($id);
             $registro = Registrosfinancieros::find($estudio->registros_id);
             $asesor = Asesores::find($estudio->asesores_id);
