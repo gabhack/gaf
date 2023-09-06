@@ -65,12 +65,12 @@ class TesoreriaController extends Controller
         //Query
         $subestados_tesoreria = [58, 2, 54];
 
-        $lista = Estudiostr::where('estado', 'DESE')
-            ->orWhere(function ($query) use ($subestados_tesoreria) {
-                $query->where('estado', 'EST')
-                    ->where('decision', 'VIABLE')
-                    ->whereIn('subestado_id', $subestados_tesoreria);
-            })
+        $lista = Estudiostr::where('decision', 'APRO')
+            // ->orWhere(function ($query) use ($subestados_tesoreria) {
+            //     $query->where('estado', 'EST')
+            //         ->where('decision', 'VIABLE')
+            //         ->whereIn('subestado_id', $subestados_tesoreria);
+            // })
             ->WhereHas('asesor', function ($q) use ($asesor) {
                 if (!is_array($asesor)) {
                     $q->where('id', $asesor);

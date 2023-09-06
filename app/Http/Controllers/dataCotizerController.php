@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\dataCotizer;
+use App\Estudiostr;
 use Illuminate\Http\Request;
 
 class dataCotizerController extends Controller
@@ -51,8 +52,17 @@ class dataCotizerController extends Controller
      */
     public function store(Request $request)
     {
-        $cotizador = new dataCotizer($request->all());
+        $cotizador = new dataCotizer($request['cotizerData']);
         $cotizador->save();
+
+        // guardamos en estudiostr
+        Estudiostr::create([
+            'user_id' => auth()->user()->id,
+            'fecha' => \Carbon\Carbon::now()->toDateString(),
+            'decision' => 'ESTU',
+            'data_cotizer_id' => $cotizador->id,
+        ]);
+
         return $cotizador;
     }
 

@@ -1082,7 +1082,7 @@ export default {
         submitData() {
             const params = this.form;
             axios
-                .post('/cotizer-data', params)
+                .post('/cotizer-data', {creditInfo: this.creditInfo, cotizerData: params})
                 .then(response => {
                     const cotizerId = response.data.id;
                     window.location.href = `/cifin/consultar?cotizerId=${cotizerId}`;
