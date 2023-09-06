@@ -1,3 +1,5 @@
+import { setCurrentPeriod } from './utils';
+
 const descuentosModule = {
     namespaced: true,
     state: {
@@ -7,12 +9,15 @@ const descuentosModule = {
     },
     getters: {
         descuentosPeriodos: state => {
-            const periodos = state.descuentos.reduce((acc, descuento) => {
+            let periodos = state.descuentos.reduce((acc, descuento) => {
                 if (acc.indexOf(descuento.nomina) === -1) {
                     acc.push(descuento.nomina);
                 }
                 return acc;
             }, []);
+
+            // Agregar el periodo actual si no existe
+            periodos = setCurrentPeriod(periodos);
 
             // Ordenar periodos de forma descendente, se convierte a fecha para poder ordenar
             return periodos.sort((a, b) => new Date(b) - new Date(a));
