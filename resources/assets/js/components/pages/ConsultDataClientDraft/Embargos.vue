@@ -13,7 +13,7 @@
                 </div>
             </div>
             <div class="panel-body">
-                <template v-if="embargosPerPeriod.length > 0">
+                <template v-if="embargosPerPeriod.items.length > 0">
                     <div class="row">
                         <div class="col-1">
                             <b class="panel-label table-text"></b>
