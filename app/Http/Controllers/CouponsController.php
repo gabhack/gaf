@@ -3,17 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\CouponsSedAtlantico;
-use App\CouponsSemBarranquilla;
 use App\CouponsSedBolivar;
 use App\CouponsSedCauca;
 use App\CouponsSedChoco;
 use App\CouponsSedFopep;
 use App\CouponsSedMagdalena;
-use App\CouponsSedPopayan;
-use App\CouponsSedQuibdo;
+use App\CouponsSedValle;
+use App\CouponsSemBarranquilla;
+use App\CouponsSemPopayan;
+use App\CouponsSemQuibdo;
 use App\CouponsSemSahagun;
 use App\CoupunsSemCali;
-use App\Coupunssecedu;
 use Illuminate\Http\Request;
 
 class CouponsController extends Controller
@@ -25,57 +25,35 @@ class CouponsController extends Controller
      */
     public function index(Request $request)
     {
-        $userDoc = $request->doc;
-        $pagaduriaType = $request->pagaduria;
+        $doc = $request->doc;
+        $couponType = $request->pagaduria;
 
-        $coupons = [];
+        $models = [
+            CouponsSedAtlantico::class => 'doc',
+            CouponsSedBolivar::class => 'doc',
+            CouponsSedCauca::class => 'doc',
+            CouponsSedChoco::class => 'doc',
+            CouponsSedFopep::class => 'doc',
+            CouponsSedMagdalena::class => 'doc',
+            CouponsSedValle::class => 'doc',
+            CouponsSemBarranquilla::class => 'doc',
+            CouponsSemPopayan::class => 'doc',
+            CouponsSemQuibdo::class => 'doc',
+            CouponsSemSahagun::class => 'doc',
+            CoupunsSemCali::class => 'doc',
+        ];
 
-        switch ($pagaduriaType) {
-            case 'SEMBARRANQUILLA':
-                $coupons = CouponsSemBarranquilla::where('doc', $userDoc)->get();
-                break;
-            case 'SEDATLANTICO':
-                $coupons = CouponsSedAtlantico::where('doc', $userDoc)->get();
-                break;
-            case 'SEDCAUCA':
-                $coupons = CouponsSedCauca::where('doc', $userDoc)->get();
-                break;
-            case 'SEDMAGDALENA':
-                $coupons = CouponsSedMagdalena::where('doc', $userDoc)->get();
-                break;
-            case 'SEDBOLIVAR':
-                $coupons = CouponsSedBolivar::where('doc', $userDoc)->get();
-                break;
-            case 'SEDCHOCO':
-                $coupons = CouponsSedChoco::where('doc', $userDoc)->get();
-                break;
-            case 'SEDPOPAYAN':
-                $coupons = CouponsSedPopayan::where('doc', $userDoc)->get();
-                break;
-            case 'SEDQUIBDO':
-                $coupons = CouponsSedQuibdo::where('doc', $userDoc)->get();
-                break;
-            case 'SEMSAHAGUN':
-                $coupons = CouponsSemSahagun::where('doc', $userDoc)->get();
-                break;
-            case 'SEMCALI':
-                $coupons = CoupunsSemCali::where('doc', $userDoc)->get();
-                break;
-            case 'SECEDUC':
-                $coupons = Coupunssecedu::where('doc', $userDoc)->get();
-                break;
-            case 'SEDVALLE':
-                $coupons = Coupunssecedu::where('doc', $userDoc)->get();
-                break;
-            case 'FOPEP':
-                $coupons = CouponsSedFopep::where('doc', $userDoc)->get();
-                break;
-            default:
-                $coupons = [];
-                break;
+        $results = [];
+
+        foreach ($models as $model => $column) {
+            $className = class_basename($model);
+
+            if ($className == $couponType) {
+                $results = $model::where($column, 'LIKE', '%' . $doc . '%')->get();
+            }
         }
 
-        return response()->json($coupons);
+        return response()->json($results, 200);
     }
 
     /**

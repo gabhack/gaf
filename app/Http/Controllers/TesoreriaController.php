@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Estudiostr;
+use App\Carteras;
 use Illuminate\Http\Request;
 use App\Simulacion;
+use App\dataCotizer;
+use App\Giro;
 use Illuminate\Support\Facades\DB as DB;
 
 class TesoreriaController extends Controller
@@ -20,6 +23,83 @@ class TesoreriaController extends Controller
         $options = $this->getOptions($request);
 
         return view("estudios/tesoreria")->with($options);
+    }
+
+    public function detalleTesoreria($idEstudio)
+    {
+        //devolvemos la data relacionada con data_cotizer y estudiostr
+        $detalleTesoreria = dataCotizer::join("estudiostr as es", "es.data_cotizer_id", "=", "data_cotizer.id")
+            ->join("solicitud_credito as sc", "sc.estudio_id", "=", "sc.id")
+            ->join("pagadurias as p", "es.pagaduria_id", "=", "p.id")
+            ->select(
+                "es.id as numero_libranza",
+                "data_cotizer.firstName as nombre",
+                "data_cotizer.firstLastname as apellido",
+                "data_cotizer.idNumber as cedula",
+                "data_cotizer.city as direccion",
+                "data_cotizer.phoneNumber as telefono",
+                "data_cotizer.email as correo_electronico",
+                "p.pagaduria as pagaduria",
+                "es.subestado as estado_tesoreria",
+                "es.created_at as fecha",
+                "sc.credito_total as solicitado",
+                "sc.cuotas as plazo",
+                "sc.cuotas as plazo",
+                "sc.cuota as cuota_total",
+                "sc.credito_total as valor_credito",
+                DB::raw("(SELECT SUM(saldo) FROM carteras WHERE carteras.estudios_id = es.id) as compras_cartera"),
+                "sc.aval as intereses_anticipados",
+                "sc.gmf as gmf",
+                DB::raw("(SELECT SUM(saldo) FROM carteras WHERE carteras.estudios_id = es.id) - sc.credito_total  as desembolso_cliente"),
+                DB::raw("(SELECT SUM(saldo) FROM carteras WHERE carteras.estudios_id = es.id) - sc.credito_total  as saldo_girar")
+            )
+            ->get();
+
+        $giros = Giro::all();
+
+        $carteras = Carteras::where("estudios_id", $idEstudio)->get();
+
+        return view("estudios/detalle_tesoreria", compact("detalleTesoreria", "carteras", "giros"));
+        //Devolvemos las carteras asociadas al estudio
+    }
+
+    public function indexGiros($idEstudio)
+    {
+        //devolvemos la data relacionada con data_cotizer y estudiostr
+        $detalleTesoreria = dataCotizer::join("estudiostr as es", "es.data_cotizer_id", "=", "data_cotizer.id")
+            ->join("solicitud_credito as sc", "sc.estudio_id", "=", "sc.id")
+            ->join("pagadurias as p", "es.pagaduria_id", "=", "p.id")
+            ->select(
+                "es.id as numero_libranza",
+                "data_cotizer.firstName as nombre",
+                "data_cotizer.firstLastname as apellido",
+                "data_cotizer.idNumber as cedula",
+                "data_cotizer.city as direccion",
+                "data_cotizer.phoneNumber as telefono",
+                "data_cotizer.email as correo_electronico",
+                "p.pagaduria as pagaduria",
+                "es.subestado as estado_tesoreria",
+                "es.created_at as fecha",
+                "sc.credito_total as solicitado",
+                "sc.cuotas as plazo",
+                "sc.cuotas as plazo",
+                "sc.cuota as cuota_total",
+                "sc.credito_total as valor_credito",
+                DB::raw("(SELECT SUM(saldo) FROM carteras WHERE carteras.estudios_id = es.id) as compras_cartera"),
+                "sc.aval as intereses_anticipados",
+                "sc.gmf as gmf",
+                DB::raw("(SELECT SUM(saldo) FROM carteras WHERE carteras.estudios_id = es.id) - sc.credito_total  as desembolso_cliente"),
+                DB::raw("(SELECT SUM(saldo) FROM carteras WHERE carteras.estudios_id = es.id) - sc.credito_total  as saldo_girar")
+            )
+            ->get();
+
+        $giros = Giro::all();
+
+        $carteras = Carteras::where("estudios_id", $idEstudio)->get();
+
+        return view("estudios/detalle_tesoreria", compact("detalleTesoreria", "carteras", "giros"));
+
+        //Devolvemos las carteras asociadas al estudio
     }
 
     public function getOptions(Request $request)

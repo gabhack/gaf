@@ -2,7 +2,6 @@
     <div class="panel mb-3 col-md-12">
         <div class="panel-heading">
             <b>REALIZAR CONSULTA</b>
-            <!--      <pre><code>{{ dataclient}}</code></pre>-->
         </div>
         <div class="panel-body">
             <loading :active.sync="isLoading" color="#0CEDB0" :can-cancel="true" :is-full-page="true" />
@@ -97,7 +96,9 @@ export default {
     },
     methods: {
         ...mapMutations('datamesModule', ['setDatamesSed', 'setCuotaDeseada']),
-        ...mapMutations('pagaduriasModule', ['setPagaduriaType', 'setSelectedPeriod']),
+        ...mapMutations('pagaduriasModule', ['setPagaduriaType', 'setCouponsType', 'setSelectedPeriod']),
+        ...mapMutations('embargosModule', ['setEmbargosType']),
+        ...mapMutations('descuentosModule', ['setDescuentosType']),
         selectedPagaduria() {
             this.setPagaduriaType(this.dataclient.pagaduria);
 
@@ -107,6 +108,11 @@ export default {
                 this.dataclient.pagaduriaKey = type.key.slice(7).toLowerCase();
                 pagaduria.documentType = 'documentType';
                 this.dataclient.cargo = pagaduria.cargo;
+
+                this.setCouponsType(`Coupons${type.key.slice(7)}`);
+                this.setEmbargosType(`Embargos${type.key.slice(7)}`);
+                this.setDescuentosType(`Descuentos${type.key.slice(7)}`);
+
                 this.setDatamesSed(pagaduria);
             }
         },

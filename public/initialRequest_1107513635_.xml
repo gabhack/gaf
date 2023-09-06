@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/">
+         <soapenv:Header/>
+         <soapenv:Body>
+            <tem:ExecuteXMLString>
+               <!--Optional:-->
+               <tem:request>
+                     <![CDATA[
+                  <DCRequest xmlns="http://transunion.com/dc/extsvc">
+                        <Authentication type="OnDemand">
+                           <UserId>IDV_CKcomercilizadora.PROD1</UserId>
+                           <Password>CK%comer2022*</Password>
+                        </Authentication>
+                        <RequestInfo>
+                  <SolutionSetId>156</SolutionSetId>
+                  <ExecuteLatestVersion>true</ExecuteLatestVersion>
+                  <ExecutionMode>NewWithContext</ExecutionMode>
+              </RequestInfo>
+                        <UserData></UserData>
+                        <Fields>
+                           <Field key="PrimaryApplicant">
+                              &lt;Applicant&gt;
+                                 &lt;IdNumber&gt;1107513635&lt;/IdNumber&gt;
+                                 &lt;IdType&gt;1&lt;/IdType&gt;
+                                 &lt;IdExpeditionDate&gt;16/12/2015&lt;/IdExpeditionDate&gt;
+                                 &lt;RecentPhoneNumber&gt;3155280591&lt;/RecentPhoneNumber&gt;
+                                 &lt;LastName&gt;CHAGUENDO&lt;/LastName&gt;
+                              &lt;/Applicant&gt;
+                           </Field>
+                        </Fields>
+                     </DCRequest>
+                  ]]>
+               </tem:request>
+            </tem:ExecuteXMLString>
+         </soapenv:Body>
+      </soapenv:Envelope>

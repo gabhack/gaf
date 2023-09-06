@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEmbargosseceduTable extends Migration
+class CreateEmbargosSedValleTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateEmbargosseceduTable extends Migration
      */
     public function up()
     {
-        Schema::connection('pgsql')->create('embargossecedu', function (Blueprint $table) {
+        Schema::connection('pgsql')->create('embargossedvalle', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
             $table->text('doc');
@@ -30,7 +30,6 @@ class CreateEmbargosseceduTable extends Migration
             $table->text('fecdata')->nullable();
             $table->text('mesdata')->nullable();
             $table->text('anodata')->nullable();
-
         });
     }
 
@@ -41,6 +40,6 @@ class CreateEmbargosseceduTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('embargossecedu');
+        Schema::dropIfExists('embargossedvalle');
     }
 }

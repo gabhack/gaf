@@ -2,6 +2,7 @@ const pagaduriasModule = {
     namespaced: true,
     state: {
         coupons: [],
+        couponsType: '',
         pagaduriaType: '',
         pagaduriasTypes: [
             { label: 'FIDUPREVISORA', value: 'FIDUPREVISORA', key: 'datamesFidu' },
@@ -173,6 +174,9 @@ const pagaduriasModule = {
         setCoupons: (state, payload) => {
             state.coupons = payload;
         },
+        setCouponsType: (state, payload) => {
+            state.couponsType = payload;
+        },
         setSelectedPeriod: (state, payload) => {
             state.selectedPeriod = payload;
         }
@@ -190,7 +194,9 @@ const pagaduriasModule = {
             ctx.commit('setCoupons', items);
 
             // Seleccionar el primer periodo por defecto
-            ctx.commit('setSelectedPeriod', ctx.getters.pagaduriaPeriodos[0]);
+            if (ctx.getters.pagaduriaPeriodos.length > 0) {
+                ctx.commit('setSelectedPeriod', ctx.getters.pagaduriaPeriodos[0]);
+            }
         }
     }
 };

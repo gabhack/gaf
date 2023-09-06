@@ -11,9 +11,28 @@
 |
 */
 
+use App\Http\Controllers\DescuentosController;
+use App\Http\Controllers\EmbargosController;
 use App\Http\Controllers\VisadoController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
+/* Route::get('/get-test', 'TestController@index');
+Route::get('/get-test/{doc}', 'TestController@search'); */
+
+
+/* Route::get('/test-pagadurias/{ciudad}', 'TestController@testPagaduria');
+Route::get('/test-pagadurias/{ciudad}/{documento}', 'TestController@testPagaduriaIndividual');
+
+Route::get('/test-embargos/{ciudad}', 'TestController@testEmbargo');
+Route::get('/test-embargos/{ciudad}/{documento}', 'TestController@testEmbargoIndividual');
+
+Route::get('/test-descuentos/{ciudad}', 'TestController@testDescuento');
+Route::get('/test-descuentos/{ciudad}/{documento}', 'TestController@testDescuentoIndividual');
+
+Route::get('/test-cupones/{ciudad}', 'TestController@testCupon');
+Route::get('/test-cupones/{ciudad}/{documento}', 'TestController@testCuponIndividual'); */
+
 
 Auth::routes(['register' => true]);
 
@@ -386,6 +405,8 @@ Route::group(['prefix' => 'estudios'], function () {
 
     Route::get('/tesoreria', 'TesoreriaController@index')->name('hego.tesoreria');
 
+    Route::get('/tesoreria/detalle/{id}', 'TesoreriaController@detalleTesoreria')->name('tesoreria.detalle');
+
     Route::get('/cartera', 'EstudiosController@cartera')->name('hego.cartera');
 
     Route::get('/venta-cartera', 'EstudiosController@ventaCartera')->name('hego.venta-cartera');
@@ -416,11 +437,11 @@ Route::post('fechaVincImport', 'FechaVincController@import');
 Route::post('descapliImport', 'DescapliController@import');
 Route::post('descnoapController', 'DescnoapController@import');
 Route::post('datamesfiduImport', 'DatamesfiduController@import');
-Route::post('datamesseceducImport', 'DatamesseceducController@import');
+Route::post('datamessedvalleImport', 'DatamesSedValleController@import');
 
 Route::get('dumpDataMes', 'DataMesController@dumpDataMes');
 Route::get('dumpDataMesFidu', 'DatamesfiduController@dumpDatamesfidu');
-Route::get('dumpDataMesSeceduc', 'DatamesseceducController@dumpDatamesseceduc');
+Route::get('dumpDataMesSedValle', 'DatamesSedValleController@dumpDatamessedvalle');
 
 Route::post('consultaDescnoap', 'DescnoapController@consultaUnitaria');
 Route::post('consultaUnitaria', 'DescapliController@consultaUnitaria');
@@ -430,38 +451,38 @@ Route::post('resultadoAprobacion', 'DescapliController@resultadoAprobacion');
 Route::post('consultaDatamessemcali', 'DatamesSemCaliController@consultaUnitaria');
 Route::post('consultaDeduccionessemcali', 'DeduccionesSemCaliController@consultaUnitaria');
 Route::post('consultaSabana', 'SabanaController@consultaUnitaria');
-Route::post('consultaDescuentosseceduc', 'DescuentosseceduController@consultaUnitaria');
+Route::post('consultaDescuentossedvalle', 'DescuentossedvalleController@consultaUnitaria');
 Route::post('consultaDescuentossedchoco', 'DescuentossedchocoController@consultaUnitaria');
 Route::post('consultaDescuentossemsahagun', 'DescuentossemsahagunController@consultaUnitaria');
-Route::post('consultaDescuentossedquibdo', 'DescuentossedquibdoController@consultaUnitaria');
-Route::post('consultaDescuentossedpopayan', 'DescuentossedpopayanController@consultaUnitaria');
+Route::post('consultaDescuentossemquibdo', 'DescuentosSemQuibdoController@consultaUnitaria');
+Route::post('consultaDescuentossempopayan', 'DescuentossempopayanController@consultaUnitaria');
 Route::post('consultaDescuentossedcauca', 'DescuentossedcaucaController@consultaUnitaria');
 Route::post('consultaDetalledecliente', 'DetalledeclienteController@consultaUnitaria');
 Route::post('consultaDescuentossemcali', 'DescuentosSemCaliController@consultaUnitaria');
 Route::post('consultaEmbargossemcali', 'EmbargosSemCaliController@consultaUnitaria');
-Route::post('consultaEmbargosseceduc', 'EmbargosseceducController@consultaUnitaria');
+Route::post('consultaEmbargossedvalle', 'EmbargosSedValleController@consultaUnitaria');
 Route::post('consultaEmbargossedchoco', 'EmbargossedchocoController@consultaUnitaria');
 Route::post('consultaEmbargossedcauca', 'EmbargossedcaucaController@consultaUnitaria');
-Route::post('consultaEmbargossedquibdo', 'EmbargossedquibdoController@consultaUnitaria');
-Route::post('consultaEmbargossedpopayan', 'EmbargossedpopayanController@consultaUnitaria');
+Route::post('consultaEmbargossemquibdo', 'EmbargosSemQuibdoController@consultaUnitaria');
+Route::post('consultaEmbargossempopayan', 'EmbargossempopayanController@consultaUnitaria');
 
 Route::resource('datamessemcali', 'DatamesSemCaliController');
 Route::resource('deduccionessemcali', 'DeduccionesSemCaliController');
 Route::resource('sabana', 'SabanaController');
-Route::resource('Descuentossecedu', 'DescuentosseceduController');
+Route::resource('Descuentossedvalle', 'DescuentosSedValleController');
 Route::resource('Descuentossedchoco', 'DescuentossedchocoController');
-Route::resource('Descuentossedquibdo', 'DescuentossedquibdoController');
+Route::resource('Descuentossemquibdo', 'DescuentosSemQuibdoController');
 Route::resource('Descuentossemsahagun', 'DescuentossemsahagunController');
-Route::resource('Descuentossedpopayan', 'DescuentossedpopayanController');
+Route::resource('Descuentossempopayan', 'DescuentossempopayanController');
 Route::resource('Descuentossedcauca', 'DescuentossedcaucaController');
 Route::resource('Detalledecliente', 'DetalledeclienteController');
 Route::resource('Descuentossemcali', 'DescuentosSemCaliController');
 Route::resource('embargossemcali', 'EmbargosSemCaliController');
-Route::resource('embargosseceduc', 'EmbargosseceducController');
+Route::resource('embargossedvalle', 'EmbargosSedValleController');
 Route::resource('embargossedchoco', 'EmbargossedchocoController');
 Route::resource('embargossedcauca', 'EmbargossedcaucaController');
-Route::resource('embargossedquibdo', 'EmbargossedquibdoController');
-Route::resource('embargossedpopayan', 'EmbargossedpopayanController');
+Route::resource('embargossemquibdo', 'EmbargosSemQuibdoController');
+Route::resource('embargossempopayan', 'EmbargossempopayanController');
 
 //FIN //
 Route::resource('datamesfopep', 'DataMesController');
@@ -483,8 +504,8 @@ Route::resource('/validate', 'SolicitudValidacionController');
 
 Route::resource('/datamesfidu', 'DatamesfiduController');
 Route::post('/datamesfidu/consultaUnitaria', 'DatamesfiduController@consultaUnitaria');
-Route::post('/datamesseceduc/consultaUnitaria', 'DatamesseceducController@consultaUnitaria');
-Route::resource('/datamesseceduc', 'DatamesseceducController');
+Route::post('/datamessedvalle/consultaUnitaria', 'DatamesSedValleController@consultaUnitaria');
+Route::resource('/datamessedvalle', 'DatamesSedValleController');
 
 Route::resource('/cotizer-data', dataCotizerController::class)->only(['store', 'index', 'show', 'update']);
 Route::get('/cotizer-data/borrar/{id}', 'dataCotizerController@destroy');
@@ -493,7 +514,11 @@ Route::view('/RegisterCredit', 'registerCredit')->name('register.credit');
 
 Route::apiResource('/whatsapp-bot', 'WhatsAppBotController');
 
-Route::post('/get-coupons', 'CouponsController@index')->name('coupons.index');
+Route::middleware('auth')->group(function () {
+    Route::post('/get-coupons', 'CouponsController@index')->name('coupons.index');
+    Route::post('/get-descuentos', [DescuentosController::class, 'index'])->name('descuentos');
+    Route::post('/get-embargos', [EmbargosController::class, 'index'])->name('embargos');
+});
 
 // Get csrf token
 // Route::get('/csrf-token', function () {
