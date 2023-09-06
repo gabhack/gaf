@@ -1,3 +1,5 @@
+import { setCurrentPeriod } from './utils';
+
 const embargosModule = {
     namespaced: true,
     state: {
@@ -7,12 +9,15 @@ const embargosModule = {
     },
     getters: {
         embargosPeriodos: state => {
-            const periodos = state.embargos.reduce((acc, embargo) => {
+            let periodos = state.embargos.reduce((acc, embargo) => {
                 if (acc.indexOf(embargo.nomina) === -1) {
                     acc.push(embargo.nomina);
                 }
                 return acc;
             }, []);
+
+            // Agregar el periodo actual si no existe
+            periodos = setCurrentPeriod(periodos);
 
             // Ordenar periodos de forma descendente, se convierte a fecha para poder ordenar
             return periodos.sort((a, b) => new Date(b) - new Date(a));
