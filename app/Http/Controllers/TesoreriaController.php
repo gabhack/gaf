@@ -31,6 +31,7 @@ class TesoreriaController extends Controller
         $detalleTesoreria = dataCotizer::join("estudiostr as es", "es.data_cotizer_id", "=", "data_cotizer.id")
             ->join("solicitud_credito as sc", "sc.estudio_id", "=", "sc.id")
             ->join("pagadurias as p", "es.pagaduria_id", "=", "p.id")
+            ->where("estudiostr.id", $idEstudio)
             ->select(
                 "es.id as numero_libranza",
                 "data_cotizer.firstName as nombre",
