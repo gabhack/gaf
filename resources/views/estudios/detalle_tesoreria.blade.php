@@ -1,4 +1,4 @@
-@extends('layouts.hego')
+@extends('layouts.app2')
 
 @section('title')
 HEGO | Tesorería
@@ -17,6 +17,6 @@ Tesorería
 <li class="breadcrumb-item active">Tesorería</li>
 @endsection
 
-@section('panel')
-{{dd($detalleTesoreria)}};
+@section('content')
+
 @endsection

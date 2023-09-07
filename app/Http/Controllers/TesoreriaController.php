@@ -45,7 +45,6 @@ class TesoreriaController extends Controller
                 "es.created_at as fecha",
                 "sc.credito_total as solicitado",
                 "sc.cuotas as plazo",
-                "sc.cuotas as plazo",
                 "sc.cuota as cuota_total",
                 "sc.credito_total as valor_credito",
                 DB::raw("(SELECT SUM(saldo) FROM carteras WHERE carteras.estudios_id = es.id) as compras_cartera"),
@@ -54,6 +53,7 @@ class TesoreriaController extends Controller
                 DB::raw("(SELECT SUM(saldo) FROM carteras WHERE carteras.estudios_id = es.id) - sc.credito_total  as desembolso_cliente"),
                 DB::raw("(SELECT SUM(saldo) FROM carteras WHERE carteras.estudios_id = es.id) - sc.credito_total  as saldo_girar")
             )
+            ->where("es.id", "=", $idEstudio)
             ->get();
 
         $giros = Giro::where("estudio_id", $idEstudio)->get();

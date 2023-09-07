@@ -118,7 +118,7 @@ Tesorería
                         <td>N/A</td>
                         @endif
                         <td class="text-center">
-                            <a href="{{ url('estudios/editar', ['id' => $estudio->id]) }}" title="Modificar" class="btn btn-info"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                            <a href="{{ route('tesoreria.detalle', ['id' => $estudio->id]) }}" title="Modificar" class="btn btn-info"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                             <a onclick="return confirm('Seguro que desea eliminar este registro y su informacion relacionada?')" href="{{ url('estudios/borrar', ['id' => $estudio->id]) }}" title="Eliminar" class="btn btn-info"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                         </td>
                     </tr>

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Giro extends Model
 {
-	use SoftDeletes;
+	// use SoftDeletes;
 
 	protected $table = 'giros';
 }
