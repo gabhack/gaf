@@ -121,6 +121,7 @@
                     ========================================-->
                     <DescnoapEmpty v-if="pagaduriaType == 'FIDUPREVISORA'" />
                     <Descnoap v-if="pagaduriaType == 'FOPEP'" :descnoap="descnoap" />
+
                     <EmbargosEmpty
                         v-if="
                             pagaduriaType == 'SEDMAGDALENA' ||
@@ -191,7 +192,7 @@ import DatamesSemCali from './DatamesSemCali.vue';
 import DatamesSemSahagun from './DatamesSemSahagun';
 
 import Descapli from './Descapli';
-import DescapliEmpty from './DescapliEmpty';
+import DescapliEmpty from './DescapliEmpty.vue';
 import Descnoap from './Descnoap';
 import DescnoapEmpty from './DescnoapEmpty';
 import Others from './Others.vue';

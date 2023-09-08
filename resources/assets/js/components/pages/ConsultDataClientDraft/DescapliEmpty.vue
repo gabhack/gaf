@@ -13,50 +13,54 @@
                 </div>
             </div>
             <div class="panel-body">
-                <div class="row">
-                    <div class="col-1">
-                        <b class="panel-label table-text"></b>
-                    </div>
-                    <div class="col-4 px-0">
-                        <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
-                    </div>
-                    <div class="col-3 px-0">
-                        <b class="panel-label table-text">CUOTA:</b>
-                    </div>
-                </div>
-
-                <div v-for="(item, key) in arrayCoupons" :key="key" class="row panel-br-light-green pt-3">
-                    <div class="col-1 pr-0">
-                        <input
-                            v-model="item.check"
-                            type="checkbox"
-                            :disabled="
-                                disabledProspect ||
-                                item.code == 'APFPM' ||
-                                item.code == 'APEPEN' ||
-                                item.code == 'APESDN'
-                            "
-                            @change="calcularEgresos"
-                        />
+                <template v-if="arrayCoupons.length > 0">
+                    <div class="row">
+                        <div class="col-1">
+                            <b class="panel-label table-text"></b>
+                        </div>
+                        <div class="col-4 px-0">
+                            <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
+                        </div>
+                        <div class="col-3 px-0">
+                            <b class="panel-label table-text">CUOTA:</b>
+                        </div>
                     </div>
 
-                    <div class="col-4 px-0">
-                        <p>{{ item.nomtercero ? item.nomtercero : '-' }}</p>
+                    <div v-for="(item, key) in arrayCoupons" :key="key" class="row panel-br-light-green pt-3">
+                        <div class="col-1 pr-0">
+                            <input
+                                v-model="item.check"
+                                type="checkbox"
+                                :disabled="
+                                    disabledProspect ||
+                                    item.code == 'APFPM' ||
+                                    item.code == 'APEPEN' ||
+                                    item.code == 'APESDN'
+                                "
+                                @change="calcularEgresos"
+                            />
+                        </div>
+
+                        <div class="col-4 px-0">
+                            <p>{{ item.nomtercero ? item.nomtercero : '-' }}</p>
+                        </div>
+
+                        <div class="col-3 px-0">
+                            <p>{{ item.vaplicado | currency }}</p>
+                        </div>
                     </div>
 
-                    <div class="col-3 px-0">
-                        <p>{{ item.vaplicado | currency }}</p>
+                    <div class="row pt-3">
+                        <div class="offset-2 col-3 text-right">
+                            <b>TOTAL:</b>
+                        </div>
+                        <div class="col-2">
+                            <b>{{ couponsIngresos.amount | currency }}</b>
+                        </div>
                     </div>
-                </div>
-
-                <div class="row pt-3">
-                    <div class="offset-2 col-3 text-right">
-                        <b>TOTAL:</b>
-                    </div>
-                    <div class="col-2">
-                        <b>{{ couponsIngresos.amount | currency }}</b>
-                    </div>
-                </div>
+                </template>
+                <p v-else-if="coupons.length == 0">El cliente no cuenta con obligaciones vigentes al día.</p>
+                <p v-else>No se encontraron obligaciones vigentes al día para el periodo seleccionado.</p>
             </div>
         </div>
     </div>

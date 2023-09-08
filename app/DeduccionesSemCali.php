@@ -21,5 +21,7 @@ class DeduccionesSemCali extends Model
         'fecdata',
         'mesdata',
         'anodata',
+        'grado',
+        'ncontr'
     ];
 }
