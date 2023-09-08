@@ -27,5 +27,7 @@ class EmbargosSemCali extends Model
         'fecdata',
         'mesdata',
         'anodata',
+        'pagaduria',
+        'nomina',
     ];
 }

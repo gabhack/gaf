@@ -41,7 +41,7 @@ use App\CouponsSedChoco;
 use App\CouponsSemPopayan;
 use App\CouponsSemQuibdo;
 use App\CouponsSemSahagun;
-use App\CoupunsSemCali;
+use App\CouponsSemCali;
 use App\CouponsSedValle;
 use App\CouponsSedFopep;
 
@@ -517,7 +517,7 @@ class Test
                     break;
 
                 case 'cali':
-                    $data = (object)["model" => CoupunsSemCali::class, 'label' => 'doc'];
+                    $data = (object)["model" => CouponsSemCali::class, 'label' => 'doc'];
                     break;
 
                 case 'choco':
@@ -781,7 +781,7 @@ class Test
             CouponsSemPopayan::class => 'doc',
             CouponsSemQuibdo::class => 'doc',
             CouponsSemSahagun::class => 'doc',
-            CoupunsSemCali::class => 'doc',
+            CouponsSemCali::class => 'doc',
             CouponsSedValle::class => 'doc',
             CouponsSedFopep::class => 'doc',
         ];

@@ -1,3 +1,5 @@
+import { setCurrentPeriod } from './utils';
+
 const pagaduriasModule = {
     namespaced: true,
     state: {
@@ -95,12 +97,15 @@ const pagaduriasModule = {
             return getters.couponsPerPeriod.items.find(coupon => coupon.code === 'SUEBA')?.ingresos || 0;
         },
         pagaduriaPeriodos: state => {
-            const periodos = state.coupons.reduce((acc, coupon) => {
+            let periodos = state.coupons.reduce((acc, coupon) => {
                 if (acc.indexOf(coupon.finperiodo) === -1) {
                     acc.push(coupon.finperiodo);
                 }
                 return acc;
             }, []);
+
+            // Agregar el periodo actual si no existe
+            periodos = setCurrentPeriod(periodos);
 
             // Ordenar periodos de forma descendente, se convierte a fecha para poder ordenar
             return periodos.sort((a, b) => new Date(b) - new Date(a));

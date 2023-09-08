@@ -22,5 +22,7 @@ class DescuentosSemCali extends Model
         'pagaduria',
         'noent',
         'causal',
+        'nomina',
+        'valor'
     ];
 }

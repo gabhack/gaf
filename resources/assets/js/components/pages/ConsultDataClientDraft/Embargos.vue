@@ -3,7 +3,7 @@
         <div class="panel panel-primary mb-3">
             <div class="panel-heading d-flex justify-content-between">
                 <b>DETALLE DE EMBARGOS</b>
-                <div v-if="embargos.length > 0" class="d-flex align-items-center">
+                <div class="d-flex align-items-center">
                     <b class="mr-2">PERIODO:</b>
                     <select class="form-control" @change="setSelectedPeriod($event.target.value)">
                         <option :value="period" v-for="period in embargosPeriodos" :key="period">

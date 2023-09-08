@@ -13,7 +13,7 @@ use App\CouponsSemBarranquilla;
 use App\CouponsSemPopayan;
 use App\CouponsSemQuibdo;
 use App\CouponsSemSahagun;
-use App\CoupunsSemCali;
+use App\CouponsSemCali;
 use Illuminate\Http\Request;
 
 class CouponsController extends Controller
@@ -40,7 +40,7 @@ class CouponsController extends Controller
             CouponsSemPopayan::class => 'doc',
             CouponsSemQuibdo::class => 'doc',
             CouponsSemSahagun::class => 'doc',
-            CoupunsSemCali::class => 'doc',
+            CouponsSemCali::class => 'doc',
         ];
 
         $results = [];
