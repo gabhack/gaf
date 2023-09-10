@@ -29,9 +29,9 @@ class TesoreriaController extends Controller
     {
         //devolvemos la data relacionada con data_cotizer y estudiostr
         $detalleTesoreria = dataCotizer::join("estudiostr as es", "es.data_cotizer_id", "=", "data_cotizer.id")
-            ->join("solicitud_credito as sc", "sc.estudio_id", "=", "sc.id")
+            ->join("solicitud_credito as sc", "sc.estudio_id", "=", "es.id")
             ->join("pagadurias as p", "es.pagaduria_id", "=", "p.id")
-            ->where("estudiostr.id", $idEstudio)
+            ->where("es.id", $idEstudio)
             ->select(
                 "es.id as numero_libranza",
                 "data_cotizer.firstName as nombre",
@@ -54,12 +54,35 @@ class TesoreriaController extends Controller
                 DB::raw("(SELECT SUM(saldo) FROM carteras WHERE carteras.estudios_id = es.id) - sc.credito_total  as saldo_girar")
             )
             ->where("es.id", "=", $idEstudio)
-            ->get();
+            ->first();
+        
+        if(is_null($detalleTesoreria)){
+
+            $detalleTesoreria["numero_libranza"] = ''; 
+            $detalleTesoreria["nombre"] = ''; 
+            $detalleTesoreria["apellido"] = '';
+            $detalleTesoreria["cedula"] = ''; 
+            $detalleTesoreria["direccion"] = ''; 
+            $detalleTesoreria["telefono"] = ''; 
+            $detalleTesoreria["correo_electronico"] = ''; 
+            $detalleTesoreria["pagaduria"] = '';
+            $detalleTesoreria["estado_tesoreria"] = ''; 
+            $detalleTesoreria["fecha"] = ''; 
+            $detalleTesoreria["solicitado"] = ''; 
+            $detalleTesoreria["plazo"] = ''; 
+            $detalleTesoreria["cuota_total"] = ''; 
+            $detalleTesoreria["valor_credito"] = ''; 
+            $detalleTesoreria["compras_cartera"] = ''; 
+            $detalleTesoreria["intereses_anticipados"] = ''; 
+            $detalleTesoreria["gmf"] = ''; 
+            $detalleTesoreria["desembolso_cliente"] = ''; 
+            $detalleTesoreria["saldo_girar"] = ''; 
+
+        }
 
         $giros = Giro::where("estudio_id", $idEstudio)->get();
 
         $carteras = Carteras::where("estudios_id", $idEstudio)->get();
-
 
         return view("estudios/detalle_tesoreria", compact("detalleTesoreria", "carteras", "giros"));
         //Devolvemos las carteras asociadas al estudio
@@ -139,7 +162,7 @@ class TesoreriaController extends Controller
             });
 
         //Preparar la salida
-        $listaOut = $lista->paginate(5)->appends(request()->except('page'));
+        $listaOut = $lista->paginate(10)->appends(request()->except('page'));
         $links = $listaOut->links();
         $options = array(
             "lista" => $listaOut,

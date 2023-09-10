@@ -118,6 +118,7 @@ class EstudiosController extends Controller
 
         $dataCotizer = dataCotizer::orderBy('id', 'desc');
         $listaCotizer = $dataCotizer->paginate(20)->appends(request()->except('page'));
+        $links = $listaCotizer->links();
 
         $options = array(
             //"lista" => $listaOut,
