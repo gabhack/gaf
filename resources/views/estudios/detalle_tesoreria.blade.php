@@ -234,13 +234,93 @@ Tesorería
                 </tbody>
             </table>
             <br>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalResultConsultVal">Adicionar Giro</button>
+            <br>
         </form>
     </div>
 </div>
+<!-- Modal -->
+<div
+    class="modal fade bd-example-modal-xl"
+    id="modalResultConsultVal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Adicionar Giro</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="">* Beneficiario</label>
+                        </div>
+                        <div class="col-md-9">
+                            <select class="form-control" name="" id=""></select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="">* Forma de Pago</label>
+                        </div>
+                        <div class="col-md-6">
+                            <select class="form-control" name="" id=""></select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="">* Cuenta</label>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-control"  name="" id=""></select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="">* Referencia</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="">* Valor a Girar</label>
+                        </div>
+                        <div class="col-md-5">
+                        <input type="number" min="0" value="0" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="">* Tipo Giro</label>
+                        </div>
+                        <div class="col-md-5">
+                            <select class="form-control"  name="" id=""></select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Agregar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @endsection
 
 @section('css')
+
     <style>
         .tablee, .tablee thead, .tablee thead tr th, .tablee tbody tr td{
             border: 1px solid black;
@@ -252,4 +332,16 @@ Tesorería
         }
 
     </style>
+@endsection
+
+@section('js')
+    <script>
+        $(document).ready(function(){
+            
+        });
+
+        var openModalGiros = () => {
+                $("#myModal").modal('show');
+            };
+    </script>
 @endsection
