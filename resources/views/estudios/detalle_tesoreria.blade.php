@@ -100,7 +100,7 @@ Tesorería
                     <td>&nbsp;</td>
                     <td valign="top">
                         <h2>LIQUIDACIÓN</h2>
-                        <div class="box1 clearfix" style="background-color: #10dd8e; padding: 20px; ">
+                        <div class="box1 clearfix" style="background-color: #E7F2F8; padding: 20px; ">
                         <table border="0" cellspacing="1" cellpadding="2">
                         <tbody><tr>
                             <td>FECHA DESEMBOLSO</td>
