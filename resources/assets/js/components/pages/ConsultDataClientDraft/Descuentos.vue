@@ -43,7 +43,7 @@
                     </div>
                 </template>
                 <p v-else-if="descuentos.length == 0">El cliente no cuenta con obligaciones vigentes en mora.</p>
-                <p v-else>No se encontraron obligaciones vigentes en mora para el periodo seleccionado.</p>
+                <p v-else>El cliente solo tiene ALERTAS en este periodo.</p>
             </div>
         </div>
     </div>

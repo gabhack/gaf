@@ -126,8 +126,6 @@
                         v-if="
                             pagaduriaType == 'SEDMAGDALENA' ||
                             pagaduriaType == 'SEMSAHAGUN' ||
-                            pagaduriaType == 'SEMBARRANQUILLA' ||
-                            pagaduriaType == 'SEDATLANTICO' ||
                             pagaduriaType == 'SEDBOLIVAR' ||
                             pagaduriaType == 'SEDNARINO'
                         "
@@ -145,8 +143,6 @@
                     <DescuentosEmpty
                         v-if="
                             pagaduriaType == 'SEDMAGDALENA' ||
-                            pagaduriaType == 'SEMBARRANQUILLA' ||
-                            pagaduriaType == 'SEDATLANTICO' ||
                             pagaduriaType == 'SEDBOLIVAR' ||
                             pagaduriaType == 'SEDNARINO'
                         "
@@ -247,6 +243,7 @@ export default {
             descnoap: [],
             embargossedvalle: [],
             embargossedchoco: [],
+            embargossedatlantico: [],
             embargossedcauca: [],
             embargossemquibdo: [],
             embargossempopayan: [],
