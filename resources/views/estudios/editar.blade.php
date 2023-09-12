@@ -576,9 +576,47 @@
         <div class="panel panel-primary">
           <div class="panel-heading"><b>Carteras por comprar</b></div>
           <div class="panel-body">
-            <button type="button" id="btnAgregarFila" class="btn btn-primary">Agregar cartera</button><br><br>
             <table id="grid" class="table table-hover table-condensed table-bordered">
+              <thead>
+                <tr>
+                  <th class="text-center">No.</th>
+                  <th class="text-center">ENTIDAD</th>
+                  <th class="text-center">CUOTA</th>
+                  <th class="text-center">SALDO INICIAL</th>
+                  <th class="text-center">NEGOCIACIÓN</th>
+                  <th class="text-center">VALOR A PAGAR</th>
+                  <th class="text-center">MONTO MÁX PAGAR</th>
+                  <th class="text-center">% NEGOCIACIÓN</th>
+                  <th class="text-center">F VENCIMIENTO</th>
+                  <th class="text-center">SE COMPRA?</th>
+                </tr>
+              </thead>
+              <tbody>
+              @if(count($sectorFinanciero)>0)
+                @foreach($sectorFinanciero as $res)
+                  <tr>
+                    <td>{{ $res['PaqueteInformacion'] }}</td>
+                    <td>{{ $res['NombreEntidad'] }}</td>
+                    <td></td>
+                    <td>{{ $res['SaldoObligacion'] }}</td>
+                    <td></td>
+                    <td>{{ $res['SaldoObligacion'] }}</td>
+                    <td></td>
+                    <td>{{ $res['PaqueteInformacion'] }}</td>
+                    <td>{{ $res['FechaCorte'] }}</td>
+                    <td>
+                      <select>
+                        <option value=""></option>
+                      </select>
+                    </td>
+                  </tr>
+                @endforeach
+              @endif
+              </tbody>
+              </tfoot>
             </table>
+
+            <button type="button" id="btnAgregarFila" class="btn btn-primary">Agregar cartera</button><br><br>
           </div>
         </div>
       </div>
