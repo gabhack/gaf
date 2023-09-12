@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\EmbargosSemBarranquilla;
 use App\EmbargosSedCauca;
+use App\EmbargosSedAtlantico;
+use App\EmbargosSedBolivar;
 use App\EmbargosSedChoco;
 use App\EmbargosSedValle;
 use App\EmbargosSemCali;
@@ -25,10 +28,13 @@ class EmbargosController extends Controller
         $models = [
             EmbargosSedCauca::class => 'doc',
             EmbargosSedChoco::class => 'doc',
+            EmbargosSemBarranquilla::class => 'doc',
+            EmbargosSedAtlantico::class => 'doc',
             EmbargosSedValle::class => 'doc',
             EmbargosSemCali::class => 'doc',
             EmbargosSemPopayan::class => 'doc',
             EmbargosSemQuibdo::class => 'idemp',
+            EmbargosSedBolivar::class => 'idemp',
         ];
 
         $results = [];

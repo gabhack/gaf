@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\DescuentosSedAtlantico;
 use App\DescuentosSedCauca;
 use App\DescuentosSedChoco;
 use App\DescuentosSedValle;
 use App\DescuentosSemCali;
+use App\DescuentosSemBarranquilla;
 use App\DescuentosSemPopayan;
 use App\DescuentosSemQuibdo;
 use Illuminate\Http\Request;
@@ -23,6 +25,8 @@ class DescuentosController extends Controller
         $descuentoType = $request->pagaduria;
 
         $models = [
+            DescuentosSedAtlantico::class => 'doc',
+            DescuentosSemBarranquilla::class => 'doc',
             DescuentosSedCauca::class => 'doc',
             DescuentosSedChoco::class => 'doc',
             DescuentosSedValle::class => 'doc',

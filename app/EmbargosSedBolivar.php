@@ -12,15 +12,5 @@ class EmbargosSedBolivar extends Model
 
     protected $guarded = ['id'];
 
-    protected $fillable = [
-        'idemp',
-        'nemp',
-        'iddem',
-        'ndem',
-        'cuenta',
-        'juzgado',
-        'expediente',
-        'valor',
-        'pagaduria',
-    ];
+    protected $fillable = ['idemp', 'nemp', 'iddem', 'ndem', 'cuenta', 'juzgado', 'expediente', 'valor', 'pagaduria'];
 }
