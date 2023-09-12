@@ -357,6 +357,58 @@ Route::group(['prefix' => 'factores'], function () {
     Route::get('/delete/{id}', 'FactoresController@destroy');
 });
 
+// Cuentas Bancarias
+Route::group(['prefix' => 'cuentasbancarias'], function () {
+    Route::get('/', 'CuentasBancariasController@index');
+
+    Route::get('/crear', 'CuentasBancariasController@create');
+    Route::post('/store', 'CuentasBancariasController@store');
+
+    Route::get('/edit/{id}', 'CuentasBancariasController@edit');
+    Route::post('/update/{id}', 'CuentasBancariasController@update');
+
+    Route::get('/delete/{id}', 'CuentasBancariasController@destroy');
+});
+
+// Cuentas Bancarias
+Route::group(['prefix' => 'entidadesdesembolso'], function () {
+    Route::get('/', 'EntidadesDesembolsoController@index');
+
+    Route::get('/crear', 'EntidadesDesembolsoController@create');
+    Route::post('/store', 'EntidadesDesembolsoController@store');
+
+    Route::get('/edit/{id}', 'EntidadesDesembolsoController@edit');
+    Route::post('/update/{id}', 'EntidadesDesembolsoController@update');
+
+    Route::get('/delete/{id}', 'EntidadesDesembolsoController@destroy');
+});
+
+// Forma Pago
+Route::group(['prefix' => 'formapago'], function () {
+    Route::get('/', 'FormaPagoController@index');
+
+    Route::get('/crear', 'FormaPagoController@create');
+    Route::post('/store', 'FormaPagoController@store');
+
+    Route::get('/edit/{id}', 'FormaPagoController@edit');
+    Route::post('/update/{id}', 'FormaPagoController@update');
+
+    Route::get('/delete/{id}', 'FormaPagoController@destroy');
+});
+
+// Tipo Giro
+Route::group(['prefix' => 'tipogiro'], function () {
+    Route::get('/', 'TipoGiroController@index');
+
+    Route::get('/crear', 'TipoGiroController@create');
+    Route::post('/store', 'TipoGiroController@store');
+
+    Route::get('/edit/{id}', 'TipoGiroController@edit');
+    Route::post('/update/{id}', 'TipoGiroController@update');
+
+    Route::get('/delete/{id}', 'TipoGiroController@destroy');
+});
+
 // Reportes
 Route::group(['prefix' => 'reportes'], function () {
     Route::get('/', 'ReportesController@index');

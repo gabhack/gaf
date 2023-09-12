@@ -104,6 +104,10 @@
                 <a class="collapse-item" href="{{ url('aliados') }}">Aliados</a>
                 <a class="collapse-item" href="{{ url('entidades') }}">Entidades</a>
                 <a class="collapse-item" href="{{ url('factores') }}">Factores</a>
+                <a class="collapse-item" href="{{url('cuentasbancarias')}}">Cuentas Bancarias</a>
+                <a class="collapse-item" href="{{url('entidadesdesembolso')}}">Entidades Desembolso</a>
+                <a class="collapse-item" href="{{url('formapago')}}">Forma Pago</a>
+                <a class="collapse-item" href="{{url('tipogiro')}}">Tipo Giro</a>
             </div>
         </div>
     </li>

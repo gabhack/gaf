@@ -42,6 +42,7 @@
 					</ul>
 				</li>
 			@endif
+
 			@if (IsSuperAdmin())
 				<li class="treeview">
 					<a class="arrow"><i class="fa fa-cog"></i> <span>Maestros</span></a>
@@ -57,6 +58,10 @@
 						<li><a href="{{url('aliados')}}"><i class="fa fa-building-o"></i> <span>Aliados</span></a></li>
 						<li><a href="{{url('entidades')}}"><i class="fa fa-suitcase"></i> <span>Entidades</span></a></li>
 						<li><a href="{{url('factores')}}"><i class="fa fa-percent"></i> <span>Factores</span></a></li>
+						<li><a href="{{url('cuentasbancarias')}}"><i class="fa fa-percent"></i> <span>Cuentas Bancarias</span></a></li>
+						<li><a href="{{url('entidadesdesembolso')}}"><i class="fa fa-percent"></i> <span>Entidades Desembolso</span></a></li>
+						<li><a href="{{url('formapago')}}"><i class="fa fa-percent"></i> <span>Forma Pago</span></a></li>
+						<li><a href="{{url('tipogiro')}}"><i class="fa fa-percent"></i> <span>Tipo Giro</span></a></li>
 					</ul>
 				</li>
 				<li><a href="{{url('planos')}}"><i class="fa fa-file-text-o"></i> <span>Carga de Archivos Manual</span></a></li>			
