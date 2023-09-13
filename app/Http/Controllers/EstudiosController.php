@@ -554,17 +554,22 @@ class EstudiosController extends Controller
                 $array = XmlaPhp::createArray($response);
                 $demo = $array['S:Envelope']['S:Body']['ns2:consultaXmlResponse']['return'];
                 $resultado = XmlaPhp::createArray($demo);
-                $sectorFinanciero = $resultado['CIFIN']['Tercero']['SectorFinancieroAlDia'];
-                $sectorFinancieroReal = $resultado['CIFIN']['Tercero']['SectorRealAlDia'];
+                $sectorFinanciero = [];
+                $sectorFinancieroReal = [];
+                $cuentas_vigentes = $resultado['CIFIN']['Tercero']['CuentasVigentes'];
+                // $sectorFinanciero = $resultado['CIFIN']['Tercero']['SectorFinancieroAlDia'];
+                // $sectorFinancieroReal = $resultado['CIFIN']['Tercero']['SectorRealAlDia'];
             }else{
                 $sectorFinanciero = [];
                 $sectorFinancieroReal = [];
+                $cuentas_vigentes = [];
             }
 
             return view("estudios/editar")->with([
                 "dataCotizer" => $dataCotizer,
                 "sectorFinanciero" => $sectorFinanciero,
-                "sectorFinancieroReal" => $sectorFinancieroReal
+                "sectorFinancieroReal" => $sectorFinancieroReal,
+                "cuentas_vigentes" => $cuentas_vigentes,
             ]);
 
             $estudio = Estudios::find($id);

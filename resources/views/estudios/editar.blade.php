@@ -673,6 +673,47 @@
                     </tr>
                   @endforeach
                 @endif
+
+                <!-- Verificando si es un arreglo -->
+                @if(isset($cuentas_vigentes['Obligacion'][0]))
+                  @foreach($cuentas_vigentes['Obligacion'] as $res)
+                    <tr>
+                      <td>{{ $res['PaqueteInformacion'] }}</td>
+                      <td>{{ $res['NombreEntidad'] }}</td>
+                      <td></td>   
+                      <td>{{ $res['ValorInicial'] }}</td>
+                      <td></td>
+                      <td>{{ $res['ValorInicial'] }}</td>
+                      <td></td>
+                      <td></td>
+                      <td>{{ $res['FechaCorte'] }}</td>
+                      <td>
+                        <select>
+                          <option value=""></option>
+                        </select>
+                      </td>
+                    </tr>
+                  @endforeach
+                @else
+                  @foreach($cuentas_vigentes as $res)
+                    <tr>
+                      <td>{{ $res['PaqueteInformacion'] }}</td>
+                      <td>{{ $res['NombreEntidad'] }}</td>
+                      <td></td>
+                      <td>{{ $res['ValorInicial'] }}</td>
+                      <td></td>
+                      <td>{{ $res['ValorInicial'] }}</td>
+                      <td></td>
+                      <td></td>
+                      <td>{{ $res['FechaCorte'] }}</td>
+                      <td>
+                        <select>
+                          <option value=""></option>
+                        </select>
+                      </td>
+                    </tr>
+                  @endforeach
+                @endif
               </tbody>
             </table>
 
