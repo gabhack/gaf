@@ -8,8 +8,18 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Giro extends Model
 {
 	// use SoftDeletes;
-
 	protected $table = 'giros';
+
+	protected $fillable = [
+		"estudio_id",
+		"identificacion",
+		"id_beneficiario",
+		"forma_pago",
+		"id_cuentabancaria",
+		"referencia",
+		"valor_girar",
+		"id_tipogiro",
+	];
 
 	public function beneficiario()
 	{

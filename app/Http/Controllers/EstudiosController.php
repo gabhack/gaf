@@ -19,6 +19,7 @@ use App\Carteras as Carteras;
 use App\FactorXMillonKredit as FactorXMillonKredit;
 use App\FactorXMillonGnb as FactorXMillonGnb;
 use Carbon\Carbon;
+use App\Giro;
 use DOMDocument;
 //
 use Illuminate\Support\Facades\DB as DB;
@@ -47,6 +48,15 @@ class EstudiosController extends Controller
     {
         $options = $this->getOptions($request);
         return view("estudios/index")->with($options);
+    }
+
+    public function guardarGiro(Request $request)
+    {
+        $data = $request->except('_token');
+
+        Giro::create($data);
+
+        return redirect()->route('tesoreria.detalle', ['estudio_id' => $data["estudio_id"]]);
     }
 
     public function getOptions(Request $request)
@@ -534,7 +544,7 @@ class EstudiosController extends Controller
                 'SOAPAction: ' . env('CIFIN_URL'),
                 'Content-length: ' . strlen($xml_post_string),
             ];
-           
+
 
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
@@ -549,8 +559,8 @@ class EstudiosController extends Controller
 
             $response = curl_exec($ch);
             curl_close($ch);
-            
-            if($response != false){
+
+            if ($response != false) {
                 $array = XmlaPhp::createArray($response);
                 $demo = $array['S:Envelope']['S:Body']['ns2:consultaXmlResponse']['return'];
                 $resultado = XmlaPhp::createArray($demo);
@@ -559,7 +569,7 @@ class EstudiosController extends Controller
                 $cuentas_vigentes = $resultado['CIFIN']['Tercero']['CuentasVigentes'];
                 // $sectorFinanciero = $resultado['CIFIN']['Tercero']['SectorFinancieroAlDia'];
                 // $sectorFinancieroReal = $resultado['CIFIN']['Tercero']['SectorRealAlDia'];
-            }else{
+            } else {
                 $sectorFinanciero = [];
                 $sectorFinancieroReal = [];
                 $cuentas_vigentes = [];
