@@ -10,4 +10,24 @@ class Giro extends Model
 	// use SoftDeletes;
 
 	protected $table = 'giros';
+
+	public function beneficiario()
+	{
+		return $this->hasOne('\App\EntidadesDesembolso', 'id', 'id_beneficiario');
+	}
+
+	public function formapago()
+	{
+		return $this->hasOne('\App\FormaPago', 'id', 'forma_pago');
+	}
+
+	public function tipogiro()
+	{
+		return $this->hasOne('\App\TipoGiro', 'id', 'forma_pago');
+	}
+
+	public function cuentabancaria()
+	{
+		return $this->hasOne('\App\CuentasBancarias', 'id', 'id_cuentabancaria');
+	}
 }

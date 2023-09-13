@@ -449,6 +449,7 @@ Route::group(['prefix' => 'estudios'], function () {
     Route::post('/iniciar', 'EstudiosController@iniciar');
     Route::get('/iniciar/{documento}', 'EstudiosController@iniciar');
     Route::post('/guardar', 'EstudiosController@guardar');
+    Route::post('/giros', 'TesoreriaController@agregarGiro');
     //
     Route::get('/editar/{id}', 'EstudiosController@editar');
     Route::post('/actualizar', 'EstudiosController@actualizar');
@@ -471,6 +472,8 @@ Route::group(['prefix' => 'clientes'], function () {
     Route::get('/editar/{id}', 'ClientesController@editar');
     Route::post('/actualizar', 'ClientesController@actualizar');
 });
+
+Route::post('giros/store', [GirosController::class, 'store'])->name('giros');
 
 Route::get('/dataset', 'DatasetController@index');
 Route::get('/dataset/get', 'DatasetController@get');

@@ -250,68 +250,92 @@ Tesorería
 >
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Adicionar Giro</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label for="">* Beneficiario</label>
+            <form action="{{ url('estudios/giros') }} " method="post" id="formgiros">
+                {{ csrf_field() }}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Adicionar Giro</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                        <input type="hidden" value="{{ $detalleTesoreria['numero_libranza'] }}" name="estudio_id">
+                        <input type="hidden" value="{{ $detalleTesoreria['cedula'] }}" name="identificacion">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="">* Beneficiario</label>
+                            </div>
+                            <div class="col-md-9">
+                                <select class="form-control" name="id_beneficiario" id="" required>
+                                    <option selected disabled>--Seleccione--</option>
+                                    @foreach($beneficiarios as $ben)
+                                        <option value="{{ $ben->id }}">{{ $ben->nombre }}</option>    
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-                        <div class="col-md-9">
-                            <select class="form-control" name="" id=""></select>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="">* Forma de Pago</label>
+                            </div>
+                            <div class="col-md-6">
+                                <select class="form-control" name="forma_pago" id="" required>
+                                    <option selected disabled>--Seleccione--</option>
+                                    @foreach($formapagos as $forma)
+                                        <option value="{{ $forma->id }}">{{ $forma->nombre }}</option>    
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label for="">* Forma de Pago</label>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="">* Cuenta</label>
+                            </div>
+                            <div class="col-md-3">
+                                <select class="form-control" name="id_cuentabancaria" id="" required>
+                                    <option selected disabled>--Seleccione--</option>
+                                    @foreach($cuentabancarias as $cuenta)
+                                        <option value="{{ $cuenta->id }}">{{ $cuenta->nombre }}</option>    
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <select class="form-control" name="" id=""></select>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="">* Referencia</label>
+                            </div>
+                            <div class="col-md-9">
+                                <input type="text" name="referencia" class="form-control">
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label for="">* Cuenta</label>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="">* Valor a Girar</label>
+                            </div>
+                            <div class="col-md-5">
+                            <input type="number" min="0" name="valor_girar" value="0" class="form-control">
+                            </div>
                         </div>
-                        <div class="col-md-3">
-                            <select class="form-control"  name="" id=""></select>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="">* Tipo Giro</label>
+                            </div>
+                            <div class="col-md-5">
+                                <select class="form-control" name="id_tipogiro" id="" required>
+                                    <option selected disabled>--Seleccione--</option>
+                                    @foreach($tipogiros as $tipo)
+                                        <option value="{{ $tipo->id }}">{{ $tipo->nombre }}</option>    
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label for="">* Referencia</label>
-                        </div>
-                        <div class="col-md-9">
-                            <input type="text" class="form-control">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label for="">* Valor a Girar</label>
-                        </div>
-                        <div class="col-md-5">
-                        <input type="number" min="0" value="0" class="form-control">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label for="">* Tipo Giro</label>
-                        </div>
-                        <div class="col-md-5">
-                            <select class="form-control"  name="" id=""></select>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Agregar</button>
-            </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary" id="procesarGiro">Agregar</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -337,11 +361,7 @@ Tesorería
 @section('js')
     <script>
         $(document).ready(function(){
-            
-        });
 
-        var openModalGiros = () => {
-                $("#myModal").modal('show');
-            };
+        });
     </script>
 @endsection

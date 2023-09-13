@@ -9,6 +9,7 @@ use App\Simulacion;
 use App\dataCotizer;
 use App\Giro;
 use Illuminate\Support\Facades\DB as DB;
+use Redirect;
 
 class TesoreriaController extends Controller
 {
@@ -83,8 +84,12 @@ class TesoreriaController extends Controller
         $giros = Giro::where("estudio_id", $idEstudio)->get();
 
         $carteras = Carteras::where("estudios_id", $idEstudio)->get();
+        $beneficiarios = \App\EntidadesDesembolso::all();
+        $formapagos =\App\FormaPago::all();
+        $cuentabancarias =\App\CuentasBancarias::all();
+        $tipogiros =\App\TipoGiro::all();
 
-        return view("estudios/detalle_tesoreria", compact("detalleTesoreria", "carteras", "giros"));
+        return view("estudios/detalle_tesoreria", compact("detalleTesoreria", "carteras", "giros", "beneficiarios", "formapagos", "cuentabancarias", "tipogiros"));
         //Devolvemos las carteras asociadas al estudio
     }
 
@@ -262,5 +267,26 @@ class TesoreriaController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function agregarGiro(Request $request){
+        $input = $request->all();
+        $beneficiario= \App\EntidadesDesembolso::find($request->id_beneficiario);
+        
+        $input['beneficiario'] = $beneficiario->nombre;
+        
+        $giro = new \App\Giro();
+        $giro->estudio_id = $request->estudio_id;
+        $giro->id_beneficiario = $request->id_beneficiario;
+        $giro->beneficiario = $beneficiario->nombre;
+        $giro->identificacion = $request->identificacion;
+        $giro->valor_girar = $request->valor_girar;
+        $giro->referencia = $request->referencia;
+        $giro->forma_pago = $request->forma_pago;
+        $giro->id_tipogiro = $request->id_tipogiro;
+        $giro->fecha_giro = date('Y-m-d');
+        $giro->save();
+
+        return \Redirect::back();
     }
 }
