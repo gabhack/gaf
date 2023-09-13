@@ -558,6 +558,7 @@ class EstudiosController extends Controller
                 $sectorFinancieroReal = $resultado['CIFIN']['Tercero']['SectorRealAlDia'];
             }else{
                 $sectorFinanciero = [];
+                $sectorFinancieroReal = [];
             }
 
             return view("estudios/editar")->with([
