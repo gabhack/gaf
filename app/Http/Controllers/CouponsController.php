@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\CouponsSedAtlantico;
+use App\CouponsSemMonteria;
 use App\CouponsSedBolivar;
 use App\CouponsSedCauca;
+use App\CouponsSedCordoba;
 use App\CouponsSedChoco;
 use App\CouponsSedFopep;
 use App\CouponsSedMagdalena;
@@ -33,11 +35,13 @@ class CouponsController extends Controller
             CouponsSedBolivar::class => 'doc',
             CouponsSedCauca::class => 'doc',
             CouponsSedChoco::class => 'doc',
+            CouponsSedCordoba::class => 'doc',
             CouponsSedFopep::class => 'doc',
             CouponsSedMagdalena::class => 'doc',
             CouponsSedValle::class => 'doc',
             CouponsSemBarranquilla::class => 'doc',
             CouponsSemPopayan::class => 'doc',
+            CouponsSemMonteria::class => 'doc',
             CouponsSemQuibdo::class => 'doc',
             CouponsSemSahagun::class => 'doc',
             CouponsSemCali::class => 'doc',

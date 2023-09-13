@@ -71,6 +71,8 @@
                         pagaduriaType == 'SEDCAUCA' ||
                         pagaduriaType == 'SEMQUIBDO' ||
                         pagaduriaType == 'SEMPOPAYAN' ||
+                        pagaduriaType == 'SEMMONTERIA' ||
+                        pagaduriaType == 'SEDCORDOBA' ||
                         pagaduriaType == 'SEDBOLIVAR' ||
                         pagaduriaType == 'SEMBARRANQUILLA' ||
                         pagaduriaType == 'SEDATLANTICO' ||
@@ -103,10 +105,12 @@
                             pagaduriaType == 'SEDVALLE' ||
                             pagaduriaType == 'SEDCAUCA' ||
                             pagaduriaType == 'SEDCHOCO' ||
+                            pagaduriaType == 'SEDCORDOBA' ||
                             pagaduriaType == 'SEMQUIBDO' ||
                             pagaduriaType == 'SEMCALI' ||
                             pagaduriaType == 'SEDMAGDALENA' ||
                             pagaduriaType == 'SEMSAHAGUN' ||
+                            pagaduriaType == 'SEMMONTERIA' ||
                             pagaduriaType == 'SEMBARRANQUILLA' ||
                             pagaduriaType == 'SEDATLANTICO' ||
                             pagaduriaType == 'SEDBOLIVAR' ||
