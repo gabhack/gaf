@@ -534,6 +534,7 @@ class EstudiosController extends Controller
                 'SOAPAction: ' . env('CIFIN_URL'),
                 'Content-length: ' . strlen($xml_post_string),
             ];
+           
 
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
@@ -548,11 +549,14 @@ class EstudiosController extends Controller
 
             $response = curl_exec($ch);
             curl_close($ch);
-
-            $array = XmlaPhp::createArray($response);
-            $demo = $array['S:Envelope']['S:Body']['ns2:consultaXmlResponse']['return'];
-            $resultado = XmlaPhp::createArray($demo);
-            $sectorFinanciero = $resultado['CIFIN']['Tercero']['SectorFinancieroAlDia'];
+            if(!$response == false){
+                $array = XmlaPhp::createArray($response);
+                $demo = $array['S:Envelope']['S:Body']['ns2:consultaXmlResponse']['return'];
+                $resultado = XmlaPhp::createArray($demo);
+                $sectorFinanciero = $resultado['CIFIN']['Tercero']['SectorFinancieroAlDia'];
+            }else{
+                $sectorFinanciero = [];
+            }
 
             return view("estudios/editar")->with([
                 "dataCotizer" => $dataCotizer,
