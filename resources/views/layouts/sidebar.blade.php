@@ -43,7 +43,7 @@
 				</li>
 			@endif
 
-			@if (IsSuperAdmin())
+			@if (IsSuperAdmin() || IsAMIAdmin() || IsHEGOAdmin())
 				<li class="treeview">
 					<a class="arrow"><i class="fa fa-cog"></i> <span>Maestros</span></a>
 					<ul class="treeview-menu">
