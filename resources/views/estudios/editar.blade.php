@@ -592,28 +592,88 @@
                 </tr>
               </thead>
               <tbody>
-              @if(count($sectorFinanciero)>0)
-                @foreach($sectorFinanciero as $res)
-                  <tr>
-                    <td>{{ $res['PaqueteInformacion'] }}</td>
-                    <td>{{ $res['NombreEntidad'] }}</td>
-                    <td></td>
-                    <td>{{ $res['SaldoObligacion'] }}</td>
-                    <td></td>
-                    <td>{{ $res['SaldoObligacion'] }}</td>
-                    <td></td>
-                    <td>{{ $res['PaqueteInformacion'] }}</td>
-                    <td>{{ $res['FechaCorte'] }}</td>
-                    <td>
-                      <select>
-                        <option value=""></option>
-                      </select>
-                    </td>
-                  </tr>
-                @endforeach
-              @endif
+                <!-- Verificando si es un arreglo -->
+                @if(isset($sectorFinanciero['Obligacion'][0]))
+                  @foreach($sectorFinanciero['Obligacion'] as $res)
+                    <tr>
+                      <td>{{ $res['PaqueteInformacion'] }}</td>
+                      <td>{{ $res['NombreEntidad'] }}</td>
+                      <td></td>
+                      <td>{{ $res['SaldoObligacion'] }}</td>
+                      <td></td>
+                      <td>{{ $res['SaldoObligacion'] }}</td>
+                      <td></td>
+                      <td>{{ $res['PaqueteInformacion'] }}</td>
+                      <td>{{ $res['FechaCorte'] }}</td>
+                      <td>
+                        <select>
+                          <option value=""></option>
+                        </select>
+                      </td>
+                    </tr>
+                  @endforeach
+                @else
+                  @foreach($sectorFinanciero as $res)
+                    <tr>
+                      <td>{{ $res['PaqueteInformacion'] }}</td>
+                      <td>{{ $res['NombreEntidad'] }}</td>
+                      <td></td>
+                      <td>{{ $res['SaldoObligacion'] }}</td>
+                      <td></td>
+                      <td>{{ $res['SaldoObligacion'] }}</td>
+                      <td></td>
+                      <td>{{ $res['PaqueteInformacion'] }}</td>
+                      <td>{{ $res['FechaCorte'] }}</td>
+                      <td>
+                        <select>
+                          <option value=""></option>
+                        </select>
+                      </td>
+                    </tr>
+                  @endforeach
+                @endif
+
+                <!-- Verificando si es un arreglo -->
+                @if(isset($sectorFinancieroReal['Obligacion'][0]))
+                  @foreach($sectorFinancieroReal['Obligacion'] as $res)
+                    <tr>
+                      <td>{{ $res['PaqueteInformacion'] }}</td>
+                      <td>{{ $res['NombreEntidad'] }}</td>
+                      <td></td>
+                      <td>{{ $res['SaldoObligacion'] }}</td>
+                      <td></td>
+                      <td>{{ $res['SaldoObligacion'] }}</td>
+                      <td></td>
+                      <td>{{ $res['PaqueteInformacion'] }}</td>
+                      <td>{{ $res['FechaCorte'] }}</td>
+                      <td>
+                        <select>
+                          <option value=""></option>
+                        </select>
+                      </td>
+                    </tr>
+                  @endforeach
+                @else
+                  @foreach($sectorFinancieroReal as $res)
+                    <tr>
+                      <td>{{ $res['PaqueteInformacion'] }}</td>
+                      <td>{{ $res['NombreEntidad'] }}</td>
+                      <td></td>
+                      <td>{{ $res['SaldoObligacion'] }}</td>
+                      <td></td>
+                      <td>{{ $res['SaldoObligacion'] }}</td>
+                      <td></td>
+                      <td>{{ $res['PaqueteInformacion'] }}</td>
+                      <td>{{ $res['FechaCorte'] }}</td>
+                      <td>
+                        <select>
+                          <option value=""></option>
+                        </select>
+                      </td>
+                    </tr>
+                  @endforeach
+                @endif
               </tbody>
-              </tfoot>
             </table>
 
             <button type="button" id="btnAgregarFila" class="btn btn-primary">Agregar cartera</button><br><br>

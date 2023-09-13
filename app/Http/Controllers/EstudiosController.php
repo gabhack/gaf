@@ -549,20 +549,22 @@ class EstudiosController extends Controller
 
             $response = curl_exec($ch);
             curl_close($ch);
-            if(!$response == false){
+            
+            if($response != false){
                 $array = XmlaPhp::createArray($response);
                 $demo = $array['S:Envelope']['S:Body']['ns2:consultaXmlResponse']['return'];
                 $resultado = XmlaPhp::createArray($demo);
                 $sectorFinanciero = $resultado['CIFIN']['Tercero']['SectorFinancieroAlDia'];
+                $sectorFinancieroReal = $resultado['CIFIN']['Tercero']['SectorRealAlDia'];
             }else{
                 $sectorFinanciero = [];
             }
 
             return view("estudios/editar")->with([
                 "dataCotizer" => $dataCotizer,
-                "sectorFinanciero" => $sectorFinanciero
+                "sectorFinanciero" => $sectorFinanciero,
+                "sectorFinancieroReal" => $sectorFinancieroReal
             ]);
-
 
             $estudio = Estudios::find($id);
             $registro = Registrosfinancieros::find($estudio->registros_id);
