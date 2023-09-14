@@ -253,4 +253,26 @@ class CarteraController extends Controller
     {
         //
     }
+
+    public function detalleCateraView($id, $tipoconsulta=null)
+    {
+        if($tipoconsulta==1)
+        {
+            // api 1
+
+        }
+        elseif ($tipoconsulta==2) {
+             // api 2
+
+        }
+        else
+        {
+            // bd sistema
+            $cartera=\App\Carteras::find($id);
+        }
+
+        return view("cartera/detalle",compact('cartera'));
+
+    }
+
 }

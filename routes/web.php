@@ -48,6 +48,8 @@ Route::group(['prefix' => 'profile'], function () {
     Route::post('/store', 'ProfileController@saveProfile');
 });
 
+
+
 // Roles
 Route::group(['prefix' => 'roles'], function () {
     Route::get('/', 'RolesController@index');
@@ -331,6 +333,8 @@ Route::group(['prefix' => 'terecuperamos'], function () {
     Route::get('/delete/{id}', 'TerecuperamosController@destroy');
 
     Route::post('/saveObservaciones/{id}', 'TerecuperamosController@saveObservaciones');
+
+
 });
 
 // Comerciales
@@ -465,6 +469,9 @@ Route::group(['prefix' => 'estudios'], function () {
     Route::get('/cartera', 'EstudiosController@cartera')->name('hego.cartera');
 
     Route::get('/venta-cartera', 'EstudiosController@ventaCartera')->name('hego.venta-cartera');
+
+
+     Route::get('/detalle-cartera/{id}/{tipoconsulta?}', 'CarteraController@detalleCateraView');
 });
 
 //Clientes

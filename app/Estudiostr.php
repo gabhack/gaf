@@ -12,9 +12,18 @@ class Estudiostr extends Model
 	protected $table = 'estudiostr';
 
 	protected $fillable = [
-		'fecha', 'decision', 'user_id', 'data_cotizer_id'
+		'fecha', 'decision', 'user_id', 'data_cotizer_id','pagaduria_id'
 	];
 
+	public function datacotizer()
+	{
+		return $this->hasOne('\App\dataCotizer', 'id', 'data_cotizer_id');
+	}
+
+	public function pagaduria()
+	{
+		return $this->hasOne('\App\Pagadurias', 'id', 'pagaduria_id');
+	}
 
 	public function cliente()
 	{
@@ -64,5 +73,10 @@ class Estudiostr extends Model
 	public function carteras()
 	{
 		return $this->hasMany('\App\Carteras', 'estudios_id', 'id');
+	}
+
+	public function solicitudcredito()
+	{
+		return $this->hasOne('\App\SolicitudCredito', 'estudio_id', 'id');
 	}
 }
