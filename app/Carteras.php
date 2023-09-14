@@ -9,6 +9,11 @@ class Carteras extends Model
     use SoftDeletes;
     
 	protected $table = 'carteras';
+
+	protected $fillable = [
+		'sector_data', 'sector_cifin', 'estadoscarteras_id', 'nombre_obligacion', 'estudios_id', 'cuota', 'saldo', 'valor_ini', 'fecha_vence'
+	];
+
 	
 	public function estudio()
 	{

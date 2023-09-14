@@ -271,7 +271,7 @@ Tesorería
                         </div>
                         <div class="col-md-9">
                             <select class="form-control" name="id_beneficiario" id="" required>
-                                <option selected disabled>--Seleccione--</option>
+                                <option selected disabled value="">--Seleccione--</option>
                                 @foreach($beneficiarios as $ben)
                                 <option value="{{ $ben->id }}">{{ $ben->nombre }}</option>
                                 @endforeach
@@ -284,7 +284,7 @@ Tesorería
                         </div>
                         <div class="col-md-6">
                             <select class="form-control" name="forma_pago" id="" required>
-                                <option selected disabled>--Seleccione--</option>
+                                <option selected disabled value="">--Seleccione--</option>
                                 @foreach($formapagos as $forma)
                                 <option value="{{ $forma->id }}">{{ $forma->nombre }}</option>
                                 @endforeach
@@ -297,7 +297,7 @@ Tesorería
                         </div>
                         <div class="col-md-3">
                             <select class="form-control" name="id_cuentabancaria" id="" required>
-                                <option selected disabled>--Seleccione--</option>
+                                <option selected disabled value="">--Seleccione--</option>
                                 @foreach($cuentabancarias as $cuenta)
                                 <option value="{{ $cuenta->id }}">{{ $cuenta->nombre }}</option>
                                 @endforeach
@@ -309,7 +309,7 @@ Tesorería
                             <label for="">* Referencia</label>
                         </div>
                         <div class="col-md-9">
-                            <input type="text" name="referencia" class="form-control">
+                            <input type="text" name="referencia" class="form-control" required>
                         </div>
                     </div>
                     <div class="row">
@@ -317,7 +317,7 @@ Tesorería
                             <label for="">* Valor a Girar</label>
                         </div>
                         <div class="col-md-5">
-                            <input type="number" min="0" name="valor_girar" value="0" class="form-control">
+                            <input type="number" min="0" name="valor_girar" class="form-control" required>
                         </div>
                     </div>
                     <div class="row">
@@ -326,7 +326,7 @@ Tesorería
                         </div>
                         <div class="col-md-5">
                             <select class="form-control" name="id_tipogiro" id="" required>
-                                <option selected disabled>--Seleccione--</option>
+                                <option selected disabled value="">--Seleccione--</option>
                                 @foreach($tipogiros as $tipo)
                                 <option value="{{ $tipo->id }}">{{ $tipo->nombre }}</option>
                                 @endforeach

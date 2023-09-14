@@ -59,6 +59,15 @@ class EstudiosController extends Controller
         return redirect()->route('tesoreria.detalle', ['estudio_id' => $data["estudio_id"]]);
     }
 
+    public function guardarCartera(Request $request)
+    {
+        $data = $request->except('_token');
+
+        \App\Carteras::create($data);
+
+        return \Redirect::back();
+    }
+
     public function getOptions(Request $request)
     {
         //Parametros de entrada para busqueda y filtrado
@@ -527,12 +536,6 @@ class EstudiosController extends Controller
                 </soapenv:Body>
             </soapenv:Envelope>';
 
-            $xml_name = $cedula . '_' . Carbon::parse($fecha)->format('d-m-Y') . '.xml';
-
-            $doc = new DOMDocument();
-            $doc->loadXML($xml_post_string);
-            $doc->save('cifinRequestAdmin_' . $xml_name);
-
             $headers = [
                 "Content-type: text/xml;charset=\"utf-8\"",
                 'Accept: text/xml',
@@ -598,19 +601,17 @@ class EstudiosController extends Controller
                 $embargos = [];
             } 
 
-            return view("estudios/editar")->with([
-                "dataCotizer" => $dataCotizer,
-                "sectorFinanciero" => $sectorFinanciero,
-                "sectorFinancieroReal" => $sectorFinancieroReal,
-                "cuentas_vigentes" => $cuentas_vigentes,
-                "embargos" => $embargos,
-            ]);
+            $carteras = \App\Carteras::where('estudios_id', $dataCotizer->estudio->id)->get();
 
             return view("estudios/editar")->with([
                 "dataCotizer" => $dataCotizer,
                 "sectorFinanciero" => $sectorFinanciero,
                 "sectorFinancieroReal" => $sectorFinancieroReal,
                 "cuentas_vigentes" => $cuentas_vigentes,
+                "embargos" => $embargos,
+                "carteras" => $carteras,
+                "sectores" => \App\Sectores::all(),
+                "estadoscartera" => \App\Estadoscartera::all(),
             ]);
 
             $estudio = Estudios::find($id);
