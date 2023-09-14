@@ -601,7 +601,12 @@ class EstudiosController extends Controller
                 $embargos = [];
             } 
 
-            $carteras = \App\Carteras::where('estudios_id', $dataCotizer->estudio->id)->get();
+            if(isset($dataCotizer->estudio->id)){
+                $carteras = \App\Carteras::where('estudios_id', $dataCotizer->estudio->id)->get();
+            }else{
+                $carteras = [];
+            }
+           
 
             return view("estudios/editar")->with([
                 "dataCotizer" => $dataCotizer,
