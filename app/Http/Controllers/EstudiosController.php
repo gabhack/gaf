@@ -575,6 +575,37 @@ class EstudiosController extends Controller
                 $cuentas_vigentes = [];
             }
 
+            $pagadurias = array(app(PagaduriasController::class)->perDoc($cedula));
+        
+            $pagaduria = '';
+            if(isset($pagadurias[0])){
+                foreach($pagadurias[0] as $key => $value){
+                    $pagaduria = str_replace("datames", "Embargos", $key); 
+                }
+            }
+
+            $embargos = array(app(EmbargosController::class)->buscar($cedula, $pagaduria));
+            
+            $arrayNewEmbargos = array();
+            if(isset($embargos[0])){
+                
+                // foreach($embargos[0] as $key => $res){
+                //     $arrayNewEmbargos[$res["entidaddeman"]] = $res;
+                // }
+                // $embargos = $arrayNewEmbargos;
+
+            }else{
+                $embargos = [];
+            } 
+
+            return view("estudios/editar")->with([
+                "dataCotizer" => $dataCotizer,
+                "sectorFinanciero" => $sectorFinanciero,
+                "sectorFinancieroReal" => $sectorFinancieroReal,
+                "cuentas_vigentes" => $cuentas_vigentes,
+                "embargos" => $embargos,
+            ]);
+
             return view("estudios/editar")->with([
                 "dataCotizer" => $dataCotizer,
                 "sectorFinanciero" => $sectorFinanciero,

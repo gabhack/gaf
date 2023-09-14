@@ -225,8 +225,6 @@ class PagaduriasController extends Controller
             }
         }
 
-        $results = !empty($results) ? $results : (object) [];
-
-        return response()->json($results, 200);
+        return $results = !empty($results) ? $results : (object) [];
     }
 }

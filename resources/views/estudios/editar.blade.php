@@ -714,6 +714,47 @@
                     </tr>
                   @endforeach
                 @endif
+
+                <!-- Verificando si es un arreglo -->
+                @if(isset($embargos[0]))
+                  @foreach($embargos[0] as $key => $res)
+                    <tr>
+                      <td>{{ $res['id'] }}</td>
+                      <td>{{ $res['entidaddeman'] }}</td>
+                      <td></td>   
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td>{{ $res['fembfin'] }}</td>
+                      <td>
+                        <select>
+                          <option value=""></option>
+                        </select>
+                      </td>
+                    </tr>
+                  @endforeach
+                @else
+                  @foreach($embargos as $key => $res)
+                    <tr>
+                      <td>{{ $res['id'] }}</td>
+                      <td>{{ $res['entidaddeman'] }}</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td>{{ $res['FechaCorte'] }}</td>
+                      <td>
+                        <select>
+                          <option value=""></option>
+                        </select>
+                      </td>
+                    </tr>
+                  @endforeach
+                @endif
               </tbody>
             </table>
 
