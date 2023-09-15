@@ -595,192 +595,192 @@
                 <!-- CIFIN -->
                 <!-- Verificando si es un arreglo -->
                 @if(isset($sectorFinanciero['Obligacion'][0]))
-                  @foreach($sectorFinanciero['Obligacion'] as $res)
-                    <tr>
-                      <td>{{ $res['PaqueteInformacion'] }}</td>
-                      <td>{{ $res['NombreEntidad'] }}</td>
-                      <td></td>
-                      <td>{{ $res['SaldoObligacion'] }}</td>
-                      <td></td>
-                      <td>{{ $res['SaldoObligacion'] }}</td>
-                      <td></td>
-                      <td>{{ $res['PaqueteInformacion'] }}</td>
-                      <td>{{ $res['FechaCorte'] }}</td>
-                      <td>
-                        <select>
-                          <option value=""></option>
-                        </select>
-                      </td>
-                    </tr>
-                  @endforeach
+                @foreach($sectorFinanciero['Obligacion'] as $res)
+                <tr>
+                  <td>{{ $res['PaqueteInformacion'] }}</td>
+                  <td>{{ $res['NombreEntidad'] }}</td>
+                  <td></td>
+                  <td>{{ $res['SaldoObligacion'] }}</td>
+                  <td></td>
+                  <td>{{ $res['SaldoObligacion'] }}</td>
+                  <td></td>
+                  <td>{{ $res['PaqueteInformacion'] }}</td>
+                  <td>{{ $res['FechaCorte'] }}</td>
+                  <td>
+                    <select>
+                      <option value=""></option>
+                    </select>
+                  </td>
+                </tr>
+                @endforeach
                 @else
-                  @foreach($sectorFinanciero as $res)
-                    <tr>
-                      <td>{{ $res['PaqueteInformacion'] }}</td>
-                      <td>{{ $res['NombreEntidad'] }}</td>
-                      <td></td>
-                      <td>{{ $res['SaldoObligacion'] }}</td>
-                      <td></td>
-                      <td>{{ $res['SaldoObligacion'] }}</td>
-                      <td></td>
-                      <td>{{ $res['PaqueteInformacion'] }}</td>
-                      <td>{{ $res['FechaCorte'] }}</td>
-                      <td>
-                        <select>
-                          <option value=""></option>
-                        </select>
-                      </td>
-                    </tr>
-                  @endforeach
+                @foreach($sectorFinanciero as $res)
+                <tr>
+                  <td>{{ $res['PaqueteInformacion'] }}</td>
+                  <td>{{ $res['NombreEntidad'] }}</td>
+                  <td></td>
+                  <td>{{ $res['SaldoObligacion'] }}</td>
+                  <td></td>
+                  <td>{{ $res['SaldoObligacion'] }}</td>
+                  <td></td>
+                  <td>{{ $res['PaqueteInformacion'] }}</td>
+                  <td>{{ $res['FechaCorte'] }}</td>
+                  <td>
+                    <select>
+                      <option value=""></option>
+                    </select>
+                  </td>
+                </tr>
+                @endforeach
                 @endif
 
                 <!-- CIFIN -->
                 <!-- Verificando si es un arreglo -->
                 @if(isset($sectorFinancieroReal['Obligacion'][0]))
-                  @foreach($sectorFinancieroReal['Obligacion'] as $res)
-                    <tr>
-                      <td>{{ $res['PaqueteInformacion'] }}</td>
-                      <td>{{ $res['NombreEntidad'] }}</td>
-                      <td></td>
-                      <td>{{ $res['SaldoObligacion'] }}</td>
-                      <td></td>
-                      <td>{{ $res['SaldoObligacion'] }}</td>
-                      <td></td>
-                      <td>{{ $res['PaqueteInformacion'] }}</td>
-                      <td>{{ $res['FechaCorte'] }}</td>
-                      <td>
-                        <select>
-                          <option value=""></option>
-                        </select>
-                      </td>
-                    </tr>
-                  @endforeach
+                @foreach($sectorFinancieroReal['Obligacion'] as $res)
+                <tr>
+                  <td>{{ $res['PaqueteInformacion'] }}</td>
+                  <td>{{ $res['NombreEntidad'] }}</td>
+                  <td></td>
+                  <td>{{ $res['SaldoObligacion'] }}</td>
+                  <td></td>
+                  <td>{{ $res['SaldoObligacion'] }}</td>
+                  <td></td>
+                  <td>{{ $res['PaqueteInformacion'] }}</td>
+                  <td>{{ $res['FechaCorte'] }}</td>
+                  <td>
+                    <select>
+                      <option value=""></option>
+                    </select>
+                  </td>
+                </tr>
+                @endforeach
                 @else
-                  @foreach($sectorFinancieroReal as $res)
-                    <tr>
-                      <td>{{ $res['PaqueteInformacion'] }}</td>
-                      <td>{{ $res['NombreEntidad'] }}</td>
-                      <td></td>
-                      <td>{{ $res['SaldoObligacion'] }}</td>
-                      <td></td>
-                      <td>{{ $res['SaldoObligacion'] }}</td>
-                      <td></td>
-                      <td>{{ $res['PaqueteInformacion'] }}</td>
-                      <td>{{ $res['FechaCorte'] }}</td>
-                      <td>
-                        <select>
-                          <option value=""></option>
-                        </select>
-                      </td>
-                    </tr>
-                  @endforeach
+                @foreach($sectorFinancieroReal as $res)
+                <tr>
+                  <td>{{ $res['PaqueteInformacion'] }}</td>
+                  <td>{{ $res['NombreEntidad'] }}</td>
+                  <td></td>
+                  <td>{{ $res['SaldoObligacion'] }}</td>
+                  <td></td>
+                  <td>{{ $res['SaldoObligacion'] }}</td>
+                  <td></td>
+                  <td>{{ $res['PaqueteInformacion'] }}</td>
+                  <td>{{ $res['FechaCorte'] }}</td>
+                  <td>
+                    <select>
+                      <option value=""></option>
+                    </select>
+                  </td>
+                </tr>
+                @endforeach
                 @endif
 
                 <!-- CIFIN -->
                 <!-- Verificando si es un arreglo -->
                 @if(isset($cuentas_vigentes['Obligacion'][0]))
-                  @foreach($cuentas_vigentes['Obligacion'] as $res)
-                    <tr>
-                      <td>{{ $res['PaqueteInformacion'] }}</td>
-                      <td>{{ $res['NombreEntidad'] }}</td>
-                      <td></td>   
-                      <td>{{ $res['ValorInicial'] }}</td>
-                      <td></td>
-                      <td>{{ $res['ValorInicial'] }}</td>
-                      <td></td>
-                      <td></td>
-                      <td>{{ $res['FechaCorte'] }}</td>
-                      <td>
-                        <select>
-                          <option value=""></option>
-                        </select>
-                      </td>
-                    </tr>
-                  @endforeach
+                @foreach($cuentas_vigentes['Obligacion'] as $res)
+                <tr>
+                  <td>{{ $res['PaqueteInformacion'] }}</td>
+                  <td>{{ $res['NombreEntidad'] }}</td>
+                  <td></td>
+                  <td>{{ $res['ValorInicial'] }}</td>
+                  <td></td>
+                  <td>{{ $res['ValorInicial'] }}</td>
+                  <td></td>
+                  <td></td>
+                  <td>{{ $res['FechaCorte'] }}</td>
+                  <td>
+                    <select>
+                      <option value=""></option>
+                    </select>
+                  </td>
+                </tr>
+                @endforeach
                 @else
-                  @foreach($cuentas_vigentes as $res)
-                    <tr>
-                      <td>{{ $res['PaqueteInformacion'] }}</td>
-                      <td>{{ $res['NombreEntidad'] }}</td>
-                      <td></td>
-                      <td>{{ $res['ValorInicial'] }}</td>
-                      <td></td>
-                      <td>{{ $res['ValorInicial'] }}</td>
-                      <td></td>
-                      <td></td>
-                      <td>{{ $res['FechaCorte'] }}</td>
-                      <td>
-                        <select>
-                          <option value=""></option>
-                        </select>
-                      </td>
-                    </tr>
-                  @endforeach
+                @foreach($cuentas_vigentes as $res)
+                <tr>
+                  <td>{{ $res['PaqueteInformacion'] }}</td>
+                  <td>{{ $res['NombreEntidad'] }}</td>
+                  <td></td>
+                  <td>{{ $res['ValorInicial'] }}</td>
+                  <td></td>
+                  <td>{{ $res['ValorInicial'] }}</td>
+                  <td></td>
+                  <td></td>
+                  <td>{{ $res['FechaCorte'] }}</td>
+                  <td>
+                    <select>
+                      <option value=""></option>
+                    </select>
+                  </td>
+                </tr>
+                @endforeach
                 @endif
 
                 <!-- EMBARGOS -->
                 <!-- Verificando si es un arreglo -->
                 @if(isset($embargos[0]))
-                  @foreach($embargos[0] as $key => $res)
-                    <tr>
-                      <td>{{ $res['id'] }}</td>
-                      <td>{{ $res['entidaddeman'] }}</td>
-                      <td></td>   
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td>{{ $res['fembfin'] }}</td>
-                      <td>
-                        <select>
-                          <option value=""></option>
-                        </select>
-                      </td>
-                    </tr>
-                  @endforeach
+                @foreach($embargos[0] as $key => $res)
+                <tr>
+                  <td>{{ $res['id'] }}</td>
+                  <td>{{ $res['entidaddeman'] }}</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>{{ $res['fembfin'] }}</td>
+                  <td>
+                    <select>
+                      <option value=""></option>
+                    </select>
+                  </td>
+                </tr>
+                @endforeach
                 @else
-                  @foreach($embargos as $key => $res)
-                    <tr>
-                      <td>{{ $res['id'] }}</td>
-                      <td>{{ $res['entidaddeman'] }}</td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td>{{ $res['FechaCorte'] }}</td>
-                      <td>
-                        <select>
-                          <option value=""></option>
-                        </select>
-                      </td>
-                    </tr>
-                  @endforeach
+                @foreach($embargos as $key => $res)
+                <tr>
+                  <td>{{ $res['id'] }}</td>
+                  <td>{{ $res['entidaddeman'] }}</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>{{ $res['FechaCorte'] }}</td>
+                  <td>
+                    <select>
+                      <option value=""></option>
+                    </select>
+                  </td>
+                </tr>
+                @endforeach
                 @endif
 
 
                 <!-- CARTERAS -->
                 @if(count($carteras) > 0)
-                  @foreach($carteras as $key => $res)
-                    <tr>
-                      <td>{{ $res->id }}</td>
-                      <td>{{ $res->nombre_obligacion  }}</td>
-                      <td>{{ $res->cuota  }}</td>   
-                      <td>{{ $res->saldo  }}</td>
-                      <td></td>
-                      <td>{{ $res->valor_ini  }}</td>
-                      <td></td>
-                      <td></td>
-                      <td>{{ $res->fecha_vence }}</td>
-                      <td>
-                        <select>
-                          <option value=""></option>
-                        </select>
-                      </td>
-                    </tr>
-                  @endforeach
+                @foreach($carteras as $key => $res)
+                <tr>
+                  <td>{{ $res->id }}</td>
+                  <td>{{ $res->nombre_obligacion  }}</td>
+                  <td>{{ $res->cuota  }}</td>
+                  <td>{{ $res->saldo  }}</td>
+                  <td></td>
+                  <td>{{ $res->valor_ini  }}</td>
+                  <td></td>
+                  <td></td>
+                  <td>{{ $res->fecha_vence }}</td>
+                  <td>
+                    <select>
+                      <option value=""></option>
+                    </select>
+                  </td>
+                </tr>
+                @endforeach
                 @endif
               </tbody>
             </table>
@@ -1066,116 +1066,117 @@
 
 <!-- Modal -->
 <div class="modal fade bd-example-modal-xl" id="modalCartera" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
-            <form action="{{ route('estudios.cartera') }}" method="post">
-                {{ csrf_field() }}
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Agregar Cartera</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" value="{{ ($dataCotizer->estudio != null) ? $dataCotizer->estudio->id : null }}" name="estudios_id">
-
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label for="">* Sector Data</label>
-                        </div>
-                        <div class="col-md-9">
-                            <select class="form-control" name="sector_data" id="" required>
-                                <option selected disabled value="">--Seleccione--</option>
-                                @foreach($sectores as $sector)
-                                  <option value="{{ $sector->id }}">{{ $sector->sector }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label for="">* Sector CIFIN</label>
-                        </div>
-                        <div class="col-md-9">
-                            <select class="form-control" name="sector_cifin" id="" required>
-                                <option selected disabled value="">--Seleccione--</option>
-                                @foreach($sectores as $sector)
-                                  <option value="{{ $sector->id }}">{{ $sector->sector }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label for="">* Estado de la Cartera</label>
-                        </div>
-                        <div class="col-md-9">
-                            <select class="form-control" name="estadoscarteras_id" id="" required>
-                                <option selected disabled value="">--Seleccione--</option>
-                                @foreach($estadoscartera as $estado)
-                                  <option value="{{ $estado->id }}">{{ $estado->estado }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label for="">* Nombre</label>
-                        </div>
-                        <div class="col-md-9">
-                          <input type="text" name="nombre_obligacion" class="form-control" required>
-                        </div>
-                    </div>
-
-
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label for="">* Cuota</label>
-                        </div>
-                        <div class="col-md-9">
-                            <input type="number" min="0" name="cuota" class="form-control" required>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label for="">* Saldo</label>
-                        </div>
-                        <div class="col-md-9">
-                          <input type="number" min="0" name="saldo" class="form-control" required>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label for="">* Valor Inicial</label>
-                        </div>
-                        <div class="col-md-9">
-                          <input type="number" min="0" name="valor_ini" class="form-control" required>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label for="">* Fecha de Vencimiento</label>
-                        </div>
-                        <div class="col-md-9">
-                            <input type="date" class="form-control" name="fecha_vence" required>
-                        </div>
-                    </div>
-
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary">Agregar</button>
-                </div>
-            </form>
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <form action="{{ route('estudios.cartera') }}" method="post">
+        {{ csrf_field() }}
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Agregar Cartera</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
+        <div class="modal-body">
+
+          <input type="hidden" value="{{ $dataCotizer->estudio ? $dataCotizer->estudio->id : null }}" name="estudios_id">
+
+          <div class="row">
+            <div class="col-md-3">
+              <label for="">* Sector Data</label>
+            </div>
+            <div class="col-md-9">
+              <select class="form-control" name="sector_data" id="" required>
+                <option selected disabled value="">--Seleccione--</option>
+                @foreach($sectores as $sector)
+                <option value="{{ $sector->id }}">{{ $sector->sector }}</option>
+                @endforeach
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-3">
+              <label for="">* Sector CIFIN</label>
+            </div>
+            <div class="col-md-9">
+              <select class="form-control" name="sector_cifin" id="" required>
+                <option selected disabled value="">--Seleccione--</option>
+                @foreach($sectores as $sector)
+                <option value="{{ $sector->id }}">{{ $sector->sector }}</option>
+                @endforeach
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-3">
+              <label for="">* Estado de la Cartera</label>
+            </div>
+            <div class="col-md-9">
+              <select class="form-control" name="estadoscarteras_id" id="" required>
+                <option selected disabled value="">--Seleccione--</option>
+                @foreach($estadoscartera as $estado)
+                <option value="{{ $estado->id }}">{{ $estado->estado }}</option>
+                @endforeach
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-3">
+              <label for="">* Nombre</label>
+            </div>
+            <div class="col-md-9">
+              <input type="text" name="nombre_obligacion" class="form-control" required>
+            </div>
+          </div>
+
+
+          <div class="row">
+            <div class="col-md-3">
+              <label for="">* Cuota</label>
+            </div>
+            <div class="col-md-9">
+              <input type="number" min="0" name="cuota" class="form-control" required>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-3">
+              <label for="">* Saldo</label>
+            </div>
+            <div class="col-md-9">
+              <input type="number" min="0" name="saldo" class="form-control" required>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-3">
+              <label for="">* Valor Inicial</label>
+            </div>
+            <div class="col-md-9">
+              <input type="number" min="0" name="valor_ini" class="form-control" required>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-3">
+              <label for="">* Fecha de Vencimiento</label>
+            </div>
+            <div class="col-md-9">
+              <input type="date" class="form-control" name="fecha_vence" required>
+            </div>
+          </div>
+
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn btn-primary">Agregar</button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
 
 @endsection

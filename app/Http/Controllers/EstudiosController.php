@@ -52,7 +52,10 @@ class EstudiosController extends Controller
 
     public function guardarGiro(Request $request)
     {
+
         $data = $request->except('_token');
+
+
 
         Giro::create($data);
 
@@ -579,34 +582,34 @@ class EstudiosController extends Controller
             }
 
             $pagadurias = array(app(PagaduriasController::class)->perDoc($cedula));
-        
+
             $pagaduria = '';
-            if(isset($pagadurias[0])){
-                foreach($pagadurias[0] as $key => $value){
-                    $pagaduria = str_replace("datames", "Embargos", $key); 
+            if (isset($pagadurias[0])) {
+                foreach ($pagadurias[0] as $key => $value) {
+                    $pagaduria = str_replace("datames", "Embargos", $key);
                 }
             }
 
             $embargos = array(app(EmbargosController::class)->buscar($cedula, $pagaduria));
-            
+
             $arrayNewEmbargos = array();
-            if(isset($embargos[0])){
-                
+            if (isset($embargos[0])) {
+
                 // foreach($embargos[0] as $key => $res){
                 //     $arrayNewEmbargos[$res["entidaddeman"]] = $res;
                 // }
                 // $embargos = $arrayNewEmbargos;
 
-            }else{
+            } else {
                 $embargos = [];
-            } 
+            }
 
-            if(isset($dataCotizer->estudio->id)){
+            if (isset($dataCotizer->estudio->id)) {
                 $carteras = \App\Carteras::where('estudios_id', $dataCotizer->estudio->id)->get();
-            }else{
+            } else {
                 $carteras = [];
             }
-           
+
 
             return view("estudios/editar")->with([
                 "dataCotizer" => $dataCotizer,

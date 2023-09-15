@@ -53,6 +53,7 @@ class dataCotizerController extends Controller
     public function store(Request $request)
     {
         $cotizador = new dataCotizer($request['cotizerData']);
+
         $cotizador->save();
 
         // guardamos en estudiostr
@@ -62,6 +63,8 @@ class dataCotizerController extends Controller
             'decision' => 'ESTU',
             'data_cotizer_id' => $cotizador->id,
         ]);
+
+        //Creamos el plan de pago del estudio
 
         return $cotizador;
     }
