@@ -45,7 +45,7 @@ class TesoreriaController extends Controller
                 "es.subestado as estado_tesoreria",
                 "es.created_at as fecha",
                 "sc.credito_total as solicitado",
-                "sc.cuotas as plazo",
+                "sc.nro_cuotas as plazo",
                 "sc.cuota as cuota_total",
                 "sc.credito_total as valor_credito",
                 DB::raw("(SELECT SUM(saldo) FROM carteras WHERE carteras.estudios_id = es.id) as compras_cartera"),
