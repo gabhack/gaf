@@ -6,6 +6,7 @@ use App\CouponsSedAtlantico;
 use App\CouponsSemMonteria;
 use App\CouponsSedBolivar;
 use App\CouponsSedCauca;
+use App\CouponsSedCaldas;
 use App\CouponsSedCordoba;
 use App\CouponsSedChoco;
 use App\CouponsSedFopep;
@@ -35,6 +36,7 @@ class CouponsController extends Controller
             CouponsSedBolivar::class => 'doc',
             CouponsSedCauca::class => 'doc',
             CouponsSedChoco::class => 'doc',
+            CouponsSedCaldas::class => 'doc',
             CouponsSedCordoba::class => 'doc',
             CouponsSedFopep::class => 'doc',
             CouponsSedMagdalena::class => 'doc',

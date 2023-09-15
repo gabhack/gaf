@@ -6,6 +6,7 @@ use App\DescuentosSedAtlantico;
 use App\DescuentosSedCauca;
 use App\DescuentosSedCordoba;
 use App\DescuentosSedChoco;
+use App\DescuentosSedCaldas;
 use App\DescuentosSedValle;
 use App\DescuentosSemCali;
 use App\DescuentosSemBarranquilla;
@@ -31,6 +32,7 @@ class DescuentosController extends Controller
             DescuentosSemMonteria::class => 'doc',
             DescuentosSemBarranquilla::class => 'doc',
             DescuentosSedCauca::class => 'doc',
+            DescuentosSedCaldas::class => 'doc',
             DescuentosSedCordoba::class => 'doc',
             DescuentosSedChoco::class => 'doc',
             DescuentosSedValle::class => 'doc',
