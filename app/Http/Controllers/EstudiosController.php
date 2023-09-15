@@ -61,6 +61,10 @@ class EstudiosController extends Controller
         return redirect()->route('tesoreria.detalle', ['estudio_id' => $data["estudio_id"]]);
     }
 
+    public function actualizarNew(Request $request){
+        dd($request);
+    }
+
     public function guardarCartera(Request $request)
     {
         $data = $request->except('_token');

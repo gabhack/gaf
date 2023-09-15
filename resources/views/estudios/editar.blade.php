@@ -1286,6 +1286,15 @@
   </div>
 </form>
 
+<form action="{{ route('estudio.actualizar') }}" method="post">
+  {{ csrf_field() }}
+    <div align="center">
+        <input type="hidden" value="{{ $dataCotizer->estudio->id }}">
+        <button type="submit" class="btn btn-primary" style="width: 300px;" class="form-control">Aceptar</button>
+    </div>
+</form>
+
+
 <!-- Modal -->
 <div class="modal fade bd-example-modal-xl" id="modalCartera" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">

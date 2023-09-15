@@ -473,6 +473,9 @@ Route::group(['prefix' => 'estudios'], function () {
 
      Route::get('/detalle-cartera/{id}/{tipoconsulta?}', 'CarteraController@detalleCateraView');
      Route::post('/comprar-cartera', 'EstudiosController@compraCartera');
+
+    Route::post('/estudio-actualizar', 'EstudiosController@actualizarNew')->name('estudio.actualizar');
+
 });
 
 //Clientes
