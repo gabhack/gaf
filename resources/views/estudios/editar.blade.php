@@ -809,30 +809,30 @@
                   <tr>
                     <td align="center"><input type="radio" name="opcion_credito" value="CLI" onchange="recalcular()" disabled=""></td>
                     <td style="font-size:16"><b>CUPO DE LIBRE INVERSION</b></td>
-                    <td><input type="text" id="opcion_cuota_cli" name="opcion_cuota_cli" value="" size="15" style="height:30; text-align:right; font-size:16; font-weight:bold; color:#CC0000; background-color:#8DB4E3" readonly=""></td>
-                    <td colspan="2"><input type="text" id="opcion_desembolso_cli" name="opcion_desembolso_cli" value="" style="width:95%; height:30; text-align:right; font-size:16; font-weight:bold; color:#CC0000; background-color:#8DB4E3" readonly=""></td>
+                    <td><input type="text" id="opcion_cuota_cli" name="opcion_cuota_cli" value="" size="15" style="height:30; text-align:right; font-size:16; font-weight:bold; " readonly=""></td>
+                    <td colspan="2"><input type="text" id="opcion_desembolso_cli" name="opcion_desembolso_cli" value="" style="width:95%; height:30; text-align:right; font-size:16; font-weight:bold; " readonly=""></td>
                   </tr>
                   <tr>
                     <td align="center"><input type="radio" name="opcion_credito" value="CCC" onchange="recalcular()" checked=""></td>
                     <td style="font-size:16"><b>CUPO CON COMPRAS</b></td>
-                    <td><input type="text" id="opcion_cuota_ccc" name="opcion_cuota_ccc" value="" size="15" style="height:30; text-align:right; font-size:16; font-weight:bold; color:#CC0000; background-color:#8DB4E3" readonly=""></td>
-                    <td colspan="2"><input type="text" id="opcion_desembolso_ccc" name="opcion_desembolso_ccc" value="" style="width:95%; height:30; text-align:right; font-size:16; font-weight:bold; color:#CC0000; background-color:#8DB4E3" readonly=""></td>
+                    <td><input type="text" id="opcion_cuota_ccc" name="opcion_cuota_ccc" value="" size="15" style="height:30; text-align:right; font-size:16; font-weight:bold; " readonly=""></td>
+                    <td colspan="2"><input type="text" id="opcion_desembolso_ccc" name="opcion_desembolso_ccc" value="" style="width:95%; height:30; text-align:right; font-size:16; font-weight:bold; " readonly=""></td>
                   </tr>
                   <tr>
                     <td align="center"><input type="radio" name="opcion_credito" value="CMP" onchange="recalcular()"></td>
                     <td style="font-size:16"><b>CUPO MAXIMO POSIBLE</b></td>
-                    <td><input type="text" id="opcion_cuota_cmp" name="opcion_cuota_cmp" value="" size="15" style="height:30; text-align:right; font-size:16; font-weight:bold; color:#CC0000; background-color:#8DB4E3" readonly=""></td>
-                    <td colspan="2"><input type="text" id="opcion_desembolso_cmp" name="opcion_desembolso_cmp" value="" style="width:95%; height:30; text-align:right; font-size:16; font-weight:bold; color:#CC0000; background-color:#8DB4E3" readonly=""></td>
+                    <td><input type="text" id="opcion_cuota_cmp" name="opcion_cuota_cmp" value="" size="15" style="height:30; text-align:right; font-size:16; font-weight:bold; " readonly=""></td>
+                    <td colspan="2"><input type="text" id="opcion_desembolso_cmp" name="opcion_desembolso_cmp" value="" style="width:95%; height:30; text-align:right; font-size:16; font-weight:bold; " readonly=""></td>
                   </tr>
                   <tr>
                     <td align="center"><input type="radio" name="opcion_credito" value="CSO" onchange="recalcular()"></td>
                     <td style="font-size:16"><b>CUPO SOLICITADO</b></td>
-                    <td><input type="text" id="opcion_cuota_cso" name="opcion_cuota_cso" value="" size="15" onfocus="this.value = this.value.replace(/\,/g, '')" onblur="if(isnumber(this.value)==false) { this.value='0'; return false; } else { if (this.value == '') { this.value = '0'; } if (parseFloat(this.value) > document.formato.opcion_cuota_ccc.value.replace(/\,/g, '')) { this.value = document.formato.opcion_cuota_ccc.value.replace(/\,/g, ''); alert('El valor de la cuota no debe ser mayor a $' + document.formato.opcion_cuota_ccc.value); } recalcular(); separador_miles(this); }" style="height:30; text-align:right; font-size:16; font-weight:bold; color:#CC0000;  background-color:#EAF1DD"></td>
-                    <td colspan="2"><input type="text" id="opcion_desembolso_cso" name="opcion_desembolso_cso" value="" style="width:95%; height:30; text-align:right; font-size:16; font-weight:bold; color:#CC0000; background-color:#8DB4E3" readonly=""></td>
+                    <td><input type="text" id="opcion_cuota_cso" name="opcion_cuota_cso" value="" size="15" onfocus="this.value = this.value.replace(/\,/g, '')" onblur="if(isnumber(this.value)==false) { this.value='0'; return false; } else { if (this.value == '') { this.value = '0'; } if (parseFloat(this.value) > document.formato.opcion_cuota_ccc.value.replace(/\,/g, '')) { this.value = document.formato.opcion_cuota_ccc.value.replace(/\,/g, ''); alert('El valor de la cuota no debe ser mayor a $' + document.formato.opcion_cuota_ccc.value); } recalcular(); separador_miles(this); }" style="height:30; text-align:right; font-size:16; font-weight:bold; color:#CC0000;  "></td>
+                    <td colspan="2"><input type="text" id="opcion_desembolso_cso" name="opcion_desembolso_cso" value="" style="width:95%; height:30; text-align:right; font-size:16; font-weight:bold; " readonly=""></td>
                   </tr>
                   <tr>
                     <td colspan="2">FECHA INCORP. PAGADURÍA</td>
-                    <td><input type="text" name="fecha_incorp_pagaduria" value="" onchange="if (this.value != '') { if(validarfecha(this.value)==false) {this.value=''; return false} }" style="height:30; text-align:right; font-size:16; font-weight:bold; color:#CC0000;  background-color:#EAF1DD; width: 100px"></td>
+                    <td><input type="text" name="fecha_incorp_pagaduria" value="" onchange="if (this.value != '') { if(validarfecha(this.value)==false) {this.value=''; return false} }" style="height:30; text-align:right; font-size:16; font-weight:bold; color:#CC0000; width: 100px"></td>
                   </tr>
                   </tbody></table>
                   <br>
@@ -865,7 +865,7 @@
                     </tr>
                     <tr>
                       <td colspan="2">COSTOS</td>
-                      <td><input type="text" id="lb_porcentaje_costos" name="lb_porcentaje_costos" value="" size="14" style="text-align:center; background-color:#EAF1DD;" onchange="if(isnumber_punto(this.value)==false) {this.value=''; return false} else { if (this.value == '') { this.value = ''; } recalcular(); }"></td>
+                      <td><input type="text" id="lb_porcentaje_costos" name="lb_porcentaje_costos" value="" size="14" style="text-align:center; " onchange="if(isnumber_punto(this.value)==false) {this.value=''; return false} else { if (this.value == '') { this.value = ''; } recalcular(); }"></td>
                       <td colspan="2"><input type="text" id="descuento5_valor" name="descuento5_valor" value="" style="width:95%; text-align:right; color:#FFFFFF;" readonly=""></td>
                     </tr>
                     <tr>
@@ -897,7 +897,7 @@
                   </tr>
                   <tr>
                     <td colspan="2">ASESORÍA FINANCIERA</td>
-                    <td><input type="text" name="descuento2" value="" onchange="if(isnumber_punto(this.value)==false) {this.value='35'; return false} else { if (this.value == '') { this.value = '35'; } recalcular(); }" size="14" style="text-align:center; background-color:#EAF1DD;"></td>
+                    <td><input type="text" name="descuento2" value="" onchange="if(isnumber_punto(this.value)==false) {this.value='35'; return false} else { if (this.value == '') { this.value = '35'; } recalcular(); }" size="14" style="text-align:center; "></td>
                     <td colspan="2"><input type="text" name="descuento2_valor" value="" style="width:95%; text-align:right; color:#FFFFFF;" readonly=""></td>
                   </tr>
                   <tr>
@@ -924,29 +924,29 @@
                   </tr>
                   <tr>
                     <td colspan="2" style="font-size:18" width="170"><b>DESEMBOLSO CLIENTE</b></td>
-                    <td colspan="3"><input type="text" id="desembolso_cliente" name="desembolso_cliente" value="" style="width:100%; height:45; text-align:right; font-size:18; font-weight:bold; color:#CC0000; background-color:#8DB4E3" readonly=""></td>
+                    <td colspan="3"><input type="text" id="desembolso_cliente" name="desembolso_cliente" value="" style="width:100%; height:45; text-align:right; font-size:18; font-weight:bold; " readonly=""></td>
                   </tr>
                   <tr><td colspan="5">&nbsp;</td></tr>
                   <tr>
                     <td colspan="2" style="font-size:16"><b>DECISIÓN</b></td>
-                    <td colspan="3"><input type="text" id="decision" name="decision" value="" style="width:100%; height:45; text-align:center; font-size:18; font-weight:bold; background-color:#8DB4E3" readonly=""><input type="hidden" id="decisionh" name="decisionh" value=""></td>
+                    <td colspan="3"><input type="text" id="decision" name="decision" value="" style="width:100%; height:45; text-align:center; font-size:18; font-weight:bold; " readonly=""><input type="hidden" id="decisionh" name="decisionh" value=""></td>
                   </tr>
                   <tr>
                     <td colspan="2">NO. LIBRANZA</td>
-                    <td colspan="3"><input type="text" name="nro_libranza" value="" style="width:100%; text-align:center; background-color:#EAF1DD;"></td>
+                    <td colspan="3"><input type="text" name="nro_libranza" value="" style="width:100%; text-align:center; "></td>
                   </tr>
                   <tr>
                     <td colspan="2">VALOR VISADO</td>
-                    <td colspan="3"><input type="text" name="valor_visado" value="" onfocus="this.value = this.value.replace(/\,/g, '')" onblur="if(isnumber(this.value)==false) {this.value='0'; return false} else { separador_miles(this); }" style="width:100%; text-align:right; background-color:#EAF1DD"></td>
+                    <td colspan="3"><input type="text" name="valor_visado" value="" onfocus="this.value = this.value.replace(/\,/g, '')" onblur="if(isnumber(this.value)==false) {this.value='0'; return false} else { separador_miles(this); }" style="width:100%; text-align:right; "></td>
                   </tr>
                   <tr>
                     <td colspan="2">FECHA CONFIRMACIÓN</td>
-                    <td colspan="3"><input type="text" name="fecha_llamada_clientef" value="" size="10" onchange="if(validarfecha(this.value)==false) {this.value=''; return false}" style="background-color:#EAF1DD;">&nbsp;HORA<input type="text" name="fecha_llamada_clienteh" value="" size="5" onchange="if(validarhora(this.value)==false) {this.value=''; return false}" style="background-color:#EAF1DD;"><select name="fecha_llamada_clientej" style="background-color:#EAF1DD;"><option value=""></option><option value="AM">AM</option><option value="PM">PM</option></select></td>
+                    <td colspan="3"><input type="text" name="fecha_llamada_clientef" value="" size="10" onchange="if(validarfecha(this.value)==false) {this.value=''; return false}" style=";">&nbsp;HORA<input type="text" name="fecha_llamada_clienteh" value="" size="5" onchange="if(validarhora(this.value)==false) {this.value=''; return false}" style=";"><select name="fecha_llamada_clientej" style=";"><option value=""></option><option value="AM">AM</option><option value="PM">PM</option></select></td>
                   </tr>
                   <tr>
                     <td colspan="2">SUBESTADO</td>
                     <td colspan="3">
-                      <select id="id_subestado" name="id_subestado" style="background-color:#EAF1DD">
+                      <select id="id_subestado" name="id_subestado" style="">
                         <option value=""></option>
                       </select>
                       <input type="hidden" name="id_subestadoh" value="">
@@ -955,7 +955,7 @@
                   <tr>
                     <td colspan="2">EXTRA PRIMA</td>
                     <td colspan="3">
-                      <select name="porcentaje_extraprima" style="background-color:#EAF1DD;" onchange="if (this.value != '0' &amp;&amp; PorcentajeSeguroExtraPrima('', document.formato.plazo.value, this.value) == '0') { alert('No hay condiciones de Extra Prima para el plazo establecido'); this.value = document.formato.porcentaje_extraprimah.value; } else { recalcular(); }">
+                      <select name="porcentaje_extraprima" style=";" onchange="if (this.value != '0' &amp;&amp; PorcentajeSeguroExtraPrima('', document.formato.plazo.value, this.value) == '0') { alert('No hay condiciones de Extra Prima para el plazo establecido'); this.value = document.formato.porcentaje_extraprimah.value; } else { recalcular(); }">
                         <option value="0"></option>
                       </select>
                       <input type="hidden" name="porcentaje_extraprimah" value="">
@@ -988,7 +988,7 @@
                     <input type="hidden" name="tipo_credito" value="">
                     <td>PLAZO SOLICITADO PARA EL CRÉDITO</td>
                     <td>
-                      <input type="text" id="plazo" name="plazo" value="" size="15" onchange="if(isnumber(this.value)==false) {this.value=''; return false} else { if (document.formato.porcentaje_extraprima.value != '0' &amp;&amp; PorcentajeSeguroExtraPrima('', this.value, document.formato.porcentaje_extraprima.value) == '0') { alert('No hay condiciones de Extra Prima para el plazo establecido'); this.value = document.formato.plazoh.value; } else { if (this.value == '') { this.value = ''; } if (parseInt(this.value) > parseInt(document.formato.plazo_maximo_segun_edad.value)) { this.value = document.formato.plazo_maximo_segun_edad.value; alert('El plazo no debe ser mayor a ' + document.formato.plazo_maximo_segun_edad.value);} CargarTasas(this.value); recalcular(); } }" style="text-align:center; background-color:#EAF1DD; color:#CC0000;">
+                      <input type="text" id="plazo" name="plazo" value="" size="15" onchange="if(isnumber(this.value)==false) {this.value=''; return false} else { if (document.formato.porcentaje_extraprima.value != '0' &amp;&amp; PorcentajeSeguroExtraPrima('', this.value, document.formato.porcentaje_extraprima.value) == '0') { alert('No hay condiciones de Extra Prima para el plazo establecido'); this.value = document.formato.plazoh.value; } else { if (this.value == '') { this.value = ''; } if (parseInt(this.value) > parseInt(document.formato.plazo_maximo_segun_edad.value)) { this.value = document.formato.plazo_maximo_segun_edad.value; alert('El plazo no debe ser mayor a ' + document.formato.plazo_maximo_segun_edad.value);} CargarTasas(this.value); recalcular(); } }" style="text-align:center;  color:#CC0000;">
                       <input type="hidden" name="plazoh" value="">
                     </td>
                     <input type="hidden" name="suma_al_presupuesto" value="0">
@@ -1000,7 +1000,7 @@
                   <div class="box1 oran clearfix">
                   <table border="0" cellspacing="1" cellpadding="2" width="95%">
                   <tbody><tr>
-                    <td colspan="4"><textarea name="observaciones" rows="3" style="width:100%; background-color:#EAF1DD;"></textarea></td>
+                    <td colspan="4"><textarea name="observaciones" rows="3" style="width:100%; "></textarea></td>
                   </tr>
                   </tbody></table>
                   </div>
