@@ -50,6 +50,11 @@ class EstudiosController extends Controller
         return view("estudios/index")->with($options);
     }
 
+    public function pagos($id)
+    {
+        return view("cartera/plan_pagos");
+    }
+
     public function guardarGiro(Request $request)
     {
 
