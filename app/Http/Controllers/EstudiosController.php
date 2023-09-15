@@ -53,6 +53,8 @@ class EstudiosController extends Controller
     public function guardarGiro(Request $request)
     {
         $data = $request->except('_token');
+        $beneficiario= \App\EntidadesDesembolso::find($data['id_beneficiario']);
+        $data['beneficiario'] = $beneficiario->nombre;
 
         Giro::create($data);
 
