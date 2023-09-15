@@ -64,7 +64,7 @@ class dataCotizerController extends Controller
         $estudio->user_id = auth()->user()->id;
         $estudio->pagaduria_id = $pagaduria->id;
         $estudio->fecha = \Carbon\Carbon::now()->toDateString();
-        $estudio->decision = 'ESTU';
+        $estudio->decision = 'PROSP';
         $estudio->data_cotizer_id = $cotizador->id;
         $estudio->save();
 
