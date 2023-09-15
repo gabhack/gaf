@@ -14,6 +14,7 @@ class Giro extends Model
 		"estudio_id",
 		"identificacion",
 		"id_beneficiario",
+		"beneficiario",
 		"forma_pago",
 		"id_cuentabancaria",
 		"referencia",

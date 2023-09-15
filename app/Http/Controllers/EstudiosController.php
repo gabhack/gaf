@@ -54,12 +54,21 @@ class EstudiosController extends Controller
     {
 
         $data = $request->except('_token');
+        $beneficiario = \App\EntidadesDesembolso::find($data['id_beneficiario']);
+        $data['beneficiario'] = $beneficiario->nombre;
 
 
 
         Giro::create($data);
 
         return redirect()->route('tesoreria.detalle', ['estudio_id' => $data["estudio_id"]]);
+    }
+
+    public function actualizarNew(Request $request)
+    {
+        $aprobarEstudio = Estudios::find($request->estudio_id)->update(["decision", "APRO"]);
+
+        return redirect()->route('hego.tesoreria');
     }
 
     public function guardarCartera(Request $request)
@@ -1026,5 +1035,14 @@ class EstudiosController extends Controller
     {
         $options = $this->getOptions($request);
         return view("estudios/venta-cartera")->with($options);
+    }
+
+    public function compraCartera(Request $request)
+    {
+        $cartera = \App\Carteras::find($request->cartera_id);
+        $cartera->estatus = 1;
+        $cartera->update();
+
+        return response()->json(['data' => true], 200);
     }
 }

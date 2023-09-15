@@ -52,17 +52,62 @@ class dataCotizerController extends Controller
      */
     public function store(Request $request)
     {
-        $cotizador = new dataCotizer($request['cotizerData']);
+        $input = $request['cotizerData'];
+        $pagaduria = $request['cotizerData']['pagaduria'];
+        unset($input['pagaduria']);
 
+        // se guarda el cotizer
+        $cotizador = new dataCotizer($input);
         $cotizador->save();
 
+        // obtenemos el id de la pagaduria seleccionada
+        $pagaduria = \App\Pagadurias::where('codigo', $pagaduria)->first();
+
         // guardamos en estudiostr
-        Estudiostr::create([
-            'user_id' => auth()->user()->id,
-            'fecha' => \Carbon\Carbon::now()->toDateString(),
-            'decision' => 'ESTU',
-            'data_cotizer_id' => $cotizador->id,
-        ]);
+        $estudio = new Estudiostr();
+        $estudio->user_id = auth()->user()->id;
+        $estudio->pagaduria_id = $pagaduria->id;
+        $estudio->fecha = \Carbon\Carbon::now()->toDateString();
+        $estudio->decision = 'PROSP';
+        $estudio->data_cotizer_id = $cotizador->id;
+        $estudio->save();
+
+        // se procede a guardar la solicitud de credito
+        $credit = new \App\SolicitudCredito($request['creditInfo']);
+        $credit->estudio_id = $estudio->id;
+        $credit->save();
+
+        /* // Obtén los datos del formulario
+        $tasaInteresMensual = $request->input('tasa_interes'); // Supongamos que ya está en forma decimal
+        $saldoCapital = $request->input('saldo_capital');
+        $costoSeguro = $request->input('costo_seguro');
+        $numCuotas = $request->input('num_cuotas');
+
+        // Calcula la cuota mensual
+        $cuotaMensual = ($saldoCapital * $tasaInteresMensual) / (1 - pow(1 + $tasaInteresMensual, -$numCuotas));
+
+        // Inicializa el saldo de capital
+        $saldoActual = $saldoCapital;
+
+        // Calcula y guarda los pagos mensuales en la tabla "plan_pagos"
+        for ($i = 1; $i <= $numCuotas; $i++) {
+            $interesMensual = $saldoActual * $tasaInteresMensual;
+            $capitalMensual = $cuotaMensual - $interesMensual;
+            $saldoActual -= $capitalMensual;
+
+            // Guarda el pago en la tabla "plan_pagos"
+            PlanPago::create([
+                'fecha' => now()->addMonths($i)->format('Y-m-d'),
+                'cuota' => $cuotaMensual,
+                'capital' => $capitalMensual,
+                'interes' => $interesMensual,
+                'seguro_vida' => $costoSeguro,
+                'total_cuota' => $cuotaMensual + $costoSeguro,
+                'saldo_capital' => $saldoActual,
+            ]);
+        }
+
+        */
 
         //Creamos el plan de pago del estudio
 

@@ -11,7 +11,7 @@ class Carteras extends Model
 	protected $table = 'carteras';
 
 	protected $fillable = [
-		'sector_data', 'sector_cifin', 'estadoscarteras_id', 'nombre_obligacion', 'estudios_id', 'cuota', 'saldo', 'valor_ini', 'fecha_vence'
+		'sector_data', 'sector_cifin', 'estadoscarteras_id', 'nombre_obligacion', 'estudios_id', 'cuota', 'saldo', 'valor_ini', 'fecha_vence', 'estatus'
 	];
 
 	

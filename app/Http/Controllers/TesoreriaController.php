@@ -45,7 +45,7 @@ class TesoreriaController extends Controller
                 "es.subestado as estado_tesoreria",
                 "es.created_at as fecha",
                 "sc.credito_total as solicitado",
-                "sc.cuotas as plazo",
+                "sc.nro_cuotas as plazo",
                 "sc.cuota as cuota_total",
                 "sc.credito_total as valor_credito",
                 DB::raw("(SELECT SUM(saldo) FROM carteras WHERE carteras.estudios_id = es.id) as compras_cartera"),
@@ -56,38 +56,37 @@ class TesoreriaController extends Controller
             )
             ->where("es.id", "=", $idEstudio)
             ->first();
-        
-        if(is_null($detalleTesoreria)){
 
-            $detalleTesoreria["numero_libranza"] = ''; 
-            $detalleTesoreria["nombre"] = ''; 
+        if (is_null($detalleTesoreria)) {
+
+            $detalleTesoreria["numero_libranza"] = '';
+            $detalleTesoreria["nombre"] = '';
             $detalleTesoreria["apellido"] = '';
-            $detalleTesoreria["cedula"] = ''; 
-            $detalleTesoreria["direccion"] = ''; 
-            $detalleTesoreria["telefono"] = ''; 
-            $detalleTesoreria["correo_electronico"] = ''; 
+            $detalleTesoreria["cedula"] = '';
+            $detalleTesoreria["direccion"] = '';
+            $detalleTesoreria["telefono"] = '';
+            $detalleTesoreria["correo_electronico"] = '';
             $detalleTesoreria["pagaduria"] = '';
-            $detalleTesoreria["estado_tesoreria"] = ''; 
-            $detalleTesoreria["fecha"] = ''; 
-            $detalleTesoreria["solicitado"] = ''; 
-            $detalleTesoreria["plazo"] = ''; 
-            $detalleTesoreria["cuota_total"] = ''; 
-            $detalleTesoreria["valor_credito"] = ''; 
-            $detalleTesoreria["compras_cartera"] = ''; 
-            $detalleTesoreria["intereses_anticipados"] = ''; 
-            $detalleTesoreria["gmf"] = ''; 
-            $detalleTesoreria["desembolso_cliente"] = ''; 
-            $detalleTesoreria["saldo_girar"] = ''; 
-
+            $detalleTesoreria["estado_tesoreria"] = '';
+            $detalleTesoreria["fecha"] = '';
+            $detalleTesoreria["solicitado"] = '';
+            $detalleTesoreria["plazo"] = '';
+            $detalleTesoreria["cuota_total"] = '';
+            $detalleTesoreria["valor_credito"] = '';
+            $detalleTesoreria["compras_cartera"] = '';
+            $detalleTesoreria["intereses_anticipados"] = '';
+            $detalleTesoreria["gmf"] = '';
+            $detalleTesoreria["desembolso_cliente"] = '';
+            $detalleTesoreria["saldo_girar"] = '';
         }
 
         $giros = Giro::where("estudio_id", $idEstudio)->get();
 
         $carteras = Carteras::where("estudios_id", $idEstudio)->get();
         $beneficiarios = \App\EntidadesDesembolso::all();
-        $formapagos =\App\FormaPago::all();
-        $cuentabancarias =\App\CuentasBancarias::all();
-        $tipogiros =\App\TipoGiro::all();
+        $formapagos = \App\FormaPago::all();
+        $cuentabancarias = \App\CuentasBancarias::all();
+        $tipogiros = \App\TipoGiro::all();
 
         return view("estudios/detalle_tesoreria", compact("detalleTesoreria", "carteras", "giros", "beneficiarios", "formapagos", "cuentabancarias", "tipogiros"));
         //Devolvemos las carteras asociadas al estudio
@@ -138,6 +137,7 @@ class TesoreriaController extends Controller
         $subestados_tesoreria = [58, 2, 54];
 
         $lista = Estudiostr::where('decision', 'APRO')
+            ->orderBy("id", "DESC")
             // ->orWhere(function ($query) use ($subestados_tesoreria) {
             //     $query->where('estado', 'EST')
             //         ->where('decision', 'VIABLE')
@@ -269,12 +269,13 @@ class TesoreriaController extends Controller
         //
     }
 
-    public function agregarGiro(Request $request){
+    public function agregarGiro(Request $request)
+    {
         $input = $request->all();
-        $beneficiario= \App\EntidadesDesembolso::find($request->id_beneficiario);
-        
+        $beneficiario = \App\EntidadesDesembolso::find($request->id_beneficiario);
+
         $input['beneficiario'] = $beneficiario->nombre;
-        
+
         $giro = new \App\Giro();
         $giro->estudio_id = $request->estudio_id;
         $giro->id_beneficiario = $request->id_beneficiario;

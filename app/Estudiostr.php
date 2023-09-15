@@ -12,7 +12,7 @@ class Estudiostr extends Model
 	protected $table = 'estudiostr';
 
 	protected $fillable = [
-		'fecha', 'decision', 'user_id', 'data_cotizer_id','pagaduria_id'
+		'fecha', 'decision', 'user_id', 'data_cotizer_id', 'pagaduria_id'
 	];
 
 	public function datacotizer()

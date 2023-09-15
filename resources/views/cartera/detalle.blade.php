@@ -89,42 +89,39 @@ Detalle Cartera
                             <table border="0" cellspacing="1" cellpadding="2">
                                 <tbody><tr>
                                     <td>SOLICITADO</td>
-                                    <td><input type="text" name="opcion_desembolso" value="{{$cartera->estudio->solicitudcredito->credito_total}}" size="15" style="text-align:right;" readonly=""></td>
+                                    <td><input type="text" value="{{$cartera->estudio->solicitudcredito->valor_solicitado}}" size="15" style="text-align:right;" readonly=""></td>
                                 </tr>
                                 <tr>
                                     <td>PLAZO</td>
-                                    <td><input type="text" name="plazo" value="" size="15" style="text-align:right;" readonly=""></td>
+                                    <td><input type="text" value="" size="15" style="text-align:right;" readonly=""></td>
                                 </tr>
                                 <tr>
                                     <td>TASA DE INTERÉS DEL CRÉDITO</td>
-                                    <td><input type="text" name="tasa_interes" value="" size="15" style="text-align:right;" readonly=""></td>
+                                    <td><input type="text" value="{{$cartera->estudio->solicitudcredito->tasa_interes}}" size="15" style="text-align:right;" readonly=""></td>
                                 </tr>
                                 <tr>
                                     <td>CUOTA CORRIENTE</td>
-                                    <td><input type="text" name="cuota_corriente" value="" size="15" style="text-align:right;" readonly=""></td>
+                                    <td><input type="text" value="{{$cartera->estudio->solicitudcredito->cuota_corriente}}" size="15" style="text-align:right;" readonly=""></td>
                                 </tr>
                                 <tr>
                                     <td>SEGURO DE VIDA</td>
-                                    <td><input type="text" name="seguro_vida" value="" size="15" style="text-align:right;" readonly=""></td>
+                                    <td><input type="text" value="{{$cartera->estudio->solicitudcredito->seguro}}" size="15" style="text-align:right;" readonly=""></td>
                                 </tr>
                                 <tr>
                                     <td>CUOTA TOTAL</td>
-                                    <td><input type="text" name="opcion_cuota" value="" size="15" style="text-align:right;" readonly=""></td>
+                                    <td><input type="text" value="{{$cartera->estudio->solicitudcredito->cuota}}" size="15" style="text-align:right;" readonly=""></td>
                                 </tr>
                                 <tr>
                                     <td>VALOR CRÉDITO</td>
-                                    <td><input type="text" name="valor_credito" value="" size="15" style="text-align:right;" readonly=""></td>
+                                    <td><input type="text" value="{{$cartera->estudio->solicitudcredito->credito_total}}" size="15" style="text-align:right;" readonly=""></td>
                                 </tr>
                                 <tr>
                                     <td>FECHA DESEMBOLSO</td>
-                                    <td><input type="text" name="fecha_desembolso" value="" size="15" style="text-align:center;" readonly=""></td>
+                                    <td><input type="text" value="" size="15" style="text-align:center;" readonly=""></td>
                                 </tr>
                                 <tr>
                                     <td>FECHA PRIMERA CUOTA</td>
-                                    <td><input type="text" name="fecha_primera_cuota" value="" size="15" style="text-align:center; background-color:#EAF1DD;" onchange="if (validarfecha(this.value) == false) {
-                                                    this.value = '2023-08-31';
-                                                    return false
-                                                }"></td>
+                                    <td><input type="text" value="" size="15" style="text-align:center; background-color:#EAF1DD;" readonly=""></td>
                                 </tr>
                                
                             </tbody></table>
