@@ -52,12 +52,16 @@ class dataCotizerController extends Controller
      */
     public function store(Request $request)
     {
+        $input = $request['cotizerData'];
+        $pagaduria = $request['cotizerData']['pagaduria'];
+        unset($input['pagaduria']);
+        
         // se guarda el cotizer
-        $cotizador = new dataCotizer($request['cotizerData']);
+        $cotizador = new dataCotizer($input);
         $cotizador->save();
 
         // obtenemos el id de la pagaduria seleccionada
-        $pagaduria = \App\Pagadurias::where('codigo', $request['cotizerData']['pagaduria'])->first();
+        $pagaduria = \App\Pagadurias::where('codigo', $pagaduria)->first();
         
         // guardamos en estudiostr
         $estudio = new Estudiostr();

@@ -774,10 +774,12 @@
                       <td></td>
                       <td></td>
                       <td>{{ $res->fecha_vence }}</td>
-                      <td>
-                        <select>
-                          <option value=""></option>
-                        </select>
+                      <td id="td-compra-{{ $res->id }}">
+                        @if($res->estatus == 0)
+                          <button type="button" onclick="comprarCartera({{ $res->id }})">Comprar</button>
+                        @else
+                          <span>Comprada</span>
+                        @endif
                       </td>
                     </tr>
                   @endforeach
@@ -1185,4 +1187,30 @@
 <script src="{{asset('css/gijgo-combined-1.9.13/js/gijgo.min.js')}}"></script>
 <script src="{{asset('js/TablaCarteras.js')}}"></script>
 <script src="{{asset('js/init_autoNumeric.js')}}"></script>
+
+<script>
+
+  var comprarCartera = (id) => {
+    $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type: 'post',
+            url: '/estudios/comprar-cartera',
+            data: {
+                cartera_id: id,
+            },
+            success: function(data) {
+              if(data.data){
+                $("#td-compra-"+id).html("<span>Comprada</span>");
+              }
+            },
+          
+            error: function(data) {
+              console.log(data);
+            }
+        });
+  };
+    
+</script>
 @endsection

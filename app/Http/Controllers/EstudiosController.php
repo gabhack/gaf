@@ -1024,4 +1024,12 @@ class EstudiosController extends Controller
         $options = $this->getOptions($request);
         return view("estudios/venta-cartera")->with($options);
     }
+
+    public function compraCartera(Request $request){
+        $cartera = \App\Carteras::find($request->cartera_id);
+        $cartera->estatus = 1;
+        $cartera->update();
+
+        return response()->json(['data' => true],200);
+    }
 }
