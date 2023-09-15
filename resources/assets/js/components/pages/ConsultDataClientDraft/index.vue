@@ -73,6 +73,7 @@
                         pagaduriaType == 'SEMPOPAYAN' ||
                         pagaduriaType == 'SEMMONTERIA' ||
                         pagaduriaType == 'SEDCORDOBA' ||
+                        pagaduriaType == 'SEDCALDAS' ||
                         pagaduriaType == 'SEDBOLIVAR' ||
                         pagaduriaType == 'SEMBARRANQUILLA' ||
                         pagaduriaType == 'SEDATLANTICO' ||
@@ -105,6 +106,7 @@
                             pagaduriaType == 'SEDVALLE' ||
                             pagaduriaType == 'SEDCAUCA' ||
                             pagaduriaType == 'SEDCHOCO' ||
+                            pagaduriaType == 'SEDCALDAS' ||
                             pagaduriaType == 'SEDCORDOBA' ||
                             pagaduriaType == 'SEMQUIBDO' ||
                             pagaduriaType == 'SEMCALI' ||

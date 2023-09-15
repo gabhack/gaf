@@ -7,6 +7,7 @@ use App\EmbargosSedCauca;
 use App\EmbargosSedAtlantico;
 use App\EmbargosSedBolivar;
 use App\EmbargosSedChoco;
+use App\EmbargosSedCaldas;
 use App\EmbargosSedCordoba;
 use App\EmbargosSedValle;
 use App\EmbargosSemCali;
@@ -34,6 +35,7 @@ class EmbargosController extends Controller
             EmbargosSemBarranquilla::class => 'doc',
             EmbargosSedAtlantico::class => 'doc',
             EmbargosSedValle::class => 'doc',
+            EmbargosSedCaldas::class => 'doc',
             EmbargosSemCali::class => 'doc',
             EmbargosSemPopayan::class => 'doc',
             EmbargosSemMonteria::class => 'doc',
