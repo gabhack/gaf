@@ -338,6 +338,7 @@ export default {
       totalCredit2:null,
       seguro:null,
       cuota:null,
+      tasa:null,
       form: {
         requestAmount: 1000000,
         payDate: '',
@@ -538,7 +539,7 @@ export default {
   methods: {  
     simulator(){
       let tasa = 1.40;
-
+      this.tasa = tasa;
       let val1 = 10/100;
       let val2 = 19/100;
       let val3 = 5/100;
@@ -599,6 +600,7 @@ export default {
         credito_total: this.totalCredit2,
         seguro: this.seguro,
         cuota: this.cuota,
+        tasa_interes: this.tasa,
         pagaduria: this.form.entidad,
       }; 
 
