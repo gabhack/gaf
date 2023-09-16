@@ -694,7 +694,9 @@
                     <select>
                       <option value=""></option>
                     </select>
+                      <a href="/detalle-cartera/{{ $dataCotizer->id }}-{{ $res['PaqueteInformacion'] }}/1">Detalle</a>
                   </td>
+
                 </tr>
                 @endforeach
                 @else
@@ -713,6 +715,7 @@
                     <select>
                       <option value=""></option>
                     </select>
+                    <a href="/detalle-cartera/{{ $dataCotizer->id }}-{{ $res['PaqueteInformacion'] }}/1">Detalle</a>
                   </td>
                 </tr>
                 @endforeach
@@ -736,6 +739,7 @@
                     <select>
                       <option value=""></option>
                     </select>
+                    <a href="/detalle-cartera/{{ $dataCotizer->id }}-{{ $res['id'] }}/2">Detalle</a>
                   </td>
                 </tr>
                 @endforeach
@@ -755,6 +759,7 @@
                     <select>
                       <option value=""></option>
                     </select>
+                    <a href="/detalle-cartera/{{ $dataCotizer->id }}-{{ $res['id'] }}/2">Detalle</a>
                   </td>
                 </tr>
                 @endforeach
@@ -780,6 +785,7 @@
                     @else
                     <span>Comprada</span>
                     @endif
+                    <a href="/detalle-cartera/{{ $res->id }}">Detalle</a>
                   </td>
                 </tr>
                 @endforeach
