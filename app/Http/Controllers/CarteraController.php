@@ -256,11 +256,12 @@ class CarteraController extends Controller
 
     public function detalleCateraView($id, $tipoconsulta=null)
     {
+
         if($tipoconsulta==1)
         {
             // api 1
-            $idpartes=explode('-', $id)
-            $dataCotizer = dataCotizer::find($idpartes[0]);
+            $idpartes=explode('-', $id);
+            $dataCotizer = \App\dataCotizer::find($idpartes[0]);
             $cedula = $dataCotizer->idNumber;
             $apellido = $dataCotizer->firstLastname;
 
@@ -340,8 +341,8 @@ class CarteraController extends Controller
         }
         elseif ($tipoconsulta==2) {
              // api 2
-            $idpartes=explode('-', $id)
-            $dataCotizer = dataCotizer::find($idpartes[0]);
+            $idpartes=explode('-', $id);
+            $dataCotizer = \App\dataCotizer::find($idpartes[0]);
             $cedula = $dataCotizer->idNumber;
             $pagadurias = array(app(PagaduriasController::class)->perDoc($cedula));
             $pagaduria = '';
