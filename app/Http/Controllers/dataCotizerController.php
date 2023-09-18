@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\dataCotizer;
 use App\Estudiostr;
 use Illuminate\Http\Request;
+use App\PlanPago;
 
 class dataCotizerController extends Controller
 {
@@ -77,11 +78,12 @@ class dataCotizerController extends Controller
         $credit->estudio_id = $estudio->id;
         $credit->save();
 
-        /* // Obtén los datos del formulario
-        $tasaInteresMensual = $request->input('tasa_interes'); // Supongamos que ya está en forma decimal
-        $saldoCapital = $request->input('saldo_capital');
-        $costoSeguro = $request->input('costo_seguro');
-        $numCuotas = $request->input('num_cuotas');
+        //Obtén los datos del formulario
+
+        $tasaInteresMensual = $credit->tasa_interes; // Supongamos que ya está en forma decimal
+        $saldoCapital = $credit->credito_total;
+        $costoSeguro = $credit->seguro;
+        $numCuotas = $credit->cuota;
 
         // Calcula la cuota mensual
         $cuotaMensual = ($saldoCapital * $tasaInteresMensual) / (1 - pow(1 + $tasaInteresMensual, -$numCuotas));
@@ -98,18 +100,16 @@ class dataCotizerController extends Controller
             // Guarda el pago en la tabla "plan_pagos"
             PlanPago::create([
                 'fecha' => now()->addMonths($i)->format('Y-m-d'),
+                'num_cuota' => $i,
                 'cuota' => $cuotaMensual,
                 'capital' => $capitalMensual,
                 'interes' => $interesMensual,
                 'seguro_vida' => $costoSeguro,
                 'total_cuota' => $cuotaMensual + $costoSeguro,
                 'saldo_capital' => $saldoActual,
+                'estudio_id' => $estudio->id
             ]);
         }
-
-        */
-
-        //Creamos el plan de pago del estudio
 
         return $cotizador;
     }
