@@ -43,37 +43,69 @@ Detalle Cartera
                                 </tr>
                                 <tr>
                                     <td>NOMBRE</td>
-                                    <td><input type="text" name="nombre" value="{{$cartera->estudio->datacotizer->firstName.' '.$cartera->estudio->datacotizer->firstLastname}}" style="width:200;" readonly=""></td>
-                                </tr>
+                                    @if(is_object($cartera->estudio->datacotizer))
+                                        <td><input type="text" name="nombre" value="{{$cartera->estudio->datacotizer->firstName.' '.$cartera->estudio->datacotizer->firstLastname}}" style="width:200;" readonly=""></td>
+                                    @else
+                                        <td><input type="text" name="nombre" style="width:200;" readonly=""></td>
+                                    @endif
+                                    </tr>
                                 <tr>
                                     <td>NÚMERO DE CÉDULA</td>
-                                    <td><input type="text" name="cedula" value="{{$cartera->estudio->datacotizer->idNumber}}" style="width:200;" readonly=""></td>
+                                    @if(is_object($cartera->estudio->datacotizer))
+                                        <td><input type="text" name="cedula" value="{{$cartera->estudio->datacotizer->idNumber}}" style="width:200;" readonly=""></td>
+                                    @else
+                                        <td><input type="text" name="cedula" style="width:200;" readonly=""></td>
+                                    @endif
                                 </tr>
                                 <tr>
                                     <td>DIRECCIÓN</td>
-                                    <td><input type="text" name="direccion" value="{{$cartera->estudio->datacotizer->addressWork}}" style="width:200; background-color:#EAF1DD" readonly=""></td>
-                                </tr>
+                                    @if(is_object($cartera->estudio->datacotizer))
+                                        <td><input type="text" name="direccion" value="{{$cartera->estudio->datacotizer->addressWork}}" style="width:200; background-color:#EAF1DD" readonly=""></td>
+                                    @else
+                                       <td> <input type="text" name="direccion" style="width:200;" readonly=""></td>
+                                    @endif
+                                    </tr>
                                 <tr>
                                     <td>CIUDAD</td>
-                                    <td>
-                                        <input type="text" name="ciudad" value="{{$cartera->estudio->datacotizer->city}}" style="width:200; background-color:#EAF1DD" readonly="">
-                                
+                                    
+                                    @if(is_object($cartera->estudio->datacotizer))
+                                        <td><input type="text" name="ciudad" value="{{$cartera->estudio->datacotizer->city}}" style="width:200; background-color:#EAF1DD" readonly=""></td>
+                                    @else
+                                       <td><input type="text" name="ciudad" style="width:200;" readonly=""></td>
+                                    @endif
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>TELÉFONO</td>
-                                    <td><input type="text" name="telefono" value="{{$cartera->estudio->datacotizer->phoneNumberFijo}}" style="width:200; background-color:#EAF1DD" readonly=""></td>
+                                    @if(is_object($cartera->estudio->datacotizer))
+                                        <td><input type="text" name="telefono" value="{{$cartera->estudio->datacotizer->phoneNumberFijo}}" style="width:200; background-color:#EAF1DD" readonly=""></td>
+                                    @else
+                                       <td> <input type="text" name="telefono" style="width:200;" readonly=""></td>
+                                    @endif
                                 </tr>
                                 <tr>
                                     <td>CELULAR</td>
-                                    <td><input type="text" name="movil" value="{{$cartera->estudio->datacotizer->phoneNumber}}" style="width:200; background-color:#EAF1DD" readonly=""></td>
+                                    @if(is_object($cartera->estudio->datacotizer))
+                                        <td><input type="text" name="movil" value="{{$cartera->estudio->datacotizer->phoneNumber}}" style="width:200; background-color:#EAF1DD" readonly=""></td>
+                                    @else
+                                       <td> <input type="text" name="movil" style="width:200;" readonly=""></td>
+                                    @endif
                                 </tr>
                                 <tr>
                                     <td>CORREO ELECTRÓNICO</td>
-                                    <td><input type="text" name="mail" value="{{$cartera->estudio->datacotizer->email}}" style="width:200; background-color:#EAF1DD" readonly=""></td>
+                                    @if(is_object($cartera->estudio->datacotizer))
+                                        <td><input type="text" name="mail" value="{{$cartera->estudio->datacotizer->email}}" style="width:200; background-color:#EAF1DD" readonly=""></td>
+                                    @else
+                                       <td> <input type="text" name="mail" style="width:200;" readonly=""></td>
+                                    @endif
                                 </tr>
                                 <tr>
                                     <td>PAGADURÍA</td>
-                                    <td><input type="text" name="pagaduria" value="{{$cartera->estudio->pagaduria->pagaduria}}" style="width:200;" readonly=""></td>
+                                    @if(is_object($cartera->estudio->pagaduria))
+                                        <td><input type="text" name="pagaduria" value="{{$cartera->estudio->pagaduria->pagaduria}}" style="width:200;" readonly=""></td>
+                                    @else
+                                       <td> <input type="text" name="pagaduria" style="width:200;" readonly=""></td>
+                                    @endif
                                 </tr>
                                 <tr>
                                     <td>FECHA ESTUDIO</td>
@@ -89,7 +121,11 @@ Detalle Cartera
                             <table border="0" cellspacing="1" cellpadding="2">
                                 <tbody><tr>
                                     <td>SOLICITADO</td>
-                                    <td><input type="text" value="{{$cartera->estudio->solicitudcredito->valor_solicitado}}" size="15" style="text-align:right;" readonly=""></td>
+                                    @if(is_object($cartera->estudio->solicitudcredito))
+                                        <td><input type="text" value="{{$cartera->estudio->solicitudcredito->valor_solicitado}}" size="15" style="text-align:right;" readonly=""></td>
+                                    @else
+                                        <td><input type="text" value="" size="15" style="text-align:right;" readonly=""></td>
+                                    @endif
                                 </tr>
                                 <tr>
                                     <td>PLAZO</td>
@@ -97,23 +133,43 @@ Detalle Cartera
                                 </tr>
                                 <tr>
                                     <td>TASA DE INTERÉS DEL CRÉDITO</td>
-                                    <td><input type="text" value="{{$cartera->estudio->solicitudcredito->tasa_interes}}" size="15" style="text-align:right;" readonly=""></td>
+                                    @if(is_object($cartera->estudio->solicitudcredito))
+                                        <td><input type="text" value="{{$cartera->estudio->solicitudcredito->tasa_interes}}" size="15" style="text-align:right;" readonly=""></td>
+                                    @else
+                                        <td><input type="text" value="" size="15" style="text-align:right;" readonly=""></td>
+                                    @endif
                                 </tr>
                                 <tr>
                                     <td>CUOTA CORRIENTE</td>
-                                    <td><input type="text" value="{{$cartera->estudio->solicitudcredito->cuota_corriente}}" size="15" style="text-align:right;" readonly=""></td>
+                                    @if(is_object($cartera->estudio->solicitudcredito))
+                                        <td><input type="text" value="{{$cartera->estudio->solicitudcredito->cuota_corriente}}" size="15" style="text-align:right;" readonly=""></td>
+                                    @else
+                                        <td><input type="text" value="" size="15" style="text-align:right;" readonly=""></td>
+                                    @endif
                                 </tr>
                                 <tr>
                                     <td>SEGURO DE VIDA</td>
+                                    @if(is_object($cartera->estudio->solicitudcredito))
                                     <td><input type="text" value="{{$cartera->estudio->solicitudcredito->seguro}}" size="15" style="text-align:right;" readonly=""></td>
+                                    @else
+                                        <td><input type="text" value="" size="15" style="text-align:right;" readonly=""></td>
+                                    @endif
                                 </tr>
                                 <tr>
                                     <td>CUOTA TOTAL</td>
-                                    <td><input type="text" value="{{$cartera->estudio->solicitudcredito->cuota}}" size="15" style="text-align:right;" readonly=""></td>
+                                    @if(is_object($cartera->estudio->solicitudcredito))
+                                        <td><input type="text" value="{{$cartera->estudio->solicitudcredito->cuota}}" size="15" style="text-align:right;" readonly=""></td>
+                                    @else
+                                        <td><input type="text" value="" size="15" style="text-align:right;" readonly=""></td>
+                                    @endif
                                 </tr>
                                 <tr>
                                     <td>VALOR CRÉDITO</td>
+                                    @if(is_object($cartera->estudio->solicitudcredito))
                                     <td><input type="text" value="{{$cartera->estudio->solicitudcredito->credito_total}}" size="15" style="text-align:right;" readonly=""></td>
+                                    @else
+                                        <td><input type="text" value="" size="15" style="text-align:right;" readonly=""></td>
+                                    @endif
                                 </tr>
                                 <tr>
                                     <td>FECHA DESEMBOLSO</td>

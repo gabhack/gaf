@@ -95,7 +95,7 @@ Cartera
                 <tbody>
                     @foreach ($lista as $estudio)
                     <tr>
-                        <td><a>{{ $estudio->datacotizer ?  $estudio->datacotizer->idNumber : "sin Data" }}</a></td>
+                        <td><a href="{{ url('/estudios/detalle-cartera/'.$estudio->id ) }}">{{ $estudio->datacotizer ?  $estudio->datacotizer->idNumber : "sin Data" }}</a></td>
                         <td>{{ $estudio->created_at }}</td>
                         <th>20</th>
                         <th>6</th>
