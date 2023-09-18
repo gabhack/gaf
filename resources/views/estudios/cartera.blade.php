@@ -95,11 +95,11 @@ Cartera
                 <tbody>
                     @foreach ($lista as $estudio)
                     <tr>
-                        <td>{{ $estudio->cliente->documento }}</td>
-                        <td>{{ $estudio->fecha }}</td>
+                        <td><a>{{ $estudio->datacotizer ?  $estudio->datacotizer->idNumber : "sin Data" }}</a></td>
+                        <td>{{ $estudio->created_at }}</td>
                         <th>20</th>
                         <th>6</th>
-                        <td>{{ $estudio->cliente->nombres }} {{ $estudio->cliente->apellidos }}</td>
+                        <td>{{ $estudio->datacotizer ?  $estudio->datacotizer->firstName : "sin Data" }} {{ $estudio->datacotizer ?  $estudio->datacotizer->firstLastname : "sin Data" }}</td>
                         <td>FIAN 62112</td>
                         <td>2.00</td>
                         <td>$1.600.000</td>
