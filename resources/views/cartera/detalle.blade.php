@@ -29,7 +29,9 @@ Detalle Cartera
         </div>
 
         <form>
-            <table border="0" cellspacing="1" cellpadding="2" align="center">
+
+            @if(isset($cartera))
+                <table border="0" cellspacing="1" cellpadding="2" align="center">
                 <tbody><tr>
                     <td valign="top">
                         <h2>DATOS CLIENTE</h2>
@@ -231,6 +233,167 @@ Detalle Cartera
                         </td>
                 </tr>
             </tbody></table>
+            @endif
+
+
+             @if(isset($carteras['Obligacion'][0]))
+                @if(count($carteras['Obligacion'][0])>0)
+                    @foreach($carteras['Obligacion'] as $cartera)
+                        @if($cartera['IdentificadorLinea']==$cartera_select)
+<table border="0" cellspacing="1" cellpadding="2" align="center">
+                <tbody><tr>
+                    <td valign="top">
+                        <h2>DATOS CLIENTE</h2>
+                        <div class="clearfix"  style="background-color: #E7F2F8; padding: 20px; margin-right: 50px;">
+                            <table border="1" cellspacing="1" cellpadding="2" align="right">
+
+                                <tbody>
+                                    <tr>
+                                    <td>NO LIBRANZA</td>
+                                    <td><input type="text" name="no_libranza" value="{{$cartera['IdentificadorLinea']}}" style="width:200; background-color:#8DB4E3;" readonly=""></td>
+                                </tr>
+                                <tr>
+                                    <td>NOMBRE</td>
+                                    <td><input type="text" name="nombre" value="{{$dataCotizer->firstName.' '.$dataCotizer->firstLastname}}" style="width:200;" readonly=""></td>
+                                </tr>
+                                <tr>
+                                    <td>NÚMERO DE CÉDULA</td>
+                                    <td><input type="text" name="cedula" value="{{$dataCotizer->idNumber}}" style="width:200;" readonly=""></td>
+                                </tr>
+                                <tr>
+                                    <td>DIRECCIÓN</td>
+                                    <td><input type="text" name="direccion" value="{{$dataCotizer->addressWork}}" style="width:200; background-color:#EAF1DD" readonly=""></td>
+                                </tr>
+                                <tr>
+                                    <td>CIUDAD</td>
+                                    <td>
+                                        <input type="text" name="ciudad" value="{{$dataCotizer->city}}" style="width:200; background-color:#EAF1DD" readonly="">
+                                
+                                </tr>
+                                <tr>
+                                    <td>TELÉFONO</td>
+                                    <td><input type="text" name="telefono" value="{{$dataCotizer->phoneNumberFijo}}" style="width:200; background-color:#EAF1DD" readonly=""></td>
+                                </tr>
+                                <tr>
+                                    <td>CELULAR</td>
+                                    <td><input type="text" name="movil" value="{{$dataCotizer->phoneNumber}}" style="width:200; background-color:#EAF1DD" readonly=""></td>
+                                </tr>
+                                <tr>
+                                    <td>CORREO ELECTRÓNICO</td>
+                                    <td><input type="text" name="mail" value="{{$dataCotizer->email}}" style="width:200; background-color:#EAF1DD" readonly=""></td>
+                                </tr>
+                                <tr>
+                                    <td>PAGADURÍA</td>
+                                    <td><input type="text" name="pagaduria" value="" style="width:200;" readonly=""></td>
+                                </tr>
+                                <tr>
+                                    <td>FECHA ESTUDIO</td>
+                                    <td><input type="text" name="fecha_estudio" value="" style="width:200;" readonly=""></td>
+                                </tr>
+                            </tbody></table>
+                        </div>
+                    </td>
+                    <td>&nbsp;</td>
+                    <td valign="top">
+                        <h2>CRÉDITO</h2>
+                        <div class="clearfix" style="background-color: #E7F2F8; padding: 20px; margin-right: 50px;">
+                            <table border="0" cellspacing="1" cellpadding="2">
+                                <tbody><tr>
+                                    <td>SOLICITADO</td>
+                                    <td><input type="text" value="" size="15" style="text-align:right;" readonly=""></td>
+                                </tr>
+                                <tr>
+                                    <td>PLAZO</td>
+                                    <td><input type="text" value="" size="15" style="text-align:right;" readonly=""></td>
+                                </tr>
+                                <tr>
+                                    <td>TASA DE INTERÉS DEL CRÉDITO</td>
+                                    <td><input type="text" value="" size="15" style="text-align:right;" readonly=""></td>
+                                </tr>
+                                <tr>
+                                    <td>CUOTA CORRIENTE</td>
+                                    <td><input type="text" value="" size="15" style="text-align:right;" readonly=""></td>
+                                </tr>
+                                <tr>
+                                    <td>SEGURO DE VIDA</td>
+                                    <td><input type="text" value="" size="15" style="text-align:right;" readonly=""></td>
+                                </tr>
+                                <tr>
+                                    <td>CUOTA TOTAL</td>
+                                    <td><input type="text" value="" size="15" style="text-align:right;" readonly=""></td>
+                                </tr>
+                                <tr>
+                                    <td>VALOR CRÉDITO</td>
+                                    <td><input type="text" value="" size="15" style="text-align:right;" readonly=""></td>
+                                </tr>
+                                <tr>
+                                    <td>FECHA DESEMBOLSO</td>
+                                    <td><input type="text" value="" size="15" style="text-align:center;" readonly=""></td>
+                                </tr>
+                                <tr>
+                                    <td>FECHA PRIMERA CUOTA</td>
+                                    <td><input type="text" value="" size="15" style="text-align:center; background-color:#EAF1DD;" readonly=""></td>
+                                </tr>
+                               
+                            </tbody></table>
+                        </div>
+                    </td>
+                        <td>&nbsp;</td>
+                        <td valign="top">
+                            <h2>VALORES HOY</h2>
+                            <div class="clearfix" style="background-color: #E7F2F8; padding: 20px; margin-right: 50px;">
+                                <table border="0" cellspacing="1" cellpadding="2">
+                                    <tbody><tr>
+                                        <td>SALDO CAPITAL</td>
+                                        <td><input type="text" name="saldo_capital" value="" size="15" style="text-align:right;" readonly=""></td>
+                                    </tr>
+                                    <tr>
+                                        <td>INTERESES CORRIENTES</td>
+                                        <td><input type="text" name="interes_corrientes" value="" size="15" style="text-align:right;" readonly=""></td>
+                                    </tr>
+                                    <tr>
+                                        <td>SEGURO DE VIDA</td>
+                                        <td><input type="text" name="seguro_vida2" value="" size="15" style="text-align:right;" readonly=""></td>
+                                    </tr>
+                                    <tr>
+                                        <td>CUOTAS CAUSADAS</td>
+                                        <td><input type="text" name="cuotas_causadas" value="" size="15" style="text-align:right;" readonly=""></td>
+                                    </tr>
+                                    <tr>
+                                        <td>CUOTAS PAGADAS</td>
+                                        <td><input type="text" name="cuotas_pagadas" value="" size="15" style="text-align:right;" readonly=""></td>
+                                    </tr>
+                                    <tr>
+                                        <td>CUOTA EN MORA</td>
+                                        <td><input type="text" name="cuotas_mora" value="" size="15" style="text-align:right;" readonly=""></td>
+                                    </tr>
+                                    <tr>
+                                        <td>TOTAL EN MORA</td>
+                                        <td><input type="text" name="total_mora" value="" size="15" style="text-align:right;" readonly=""></td>
+                                    </tr>
+                                    <tr>
+                                        <td>TOTAL A PAGAR</td>
+                                        <td><input type="text" name="total_pagar" value="" size="14" style="text-align:right; font-weight:bold;" readonly=""></td>
+                                    </tr>
+                                    <!-- 004 -->
+                                    <tr>
+                                        <td>CALIFICACIÓN</td>
+                                        <td><input type="text" name="calificacion" value="" size="14" style="text-align:center;" readonly=""></td>
+                                    </tr>
+
+                                </tbody></table>
+                            </div>
+                        </td>
+                </tr>
+            </tbody></table>
+                        @endif
+                    @endforeach
+                @endif
+            @endif    
+            
+
+
+
             <br>
             <br>
             <h2>VALORES RECAUDADOS</h2>

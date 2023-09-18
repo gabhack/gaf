@@ -338,6 +338,11 @@ class CarteraController extends Controller
                 $cuentas_vigentes = [];
             }
 
+            $carteras=$cuentas_vigentes;
+            $cartera_select=$idpartes[1];
+
+        return view("cartera/detalle",compact('carteras','cartera_select','dataCotizer'));
+
         }
         elseif ($tipoconsulta==2) {
              // api 2
@@ -358,14 +363,18 @@ class CarteraController extends Controller
             } else {
                 $embargos = [];
             }
+
+            dd("Faltar programar la vista");
+
         }
         else
         {
             // bd sistema
             $cartera=\App\Carteras::find($id);
+            return view("cartera/detalle",compact('cartera'));
         }
 
-        return view("cartera/detalle",compact('cartera'));
+      
 
     }
 

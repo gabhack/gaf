@@ -597,7 +597,7 @@
                 @if(isset($sectorFinanciero['Obligacion'][0]))
                 @foreach($sectorFinanciero['Obligacion'] as $res)
                 <tr>
-                  <td>{{ $res['PaqueteInformacion'] }}</td>
+                  <td>{{ $res['IdentificadorLinea'] }}</td>
                   <td>{{ $res['NombreEntidad'] }}</td>
                   <td></td>
                   <td>{{ $res['SaldoObligacion'] }}</td>
@@ -616,7 +616,7 @@
                 @else
                 @foreach($sectorFinanciero as $res)
                 <tr>
-                  <td>{{ $res['PaqueteInformacion'] }}</td>
+                  <td>{{ $res['IdentificadorLinea'] }}</td>
                   <td>{{ $res['NombreEntidad'] }}</td>
                   <td></td>
                   <td>{{ $res['SaldoObligacion'] }}</td>
@@ -681,7 +681,7 @@
                 @if(isset($cuentas_vigentes['Obligacion'][0]))
                 @foreach($cuentas_vigentes['Obligacion'] as $res)
                 <tr>
-                  <td>{{ $res['PaqueteInformacion'] }}</td>
+                  <td>{{ $res['IdentificadorLinea'] }}</td>
                   <td>{{ $res['NombreEntidad'] }}</td>
                   <td></td>
                   <td>{{ $res['ValorInicial'] }}</td>
@@ -694,7 +694,7 @@
                     <select>
                       <option value=""></option>
                     </select>
-                      <a href="/estudios/detalle-cartera/{{ $dataCotizer->id }}-{{ $res['PaqueteInformacion'] }}/1">Detalle</a>
+                      <a href="/estudios/detalle-cartera/{{ $dataCotizer->id }}-{{ $res['IdentificadorLinea'] }}/1">Detalle</a>
                   </td>
 
                 </tr>
@@ -702,7 +702,7 @@
                 @else
                 @foreach($cuentas_vigentes as $res)
                 <tr>
-                  <td>{{ $res['PaqueteInformacion'] }}</td>
+                  <td>{{ $res['IdentificadorLinea'] }}</td>
                   <td>{{ $res['NombreEntidad'] }}</td>
                   <td></td>
                   <td>{{ $res['ValorInicial'] }}</td>
@@ -715,7 +715,7 @@
                     <select>
                       <option value=""></option>
                     </select>
-                    <a href="/estudios/detalle-cartera/{{ $dataCotizer->id }}-{{ $res['PaqueteInformacion'] }}/1">Detalle</a>
+                    <a href="/estudios/detalle-cartera/{{ $dataCotizer->id }}-{{ $res['IdentificadorLinea'] }}/1">Detalle</a>
                   </td>
                 </tr>
                 @endforeach
