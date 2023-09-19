@@ -80,10 +80,11 @@ class dataCotizerController extends Controller
 
         //Obtén los datos del formulario
 
-        $tasaInteresMensual = $credit->tasa_interes; // Supongamos que ya está en forma decimal
-        $saldoCapital = $credit->credito_total;
+
+        $tasaInteresMensual = $credit->tasa_interes / 100; // Supongamos que ya está en forma decimal
+        $saldoCapital = $credit->valor_solicitado;
         $costoSeguro = $credit->seguro;
-        $numCuotas = $credit->cuota;
+        $numCuotas = $credit->nro_cuotas;
 
         // Calcula la cuota mensual
         $cuotaMensual = ($saldoCapital * $tasaInteresMensual) / (1 - pow(1 + $tasaInteresMensual, -$numCuotas));
