@@ -88,7 +88,7 @@ Tesorería
                 @foreach ($lista as $estudio)
                 <tr>
                     <th>{{ $estudio->id }}</th>
-                    <td><a href="{{ url('estudios/tesoreria/detalle', ['id' => $estudio->id])  }}">{{ (isset($estudio->cliente->documento) ? $estudio->cliente->documento : '' )  }}</a></td>
+                    <td><a href="{{ url('estudios/tesoreria/detalle', ['id' => $estudio->id])  }}">{{ $estudio->datacotizer ? $estudio->datacotizer->idNumber : 'Sin identificación'   }}</a></td>
                     <td>{{ $estudio->datacotizer ?  $estudio->datacotizer->firstName : "sin Data" }} {{ $estudio->datacotizer ?  $estudio->datacotizer->firstLastname : "sin Data" }}</td>
                     <td>{{ $estudio->pagaduria ? $estudio->pagaduria->pagaduria  : "Sin pagaduria"}}</td>
                     <td>{{ $estudio->solicitudcredito ? $estudio->solicitudcredito->credito_total  : "Sin valor"}}</td>
@@ -96,7 +96,7 @@ Tesorería
                     <td>{{ $estudio->fecha }}</td>
                     <td class="text-center">
                         <a href="{{ route('tesoreria.detalle', ['id' => $estudio->id]) }}" title="Modificar" class="btn btn-info"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-                       <a href="{{ url('estudios/pagos', ['id' => $estudio->id]) }}" title="Pagos" class="btn btn-info"><i class="fa fa-file" aria-hidden="true"></i></a>
+                        <a href="{{ url('estudios/pagos', ['id' => $estudio->id]) }}" title="Pagos" class="btn btn-info"><i class="fa fa-file" aria-hidden="true"></i></a>
                         <a onclick="return confirm('Seguro que desea eliminar este registro y su informacion relacionada?')" href="{{ url('estudios/borrar', ['id' => $estudio->id]) }}" title="Eliminar" class="btn btn-info"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                     </td>
                 </tr>

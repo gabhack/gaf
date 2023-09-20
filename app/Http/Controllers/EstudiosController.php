@@ -25,6 +25,7 @@ use DOMDocument;
 use Illuminate\Support\Facades\DB as DB;
 use Illuminate\Support\Facades\Auth as Auth;
 use Illuminate\Http\Request;
+use App\PlanPago;
 use DateTime;
 
 class EstudiosController extends Controller
@@ -52,7 +53,9 @@ class EstudiosController extends Controller
 
     public function pagos($id)
     {
-        return view("cartera/plan_pagos");
+        $pagos = PlanPago::where("estudio_id", $id)->get();
+
+        return view("cartera/plan_pagos", compact($pagos));
     }
 
     public function guardarGiro(Request $request)
@@ -61,8 +64,6 @@ class EstudiosController extends Controller
         $data = $request->except('_token');
         $beneficiario = \App\EntidadesDesembolso::find($data['id_beneficiario']);
         $data['beneficiario'] = $beneficiario->nombre;
-
-
 
         Giro::create($data);
 
