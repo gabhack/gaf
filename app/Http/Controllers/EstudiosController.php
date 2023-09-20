@@ -54,8 +54,8 @@ class EstudiosController extends Controller
     public function pagos($id)
     {
         $pagos = PlanPago::where("estudio_id", $id)->get();
-
-        return view("cartera/plan_pagos", compact($pagos));
+        
+        return view("cartera/plan_pagos", compact('pagos'));
     }
 
     public function guardarGiro(Request $request)

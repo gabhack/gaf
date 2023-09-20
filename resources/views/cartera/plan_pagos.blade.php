@@ -42,17 +42,18 @@ Plan de Pagos
                     </tr>
                 </thead>
                 </tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>01/01/2023</td>
-                        <td>124456</td>
-                        <td>124124</td>
-                        <td>124124124</td>
-                        <td>5</td>
-                        <td>300000</td>
-                    </tr>
-                </tbody>
-               
+                    @foreach($pagos as $pago)
+                        <tr>
+                            <td>{{ $pago->num_cuota }}</td>
+                            <td>{{ $pago->fecha }}</td>
+                            <td>{{ $pago->capital }}</td>
+                            <td>{{ $pago->interes }}</td>
+                            <td>{{ $pago->seguro_vida }}</td>
+                            <td>{{ $pago->total_cuota }}</td>
+                            <td>{{ $pago->saldo_capital }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>               
             </table>
             <br>
             </form>
