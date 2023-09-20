@@ -24,7 +24,7 @@ Detalle Cartera
 
         <div class="col-md-12">
             <div class="btn-group mr-2 float-right" role="group">
-                <a type="button" class="btn btn-secondary" href="{{url('estudios')}}"><i class="fa fa-arrow-left"></i> Atrás</a>
+                <a type="button" class="btn btn-secondary" href="{{url('estudios/cartera')}}"><i class="fa fa-arrow-left"></i> Atrás</a>
             </div>
         </div>
 

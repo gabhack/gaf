@@ -1033,8 +1033,9 @@ class EstudiosController extends Controller
 
     public function cartera(Request $request)
     {
-        $options = $this->getOptions($request);
-        return view("estudios/cartera")->with($options);
+        $lista = \App\Carteras::paginate(10);
+
+        return view("estudios/cartera", compact('lista'));
     }
 
     public function ventaCartera(Request $request)

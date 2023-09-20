@@ -93,13 +93,13 @@ Cartera
                     <th><img src="../images/planpagos.png" title="Plan de Pagos"></th>
                 </tr>
                 <tbody>
-                    @foreach ($lista as $estudio)
+                    @foreach ($lista as $cartera)
                     <tr>
-                        <td><a href="{{ url('/estudios/detalle-cartera/'.$estudio->id ) }}">{{ $estudio->datacotizer ?  $estudio->datacotizer->idNumber : "sin Data" }}</a></td>
-                        <td>{{ $estudio->created_at }}</td>
+                        <td><a href="{{ url('/estudios/detalle-cartera/'.$cartera->id ) }}">{{ $cartera->estudio->datacotizer ?  $cartera->estudio->datacotizer->idNumber : "sin Data" }}</a></td>
+                        <td>{{ $cartera->created_at }}</td>
                         <th>20</th>
                         <th>6</th>
-                        <td>{{ $estudio->datacotizer ?  $estudio->datacotizer->firstName : "sin Data" }} {{ $estudio->datacotizer ?  $estudio->datacotizer->firstLastname : "sin Data" }}</td>
+                        <td>{{ $cartera->estudio->datacotizer ?  $cartera->estudio->datacotizer->firstName : "sin Data" }} {{ $cartera->estudio->datacotizer ?  $cartera->estudio->datacotizer->firstLastname : "sin Data" }}</td>
                         <td>FIAN 62112</td>
                         <td>2.00</td>
                         <td>$1.600.000</td>
@@ -112,15 +112,15 @@ Cartera
                         <td>0</td>
                         <td>0</td>
                         <td class="text-center">
-                            <a href="{{ url('estudios/editar', ['id' => $estudio->id]) }}" title="Modificar" class="btn btn-info"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-                            <a onclick="return confirm('Seguro que desea eliminar este registro y su informacion relacionada?')" href="{{ url('estudios/borrar', ['id' => $estudio->id]) }}" title="Eliminar" class="btn btn-info"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                            <a href="#" title="Modificar" class="btn btn-info"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                            <a onclick="return confirm('Seguro que desea eliminar este registro y su informacion relacionada?')" href="#" title="Eliminar" class="btn btn-info"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                         </td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
-        {{ $links }}
+        {{ $lista->links() }}
     </div>
 </div>
 @endsection
