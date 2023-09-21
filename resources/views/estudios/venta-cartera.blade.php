@@ -96,9 +96,9 @@ Venta de Cartera
                         <th>{{ $estudio->id }}</th>
                         <td>{{ $estudio->fecha }}</td>
                         <td>{{ $estudio->periodo_estudio }}</td>
-                        <td>{{ $estudio->cliente->documento }}</td>
-                        <td>{{ $estudio->cliente->nombres }} {{ $estudio->cliente->apellidos }}</td>
-                        <td>{{ $estudio->asesor->nombres }}</td>
+                        <td>{{ $estudio->cliente ?  $estudio->cliente->documento : "Sin Data" }}</td>
+                        <td>{{ $estudio->cliente ? $estudio->cliente->documento . " " .  $estudio->cliente->apellidos : "Sin Data" }}</td>
+                        <td>{{ $estudio->asesor ? $estudio->asesor->nombres : "Sin Data" }}</td>
                         @if ($estudio->decision)
                         <td>{{ decisiones_estudios()[$estudio->decision] }}</td>
                         @else
