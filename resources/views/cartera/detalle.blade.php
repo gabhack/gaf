@@ -415,6 +415,11 @@ Detalle Cartera
                     <tr>
                     </tr>
                 </tbody>
+                <tfooter>
+                    <tr>
+                        <th colspan="8"><a class="btn btn-primary" href="{{ url('estudios/recaudo/'.$cartera->estudio->id) }}">Agregar Recaudo</a></th>
+                    </tr>
+                </tfooter>               
             </table>
         </form>
     </div>

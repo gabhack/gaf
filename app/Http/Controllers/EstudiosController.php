@@ -1052,4 +1052,15 @@ class EstudiosController extends Controller
 
         return response()->json(['data' => true], 200);
     }
+
+    public function recaudo($id)
+    {
+        $planes = \App\PlanPago::where('estudio_id', $id)->get();
+
+        return view('cartera/recaudo', compact('id', 'planes'));
+    }
+
+    public function recaudoGuardar(Request $request){
+        dd($request->all());
+    }
 }

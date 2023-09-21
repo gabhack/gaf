@@ -475,6 +475,8 @@ Route::group(['prefix' => 'estudios'], function () {
     Route::post('/estudio-actualizar', 'EstudiosController@actualizarNew')->name('estudio.actualizar');
 
     Route::get('/pagos/{id}', 'EstudiosController@pagos')->name('estudio.pagos');
+    Route::get('/recaudo/{id}', 'EstudiosController@recaudo')->name('estudio.recaudo');
+    Route::post('/recaudos/guardar', 'EstudiosController@recaudoGuardar')->name('estudio.recaudo');
 
 });
 

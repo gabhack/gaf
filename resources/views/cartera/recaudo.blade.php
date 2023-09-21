@@ -28,14 +28,28 @@ Ingresar Recaudo
             </div>
         </div>
 
-        <form>
+        <form id="form_guardar" action="{{ url('estudios/recaudos/guardar') }}" method="POST" enctype="multipart/form-data">
+            {!! Form::token() !!}
+            <input type="hidden" value="{{ $id }}" name="estudio_id">
             <table border="0" cellspacing="1" cellpadding="2" >
             <tbody><tr>
                 <td>
                     <h2>DATOS RECAUDO</h2>
                     <div class="box1 clearfix">
+                      <form>  
                     <table border="0" cellspacing="1" cellpadding="2">
                     <tbody><tr>
+                        <td>* Cuotas</td>
+                        <td>
+                            <select name="plan_id" style="" onchange="valorCuota(this)" required>
+                                <option value="" disabled selected></option>
+                                <option value="all">Cancelar Todo</option>
+                                @foreach($planes as $plan)
+                                    <option value="{{ $plan->id }}">{{ $plan->num_cuota }}</option>
+                                @endforeach
+                            </select>
+                        </td>
+
                         <td>* T RECAUDO</td>
                         <td>
                             <select name="tipo_recaudo" style="">
@@ -45,21 +59,23 @@ Ingresar Recaudo
                         </td>
                         <td width="20">&nbsp;</td>
                         <td>* F RECAUDO</td>
-                        <td><input type="text" name="fecha" size="10" style="text-align:center; " ></td>
+                        <td><input type="text" readonly value="{{ date('Y-m-d') }}" name="fecha" size="10" style="text-align:center; " ></td>
                         <td width="20">&nbsp;</td>
                         <td>* VR TOTAL</td>
-                        <td><input type="text" name="fecha" size="10" style="text-align:center; " >
-                            <input type="hidden" name="valor_aplicarh">
+                        <td><input type="text" id="valor" name="valor" size="10" style="text-align:center; " >
                         </td>
                         <td width="20">&nbsp;</td>
                         <td>SOPORTE</td>
                         <td><input type="file" name="archivo" style="text-align:center; "></td>
+                        <td></td>
+                        <td><button type="submit" class="btn btn-primary" >Guardar</button></td>
                     </tr>
                     </tbody></table>
                     </div>
                 </td>
             </tr>
             </tbody></table>
+        </form>
             <br>
             <table border="0" class="table table-striped">
                 <thead>
@@ -83,9 +99,23 @@ Ingresar Recaudo
             <br>
             <p align="center">
             </p>
-            </form>
         
     
     </div>
 </div>
+@endsection
+
+@section('js')
+    <script>
+
+        var cuotas = {!! json_encode($planes, JSON_HEX_TAG) !!};
+
+        var valorCuota = (e) => {
+            cuotas.forEach(function(cuota) {
+                if(cuota.id == $(e).val()) $("#valor").val(cuota.total_cuota);
+            });
+
+            if($(e).val() == 'all')  $("#valor").val(null);
+        };
+    </script>
 @endsection
