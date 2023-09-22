@@ -109,9 +109,10 @@ export default {
                 pagaduria.documentType = 'documentType';
                 this.dataclient.cargo = pagaduria.cargo;
 
-                this.setCouponsType(`Coupons${type.key.slice(7)}`);
-                this.setEmbargosType(`Embargos${type.key.slice(7)}`);
-                this.setDescuentosType(`Descuentos${type.key.slice(7)}`);
+                this.setCouponsType(type.key.includes('datames') ? `Coupons${type.key.slice(7)}` : type.key);
+                this.setEmbargosType(type.key.includes('datames') ? `Embargos${type.key.slice(7)}` : type.key);
+                // prettier-ignore
+                this.setDescuentosType(type.key.includes('datames') ? `Descuentos${type.key.slice(7)}` : type.key);
 
                 this.setDatamesSed(pagaduria);
             }

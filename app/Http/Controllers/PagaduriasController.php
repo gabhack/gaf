@@ -53,6 +53,7 @@ use App\DatamesSemValledupar;
 use App\DatamesSemYopal;
 use App\DatamesSemYumbo;
 use App\DatamesSemZipaquira;
+use App\DatamesGen;
 use App\Pagadurias;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -222,6 +223,15 @@ class PagaduriasController extends Controller
             if ($data) {
                 $modelName = class_basename($model);
                 $results[Str::camel($modelName)] = $data;
+            }
+        }
+
+        // General datames
+        $dataGen = DatamesGen::where('doc', 'LIKE', '%' . $doc . '%')->get();
+
+        if ($dataGen) {
+            foreach ($dataGen as $item) {
+                $results[$item->pagaduria] = $item;
             }
         }
 

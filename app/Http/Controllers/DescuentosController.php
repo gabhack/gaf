@@ -13,6 +13,7 @@ use App\DescuentosSemBarranquilla;
 use App\DescuentosSemPopayan;
 use App\DescuentosSemMonteria;
 use App\DescuentosSemQuibdo;
+use App\DescuentosGen;
 use Illuminate\Http\Request;
 
 class DescuentosController extends Controller
@@ -48,6 +49,16 @@ class DescuentosController extends Controller
 
             if ($className == $descuentoType) {
                 $results = $model::where($column, 'LIKE', '%' . $doc . '%')->get();
+            }
+        }
+
+        // General descuentos
+        $dataGen = DescuentosGen::where('doc', 'LIKE', '%' . $doc . '%')
+            ->where('pagaduria', $descuentoType)->get();
+
+        if ($dataGen) {
+            foreach ($dataGen as $item) {
+                array_push($results, $item);
             }
         }
 

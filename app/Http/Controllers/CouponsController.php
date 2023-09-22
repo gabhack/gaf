@@ -17,6 +17,7 @@ use App\CouponsSemPopayan;
 use App\CouponsSemQuibdo;
 use App\CouponsSemSahagun;
 use App\CouponsSemCali;
+use App\CouponsGen;
 use Illuminate\Http\Request;
 
 class CouponsController extends Controller
@@ -56,6 +57,16 @@ class CouponsController extends Controller
 
             if ($className == $couponType) {
                 $results = $model::where($column, 'LIKE', '%' . $doc . '%')->get();
+            }
+        }
+
+        // General coupons
+        $dataGen = CouponsGen::where('doc', 'LIKE', '%' . $doc . '%')
+            ->where('pagaduria', $couponType)->get();
+
+        if ($dataGen) {
+            foreach ($dataGen as $item) {
+                array_push($results, $item);
             }
         }
 

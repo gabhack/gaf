@@ -14,6 +14,7 @@ use App\EmbargosSemCali;
 use App\EmbargosSemPopayan;
 use App\EmbargosSemMonteria;
 use App\EmbargosSemQuibdo;
+use App\EmbargosGen;
 use Illuminate\Http\Request;
 
 class EmbargosController extends Controller
@@ -23,6 +24,7 @@ class EmbargosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index(Request $request)
     {
         $doc = $request->doc;
@@ -53,8 +55,51 @@ class EmbargosController extends Controller
             }
         }
 
+        // General embargos
+        $dataGen = EmbargosGen::where('doc', 'LIKE', '%' . $doc . '%')
+            ->where('pagaduria', $embargoType)->get();
+
+        if ($dataGen) {
+            foreach ($dataGen as $item) {
+                array_push($results, $item);
+            }
+        }
+
         return response()->json($results, 200);
     }
+
+    // public function index(Request $request)
+    // {
+    //     $doc = $request->doc;
+    //     $embargoType = $request->pagaduria;
+
+    //     $models = [
+    //         EmbargosSedCauca::class => 'doc',
+    //         EmbargosSedChoco::class => 'doc',
+    //         EmbargosSedCordoba::class => 'doc',
+    //         EmbargosSemBarranquilla::class => 'doc',
+    //         EmbargosSedAtlantico::class => 'doc',
+    //         EmbargosSedValle::class => 'doc',
+    //         EmbargosSedCaldas::class => 'doc',
+    //         EmbargosSemCali::class => 'doc',
+    //         EmbargosSemPopayan::class => 'doc',
+    //         EmbargosSemMonteria::class => 'doc',
+    //         EmbargosSemQuibdo::class => 'idemp',
+    //         EmbargosSedBolivar::class => 'idemp',
+    //     ];
+
+    //     $results = [];
+
+    //     foreach ($models as $model => $column) {
+    //         $className = class_basename($model);
+
+    //         if ($className == $embargoType) {
+    //             $results = $model::where($column, 'LIKE', '%' . $doc . '%')->get();
+    //         }
+    //     }
+
+    //     return response()->json($results, 200);
+    // }
 
     /**
      * Store a newly created resource in storage.
