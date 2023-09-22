@@ -53,6 +53,7 @@ use App\DatamesSemValledupar;
 use App\DatamesSemYopal;
 use App\DatamesSemYumbo;
 use App\DatamesSemZipaquira;
+use App\DatamesGen;
 use App\Pagadurias;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -163,6 +164,7 @@ class PagaduriasController extends Controller
         $models = [
             DatamesFidu::class => 'doc',
             DatamesFopep::class => 'doc',
+            DatamesGen::class => 'doc',
             DatamesSedAntioquia::class => 'doc',
             DatamesSedArauca::class => 'doc',
             DatamesSedAtlantico::class => 'doc',
@@ -223,6 +225,10 @@ class PagaduriasController extends Controller
                 $modelName = class_basename($model);
                 $results[Str::camel($modelName)] = $data;
             }
+        }
+
+        if (empty($results)) {
+            $results = DatamesGen::where('doc', $doc)->get();
         }
 
         $results = !empty($results) ? $results : (object) [];

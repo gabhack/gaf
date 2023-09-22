@@ -13,6 +13,7 @@ use App\DescuentosSemBarranquilla;
 use App\DescuentosSemPopayan;
 use App\DescuentosSemMonteria;
 use App\DescuentosSemQuibdo;
+use App\DescuentosGen;
 use Illuminate\Http\Request;
 
 class DescuentosController extends Controller
@@ -39,6 +40,7 @@ class DescuentosController extends Controller
             DescuentosSemCali::class => 'doc',
             DescuentosSemPopayan::class => 'doc',
             DescuentosSemQuibdo::class => 'doc',
+            DescuentosGen::class => 'doc',
         ];
 
         $results = [];
@@ -49,6 +51,12 @@ class DescuentosController extends Controller
             if ($className == $descuentoType) {
                 $results = $model::where($column, 'LIKE', '%' . $doc . '%')->get();
             }
+        }
+
+        if (empty($results)) {
+            $results = DescuentosGen::where('pagaduria', 'LIKE', '%' . $descuentoType . '%')
+                ->where('doc', $doc)
+                ->get();
         }
 
         return response()->json($results, 200);

@@ -77,6 +77,13 @@
                         pagaduriaType == 'SEDBOLIVAR' ||
                         pagaduriaType == 'SEMBARRANQUILLA' ||
                         pagaduriaType == 'SEDATLANTICO' ||
+                        pagaduriaType == 'SEDHUILA' ||
+                        pagaduriaType == 'SEDRISARALDA' ||
+                        pagaduriaType == 'SEDMETA' ||
+                        pagaduriaType == 'SEDCUNDINAMARCA' ||
+                        pagaduriaType == 'SEMMOSQUERA' ||
+                        pagaduriaType == 'SEMNEIVA' ||
+                        pagaduriaType == 'SEMFUNZA' ||
                         pagaduriaType == 'SEDNARINO'
                     "
                 />
@@ -117,7 +124,15 @@
                             pagaduriaType == 'SEDATLANTICO' ||
                             pagaduriaType == 'SEDBOLIVAR' ||
                             pagaduriaType == 'SEMPOPAYAN' ||
-                            pagaduriaType == 'FOPEP'
+                            pagaduriaType == 'FOPEP' ||
+                            pagaduriaType == 'SEDHUILA' ||
+                            pagaduriaType == 'SEDRISARALDA' ||
+                            pagaduriaType == 'SEDMETA' ||
+                            pagaduriaType == 'SEDCUNDINAMARCA' ||
+                            pagaduriaType == 'SEMMOSQUERA' ||
+                            pagaduriaType == 'SEMNEIVA' ||
+                            pagaduriaType == 'SEMFUNZA' ||
+                            pagaduriaType == 'SEDNARINO'
                         "
                         :disabledProspect="disabledProspect"
                     />
@@ -132,8 +147,7 @@
                         v-if="
                             pagaduriaType == 'SEDMAGDALENA' ||
                             pagaduriaType == 'SEMSAHAGUN' ||
-                            pagaduriaType == 'SEDBOLIVAR' ||
-                            pagaduriaType == 'SEDNARINO'
+                            pagaduriaType == 'SEDBOLIVAR'
                         "
                         :embargosempty="embargosempty"
                     />
@@ -147,11 +161,7 @@
                         :descuentossemsahagun="descuentossemsahagun"
                     />
                     <DescuentosEmpty
-                        v-if="
-                            pagaduriaType == 'SEDMAGDALENA' ||
-                            pagaduriaType == 'SEDBOLIVAR' ||
-                            pagaduriaType == 'SEDNARINO'
-                        "
+                        v-if="pagaduriaType == 'SEDMAGDALENA' || pagaduriaType == 'SEDBOLIVAR'"
                         :descuentosempty="descuentosempty"
                     />
                     <Descuentos v-else />
