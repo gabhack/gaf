@@ -43,7 +43,6 @@ class EmbargosController extends Controller
             EmbargosSemMonteria::class => 'doc',
             EmbargosSemQuibdo::class => 'idemp',
             EmbargosSedBolivar::class => 'idemp',
-            EmbargosGen::class => 'doc',
         ];
 
         $results = [];
@@ -56,10 +55,14 @@ class EmbargosController extends Controller
             }
         }
 
-        if (empty($results)) {
-            $results = EmbargosGen::where('pagaduria', 'LIKE', '%' . $embargoType . '%')
-                ->where('doc', $doc)
-                ->get();
+        // General embargos
+        $dataGen = EmbargosGen::where('doc', 'LIKE', '%' . $doc . '%')
+            ->where('pagaduria', $embargoType)->get();
+
+        if ($dataGen) {
+            foreach ($dataGen as $item) {
+                array_push($results, $item);
+            }
         }
 
         return response()->json($results, 200);

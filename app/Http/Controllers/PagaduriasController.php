@@ -164,7 +164,6 @@ class PagaduriasController extends Controller
         $models = [
             DatamesFidu::class => 'doc',
             DatamesFopep::class => 'doc',
-            DatamesGen::class => 'doc',
             DatamesSedAntioquia::class => 'doc',
             DatamesSedArauca::class => 'doc',
             DatamesSedAtlantico::class => 'doc',
@@ -227,8 +226,13 @@ class PagaduriasController extends Controller
             }
         }
 
-        if (empty($results)) {
-            $results = DatamesGen::where('doc', $doc)->get();
+        // General datames
+        $dataGen = DatamesGen::where('doc', 'LIKE', '%' . $doc . '%')->get();
+
+        if ($dataGen) {
+            foreach ($dataGen as $item) {
+                $results[$item->pagaduria] = $item;
+            }
         }
 
         $results = !empty($results) ? $results : (object) [];

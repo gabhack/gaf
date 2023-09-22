@@ -48,7 +48,6 @@ class CouponsController extends Controller
             CouponsSemQuibdo::class => 'doc',
             CouponsSemSahagun::class => 'doc',
             CouponsSemCali::class => 'doc',
-            CouponsGen::class => 'doc',
         ];
 
         $results = [];
@@ -61,10 +60,14 @@ class CouponsController extends Controller
             }
         }
 
-        if (empty($results)) {
-            $results = CouponsGen::where('pagaduria', 'LIKE', '%' . $couponType . '%')
-                ->where('doc', $doc)
-                ->get();
+        // General coupons
+        $dataGen = CouponsGen::where('doc', 'LIKE', '%' . $doc . '%')
+            ->where('pagaduria', $couponType)->get();
+
+        if ($dataGen) {
+            foreach ($dataGen as $item) {
+                array_push($results, $item);
+            }
         }
 
         return response()->json($results, 200);

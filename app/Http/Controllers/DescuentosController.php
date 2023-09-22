@@ -40,7 +40,6 @@ class DescuentosController extends Controller
             DescuentosSemCali::class => 'doc',
             DescuentosSemPopayan::class => 'doc',
             DescuentosSemQuibdo::class => 'doc',
-            DescuentosGen::class => 'doc',
         ];
 
         $results = [];
@@ -53,10 +52,14 @@ class DescuentosController extends Controller
             }
         }
 
-        if (empty($results)) {
-            $results = DescuentosGen::where('pagaduria', 'LIKE', '%' . $descuentoType . '%')
-                ->where('doc', $doc)
-                ->get();
+        // General descuentos
+        $dataGen = DescuentosGen::where('doc', 'LIKE', '%' . $doc . '%')
+            ->where('pagaduria', $descuentoType)->get();
+
+        if ($dataGen) {
+            foreach ($dataGen as $item) {
+                array_push($results, $item);
+            }
         }
 
         return response()->json($results, 200);
