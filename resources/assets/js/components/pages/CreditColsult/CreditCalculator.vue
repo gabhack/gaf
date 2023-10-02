@@ -1,5 +1,5 @@
 <template>
-  <form id="credit-form" class="d-flex align-items-center" :class="collapsed ? 'collapsed' : null">
+  <form id="credit-form" @submit.prevent="submitData" class="d-flex align-items-center" :class="collapsed ? 'collapsed' : null">
     <b-card no-body class="card-main mt-5 mb-5 ml-5">
       <b-card-body>
         <!-- <div v-if="form.requestAmount >= 1000000">
@@ -16,6 +16,7 @@
                 v-model.number="form.requestAmount"
                 type="number"
                 trim
+                required
               />
             </b-form-group>
             <b-form-group>
@@ -60,6 +61,7 @@
                   id="gender"
                   v-model="form.due"
                   :options="selectDues"
+                  required
                 />
               </b-input-group>
             </b-form-group>
@@ -74,6 +76,7 @@
                 id="gender"
                 v-model="form.gender"
                 :options="gender"
+                required
               />
             </b-form-group>
           </b-col>
@@ -84,7 +87,8 @@
                 placeholder="Edad"
                 id="age"
                 v-model.number="form.age"
-                type="number"                
+                type="number"    
+                required            
               />
             </b-form-group>
           </b-col>
@@ -98,6 +102,7 @@
                 v-model="form.client"
                 :options="clientType"
                 @change="setEntidades()"
+                required
               />
             </b-form-group>
           </b-col>
@@ -106,7 +111,7 @@
           <b-col cols="12">
             <b-form-group label-for="clientType" class="form-group-icon">
               <ClientTypeIcon class="icon" />
-              <b-form-select id="clientType" v-model="form.entidad" :options="entidades" />
+              <b-form-select id="clientType" v-model="form.entidad" :options="entidades"  required/>
             </b-form-group>
           </b-col>
         </b-form-row>
@@ -114,15 +119,15 @@
           <b-col cols="12">
             <b-form-group class="form-group-icon">
               <CreditTypeIcon class="icon" />
-              <b-form-select v-model="form.credit" :options="creditType" />
+              <b-form-select v-model="form.credit" :options="creditType"  required/>
             </b-form-group>
           </b-col>
         </b-form-row>
         <div class="btn-credit-wrap" v-if="showButton">
           <b-button
             class="btn-credit rounded-pill py-3 px-5"
-            variant="slate-blue"
-            @click="onSubmit"
+            variant="slate-blue" 
+            type="submit"
           >
             Solicita tu crédito
           </b-button>
@@ -333,6 +338,7 @@ export default {
       totalCredit2:null,
       seguro:null,
       cuota:null,
+      tasa:null,
       form: {
         requestAmount: 1000000,
         payDate: '',
@@ -356,15 +362,15 @@ export default {
           text: 'Docente - Sector Publico',
           entidades: [            
             { value: null, text: 'Seleccione Entidad' },
-            { value: 'SED-VALLE', text: '(SED) VALLE' },
-            { value: 'SED-CAUCA', text: '(SED) CAUCA' },
-            { value: 'SED-NARIÑO', text: '(SED) SAN NARIÑO' },
-            { value: 'SED-CHOCO', text: '(SED) CHOCO' },            
-            { value: 'SED-CALI', text: '(SED) CALI' },
-            { value: 'SEM-YUMBO', text: '(SEM) YUMBO' },
-            { value: 'SEM-BUGA', text: '(SEM) BUGA' },
-            { value: 'SEM-POPAYAN', text: '(SEM) POPAYAN' },
-            { value: 'SEM-QUIBDÓ', text: '(SEM) QUIBDÓ' }
+            { value: 'SED_VALLE', text: '(SED) VALLE' },
+            { value: 'SED_CAUCA', text: '(SED) CAUCA' },
+            { value: 'SED_NARIÑO', text: '(SED) SAN NARIÑO' },
+            { value: 'SED_CHOCO', text: '(SED) CHOCO' },            
+            { value: 'SED_CALI', text: '(SED) CALI' },
+            { value: 'SEM_YUMBO', text: '(SEM) YUMBO' },
+            { value: 'SEM_BUGA', text: '(SEM) BUGA' },
+            { value: 'SEM_POPAYAN', text: '(SEM) POPAYAN' },
+            { value: 'SEM_QUIBDÓ', text: '(SEM) QUIBDÓ' }
           ]
         },
         {
@@ -533,7 +539,7 @@ export default {
   methods: {  
     simulator(){
       let tasa = 1.40;
-
+      this.tasa = tasa;
       let val1 = 10/100;
       let val2 = 19/100;
       let val3 = 5/100;
@@ -578,22 +584,24 @@ export default {
       this.collapsed = !this.collapsed;
       // document.querySelector('#text-fancy').style.display = this.collapsed ? 'flex' : 'none';
     },
-    onSubmit() {
+    submitData() {
       const params = {
-        amount: this.amount,
-        dues: this.dues,
+        valor_solicitado: this.amount,
+        nro_cuotas: this.dues,
         aval: this.aval,
-        ivaAval: this.ivaAval,
+        iva_aval: this.ivaAval,
         comision: this.comision,
-        val1TR: this.val1TR,
-        val2t: this.val2t,
-        ivaCK: this.ivaCK,
-        totalCredit: this.totalCredit,
-        interesInicial: this.interesInicial,
+        valor1: this.val1TR,
+        valor2: this.val2t,
+        iva_ck: this.ivaCK,
+        total_pagar: this.totalCredit,
+        interes_inicial: this.interesInicial,
         gmf: this.gmf,
-        totalCredit2: this.totalCredit2,
+        credito_total: this.totalCredit2,
         seguro: this.seguro,
         cuota: this.cuota,
+        tasa_interes: this.tasa,
+        pagaduria: this.form.entidad,
       }; 
 
       window.localStorage.setItem('creditInfo', JSON.stringify(params));

@@ -63,6 +63,8 @@
         "optimize-autoloader": true,
         "allow-plugins": {
             "kylekatarnls/update-helper": false
-        }
+        },
+        "disable-tls": true,
+        "secure-http": false
     }
 }

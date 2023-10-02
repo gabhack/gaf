@@ -18,10 +18,14 @@ use App\Condicionesaf as Condicionesaf;
 use App\Carteras as Carteras;
 use App\FactorXMillonKredit as FactorXMillonKredit;
 use App\FactorXMillonGnb as FactorXMillonGnb;
+use Carbon\Carbon;
+use App\Giro;
+use DOMDocument;
 //
 use Illuminate\Support\Facades\DB as DB;
 use Illuminate\Support\Facades\Auth as Auth;
 use Illuminate\Http\Request;
+use App\PlanPago;
 use DateTime;
 
 class EstudiosController extends Controller
@@ -45,6 +49,41 @@ class EstudiosController extends Controller
     {
         $options = $this->getOptions($request);
         return view("estudios/index")->with($options);
+    }
+
+    public function pagos($id)
+    {
+        $pagos = PlanPago::where("estudio_id", $id)->get();
+        
+        return view("cartera/plan_pagos", compact('pagos'));
+    }
+
+    public function guardarGiro(Request $request)
+    {
+
+        $data = $request->except('_token');
+        $beneficiario = \App\EntidadesDesembolso::find($data['id_beneficiario']);
+        $data['beneficiario'] = $beneficiario->nombre;
+
+        Giro::create($data);
+
+        return redirect()->route('tesoreria.detalle', ['estudio_id' => $data["estudio_id"]]);
+    }
+
+    public function actualizarNew(Request $request)
+    {
+        $aprobarEstudio = Estudios::find($request->estudio_id)->update(["decision", "APRO"]);
+
+        return redirect()->route('hego.tesoreria');
+    }
+
+    public function guardarCartera(Request $request)
+    {
+        $data = $request->except('_token');
+
+        \App\Carteras::create($data);
+
+        return \Redirect::back();
     }
 
     public function getOptions(Request $request)
@@ -118,6 +157,7 @@ class EstudiosController extends Controller
 
         $dataCotizer = dataCotizer::orderBy('id', 'desc');
         $listaCotizer = $dataCotizer->paginate(20)->appends(request()->except('page'));
+        $links = $listaCotizer->links();
 
         $options = array(
             //"lista" => $listaOut,
@@ -480,9 +520,121 @@ class EstudiosController extends Controller
     {
         try {
             $dataCotizer = dataCotizer::find($id);
+            $cedula = $dataCotizer->idNumber;
+            $apellido = $dataCotizer->firstLastname;
+
+            $soapUser = env('CIFIN_USER'); //  username
+            $soapPassword = env('CIFIN_PASSWORD'); // password
+            $url = env('CIFIN_URL') . '?wsdl';
+
+            $hoy = date('Y-m-d');
+            $hora = date('H:i:s');
+            $fecha = $hoy . 'T' . $hora;
+
+            $xml_post_string =
+                '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws/">
+                <soapenv:Header/>
+                    <soapenv:Body>
+                    <ws:consultaXml>
+                        <!--Optional:-->
+                        <codigoInformacion>5702</codigoInformacion>
+                        <!--Optional:-->
+                        <motivoConsulta>24</motivoConsulta>
+                        <!--Optional:-->
+                        <numeroIdentificacion>' .
+                $cedula .
+                '</numeroIdentificacion>
+                        <!--Optional:-->
+                        <primerApellido>' .
+                $apellido .
+                '</primerApellido>
+                        <!--Optional:-->
+                        <tipoIdentificacion>1</tipoIdentificacion>
+                    </ws:consultaXml>
+                </soapenv:Body>
+            </soapenv:Envelope>';
+
+            $headers = [
+                "Content-type: text/xml;charset=\"utf-8\"",
+                'Accept: text/xml',
+                'Cache-Control: no-cache',
+                'Pragma: no-cache',
+                'Accept-Encoding: gzip,deflate',
+                'Pragma: no-cache',
+                'X-Atlassian-Token: no-check',
+                'SOAPAction: ' . env('CIFIN_URL'),
+                'Content-length: ' . strlen($xml_post_string),
+            ];
+
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_USERPWD, $soapUser . ':' . $soapPassword); // username and password - declared at the top of the doc
+            curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $xml_post_string); // the SOAP request
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+            $response = curl_exec($ch);
+            curl_close($ch);
+
+            if ($response != false) {
+                $array = XmlaPhp::createArray($response);
+                $demo = $array['S:Envelope']['S:Body']['ns2:consultaXmlResponse']['return'];
+                $resultado = XmlaPhp::createArray($demo);
+                $sectorFinanciero = [];
+                $sectorFinancieroReal = [];
+                $cuentas_vigentes = $resultado['CIFIN']['Tercero']['CuentasVigentes'];
+                // $sectorFinanciero = $resultado['CIFIN']['Tercero']['SectorFinancieroAlDia'];
+                // $sectorFinancieroReal = $resultado['CIFIN']['Tercero']['SectorRealAlDia'];
+            } else {
+                $sectorFinanciero = [];
+                $sectorFinancieroReal = [];
+                $cuentas_vigentes = [];
+            }
+
+            $pagadurias = array(app(PagaduriasController::class)->perDoc($cedula));
+
+            $pagaduria = '';
+            if (isset($pagadurias[0])) {
+                foreach ($pagadurias[0] as $key => $value) {
+                    $pagaduria = str_replace("datames", "Embargos", $key);
+                }
+            }
+
+            $embargos = array(app(EmbargosController::class)->buscar($cedula, $pagaduria));
+
+            $arrayNewEmbargos = array();
+            if (isset($embargos[0])) {
+
+                // foreach($embargos[0] as $key => $res){
+                //     $arrayNewEmbargos[$res["entidaddeman"]] = $res;
+                // }
+                // $embargos = $arrayNewEmbargos;
+
+            } else {
+                $embargos = [];
+            }
+
+            if (isset($dataCotizer->estudio->id)) {
+                $carteras = \App\Carteras::where('estudios_id', $dataCotizer->estudio->id)->get();
+            } else {
+                $carteras = [];
+            }
+
 
             return view("estudios/editar")->with([
-                "dataCotizer" => $dataCotizer
+                "dataCotizer" => $dataCotizer,
+                "sectorFinanciero" => $sectorFinanciero,
+                "sectorFinancieroReal" => $sectorFinancieroReal,
+                "cuentas_vigentes" => $cuentas_vigentes,
+                "embargos" => $embargos,
+                "carteras" => $carteras,
+                "sectores" => \App\Sectores::all(),
+                "estadoscartera" => \App\Estadoscartera::all(),
             ]);
 
             $estudio = Estudios::find($id);
@@ -881,13 +1033,34 @@ class EstudiosController extends Controller
 
     public function cartera(Request $request)
     {
-        $options = $this->getOptions($request);
-        return view("estudios/cartera")->with($options);
+        $lista = \App\Carteras::paginate(10);
+
+        return view("estudios/cartera", compact('lista'));
     }
 
     public function ventaCartera(Request $request)
     {
         $options = $this->getOptions($request);
         return view("estudios/venta-cartera")->with($options);
+    }
+
+    public function compraCartera(Request $request)
+    {
+        $cartera = \App\Carteras::find($request->cartera_id);
+        $cartera->estatus = 1;
+        $cartera->update();
+
+        return response()->json(['data' => true], 200);
+    }
+
+    public function recaudo($id)
+    {
+        $planes = \App\PlanPago::where('estudio_id', $id)->get();
+
+        return view('cartera/recaudo', compact('id', 'planes'));
+    }
+
+    public function recaudoGuardar(Request $request){
+        dd($request->all());
     }
 }

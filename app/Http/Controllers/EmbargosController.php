@@ -145,4 +145,30 @@ class EmbargosController extends Controller
     {
         //
     }
+
+    public function buscar($doc = null, $pagaduria = null)
+    {
+        $embargoType = $pagaduria;
+
+        $models = [
+            EmbargosSedCauca::class => 'doc',
+            EmbargosSedChoco::class => 'doc',
+            EmbargosSedValle::class => 'doc',
+            EmbargosSemCali::class => 'doc',
+            EmbargosSemPopayan::class => 'doc',
+            EmbargosSemQuibdo::class => 'idemp',
+        ];
+
+        $results = [];
+
+        foreach ($models as $model => $column) {
+            $className = class_basename($model);
+
+            if ($className == $embargoType) {
+                $results = $model::where($column, 'LIKE', '%' . $doc . '%')->get();
+            }
+        }
+
+        return $results;
+    }
 }

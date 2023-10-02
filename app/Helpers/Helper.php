@@ -193,6 +193,7 @@ if (!function_exists('decisiones_estudios')) {
 	function decisiones_estudios()
 	{
 		return array(
+			'PROSP' => 'PROSPECTADO',
 			'APRO' => 'APROBADO',
 			'NEGA' => 'NEGADO',
 			'ESTU' => 'ESTUDIO',
