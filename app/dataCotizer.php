@@ -58,4 +58,9 @@ class dataCotizer extends Model
     protected $attributes = [
         'nit' => '-',
     ];
+
+    public function estudio()
+	{
+		return $this->hasOne('App\Estudiostr', 'data_cotizer_id', 'id');
+	}
 }

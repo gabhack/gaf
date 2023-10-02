@@ -40,11 +40,15 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/logout', 'Auth\LoginController@logout');
+Route::post('/guardar-giro', 'EstudiosController@guardarGiro')->name('estudios.giros');
+Route::post('/guardar-cartera', 'EstudiosController@guardarCartera')->name('estudios.cartera');
 
 Route::group(['prefix' => 'profile'], function () {
     Route::get('/', 'ProfileController@profile');
     Route::post('/store', 'ProfileController@saveProfile');
 });
+
+
 
 // Roles
 Route::group(['prefix' => 'roles'], function () {
@@ -357,6 +361,58 @@ Route::group(['prefix' => 'factores'], function () {
     Route::get('/delete/{id}', 'FactoresController@destroy');
 });
 
+// Cuentas Bancarias
+Route::group(['prefix' => 'cuentasbancarias'], function () {
+    Route::get('/', 'CuentasBancariasController@index');
+
+    Route::get('/crear', 'CuentasBancariasController@create');
+    Route::post('/store', 'CuentasBancariasController@store');
+
+    Route::get('/edit/{id}', 'CuentasBancariasController@edit');
+    Route::post('/update/{id}', 'CuentasBancariasController@update');
+
+    Route::get('/delete/{id}', 'CuentasBancariasController@destroy');
+});
+
+// Cuentas Bancarias
+Route::group(['prefix' => 'entidadesdesembolso'], function () {
+    Route::get('/', 'EntidadesDesembolsoController@index');
+
+    Route::get('/crear', 'EntidadesDesembolsoController@create');
+    Route::post('/store', 'EntidadesDesembolsoController@store');
+
+    Route::get('/edit/{id}', 'EntidadesDesembolsoController@edit');
+    Route::post('/update/{id}', 'EntidadesDesembolsoController@update');
+
+    Route::get('/delete/{id}', 'EntidadesDesembolsoController@destroy');
+});
+
+// Forma Pago
+Route::group(['prefix' => 'formapago'], function () {
+    Route::get('/', 'FormaPagoController@index');
+
+    Route::get('/crear', 'FormaPagoController@create');
+    Route::post('/store', 'FormaPagoController@store');
+
+    Route::get('/edit/{id}', 'FormaPagoController@edit');
+    Route::post('/update/{id}', 'FormaPagoController@update');
+
+    Route::get('/delete/{id}', 'FormaPagoController@destroy');
+});
+
+// Tipo Giro
+Route::group(['prefix' => 'tipogiro'], function () {
+    Route::get('/', 'TipoGiroController@index');
+
+    Route::get('/crear', 'TipoGiroController@create');
+    Route::post('/store', 'TipoGiroController@store');
+
+    Route::get('/edit/{id}', 'TipoGiroController@edit');
+    Route::post('/update/{id}', 'TipoGiroController@update');
+
+    Route::get('/delete/{id}', 'TipoGiroController@destroy');
+});
+
 // Reportes
 Route::group(['prefix' => 'reportes'], function () {
     Route::get('/', 'ReportesController@index');
@@ -397,17 +453,31 @@ Route::group(['prefix' => 'estudios'], function () {
     Route::post('/iniciar', 'EstudiosController@iniciar');
     Route::get('/iniciar/{documento}', 'EstudiosController@iniciar');
     Route::post('/guardar', 'EstudiosController@guardar');
+    Route::post('/giros', 'TesoreriaController@agregarGiro');
     //
     Route::get('/editar/{id}', 'EstudiosController@editar');
     Route::post('/actualizar', 'EstudiosController@actualizar');
     //
     Route::get('/borrar/{id}', 'EstudiosController@eliminar');
 
-    Route::get('/tesoreria', 'EstudiosController@tesoreria')->name('hego.tesoreria');
+    Route::get('/tesoreria', 'TesoreriaController@index')->name('hego.tesoreria');
+
+    Route::get('/tesoreria/detalle/{id}', 'TesoreriaController@detalleTesoreria')->name('tesoreria.detalle');
 
     Route::get('/cartera', 'EstudiosController@cartera')->name('hego.cartera');
 
     Route::get('/venta-cartera', 'EstudiosController@ventaCartera')->name('hego.venta-cartera');
+
+
+    Route::get('/detalle-cartera/{id}/{tipoconsulta?}', 'CarteraController@detalleCateraView');
+    Route::post('/comprar-cartera', 'EstudiosController@compraCartera');
+
+    Route::post('/estudio-actualizar', 'EstudiosController@actualizarNew')->name('estudio.actualizar');
+
+    Route::get('/pagos/{id}', 'EstudiosController@pagos')->name('estudio.pagos');
+    Route::get('/recaudo/{id}', 'EstudiosController@recaudo')->name('estudio.recaudo');
+    Route::post('/recaudos/guardar', 'EstudiosController@recaudoGuardar')->name('estudio.recaudo');
+
 });
 
 //Clientes
@@ -417,6 +487,8 @@ Route::group(['prefix' => 'clientes'], function () {
     Route::get('/editar/{id}', 'ClientesController@editar');
     Route::post('/actualizar', 'ClientesController@actualizar');
 });
+
+Route::post('giros/store', [GirosController::class, 'store'])->name('giros');
 
 Route::get('/dataset', 'DatasetController@index');
 Route::get('/dataset/get', 'DatasetController@get');

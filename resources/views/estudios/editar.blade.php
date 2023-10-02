@@ -576,8 +576,459 @@
         <div class="panel panel-primary">
           <div class="panel-heading"><b>Carteras por comprar</b></div>
           <div class="panel-body">
-            <button type="button" id="btnAgregarFila" class="btn btn-primary">Agregar cartera</button><br><br>
             <table id="grid" class="table table-hover table-condensed table-bordered">
+              <thead>
+                <tr>
+                  <th class="text-center">No.</th>
+                  <th class="text-center">ENTIDAD</th>
+                  <th class="text-center">CUOTA</th>
+                  <th class="text-center">SALDO INICIAL</th>
+                  <th class="text-center">NEGOCIACIÓN</th>
+                  <th class="text-center">VALOR A PAGAR</th>
+                  <th class="text-center">MONTO MÁX PAGAR</th>
+                  <th class="text-center">% NEGOCIACIÓN</th>
+                  <th class="text-center">F VENCIMIENTO</th>
+                  <th class="text-center">SE COMPRA?</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- CIFIN -->
+                <!-- Verificando si es un arreglo -->
+                @if(isset($sectorFinanciero['Obligacion'][0]))
+                @foreach($sectorFinanciero['Obligacion'] as $res)
+                <tr>
+                  <td>{{ $res['IdentificadorLinea'] }}</td>
+                  <td>{{ $res['NombreEntidad'] }}</td>
+                  <td></td>
+                  <td>{{ $res['SaldoObligacion'] }}</td>
+                  <td></td>
+                  <td>{{ $res['SaldoObligacion'] }}</td>
+                  <td></td>
+                  <td>{{ $res['PaqueteInformacion'] }}</td>
+                  <td>{{ $res['FechaCorte'] }}</td>
+                  <td>
+                    <select>
+                      <option value=""></option>
+                    </select>
+                  </td>
+                </tr>
+                @endforeach
+                @else
+                @foreach($sectorFinanciero as $res)
+                <tr>
+                  <td>{{ $res['IdentificadorLinea'] }}</td>
+                  <td>{{ $res['NombreEntidad'] }}</td>
+                  <td></td>
+                  <td>{{ $res['SaldoObligacion'] }}</td>
+                  <td></td>
+                  <td>{{ $res['SaldoObligacion'] }}</td>
+                  <td></td>
+                  <td>{{ $res['PaqueteInformacion'] }}</td>
+                  <td>{{ $res['FechaCorte'] }}</td>
+                  <td>
+                    <select>
+                      <option value=""></option>
+                    </select>
+                  </td>
+                </tr>
+                @endforeach
+                @endif
+
+                <!-- CIFIN -->
+                <!-- Verificando si es un arreglo -->
+                @if(isset($sectorFinancieroReal['Obligacion'][0]))
+                @foreach($sectorFinancieroReal['Obligacion'] as $res)
+                <tr>
+                  <td>{{ $res['PaqueteInformacion'] }}</td>
+                  <td>{{ $res['NombreEntidad'] }}</td>
+                  <td></td>
+                  <td>{{ $res['SaldoObligacion'] }}</td>
+                  <td></td>
+                  <td>{{ $res['SaldoObligacion'] }}</td>
+                  <td></td>
+                  <td>{{ $res['PaqueteInformacion'] }}</td>
+                  <td>{{ $res['FechaCorte'] }}</td>
+                  <td>
+                    <select>
+                      <option value=""></option>
+                    </select>
+                  </td>
+                </tr>
+                @endforeach
+                @else
+                @foreach($sectorFinancieroReal as $res)
+                <tr>
+                  <td>{{ $res['PaqueteInformacion'] }}</td>
+                  <td>{{ $res['NombreEntidad'] }}</td>
+                  <td></td>
+                  <td>{{ $res['SaldoObligacion'] }}</td>
+                  <td></td>
+                  <td>{{ $res['SaldoObligacion'] }}</td>
+                  <td></td>
+                  <td>{{ $res['PaqueteInformacion'] }}</td>
+                  <td>{{ $res['FechaCorte'] }}</td>
+                  <td>
+                    <select>
+                      <option value=""></option>
+                    </select>
+                  </td>
+                </tr>
+                @endforeach
+                @endif
+
+                <!-- CIFIN -->
+                <!-- Verificando si es un arreglo -->
+                @if(isset($cuentas_vigentes['Obligacion'][0]))
+                @foreach($cuentas_vigentes['Obligacion'] as $res)
+                <tr>
+                  <td>{{ $res['IdentificadorLinea'] }}</td>
+                  <td>{{ $res['NombreEntidad'] }}</td>
+                  <td></td>
+                  <td>{{ $res['ValorInicial'] }}</td>
+                  <td></td>
+                  <td>{{ $res['ValorInicial'] }}</td>
+                  <td></td>
+                  <td></td>
+                  <td>{{ $res['FechaCorte'] }}</td>
+                  <td>
+                    <select>
+                      <option value=""></option>
+                    </select>
+                      <a href="/estudios/detalle-cartera/{{ $dataCotizer->id }}-{{ $res['IdentificadorLinea'] }}/1">Detalle</a>
+                  </td>
+
+                </tr>
+                @endforeach
+                @else
+                @foreach($cuentas_vigentes as $res)
+                <tr>
+                  <td>{{ $res['IdentificadorLinea'] }}</td>
+                  <td>{{ $res['NombreEntidad'] }}</td>
+                  <td></td>
+                  <td>{{ $res['ValorInicial'] }}</td>
+                  <td></td>
+                  <td>{{ $res['ValorInicial'] }}</td>
+                  <td></td>
+                  <td></td>
+                  <td>{{ $res['FechaCorte'] }}</td>
+                  <td>
+                    <select>
+                      <option value=""></option>
+                    </select>
+                    <a href="/estudios/detalle-cartera/{{ $dataCotizer->id }}-{{ $res['IdentificadorLinea'] }}/1">Detalle</a>
+                  </td>
+                </tr>
+                @endforeach
+                @endif
+
+                <!-- EMBARGOS -->
+                <!-- Verificando si es un arreglo -->
+                @if(isset($embargos[0]))
+                @foreach($embargos[0] as $key => $res)
+                <tr>
+                  <td>{{ $res['id'] }}</td>
+                  <td>{{ $res['entidaddeman'] }}</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>{{ $res['fembfin'] }}</td>
+                  <td>
+                    <select>
+                      <option value=""></option>
+                    </select>
+                    <a href="/estudios/detalle-cartera/{{ $dataCotizer->id }}-{{ $res['id'] }}/2">Detalle</a>
+                  </td>
+                </tr>
+                @endforeach
+                @else
+                @foreach($embargos as $key => $res)
+                <tr>
+                  <td>{{ $res['id'] }}</td>
+                  <td>{{ $res['entidaddeman'] }}</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>{{ $res['FechaCorte'] }}</td>
+                  <td>
+                    <select>
+                      <option value=""></option>
+                    </select>
+                    <a href="/estudios/detalle-cartera/{{ $dataCotizer->id }}-{{ $res['id'] }}/2">Detalle</a>
+                  </td>
+                </tr>
+                @endforeach
+                @endif
+
+
+                <!-- CARTERAS -->
+                @if(count($carteras) > 0)
+                @foreach($carteras as $key => $res)
+                <tr>
+                  <td>{{ $res->id }}</td>
+                  <td>{{ $res->nombre_obligacion  }}</td>
+                  <td>{{ $res->cuota  }}</td>
+                  <td>{{ $res->saldo  }}</td>
+                  <td></td>
+                  <td>{{ $res->valor_ini  }}</td>
+                  <td></td>
+                  <td></td>
+                  <td>{{ $res->fecha_vence }}</td>
+                  <td id="td-compra-{{ $res->id }}">
+                    @if($res->estatus == 0)
+                    <button type="button" onclick="comprarCartera({{ $res->id }})">Comprar</button>
+                    @else
+                    <span>Comprada</span>
+                    @endif
+                    <a href="/estudios/detalle-cartera/{{ $res->id }}">Detalle</a>
+                  </td>
+                </tr>
+                @endforeach
+                @endif
+              </tbody>
+            </table>
+
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCartera">Agregar cartera</button><br><br>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div class="panel panel-primary">
+          <div class="panel-heading"><b></b></div>
+          <div class="panel-body">
+            <table>
+              <tr>
+                <td valign="top">
+                  <br>
+                  <table border="0" cellspacing="1" cellpadding="2" class="tab1" width="100%">
+                    <tbody>
+                      <tr>
+                        <th colspan="2">OPCIONES DE CRÉDITO</th>
+                        <th>OPCIÓN CUOTA</th>
+                        <th colspan="2">OPCIÓN DESEMBOLSO</th>
+                      </tr>
+                      <tr>
+                        <td align="center"><input type="radio" name="opcion_credito" value="CLI" onchange="recalcular()" disabled=""></td>
+                        <td style="font-size:16"><b>CUPO DE LIBRE INVERSION</b></td>
+                        <td><input type="text" id="opcion_cuota_cli" name="opcion_cuota_cli" value="" size="15" style="height:30; text-align:right; font-size:16; font-weight:bold; " readonly=""></td>
+                        <td colspan="2"><input type="text" id="opcion_desembolso_cli" name="opcion_desembolso_cli" value="" style="width:95%; height:30; text-align:right; font-size:16; font-weight:bold; " readonly=""></td>
+                      </tr>
+                      <tr>
+                        <td align="center"><input type="radio" name="opcion_credito" value="CCC" onchange="recalcular()" checked=""></td>
+                        <td style="font-size:16"><b>CUPO CON COMPRAS</b></td>
+                        <td><input type="text" id="opcion_cuota_ccc" name="opcion_cuota_ccc" value="" size="15" style="height:30; text-align:right; font-size:16; font-weight:bold; " readonly=""></td>
+                        <td colspan="2"><input type="text" id="opcion_desembolso_ccc" name="opcion_desembolso_ccc" value="" style="width:95%; height:30; text-align:right; font-size:16; font-weight:bold; " readonly=""></td>
+                      </tr>
+                      <tr>
+                        <td align="center"><input type="radio" name="opcion_credito" value="CMP" onchange="recalcular()"></td>
+                        <td style="font-size:16"><b>CUPO MAXIMO POSIBLE</b></td>
+                        <td><input type="text" id="opcion_cuota_cmp" name="opcion_cuota_cmp" value="" size="15" style="height:30; text-align:right; font-size:16; font-weight:bold; " readonly=""></td>
+                        <td colspan="2"><input type="text" id="opcion_desembolso_cmp" name="opcion_desembolso_cmp" value="" style="width:95%; height:30; text-align:right; font-size:16; font-weight:bold; " readonly=""></td>
+                      </tr>
+                      <tr>
+                        <td align="center"><input type="radio" name="opcion_credito" value="CSO" onchange="recalcular()"></td>
+                        <td style="font-size:16"><b>CUPO SOLICITADO</b></td>
+                        <td><input type="text" id="opcion_cuota_cso" name="opcion_cuota_cso" value="" size="15" onfocus="this.value = this.value.replace(/\,/g, '')" onblur="if(isnumber(this.value)==false) { this.value='0'; return false; } else { if (this.value == '') { this.value = '0'; } if (parseFloat(this.value) > document.formato.opcion_cuota_ccc.value.replace(/\,/g, '')) { this.value = document.formato.opcion_cuota_ccc.value.replace(/\,/g, ''); alert('El valor de la cuota no debe ser mayor a $' + document.formato.opcion_cuota_ccc.value); } recalcular(); separador_miles(this); }" style="height:30; text-align:right; font-size:16; font-weight:bold; color:#CC0000;  "></td>
+                        <td colspan="2"><input type="text" id="opcion_desembolso_cso" name="opcion_desembolso_cso" value="" style="width:95%; height:30; text-align:right; font-size:16; font-weight:bold; " readonly=""></td>
+                      </tr>
+                      <tr>
+                        <td colspan="2">FECHA INCORP. PAGADURÍA</td>
+                        <td><input type="text" name="fecha_incorp_pagaduria" value="" onchange="if (this.value != '') { if(validarfecha(this.value)==false) {this.value=''; return false} }" style="height:30; text-align:right; font-size:16; font-weight:bold; color:#CC0000; width: 100px"></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <br>
+                  <h2>TE RECUPERAMOS</h2>
+                  <div class="box1 clearfix">
+                    <table border="0" cellspacing="1" cellpadding="2" width="100%">
+                      <tbody>
+                        <tr>
+                          <td colspan="3">
+                            <input type="checkbox" name="tipo_producto_checked" value="1" onchange="if (this.checked == true) { document.formato.descuento1.value = '0'; document.formato.tipo_producto.value = '1'; document.getElementById('descuento5').style.color = '#000000'; document.getElementById('descuento6').style.color = '#000000'; document.getElementById('descuento5_valor').style.color = '#000000'; document.getElementById('descuento6_valor').style.color = '#000000'; document.getElementById('descuento5').style.backgroundColor = '#EAF1DD'; document.getElementById('descuento6').style.backgroundColor = '#EAF1DD'; document.getElementById('descuento5').readOnly = false; document.getElementById('descuento6').readOnly = false; } else { document.formato.descuento1.value = '3.93'; document.formato.tipo_producto.value = '0'; document.getElementById('descuento5').style.color = '#FFFFFF'; document.getElementById('descuento6').style.color = '#FFFFFF'; document.getElementById('descuento5_valor').style.color = '#FFFFFF'; document.getElementById('descuento6_valor').style.color = '#FFFFFF'; document.getElementById('descuento5').style.backgroundColor = '#FFFFFF'; document.getElementById('descuento6').style.backgroundColor = '#FFFFFF'; document.getElementById('descuento5').readOnly = true; document.getElementById('descuento6').readOnly = true; } recalcular();" hidden="">
+                            <input type="hidden" name="tipo_producto" value="">
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="2">TOTAL CARTERAS A COMPRAR</td>
+                          <td>&nbsp;</td>
+                          <td colspan="2"><input type="text" id="total_carteras_comprar" name="total_carteras_comprar" value="" style="width:95%; text-align:right; color:#FFFFFF;" readonly=""></td>
+                        </tr>
+                        <tr>
+                          <td colspan="2">TIPO DE CLIENTE</td>
+                          <td>&nbsp;</td>
+                          <td>
+                            <select id="descuento5" name="descuento5" onchange="document.formato.lb_porcentaje_costos.value = tipos_cliente[this.value];recalcular();" style=" color:#FFFFFF;" readonly="">
+                              <option value="" hidden="" disabled="" selected="">Seleccione uno...</option>
+                              <option value="A">A</option>
+                              <option value="B">B</option>
+                              <option value="C">C</option>
+                              <option value="K">K</option>
+                            </select>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="2">COSTOS</td>
+                          <td><input type="text" id="lb_porcentaje_costos" name="lb_porcentaje_costos" value="" size="14" style="text-align:center; " onchange="if(isnumber_punto(this.value)==false) {this.value=''; return false} else { if (this.value == '') { this.value = ''; } recalcular(); }"></td>
+                          <td colspan="2"><input type="text" id="descuento5_valor" name="descuento5_valor" value="" style="width:95%; text-align:right; color:#FFFFFF;" readonly=""></td>
+                        </tr>
+                        <tr>
+                          <td colspan="2">IVA</td>
+                          <td><input type="text" id="descuento6" name="descuento6" value="19" size="14" style="text-align:center; color:#FFFFFF;" readonly=""></td>
+                          <td colspan="2"><input type="text" id="descuento6_valor" name="descuento6_valor" value="" style="width:95%; text-align:right; color:#FFFFFF;" readonly=""></td>
+                        </tr>
+                        <tr>
+                          <td colspan="2">TRANSFERENCIA</td>
+                          <td>&nbsp;</td>
+                          <td colspan="2"><input type="text" name="descuento_transferencia_valor" value="" style="width:95%; text-align:right; color:#FFFFFF;" readonly=""></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <br>
+                  <h2>DESCUENTOS DESEMBOLSO</h2>
+                  <div class="box1 oran clearfix">
+                    <table border="0" cellspacing="1" cellpadding="2" width="100%">
+                      <tbody>
+                        <tr>
+                          <th colspan="2">&nbsp;</th>
+                          <th>%</th>
+                          <th colspan="2">VALOR</th>
+                        </tr>
+                        <tr>
+                          <td colspan="2">INTERESES ANTICIPADOS</td>
+                          <td><input type="text" name="descuento1" value="3.93" size="14" style="text-align:center; color:#FFFFFF;"></td>
+                          <td colspan="2"><input type="text" name="descuento1_valor" value="" style="width:95%; text-align:right; color:#FFFFFF;" readonly=""></td>
+                        </tr>
+                        <tr>
+                          <td colspan="2">ASESORÍA FINANCIERA</td>
+                          <td><input type="text" name="descuento2" value="" onchange="if(isnumber_punto(this.value)==false) {this.value='35'; return false} else { if (this.value == '') { this.value = '35'; } recalcular(); }" size="14" style="text-align:center; "></td>
+                          <td colspan="2"><input type="text" name="descuento2_valor" value="" style="width:95%; text-align:right; color:#FFFFFF;" readonly=""></td>
+                        </tr>
+                        <tr>
+                          <td colspan="2">IVA</td>
+                          <td><input type="text" name="descuento3" value="19" size="14" style="text-align:center; color:#FFFFFF;" readonly=""></td>
+                          <td colspan="2"><input type="text" name="descuento3_valor" value="" style="width:95%; text-align:right; color:#FFFFFF;" readonly=""></td>
+                        </tr>
+                        <tr>
+                          <td colspan="2">GMF</td>
+                          <td><input type="text" name="descuento4" value="0.4" size="14" style="text-align:center; color:#FFFFFF;" readonly=""></td>
+                          <td colspan="2"><input type="text" name="descuento4_valor" value="" style="width:95%; text-align:right; color:#FFFFFF;" readonly=""></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </td>
+                <td width="20">&nbsp;</td>
+                <td valign="top">
+                  <br>
+                  <div class="box1 clearfix">
+                    <table border="0" cellspacing="1" cellpadding="2" width="95%">
+                      <tbody>
+                        <tr>
+                          <td colspan="2">VALOR CRÉDITO</td>
+                          <td colspan="3"><input type="text" name="valor_credito" value="" style="width:100%; text-align:right;" readonly=""></td>
+                        </tr>
+                        <tr>
+                          <td colspan="2" style="font-size:18" width="170"><b>DESEMBOLSO CLIENTE</b></td>
+                          <td colspan="3"><input type="text" id="desembolso_cliente" name="desembolso_cliente" value="" style="width:100%; height:45; text-align:right; font-size:18; font-weight:bold; " readonly=""></td>
+                        </tr>
+                        <tr>
+                          <td colspan="5">&nbsp;</td>
+                        </tr>
+                        <tr>
+                          <td colspan="2" style="font-size:16"><b>DECISIÓN</b></td>
+                          <td colspan="3"><input type="text" id="decision" name="decision" value="" style="width:100%; height:45; text-align:center; font-size:18; font-weight:bold; " readonly=""><input type="hidden" id="decisionh" name="decisionh" value=""></td>
+                        </tr>
+                        <tr>
+                          <td colspan="2">NO. LIBRANZA</td>
+                          <td colspan="3"><input type="text" name="nro_libranza" value="" style="width:100%; text-align:center; "></td>
+                        </tr>
+                        <tr>
+                          <td colspan="2">VALOR VISADO</td>
+                          <td colspan="3"><input type="text" name="valor_visado" value="" onfocus="this.value = this.value.replace(/\,/g, '')" onblur="if(isnumber(this.value)==false) {this.value='0'; return false} else { separador_miles(this); }" style="width:100%; text-align:right; "></td>
+                        </tr>
+                        <tr>
+                          <td colspan="2">FECHA CONFIRMACIÓN</td>
+                          <td colspan="3"><input type="text" name="fecha_llamada_clientef" value="" size="10" onchange="if(validarfecha(this.value)==false) {this.value=''; return false}" style=";">&nbsp;HORA<input type="text" name="fecha_llamada_clienteh" value="" size="5" onchange="if(validarhora(this.value)==false) {this.value=''; return false}" style=";"><select name="fecha_llamada_clientej" style=";">
+                              <option value=""></option>
+                              <option value="AM">AM</option>
+                              <option value="PM">PM</option>
+                            </select></td>
+                        </tr>
+                        <tr>
+                          <td colspan="2">SUBESTADO</td>
+                          <td colspan="3">
+                            <select id="id_subestado" name="id_subestado" style="">
+                              <option value=""></option>
+                            </select>
+                            <input type="hidden" name="id_subestadoh" value="">
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="2">EXTRA PRIMA</td>
+                          <td colspan="3">
+                            <select name="porcentaje_extraprima" style=";" onchange="if (this.value != '0' &amp;&amp; PorcentajeSeguroExtraPrima('', document.formato.plazo.value, this.value) == '0') { alert('No hay condiciones de Extra Prima para el plazo establecido'); this.value = document.formato.porcentaje_extraprimah.value; } else { recalcular(); }">
+                              <option value="0"></option>
+                            </select>
+                            <input type="hidden" name="porcentaje_extraprimah" value="">
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="2">PORCENTAJE SEGURO</td>
+                          <td colspan="3"><input type="text" name="porcentaje_seguro" value="" style="width:100%; text-align:right;" readonly=""></td>
+                        </tr>
+                        <tr>
+                          <td colspan="2">MONTO APROB. POR ALIADO</td>
+                          <td colspan="3"><input onfocus="this.value = this.value.replace(/\,/g, '')" onblur="if (isnumber(this.value) == false) { this.value = '0'; return false } else { if (this.value == '') { this.value = '0'; } separador_miles(this); }" type="text" name="monto_aprob_aliado" value="0" style="width:100%; text-align:right;"></td>
+                        </tr>
+
+                        <tr>
+                          <td>TASA DE INTERÉS DEL CRÉDITO</td>
+                          <td width="70">
+                            <select id="tasa_interes" class="form-control" name="tasa_interes" onchange="recalcular()">
+                              <option value="" selected=""></option>
+                              <option value="" selected="">2</option>
+                              <option value="" selected="">1.9</option>
+                              <option value="" selected="">1.8</option>
+                              <option value="" selected="">1.7</option>
+                              <option value="" selected="">1.6</option>
+                              <option value="" selected="">1.4</option>
+                              <option value="" selected="">1.3</option>
+                            </select>
+                            <input type="hidden" name="tasa_interesh" value="0">
+                          </td>
+                          <input type="hidden" name="tipo_credito" value="">
+                          <td>PLAZO SOLICITADO PARA EL CRÉDITO</td>
+                          <td>
+                            <input type="text" id="plazo" name="plazo" value="" size="15" onchange="if(isnumber(this.value)==false) {this.value=''; return false} else { if (document.formato.porcentaje_extraprima.value != '0' &amp;&amp; PorcentajeSeguroExtraPrima('', this.value, document.formato.porcentaje_extraprima.value) == '0') { alert('No hay condiciones de Extra Prima para el plazo establecido'); this.value = document.formato.plazoh.value; } else { if (this.value == '') { this.value = ''; } if (parseInt(this.value) > parseInt(document.formato.plazo_maximo_segun_edad.value)) { this.value = document.formato.plazo_maximo_segun_edad.value; alert('El plazo no debe ser mayor a ' + document.formato.plazo_maximo_segun_edad.value);} CargarTasas(this.value); recalcular(); } }" style="text-align:center;  color:#CC0000;">
+                            <input type="hidden" name="plazoh" value="">
+                          </td>
+                          <input type="hidden" name="suma_al_presupuesto" value="0">
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <br>
+                  <h2>OBSERVACIONES</h2>
+                  <div class="box1 oran clearfix">
+                    <table border="0" cellspacing="1" cellpadding="2" width="95%">
+                      <tbody>
+                        <tr>
+                          <td colspan="4"><textarea name="observaciones" rows="3" style="width:100%; "></textarea></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </td>
+              </tr>
+
             </table>
           </div>
         </div>
@@ -857,6 +1308,130 @@
   </div>
 </form>
 
+<form action="{{ route('estudio.actualizar') }}" method="post">
+  {{ csrf_field() }}
+  <div align="center">
+    <input type="hidden" value="{{ $dataCotizer->estudio->id }}" name="estudio_id">
+    <button type="submit" class="btn btn-primary" style="width: 300px;" class="form-control">Aceptar</button>
+  </div>
+</form>
+
+
+<!-- Modal -->
+<div class="modal fade bd-example-modal-xl" id="modalCartera" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <form action="{{ route('estudios.cartera') }}" method="post">
+        {{ csrf_field() }}
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Agregar Cartera</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          <input type="hidden" value="{{ $dataCotizer->estudio ? $dataCotizer->estudio->id : null }}" name="estudios_id">
+
+          <div class="row">
+            <div class="col-md-3">
+              <label for="">* Sector Data</label>
+            </div>
+            <div class="col-md-9">
+              <select class="form-control" name="sector_data" id="" required>
+                <option selected disabled value="">--Seleccione--</option>
+                @foreach($sectores as $sector)
+                <option value="{{ $sector->id }}">{{ $sector->sector }}</option>
+                @endforeach
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-3">
+              <label for="">* Sector CIFIN</label>
+            </div>
+            <div class="col-md-9">
+              <select class="form-control" name="sector_cifin" id="" required>
+                <option selected disabled value="">--Seleccione--</option>
+                @foreach($sectores as $sector)
+                <option value="{{ $sector->id }}">{{ $sector->sector }}</option>
+                @endforeach
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-3">
+              <label for="">* Estado de la Cartera</label>
+            </div>
+            <div class="col-md-9">
+              <select class="form-control" name="estadoscarteras_id" id="" required>
+                <option selected disabled value="">--Seleccione--</option>
+                @foreach($estadoscartera as $estado)
+                <option value="{{ $estado->id }}">{{ $estado->estado }}</option>
+                @endforeach
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-3">
+              <label for="">* Nombre</label>
+            </div>
+            <div class="col-md-9">
+              <input type="text" name="nombre_obligacion" class="form-control" required>
+            </div>
+          </div>
+
+
+          <div class="row">
+            <div class="col-md-3">
+              <label for="">* Cuota</label>
+            </div>
+            <div class="col-md-9">
+              <input type="number" min="0" name="cuota" class="form-control" required>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-3">
+              <label for="">* Saldo</label>
+            </div>
+            <div class="col-md-9">
+              <input type="number" min="0" name="saldo" class="form-control" required>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-3">
+              <label for="">* Valor Inicial</label>
+            </div>
+            <div class="col-md-9">
+              <input type="number" min="0" name="valor_ini" class="form-control" required>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-3">
+              <label for="">* Fecha de Vencimiento</label>
+            </div>
+            <div class="col-md-9">
+              <input type="date" class="form-control" name="fecha_vence" required>
+            </div>
+          </div>
+
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn btn-primary">Agregar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 @endsection
 
 @section('js')
@@ -864,4 +1439,28 @@
 <script src="{{asset('css/gijgo-combined-1.9.13/js/gijgo.min.js')}}"></script>
 <script src="{{asset('js/TablaCarteras.js')}}"></script>
 <script src="{{asset('js/init_autoNumeric.js')}}"></script>
+
+<script>
+  var comprarCartera = (id) => {
+    $.ajax({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+      type: 'post',
+      url: '/estudios/comprar-cartera',
+      data: {
+        cartera_id: id,
+      },
+      success: function(data) {
+        if (data.data) {
+          $("#td-compra-" + id).html("<span>Comprada</span>");
+        }
+      },
+
+      error: function(data) {
+        console.log(data);
+      }
+    });
+  };
+</script>
 @endsection
