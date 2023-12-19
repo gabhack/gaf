@@ -10,7 +10,7 @@ const pagaduriasModule = {
         pagaduriasTypes: [
             { label: 'FIDUPREVISORA', value: 'FIDUPREVISORA', key: 'datamesFidu' },
             { label: 'FOPEP', value: 'FOPEP', key: 'datamesFopep' },
-            { label: 'SED ANTIOQUIA', value: 'SEDANTIOQUIA', key: 'datamesSedAntioquia' },
+            { label: 'SED ANTIOQUIA', value: 'SEDANTIOQUIA', key: 'SED ANTIOQUIA' },
             { label: 'SED ARAUCA', value: 'SEDARAUCA', key: 'datamesSedArauca' },
             { label: 'SED ATLANTICO', value: 'SEDATLANTICO', key: 'datamesSedAtlantico' },
             { label: 'SED BOLIVAR', value: 'SEDBOLIVAR', key: 'datamesSedBolivar' },
@@ -37,6 +37,11 @@ const pagaduriasModule = {
             { label: 'SEM BUGA', value: 'SEMBUGA', key: 'SEM BUGA'},
             { label: 'SEM CALI', value: 'SEMCALI', key: 'datamesSemCali' },
             { label: 'SEM CARTAGENA', value: 'SEMCARTAGENA', key: 'datamesSemCartagena' },
+            { label: 'SEM CARTAGO', value: 'SEMCARTAGO', key: 'SEM CARTAGO' },
+            { label: 'SEM DUITAMA', value: 'SEMDUITAMA', key: 'SEM DUITAMA' },
+            { label: 'SEM GIRON', value: 'SEMGIRON', key: 'SEM GIRON' },
+            { label: 'SEM CHIA', value: 'SEMCHIA', key: 'SEM CHIA' },
+            { label: 'SEM VILLAVICENCIO', value: 'SEMVILLAVICENCIO', key: 'SEM VILLAVICENCIO' },
             { label: 'SEM GIRARDOT', value: 'SEMGIRARDOT', key: 'datamesSemGirardot' },
             { label: 'SEM IBAGUE', value: 'SEMIBAGUE', key: 'datamesSemIbague' },
             { label: 'SEM IPIALES', value: 'SEMIPIALES', key: 'SEM IPIALES' },
@@ -64,6 +69,7 @@ const pagaduriasModule = {
             { label: 'SEM TUNJA', value: 'SEMTUNJA', key: 'SEM TUNJA' },
             { label: 'SEM BUCARAMANGA', value: 'SEMBUCARAMANGA', key: 'SEM BUCARAMANGA' },
             { label: 'SEM BUENAVENTURA', value: 'SEMBUENAVENTURA', key: 'SEM BUENAVENTURA' },
+            { label: 'SEM ARMENIA', value: 'SEMARMENIA', key: 'SEM ARMENIA' },
             { label: 'SEM FUNZA', value: 'SEMFUNZA', key: 'funza' }
         ],
         selectedPeriod: ''

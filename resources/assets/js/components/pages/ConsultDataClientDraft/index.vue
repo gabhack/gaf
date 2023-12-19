@@ -99,9 +99,16 @@
                         pagaduriaType == 'SEMBUENAVENTURA' ||
                         pagaduriaType == 'SEMPALMIRA' ||
                         pagaduriaType == 'SEMJAMUNDI' ||
+                        pagaduriaType == 'SEMCARTAGO' ||
+                        pagaduriaType == 'SEMDUITAMA' ||
+                        pagaduriaType == 'SEMGIRON' ||
+                        pagaduriaType == 'SEMCHIA' ||
+                        pagaduriaType == 'SEMARMENIA' ||
+                        pagaduriaType == 'SEMVILLAVICENCIO' ||
                         pagaduriaType == 'SEDNORTEDESANTANDER' ||
                         pagaduriaType == 'SEDCASANARE' ||
                         pagaduriaType == 'SEDCAQUETA' ||
+                        pagaduriaType == 'SEDANTIOQUIA' ||
                         pagaduriaType == 'SEDNARINO'
                     "
                 />
@@ -164,9 +171,16 @@
                             pagaduriaType == 'SEMBUENAVENTURA' ||
                             pagaduriaType == 'SEMPALMIRA' ||
                             pagaduriaType == 'SEMJAMUNDI' ||
+                            pagaduriaType == 'SEMCARTAGO' ||
+                            pagaduriaType == 'SEMDUITAMA' ||
+                            pagaduriaType == 'SEMGIRON' ||
+                            pagaduriaType == 'SEMCHIA' ||
+                            pagaduriaType == 'SEMARMENIA' ||
+                            pagaduriaType == 'SEMVILLAVICENCIO' ||
                             pagaduriaType == 'SEDNORTEDESANTANDER' ||
                             pagaduriaType == 'SEDCASANARE' ||
                             pagaduriaType == 'SEDCAQUETA' ||
+                            pagaduriaType == 'SEDANTIOQUIA' ||
                             pagaduriaType == 'SEDNARINO'
                         "
                         :disabledProspect="disabledProspect"
@@ -181,8 +195,7 @@
                     <EmbargosEmpty
                         v-if="
                             pagaduriaType == 'SEDMAGDALENA' ||
-                            pagaduriaType == 'SEMSAHAGUN' ||
-                            pagaduriaType == 'SEDBOLIVAR'
+                            pagaduriaType == 'SEMSAHAGUN'
                         "
                         :embargosempty="embargosempty"
                     />
