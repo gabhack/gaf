@@ -31,6 +31,7 @@ class CouponsController extends Controller
     {
         $doc = $request->doc;
         $couponType = $request->pagaduria;
+        $pagaduriaLabel = $request->pagaduriaLabel;
 
         $models = [
             CouponsSedAtlantico::class => 'doc',
@@ -56,19 +57,18 @@ class CouponsController extends Controller
             $className = class_basename($model);
 
             if ($className == $couponType) {
-                $results = $model::where($column, 'LIKE', '%' . $doc . '%')->get();
+                $results = array_merge($results, $model::where($column, 'LIKE', '%' . $doc . '%')->get()->toArray());
             }
         }
 
         // General coupons
         $dataGen = CouponsGen::where('doc', 'LIKE', '%' . $doc . '%')
-            ->where('pagaduria', $couponType)->get();
+            ->where(function ($query) use ($couponType, $pagaduriaLabel) {
+                $query->where('pagaduria', $couponType)
+                    ->orWhere('pagaduria', $pagaduriaLabel);
+            })->get()->toArray();
 
-        if ($dataGen) {
-            foreach ($dataGen as $item) {
-                array_push($results, $item);
-            }
-        }
+        $results = array_merge($results, $dataGen);
 
         return response()->json($results, 200);
     }

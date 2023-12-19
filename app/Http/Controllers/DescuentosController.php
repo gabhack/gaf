@@ -27,6 +27,7 @@ class DescuentosController extends Controller
     {
         $doc = $request->doc;
         $descuentoType = $request->pagaduria;
+        $pagaduriaLabel = $request->pagaduriaLabel;
 
         $models = [
             DescuentosSedAtlantico::class => 'doc',
@@ -48,19 +49,18 @@ class DescuentosController extends Controller
             $className = class_basename($model);
 
             if ($className == $descuentoType) {
-                $results = $model::where($column, 'LIKE', '%' . $doc . '%')->get();
+                $results = array_merge($results, $model::where($column, 'LIKE', '%' . $doc . '%')->get()->toArray());
             }
         }
 
         // General descuentos
         $dataGen = DescuentosGen::where('doc', 'LIKE', '%' . $doc . '%')
-            ->where('pagaduria', $descuentoType)->get();
+            ->where(function ($query) use ($descuentoType, $pagaduriaLabel) {
+                $query->where('pagaduria', $descuentoType)
+                    ->orWhere('pagaduria', $pagaduriaLabel);
+            })->get()->toArray();
 
-        if ($dataGen) {
-            foreach ($dataGen as $item) {
-                array_push($results, $item);
-            }
-        }
+        $results = array_merge($results, $dataGen);
 
         return response()->json($results, 200);
     }

@@ -82,8 +82,14 @@
                         pagaduriaType == 'SEDMETA' ||
                         pagaduriaType == 'SEDCUNDINAMARCA' ||
                         pagaduriaType == 'SEMMOSQUERA' ||
+                        pagaduriaType == 'SEMBUGA' ||
                         pagaduriaType == 'SEMNEIVA' ||
                         pagaduriaType == 'SEMFUNZA' ||
+                        pagaduriaType == 'SEMZIPAQUIRA' ||
+                        pagaduriaType == 'SEMYUMBO' ||
+                        pagaduriaType == 'SEMYOPAL' ||
+                        pagaduriaType == 'SEMVALLEDUPAR' ||
+                        pagaduriaType == 'SEDNORTEDESANTANDER' ||
                         pagaduriaType == 'SEDNARINO'
                     "
                 />
@@ -130,8 +136,13 @@
                             pagaduriaType == 'SEDMETA' ||
                             pagaduriaType == 'SEDCUNDINAMARCA' ||
                             pagaduriaType == 'SEMMOSQUERA' ||
+                            pagaduriaType == 'SEMBUGA' ||
                             pagaduriaType == 'SEMNEIVA' ||
-                            pagaduriaType == 'SEMFUNZA' ||
+                            pagaduriaType == 'SEMZIPAQUIRA' ||
+                            pagaduriaType == 'SEMYUMBO' ||
+                            pagaduriaType == 'SEMYOPAL' ||
+                            pagaduriaType == 'SEMVALLEDUPAR' ||
+                            pagaduriaType == 'SEDNORTEDESANTANDER' ||
                             pagaduriaType == 'SEDNARINO'
                         "
                         :disabledProspect="disabledProspect"
@@ -161,7 +172,9 @@
                         :descuentossemsahagun="descuentossemsahagun"
                     />
                     <DescuentosEmpty
-                        v-if="pagaduriaType == 'SEDMAGDALENA' || pagaduriaType == 'SEDBOLIVAR'"
+                        v-if="pagaduriaType == 'SEDMAGDALENA' || 
+                              pagaduriaType == 'SEDNORTEDESANTANDER' || 
+                              pagaduriaType == 'SEDBOLIVAR'"
                         :descuentosempty="descuentosempty"
                     />
                     <Descuentos v-else />
@@ -318,7 +331,7 @@ export default {
         }
     },
     computed: {
-        ...mapState('pagaduriasModule', ['coupons', 'couponsType', 'pagaduriaType']),
+        ...mapState('pagaduriasModule', ['coupons', 'couponsType', 'pagaduriaType', 'pagaduriaLabel']),
         ...mapGetters('pagaduriasModule', [
             'couponsPerPeriod',
             'valorIngreso',
@@ -459,15 +472,18 @@ export default {
             this.getDescnoap(payload);
             this.getCoupons({
                 doc: payload.doc,
-                pagaduria: this.couponsType
+                pagaduria: this.couponsType,
+                pagaduriaLabel: this.pagaduriaLabel
             });
             this.getEmbargos({
                 doc: payload.doc,
-                pagaduria: this.embargosType
+                pagaduria: this.embargosType,
+                pagaduriaLabel: this.pagaduriaLabel
             });
             this.getDescuentos({
                 doc: payload.doc,
-                pagaduria: this.descuentosType
+                pagaduria: this.descuentosType,
+                pagaduriaLabel: this.pagaduriaLabel
             });
             this.getFechaVinc(payload).then(response => {
                 this.showOthers = true;
@@ -509,7 +525,8 @@ export default {
         async getCoupons(payload) {
             const data = {
                 doc: payload.doc,
-                pagaduria: payload.pagaduria
+                pagaduria: payload.pagaduria,
+                pagaduriaLabel: payload.pagaduriaLabel
             };
 
             const response = await axios.post('/get-coupons', data);
@@ -525,7 +542,8 @@ export default {
         async getEmbargos(payload) {
             const data = {
                 doc: payload.doc,
-                pagaduria: payload.pagaduria
+                pagaduria: payload.pagaduria,
+                pagaduriaLabel: payload.pagaduriaLabel
             };
 
             const response = await axios.post('/get-embargos', data);
@@ -534,7 +552,8 @@ export default {
         async getDescuentos(payload) {
             const data = {
                 doc: payload.doc,
-                pagaduria: payload.pagaduria
+                pagaduria: payload.pagaduria,
+                pagaduriaLabel: payload.pagaduriaLabel
             };
 
             const response = await axios.post('/get-descuentos', data);
