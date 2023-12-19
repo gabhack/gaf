@@ -82,8 +82,14 @@
                         pagaduriaType == 'SEDMETA' ||
                         pagaduriaType == 'SEDCUNDINAMARCA' ||
                         pagaduriaType == 'SEMMOSQUERA' ||
+                        pagaduriaType == 'SEMBUGA' ||
                         pagaduriaType == 'SEMNEIVA' ||
                         pagaduriaType == 'SEMFUNZA' ||
+                        pagaduriaType == 'SEMZIPAQUIRA' ||
+                        pagaduriaType == 'SEMYUMBO' ||
+                        pagaduriaType == 'SEMYOPAL' ||
+                        pagaduriaType == 'SEMVALLEDUPAR' ||
+                        pagaduriaType == 'SEDNORTEDESANTANDER' ||
                         pagaduriaType == 'SEDNARINO'
                     "
                 />
@@ -130,8 +136,13 @@
                             pagaduriaType == 'SEDMETA' ||
                             pagaduriaType == 'SEDCUNDINAMARCA' ||
                             pagaduriaType == 'SEMMOSQUERA' ||
+                            pagaduriaType == 'SEMBUGA' ||
                             pagaduriaType == 'SEMNEIVA' ||
-                            pagaduriaType == 'SEMFUNZA' ||
+                            pagaduriaType == 'SEMZIPAQUIRA' ||
+                            pagaduriaType == 'SEMYUMBO' ||
+                            pagaduriaType == 'SEMYOPAL' ||
+                            pagaduriaType == 'SEMVALLEDUPAR' ||
+                            pagaduriaType == 'SEDNORTEDESANTANDER' ||
                             pagaduriaType == 'SEDNARINO'
                         "
                         :disabledProspect="disabledProspect"
@@ -161,7 +172,9 @@
                         :descuentossemsahagun="descuentossemsahagun"
                     />
                     <DescuentosEmpty
-                        v-if="pagaduriaType == 'SEDMAGDALENA' || pagaduriaType == 'SEDBOLIVAR'"
+                        v-if="pagaduriaType == 'SEDMAGDALENA' || 
+                              pagaduriaType == 'SEDNORTEDESANTANDER' || 
+                              pagaduriaType == 'SEDBOLIVAR'"
                         :descuentosempty="descuentosempty"
                     />
                     <Descuentos v-else />
