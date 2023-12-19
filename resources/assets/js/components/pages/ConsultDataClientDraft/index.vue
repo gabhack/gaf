@@ -74,6 +74,7 @@
                         pagaduriaType == 'SEMMONTERIA' ||
                         pagaduriaType == 'SEDCORDOBA' ||
                         pagaduriaType == 'SEDCALDAS' ||
+                        pagaduriaType == 'SEDBOYACA' ||
                         pagaduriaType == 'SEDBOLIVAR' ||
                         pagaduriaType == 'SEMBARRANQUILLA' ||
                         pagaduriaType == 'SEDATLANTICO' ||
@@ -82,14 +83,25 @@
                         pagaduriaType == 'SEDMETA' ||
                         pagaduriaType == 'SEDCUNDINAMARCA' ||
                         pagaduriaType == 'SEMMOSQUERA' ||
+                        pagaduriaType == 'SEMMAGANGUE' ||
                         pagaduriaType == 'SEMBUGA' ||
                         pagaduriaType == 'SEMNEIVA' ||
                         pagaduriaType == 'SEMFUNZA' ||
                         pagaduriaType == 'SEMZIPAQUIRA' ||
                         pagaduriaType == 'SEMYUMBO' ||
                         pagaduriaType == 'SEMYOPAL' ||
+                        pagaduriaType == 'SEMIPIALES' ||
                         pagaduriaType == 'SEMVALLEDUPAR' ||
+                        pagaduriaType == 'SEMURIBIA' ||
+                        pagaduriaType == 'SEMTURBO' ||
+                        pagaduriaType == 'SEMTUNJA' ||
+                        pagaduriaType == 'SEMBUCARAMANGA' ||
+                        pagaduriaType == 'SEMBUENAVENTURA' ||
+                        pagaduriaType == 'SEMPALMIRA' ||
+                        pagaduriaType == 'SEMJAMUNDI' ||
                         pagaduriaType == 'SEDNORTEDESANTANDER' ||
+                        pagaduriaType == 'SEDCASANARE' ||
+                        pagaduriaType == 'SEDCAQUETA' ||
                         pagaduriaType == 'SEDNARINO'
                     "
                 />
@@ -120,6 +132,7 @@
                             pagaduriaType == 'SEDCAUCA' ||
                             pagaduriaType == 'SEDCHOCO' ||
                             pagaduriaType == 'SEDCALDAS' ||
+                            pagaduriaType == 'SEDBOYACA' ||
                             pagaduriaType == 'SEDCORDOBA' ||
                             pagaduriaType == 'SEMQUIBDO' ||
                             pagaduriaType == 'SEMCALI' ||
@@ -136,13 +149,24 @@
                             pagaduriaType == 'SEDMETA' ||
                             pagaduriaType == 'SEDCUNDINAMARCA' ||
                             pagaduriaType == 'SEMMOSQUERA' ||
+                            pagaduriaType == 'SEMMAGANGUE' ||
                             pagaduriaType == 'SEMBUGA' ||
                             pagaduriaType == 'SEMNEIVA' ||
                             pagaduriaType == 'SEMZIPAQUIRA' ||
                             pagaduriaType == 'SEMYUMBO' ||
                             pagaduriaType == 'SEMYOPAL' ||
+                            pagaduriaType == 'SEMIPIALES' ||
                             pagaduriaType == 'SEMVALLEDUPAR' ||
+                            pagaduriaType == 'SEMURIBIA' ||
+                            pagaduriaType == 'SEMTURBO' ||
+                            pagaduriaType == 'SEMTUNJA' ||
+                            pagaduriaType == 'SEMBUCARAMANGA' ||
+                            pagaduriaType == 'SEMBUENAVENTURA' ||
+                            pagaduriaType == 'SEMPALMIRA' ||
+                            pagaduriaType == 'SEMJAMUNDI' ||
                             pagaduriaType == 'SEDNORTEDESANTANDER' ||
+                            pagaduriaType == 'SEDCASANARE' ||
+                            pagaduriaType == 'SEDCAQUETA' ||
                             pagaduriaType == 'SEDNARINO'
                         "
                         :disabledProspect="disabledProspect"
@@ -172,9 +196,7 @@
                         :descuentossemsahagun="descuentossemsahagun"
                     />
                     <DescuentosEmpty
-                        v-if="pagaduriaType == 'SEDMAGDALENA' || 
-                              pagaduriaType == 'SEDNORTEDESANTANDER' || 
-                              pagaduriaType == 'SEDBOLIVAR'"
+                        v-if="pagaduriaType == 'SEDMAGDALENA'"
                         :descuentosempty="descuentosempty"
                     />
                     <Descuentos v-else />
