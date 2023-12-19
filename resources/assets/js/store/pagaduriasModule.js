@@ -6,6 +6,7 @@ const pagaduriasModule = {
         coupons: [],
         couponsType: '',
         pagaduriaType: '',
+        pagaduriaLabel: '',
         pagaduriasTypes: [
             { label: 'FIDUPREVISORA', value: 'FIDUPREVISORA', key: 'datamesFidu' },
             { label: 'FOPEP', value: 'FOPEP', key: 'datamesFopep' },
@@ -176,6 +177,9 @@ const pagaduriasModule = {
     mutations: {
         setPagaduriaType: (state, payload) => {
             state.pagaduriaType = payload;
+        },
+        setPagaduriaLabel: (state, payload) => {
+            state.pagaduriaLabel = payload;
         },
         setCoupons: (state, payload) => {
             state.coupons = payload;

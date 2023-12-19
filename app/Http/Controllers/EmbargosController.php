@@ -29,6 +29,7 @@ class EmbargosController extends Controller
     {
         $doc = $request->doc;
         $embargoType = $request->pagaduria;
+        $pagaduriaLabel = $request->pagaduriaLabel;
 
         $models = [
             EmbargosSedCauca::class => 'doc',
@@ -51,19 +52,18 @@ class EmbargosController extends Controller
             $className = class_basename($model);
 
             if ($className == $embargoType) {
-                $results = $model::where($column, 'LIKE', '%' . $doc . '%')->get();
+                $results = array_merge($results, $model::where($column, 'LIKE', '%' . $doc . '%')->get()->toArray());
             }
         }
 
         // General embargos
         $dataGen = EmbargosGen::where('doc', 'LIKE', '%' . $doc . '%')
-            ->where('pagaduria', $embargoType)->get();
+            ->where(function ($query) use ($embargoType, $pagaduriaLabel) {
+                $query->where('pagaduria', $embargoType)
+                    ->orWhere('pagaduria', $pagaduriaLabel);
+            })->get()->toArray();
 
-        if ($dataGen) {
-            foreach ($dataGen as $item) {
-                array_push($results, $item);
-            }
-        }
+        $results = array_merge($results, $dataGen);
 
         return response()->json($results, 200);
     }
