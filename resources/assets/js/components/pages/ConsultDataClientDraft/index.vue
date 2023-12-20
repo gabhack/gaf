@@ -91,24 +91,71 @@
                         pagaduriaType == 'SEMYUMBO' ||
                         pagaduriaType == 'SEMYOPAL' ||
                         pagaduriaType == 'SEMIPIALES' ||
+                        pagaduriaType == 'SEMPIEDECUESTA' ||
                         pagaduriaType == 'SEMVALLEDUPAR' ||
                         pagaduriaType == 'SEMURIBIA' ||
                         pagaduriaType == 'SEMTURBO' ||
                         pagaduriaType == 'SEMTUNJA' ||
                         pagaduriaType == 'SEMBUCARAMANGA' ||
+                        pagaduriaType == 'SEMMANIZALES' ||
+                        pagaduriaType == 'SEMMAICAO' ||
+                        pagaduriaType == 'SEMMALAMBO' ||
+                        pagaduriaType == 'SEMPASTO' ||
                         pagaduriaType == 'SEMBUENAVENTURA' ||
                         pagaduriaType == 'SEMPALMIRA' ||
                         pagaduriaType == 'SEMJAMUNDI' ||
                         pagaduriaType == 'SEMCARTAGO' ||
                         pagaduriaType == 'SEMDUITAMA' ||
                         pagaduriaType == 'SEMGIRON' ||
+                        pagaduriaType == 'SEMGIRARDOT' ||
                         pagaduriaType == 'SEMCHIA' ||
+                        pagaduriaType == 'SEMBELLO' ||
+                        pagaduriaType == 'SEMCIENAGA' ||
+                        pagaduriaType == 'SEMCUCUTA' ||
+                        pagaduriaType == 'SEMMEDELLIN' ||
+                        pagaduriaType == 'SEMDOSQUEBRADAS' ||
+                        pagaduriaType == 'SEMCARTAGENA' ||
+                        pagaduriaType == 'SEMFUSAGAZUGA' ||
+                        pagaduriaType == 'SEMENVIGADO' ||
+                        pagaduriaType == 'SEMFACATATIVA' ||
                         pagaduriaType == 'SEMARMENIA' ||
                         pagaduriaType == 'SEMVILLAVICENCIO' ||
+                        pagaduriaType == 'SEMFLORENCIA' ||
+                        pagaduriaType == 'SEMFLORIDABLANCA' ||
                         pagaduriaType == 'SEDNORTEDESANTANDER' ||
+                        pagaduriaType == 'SEDSANTANDER' ||
+                        pagaduriaType == 'SEMGUAINIA' ||
+                        pagaduriaType == 'SEMIBAGUE' ||
+                        pagaduriaType == 'SEMLORICA' ||
                         pagaduriaType == 'SEDCASANARE' ||
+                        pagaduriaType == 'SEMPEREIRA' ||
+                        pagaduriaType == 'SEMITAGUI' ||
+                        pagaduriaType == 'SEMAPARTADO' ||
+                        pagaduriaType == 'SEMBARRANCABERMEJA' ||
+                        pagaduriaType == 'SEMPITALITO' ||
+                        pagaduriaType == 'SEMRIOHACHA' ||
+                        pagaduriaType == 'SEMRIONEGRO' ||
+                        pagaduriaType == 'SEMTULUA' ||
+                        pagaduriaType == 'SEMTUMACO' ||
+                        pagaduriaType == 'SEMSABANETA' ||
+                        pagaduriaType == 'SEMSAN' ||
+                        pagaduriaType == 'SEMSOACHA' ||
+                        pagaduriaType == 'SEMSOGAMOSO' ||
+                        pagaduriaType == 'SEMSOLEDAD' ||
                         pagaduriaType == 'SEDCAQUETA' ||
                         pagaduriaType == 'SEDANTIOQUIA' ||
+                        pagaduriaType == 'SEDARAUCA' ||
+                        pagaduriaType == 'SEDPUTUMAYO' ||
+                        pagaduriaType == 'SEDQUINDIO' ||
+                        pagaduriaType == 'SEDSINCELEJO' ||
+                        pagaduriaType == 'SEDSUCRE' ||
+                        pagaduriaType == 'SEDCESAR' ||
+                        pagaduriaType == 'SEDAMAZONAS' ||
+                        pagaduriaType == 'SEDTOLIMA' ||
+                        pagaduriaType == 'SEDVAUPES' ||
+                        pagaduriaType == 'SEDVICHADA' ||
+                        pagaduriaType == 'SEDGUAJIRA' ||
+                        pagaduriaType == 'SEDGUAVIARE' ||
                         pagaduriaType == 'SEDNARINO'
                     "
                 />
@@ -151,6 +198,7 @@
                             pagaduriaType == 'SEDBOLIVAR' ||
                             pagaduriaType == 'SEMPOPAYAN' ||
                             pagaduriaType == 'FOPEP' ||
+                            pagaduriaType == 'SEMMEDELLIN' ||
                             pagaduriaType == 'SEDHUILA' ||
                             pagaduriaType == 'SEDRISARALDA' ||
                             pagaduriaType == 'SEDMETA' ||
@@ -162,25 +210,72 @@
                             pagaduriaType == 'SEMZIPAQUIRA' ||
                             pagaduriaType == 'SEMYUMBO' ||
                             pagaduriaType == 'SEMYOPAL' ||
+                            pagaduriaType == 'SEMFLORENCIA' ||
+                            pagaduriaType == 'SEMFLORIDABLANCA' ||
                             pagaduriaType == 'SEMIPIALES' ||
                             pagaduriaType == 'SEMVALLEDUPAR' ||
                             pagaduriaType == 'SEMURIBIA' ||
                             pagaduriaType == 'SEMTURBO' ||
                             pagaduriaType == 'SEMTUNJA' ||
                             pagaduriaType == 'SEMBUCARAMANGA' ||
+                            pagaduriaType == 'SEMMANIZALES' ||
+                            pagaduriaType == 'SEMMAICAO' ||
+                            pagaduriaType == 'SEMMALAMBO' ||
+                            pagaduriaType == 'SEMPASTO' ||
                             pagaduriaType == 'SEMBUENAVENTURA' ||
                             pagaduriaType == 'SEMPALMIRA' ||
                             pagaduriaType == 'SEMJAMUNDI' ||
+                            pagaduriaType == 'SEMFUSAGAZUGA' ||
                             pagaduriaType == 'SEMCARTAGO' ||
                             pagaduriaType == 'SEMDUITAMA' ||
+                            pagaduriaType == 'SEMFUNZA' ||
                             pagaduriaType == 'SEMGIRON' ||
+                            pagaduriaType == 'SEMPIEDECUESTA' ||
+                            pagaduriaType == 'SEMPEREIRA' ||
+                            pagaduriaType == 'SEMGIRARDOT' ||
+                            pagaduriaType == 'SEMGUAINIA' ||
+                            pagaduriaType == 'SEMLORICA' ||
+                            pagaduriaType == 'SEMIBAGUE' ||
                             pagaduriaType == 'SEMCHIA' ||
+                            pagaduriaType == 'SEMITAGUI' ||
+                            pagaduriaType == 'SEMAPARTADO' ||
+                            pagaduriaType == 'SEMBARRANCABERMEJA' ||
+                            pagaduriaType == 'SEMPITALITO' ||
+                            pagaduriaType == 'SEMRIOHACHA' ||
+                            pagaduriaType == 'SEMRIONEGRO' ||
+                            pagaduriaType == 'SEMTULUA' ||
+                            pagaduriaType == 'SEMTUMACO' ||
+                            pagaduriaType == 'SEMSABANETA' ||
+                            pagaduriaType == 'SEMSAN' ||
+                            pagaduriaType == 'SEMSOACHA' ||
+                            pagaduriaType == 'SEMSOGAMOSO' ||
+                            pagaduriaType == 'SEMSOLEDAD' ||
+                            pagaduriaType == 'SEMBELLO' ||
+                            pagaduriaType == 'SEMCIENAGA' ||
+                            pagaduriaType == 'SEMCARTAGENA' ||
                             pagaduriaType == 'SEMARMENIA' ||
                             pagaduriaType == 'SEMVILLAVICENCIO' ||
+                            pagaduriaType == 'SEMCUCUTA' ||
+                            pagaduriaType == 'SEMDOSQUEBRADAS' ||
+                            pagaduriaType == 'SEMENVIGADO' ||
+                            pagaduriaType == 'SEMFACATATIVA' ||
                             pagaduriaType == 'SEDNORTEDESANTANDER' ||
+                            pagaduriaType == 'SEDSANTANDER' ||
                             pagaduriaType == 'SEDCASANARE' ||
                             pagaduriaType == 'SEDCAQUETA' ||
                             pagaduriaType == 'SEDANTIOQUIA' ||
+                            pagaduriaType == 'SEDARAUCA' ||
+                            pagaduriaType == 'SEDPUTUMAYO' ||
+                            pagaduriaType == 'SEDQUINDIO' ||
+                            pagaduriaType == 'SEDSINCELEJO' ||
+                            pagaduriaType == 'SEDSUCRE' ||
+                            pagaduriaType == 'SEDCESAR' ||
+                            pagaduriaType == 'SEDAMAZONAS' ||
+                            pagaduriaType == 'SEDTOLIMA' ||
+                            pagaduriaType == 'SEDVAUPES' ||
+                            pagaduriaType == 'SEDVICHADA' ||
+                            pagaduriaType == 'SEDGUAJIRA' ||
+                            pagaduriaType == 'SEDGUAVIARE' ||
                             pagaduriaType == 'SEDNARINO'
                         "
                         :disabledProspect="disabledProspect"
