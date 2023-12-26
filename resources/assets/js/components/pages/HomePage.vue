@@ -91,7 +91,7 @@
             </div>
         </section>
         <section class="container subscriptions py-5">
-            <div>
+            <!-- <div>
                 <div>
                     <b-card no-body>
                         <b-tabs tabs justified vertical>
@@ -301,14 +301,19 @@
                         </b-tabs>
                     </b-card>
                 </div>
-            </div>
+            </div> -->
             <div class="accordion" role="tablist">
                 <b-card no-body class="">
                     <b-card-header header-tag="header" class="p-1" role="tab">
-                        <b-button class="button-select" block v-b-toggle.accordion-1>
+                        <b-button class="button-select" style="border-top: none !important;" block v-b-toggle.accordion-1>
                             <div class="d-flex align-items-center justify-content-right">
-                                <span class="p-2"> Historia GAF </span>
+                                <span class="p-2 text-right" style="min-width: 161px;"> Historia GAF </span>
                                 <img src="/img/quienesomos.png" class="img-fluid w-10 cont-img" />
+                                <!-- <div class="d-flex justify-content-end hola" style="width: 100%;">
+                                    <img src="/img/quienesomos.png" class="img-fluid w-10 cont-img" />
+                                </div> -->
+                                <!-- <FacebookIcon /> -->
+                                <!-- <InstagramIcon /> -->
                             </div>
                         </b-button>
                     </b-card-header>
@@ -375,9 +380,9 @@
 
                 <b-card no-body class="">
                     <b-card-header header-tag="header" class="p-1" role="tab">
-                        <b-button class="button-select" block v-b-toggle.accordion-2>
+                        <b-button class="button-select" style="border-top: none;" block v-b-toggle.accordion-2>
                             <div class="d-flex align-items-center justify-content-right">
-                                <span class="p-2"> ¿Quiénes Somos? </span>
+                                <span class="p-2 text-right" style="min-width: 161px;"> ¿Quiénes Somos? </span>
                                 <img src="/img/quienesomos.png" class="img-fluid w-10 cont-img" />
                             </div>
                         </b-button>
@@ -452,9 +457,9 @@
 
                 <b-card no-body class="">
                     <b-card-header header-tag="header" class="p-1" role="tab">
-                        <b-button class="button-select" block v-b-toggle.accordion-3>
+                        <b-button class="button-select" style="border-top: none;" block v-b-toggle.accordion-3>
                             <div class="d-flex align-items-center justify-content-right">
-                                <span class="p-2"> ¿Donde Estamos? </span>
+                                <span class="p-2 text-right" style="min-width: 161px;"> ¿Donde Estamos? </span>
                                 <img src="/img/quienesomos.png" class="img-fluid w-10 cont-img" />
                             </div>
                         </b-button>
@@ -492,9 +497,9 @@
 
                 <b-card no-body class="">
                     <b-card-header header-tag="header" class="p-1" role="tab">
-                        <b-button class="button-select" block v-b-toggle.accordion-4>
+                        <b-button class="button-select" style="border-top: none;" block v-b-toggle.accordion-4>
                             <div class="d-flex align-items-center justify-content-right">
-                                <span class="p-2"> Nuestros Valores </span>
+                                <span class="p-2 text-right" style="min-width: 161px;"> Nuestros Valores </span>
                                 <img src="/img/quienesomos.png" class="img-fluid w-10 cont-img" />
                             </div>
                         </b-button>
@@ -571,9 +576,9 @@
 
                 <b-card no-body class="">
                     <b-card-header header-tag="header" class="p-1" role="tab">
-                        <b-button class="button-select" block v-b-toggle.accordion-5>
+                        <b-button class="button-select" style="border-top: none;" block v-b-toggle.accordion-5>
                             <div class="d-flex align-items-center justify-content-right">
-                                <span class="p-2"> Target </span>
+                                <span class="p-2 text-right" style="min-width: 161px;"> Target </span>
                                 <img src="/img/quienesomos.png" class="img-fluid w-10 cont-img" />
                             </div>
                         </b-button>
@@ -652,9 +657,9 @@
 
                 <b-card no-body class="">
                     <b-card-header header-tag="header" class="p-1" role="tab">
-                        <b-button class="button-select" block v-b-toggle.accordion-6>
+                        <b-button class="button-select" style="border-bottom: none !important; border-top: none !important;" block v-b-toggle.accordion-6>
                             <div class="d-flex align-items-center justify-content-right">
-                                <span class="p-2"> Sostenibilidad </span>
+                                <span class="p-2 text-right" style="min-width: 161px;"> Sostenibilidad </span>
                                 <img src="/img/quienesomos.png" class="img-fluid w-10 cont-img" />
                             </div>
                         </b-button>
@@ -1300,5 +1305,13 @@ export default {
     border-bottom: 2px solid #d3d3d3;
     border-left: none;
     border-right: none;
+}
+
+.collapse.show + .hola{
+    background-color: red;
+}
+
+.collapse + .hola{
+    background-color: blue;
 }
 </style>
