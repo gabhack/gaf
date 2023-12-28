@@ -69,7 +69,7 @@ const pagaduriasModule = {
             { label: 'SEM IPIALES', value: 'SEMIPIALES', key: 'SEM IPIALES' },
             { label: 'SEM JAMUNDI', value: 'SEMJAMUNDI', key: 'SEM JAMUNDI' },
             { label: 'SEM MAGANGUE', value: 'SEMMAGANGUE', key: 'SEM MAGANGUE' },
-            { label: 'SEM MONTERIA', value: 'SEMMONTERIA', key: 'SEM MONTERIA' && 'datamesSemMonteria' },
+            { label: 'SEM MONTERIA', value: 'SEMMONTERIA', key: 'SEM MONTERIA' &&   'datamesSemMonteria'},
             { label: 'SEM NEIVA', value: 'SEMNEIVA', key: 'SEM NEIVA' && 'neiva' },
             { label: 'SEM PALMIRA', value: 'SEMPALMIRA', key: 'SEM PALMIRA' },
             { label: 'SEM GUAINIA', value: 'SEMGUAINIA', key: 'SEM GUAINIA' },
