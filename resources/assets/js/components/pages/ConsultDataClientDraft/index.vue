@@ -68,8 +68,13 @@
                 ===================================-->
                 <DatamesData
                     v-if="
+                        pagaduriaType == 'SEDCHOCO' ||
+                        pagaduriaType == 'SEDVALLE' ||
                         pagaduriaType == 'SEDCAUCA' ||
+                        pagaduriaType == 'SEMSAHAGUN' ||
+                        pagaduriaType == 'SEMCALI' ||
                         pagaduriaType == 'SEMQUIBDO' ||
+                        pagaduriaType == 'SEDMAGDALENA' ||
                         pagaduriaType == 'SEMPOPAYAN' ||
                         pagaduriaType == 'SEMMONTERIA' ||
                         pagaduriaType == 'SEDCORDOBA' ||
@@ -289,8 +294,7 @@
 
                     <EmbargosEmpty
                         v-if="
-                            pagaduriaType == 'SEDMAGDALENA' ||
-                            pagaduriaType == 'SEMSAHAGUN'
+                            pagaduriaType == 'SED' 
                         "
                         :embargosempty="embargosempty"
                     />
@@ -299,12 +303,12 @@
                     <!--===================================
                             LIQUIDACIONES
                     ========================================-->
-                    <Descuentossemsahagun
+                    <!-- <Descuentossemsahagun
                         v-if="pagaduriaType == 'SEMSAHAGUN'"
                         :descuentossemsahagun="descuentossemsahagun"
-                    />
+                    /> -->
                     <DescuentosEmpty
-                        v-if="pagaduriaType == 'SEDMAGDALENA'"
+                        v-if="pagaduriaType == 'SED'"
                         :descuentosempty="descuentosempty"
                     />
                     <Descuentos v-else />

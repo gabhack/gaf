@@ -8,12 +8,11 @@
 
         <div class="icons-desktop">
           <b-button variant="black-pearl" class="mr-2" href="/welcome">
-            <span>Personas</span>
-            <PersonsIcon />
+            Sobre GAF<PersonsIcon />
           </b-button>
           <b-dropdown variant="spring-green">
             <template #button-content>
-              Empresas
+              Servicios
               <CompaniesIcon />
             </template>
             <b-dropdown-item href="/amipersonas">Ami</b-dropdown-item>
@@ -22,11 +21,9 @@
         </div>
 
         <div class="icons-responsie">
-          <b-button variant="black-pearl" class="mr-2" href="/welcome">
-            <PersonsIcon />
-          </b-button>
           <b-dropdown variant="spring-green">
             <template #button-content>
+              Servicios
               <CompaniesIcon />
             </template>
             <b-dropdown-item href="/amipersonas">Ami</b-dropdown-item>
@@ -36,7 +33,7 @@
 
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
-        <div class="popup-res">
+        <!-- <div class="popup-res">
           <b-button v-b-modal.modal-1>Asesoria</b-button>
 
           <b-modal id="modal-1">
@@ -52,7 +49,7 @@
               </div>
             </div>
           </b-modal>
-        </div>
+        </div> -->
 
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav class="ml-auto">
@@ -61,12 +58,12 @@
                 {{ link.label }}
               </b-nav-item>
             </template>
-            <b-nav-item-dropdown text="Menu" right>
-              <b-dropdown-item href="#">EN</b-dropdown-item>
-              <b-dropdown-item href="#">ES</b-dropdown-item>
-              <b-dropdown-item href="#">RU</b-dropdown-item>
-              <b-dropdown-item href="#">FA</b-dropdown-item>
-            </b-nav-item-dropdown>
+            <!-- <b-nav-item-dropdown text="Menu" right>
+              <b-dropdown-item href="/login">Ingreso</b-dropdown-item>
+              <b-dropdown-item href="/amipersonas">AMI</b-dropdown-item>
+              <b-dropdown-item href="/hego">HEGO</b-dropdown-item>
+              <b-dropdown-item href="#">Politicas</b-dropdown-item>
+            </b-nav-item-dropdown> -->
           </b-navbar-nav>
         </b-collapse>
 
@@ -88,9 +85,16 @@ import { CompaniesIcon, PersonsIcon } from './icons';
 export default {
   data() {
     return {
+      menuLinksRes: [
+        { label: 'Ingreso', url: '/login' },
+        { label: 'Politicas', url: '/login' },
+        { label: 'AMI', url: '/amipersonas' },
+        { label: 'HEGO', url: '/hego' }
+      ],
       menuLinks: [
-        { label: 'Regístrate', url: '/' },
-        { label: 'Ingreso', url: '/login' }
+        { label: 'Contacto', url: '#' },
+        { label: 'Politicas', url: '/login' },
+        { label: 'Ingreso', url: '/login' },
       ]
     };
   },
