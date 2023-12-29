@@ -8,7 +8,7 @@
                 <div class="offset-1 col-lg-4 col-sm-12 d-flex align-items-center marg-resp">
                     <div class="pr-md-5 res-center">
                         <p class="text-big font-weight-bold">GAF "Gestor y Administrador Financiero"</p>
-                        <p class="p-text2">
+                        <p class="p-text2" style="margin-bottom: 32px;">
                             Diseñamos soluciones tecnológicas a medida para impulsar el crecimiento económico de las
                             empresas en Colombia, ofreciendo innovación estratégica y resultados tangibles que potencian
                             su éxito a largo plazo.
@@ -858,7 +858,7 @@
                 </b-card>
             </div>
         </section>
-        <section class="container subscriptions py-5 px-2 img-responsive">
+        <section class="container subscriptions pb-5 px-2 img-responsive">
             <div class="accordion" role="tablist">
                 <b-card no-body class="card-buttom">
                     <b-card-header header-tag="header" class="p-1" role="tab">
@@ -1219,8 +1219,8 @@
                                                         >
                                                             <img src="/img/target1.png" style="width: 106px" />
                                                         </div>
-                                                        <div class="col-8 pr-0">
-                                                            <p class="text-justify my-1 ml-1" style="line-height: 1.3">
+                                                        <div class="col-8 pr-0 d-flex align-items-center">
+                                                            <p class="my-1 ml-1" style="line-height: 1.3; font-size: 12px;">
                                                                 <b>Principales:</b><br />-Fondos De Capital Privado.<br />-Originadores
                                                                 de Créditos.
                                                             </p>
@@ -1234,8 +1234,8 @@
                                                         >
                                                             <img src="/img/target2.png" style="width: 106px" />
                                                         </div>
-                                                        <div class="col-8 pr-0">
-                                                            <p class="text-justify my-1 ml-1" style="line-height: 1.3">
+                                                        <div class="col-8 pr-0 d-flex align-items-center">
+                                                            <p class="my-1 ml-1" style="line-height: 1.3; font-size: 12px;">
                                                                 <b>Otros:</b><br />-Gestor De Activos Alternativos.<br />-Agencias
                                                                 De Cobranza.
                                                             </p>
@@ -1296,7 +1296,7 @@
                             >
                                 <div class="line"></div>
                                 <img src="/img/sostenibilidad.png" class="img-fluid w-10 cont-imgres" />
-                                <span class="p-2 text-left" style="min-width: 100px"> ¿Quiénes somos? </span>
+                                <span class="p-2 text-left" style="min-width: 100px"> Sostenibilidad </span>
                             </div>
                         </b-button>
                     </b-card-header>
@@ -1309,7 +1309,7 @@
                                             class="col-12 text-center icon-int d-flex align-items-center justify-content-left"
                                         >
                                             <div class="text-center d-flex align-items-center justify-content-center">
-                                                <img src="/img/sostenibilidadactive.png" class="img-fluid w-25" />
+                                                <img src="/img/sostenibilidadactive.png" class="img-fluid w-25" style="margin-left: 40px;" />
                                                 <div style="padding-top: 10px" class="pl-3">
                                                     <h3><b>Sostenibilidad</b></h3>
                                                 </div>
@@ -1347,6 +1347,7 @@
                                                             <b-card-header header-tag="header" class="p-1" role="tab">
                                                                 <b-button
                                                                     class="button-sostenibilidad"
+                                                                    style="font-size: 12px;"
                                                                     block
                                                                     v-b-toggle.accordion-7
                                                                     >Seguridad, Gobernanza y Cumplimiento: Pilares de
@@ -1473,6 +1474,7 @@
                                                             <b-card-header header-tag="header" class="p-1" role="tab">
                                                                 <b-button
                                                                     class="button-sostenibilidad"
+                                                                    style="font-size: 12px;"
                                                                     block
                                                                     v-b-toggle.accordion-8
                                                                     >Personas, Innovación Social y Comunidades: Forjando
@@ -1603,6 +1605,7 @@
                                                             <b-card-header header-tag="header" class="p-1" role="tab">
                                                                 <b-button
                                                                     class="button-sostenibilidad"
+                                                                    style="font-size: 12px;"
                                                                     block
                                                                     v-b-toggle.accordion-9
                                                                     >Cambio Climático y Huella Ambiental: GAF
