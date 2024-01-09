@@ -10,7 +10,8 @@ body {
   font-size: 150px;
   line-height: 1em;
   text-align: center;
-  letter-spacing: 0.15em;
+  color: rgb(9, 186, 139);
+  // letter-spacing: 0.15em;
 }
 
 .col-icons {
@@ -19,7 +20,7 @@ body {
   .icon-line {
     padding: 20px;
     margin: 5px;
-    border-bottom: 2px solid $spring-green;
+    border-bottom: 2px solid rgb(9, 186, 139);
   }
 
   .text-line {
@@ -58,7 +59,6 @@ body {
   &-bottom {
     font-size: 110px;
     line-height: 1;
-    letter-spacing: -0.095em;
   }
 }
 
@@ -106,7 +106,6 @@ body {
   .text-ami-bottom {
     font-size: 54px;
     line-height: 1;
-    letter-spacing: -0.095em;
   }
   .text-final1 {
     font-size: 23px;
@@ -141,4 +140,19 @@ body {
 }
 .img-sec4 {
   display: none;
+}
+.title{
+  color: #056e52;
+}
+.subtitle{
+  color: rgb(9, 186, 139);
+}
+.degradado{
+  background: linear-gradient(90deg, #11484b, #0cedb0, #11484b, #0cedb0);
+  -webkit-background-clip: text;
+  color: transparent;  
+}
+.text1{
+  max-width: 540px; 
+  text-align: justify;
 }

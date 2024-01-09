@@ -3,7 +3,7 @@
     <b-navbar toggleable="lg" type="light" variant="white" class="py-3x px-5x">
       <div class="container">
         <b-navbar-brand href="/welcome" class="mr-5">
-          <img src="/img/logo-gaf.svg" alt="Logo GAF" width="60px" />
+          <img src="/img/logocolor.png" alt="Logo GAF" width="150px" />
         </b-navbar-brand>
 
         <div class="icons-desktop">
@@ -15,8 +15,8 @@
               Servicios
               <CompaniesIcon />
             </template>
-            <b-dropdown-item href="/amipersonas">Ami</b-dropdown-item>
-            <b-dropdown-item href="/hego">Hego</b-dropdown-item>
+            <b-dropdown-item href="/amipersonas"><strong>AMI</strong> "Analisis de Mercado Inteligente"</b-dropdown-item>
+            <b-dropdown-item href="/hego"><strong>HEGO</strong> "Herramienta Ejecutora de <br/> Gestiones Operativas y Comerciales"</b-dropdown-item>
           </b-dropdown>
         </div>
 
