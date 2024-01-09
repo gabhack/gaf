@@ -17,7 +17,7 @@ body {
 }
 
 .p-sec3 {
-  margin-top: -10px;
+  // margin-top: -10px;
 }
 
 .secure-text {
@@ -26,7 +26,7 @@ body {
 
 .text-sec3 {
   font-size: 43px;
-  margin-top: -35px;
+  // margin-top: -35px;
   font-weight: 900;
 }
 
@@ -71,8 +71,8 @@ body {
     margin-bottom: -35px;
   }
   .text-p-h {
+    max-width: 540px; 
     text-align: justify;
-    padding: 5px 40px;
   }
   .btn-more {
     max-width: 195px;
@@ -90,4 +90,38 @@ body {
 }
 .doc-desk {
   display: block;
+}
+.title{
+  color: #056e52;
+}
+.subtitle{
+  color: rgb(9, 186, 139);
+}
+.degradado{
+  background: linear-gradient(90deg, #11484b, #0cedb0, #11484b, #0cedb0);
+  -webkit-background-clip: text;
+  color: transparent;  
+}
+.img-responsive{
+  width: 45%;
+
+  @media screen and (max-width: 800px){
+    width: 100%;
+  }
+}
+
+.responsive1{
+  height: 100vh;
+  scroll-snap-align: start;
+
+  @media screen and (max-width: 800px){
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+.text1{
+  max-width: 540px; 
+  text-align: justify;
 }

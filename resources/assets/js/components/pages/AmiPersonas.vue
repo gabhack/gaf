@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <section class="container-fluid mb-5">
-      <div class="row">
+  <div style="height: 83vh; scroll-snap-type: y mandatory; overflow-y: scroll;">
+    <section class="container-fluid" style=" scroll-snap-align: start;">
+      <div class="row" style="height: 88vh;">
         <div
           class="
             col-12
@@ -13,23 +13,21 @@
         >
           <div>
             <h1
-              class="font-weight-bold text-spring-green text-big-personas mb-0"
+              class="font-weight-bold text-big-personas mb-0"
             >
               AMI
             </h1>
-            <p class="text-ami font-weight-bold">
-              <span class="text-spring-green">Analisis </span>
-              de Mercado
-              <span class="text-spring-green">Inteligente</span>
+            <p class="text-ami font-weight-bold text-black-pearl">
+              Análisis de Mercado Inteligente
             </p>
           </div>
         </div>
-        <div class="col-lg-6 col-sm-12 pt-5">
+        <!-- <div class="col-lg-6 col-sm-12 pt-5">
           <img src="/img/amipersonas1.svg" class="img-fluid w-100" />
-        </div>
+        </div> -->
         <div
           class="
-            col-6
+            col-12
             d-flex
             align-items-center
             justify-content-center
@@ -38,20 +36,21 @@
         >
           <div>
             <h1
-              class="font-weight-bold text-spring-green text-big-personas mb-0"
+              class="font-weight-bold text-big-personas mb-0"
             >
               AMI
             </h1>
             <p class="text-ami font-weight-bold">
-              <span class="text-spring-green">Analisis </span>
+              <!-- <span class="text-spring-green">Análisis </span>
               de Mercado
-              <span class="text-spring-green">Inteligente</span>
+              <span class="text-spring-green">Inteligente</span> -->
+              Análisis de Mercado Inteligente
             </p>
           </div>
         </div>
       </div>
     </section>
-    <section class="container-fluid mb-5">
+    <section class="container-fluid" style="padding-top: 50px;height: 80vh; scroll-snap-align: center;">
       <div class="row">
         <div
           class="
@@ -62,26 +61,23 @@
           "
         >
           <div class="text-center">
-            <p class="text-spacing mb-0">CON NUESTRO SISTEMA</p>
+            <p class="text-spacing mb-0">CON NUESTRO SISTEMA DE</p>
             <p class="text-medium font-weight-bold">
-              <span class="text-spring-green">Analisis para </span>
-              <span class="text-black-pearl">aprobación de crédito</span>
+              <span class="subtitle">Análisis Para Aprobación De Crédito</span>
             </p>
-            <p class="texts-p">
-              JAMAS VOLVERAS APROBAR TUS CREDITOS COMO ANTES, con nuestro
-              sistema<br />
-              inteligente podrás mejorar tus resultados, optimizar tiempos de
-              respuesta,<br />
-              garantizar la vida de tu cartera. Recuerda que AMI elimina hasta
-              en un 90%<br />
-              los errores operativos
+            <p class="text1">
+              Experimentarás una transformación notable en la manera en que gestionas
+              tus créditos. Nunca mas enfrentarás los desafios previos a la aprobación,
+              ya que nuestro sistema inteligente te permite mejorar tus resultados
+              significativamente. La optimización de los tiempos de respuesta es una de 
+              las características clave, asegurando eficiencia y agilidad en el proceso.
             </p>
             <b-button
               variant="black"
               class="btn-more font-weight-bold"
               href="/moreinformation"
             >
-              Más Información
+              ¡Más Información!
             </b-button>
           </div>
         </div>
@@ -90,9 +86,9 @@
         </div>
       </div>
     </section>
-    <section class="container-fluid mb-5">
+    <section class="container-fluid" style="height: 90vh; scroll-snap-align: start;">
       <div class="row">
-        <div class="col-5 img-sec3">
+        <div class="col-5 img-sec3 pl-0">
           <img src="/img/amipersonas2.svg" class="img-fluid w-100" />
         </div>
         <div
@@ -104,27 +100,23 @@
           "
         >
           <div class="text-center">
-            <p class="text-spacing mb-0">CON NUESTRO PROCESO</p>
+            <p class="text-spacing mb-0">CON NUESTRO PROCESO DE</p>
             <p class="text-medium font-weight-bold">
-              <span class="text-spring-green mb-5">Recuperación </span>
-              de cartera
+              <span class="subtitle mb-5">Recuperación De Cartera</span>
             </p>
-            <p class="texts-p">
-              ¡Tu cartera al día! controla tu cartera las 24 horas del día y los
-              7 días de la <br />semana,sabemos lo importante que es para ti por
-              eso diseñamos nuestra<br />
-              herramienta mejorando los procesos y rediseñando las estrategias
-              de<br />
-              cobranza, Ya no es necesario esperar al cierre de mes para tomar
-              decisiones o<br />
-              prevenir las situaciones que afectan el desarrollo de tu cartera.
+            <p class="text1">
+              Mantén tu activo bajo control y monitoreo constante las 24 horas
+              y los 7 días de la semana. Nuestra intervención mediante un sistema 
+              inteligente agilizará la normalización de tu activo, especialmente
+              en etapas tempranas de morosidad. No esperes llegar al DEFAULT;
+              mitiga los riesgos desde su nacimiento.
             </p>
             <b-button
               variant="black"
               class="btn-more font-weight-bold"
               href="/moreinformation"
             >
-              Más Información
+            ¡Más Información!
             </b-button>
           </div>
         </div>
@@ -136,37 +128,38 @@
     <section class="container-fluid bg-black-pearl py-4">
       <div class="row">
         <div class="col-12 text-center">
-          <p class="text-white text-uppercase text-spacing mb-0">
-            Descubre
-            <span class="text-spring-green font-weight-bold">
+          <p class="text-white text-uppercase text-spacing mb-0" style=" scroll-snap-align: start;">
+            ¡Descubre
+            <span class="subtitle font-weight-bold">
               nuevos clientes
             </span>
-            con nuestro sistema de
+            con nuestro servicio!
           </p>
         </div>
       </div>
     </section>
-    <section class="container my-5">
+    <section class="container mt-4" style="height: 100vh;">
       <div class="row mb-5">
-        <div class="col-12 text-center">
+        <div class="col-12 text-center align-items-center justify-content-center" style="display: grid;">
           <p class="text-medium font-weight-bold mb-0">
-            <span class="text-spring-green">Prospección</span>
-            <span>de Mercado</span>
+            <span class="degradado">Prospección De Mercado</span>
           </p>
-          <p class="texts-p">
+          <p class="text1">
             Conocemos millones de clientes nuevos para ti, de acuerdo a tu
-            política de crédito<br />
+            política de créditos
             analizaremos los requerimientos del mercado y diseñamos la mejor
-            estrategia de venta.<br />
+            estrategia de venta.
             Podrás desarrollar diferentes estrategias como:
           </p>
-          <b-button
-            variant="spring-green"
-            class="btn-more font-weight-bold"
-            href="/moreinformation"
-          >
-            Más Información
-          </b-button>
+          <div class="d-flex justify-content-center">
+            <b-button
+              class="btn-more font-weight-bold"
+              href="/moreinformation"
+              style="background: rgb(9, 186, 139); border: none;"
+            >
+              ¡Más Información!
+            </b-button>
+          </div>
         </div>
       </div>
       <div class="row">
@@ -174,37 +167,37 @@
           <img src="/img/IconoAmi1.png" class="img-fluid w-40 icon-line" />
           <p class="font-weight-bold text-line mb-0">
             ESTRATEGIA DE <br />
-            <span class="text-spring-green">
+            <span class="subtitle">
               PENETRACIÓN DE <br />MERCADO
             </span>
           </p>
         </div>
         <div class="col-lg-3 col-sm-12 col-icons">
-          <img src="/img/IconoAmi2.png" class="img-fluid w-40 icon-line" />
+          <img src="/img/IconoAmi2.png" class="img-fluid icon-line" style="width: 122px; height: 128px;" />
           <p class="font-weight-bold text-line mb-0">
             ESTRATEGIA DE <br />
-            <span class="text-spring-green"> DESARROLLO DE <br />MERCADO </span>
+            <span class="subtitle"> DESARROLLO DE <br />MERCADO </span>
           </p>
         </div>
         <div class="col-lg-3 col-sm-12 col-icons">
-          <img src="/img/IconoAmi3.png" class="img-fluid w-40 icon-line" />
+          <img src="/img/IconoAmi3.png" class="img-fluid icon-line" style="width: 122px; height: 128px;" />
           <p class="font-weight-bold text-line mb-0">
             ESTRATEGIA DE <br />
-            <span class="text-spring-green">
+            <span class="subtitle">
               DESARROLLO DE <br />PRODUCTO
             </span>
           </p>
         </div>
         <div class="col-lg-3 col-sm-12 col-icons">
-          <img src="/img/IconoAmi4.png" class="img-fluid w-40 icon-line" />
+          <img src="/img/IconoAmi4.png" class="img-fluid icon-line" style="width: 122px; height: 128px;" />
           <p class="font-weight-bold text-line mb-0">
             ESTRATEGIA DE <br />
-            <span class="text-spring-green"> DIVERSIFICACIÓN </span>
+            <span class="subtitle"> DIVERSIFICACIÓN </span>
           </p>
         </div>
       </div>
     </section>
-    <section class="container-fluid">
+    <section class="container-fluid" style="height: 90vh; scroll-snap-align: start;">
       <div class="row">
         <div
           class="
@@ -218,13 +211,13 @@
             <p class="text-black-pearl font-weight-bold mb-0">
               <span class="text-cursi font-weight-normal desk">con</span>
               <span class="text-cursi font-weight-normal respo">con<br /></span>
-              <span class="text-spring-green black-pearl text-ami-bottom">
-                A <span class="text-black-pearl">M</span> I
+              <span class="text-ami-bottom subtitle">
+                AMI
               </span>
               <br />
               <span class="text-black text-final1">
-                siempre darás <br />
-                <span class="text-spring-green text-final2">EN EL BLANCO</span>
+                Siempre Darás <br />
+                <span class="text-final2 degradado">¡EN EL BLANCO!</span>
               </span>
             </p>
           </div>

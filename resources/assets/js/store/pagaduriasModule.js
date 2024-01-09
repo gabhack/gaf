@@ -78,7 +78,7 @@ const pagaduriasModule = {
             { label: 'SEM PEREIRA', value: 'SEMPEREIRA', key: 'SEM PEREIRA' },
             { label: 'SEM MEDELLIN', value: 'SEMMEDELLIN', key: 'SEM MEDELLIN' },
             { label: 'SEM MANIZALES', value: 'SEMMANIZALES', key: 'SEM MANIZALES' },
-            { label: 'SEM PASTO', value: 'SEMPASTO', key: 'SEM PASTO' },
+            { label: 'SEM PASTO', value: 'SEMPASTO', key: 'SEM PASTO' && 'datamesSemPasto' && 'pasto' },
             { label: 'SEM MAICAO', value: 'SEMMAICAO', key: 'SEM MAICAO' },
             { label: 'SEM MALAMBO', value: 'SEMMALAMBO', key: 'SEM MALAMBO' },
             { label: 'SEM POPAYAN', value: 'SEMPOPAYAN', key: 'SEM POPAYAN' && 'datamesSemPopayan' },

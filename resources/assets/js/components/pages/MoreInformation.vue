@@ -7,14 +7,10 @@
             <h2 class="text-ami text-spring-green font-weight-bold">
               ¿Qué <span class="text-black-pearl">es?</span>
             </h2>
-            <p class="text-sec">
-              Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed
-              diam<br />
-              nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam<br />
-              erat volutpat. Ut wisi enim ad minim veniam, quis nostrud
-              exerci<br />
-              tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo
-              consequat.
+            <p class="text1">
+              Es un servicio crucial para el crecimiento y la expansión de tu compañía. 
+              Somos proveedores de información efectiva para la toma de decisiones y  
+              prospección de nuevos mercados.
             </p>
           </div>
         </div>
@@ -28,11 +24,9 @@
               <span class="text-spring-green">¿CÓMO </span>
               <span class="font-weight-bold">FUNCIONA?</span>
             </p>
-            <p class="text-sec2 text-sec">
-              Lorem ipsum dolor sit amet, consectetuer<br />
-              adipiscing elit, sed diam nonummy nibh<br />
-              euismod tincidunt ut laoreet dolore magna<br />
-              aliquam erat volutpat.
+            <p class="text1">
+              Nuestro servicio se centra en proporcionar información efectiva y estratégica para la aprobación exitosa de créditos  . 
+
             </p>
           </div>
         </div>
@@ -44,15 +38,15 @@
     <section class="container py-5 mb-5 pad-resp">
       <div class="row">
         <div class="col text-center">
-          <p class="text-line text-orange">Proceso</p>
+          <p class="text-line text-orange">Análisis</p>
           <img src="/img/step-one.png" class="img-fluid w-75" />
         </div>
         <div class="col text-center">
-          <p class="text-line text-black-pearl">Proceso</p>
+          <p class="text-line text-black-pearl">Visación</p>
           <img src="/img/step-two.png" class="img-fluid w-75" />
         </div>
         <div class="col text-center">
-          <p class="text-line text-caribbean-green">Proceso</p>
+          <p class="text-line text-caribbean-green">Incorporación</p>
           <img src="/img/step-three.png" class="img-fluid w-75" />
         </div>
         <div class="col text-center">

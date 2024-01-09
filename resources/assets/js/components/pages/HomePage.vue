@@ -107,7 +107,7 @@
                     <b-collapse id="accordion-1" visible accordion="my-accordion" role="tabpanel">
                         <b-card-body class="p-0">
                             <div class="row">
-                                <div class="col-3 text-center div-img d-flex align-items-center justify-content-center">
+                                <div class="col-3 text-center div-img d-flex align-items-center justify-content-center" style="max-width: 247px;">
                                     <div class="text-center">
                                         <img src="/img/quienessomosactive.png" class="img-fluid w-30 mb-4" />
                                         <h4><b>Historia GAF</b></h4>
@@ -177,7 +177,7 @@
                     <b-collapse id="accordion-2" visible accordion="my-accordion" role="tabpanel">
                         <b-card-body class="p-0">
                             <div class="row">
-                                <div class="col-3 text-center div-img d-flex align-items-center justify-content-center">
+                                <div class="col-3 text-center div-img d-flex align-items-center justify-content-center" style="max-width: 247px;">
                                     <div class="text-center">
                                         <img src="/img/quienessomosactive.png" class="img-fluid w-30 mb-4" />
                                         <h4><b>¿Quiénes Somos?</b></h4>
@@ -226,7 +226,7 @@
                             <div class="row">
                                 <div
                                     class="col-3 text-center cont-img d-flex align-items-center justify-content-center"
-                                >
+                                    style="max-width: 247px;">
                                     <div class="text-center">
                                         <img src="/img/dondeestamosactive.png" class="img-fluid w-30 mb-4" />
                                         <h4><b>¿Donde Estamos?</b></h4>
@@ -270,7 +270,7 @@
                             <div class="row">
                                 <div
                                     class="col-3 text-center cont-img d-flex align-items-center justify-content-center"
-                                >
+                                    style="max-width: 247px;">
                                     <div class="text-center">
                                         <img src="/img/valoresactive.png" class="img-fluid w-30 mb-4" />
                                         <h4><b>Nuestros Valores</b></h4>
@@ -278,53 +278,53 @@
                                 </div>
                                 <div class="col-9 p-4">
                                     <div class="row">
-                                        <div class="col-2 d-flex align-items-center justify-content-center">
-                                            <img src="/img/compromiso.png" class="img-fluid w-50" />
+                                        <div class="col-1 pr-0 d-flex align-items-start justify-content-center">
+                                            <img src="/img/compromiso.png" class="img-fluid w-25" style="width: 50% !important;" />
                                         </div>
-                                        <div class="col-10 d-flex align-items-center justify-content-left">
-                                            <p class="text-justify">
+                                        <div class="col-11 pb-3 pl-0 d-flex align-items-start justify-content-left">
+                                            <p class="text-justify" style="margin-bottom: 0;">
                                                 <b>Compromiso con la Excelencia:</b> Buscamos constantemente la
                                                 perfecci&oacute;n en cada detalle, desde la elegibilidad hasta el
                                                 recaudo master, para asegurar la satisfacci&oacute;n total de nuestros
                                                 clientes.
                                             </p>
                                         </div>
-                                        <div class="col-2 d-flex align-items-center justify-content-center">
-                                            <img src="/img/innovacion.png" class="img-fluid w-50" />
+                                        <div class="col-1 pr-0 d-flex align-items-start justify-content-center">
+                                            <img src="/img/innovacion.png" class="img-fluid w-25" style="width: 50% !important;" />
                                         </div>
-                                        <div class="col-10 d-flex align-items-center justify-content-left">
-                                            <p class="text-justify">
+                                        <div class="col-11 pl-0 pb-3 d-flex align-items-start justify-content-left">
+                                            <p class="text-justify" style="margin-bottom: 0;">
                                                 <b>Innovaci&oacute;n Sostenible:</b> Nos esforzamos por liderar la
                                                 industria con soluciones creativas y sostenibles que se adapten a las
                                                 cambiantes din&aacute;micas del mercado financiero.
                                             </p>
                                         </div>
-                                        <div class="col-2 d-flex align-items-center justify-content-center">
-                                            <img src="/img/integridad.png" class="img-fluid w-50" />
+                                        <div class="col-1 pr-0 d-flex align-items-start justify-content-center">
+                                            <img src="/img/integridad.png" class="img-fluid w-25" style="width: 50% !important;" />
                                         </div>
-                                        <div class="col-10 d-flex align-items-center justify-content-left">
-                                            <p class="text-justify">
+                                        <div class="col-11 pl-0 pb-3 d-flex align-items-start justify-content-left">
+                                            <p class="text-justify" style="margin-bottom: 0;">
                                                 <b>Integridad y Transparencia:</b> Basamos nuestras relaciones
                                                 comerciales en la honestidad y la transparencia, construyendo confianza
                                                 duradera con nuestros clientes y socios.
                                             </p>
                                         </div>
-                                        <div class="col-2 d-flex align-items-center justify-content-center">
-                                            <img src="/img/enfoque.png" class="img-fluid w-50" />
+                                        <div class="col-1 pr-0 d-flex align-items-start justify-content-center">
+                                            <img src="/img/enfoque.png" class="img-fluid w-25" style="width: 50% !important;" />
                                         </div>
-                                        <div class="col-10 d-flex align-items-center justify-content-left">
-                                            <p class="text-justify">
+                                        <div class="col-11 pl-0 pb-3 d-flex align-items-start justify-content-left">
+                                            <p class="text-justify" style="margin-bottom: 0;">
                                                 <b>Enfoque en el Cliente:</b> Colocamos las necesidades y objetivos de
                                                 nuestros clientes en el centro de todo lo que hacemos, adaptando
                                                 nuestras soluciones para satisfacer sus desaf&iacute;os
                                                 espec&iacute;ficos.
                                             </p>
                                         </div>
-                                        <div class="col-2 my-3 d-flex align-items-center justify-content-center">
-                                            <img src="/img/personas.png" class="img-fluid w-50" />
+                                        <div class="col-1 pr-0 d-flex align-items-start justify-content-center">
+                                            <img src="/img/personas.png" class="img-fluid w-25" style="width: 50% !important;" />
                                         </div>
-                                        <div class="col-10 d-flex align-items-center justify-content-left">
-                                            <p class="text-justify">
+                                        <div class="col-11 pl-0 d-flex align-items-start justify-content-left">
+                                            <p class="text-justify" style="margin-bottom: 0;">
                                                 <b>Personas:</b> Reconocemos que cada persona es esencial para nuestro
                                                 &eacute;xito.
                                             </p>
@@ -350,7 +350,7 @@
                             <div class="row">
                                 <div
                                     class="col-3 text-center cont-img d-flex align-items-center justify-content-center"
-                                >
+                                    style="max-width: 247px;">
                                     <div class="text-center">
                                         <img src="/img/targetactive.png" class="img-fluid w-30 mb-4" />
                                         <h4><b>Target</b></h4>
@@ -389,7 +389,7 @@
                                         </div>
                                         <div class="col-12 mb-4">
                                             <div class="row">
-                                                <div
+                                                <!-- <div
                                                     class="col-4 text-center d-flex align-items-center justify-content-center"
                                                 >
                                                     <img src="/img/LogoCK.png" class="img-fluid w-50" />
@@ -403,6 +403,83 @@
                                                     class="col-4 text-center d-flex align-items-center justify-content-center"
                                                 >
                                                     <img src="/img/kblogo.png" class="img-fluid w-100" />
+                                                </div> -->
+
+                                                <div class="col-12 d-flex align-items-center justify-content-center">
+                                                    <b-carousel
+                                                        style="max-width: 319px;"
+                                                        background="white"
+                                                    >
+                                                        <b-carousel-slide>
+                                                            <template #img>
+                                                                <div style="display: flex;">
+                                                                    <img
+                                                                        class="d-block img-fluid w-100"
+                                                                        src="/img/kblogo.png"
+                                                                        alt="image slot"
+                                                                        style="max-width: 318px; height: 150px;"
+                                                                    >
+                                                                    <img
+                                                                        src="/img/LogoCK.png"
+                                                                        alt="image slot"
+                                                                        style="max-width: 318px; max-height: 150px;"
+                                                                    >
+                                                                    <img
+                                                                        class="d-block img-fluid w-100"
+                                                                        src="/img/trlogo.png"
+                                                                        alt="image slot"
+                                                                        style="max-width: 318px; height: 150px;"
+                                                                    >
+                                                                </div>
+                                                            </template>
+                                                        </b-carousel-slide>
+                                                        <b-carousel-slide>
+                                                            <template #img>
+                                                                <div style="display: flex;">
+                                                                    <img
+                                                                        src="/img/LogoCK.png"
+                                                                        alt="image slot"
+                                                                        style="max-width: 318px; max-height: 150px;"
+                                                                    >
+                                                                    <img
+                                                                        class="d-block img-fluid w-100"
+                                                                        src="/img/trlogo.png"
+                                                                        alt="image slot"
+                                                                        style="max-width: 318px; height: 150px;"
+                                                                    >
+                                                                    <img
+                                                                        class="d-block img-fluid w-100"
+                                                                        src="/img/kblogo.png"
+                                                                        alt="image slot"
+                                                                        style="max-width: 318px; height: 150px;"
+                                                                    >
+                                                                </div>
+                                                            </template>
+                                                        </b-carousel-slide>
+                                                        <b-carousel-slide>
+                                                            <template #img>
+                                                                <div style="display: flex;">
+                                                                    <img
+                                                                        class="d-block img-fluid w-100"
+                                                                        src="/img/trlogo.png"
+                                                                        alt="image slot"
+                                                                        style="max-width: 318px; height: 150px;"
+                                                                    >
+                                                                    <img
+                                                                        class="d-block img-fluid w-100"
+                                                                        src="/img/kblogo.png"
+                                                                        alt="image slot"
+                                                                        style="max-width: 318px; height: 150px;"
+                                                                    >
+                                                                    <img
+                                                                        src="/img/LogoCK.png"
+                                                                        alt="image slot"
+                                                                        style="max-width: 318px; max-height: 150px;"
+                                                                    >
+                                                                </div>
+                                                            </template>
+                                                        </b-carousel-slide>
+                                                    </b-carousel>
                                                 </div>
                                             </div>
                                         </div>
@@ -443,7 +520,7 @@
                             <div class="row">
                                 <div
                                     class="col-3 text-center cont-img d-flex align-items-center justify-content-center"
-                                >
+                                    style="max-width: 247px;">
                                     <div class="text-center">
                                         <img src="/img/sostenibilidadactive.png" class="img-fluid w-30 mb-4" />
                                         <h4><b>Sostenibilidad</b></h4>
