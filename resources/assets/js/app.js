@@ -54,6 +54,7 @@ Vue.component('AmiPersonas', require('./components/pages/AmiPersonas').default);
 Vue.component('MoreInformation', require('./components/pages/MoreInformation').default);
 Vue.component('Hego', require('./components/pages/Hego').default);
 Vue.component('HegoInformation', require('./components/pages/HegoInformation').default);
+Vue.component('Politicas', require('./components/pages/Politicas').default);
 Vue.component('download-pdf-button', require('./components/DownloadPdfButton').default);
 
 // Pages

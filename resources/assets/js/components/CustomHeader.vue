@@ -7,13 +7,13 @@
         </b-navbar-brand>
 
         <div class="icons-desktop">
-          <b-button variant="black-pearl" class="mr-2" href="/welcome">
-            Sobre GAF<PersonsIcon />
+          <b-button variant="black-pearl" class="mr-2" href="/welcome" style="min-width: 160px;">
+            Sobre GAF<span style="margin-left: 10px;"><PersonsIcon /></span>
           </b-button>
-          <b-dropdown variant="spring-green">
+          <b-dropdown variant="spring-green"  style="min-width: 160px;">
             <template #button-content>
               Servicios
-              <CompaniesIcon />
+              <span style="margin-left: 10px;"><CompaniesIcon /></span>
             </template>
             <b-dropdown-item href="/amipersonas"><strong>AMI</strong> "Analisis de Mercado Inteligente"</b-dropdown-item>
             <b-dropdown-item href="/hego"><strong>HEGO</strong> "Herramienta Ejecutora de <br/> Gestiones Operativas y Comerciales"</b-dropdown-item>
@@ -87,13 +87,13 @@ export default {
     return {
       menuLinksRes: [
         { label: 'Ingreso', url: '/login' },
-        { label: 'Politicas', url: '/login' },
+        { label: 'Politicas', url: '/politicas' },
         { label: 'AMI', url: '/amipersonas' },
         { label: 'HEGO', url: '/hego' }
       ],
       menuLinks: [
         { label: 'Contacto', url: '#' },
-        { label: 'Politicas', url: '/login' },
+        { label: 'Politicas', url: '/politicas' },
         { label: 'Ingreso', url: '/login' },
       ]
     };

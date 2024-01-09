@@ -148,11 +148,18 @@ body {
   color: rgb(9, 186, 139);
 }
 .degradado{
-  background: linear-gradient(90deg, #11484b, #0cedb0, #11484b, #0cedb0);
+  background: linear-gradient(90deg, #11484b, #0dbf95e1, #11484b, #0dbf95e1);
   -webkit-background-clip: text;
   color: transparent;  
 }
 .text1{
   max-width: 540px; 
   text-align: justify;
+}
+.btn-informacion:hover{
+  color: rgb(9, 186, 139);
+}
+.div-icon{
+  border-bottom: 2px solid black;
+  max-width: 255px;
 }
