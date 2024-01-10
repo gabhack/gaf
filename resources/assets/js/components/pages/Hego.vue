@@ -89,7 +89,7 @@
           <div class="text-center">
             <p class="text-spacing">NUESTRO SERVICIO DE</p>
             <p class="text-medium font-weight-bold degradado" style="line-height: 30px;" >
-              Pagare Desmaterializado
+              Pagaré Desmaterializado
               <br />
               Firma electrónica
             </p>
@@ -130,7 +130,7 @@
       <div class="row mb-5">
           <div class="col-12 text-center align-items-center justify-content-center" style="display: grid;">
           <p class="text-medium font-weight-bold mb-0">
-            <span class="degradado">Pagares Desmaterializado</span>
+            <span class="degradado">Pagaré Desmaterializado</span>
           </p>
           <p class="text1">
             Optimizamos tu modelo de negocio para ofrecerte una experiencia
