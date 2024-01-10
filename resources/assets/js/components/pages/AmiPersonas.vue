@@ -169,11 +169,10 @@
 
         <div class="col-lg-3 col-sm-12 col-icons pb-4 pb-lg-0">
           <div class="div-icon">
-            <img src="/img/IconoAmi1.png" style="width: 100px; height: 113px; margin-left: -30px;" />
+            <img src="/img/IconoAmi1.png" style="width: 91px;" />
             <p class="font-weight-bold subtitle text-line mb-0">ESTRATEGIA I</p>
           </div>
           <p class="font-weight-bold text-line subtitle mb-0 mt-0">
-            
             <span class="black-pearl" style="color: black;">
               PENETRACIÓN DE <br />MERCADO
             </span>
@@ -181,18 +180,16 @@
         </div>
         <div class="col-lg-3 col-sm-12 col-icons pb-4 pb-lg-0">
           <div class="div-icon">
-            <img src="/img/IconoAmi2.png" style="width: 100px; height: 113px;" />
+            <img src="/img/IconoAmi2.png" style="width: 109px;" />
             <p class="font-weight-bold subtitle text-line mb-0">ESTRATEGIA II</p>
           </div>  
           <p class="font-weight-bold text-line mb-0 mt-0">
-            
-              ESPANSIÓN <br />COMERCIAL
-            
+              EXPANSIÓN <br />COMERCIAL
           </p>
         </div>
         <div class="col-lg-3 col-sm-12 col-icons pb-4 pb-lg-0">
           <div class="div-icon">
-            <img src="/img/IconoAmi3.png" style="width: 100px; height: 113px;" />
+            <img src="/img/IconoAmi3.png" style="width: 100px;" />
             <p class="font-weight-bold subtitle text-line mb-0">ESTRATEGIA III</p>
           </div>
           
@@ -202,46 +199,13 @@
         </div>
         <div class="col-lg-3 col-sm-12 col-icons pb-4 pb-lg-0">
           <div class="div-icon">
-            <img src="/img/IconoAmi4.png" style="width: 118px; height: 113px;" />
+            <img src="/img/IconoAmi4.png" style="width: 82px;" />
             <p class="font-weight-bold subtitle text-line mb-0">ESTRATEGIA IV</p>
           </div>
           <p class="font-weight-bold text-line mt-0 mb-0">
             DIVERSIFICACIÓN DE <br /> PORTAFOLIO
           </p>
         </div>
-
-        <!-- <div class="col-lg-3 col-sm-12 col-icons">
-          <img src="/img/IconoAmi1.png" class="img-fluid w-40 icon-line" />
-          <p class="font-weight-bold text-line mb-0">
-            ESTRATEGIA DE <br />
-            <span class="subtitle">
-              PENETRACIÓN DE <br />MERCADO
-            </span>
-          </p>
-        </div>
-        <div class="col-lg-3 col-sm-12 col-icons">
-          <img src="/img/IconoAmi2.png" class="img-fluid icon-line" style="width: 122px; height: 128px;" />
-          <p class="font-weight-bold text-line mb-0">
-            ESTRATEGIA DE <br />
-            <span class="subtitle"> DESARROLLO DE <br />MERCADO </span>
-          </p>
-        </div>
-        <div class="col-lg-3 col-sm-12 col-icons">
-          <img src="/img/IconoAmi3.png" class="img-fluid icon-line" style="width: 122px; height: 128px;" />
-          <p class="font-weight-bold text-line mb-0">
-            ESTRATEGIA DE <br />
-            <span class="subtitle">
-              DESARROLLO DE <br />PRODUCTO
-            </span>
-          </p>
-        </div>
-        <div class="col-lg-3 col-sm-12 col-icons">
-          <img src="/img/IconoAmi4.png" class="img-fluid icon-line" style="width: 122px; height: 128px;" />
-          <p class="font-weight-bold text-line mb-0">
-            ESTRATEGIA DE <br />
-            <span class="subtitle"> DIVERSIFICACIÓN DE <br /> PORATOFLIO </span>
-          </p>
-        </div> -->
       </div>
     </section>
     <section class="container-fluid" style="height: 90vh; scroll-snap-align: start;">

@@ -500,6 +500,7 @@ Route::view('/moreinformation', 'moreinformation');
 Route::view('/hego', 'hego');
 Route::view('/hegoinformation', 'hegoinformation');
 Route::view('/politicas', 'politicas');
+Route::view('/contacto', 'contacto');
 Route::view('/integration', 'integration');
 Route::view('/contact', 'contact');
 

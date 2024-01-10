@@ -2,38 +2,43 @@
   <div>
     <section class="container-fluid follow-us mb-5">
       <div class="row">
-        <div class="col-lg-7 img-desk">
+        <div class="col-lg-6 img-desk d-flex align-items-center">
           <img src="/img/home-bottom-illustration.svg" class="img-fluid w-100" />
         </div>
-        <div class="col-lg-4 col-sm-12 d-flex align-items-center justify-content-center">
-          <div class="text-center">
-            <h2>¡Contactanos!</h2>
+        <div class="col-lg-5 col-sm-12 d-flex align-items-start justify-content-center">
+          <div>
+            <h5 class="contactanos text-center mb-0">¡Contactanos!</h5>
             <div class="row">
               <div class="panel mb-3 col-md-12">
                 <div class="panel-body">
                   <div class="row">
-                    <div class="col-6">
-                      <b class="panel-label">NOMBRES:</b>
-                      <input required class="form-control text-center" type="text" />
+                    <div class="col-6 mt-4">
+                      <input required  placeholder="Nombres:" class="form-control1" type="text" />
                     </div>
-                    <div class="col-6">
-                      <b class="panel-label">APELLIDOS:</b>
-                      <input required class="form-control text-center" type="text" />
-                    </div>
-                    <div class="col-6">
-                      <b class="panel-label">TELÉFONO:</b>
-                      <input required class="form-control text-center" type="text" />
-                    </div>
-                    <div class="col-6">
-                      <b class="panel-label">CORREO ELECTRÓNICO:</b>
-                      <input required class="form-control text-center" type="text" />
-                    </div>
-                    <div class="col-12">
-                      <b class="panel-label">¿QUÉ QUIERES SABER?:</b>
-                      <input required class="form-control text-center" type="text" />
+                    <div class="col-6 mt-4">
+                      <input required placeholder="Apellidos:" class="form-control1" type="text" />
                     </div>
                     <div class="col-12 mt-4">
-                      <b-button variant="black-pearl" type="button" class="px-3">ENVIAR</b-button>
+                      <input required placeholder="Teléfono:" class="form-control1" type="number" />
+                    </div>
+                    <div class="col-12 mt-4">
+                      <input required placeholder="Correo electrónico:" class="form-control1" type="email" />
+                    </div>
+                    <div class="col-12 mt-4">
+                      <input required placeholder="Empresa:" class="form-control1" type="text" />
+                    </div>
+                    <div class="col-12 mt-4">
+                      <input required placeholder="Cargo:" class="form-control1" type="text" />
+                    </div>
+                    <div class="col-12 mt-4">
+                      <input required placeholder="Comentarios:" class="form-control2" type="text" />
+                    </div>
+                    <div class="col-12">
+                      <p class="my-3">La información que proporciones a GAF Solutions se rige por los términos
+                        de nuestra <a href="">Politica de privacidad</a> </p>
+                    </div>
+                    <div class="col-12 text-center">
+                      <b-button type="button" class="px-3 btn-informacion">¡ENVIAR!</b-button>
                     </div>
                   </div>
                 </div>
@@ -42,7 +47,9 @@
           </div>
         </div>
         <div class="col-lg-12 col-sm-12 text-center mt-4">
-          <div class="social-media mb-3">
+          
+          <span class="text-big d-block font-weight-bold text-uppercase"> ¡Síguenos! </span>
+          <div class="social-media mt-4 mb-3">
             <a href="">
               <FacebookIcon />
             </a>
@@ -57,28 +64,27 @@
               <YoutubeIcon />
             </a>
           </div>
-          <span class="text-big d-block font-weight-bold text-uppercase"> Más Información </span>
-          <span class="text-big d-block">+57 300 425 3256</span>
-          <span class="text-medium d-block">contacto@gafsolutions.co</span>
+          <!-- <span class="text-big d-block">Tel. 3183109067</span>
+          <span class="text-medium d-block">info@gafsolutions.co</span> -->
         </div>
       </div>
     </section>
-    <div class="container-fluid sub-footer py-3">
+    <!-- <div class="container-fluid sub-footer py-3">
       <div class="row">
         <div class="col-sm-12 img-final-res">
           <img src="/img/home-bottom-illustration.svg" class="img-fluid w-100" />
         </div>
         <div class="col-lg-12 text-center direction-desk">
-          <span> Cra. 100 #11-60. Oficina 605, Torre Farallones </span>
+          <span> Cra. 100 #11-60 HTC Torre Farallones Oficina 605 </span>
         </div>
         <div class="col-sm-12 text-center direction-res">
           <span class="direction-text-res">
-            Av. Lorem ipsum dolor 2045<br />
-            Dolor sit Amet - Adress
+            Cra. 100 #11-60 HTC<br />
+            HTC Torre Farallones Oficina 605
           </span>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -95,3 +101,46 @@ export default {
   }
 };
 </script>
+<style>
+.contactanos{
+  font-family: BillionDreams;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 5vw;
+    /* line-height: 177px; */
+    color: #0cedb0;
+}
+
+.form-control1{
+  height: 36px;
+  width: 100%;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+.form-control2{
+  height: 100px;
+  width: 100%;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+.form-control1::placeholder, .form-control2::placeholder{
+  /* color: #0cedb0; */
+  padding-left: 10px;
+  display: flex-start;
+}
+.btn-informacion:hover{
+  background-color: black;
+  color: rgb(9, 186, 139);
+}
+
+.btn-informacion{
+  background-color: black;
+  color: white;
+  min-width: 220px;
+}
+
+.form-control2::placeholder{
+  position: absolute;
+  top:0;
+    }
+</style>
