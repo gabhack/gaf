@@ -36,115 +36,108 @@
         </section>
         <section class="container py-5 mb-5 pad-resp">
             <div class="row">
-                <table width="100%">
+
+
+
+
+                <table width="100%" style="border-collapse: separate">
                     <tbody>
-                        <tr class="text-center">
+                        <tr class="text-center bordeado">
                             <td width="150"></td>
-                            <td width="196" style="border: 2px solid black">
+                            <td width="196" class="bordeado" style="background-color: #faa600; border:none !important;">
                                 <p class="mb-0 text-center">
-                                    <strong>Analisis</strong>
+                                    Análisis
                                 </p>
                             </td>
-                            <td width="196" style="border: 2px solid black">
-                                <p class="mb-0"><strong>Visación</strong></p>
+                            <td width="196" class="bordeado" style="background-color: black; color: white !important; border:none !important;">
+                                <p class="mb-0">Visación</p>
                             </td>
-                            <td width="196" style="border: 2px solid black">
-                                <p class="mb-0"><strong>Incorporación</strong></p>
+                            <td width="196" class="degrade bordeado" style=" border:none !important;">
+                                <p class="mb-0">Incorporación</p>
                             </td>
-                            <td width="196" style="border: 2px solid black">
-                                <p class="mb-0"><strong>Recaudo</strong></p>
+                            <td width="196" class="bordeado" style="background-color: #faa600; border:none !important;">
+                                <p class="mb-0">Recaudo</p>
                             </td>
                         </tr>
                         <tr>
-                            <td  class="pr-3" style="border: 2px solid black">Tiempo</td>
+                            <td  class="pr-3 degrade bordeado">Tiempo</td>
 
-                            <td width="196" class="pr-3" style="border: 2px solid black">
-                                <p>1 minuto o 3 minutos</p>
+                            <td width="196" class="px-3 bordeado fondo">
+                                <p class="mb-0">1 minuto o 3 minutos</p>
                             </td>
-                            <td width="196" class="px-3" style="border: 2px solid black">
-                                <p>1 minuto a 2 horas</p>
+                            <td width="196" class="px-3 bordeado fondo">
+                                <p class="mb-0">1 minuto a 2 horas</p>
                             </td>
-                            <td width="196" class="px-3" style="border: 2px solid black">
-                                <p>
+                            <td width="196" class="px-3 bordeado fondo">
+                                <p class="mb-0">
                                   Desde el día 1 al 31
                                 </p>
                             </td>
-                            <td width="196" class="px-3" style="border: 2px solid black">
-                                <p>
+                            <td width="196" class="px-3 bordeado fondo">
+                                <p class="mb-0">
                                   De 30 a 45 dias
                                 </p>
                             </td>
                         </tr>
                         <tr>
-                            <td  class="pr-3" style="border: 2px solid black">Alcance</td>
+                            <td  class="pr-3 degrade bordeado">Alcance</td>
 
-                            <td width="196" class="pr-3" style="border: 2px solid black">
-                                <p>Factible <br/>No factible</p>
+                            <td width="196" class="px-3 bordeado fondo">
+                                <p class="mb-0">Factible <br/>No factible</p>
                             </td>
-                            <td width="196" class="px-3" style="border: 2px solid black">
-                                <p>Condiciones <br/> autorizadas</p>
+                            <td width="196" class="px-3 bordeado fondo">
+                                <p class="mb-0">Condiciones <br/> autorizadas</p>
                             </td>
-                            <td width="196" class="px-3" style="border: 2px solid black">
-                                <p>
+                            <td width="196" class="px-3 bordeado fondo">
+                                <p class="mb-0">
                                   Cuota al 99.7%
                                 </p>
                             </td>
-                            <td width="196" class="px-3" style="border: 2px solid black">
-                                <p>
+                            <td width="196" class="px-3 bordeado fondo">
+                                <p class="mb-0">
                                   Efectivo 100%
                                 </p>
                             </td>
                         </tr>
                         <tr>
-                            <td class="pr-3" style="border: 2px solid black">Riesgo</td>
+                            <td class="pr-3 degrade bordeado">Riesgo</td>
 
-                            <td width="196" class="pr-3" style="border: 2px solid black">
-                                <p>R. Comercial <br/> R. Operativo</p>
+                            <td width="196" class="px-3 bordeado fondo">
+                                <p class="mb-0">R. Comercial <br/> R. Operativo</p>
+                            </td> 
+                            <td width="196" class="px-3 bordeado fondo">
+                                <p class="mb-0">R. Pagaduria <br/> R. Operativo</p>
                             </td>
-                            <td width="196" class="px-3" style="border: 2px solid black">
-                                <p>R. Pagaduria <br/> R. Operativo</p>
-                            </td>
-                            <td width="196" class="px-3" style="border: 2px solid black">
-                                <p>
+                            <td width="196" class="px-3 bordeado fondo">
+                                <p class="mb-0">
                                   R. Pagaduria <br/>
                                   R. Operativo <br/>
                                   R. Comercial
                                 </p>
                             </td>
-                            <td width="196" class="px-3" style="border: 2px solid black">
-                                <p>
+                            <td width="196" class="px-3 bordeado fondo">
+                                <p class="mb-0">
                                   R. pagaduria<br/>
                                   R. Operativo
                                 </p>
                             </td>
                         </tr>
                         <tr>
-                            <td  class="pr-3" style="border: 2px solid black">Resultado</td>
+                            <td  class="pr-3 degrade bordeado">Resultado</td>
 
-                            <td colspan="4" class="pr-3" style="border: 2px solid black">
-                                <p class="text-center">Cartera bien originada</p>
+                            <td colspan="4" class="px-3 bordeado fondo">
+                                <p class="text-center mb-0">Cartera bien originada</p>
                             </td>
-                            <!-- <td width="196" class="px-3" style="border: 2px solid black">
-                                <p>R. Pagaduria <br/> R. Operativo</p>
-                            </td>
-                            <td width="196" class="px-3" style="border: 2px solid black">
-                                <p>
-                                  R. Pagaduria <br/>
-                                  R. Operativo <br/>
-                                  R. Comercial
-                                </p>
-                            </td>
-                            <td width="196" class="px-3" style="border: 2px solid black">
-                                <p>
-                                  R. pagaduria<br/>
-                                  R. Operativo
-                                </p>
-                            </td> -->
                         </tr>
                     </tbody>
                 </table>
 
-                <div class="col text-center">
+
+
+
+
+
+                <!-- <div class="col text-center">
                     <p class="text-line text-orange">Análisis</p>
                     <img src="/img/step-one.png" class="img-fluid w-75" />
                 </div>
@@ -160,10 +153,10 @@
                     <p class="text-line text-black-pearl">Recaudo</p>
                     <img src="/img/step-four.png" class="img-fluid w-75" />
                 </div>
-                <!-- <div class="col text-center">
-          <p class="text-line text-orange">Proceso</p>
-          <img src="/img/step-five.png" class="img-fluid w-75 width-res" />
-        </div> -->
+                <div class="col text-center">
+                    <p class="text-line text-orange">Proceso</p>
+                    <img src="/img/step-five.png" class="img-fluid w-75 width-res" />
+                </div> -->
             </div>
         </section>
         <section class="container-fluid mb-5">
@@ -211,3 +204,19 @@
         </section>
     </div>
 </template>
+<style>
+.degrade{
+    background: #10dd8e;
+    border: none !important;
+    color: black;
+    text-align: center;
+}
+.bordeado{
+    border: 2px solid #d3d3d3;
+    border-radius: 7px;
+}
+.fondo{
+    /* background-color: #2ac6a1; */
+    background-color: white;
+}
+</style>
