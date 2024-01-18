@@ -1,6 +1,6 @@
 <template>
-  <div style="height: 83vh; scroll-snap-type: y mandatory; overflow-y: scroll;">
-    <section class="container-fluid" style=" scroll-snap-align: start;">
+  <div class="enter-section">
+    <section class="container-fluid section1">
       <div class="row" style="height: 88vh;">
         <div
           class="
@@ -10,15 +10,15 @@
             justify-content-center
             d-md-none
           "
+          style="background-image: url('/img/AMI-banner-responsive.png');"
         >
           <div>
             <h1
-              class="font-weight-bold text-big-personas mb-0"
-              style="color: black !important;"
+              class="font-weight-bold text-big-personas mb-0 ami-title"
             >
               AMI
             </h1>
-            <p class="text-ami font-weight-bold degradado">
+            <p class="text-ami font-weight-bold" style="font-size: 36px;">
               Análisis de Mercado Inteligente
             </p>
           </div>
@@ -27,32 +27,33 @@
           <img src="/img/amipersonas1.svg" class="img-fluid w-100" />
         </div> -->
         <div
-          class="
-            col-12
+          class="col-12
             d-flex
-            align-items-center
+            align-items-start
             justify-content-center
-            first-desk
-          "
+            first-desk"
+          style="background-image: url('/img/AMI-banner.png'); 
+            background-size: contain; 
+            background-repeat: no-repeat;
+            padding-top: 23px;"
         >
           <div>
             <div class="d-flex align-items-center justify-content-center">
-              <img src="/img/coheteicon.svg" alt="img-asesoria" width="30%" />
+              <!-- <img src="/img/coheteicon.svg" alt="img-asesoria" width="30%" /> -->
               <h1
-                class="font-weight-bold text-big-personas mb-0"
-                style="color: black !important;"
+                class="font-weight-bold text-big-personas mb-0 ami-title"
               >
                 AMI
               </h1>
             </div>
-            <p class="text-ami font-weight-bold degradado">
+            <p class="text-ami font-weight-bold text-white" style="margin-top: -12px;"> 
               Análisis de Mercado Inteligente
             </p>
           </div>
         </div>
       </div>
     </section>
-    <section class="container-fluid" style="padding-top: 50px; height: 100vh; scroll-snap-align: center;">
+    <section class="container-fluid section2">
       <div class="row">
         <div
           class="
@@ -89,10 +90,10 @@
         </div>
       </div>
     </section>
-    <section class="container-fluid" style="height: 90vh; scroll-snap-align: start;">
-      <div class="row">
-        <div class="col-5 img-sec3 pl-0">
-          <img src="/img/amipersonas2.svg" class="img-fluid w-100" />
+    <section class="container-fluid section3">
+      <div class="row align-items-end">
+        <div class="col-5 img-sec3 pl-0" style="padding-top: 5rem;">
+          <img src="/img/amipersonas2.svg" style="width: 75%;" />
         </div>
         <div
           class="
@@ -141,7 +142,7 @@
         </div>
       </div>
     </section>
-    <section class="container mt-3" style="height: 100vh;">
+    <section class="container mt-3 section4">
       <div class="row mb-5">
         <div class="col-12 text-center align-items-center justify-content-center" style="display: grid;">
           <p class="text-medium font-weight-bold mb-0">
@@ -168,9 +169,11 @@
       <div class="row">
 
         <div class="col-lg-3 col-sm-12 col-icons pb-4 pb-lg-0">
-          <div class="div-icon">
-            <img src="/img/IconoAmi1.png" style="width: 91px;" />
-            <p class="font-weight-bold subtitle text-line mb-0">ESTRATEGIA I</p>
+          <div class="d-flex justify-content-center">
+            <div class="div-icon" style="display: grid; justify-content: center; width: 280px;">
+              <img src="/img/IconoAmi1.png" style="width: 91px; margin-left: 15px;" />
+              <p class="font-weight-bold subtitle text-line mb-0">ESTRATEGIA I</p>
+            </div>
           </div>
           <p class="font-weight-bold text-line subtitle mb-0 mt-0">
             <span class="black-pearl" style="color: black;">
@@ -179,18 +182,22 @@
           </p>
         </div>
         <div class="col-lg-3 col-sm-12 col-icons pb-4 pb-lg-0">
-          <div class="div-icon">
-            <img src="/img/IconoAmi2.png" style="width: 109px;" />
-            <p class="font-weight-bold subtitle text-line mb-0">ESTRATEGIA II</p>
+          <div class="d-flex justify-content-center">
+            <div class="div-icon" style="display: grid; justify-content: center; width: 280px;">
+              <img src="/img/IconoAmi2.png" style="width: 109px; margin-left: 7.5px;" />
+              <p class="font-weight-bold subtitle text-line mb-0">ESTRATEGIA II</p>
+            </div>
           </div>  
           <p class="font-weight-bold text-line mb-0 mt-0">
               EXPANSIÓN <br />COMERCIAL
           </p>
         </div>
         <div class="col-lg-3 col-sm-12 col-icons pb-4 pb-lg-0">
-          <div class="div-icon">
-            <img src="/img/IconoAmi3.png" style="width: 100px;" />
-            <p class="font-weight-bold subtitle text-line mb-0">ESTRATEGIA III</p>
+          <div class="d-flex justify-content-center">
+            <div class="div-icon" style="display: grid; justify-content: center; width: 280px;">
+              <img src="/img/IconoAmi3.png" style="width: 100px; margin-left: 20px;" />
+              <p class="font-weight-bold subtitle text-line mb-0">ESTRATEGIA III</p>
+            </div>
           </div>
           
           <p class="font-weight-bold text-line mb-0 mt-0">
@@ -198,9 +205,11 @@
           </p>
         </div>
         <div class="col-lg-3 col-sm-12 col-icons pb-4 pb-lg-0">
-          <div class="div-icon">
-            <img src="/img/IconoAmi4.png" style="width: 82px;" />
-            <p class="font-weight-bold subtitle text-line mb-0">ESTRATEGIA IV</p>
+          <div class="d-flex justify-content-center">
+            <div class="div-icon" style="display: grid; justify-content: center; width: 280px;">
+              <img src="/img/IconoAmi4.png" style="width: 82px; margin-left: 25px;" />
+              <p class="font-weight-bold subtitle text-line mb-0">ESTRATEGIA IV</p>
+            </div>
           </div>
           <p class="font-weight-bold text-line mt-0 mb-0">
             DIVERSIFICACIÓN DE <br /> PORTAFOLIO
@@ -208,7 +217,7 @@
         </div>
       </div>
     </section>
-    <section class="container-fluid" style="height: 90vh; scroll-snap-align: start;">
+    <section class="container-fluid section5">
       <div class="row">
         <div
           class="
@@ -220,7 +229,7 @@
         >
           <div class="text-center">
             <p class="text-black-pearl font-weight-bold mb-0">
-              <span class="text-cursi font-weight-normal desk">con</span>
+              <span class="text-cursi font-weight-normal desk" style="margin-bottom: -16px">con</span>
               <span class="text-cursi font-weight-normal respo">con<br /></span>
               <span class="text-ami-bottom subtitle">
                 AMI
