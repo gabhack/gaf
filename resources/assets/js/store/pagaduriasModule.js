@@ -23,7 +23,7 @@ const pagaduriasModule = {
             { label: 'SED CUNDINAMARCA', value: 'SEDCUNDINAMARCA', key: 'SED CUNDINAMARCA' && 'cundinamarca' },
             { label: 'SED GUAJIRA', value: 'SEDGUAJIRA', key: 'SED GUAJIRA' },
             { label: 'SED GUAVIARE', value: 'SEDGUAVIARE', key: 'SED GUAVIARE' },
-            { label: 'SED HUILA', value: 'SEDHUILA', key: 'SED HUILA' && 'HUILA' && 'huila'},
+            { label: 'SED HUILA', value: 'SEDHUILA', key: 'SED HUILA' && 'HUILA'},
             { label: 'SED MAGDALENA', value: 'SEDMAGDALENA', key: 'SED MAGDALENA' && 'datamesSedMagdalena' },
             { label: 'SED META', value: 'SEDMETA', key: 'meta' && 'SED META' },
             { label: 'SED NARINO', value: 'SEDNARINO', key: 'SED NARINO' && 'narino'},
