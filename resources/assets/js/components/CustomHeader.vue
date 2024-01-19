@@ -2,7 +2,7 @@
   <header>
     <b-navbar toggleable="lg" type="light" variant="white" class="py-3x px-5x">
       <div class="container">
-        <b-navbar-brand href="/welcome" class="mr-5">
+        <b-navbar-brand href="/welcome" class="mr-0 mr-md-5">
           <img src="/img/logocolor.png" alt="Logo GAF" width="150px" />
         </b-navbar-brand>
 

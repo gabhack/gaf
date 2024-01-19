@@ -98,7 +98,7 @@
             <div
                 class="d-flex justify-content-center align-items-center img-nosotros"
             >
-                <h1><strong>¡Nosotros!</strong></h1>
+                <h1 class="nosotros"><strong>¡Nosotros!</strong></h1>
             </div>
             <div style="background-color: #ebebeb">
                 <section class="container subscriptions pb-5 pt-0 img-desk" style="margin-top: -45px;">
@@ -2193,7 +2193,7 @@ export default {
   color: rgb(9, 186, 139);
 }
 .marg-resp{
-    height: 50vh;
+    height: 60vh;
     z-index: 1;
     background-image: url('/img/background-home.png');
     background-size: cover;
@@ -2222,6 +2222,9 @@ export default {
     @media screen and (min-width: 800px){
         margin-top: -95px;
     }
+    @media screen and (min-width: 1600px){
+        margin-top: -170px;
+    }
 }
 .img-nosotros{
     height: 247px; 
@@ -2229,8 +2232,24 @@ export default {
     background-image: url(/img/grey-background-responsive.png);
     background-size: cover;
     background-repeat: no-repeat;
+
     @media screen and (min-width: 800px){
         background-image: url(/img/grey-background2.png);
+    }
+
+    /* @media screen and (min-width: 1600px){
+        background-image: url(/img/uncut-grey-background1.png);
+    } */
+}
+
+.nosotros{
+    padding-top: 15%;
+    @media screen and (min-width: 1000px){
+        padding-top: 7%;
+    }
+
+    @media screen and (min-width: 1600px){
+        padding-top: 5%;
     }
 }
 </style>
