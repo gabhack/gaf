@@ -31,7 +31,7 @@
                       <input required placeholder="Cargo:" class="form-control1" type="text" />
                     </div>
                     <div class="col-12 mt-4">
-                      <input required placeholder="Comentarios:" class="form-control2" type="text" />
+                      <textarea name="comentario" class="form-control2" placeholder="Comentarios:" id="" cols="30" rows="10"></textarea>
                     </div>
                     <div class="col-12">
                       <p class="my-3">La información que proporciones a GAF Solutions se rige por los términos
@@ -104,11 +104,10 @@ export default {
 <style>
 .contactanos{
   font-family: BillionDreams;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 5vw;
-    /* line-height: 177px; */
-    color: #0cedb0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 5vw;
+  color: #0cedb0;
 }
 
 .form-control1{
@@ -116,23 +115,23 @@ export default {
   width: 100%;
   border: 1px solid black;
   border-radius: 10px;
+  text-indent: 10px;
 }
 .form-control2{
   height: 100px;
   width: 100%;
+  text-indent: 10px;
   border: 1px solid black;
   border-radius: 10px;
+  vertical-align: text-top;
 }
 .form-control1::placeholder, .form-control2::placeholder{
-  /* color: #0cedb0; */
-  padding-left: 10px;
   display: flex-start;
 }
 .btn-informacion:hover{
   background-color: black;
   color: rgb(9, 186, 139);
 }
-
 .btn-informacion{
   background-color: black;
   color: white;
