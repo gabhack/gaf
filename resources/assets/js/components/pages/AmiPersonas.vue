@@ -62,6 +62,8 @@
             d-flex
             align-items-center
             justify-content-center
+            pb-5
+            pb-md-0
           "
         >
           <div class="text-center">
@@ -85,7 +87,10 @@
             </b-button>
           </div>
         </div>
-        <div class="col-lg-7 col-sm-12 pr-0 d-flex justify-content-end">
+        <div class="col-lg-7 col-sm-12 pr-0 d-flex d-md-none justify-content-center">
+          <img src="/img/amicards-responsive.png" style="width: 90%;" />
+        </div>
+        <div class="col-lg-7 col-sm-12 pr-0 d-none d-md-flex justify-content-end">
           <img src="/img/amicards.svg" style="width: 90%;" />
         </div>
       </div>
@@ -101,6 +106,8 @@
             d-flex
             align-items-center
             justify-content-center
+            pb-5
+            pb-md-0
           "
         >
           <div class="text-center">
@@ -225,6 +232,8 @@
             d-flex
             align-items-center
             justify-content-center
+            pt-5
+            pt-md-0
           "
         >
           <div class="text-center">

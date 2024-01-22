@@ -1,10 +1,10 @@
 <template>
-  <div style="height: 83vh; overflow-y: scroll;">
-    <section class="container-fluid responsive1" >
-      <div class="row">
-        <div class="col-lg-12 col-sm-12 d-flex align-items-center justify-content-center">
+  <div class="enter-section">
+    <section class="container-fluid section1" >
+      <div class="row" style="height: 88vh;">
+        <!-- <div class="col-lg-12 col-sm-12 d-flex align-items-center justify-content-center">
           <img src="/img/hegoprincipal.svg" class="img-responsive"/>
-        </div>
+        </div> -->
         <div
           class="
             col-12
@@ -13,31 +13,49 @@
             justify-content-center
             d-md-none
           "
+          style="background-image: url('/img/HEGO-banner-responsive.png'); background-size: cover; background-repeat: no-repeat;"
         >
           <div>
-            <p class="text-ami font-weight-bold degradado">
-              Herramienta Ejecutora De Gestiones Operativas y Comerciales
+            <h1
+              class="font-weight-bold text-big-personas my-0 ami-title"
+            >
+              HEGO
+            </h1>
+            <p class="text-ami font-weight-bold" style="font-size: 26px;">
+              Herramienta Ejecutora <br/> de Gestiones Operativas y <br /> Comerciales
             </p>
           </div>
         </div>
         <div
-          class="
-            col-12
+          class="col-12
             d-flex
             align-items-start
             justify-content-center
-            text-desk
-          "
+            text-desk"
+          style="background-image: url('/img/HEGO-banner.png');background-size: contain; 
+            background-repeat: no-repeat;"
         >
-          <div>
+          <!-- <div>
             <p class="text-ami text-center font-weight-bold degradado" style="line-height: 40px;">
               Herramienta Ejecutora de Gestiones Operativas y Comerciales
+            </p>
+          </div> -->
+          <div>
+            <div class="d-flex align-items-center justify-content-center">
+              <h1
+                class="font-weight-bold text-big-personas mb-0 ami-title"
+              >
+                HEGO
+              </h1>
+            </div>
+            <p class="text-ami font-weight-bold text-white text-center" style="margin-top: -12px;"> 
+              Herramienta Ejecutora de Gestiones <br /> Operativas y Comerciales
             </p>
           </div>
         </div>
       </div>
     </section>
-    <section class="container-fluid mb-5"  style="height: 100vh;">
+    <section class="container-fluid mb-5 section2">
       <div class="row" >
         <div
           class="
@@ -46,6 +64,8 @@
             d-flex
             align-items-center
             justify-content-end
+            pb-5
+            pb-md-0
           "
         >
           <div class="text-center">
@@ -68,15 +88,18 @@
             </b-button>
           </div>
         </div>
-        <div class="col-lg-7 col-sm-12 pr-0 d-flex justify-content-md-end">
+        <div class="col-lg-7 col-sm-12 pr-0 d-flex d-md-none justify-content-center">
+          <img src="/img/hegosec2-responsive.png" style="width: 90%;" />
+        </div>
+        <div class="col-lg-7 col-sm-12 pr-0 d-none d-md-flex justify-content-md-end">
           <img src="/img/hegosec2.svg" style="width: 90%;" />
         </div>
       </div>
     </section>
-    <section class="container-fluid mb-5"  style="height: 100vh;">
+    <section class="container-fluid mb-0 section3">
       <div class="row" >
-        <div class="offset-1 col-5 doc-desk">
-          <img src="/img/hegodoc.svg" style="width: 95%;" />
+        <div class="offset-1 col-5 doc-desk" style="padding-top: 5rem;">
+          <img src="/img/hegodoc.svg" style="width: 80%;" />
         </div>
         <div
           class="
@@ -84,9 +107,11 @@
             d-flex
             align-items-center
             justify-content-center
+            pb-5
+            pb-md-0
           "
         >
-          <div class="text-center">
+          <div class="text-center"  style="padding-top: 9rem;">
             <p class="text-spacing">NUESTRO SERVICIO DE</p>
             <p class="text-medium font-weight-bold degradado" style="line-height: 30px;" >
               Pagaré Desmaterializado
@@ -108,7 +133,8 @@
             </b-button>
           </div>
         </div>
-        <div class="col-12 d-md-none">
+        <div class="col-12 d-md-none pb-5
+            pb-md-0">
           <img src="/img/hegodoc.svg" class="img-fluid w-100" />
         </div>
       </div>
@@ -126,7 +152,7 @@
         </div>
       </div>
     </section>
-    <section class="container my-3">
+    <section class="container my-3 section4">
       <div class="row mb-5">
           <div class="col-12 text-center align-items-center justify-content-center" style="display: grid;">
           <p class="text-medium font-weight-bold mb-0">
