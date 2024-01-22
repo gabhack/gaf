@@ -92,7 +92,7 @@ export default {
         { label: 'HEGO', url: '/hego' }
       ],
       menuLinks: [
-        { label: 'Contacto', url: '#' },
+        { label: 'Contacto', url: '/contact' },
         { label: 'Politicas', url: '/politicas' },
         { label: 'Ingreso', url: '/login' },
       ]
