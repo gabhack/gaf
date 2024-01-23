@@ -52,6 +52,7 @@ Vue.component('HomePage', require('./components/pages/HomePage').default);
 Vue.component('Contact', require('./components/pages/Contact').default);
 Vue.component('AmiPersonas', require('./components/pages/AmiPersonas').default);
 Vue.component('MoreInformation', require('./components/pages/MoreInformation').default);
+Vue.component('MoreInformationCartera', require('./components/pages/MoreInformationCartera').default);
 Vue.component('Hego', require('./components/pages/Hego').default);
 Vue.component('HegoInformation', require('./components/pages/HegoInformation').default);
 Vue.component('Politicas', require('./components/pages/Politicas').default);

@@ -2193,7 +2193,7 @@ export default {
   color: rgb(9, 186, 139);
 }
 .marg-resp{
-    height: 50vh;
+    height: 60vh;
     z-index: 1;
     background-image: url('/img/background-home.png');
     background-size: cover;
@@ -2215,7 +2215,17 @@ export default {
         background-repeat: no-repeat;
     }
     @media screen and (min-width: 1024px){
-        height: 37vh;
+        height: 60vh;
+        background-size: cover;
+        background-repeat: no-repeat;
+        margin-bottom: 30px;
+    }
+    @media screen and (min-width: 1300px){
+        height: 100vh;
+        margin-bottom: 30px;
+    }
+    @media screen and (min-width: 1366px) and (min-height: 1024px) {
+        height: 80vh;
         margin-bottom: 30px;
     }
 }
@@ -2231,8 +2241,14 @@ export default {
     @media screen and (min-width: 800px){
         margin-top: -95px;
     }
-    @media screen and (min-width: 1600px){
-        margin-top: -170px;
+    @media screen and (min-width: 1024px){
+        margin-top: -175px;
+    }
+    @media screen and (min-width: 1300px){
+        margin-top: -120px;
+    }
+    @media screen and (min-width: 1366px) and (min-height: 1024px) {
+        margin-top:-150px;
     }
 }
 .img-nosotros{
@@ -2274,7 +2290,16 @@ export default {
         margin-top:25px;
     }
     @media screen and (min-width: 1024px){
+        margin-top:-200px;
+    }
+    @media screen and (min-width: 1300px){
         margin-top:-90px;
+    }
+    
+}
+.res-center{
+    @media screen and (min-width: 430px) and (min-height: 932px) and (max-width: 431px) and (max-height: 933px){
+        margin-top: 100px;
     }
 }
 .img-back {

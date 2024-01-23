@@ -35,7 +35,7 @@
                     </div>
                     <div class="col-12">
                       <p class="my-3">La información que proporciones a GAF Solutions se rige por los términos
-                        de nuestra <a href="">Politica de privacidad</a> </p>
+                        de nuestra <a href="/politicas">Politica de privacidad</a> </p>
                     </div>
                     <div class="col-12 text-center">
                       <b-button type="button" class="px-3 btn-informacion">¡ENVIAR!</b-button>

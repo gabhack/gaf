@@ -167,12 +167,22 @@
                         <p class="text-sec text-sec2">
                              Accede a:
                         </p>
-                        <h3>
-                            <span class="degradado text-medium font-weight-bold"><span class="plus-m">+</span><span class="onem-plus">1M</span> De Posibles Clientes.</span>
-                        </h3>
-                        <h3 class="mt-4">
-                            <span class="degradado text-medium font-weight-bold"><span class="plus-m">+</span><span class="onem-plus">300</span> Convenios a Nivel Nacional.</span>
-                        </h3>
+                        <div class="d-flex justify-content-center">
+                            <div class="d-flex align-items-start">
+                                <h3 class="text-medium font-weight-bold plus" style="color: #124f50">+</h3>
+                            </div>
+                            <h3>
+                                <span class="degradado text-medium font-weight-bold"><span class="onem-plus">1M</span> De Posibles Clientes.</span>
+                            </h3>
+                        </div>
+                        <div class="d-flex justify-content-center mt-4">
+                            <div class="d-flex align-items-start">
+                                <h3 class="text-medium font-weight-bold plus" style="color: #124f50">+</h3>
+                            </div>
+                            <h3>
+                                <span class="degradado text-medium font-weight-bold"><span class="onem-plus">300</span> Convenios a Nivel Nacional.</span>
+                            </h3>
+                        </div>
                     </div>
                 </div>
                 <div class="col-lg-6 col-sm-12 pl-5 respo">

@@ -125,7 +125,7 @@
             <b-button
               variant="black"
               class="btn-more font-weight-bold btn-informacion" 
-              href="/moreinformation"
+              href="/moreinformationcartera"
             >
             ¡Más Información!
             </b-button>
