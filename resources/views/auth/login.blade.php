@@ -8,12 +8,12 @@
   <div class="col-xs-10 col-md-6 d-flex align-items-center justify-content-center">
     <div class="text-center">
       <h1 class="title font-weight-bold text-spring-green mb-0">
-        AMI
+        GAF
       </h1>
       <p class="text font-weight-bold mb-4">
-        <span class="text-spring-green">Analisis </span>
-        de Mercado
-        <span class="text-spring-green">Inteligente</span>
+        <span class="text-spring-green">AMI</span>
+        - HEGO
+        <!-- <span class="text-spring-green">Inteligente</span> -->
       </p>
       <div class="w-50 mx-auto text-center">
         <form method="POST" action="{{ route('login') }}">

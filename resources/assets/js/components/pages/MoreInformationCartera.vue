@@ -8,8 +8,7 @@
                             ¿Qué <span class="text-black-pearl">es?</span>
                         </h2>
                         <p class="text1">
-                            Es un servicio crucial para el crecimiento y la expansión de tu compañía. Somos proveedores
-                            de información efectiva para la toma de decisiones y prospección de nuevos mercados.
+                            Es un servicio diseñado para el sostenimiento o recuperación temprana del activo.
                         </p>
                     </div>
                 </div>
@@ -25,7 +24,7 @@
                         </p>
                         <p class="text1 pl-sm-5">
                             Nuestro servicio se centra en proporcionar información efectiva y estratégica para la
-                            mitigación temprana.
+                            mitigación de mora temprana.
                         </p>
                     </div>
                 </div>

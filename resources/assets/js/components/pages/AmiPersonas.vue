@@ -87,22 +87,28 @@
             </b-button>
           </div>
         </div>
-        <div class="col-lg-7 col-sm-12 pr-0 d-flex d-md-none justify-content-center">
+        <div class="col-lg-7 col-sm-12 pr-0 d-flex d-lg-none justify-content-center">
           <img src="/img/amicards-responsive.png" style="width: 90%;" />
         </div>
-        <div class="col-lg-7 col-sm-12 pr-0 d-none d-md-flex justify-content-end">
+        <div class="col-lg-7 col-sm-12 pr-0 d-none d-lg-flex justify-content-end">
           <img src="/img/amicards.svg" style="width: 90%;" />
         </div>
       </div>
     </section>
     <section class="container-fluid section3">
-      <div class="row align-items-end">
-        <div class="col-5 img-sec3 pl-0" style="padding-top: 5rem;">
+      <div class="row align-items-end ">
+        <!-- <div class="col-5 img-sec3 pl-0" style="padding-top: 5rem;">
           <img src="/img/amipersonas2.svg" style="width: 75%;" />
+        </div> -->
+        <!-- <div class="col-lg-7 col-sm-12 pr-0 d-flex d-lg-none justify-content-center">
+          <img src="/img/amipersonas2.svg" style="width: 75%;" />
+        </div> -->
+        <div class="col-lg-7 col-sm-12 pr-0 pt-2 pt-lg-5 d-flex justify-content-center justify-content-lg-start">
+          <img src="/img/amipersonas2.svg" style="width: 65%;" />
         </div>
         <div
           class="
-            col-lg-7 col-sm-12
+            col-lg-5 col-sm-12
             d-flex
             align-items-center
             justify-content-center
