@@ -163,7 +163,7 @@
             100% digital, ágil y segura en tan solo <span style="font-size: 20px;"><strong>4</strong></span>
             pasos.
           </p>
-          <div class="d-flex justify-content-center">
+          <!-- <div class="d-flex justify-content-center">
             <b-button
               variant="black"
               class="btn-more font-weight-bold btn-informacion"
@@ -171,7 +171,7 @@
             >
               ¡Más Información!
             </b-button>
-          </div>
+          </div> -->
         </div>
       </div>
       <div class="row">

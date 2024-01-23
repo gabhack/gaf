@@ -204,7 +204,7 @@ body {
           height: 90vh; 
           scroll-snap-align: start; 
           background-image: url('/img/cut-grey-background.png');
-          background-size: 100% 565px;
+          background-size: cover;
           background-repeat: no-repeat;
         }
         .section4{
@@ -215,7 +215,7 @@ body {
           scroll-snap-align: start; 
           background-image: url('/img/cut-grey-background.png');
           background-repeat: no-repeat;
-          background-size: 100% 650px;
+          background-size: cover;
         }
 }
 .ami-title, .text-ami{

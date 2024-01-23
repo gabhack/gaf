@@ -162,7 +162,7 @@
             estrategia de venta.
             Podrás desarrollar diferentes estrategias como:
           </p>
-          <div class="d-flex justify-content-center">
+          <!-- <div class="d-flex justify-content-center">
             <b-button
               variant="black"
               class="btn-more font-weight-bold btn-informacion"
@@ -170,7 +170,7 @@
             >
               ¡Más Información!
             </b-button>
-          </div>
+          </div> -->
         </div>
       </div>
       <div class="row">
