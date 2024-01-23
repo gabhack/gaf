@@ -36,31 +36,29 @@
         </section>
         <section class="container py-5 mb-5 pad-resp">
             <div class="row">
-
-
-
-
                 <table width="100%" style="border-collapse: separate">
                     <tbody>
                         <tr class="text-center bordeado">
                             <td width="150"></td>
-                            <td width="196" class="bordeado" style="background-color: #faa600; border:none !important;">
-                                <p class="mb-0 text-center">
-                                    Análisis
-                                </p>
+                            <td width="196" class="bordeado" style="background-color: #faa600; border: none !important">
+                                <p class="mb-0 text-center">Análisis</p>
                             </td>
-                            <td width="196" class="bordeado" style="background-color: black; color: white !important; border:none !important;">
+                            <td
+                                width="196"
+                                class="bordeado"
+                                style="background-color: black; color: white !important; border: none !important"
+                            >
                                 <p class="mb-0">Visación</p>
                             </td>
-                            <td width="196" class="degrade bordeado" style=" border:none !important;">
+                            <td width="196" class="degrade bordeado" style="border: none !important">
                                 <p class="mb-0">Incorporación</p>
                             </td>
-                            <td width="196" class="bordeado" style="background-color: #faa600; border:none !important;">
+                            <td width="196" class="bordeado" style="background-color: #faa600; border: none !important">
                                 <p class="mb-0">Recaudo</p>
                             </td>
                         </tr>
                         <tr>
-                            <td  class="pr-3 degrade bordeado">Tiempo</td>
+                            <td class="pr-3 degrade bordeado">Tiempo</td>
 
                             <td width="196" class="px-3 bordeado fondo">
                                 <p class="mb-0">1 minuto o 3 minutos</p>
@@ -69,61 +67,62 @@
                                 <p class="mb-0">1 minuto a 2 horas</p>
                             </td>
                             <td width="196" class="px-3 bordeado fondo">
-                                <p class="mb-0">
-                                  Desde el día 1 al 31
-                                </p>
+                                <p class="mb-0">Desde el día 1 al 31</p>
                             </td>
                             <td width="196" class="px-3 bordeado fondo">
-                                <p class="mb-0">
-                                  De 30 a 45 dias
-                                </p>
+                                <p class="mb-0">De 30 a 45 dias</p>
                             </td>
                         </tr>
                         <tr>
-                            <td  class="pr-3 degrade bordeado">Alcance</td>
+                            <td class="pr-3 degrade bordeado">Alcance</td>
 
                             <td width="196" class="px-3 bordeado fondo">
-                                <p class="mb-0">Factible <br/>No factible</p>
-                            </td>
-                            <td width="196" class="px-3 bordeado fondo">
-                                <p class="mb-0">Condiciones <br/> autorizadas</p>
+                                <p class="mb-0">Factible <br />No factible</p>
                             </td>
                             <td width="196" class="px-3 bordeado fondo">
                                 <p class="mb-0">
-                                  Cuota al 99.7%
+                                    Condiciones <br />
+                                    autorizadas
                                 </p>
                             </td>
                             <td width="196" class="px-3 bordeado fondo">
-                                <p class="mb-0">
-                                  Efectivo 100%
-                                </p>
+                                <p class="mb-0">Cuota al 99.7%</p>
+                            </td>
+                            <td width="196" class="px-3 bordeado fondo">
+                                <p class="mb-0">Efectivo 100%</p>
                             </td>
                         </tr>
                         <tr>
                             <td class="pr-3 degrade bordeado">Riesgo</td>
 
                             <td width="196" class="px-3 bordeado fondo">
-                                <p class="mb-0">R. Comercial <br/> R. Operativo</p>
-                            </td> 
-                            <td width="196" class="px-3 bordeado fondo">
-                                <p class="mb-0">R. Pagaduria <br/> R. Operativo</p>
-                            </td>
-                            <td width="196" class="px-3 bordeado fondo">
                                 <p class="mb-0">
-                                  R. Pagaduria <br/>
-                                  R. Operativo <br/>
-                                  R. Comercial
+                                    R. Comercial <br />
+                                    R. Operativo
                                 </p>
                             </td>
                             <td width="196" class="px-3 bordeado fondo">
                                 <p class="mb-0">
-                                  R. pagaduria<br/>
-                                  R. Operativo
+                                    R. Pagaduria <br />
+                                    R. Operativo
+                                </p>
+                            </td>
+                            <td width="196" class="px-3 bordeado fondo">
+                                <p class="mb-0">
+                                    R. Pagaduria <br />
+                                    R. Operativo <br />
+                                    R. Comercial
+                                </p>
+                            </td>
+                            <td width="196" class="px-3 bordeado fondo">
+                                <p class="mb-0">
+                                    R. pagaduria<br />
+                                    R. Operativo
                                 </p>
                             </td>
                         </tr>
                         <tr>
-                            <td  class="pr-3 degrade bordeado">Resultado</td>
+                            <td class="pr-3 degrade bordeado">Resultado</td>
 
                             <td colspan="4" class="px-3 bordeado fondo">
                                 <p class="text-center mb-0">Cartera bien originada</p>
@@ -131,11 +130,6 @@
                         </tr>
                     </tbody>
                 </table>
-
-
-
-
-
 
                 <!-- <div class="col text-center">
                     <p class="text-line text-orange">Análisis</p>
@@ -171,17 +165,14 @@
                             <span class="font-weight-bold">COMERCIAL!</span>
                         </p>
                         <p class="text-sec text-sec2">
-                            Lorem ipsum dolor sit amet, consectetuer <br />
-                            adipiscing elit, sed diam nonummy nibh <br />
-                            euismod tincidunt ut laoreet dolore magna <br />
-                            aliquam erat volutpat.
+                             Accede a:
                         </p>
-                        <p class="text-sec text-sec2">
-                            Lorem ipsum dolor sit amet, consectetuer <br />
-                            adipiscing elit, sed diam nonummy nibh <br />
-                            euismod tincidunt ut laoreet dolore magna <br />
-                            aliquam erat volutpat.
-                        </p>
+                        <h3>
+                            <span class="degradado text-medium font-weight-bold"><span class="plus-m">+</span><span class="onem-plus">1M</span> De Posibles Clientes.</span>
+                        </h3>
+                        <h3 class="mt-4">
+                            <span class="degradado text-medium font-weight-bold"><span class="plus-m">+</span><span class="onem-plus">300</span> Convenios a Nivel Nacional.</span>
+                        </h3>
                     </div>
                 </div>
                 <div class="col-lg-6 col-sm-12 pl-5 respo">
@@ -205,18 +196,24 @@
     </div>
 </template>
 <style>
-.degrade{
+.degrade {
     background: #10dd8e;
     border: none !important;
     color: black;
     text-align: center;
 }
-.bordeado{
+.bordeado {
     border: 2px solid #d3d3d3;
     border-radius: 7px;
 }
-.fondo{
+.fondo {
     /* background-color: #2ac6a1; */
     background-color: white;
+}
+.plus-m {
+    
+}
+.onem-plus {
+   font-size: 38px; 
 }
 </style>

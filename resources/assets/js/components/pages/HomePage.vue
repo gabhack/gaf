@@ -5,14 +5,14 @@
                 <div class="col-sm-12 px-0 img-responsive">
                     <img src="/img/GAF-home-responsive.png" class="img-fluid w-100" />
                 </div>
-                <div class="col-lg-12 col-sm-12 px-0 img-desk">
+                <div class="col-lg-12 col-sm-12 px-0 img-desk img-back">
                     <img src="/img/GAF-home.png" class="img-fluid w-100" />
                 </div>
                 <div
-                    class="col-lg-12 col-sm-12 d-flex align-items-start align-items-lg-center justify-content-center marg-resp"
+                    class="col-lg-12 col-sm-12 d-flex align-items-start align-items-lg-center justify-content-center marg-resp space-desk"
                 >
                     <div class="res-center">
-                        <p class="text-big font-weight-bold degradado">GAF "Gestor y Administrador Financiero"</p>
+                        <p class="text-big font-weight-bold degradado">"Gestor y Administrador Financiero"</p>
                         <div style="display: grid; justify-content: center">
                             <p class="p-text2 text1" style="margin-bottom: 32px">
                                 Diseñamos soluciones tecnológicas a medida para impulsar el crecimiento económico de las
@@ -2193,21 +2193,30 @@ export default {
   color: rgb(9, 186, 139);
 }
 .marg-resp{
-    height: 60vh;
+    height: 50vh;
     z-index: 1;
     background-image: url('/img/background-home.png');
     background-size: cover;
     background-repeat: no-repeat;
-
+    
     @media screen and (min-width: 800px){
+        margin-top:-275px;
         height: 35vh;
         background-size: contain;
         background-repeat: no-repeat;
+    }
+    @media screen and (min-width: 760px){
+        height: 39vh;
+        margin-bottom: -70px;
     }
     @media screen and (min-width: 1000px){
         height: 90vh;
         background-size: contain;
         background-repeat: no-repeat;
+    }
+    @media screen and (min-width: 1024px){
+        height: 37vh;
+        margin-bottom: 30px;
     }
 }
 .text1 {
@@ -2251,5 +2260,24 @@ export default {
     @media screen and (min-width: 1600px){
         padding-top: 5%;
     }
+}
+.space-desk {
+    margin-top: -155px;
+    
+    @media screen and (max-width: 600px){
+        margin-top:0;
+    }
+    @media screen and (min-width: 800px){
+        margin-top:25px;
+    }
+    @media screen and (min-width: 760px){
+        margin-top:25px;
+    }
+    @media screen and (min-width: 1024px){
+        margin-top:-90px;
+    }
+}
+.img-back {
+    z-index: 2;
 }
 </style>
