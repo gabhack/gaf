@@ -14,9 +14,10 @@ export const setCurrentPeriod = data => {
 };
 
 export const floatToInt = value => {
-    if (!value) return 0;
+    if (!value) return 0; // Si no hay valor retornar 0
 
-    value.replace(/[^\d.-]/g, '');
+    // Eliminar caracteres no numericos
+    const newInt = value.replace(/[^\d.-]/g, '');
 
-    return parseInt(value, 10);
+    return Number(newInt);
 };
