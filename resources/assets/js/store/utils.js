@@ -12,3 +12,11 @@ export const setCurrentPeriod = data => {
 
     return data;
 };
+
+export const floatToInt = value => {
+    if (!value) return 0;
+
+    value.replace(/[^\d.-]/g, '');
+
+    return parseInt(value, 10);
+};
