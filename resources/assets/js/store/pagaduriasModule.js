@@ -26,7 +26,7 @@ const pagaduriasModule = {
             { label: 'SED CAUCA', value: 'SEDCAUCA', key: 'SED CAUCA' && 'datamesSedCauca' },
             { label: 'SED CHOCO', value: 'SEDCHOCO', key: 'SED CHOCO' && 'datamesSedChoco' },
             { label: 'SED CORDOBA', value: 'SEDCORDOBA', key: 'SED CORDOBA' && 'datamesSedCordoba' },
-            { label: 'SED CUNDINAMARCA', value: 'SEDCUNDINAMARCA', key: 'SED CUNDINAMARCA' && 'cundinamarca' },
+            { label: 'SED CUNDINAMARCA', value: 'SEDCUNDINAMARCA', key: 'SED CUNDINAMARCA'},
             { label: 'SED GUAJIRA', value: 'SEDGUAJIRA', key: 'SED GUAJIRA' },
             { label: 'SED GUAVIARE', value: 'SEDGUAVIARE', key: 'SED GUAVIARE' },
             { label: 'SED MAGDALENA', value: 'SEDMAGDALENA', key: 'SED MAGDALENA' && 'datamesSedMagdalena' },
