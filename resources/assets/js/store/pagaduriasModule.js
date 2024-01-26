@@ -34,7 +34,7 @@ const pagaduriasModule = {
             { label: 'SED NARINO', value: 'SEDNARINO', key: 'SED NARINO'},
             { label: 'SED NORTE SANTANDER', value: 'SEDNORTEDESANTANDER', key: 'SED NORTEDESANTANDER' },
             { label: 'SED SANTANDER', value: 'SEDSANTANDER', key: 'SED SANTANDER' },
-            { label: 'SED RISARALDA', value: 'SEDRISARALDA', key: 'SED RISARALDA' && 'risaralda' },
+            { label: 'SED RISARALDA', value: 'SEDRISARALDA', key: 'SED RISARALDA'},
             { label: 'SED SUCRE', value: 'SEDSUCRE', key: 'SED SUCRE' },
             { label: 'SED TOLIMA', value: 'SEDTOLIMA', key: 'SED TOLIMA' },
             { label: 'SED VALLE', value: 'SEDVALLE', key: 'SED VALLE' && 'datamesSedValle' },
@@ -88,7 +88,7 @@ const pagaduriasModule = {
             { label: 'SEM PEREIRA', value: 'SEMPEREIRA', key: 'SEM PEREIRA' },
             { label: 'SEM MEDELLIN', value: 'SEMMEDELLIN', key: 'SEM MEDELLIN' },
             { label: 'SEM MANIZALES', value: 'SEMMANIZALES', key: 'SEM MANIZALES' },
-            { label: 'SEM PASTO', value: 'SEMPASTO', key: 'SEM PASTO' && 'datamesSemPasto' && 'pasto' },
+            { label: 'SEM PASTO', value: 'SEMPASTO', key: 'SEM PASTO' && 'datamesSemPasto'},
             { label: 'SEM MAICAO', value: 'SEMMAICAO', key: 'SEM MAICAO' },
             { label: 'SEM MALAMBO', value: 'SEMMALAMBO', key: 'SEM MALAMBO' },
             { label: 'SEM POPAYAN', value: 'SEMPOPAYAN', key: 'SEM POPAYAN'},
@@ -102,7 +102,7 @@ const pagaduriasModule = {
             { label: 'SEM YOPAL', value: 'SEMYOPAL', key: 'SEM YOPAL' },
             { label: 'SEM YUMBO', value: 'SEMYUMBO', key: 'SEM YUMBO' },
             { label: 'SEM ZIPAQUIRA', value: 'SEMZIPAQUIRA', key: 'SEM ZIPAQUIRA' },
-            { label: 'SEM MOSQUERA', value: 'SEMMOSQUERA', key: 'SEM MOSQUERA' && 'mosquera' },
+            { label: 'SEM MOSQUERA', value: 'SEMMOSQUERA', key: 'SEM MOSQUERA'},
             { label: 'SEM URIBIA', value: 'SEMURIBIA', key: 'SEM URIBIA' },
             { label: 'SEM TURBO', value: 'SEMTURBO', key: 'SEM TURBO' },
             { label: 'SEM TUNJA', value: 'SEMTUNJA', key: 'SEM TUNJA' },
@@ -116,7 +116,7 @@ const pagaduriasModule = {
             { label: 'SEM GIRARDOT', value: 'SEMGIRARDOT', key: 'SEM GIRARDOT' },
             { label: 'SEM LORICA', value: 'SEMLORICA', key: 'SEM LORICA' },
             { label: 'SEM IBAGUE', value: 'SEMIBAGUE', key: 'SEM IBAGUE' },
-            { label: 'SEM FUNZA', value: 'SEMFUNZA', key: 'funza' && 'SEM FUNZA' }
+            { label: 'SEM FUNZA', value: 'SEMFUNZA', key: 'SEM FUNZA' }
         ],
         selectedPeriod: ''
     },
