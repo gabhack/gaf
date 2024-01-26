@@ -80,7 +80,7 @@ const pagaduriasModule = {
             { label: 'SEM MAGANGUE', value: 'SEMMAGANGUE', key: 'SEM MAGANGUE' },
             { label: 'SEM MONTERIA', value: 'SEMMONTERIA', key: 'SEM MONTERIA' && 'datamesSemMonteria' },
             { label: 'SED HUILA', value: 'SEDHUILA', key: 'SED HUILA' },
-            { label: 'SEM NEIVA', value: 'SEMNEIVA', key: 'SEM NEIVA' && 'NEIVA' },
+            { label: 'SEM NEIVA', value: 'SEMNEIVA', key: 'SEM NEIVA'},
             { label: 'SEM PALMIRA', value: 'SEMPALMIRA', key: 'SEM PALMIRA' },
             { label: 'SEM GUAINIA', value: 'SEMGUAINIA', key: 'SEM GUAINIA' },
             { label: 'SEM ITAGUI', value: 'SEMITAGUI', key: 'SEM ITAGUI' },
