@@ -84,9 +84,13 @@ body {
   .img-sec3 {
     display: none !important;
   }
+  .img-section3{
+    display: none !important;
+  }
   .img-sec4 {
     display: block !important;
   }
+
   .text-big-personas {
     font-size: 86px;
     line-height: 1em;
@@ -166,25 +170,12 @@ body {
   height: 100vh;
 }
 .section2{
-  
   height: 100vh; 
-  
 }
 .section3{
   height: 90vh;
-  // background-image: url('/img/grey-background3.png');
-  // background-size: 100% 565px;
-  // background-repeat: no-repeat;
 }
-.section4{
-  
-}
-.section5{
-  
-  // background-image: url('/img/cut-grey-background.png');
-  // background-repeat: no-repeat;
-  // background-size: 100% 650px;
-}
+
 @media screen and (min-width: 1000px){
         .enter-section{
           height: 83vh; 
@@ -217,25 +208,180 @@ body {
           background-size: cover;
         }
 }
-@media screen and (min-width: 1366px) and (min-height: 1024px){
+
+
+@media screen and (min-width: 768px) and (min-height: 1024px){
   .section1{
-    height: 50vh;
+    height: 90vh !important;
   }
-  .section3{
-    height: 50vh;
+  .ami-title{
+    font-size: 90px !important;
   }
-  .section2{
-    padding-top: 50px; 
-    height: 65vh; 
-    scroll-snap-align: center;
+  .text-ami{
+    font-size: 35px !important;
   }
-  .section4{
-    height: 50vh;
+  .first-desk{
+    padding-top: 0 !important;
   }
   .section5{
-    height: 50vh;
+    padding-top: 5rem;
   }
 }
+@media screen and (min-width: 1366px) and (min-height: 1024px){
+  .section1{
+    height: 80vh !important;
+  }
+  .first-desk{
+    padding-top: 23px !important;
+  }
+  .ami-title{
+    font-size: 150px !important;
+  }
+  .text-ami{
+    font-size: 35px !important;
+  }
+}
+// 2560x1440 (Quad HD o 1440p)
+@media screen and (min-width: 2560px) and (min-height: 1440px){
+  .ami-title{
+    font-size: 250px !important;
+  }
+  .text-ami{
+    font-size: 100px !important;
+  }
+}
+//Ipad
+@media screen and (min-width: 1024px) and (min-height: 768px){
+  .enter-section{
+  }
+  .ami-title{
+    font-size: 110px;
+  }
+  .text-ami{
+
+  }
+  .section1{
+    height: 80vh !important;
+  }
+  .section2{
+    height: 80vh !important;
+  }
+  .section3{
+    height: 65vh !important;
+  }
+  .img-section3{
+    padding-top: 5rem;
+  }
+  .section4{
+    height: 80vh !important;
+  }
+  .section5{
+    height: 70vh !important;
+  }
+}
+@media screen and (min-width: 1024px) and (min-height: 1366px){
+  .enter-section{
+    height: 83vh; 
+    scroll-snap-type: none; 
+    overflow-y: scroll;
+  }
+  .first-desk{
+    padding-top: 23px !important;
+  }
+  .section1{
+    height: 80vh !important;
+  }
+  .section2{
+    height: 50vh !important;
+  }
+  .section3{
+    height: 40vh !important;
+  }
+  .section4{
+    height: 50vh !important;
+  }
+  .section5{
+    height: 50vh !important;
+  }
+}
+// 1600x900
+@media screen and (min-width: 1600px) and (min-height: 900px){
+  .enter-section{
+  }
+  .section1{
+    height: 80vh !important;
+  }
+  .ami-title{
+    font-size: 150px;
+  }
+  .text-ami{
+    font-size: 50px;
+  }
+  .section2{
+    height: 90vh !important;
+  }
+  .section3{
+    height: 80vh !important;
+  }
+  .section4{
+    height: 70vh !important;
+  }
+  .section5{
+    height: 80vh !important;
+  }
+}
+// 1920x1080 (Full HD o 1080p)
+@media screen and (min-width: 1920px) and (min-height: 1080px){
+  .enter-section{
+  }
+  .section1{
+    height: 80vh !important;
+  }
+  .section2{
+    height: 100vh !important;
+  }
+  .section3{
+    height: 80vh !important;
+  }
+  .section4{
+  }
+  .section5{
+    height: 80vh !important;
+  }
+}
+
+// 2880x1800
+@media screen and (min-width: 2880px) and (min-height: 1800px){
+  .enter-section{
+  }
+  .section1{
+  }
+  .section2{
+  }
+  .section3{
+  }
+  .section4{
+  }
+  .section5{
+  }
+}
+// 3840x2160 (Ultra HD o 4K)
+@media screen and (min-width: 3840px) and (min-height: 2160px){
+  .enter-section{
+  }
+  .section1{
+  }
+  .section2{
+  }
+  .section3{
+  }
+  .section4{
+  }
+  .section5{
+  }
+}
+
+
 @media screen and (min-width: 1180px) and (min-height: 820px){
   .section1{
     height: 50vh;
@@ -249,9 +395,7 @@ body {
     scroll-snap-align: center;
   }
   .section3{
-    
-    height: 60vh; 
-    
+    height: 60vh;
   }
   .section4{
     height: 60vh;

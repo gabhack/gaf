@@ -15,7 +15,9 @@ const pagaduriasModule = {
             {
                 label: 'SED ATLANTICO',
                 value: 'SEDATLANTICO',
-                key: 'SED ATLANTICO' && 'atlantico' && 'datamesSedAtlantico'
+                // key: ['SED ATLANTICO', 'datamesSedAtlantico', 'atlantico', 'ATLANTICO'].join('|')
+                key: 'SED ATLANTICO' && 'atlantico'
+                // key: ['SED ATLANTICO', 'datamesSedAtlantico', 'ATLANTICO']
             },
             { label: 'SED BOLIVAR', value: 'SEDBOLIVAR', key: 'SED BOLIVAR' && 'datamesSedBolivar' },
             { label: 'SED BOYACA', value: 'SEDBOYACA', key: 'SED BOYACA' },
@@ -46,7 +48,7 @@ const pagaduriasModule = {
             {
                 label: 'SEM BARRANQUILLA',
                 value: 'SEMBARRANQUILLA',
-                key: 'SEM BARRANQUILLA' && 'datamesSemBarranquilla'
+                key: 'SEM BARRANQUILLA' && 'datamesSemBarranquilla' && 'BARRANQUILLA'
             },
             { label: 'SEM APARTADO', value: 'SEMAPARTADO', key: 'SEM APARTADO' },
             { label: 'SEM BARRANCABERMEJA', value: 'SEMBARRANCABERMEJA', key: 'SEM BARRANCABERMEJA' },
@@ -77,7 +79,7 @@ const pagaduriasModule = {
             { label: 'SEM JAMUNDI', value: 'SEMJAMUNDI', key: 'SEM JAMUNDI' },
             { label: 'SEM MAGANGUE', value: 'SEMMAGANGUE', key: 'SEM MAGANGUE' },
             { label: 'SEM MONTERIA', value: 'SEMMONTERIA', key: 'SEM MONTERIA' && 'datamesSemMonteria' },
-            { label: 'SED HUILA', value: 'SEDHUILA', key: 'SED HUILA' && 'HUILA' },
+            { label: 'SED HUILA', value: 'SEDHUILA', key: 'SED HUILA' },
             { label: 'SEM NEIVA', value: 'SEMNEIVA', key: 'SEM NEIVA' && 'NEIVA' },
             { label: 'SEM PALMIRA', value: 'SEMPALMIRA', key: 'SEM PALMIRA' },
             { label: 'SEM GUAINIA', value: 'SEMGUAINIA', key: 'SEM GUAINIA' },
@@ -89,7 +91,7 @@ const pagaduriasModule = {
             { label: 'SEM PASTO', value: 'SEMPASTO', key: 'SEM PASTO' && 'datamesSemPasto' && 'pasto' },
             { label: 'SEM MAICAO', value: 'SEMMAICAO', key: 'SEM MAICAO' },
             { label: 'SEM MALAMBO', value: 'SEMMALAMBO', key: 'SEM MALAMBO' },
-            { label: 'SEM POPAYAN', value: 'SEMPOPAYAN', key: 'SEM POPAYAN' && 'datamesSemPopayan' },
+            { label: 'SEM POPAYAN', value: 'SEMPOPAYAN', key: 'SEM POPAYAN'},
             { label: 'SEM QUIBDO', value: 'SEMQUIBDO', key: 'SEM QUIBDO' && 'datamesSemQuibdo' },
             { label: 'SEM RIONEGRO', value: 'SEMRIONEGRO', key: 'SEM RIONEGRO' && 'datamesSemRioNegro' },
             { label: 'SEM SABANETA', value: 'SEMSABANETA', key: 'SEM SABANETA' && 'datamesSemSabaneta' },

@@ -104,7 +104,7 @@
           <img src="/img/amipersonas2.svg" style="width: 75%;" />
         </div> -->
         <div class="col-lg-7 col-sm-12 pr-0 pt-2 pt-lg-5 d-flex justify-content-center justify-content-lg-start">
-          <img src="/img/amipersonas2.svg" style="width: 65%;" />
+          <img src="/img/amipersonas2.svg" class="img-section3" style="width: 65%;" />
         </div>
         <div
           class="
