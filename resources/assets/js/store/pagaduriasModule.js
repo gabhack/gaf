@@ -31,7 +31,7 @@ const pagaduriasModule = {
             { label: 'SED GUAVIARE', value: 'SEDGUAVIARE', key: 'SED GUAVIARE' },
             { label: 'SED MAGDALENA', value: 'SEDMAGDALENA', key: 'SED MAGDALENA' && 'datamesSedMagdalena' },
             { label: 'SED META', value: 'SEDMETA', key: 'meta' && 'SED META' },
-            { label: 'SED NARINO', value: 'SEDNARINO', key: 'SED NARINO' && 'narino' },
+            { label: 'SED NARINO', value: 'SEDNARINO', key: 'SED NARINO'},
             { label: 'SED NORTE SANTANDER', value: 'SEDNORTEDESANTANDER', key: 'SED NORTEDESANTANDER' },
             { label: 'SED SANTANDER', value: 'SEDSANTANDER', key: 'SED SANTANDER' },
             { label: 'SED RISARALDA', value: 'SEDRISARALDA', key: 'SED RISARALDA' && 'risaralda' },
