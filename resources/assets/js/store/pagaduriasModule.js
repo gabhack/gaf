@@ -48,7 +48,7 @@ const pagaduriasModule = {
             {
                 label: 'SEM BARRANQUILLA',
                 value: 'SEMBARRANQUILLA',
-                key: 'SEM BARRANQUILLA' && 'datamesSemBarranquilla' && 'BARRANQUILLA'
+                key: 'SEM BARRANQUILLA' && 'datamesSemBarranquilla'
             },
             { label: 'SEM APARTADO', value: 'SEMAPARTADO', key: 'SEM APARTADO' },
             { label: 'SEM BARRANCABERMEJA', value: 'SEMBARRANCABERMEJA', key: 'SEM BARRANCABERMEJA' },
