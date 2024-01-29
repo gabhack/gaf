@@ -16,7 +16,7 @@ const pagaduriasModule = {
                 label: 'SED ATLANTICO',
                 value: 'SEDATLANTICO',
                 // key: ['SED ATLANTICO', 'datamesSedAtlantico', 'atlantico', 'ATLANTICO'].join('|')
-                key: 'SED ATLANTICO' && 'atlantico'
+                key: 'SED ATLANTICO' && 'datamesSedAtlantico'
                 // key: ['SED ATLANTICO', 'datamesSedAtlantico', 'ATLANTICO']
             },
             { label: 'SED BOLIVAR', value: 'SEDBOLIVAR', key: 'SED BOLIVAR' && 'datamesSedBolivar' },
