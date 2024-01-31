@@ -358,7 +358,7 @@
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-6">
-                                    <b class="panel-label">TIPO DE DOCUMENTO:</b>
+                                    <b class="panel-label">TIPO DE DOCUMENTOf:</b>
                                     <div v-for="(datames, key) in datames" :key="key">
                                         <p class="panel-value">{{ datames.td }}</p>
                                     </div>
@@ -407,6 +407,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <b class="panel-label">CELULAR:</b>
+                                    
                                     <div v-for="(datames, key) in datames" :key="key">
                                         <p class="panel-value">{{ datames.cel }}</p>
                                     </div>

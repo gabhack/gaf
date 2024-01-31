@@ -1,7 +1,7 @@
 <template>
-    <div class="col-md-6">
+    <!-- <div class="col-md-6">
         <div class="panel panel-primary mb-3">
-            <div class="panel-heading"><b>INFORMACIÓN PERSONAL</b></div>
+            <div class="panel-heading"><b>INFORMACIÓN PERSONALLLL</b></div>
             <div class="panel-body">
                 <div class="row">
                     <div class="col-6">
@@ -61,7 +61,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 </template>
 
 <script>
