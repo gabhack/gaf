@@ -483,7 +483,7 @@
                                                         <div
                                                             class="col-12 d-flex align-items-center justify-content-center"
                                                         >
-                                                            <b-carousel style="max-width: 319px" background="white">
+                                                            <b-carousel :interval="4000" fade controls indicators style="max-width: 300px" background="#ebebeb">
                                                                 <b-carousel-slide>
                                                                     <template #img>
                                                                         <div style="display: flex">
@@ -491,22 +491,22 @@
                                                                                 class="d-block img-fluid w-100"
                                                                                 src="/img/kblogo.png"
                                                                                 alt="image slot"
-                                                                                style="max-width: 318px; height: 150px"
+                                                                                style="width: 300px; min-height: 150px;"
                                                                             />
-                                                                            <img
-                                                                                src="/img/LogoCK.png"
-                                                                                alt="image slot"
-                                                                                style="
-                                                                                    max-width: 318px;
-                                                                                    max-height: 150px;
-                                                                                "
-                                                                            />
+                                                                            <!-- <div style="min-width: 300px;">
+                                                                                <img
+                                                                                    class="d-block"
+                                                                                    src="/img/LogoCK(1).png"
+                                                                                    alt="image slot"
+                                                                                    style="min-width: 300px; max-height: 150px;"
+                                                                                />
+                                                                            </div>
                                                                             <img
                                                                                 class="d-block img-fluid w-100"
                                                                                 src="/img/trlogo.png"
                                                                                 alt="image slot"
-                                                                                style="max-width: 318px; height: 150px"
-                                                                            />
+                                                                                style="max-width: 300px; max-height: 150px;"
+                                                                            /> -->
                                                                         </div>
                                                                     </template>
                                                                 </b-carousel-slide>
@@ -514,14 +514,14 @@
                                                                     <template #img>
                                                                         <div style="display: flex">
                                                                             <img
-                                                                                src="/img/LogoCK.png"
+                                                                                src="/img/LogoCK(1).png"
                                                                                 alt="image slot"
                                                                                 style="
-                                                                                    max-width: 318px;
+                                                                                    min-width: 318px;
                                                                                     max-height: 150px;
                                                                                 "
                                                                             />
-                                                                            <img
+                                                                            <!-- <img
                                                                                 class="d-block img-fluid w-100"
                                                                                 src="/img/trlogo.png"
                                                                                 alt="image slot"
@@ -532,7 +532,7 @@
                                                                                 src="/img/kblogo.png"
                                                                                 alt="image slot"
                                                                                 style="max-width: 318px; height: 150px"
-                                                                            />
+                                                                            /> -->
                                                                         </div>
                                                                     </template>
                                                                 </b-carousel-slide>
@@ -543,22 +543,22 @@
                                                                                 class="d-block img-fluid w-100"
                                                                                 src="/img/trlogo.png"
                                                                                 alt="image slot"
-                                                                                style="max-width: 318px; height: 150px"
+                                                                                style="max-width: 318px; min-height: 150px"
                                                                             />
-                                                                            <img
+                                                                            <!-- <img
                                                                                 class="d-block img-fluid w-100"
                                                                                 src="/img/kblogo.png"
                                                                                 alt="image slot"
                                                                                 style="max-width: 318px; height: 150px"
                                                                             />
                                                                             <img
-                                                                                src="/img/LogoCK.png"
+                                                                                src="/img/LogoCK(1).png"
                                                                                 alt="image slot"
                                                                                 style="
                                                                                     max-width: 318px;
                                                                                     max-height: 150px;
                                                                                 "
-                                                                            />
+                                                                            /> -->
                                                                         </div>
                                                                     </template>
                                                                 </b-carousel-slide>

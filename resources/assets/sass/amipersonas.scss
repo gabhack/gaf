@@ -249,6 +249,47 @@ body {
   .text-ami{
     font-size: 100px !important;
   }
+  .texto-1{
+    font-size: 55px;
+    letter-spacing: 0.2em;
+  }
+  .texto-2{
+    font-size: 70px;
+  }
+  .texto-3{
+    font-size: 30px;
+    padding-bottom: 50px;
+    max-width: 988px !important;
+  }
+  .btn-informacion{
+    font-size: 30px;
+    min-width: 472px !important;
+  }
+  .texto-4{
+    font-size: 40px;
+  }
+  .texto-end{
+    font-size: 35px !important;
+  }
+  .img-1{
+    width: 215px !important;
+  }
+  .img-2{
+    width: 258px !important;
+  }
+  .img-3{
+    width: 232px !important;
+  }
+  .img-4{
+    width: 188px !important;
+  }
+  .text-cursi, .text-ami-bottom{
+    font-size: 150px !important;
+  }
+  .text-final1 {
+    font-size: 70px;
+    line-height: 70px;
+  }
 }
 //Ipad
 @media screen and (min-width: 1024px) and (min-height: 768px){
@@ -347,37 +388,6 @@ body {
   }
   .section5{
     height: 80vh !important;
-  }
-}
-
-// 2880x1800
-@media screen and (min-width: 2880px) and (min-height: 1800px){
-  .enter-section{
-  }
-  .section1{
-  }
-  .section2{
-  }
-  .section3{
-  }
-  .section4{
-  }
-  .section5{
-  }
-}
-// 3840x2160 (Ultra HD o 4K)
-@media screen and (min-width: 3840px) and (min-height: 2160px){
-  .enter-section{
-  }
-  .section1{
-  }
-  .section2{
-  }
-  .section3{
-  }
-  .section4{
-  }
-  .section5{
   }
 }
 

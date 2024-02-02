@@ -67,11 +67,11 @@
           "
         >
           <div class="text-center">
-            <p class="text-spacing mb-0">CON NUESTRO SISTEMA DE</p>
+            <p class="text-spacing mb-0 texto-1">CON NUESTRO SISTEMA DE</p>
             <p class="text-medium font-weight-bold">
-              <span class="degradado">Análisis Para Aprobación De Crédito</span>
+              <span class="degradado texto-2">Análisis Para Aprobación De Crédito</span>
             </p>
-            <p class="text1">
+            <p class="text1 texto-3">
               Experimentarás una transformación notable en la manera en que gestionas
               tus créditos. Nunca mas enfrentarás los desafios previos a la aprobación,
               ya que nuestro sistema inteligente te permite mejorar tus resultados
@@ -97,12 +97,6 @@
     </section>
     <section class="container-fluid section3">
       <div class="row align-items-end ">
-        <!-- <div class="col-5 img-sec3 pl-0" style="padding-top: 5rem;">
-          <img src="/img/amipersonas2.svg" style="width: 75%;" />
-        </div> -->
-        <!-- <div class="col-lg-7 col-sm-12 pr-0 d-flex d-lg-none justify-content-center">
-          <img src="/img/amipersonas2.svg" style="width: 75%;" />
-        </div> -->
         <div class="col-lg-7 col-sm-12 pr-0 pt-2 pt-lg-5 d-flex justify-content-center justify-content-lg-start">
           <img src="/img/amipersonas2.svg" class="img-section3" style="width: 65%;" />
         </div>
@@ -114,14 +108,15 @@
             justify-content-center
             pb-5
             pb-md-0
+            pr-xl-5
           "
         >
           <div class="text-center">
-            <p class="text-spacing mb-0">CON NUESTRO PROCESO DE</p>
+            <p class="text-spacing mb-0 texto-1">CON NUESTRO PROCESO DE</p>
             <p class="text-medium font-weight-bold">
-              <span class="degradado mb-5">Recuperación De Cartera</span>
+              <span class="degradado mb-5 texto-2">Recuperación De Cartera</span>
             </p>
-            <p class="text1">
+            <p class="text1 texto-3">
               Mantén tu activo bajo control y monitoreo constante las 24 horas
               y los 7 días de la semana. Nuestra intervención mediante un sistema 
               inteligente agilizará la normalización de tu activo, especialmente
@@ -145,7 +140,7 @@
     <section class="container-fluid bg-black-pearl py-4">
       <div class="row">
         <div class="col-12 text-center">
-          <p class="text-white text-uppercase text-spacing mb-0" style=" scroll-snap-align: start;">
+          <p class="text-white text-uppercase text-spacing mb-0 texto-4" style=" scroll-snap-align: start;">
             ¡Descubre
             <span class="subtitle font-weight-bold">
               nuevos clientes
@@ -155,40 +150,30 @@
         </div>
       </div>
     </section>
-    <section class="container mt-3 section4">
+    <section class="mt-3 section4">
       <div class="row mb-5">
         <div class="col-12 text-center align-items-center justify-content-center" style="display: grid;">
           <p class="text-medium font-weight-bold mb-0">
-            <span class="degradado">Prospección De Mercado</span>
+            <span class="degradado texto-2">Prospección De Mercado</span>
           </p>
-          <p class="text1" style="margin-top: 12px !important">
+          <p class="text1 texto-3" style="margin-top: 12px !important">
             Conocemos millones de clientes nuevos para ti, de acuerdo a tu
             política de créditos
             analizaremos los requerimientos del mercado y diseñamos la mejor
             estrategia de venta.
             Podrás desarrollar diferentes estrategias como:
           </p>
-          <!-- <div class="d-flex justify-content-center">
-            <b-button
-              variant="black"
-              class="btn-more font-weight-bold btn-informacion"
-              href="/moreinformation"
-            >
-              ¡Más Información!
-            </b-button>
-          </div> -->
         </div>
       </div>
       <div class="row">
-
         <div class="col-lg-3 col-sm-12 col-icons pb-4 pb-lg-0">
           <div class="d-flex justify-content-center">
             <div class="div-icon" style="display: grid; justify-content: center; width: 280px;">
-              <img src="/img/IconoAmi1.png" style="width: 91px; margin-left: 15px;" />
-              <p class="font-weight-bold subtitle text-line mb-0">ESTRATEGIA I</p>
+              <img src="/img/IconoAmi1.png" class="img-1" style="width: 91px; margin-left: 15px;" />
+              <p class="font-weight-bold subtitle text-line mb-0 texto-end">ESTRATEGIA I</p>
             </div>
           </div>
-          <p class="font-weight-bold text-line subtitle mb-0 mt-0">
+          <p class="font-weight-bold text-line subtitle mb-0 mt-0 texto-end">
             <span class="black-pearl" style="color: black;">
               PENETRACIÓN DE <br />MERCADO
             </span>
@@ -197,34 +182,34 @@
         <div class="col-lg-3 col-sm-12 col-icons pb-4 pb-lg-0">
           <div class="d-flex justify-content-center">
             <div class="div-icon" style="display: grid; justify-content: center; width: 280px;">
-              <img src="/img/IconoAmi2.png" style="width: 109px; margin-left: 7.5px;" />
-              <p class="font-weight-bold subtitle text-line mb-0">ESTRATEGIA II</p>
+              <img src="/img/IconoAmi2.png" class="img-2" style="width: 109px; margin-left: 7.5px;" />
+              <p class="font-weight-bold subtitle text-line mb-0 texto-end">ESTRATEGIA II</p>
             </div>
           </div>  
-          <p class="font-weight-bold text-line mb-0 mt-0">
+          <p class="font-weight-bold text-line mb-0 mt-0 texto-end">
               EXPANSIÓN <br />COMERCIAL
           </p>
         </div>
         <div class="col-lg-3 col-sm-12 col-icons pb-4 pb-lg-0">
           <div class="d-flex justify-content-center">
             <div class="div-icon" style="display: grid; justify-content: center; width: 280px;">
-              <img src="/img/IconoAmi3.png" style="width: 100px; margin-left: 20px;" />
-              <p class="font-weight-bold subtitle text-line mb-0">ESTRATEGIA III</p>
+              <img src="/img/IconoAmi3.png" class="img-3" style="width: 100px; margin-left: 20px;" />
+              <p class="font-weight-bold subtitle text-line mb-0 texto-end">ESTRATEGIA III</p>
             </div>
           </div>
           
-          <p class="font-weight-bold text-line mb-0 mt-0">
+          <p class="font-weight-bold text-line mb-0 mt-0 texto-end">
              DESARROLLO DE <br />PRODUCTO
           </p>
         </div>
         <div class="col-lg-3 col-sm-12 col-icons pb-4 pb-lg-0">
           <div class="d-flex justify-content-center">
             <div class="div-icon" style="display: grid; justify-content: center; width: 280px;">
-              <img src="/img/IconoAmi4.png" style="width: 82px; margin-left: 25px;" />
-              <p class="font-weight-bold subtitle text-line mb-0">ESTRATEGIA IV</p>
+              <img src="/img/IconoAmi4.png" class="img-4" style="width: 82px; margin-left: 25px;" />
+              <p class="font-weight-bold subtitle text-line mb-0 texto-end">ESTRATEGIA IV</p>
             </div>
           </div>
-          <p class="font-weight-bold text-line mt-0 mb-0">
+          <p class="font-weight-bold text-line mt-0 mb-0 texto-end">
             DIVERSIFICACIÓN DE <br /> PORTAFOLIO
           </p>
         </div>
