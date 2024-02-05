@@ -7,7 +7,7 @@
         </div>
         <div class="col-lg-5 col-sm-12 d-flex align-items-start justify-content-center">
           <div>
-            <h5 class="contactanos text-center mb-0">¡Contactanos!</h5>
+            <h5 class="contactanos text-center mb-0">¡Contáctanos!</h5>
             <div class="row">
               <div class="panel mb-3 col-md-12">
                 <div class="panel-body">
