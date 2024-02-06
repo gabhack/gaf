@@ -464,22 +464,6 @@
                                                 </div>
                                                 <div class="col-12 mb-4">
                                                     <div class="row">
-                                                        <!-- <div
-                                                    class="col-4 text-center d-flex align-items-center justify-content-center"
-                                                >
-                                                    <img src="/img/LogoCK.png" class="img-fluid w-50" />
-                                                </div>
-                                                <div
-                                                    class="col-4 text-center d-flex align-items-center justify-content-center"
-                                                >
-                                                    <img src="/img/trlogo.png" class="img-fluid w-100" />
-                                                </div>
-                                                <div
-                                                    class="col-4 text-center d-flex align-items-center justify-content-center"
-                                                >
-                                                    <img src="/img/kblogo.png" class="img-fluid w-100" />
-                                                </div> -->
-
                                                         <div
                                                             class="col-12 d-flex align-items-center justify-content-center"
                                                         >
@@ -493,20 +477,6 @@
                                                                                 alt="image slot"
                                                                                 style="width: 300px; min-height: 150px;"
                                                                             />
-                                                                            <!-- <div style="min-width: 300px;">
-                                                                                <img
-                                                                                    class="d-block"
-                                                                                    src="/img/LogoCK(1).png"
-                                                                                    alt="image slot"
-                                                                                    style="min-width: 300px; max-height: 150px;"
-                                                                                />
-                                                                            </div>
-                                                                            <img
-                                                                                class="d-block img-fluid w-100"
-                                                                                src="/img/trlogo.png"
-                                                                                alt="image slot"
-                                                                                style="max-width: 300px; max-height: 150px;"
-                                                                            /> -->
                                                                         </div>
                                                                     </template>
                                                                 </b-carousel-slide>
@@ -521,18 +491,6 @@
                                                                                     max-height: 150px;
                                                                                 "
                                                                             />
-                                                                            <!-- <img
-                                                                                class="d-block img-fluid w-100"
-                                                                                src="/img/trlogo.png"
-                                                                                alt="image slot"
-                                                                                style="max-width: 318px; height: 150px"
-                                                                            />
-                                                                            <img
-                                                                                class="d-block img-fluid w-100"
-                                                                                src="/img/kblogo.png"
-                                                                                alt="image slot"
-                                                                                style="max-width: 318px; height: 150px"
-                                                                            /> -->
                                                                         </div>
                                                                     </template>
                                                                 </b-carousel-slide>
@@ -545,23 +503,15 @@
                                                                                 alt="image slot"
                                                                                 style="max-width: 318px; min-height: 150px"
                                                                             />
-                                                                            <!-- <img
-                                                                                class="d-block img-fluid w-100"
-                                                                                src="/img/kblogo.png"
-                                                                                alt="image slot"
-                                                                                style="max-width: 318px; height: 150px"
-                                                                            />
-                                                                            <img
-                                                                                src="/img/LogoCK(1).png"
-                                                                                alt="image slot"
-                                                                                style="
-                                                                                    max-width: 318px;
-                                                                                    max-height: 150px;
-                                                                                "
-                                                                            /> -->
                                                                         </div>
                                                                     </template>
                                                                 </b-carousel-slide>
+                                                                <slot name="nav-prev">
+                                                                    <button class="btn btn-primary">Anterior</button>
+                                                                </slot>
+                                                                <slot name="nav-next">
+                                                                    <button class="btn btn-primary">Siguiente</button>
+                                                                </slot>
                                                             </b-carousel>
                                                         </div>
                                                     </div>
@@ -2304,5 +2254,26 @@ export default {
 }
 .img-back {
     z-index: 2;
+}
+.carousel-control-prev{
+    left: -25px;
+}
+.carousel-control-next{
+    right: -25px;
+}
+.carousel-control-prev::before{
+    content: '<';
+    font-size: 50px;
+    color: #07edb1;
+    background: white;
+}
+.carousel-control-next::before{
+    content: '>';
+    font-size: 50px;
+    color: #07edb1;
+    background: white;
+}
+.carousel-control-prev-icon, .carousel-control-next-icon{
+    display: none !important;
 }
 </style>

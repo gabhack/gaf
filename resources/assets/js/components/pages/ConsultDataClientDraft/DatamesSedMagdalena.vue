@@ -1,5 +1,5 @@
 <template>
-  <div class="col-6" v-if="datamesSed">
+  <!-- <div class="col-6" v-if="datamesSed">
     <div class="panel panel-primary mb-3">
       <div class="panel-heading">
         <b>INFORMACIÓN PERSONAL</b>
@@ -26,7 +26,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>
