@@ -522,7 +522,7 @@
                                                         soluciones para el día a día de los originadores de créditos y
                                                         fondos de inversión hasta atender las necesidades específicas de
                                                         gestores de
-                                                        <b>NPLs (Non-Performing Loans).</b>En GAF, estamos comprometidos
+                                                        <b>NPLs (Non-Performing Loans).</b> En GAF, estamos comprometidos
                                                         con proporcionar servicios de vanguardia que permitan a nuestros
                                                         clientes avanzar y estabilizarse con confianza en un mundo
                                                         financiero en constante evolución.
