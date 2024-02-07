@@ -1,5 +1,5 @@
 <template>
-    <!-- <div class="col-md-6">
+    <div class="col-md-6">
         <div class="panel panel-primary mb-3">
             <div class="panel-heading"><b>INFORMACIÓN PERSONALLLL</b></div>
             <div class="panel-body">
@@ -61,7 +61,7 @@
                 </div>
             </div>
         </div>
-    </div> -->
+    </div>
 </template>
 
 <script>
