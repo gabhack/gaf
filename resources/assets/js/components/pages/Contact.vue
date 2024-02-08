@@ -85,17 +85,17 @@
         <div class="col-lg-12 col-sm-12 text-center mt-4">
           <span class="text-big d-block font-weight-bold text-uppercase"> ¡Síguenos! </span>
           <div class="social-media mt-4 mb-3">
-            <a href="">
+            <a href="https://www.facebook.com/" class="icons">
               <FacebookIcon />
             </a>
-            <a href="">
+            <a href="https://www.instagram.com/" class="icons">
               <InstagramIcon />
             </a>
 
-            <a href="">
+            <a href="https://twitter.com/" class="icons">
               <TwitterIcon />
             </a>
-            <a href="">
+            <a href="https://www.youtube.com/" class="icons">
               <YoutubeIcon />
             </a>
           </div>
@@ -264,6 +264,9 @@ export default {
   &:not(.is-invalid) {
     border-color: #000000;
   }
+}
+.icons:hover{
+  opacity: 0.5;
 }
 </style>
 
