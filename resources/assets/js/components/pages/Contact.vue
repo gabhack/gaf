@@ -260,7 +260,6 @@ export default {
 <style lang="scss" scoped>
 .form-control {
   border-radius: 10px;
-  text-indent: 10px;
 
   &:not(.is-invalid) {
     border-color: #000000;
