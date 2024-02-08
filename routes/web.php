@@ -11,6 +11,7 @@
 |
 */
 
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DescuentosController;
 use App\Http\Controllers\EmbargosController;
 use App\Http\Controllers\VisadoController;
@@ -503,7 +504,6 @@ Route::view('/hegoinformation', 'hegoinformation');
 Route::view('/politicas', 'politicas');
 Route::view('/contacto', 'contacto');
 Route::view('/integration', 'integration');
-Route::view('/contact', 'contact');
 
 Route::post('datamesImport', 'DataMesController@import');
 Route::post('fechaVincImport', 'FechaVincController@import');
@@ -606,3 +606,7 @@ Route::resource('cartera', 'CarteraController');
 
 //Reporte de planta comercial
 Route::get('reporte-planta-comercial', 'ReportesController@reportePlantaComercial');
+
+// Contacto
+Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
