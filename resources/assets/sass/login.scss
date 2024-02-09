@@ -5,7 +5,11 @@ html,
 body {
   font-family: Poppins;
 }
-
+@media (max-height: 500px) and (orientation: landscape) {
+  html {
+    display: block;
+  }
+}
 .img-background{
   background-image: url('/img/INGRESO-GAF3.jpg');
   background-size: 100% 100%;
