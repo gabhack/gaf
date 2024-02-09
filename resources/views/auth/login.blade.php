@@ -38,7 +38,7 @@
               </span>
             @endif
           </div>
-          <div class="mt-3 pb-5">
+          <div class="mt-3 pb-2">
               <div class="custom-control custom-checkbox">
                 <input type="checkbox" id="remember" name="remember" class="custom-control-input" {{ old('remember') ? 'checked' : '' }}>
                 <label class="custom-control-label password" for="remember">Recuérdame</label>
