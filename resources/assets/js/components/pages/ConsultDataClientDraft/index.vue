@@ -71,10 +71,10 @@
                         // pagaduriaType == 'SEDCHOCO' ||
                         // pagaduriaType == 'SEDVALLE' ||
                         pagaduriaType == 'SEDCAUCA' ||
-                        // pagaduriaType == 'SEMSAHAGUN' ||
+                        pagaduriaType == 'SEMSAHAGUN' ||
                         // pagaduriaType == 'SEMCALI' ||
                         pagaduriaType == 'SEMQUIBDO' ||
-                        // pagaduriaType == 'SEDMAGDALENA' ||
+                        //pagaduriaType == 'SEDMAGDALENA' ||
                         pagaduriaType == 'SEMPOPAYAN' ||
                         pagaduriaType == 'SEMMONTERIA' ||
                         pagaduriaType == 'SEDCORDOBA' ||

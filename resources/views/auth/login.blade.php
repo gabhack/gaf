@@ -1,7 +1,13 @@
 @extends('layouts.applogin')
 
 @section('content')
+<div class="twin2">
+  <img src="/img/rotate-phone.png" style="width: 15%;" />
+  <span class="twin1">Gire su móvil en modo vertical para ver el contenido.</span>
+</div>
+
 <div class="row h-100 img-background">
+
   <div class="col-xl-5 d-none d-xl-flex align-items-center justify-content-end">
     <img src="/img/INGRESO-IMG-GAF2.png" class="img-fluid w-75" />
   </div>
