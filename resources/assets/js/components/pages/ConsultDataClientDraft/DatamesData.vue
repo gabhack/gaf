@@ -45,7 +45,9 @@ export default {
                 { label: 'DEPARTAMENTO', field: '' },
                 { label: 'MUNICIPIO', field: '' },
                 { label: 'TELÉFONO', field: 'tel' },
-                { label: 'CELULAR', field: '' }
+                { label: 'CELULAR', field: 'cel' },
+                { label: 'SITUACION LABORAL', field: 'slabor' },
+                { label: 'NOVEDAD', field: 'novvinc' },
             ]
         };
     },

@@ -25,5 +25,7 @@ class DatamesSedMagdalena extends Model
         'ie_sede_area',
         'telefono',
         'email',
+        'dir',
+        'fecnacimient'
     ];
 }
