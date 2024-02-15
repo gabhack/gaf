@@ -60,7 +60,7 @@ class dataCotizer extends Model
     ];
 
     public function estudio()
-	{
-		return $this->hasOne('App\Estudiostr', 'data_cotizer_id', 'id');
-	}
+    {
+        return $this->hasOne('App\Estudiostr', 'data_cotizer_id', 'id');
+    }
 }
