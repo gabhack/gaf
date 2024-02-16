@@ -66,9 +66,13 @@
                 <!--================================
                 DATAMES SECRETARIAS
                 ===================================-->
+                <DatamesData2
+                    v-if="
+                        pagaduriaType == 'SEMSAHAGUN'" />
+
                 <DatamesData
                     v-if="
-                        // pagaduriaType == 'SEDCHOCO' ||
+                        pagaduriaType == 'SEDCHOCO' ||
                         // pagaduriaType == 'SEDVALLE' ||
                         pagaduriaType == 'SEDCAUCA' ||
                         // pagaduriaType == 'SEMSAHAGUN' ||
@@ -165,9 +169,9 @@
                     "
                 />
 
-                <DatamesSedChoco v-if="pagaduriaType == 'SEDCHOCO'" />
+                <!-- <DatamesSedChoco v-if="pagaduriaType == 'SEDCHOCO'" /> -->
                 <DatamesSedMagdalena v-if="pagaduriaType == 'SEDMAGDALENA'" />
-                <DatamesSemSahagun v-if="pagaduriaType == 'SEMSAHAGUN'" />
+                <!-- <DatamesSemSahagun v-if="pagaduriaType == 'SEMSAHAGUN'" /> -->
 
                 <!--============================
                 COMPONENTE HISTORIAL LABORAL
@@ -343,6 +347,7 @@ import EmploymentHistory from './EmploymentHistory';
 import DatamesComponent from './Datames.vue';
 
 import DatamesData from './DatamesData';
+import DatamesData2 from './DatamesData2';
 import DatamesFidu from './DatamesFidu';
 import DatamesSedChoco from './DatamesSedChoco.vue';
 import DatamesSedMagdalena from './DatamesSedMagdalena';
@@ -374,6 +379,7 @@ export default {
         EmploymentHistory,
         DatamesComponent,
         DatamesData,
+        DatamesData2,
         DatamesFidu,
         DatamesSedChoco,
         DatamesSedMagdalena,
