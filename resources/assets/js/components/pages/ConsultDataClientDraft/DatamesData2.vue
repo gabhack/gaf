@@ -44,6 +44,7 @@ export default {
                 { label: 'DIRECCIÓN', field: 'dir' },
                 { label: 'DEPARTAMENTO', field: '' },
                 { label: 'MUNICIPIO', field: '' },
+                { label: 'EMAIL', field: 'email' },
                 { label: 'TELÉFONO', field: 'tel' },
                 { label: 'CELULAR', field: '' },
                 { label: 'SITUACION LABORAL', field: 'sitlab' },
