@@ -360,7 +360,7 @@
                         <div class="col-6">
                             <b class="panel-label"> TIPO DE CONTRATO:</b>
                             <div>
-                                <p class="panel-value">{{ datamesSed.ncontr || datamesSed.ncontrata }}</p>
+                                <p class="panel-value">{{ datamesSed.ncontr || datamesSed.ncontrata || datamesSed.nivelcontratacion }}</p>
                             </div>
                         </div>
 
@@ -381,7 +381,7 @@
                         <div class="col-6">
                             <b class="panel-label"> SEDE:</b>
                             <div>
-                                <p class="panel-value">{{ datamesSed.cencosto || datamesSed.estabedu}}</p>
+                                <p class="panel-value">{{ datamesSed.cencosto || datamesSed.estabedu || datamesSed.ie_sede_area}}</p>
                             </div>
                         </div>
 
