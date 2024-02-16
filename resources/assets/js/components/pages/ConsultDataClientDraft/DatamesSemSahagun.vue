@@ -39,13 +39,15 @@ export default {
       labels: [
         { label: 'TIPO DOCUMENTO', field: 'documentType' },
         { label: 'NÚMERO DOCUMENTO', field: 'codempleado' },
-        { label: 'NOMBRE Y APELLIDO', field: 'empleado' },
-        { label: 'FECHA DE NACIMIENTO', field: '' },
-        { label: 'DIRECCIÓN', field: '' },
+        { label: 'NOMBRE Y APELLIDO', field: 'emp' },
+        { label: 'FECHA DE NACIMIENTO', field: 'fnac' },
+        { label: 'DIRECCIÓN', field: 'dir' },
         { label: 'DEPARTAMENTO', field: '' },
         { label: 'CIUDAD', field: 'ciudad' },
-        { label: 'EMAIL', field: '' },
-        { label: 'CELULAR', field: '' }
+        { label: 'EMAIL', field: 'email' },
+        { label: 'CELULAR', field: 'tel' },
+        { label: 'SITUACIÓN LABORAL', field: 'sitlab' },
+        { label: 'NOVEDAD', field: 'vinnov' }
       ]
     };
   },

@@ -1,7 +1,7 @@
 <template>
     <div class="col-md-6">
         <div class="panel panel-primary mb-3">
-            <div class="panel-heading"><b>INFORMACIÓN PERSONALllllll</b></div>
+            <div class="panel-heading"><b>INFORMACIÓN PERSONAL</b></div>
             <div class="panel-body">
                 <div class="row">
                     <div class="col-6">
@@ -48,16 +48,34 @@
                             <p class="panel-value">-</p>
                         </div>
                     </div>
+                    <div class="col-6">
+                        <b class="panel-label">EMAIL:</b>
+                        <div>
+                            <p class="panel-value">{{ datamessemcali.email ? datamessemcali.email : '-' }}</p>
+                        </div>
+                    </div>
                     <div class="col-md-6">
                         <b class="panel-label">TELEFONO:</b>
                         <div>
-                            <p class="panel-value">{{ datamessemcali.tel ? datamessemcali.mesdata : '-' }}</p>
+                            <p class="panel-value">{{ datamessemcali.tel ? datamessemcali.tel : '-' }}</p>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <b class="panel-label">CELULAR:</b>
                         <div>
                             <p class="panel-value">-</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <b class="panel-label">SITUACIÓN LABORAL:</b>
+                        <div>
+                            <p class="panel-value">{{ datamessemcali.slabor ? datamessemcali.slabor : '-' }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <b class="panel-label">NOVEDAD:</b>
+                        <div>
+                            <p class="panel-value">{{ datamessemcali.novvinc ? datamessemcali.novvinc : '-' }}</p>
                         </div>
                     </div>
                 </div>

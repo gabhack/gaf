@@ -46,6 +46,12 @@
                             <p class="panel-value">-</p>
                         </div>
                     </div>
+                    <div class="col-6">
+                        <b class="panel-label">EMIAL:</b>
+                        <div>
+                            <p class="panel-value">{{ datamesSed.email || '-' }}</p>
+                        </div>
+                    </div>
                     <div class="col-md-6">
                         <b class="panel-label">TELÉFONO:</b>
                         <div>
@@ -56,6 +62,18 @@
                         <b class="panel-label">CELULAR:</b>
                         <div>
                             <p class="panel-value">{{ datamesSed.tel || '-' }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <b class="panel-label">SITUACIÓN LABORAL:</b>
+                        <div>
+                            <p class="panel-value">{{ datamesSed.slabor || '-' }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <b class="panel-label">NOVEDAD:</b>
+                        <div>
+                            <p class="panel-value">{{ datamesSed.novvinc || '-' }}</p>
                         </div>
                     </div>
                 </div>

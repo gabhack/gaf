@@ -63,6 +63,18 @@
                         </div>
                     </div>
                     <div class="col-md-6">
+                        <b class="panel-label">SITUACIÓN LABORAL:</b>
+                        <div>
+                            <p class="panel-value">{{ datamessedvalle.estlaboral ? datamessedvalle.estlaboral : '-' }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <b class="panel-label">NOVEDAD:</b>
+                        <div>
+                            <p class="panel-value">{{ datamessedvalle.novvinc ? datamessedvalle.novvinc : '-' }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
                         <b class="panel-label">CORREO:</b>
                         <div>
                             <p class="panel-value">{{ datamessedvalle.correo ? datamessedvalle.correo : '-' }}</p>

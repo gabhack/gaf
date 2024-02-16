@@ -68,10 +68,10 @@
                 ===================================-->
                 <DatamesData
                     v-if="
-                        pagaduriaType == 'SEDCHOCO' ||
+                        // pagaduriaType == 'SEDCHOCO' ||
                         // pagaduriaType == 'SEDVALLE' ||
                         pagaduriaType == 'SEDCAUCA' ||
-                        pagaduriaType == 'SEMSAHAGUN' ||
+                        // pagaduriaType == 'SEMSAHAGUN' ||
                         // pagaduriaType == 'SEMCALI' ||
                         pagaduriaType == 'SEMQUIBDO' ||
                         // pagaduriaType == 'SEDMAGDALENA' ||
@@ -165,7 +165,7 @@
                     "
                 />
 
-                <!-- <DatamesSedChoco v-if="pagaduriaType == 'SEDCHOCO'" /> -->
+                <DatamesSedChoco v-if="pagaduriaType == 'SEDCHOCO'" />
                 <DatamesSedMagdalena v-if="pagaduriaType == 'SEDMAGDALENA'" />
                 <DatamesSemSahagun v-if="pagaduriaType == 'SEMSAHAGUN'" />
 
