@@ -10,6 +10,7 @@
                 </div>
                 <div
                     class="col-lg-12 col-sm-12 d-flex align-items-start align-items-lg-center justify-content-center marg-resp space-desk"
+                
                 >
                     <div class="res-center">
                         <p class="text-big font-weight-bold degradado">"Gestor y Administrador Financiero"</p>
@@ -2142,13 +2143,13 @@ export default {
 .btn-informacion:hover{
   color: rgb(9, 186, 139);
 }
+
 .marg-resp{
     height: 60vh;
     z-index: 1;
     background-image: url('/img/background-home.png');
     background-size: cover;
     background-repeat: no-repeat;
-    
     @media screen and (min-width: 800px){
         margin-top:-275px;
         height: 35vh;
@@ -2176,6 +2177,14 @@ export default {
     }
     @media screen and (min-width: 1366px) and (min-height: 1024px) {
         height: 80vh;
+        margin-bottom: 30px;
+    }
+    @media screen and (min-width: 1200px) and (min-height: 500px) {
+        height: 100vh !important;
+        margin-bottom: 30px;
+    }
+    @media screen and (min-width: 1024px) and (min-height: 760px) {
+        height: 80vh !important;
         margin-bottom: 30px;
     }
 }
@@ -2229,7 +2238,9 @@ export default {
 }
 .space-desk {
     margin-top: -155px;
-    
+    /* @media screen and (min-height: 1000px) and (min-height: 500px){
+        height: 100vh !important;
+    } */
     @media screen and (max-width: 600px){
         margin-top:0;
     }
