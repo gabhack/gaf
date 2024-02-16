@@ -332,21 +332,21 @@
                         <div class="col-6">
                             <b class="panel-label">FECHA INGRESO:</b>
                             <div>
-                                <p class="panel-value">{{ datamesSed.fingr }}</p>
+                                <p class="panel-value">{{ datamesSed.fingr || datamesSed.fchingreso }}</p>
                             </div>
                         </div>
 
                         <div class="col-6">
                             <b class="panel-label">FECHA VINCULACIÓN:</b>
                             <div>
-                                <p class="panel-value">{{ datamesSed.fnombramiento }}</p>
+                                <p class="panel-value">{{ datamesSed.fnombramiento || datamesSed.nomfecha }}</p>
                             </div>
                         </div>
 
                         <div class="col-6">
                             <b class="panel-label">AREA DE DESEMPEÑO:</b>
                             <div>
-                                <p class="panel-value">{{ datamesSed.esquema }}</p>
+                                <p class="panel-value">{{ datamesSed.esquema || datamesSed.areaedu }}</p>
                             </div>
                         </div>
 
@@ -360,35 +360,35 @@
                         <div class="col-6">
                             <b class="panel-label"> TIPO DE CONTRATO:</b>
                             <div>
-                                <p class="panel-value">{{ datamesSed.ncontr }}</p>
+                                <p class="panel-value">{{ datamesSed.ncontr || datamesSed.ncontrata }}</p>
                             </div>
                         </div>
 
                         <div class="col-6">
                             <b class="panel-label"> GRADO:</b>
                             <div>
-                                <p class="panel-value">{{ datamesSed.grado }}</p>
+                                <p class="panel-value">{{ datamesSed.grado || datamesSed.grad }}</p>
                             </div>
                         </div>
 
                         <div class="col-6">
                             <b class="panel-label"> PRINCIPAL :</b>
                             <div>
-                                <p class="panel-value">{{ datamesSed.depen ? datamesSed.depen : '-' }}</p>
+                                <p class="panel-value">{{ datamesSed.depen || datamesSed.neducdb }}</p>
                             </div>
                         </div>
 
                         <div class="col-6">
                             <b class="panel-label"> SEDE:</b>
                             <div>
-                                <p class="panel-value">{{ datamesSed.cencosto ? datamesSed.cencosto : '-' }}</p>
+                                <p class="panel-value">{{ datamesSed.cencosto || datamesSed.estabedu}}</p>
                             </div>
                         </div>
 
                         <div class="col-6">
                             <b class="panel-label"> CIUDAD LABORAL:</b>
                             <div>
-                                <p class="panel-value">{{ datamesSed.ciudad }}</p>
+                                <p class="panel-value">{{ datamesSed.ciudad || datamesSed.ciud }}</p>
                             </div>
                         </div>
                     </template>
