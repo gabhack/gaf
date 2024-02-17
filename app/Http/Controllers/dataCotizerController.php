@@ -80,8 +80,9 @@ class dataCotizerController extends Controller
         $estudio = new Estudiostr();
         $estudio->user_id = auth()->user()->id;
         $estudio->pagaduria_id = 1;
+        $estudio->clientes_id = 200;
         $estudio->fecha = Carbon::now()->toDateString();
-        $estudio->decision = 'PROSP';
+        $estudio->decision = 'PROS';
         $estudio->data_cotizer_id = $cotizador->id;
         $estudio->save();
         Log::info('Estudio creado y guardado.', ['estudioId' => $estudio->id]);
