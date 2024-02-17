@@ -54,7 +54,7 @@ class EstudiosController extends Controller
     public function pagos($id)
     {
         $pagos = PlanPago::where("estudio_id", $id)->get();
-        
+
         return view("cartera/plan_pagos", compact('pagos'));
     }
 
@@ -795,6 +795,7 @@ class EstudiosController extends Controller
             } else {
                 $lista = Estudios::where('user_id', Auth::user()->id)->get();
             }
+        
             return view("estudios/index")->with([
                 "lista" => $lista,
                 "message" => array(
@@ -1060,7 +1061,8 @@ class EstudiosController extends Controller
         return view('cartera/recaudo', compact('id', 'planes'));
     }
 
-    public function recaudoGuardar(Request $request){
+    public function recaudoGuardar(Request $request)
+    {
         dd($request->all());
     }
 }

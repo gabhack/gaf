@@ -122,6 +122,7 @@ class CifinController extends Controller
         $demo = $array['S:Envelope']['S:Body']['ns2:consultaXmlResponse']['return'];
         $resultado = XmlaPhp::createArray($demo);
 
+        return $resultado;
         return view('cifin/consulta')->with(['resultado' => (object) $resultado]);
     }
 
