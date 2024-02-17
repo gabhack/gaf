@@ -4,8 +4,14 @@ namespace App\Http\Controllers;
 
 use App\dataCotizer;
 use App\Estudiostr;
+use App\Pagadurias;
+use App\SolicitudCredito;
+
 use Illuminate\Http\Request;
 use App\PlanPago;
+use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
+use Auth;
 
 class dataCotizerController extends Controller
 {
@@ -53,52 +59,53 @@ class dataCotizerController extends Controller
      */
     public function store(Request $request)
     {
+        // Registro inicial de la recepción de la solicitud
+        Log::info('Inicio del proceso de almacenamiento de la solicitud.');
+
+        // Extracción de datos de cotizador y crédito del request
         $input = $request['cotizerData'];
-        $pagaduria = $request['cotizerData']['pagaduria'];
-        unset($input['pagaduria']);
+        $pagaduriaCode = $request['cotizerData']['pagaduria'];
+        unset($input['pagaduria']); // Eliminación de pagaduria del array para evitar conflictos en la creación del modelo
+        Log::info('Datos de cotizador y crédito extraídos.', ['cotizerData' => $input, 'pagaduriaCode' => $pagaduriaCode]);
 
-        // se guarda el cotizer
-        $cotizador = new dataCotizer($input);
+        // Creación y guardado del cotizador
+        $cotizador = new DataCotizer($input);
         $cotizador->save();
+        Log::info('Cotizador creado y guardado con éxito.', ['cotizadorId' => $cotizador->id]);
 
-        // obtenemos el id de la pagaduria seleccionada
-        $pagaduria = \App\Pagadurias::where('codigo', $pagaduria)->first();
+        // Obtención del ID de la pagaduría seleccionada
+        $pagaduria = Pagadurias::where('codigo', $pagaduriaCode)->first();
 
-        // guardamos en estudiostr
+        // Creación y guardado del estudio
         $estudio = new Estudiostr();
         $estudio->user_id = auth()->user()->id;
         $estudio->pagaduria_id = 1;
-        $estudio->fecha = \Carbon\Carbon::now()->toDateString();
-        $estudio->decision = 'PROSP';
+        $estudio->clientes_id = 200;
+        $estudio->fecha = Carbon::now()->toDateString();
+        $estudio->decision = 'PROS';
         $estudio->data_cotizer_id = $cotizador->id;
         $estudio->save();
+        Log::info('Estudio creado y guardado.', ['estudioId' => $estudio->id]);
 
-        // se procede a guardar la solicitud de credito
-        $credit = new \App\SolicitudCredito($request['creditInfo']);
+        // Creación y guardado de la solicitud de crédito
+        $credit = new SolicitudCredito($request['creditInfo']);
         $credit->estudio_id = $estudio->id;
         $credit->save();
+        Log::info('Solicitud de crédito creada y guardada.', ['solicitudCreditoId' => $credit->id]);
 
-        //Obtén los datos del formulario
-
-
-        $tasaInteresMensual = $credit->tasa_interes / 100; // Supongamos que ya está en forma decimal
+        // Cálculo de la cuota mensual y creación del plan de pagos
+        $tasaInteresMensual = $credit->tasa_interes / 100;
         $saldoCapital = $credit->valor_solicitado;
         $costoSeguro = $credit->seguro;
         $numCuotas = $credit->nro_cuotas;
-
-        // Calcula la cuota mensual
         $cuotaMensual = ($saldoCapital * $tasaInteresMensual) / (1 - pow(1 + $tasaInteresMensual, -$numCuotas));
-
-        // Inicializa el saldo de capital
         $saldoActual = $saldoCapital;
 
-        // Calcula y guarda los pagos mensuales en la tabla "plan_pagos"
         for ($i = 1; $i <= $numCuotas; $i++) {
             $interesMensual = $saldoActual * $tasaInteresMensual;
             $capitalMensual = $cuotaMensual - $interesMensual;
             $saldoActual -= $capitalMensual;
 
-            // Guarda el pago en la tabla "plan_pagos"
             PlanPago::create([
                 'fecha' => now()->addMonths($i)->format('Y-m-d'),
                 'num_cuota' => $i,
@@ -111,6 +118,10 @@ class dataCotizerController extends Controller
                 'estudio_id' => $estudio->id
             ]);
         }
+        Log::info('Plan de pagos calculado y guardado.', ['solicitudCreditoId' => $credit->id, 'numCuotas' => $numCuotas]);
+
+        // Final del proceso de almacenamiento
+        Log::info('Proceso de almacenamiento completado con éxito.');
 
         return $cotizador;
     }
