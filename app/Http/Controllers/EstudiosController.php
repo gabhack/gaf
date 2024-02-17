@@ -795,6 +795,7 @@ class EstudiosController extends Controller
             } else {
                 $lista = Estudios::where('user_id', Auth::user()->id)->get();
             }
+        
             return view("estudios/index")->with([
                 "lista" => $lista,
                 "message" => array(
