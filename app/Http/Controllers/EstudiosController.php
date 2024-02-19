@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 //
 use App\Clientes as Clientes;
 use App\Asesores as Asesores;
@@ -21,7 +22,7 @@ use App\FactorXMillonGnb as FactorXMillonGnb;
 use Carbon\Carbon;
 use App\Giro;
 use DOMDocument;
-//
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB as DB;
 use Illuminate\Support\Facades\Auth as Auth;
 use Illuminate\Http\Request;
@@ -579,21 +580,34 @@ class EstudiosController extends Controller
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
             $response = curl_exec($ch);
+
+
             curl_close($ch);
 
             if ($response != false) {
                 $array = XmlaPhp::createArray($response);
+
                 $demo = $array['S:Envelope']['S:Body']['ns2:consultaXmlResponse']['return'];
-                $resultado = XmlaPhp::createArray($demo);
-                $sectorFinanciero = [];
-                $sectorFinancieroReal = [];
-                $cuentas_vigentes = $resultado['CIFIN']['Tercero']['CuentasVigentes'];
-                // $sectorFinanciero = $resultado['CIFIN']['Tercero']['SectorFinancieroAlDia'];
-                // $sectorFinancieroReal = $resultado['CIFIN']['Tercero']['SectorRealAlDia'];
-            } else {
-                $sectorFinanciero = [];
-                $sectorFinancieroReal = [];
-                $cuentas_vigentes = [];
+                if ($demo != 'error') {
+
+                    // Check if $demo is a well-formed XML string
+                    if (is_string($demo) && strpos($demo, '<?xml') === 0) {
+                        $resultado = XmlaPhp::createArray($demo);
+                    } else {
+                        // Handle the case where $demo is not a well-formed XML
+                        Log::debug("Returned data is not a well-formed XML: ", ['demo' => $demo]);
+                        // Additional handling here...
+                    }
+                    $sectorFinanciero = [];
+                    $sectorFinancieroReal = [];
+                    $cuentas_vigentes = $resultado['CIFIN']['Tercero']['CuentasVigentes'];
+                    // $sectorFinanciero = $resultado['CIFIN']['Tercero']['SectorFinancieroAlDia'];
+                    // $sectorFinancieroReal = $resultado['CIFIN']['Tercero']['SectorRealAlDia'];
+                } else {
+                    $sectorFinanciero = [];
+                    $sectorFinancieroReal = [];
+                    $cuentas_vigentes = [];
+                }
             }
             $sectorFinanciero = [];
             $sectorFinancieroReal = [];
@@ -766,7 +780,6 @@ class EstudiosController extends Controller
             );
 
             $sueldocompleto = $sueldobasico + $adicional;
-
             return view("estudios/editar")->with([
                 "estudio" => $estudio,
                 "registro" => $registro,
@@ -793,12 +806,18 @@ class EstudiosController extends Controller
                 "viabilidad" => $viabilidad
             ]);
         } catch (\Exception $e) {
+            Log::error("Error al editar el estudio con ID {$id}: {$e->getMessage()}", [
+                'id' => $id,
+                'exception' => $e->getTraceAsString(),
+            ]);
+            return view('error')
+                ->with('error en estudio controller editar', $e->getMessage());
+
             if (Auth::user()->rol->id == 1 || Auth::user()->rol->id == 5) {
                 $lista = Estudios::all();
             } else {
                 $lista = Estudios::where('user_id', Auth::user()->id)->get();
             }
-        
             return view("estudios/index")->with([
                 "lista" => $lista,
                 "message" => array(

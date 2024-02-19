@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
+
 use App\DatamesSedCauca;
 use App\DatamesSedValle;
 use App\DatamesSemCali;
@@ -161,82 +163,93 @@ class PagaduriasController extends Controller
 
     public function perDoc($doc)
     {
-        $models = [
-            DatamesFidu::class => 'doc',
-            DatamesFopep::class => 'doc',
-            DatamesSedAntioquia::class => 'doc',
-            DatamesSedArauca::class => 'doc',
-            DatamesSedAtlantico::class => 'doc',
-            DatamesSedBolivar::class => 'doc',
-            DatamesSedBoyaca::class => 'doc',
-            DatamesSedCaldas::class => 'doc',
-            DatamesSedCasanare::class => 'doc',
-            DatamesSedCauca::class => 'doc',
-            DatamesSedCesar::class => 'doc',
-            DatamesSedChoco::class => 'doc',
-            DatamesSedCordoba::class => 'doc',
-            DatamesSedCundinamarca::class => 'doc',
-            DatamesSedGuajira::class => 'doc',
-            DatamesSedHuila::class => 'doc',
-            DatamesSedMagdalena::class => 'codempleado',
-            DatamesSedMeta::class => 'doc',
-            DatamesSedNarino::class => 'doc',
-            DatamesSedNorteSantander::class => 'doc',
-            DatamesSedRisaralda::class => 'doc',
-            DatamesSedSantander::class => 'doc',
-            DatamesSedSucre::class => 'doc',
-            DatamesSedTolima::class => 'doc',
-            DatamesSedValle::class => 'doc',
-            DatamesSemBarranquilla::class => 'doc',
-            DatamesSemBuga::class => 'doc',
-            DatamesSemCali::class => 'doc',
-            DatamesSemCartagena::class => 'doc',
-            DatamesSemGirardot::class => 'doc',
-            DatamesSemIbague::class => 'doc',
-            DatamesSemIpiales::class => 'doc',
-            DatamesSemJamundi::class => 'doc',
-            DatamesSemMagangue::class => 'doc',
-            DatamesSemMedellin::class => 'doc',
-            DatamesSemMonteria::class => 'doc',
-            DatamesSemMosquera::class => 'doc',
-            DatamesSemNeiva::class => 'doc',
-            DatamesSemPalmira::class => 'doc',
-            DatamesSemPasto::class => 'doc',
-            DatamesSemPopayan::class => 'doc',
-            DatamesSemQuibdo::class => 'doc',
-            DatamesSemRioNegro::class => 'doc',
-            DatamesSemSabaneta::class => 'doc',
-            DatamesSemSahagun::class => 'codempleado',
-            DatamesSemSincelejo::class => 'doc',
-            DatamesSemSoledad::class => 'doc',
-            DatamesSemValledupar::class => 'doc',
-            DatamesSemYopal::class => 'doc',
-            DatamesSemYumbo::class => 'doc',
-            DatamesSemZipaquira::class => 'doc',
-        ];
+        try {
+            $models = [
+                DatamesFidu::class => 'doc',
+                DatamesFopep::class => 'doc',
+                DatamesSedAntioquia::class => 'doc',
+                DatamesSedArauca::class => 'doc',
+                DatamesSedAtlantico::class => 'doc',
+                DatamesSedBolivar::class => 'doc',
+                DatamesSedBoyaca::class => 'doc',
+                DatamesSedCaldas::class => 'doc',
+                DatamesSedCasanare::class => 'doc',
+                DatamesSedCauca::class => 'doc',
+                DatamesSedCesar::class => 'doc',
+                DatamesSedChoco::class => 'doc',
+                DatamesSedCordoba::class => 'doc',
+                DatamesSedCundinamarca::class => 'doc',
+                DatamesSedGuajira::class => 'doc',
+                DatamesSedHuila::class => 'doc',
+                DatamesSedMagdalena::class => 'codempleado',
+                DatamesSedMeta::class => 'doc',
+                DatamesSedNarino::class => 'doc',
+                DatamesSedNorteSantander::class => 'doc',
+                DatamesSedRisaralda::class => 'doc',
+                DatamesSedSantander::class => 'doc',
+                DatamesSedSucre::class => 'doc',
+                DatamesSedTolima::class => 'doc',
+                DatamesSedValle::class => 'doc',
+                DatamesSemBarranquilla::class => 'doc',
+                DatamesSemBuga::class => 'doc',
+                DatamesSemCali::class => 'doc',
+                DatamesSemCartagena::class => 'doc',
+                DatamesSemGirardot::class => 'doc',
+                DatamesSemIbague::class => 'doc',
+                DatamesSemIpiales::class => 'doc',
+                DatamesSemJamundi::class => 'doc',
+                DatamesSemMagangue::class => 'doc',
+                DatamesSemMedellin::class => 'doc',
+                DatamesSemMonteria::class => 'doc',
+                DatamesSemMosquera::class => 'doc',
+                DatamesSemNeiva::class => 'doc',
+                DatamesSemPalmira::class => 'doc',
+                DatamesSemPasto::class => 'doc',
+                DatamesSemPopayan::class => 'doc',
+                DatamesSemQuibdo::class => 'doc',
+                DatamesSemRioNegro::class => 'doc',
+                DatamesSemSabaneta::class => 'doc',
+                DatamesSemSahagun::class => 'codempleado',
+                DatamesSemSincelejo::class => 'doc',
+                DatamesSemSoledad::class => 'doc',
+                DatamesSemValledupar::class => 'doc',
+                DatamesSemYopal::class => 'doc',
+                DatamesSemYumbo::class => 'doc',
+                DatamesSemZipaquira::class => 'doc',
+            ];
 
-        $results = [];
+            $results = [];
 
-        foreach ($models as $model => $column) {
-            $data = $model::where($column, 'LIKE', '%' . $doc . '%')->first();
+            foreach ($models as $model => $column) {
+                $data = $model::where($column, 'LIKE', '%' . $doc . '%')->first();
 
-            if ($data) {
-                $modelName = class_basename($model);
-                $results[Str::camel($modelName)] = $data;
+                if ($data) {
+                    $modelName = class_basename($model);
+                    $results[Str::camel($modelName)] = $data;
+                }
             }
-        }
 
-        // General datames
-        $dataGen = DatamesGen::where('doc', 'LIKE', '%' . $doc . '%')->get();
+            // General datames
+            $dataGen = DatamesGen::where('doc', 'LIKE', '%' . $doc . '%')->get();
 
-        if ($dataGen) {
-            foreach ($dataGen as $item) {
-                $results[$item->pagaduria] = $item;
+            if ($dataGen) {
+                foreach ($dataGen as $item) {
+                    $results[$item->pagaduria] = $item;
+                }
             }
+
+            $results = !empty($results) ? $results : (object) [];
+
+            return response()->json($results, 200);
+        } catch (\Exception $e) {
+            // Aquí se captura la excepción y se logra el error
+            Log::error("Error al buscar pagadurías por documento: {$e->getMessage()}", [
+                'doc' => $doc, // Incluye el documento para identificar la consulta que causó el error
+                'exception' => $e->getTraceAsString(), // Para un diagnóstico más detallado
+            ]);
+
+            // Opcional: Devuelve una respuesta o maneja el error como sea apropiado
+            return response()->json(['error' => 'Ocurrió un error al procesar la solicitud'], 500);
         }
-
-        $results = !empty($results) ? $results : (object) [];
-
-        return response()->json($results, 200);
     }
 }
