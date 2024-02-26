@@ -357,7 +357,7 @@ class EstudiosController extends Controller
             //Nuevo estudio
             $newestudio = new Estudios;
             $newestudio->clientes_id = $request->cliente_id;
-            $newestudio->user_id = \Auth::user()->id;
+            $newestudio->user_id = Auth::user()->id;
             $newestudio->registros_id = $request->registro_id;
             $newestudio->decision = strtoupper($request->desiciones);
 
@@ -595,6 +595,9 @@ class EstudiosController extends Controller
                 $sectorFinancieroReal = [];
                 $cuentas_vigentes = [];
             }
+            $sectorFinanciero = [];
+            $sectorFinancieroReal = [];
+            $cuentas_vigentes = [];
 
             $pagadurias = array(app(PagaduriasController::class)->perDoc($cedula));
 
