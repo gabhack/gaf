@@ -590,24 +590,25 @@ class EstudiosController extends Controller
                 $demo = $array['S:Envelope']['S:Body']['ns2:consultaXmlResponse']['return'];
                 if ($demo != 'error') {
 
-                    // Check if $demo is a well-formed XML string
                     if (is_string($demo) && strpos($demo, '<?xml') === 0) {
-                        $resultado = XmlaPhp::createArray($demo);
                     } else {
-                        // Handle the case where $demo is not a well-formed XML
-                        Log::debug("Returned data is not a well-formed XML: ", ['demo' => $demo]);
-                        // Additional handling here...
+                        Log::debug("Returned data is not a well-formed XML");
                     }
+                    $resultado = XmlaPhp::createArray($demo);
+
                     $sectorFinanciero = [];
                     $sectorFinancieroReal = [];
                     $cuentas_vigentes = $resultado['CIFIN']['Tercero']['CuentasVigentes'];
-                    // $sectorFinanciero = $resultado['CIFIN']['Tercero']['SectorFinancieroAlDia'];
-                    // $sectorFinancieroReal = $resultado['CIFIN']['Tercero']['SectorRealAlDia'];
+                    $obligaciones_en_mora = $resultado['CIFIN']['Tercero']['SectorFinancieroEnMora'];
                 } else {
                     $sectorFinanciero = [];
                     $sectorFinancieroReal = [];
                     $cuentas_vigentes = [];
+                    $obligaciones_en_mora = [];
                 }
+            } else {
+
+                Log::error("SOAP request failed");
             }
             $sectorFinanciero = [];
             $sectorFinancieroReal = [];
@@ -648,6 +649,7 @@ class EstudiosController extends Controller
                 "sectorFinanciero" => $sectorFinanciero,
                 "sectorFinancieroReal" => $sectorFinancieroReal,
                 "cuentas_vigentes" => $cuentas_vigentes,
+                "obligacionesEnMora" => $obligaciones_en_mora,
                 "embargos" => $embargos,
                 "carteras" => $carteras,
                 "sectores" => \App\Sectores::all(),

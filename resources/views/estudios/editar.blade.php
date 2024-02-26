@@ -696,6 +696,83 @@
                         :id-number="'{{ $dataCotizer->idNumber }}'"></client-data-component-draft-integration>
                 </div>
 
+                <!-- Obligaciones en mora -->
+
+                <div class="col-md-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading"><b>Obligaciones en mora</b></div>
+                        <div class="panel-body">
+                            <table id="grid" class="table table-hover table-condensed table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Nombre Entidad</th>
+                                        <th class="text-center">Número Obligación</th>
+                                        <th class="text-center">Calidad</th>
+                                        <th class="text-center">Estado Obligación</th>
+                                        <th class="text-center">Saldo Obligación</th>
+                                        <th class="text-center">Valor Mora</th>
+                                        <th class="text-center">Valor Cuota</th>
+                                        <th class="text-center">Comportamientos</th>
+                                        <th class="text-center">Entidad Originadora Cartera</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Iterar sobre las obligaciones en mora -->
+                                    @if (isset($obligacionesEnMora['Obligacion']))
+                                        @foreach ($obligacionesEnMora['Obligacion'] as $obligacion)
+                                            <tr>
+                                                <td>{{ $obligacion['NombreEntidad'] }}</td>
+                                                <td>{{ $obligacion['NumeroObligacion'] }}</td>
+                                                <td>{{ $obligacion['Calidad'] }}</td>
+                                                <td>{{ $obligacion['EstadoObligacion'] }}</td>
+                                                <td>{{ $obligacion['SaldoObligacion'] }}</td>
+                                                <td>{{ $obligacion['ValorMora'] }}</td>
+                                                <td>{{ $obligacion['ValorCuota'] }}</td>
+                                                <td>
+                                                    <a href="#" data-toggle="modal"
+                                                        data-target="#modalComportamientos{{ $loop->index }}">
+                                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                                    </a>
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                            <div class="modal fade" id="modalComportamientos{{ $loop->index }}"
+                                                tabindex="-1" role="dialog"
+                                                aria-labelledby="modalComportamientos{{ $loop->index }}Label"
+                                                aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title"
+                                                                id="modalComportamientos{{ $loop->index }}Label">
+                                                                Comportamientos</h5>
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <!-- Contenido del modal -->
+                                                            <p>{{ $obligacion['Comportamientos'] }}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <tr>
+                                            <td colspan="9">No hay obligaciones en mora disponibles</td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                            </table>
+
+                            <br><br>
+                        </div>
+                    </div>
+                </div>
+
+
                 <div class="col-md-12">
                     <div class="panel panel-primary">
                         <div class="panel-heading"><b>Carteras por comprar</b></div>
