@@ -28,7 +28,7 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-6">
-                                <b class="panel-label">CEDULA:</b>
+                                <b class="panel-label">CÉDULA:</b>
                                 <input
                                     required
                                     class="form-control text-center"

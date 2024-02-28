@@ -7,7 +7,7 @@
             <loading :active.sync="isLoading" color="#0CEDB0" :can-cancel="true" :is-full-page="true" />
             <div class="row">
                 <div class="col-6">
-                    <b class="panel-label">CEDULA:</b>
+                    <b class="panel-label">CÉDULA:</b>
                     <input required class="form-control text-center" type="number" v-model="dataclient.doc" />
                 </div>
                 <div class="col-6">
