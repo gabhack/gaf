@@ -80,13 +80,29 @@ Vue.component('refund-component', require('./components/pages/ConsultDataClient/
 Vue.component('history-component', require('./components/pages/ConsultDataClient/history.vue').default);
 Vue.component('detail-history-component', require('./components/pages/ConsultDataClient/detailhistory.vue').default);
 Vue.component(
-  'detail-history-component-draft',
-  require('./components/pages/ConsultDataClient/detailhistoryBorrador.vue').default
+    'detail-history-component-draft',
+    require('./components/pages/ConsultDataClient/detailhistoryBorrador.vue').default
 );
 Vue.component('credit-calculator', require('./components/pages/CreditColsult/CreditCalculator.vue').default);
 Vue.component('register-credit', require('./components/pages/CreditColsult/CreditForm.vue').default);
+Vue.component('FormConsult', require('./components/pages/ConsultDataClientDraft/FormConsult.vue').default);
+//AMI Integración en solicitud credito
+
+Vue.component(
+    'form-consult-integration',
+    require('./components/pages/ConsultDataClientDraft/FormConsultIntegration.vue').default
+);
+Vue.component(
+    'consulta-pagadurias-form-consult',
+    require('./components/pages/ConsultDataClientDraft/ConsultaPagaduriasFormConsult.vue').default
+);
+Vue.component(
+    'client-data-component-draft-integration',
+    require('./components/pages/ConsultDataClientDraft/indexIntegration.vue').default
+);
+
 /* Vue Init */
 const app = new Vue({
-  el: '#app',
-  store
+    el: '#app',
+    store
 });
