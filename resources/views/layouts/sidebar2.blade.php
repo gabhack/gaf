@@ -1,5 +1,5 @@
 <!-- Sidebar -->
-<ul class="navbar-nav bg-black-pearl sidebar sidebar-dark accordion toggled" id="accordionSidebar">
+<ul class="navbar-nav bg-black-pearl sidebar sidebar-dark accordion toggled" style="display: grid; justify-content: space-evenly;" id="accordionSidebar">
     <!-- Sidebar - Brand -->
     <div class="py-3 text-center">
         <a class="" href="{{ url('home') }}">
@@ -8,18 +8,19 @@
     </div>
 
     <!-- Nav Items-->
-    <li class="nav-item">
+    <!-- <li class="nav-item">
         <a class="nav-link" href="{{ url('home') }}">
             <home-icon></home-icon>
             <span>Inicio</span>
         </a>
-    </li>
+    </li> -->
 
     @if ((IsUser() || IsCompany()) && ( AMISilverHabilitado() || AMIGoldHabilitado() || AMIDiamondHabilitado() ) && !(IsSuperAdmin() || IsAMIAdmin() || IsHEGOAdmin()))
-    <li class="nav-item active">
+    <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#menuAMI" aria-expanded="false" aria-controls="menuAMI">
-            <ami-icon></ami-icon>
-            <span>AMI®</span>
+            <!-- <ami-icon></ami-icon>
+            <span>AMI®</span> -->
+            <img src="/img/ami-sidebar.png" alt="AMI" class="img-fluid mx-auto"/>
         </a>
         <div id="menuAMI" class="collapse" aria-labelledby="menuAMI" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner">
@@ -37,39 +38,40 @@
             </div>
         </div>
     </li>
-    <li class="nav-item">
+    <!-- <li class="nav-item">
         <a class="nav-link" href="{{ url('pagos') }}">
             <ami-icon></ami-icon>
             <span>Pagos</span>
         </a>
-    </li>
+    </li> -->
     @endif
 
     @if (HEGOAccess())
     <li class="nav-item">
         <a class="nav-link" href="{{ url('estudios') }}">
-            <hego-icon></hego-icon>
-            <span>HEGO®</span>
+            <!-- <hego-icon></hego-icon>
+            <span>HEGO®</span> -->
+            <img src="/img/hego-sidebar.png" alt="HEGO" class="" style="width: 82px;"/>
         </a>
     </li>
 
-    <li class="nav-item">
+    <!-- <li class="nav-item">
         <a class="nav-link" href="/solicitud">
             <ami-icon></ami-icon>
             <span>Solicitud de Credito</span>
         </a>
-    </li>
+    </li> -->
 
-    <li class="nav-item">
+    <!-- <li class="nav-item">
         <a class="nav-link" href="{{ url('integration') }}">
             <hego-icon></hego-icon>
             <span>ID</span>
         </a>
-    </li>
+    </li> -->
     @endif
 
     @if (IsSuperAdmin() || IsAMIAdmin() || IsHEGOAdmin() || IsCompany() || IsUserCreator())
-    <li class="nav-item">
+    <!-- <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#menuAdmon" aria-expanded="false" aria-controls="menuAdmon">
             <admin-settings-icon></admin-settings-icon>
             <span>Admon</span>
@@ -84,7 +86,7 @@
                 @endif
             </div>
         </div>
-    </li>
+    </li> -->
     @endif
 
     @if (IsSuperAdmin())

@@ -177,6 +177,13 @@
                 COMPONENTE HISTORIAL LABORAL
                 ==============================-->
                 <template v-if="fechavinc">
+                    <EmploymentHistory2
+                        :fechavinc="fechavinc"
+                        :datamessedvalle="datamessedvalle"
+                        :datamesFidu="datamesFidu"
+                        :datamessemcali="datamessemcali"
+                        :user="user"
+                    />
                     <EmploymentHistory
                         :fechavinc="fechavinc"
                         :datamessedvalle="datamessedvalle"
@@ -185,6 +192,7 @@
                         :user="user"
                     />
                     <Detallecliente :totales="totales" />
+                    
                 </template>
 
                 <template v-if="showOthers">
@@ -344,6 +352,7 @@
 import printJS from 'print-js';
 import FormConsult from './FormConsult';
 import EmploymentHistory from './EmploymentHistory';
+import EmploymentHistory2 from './EmploymentHistory2';
 import DatamesComponent from './Datames.vue';
 
 import DatamesData from './DatamesData';
@@ -377,6 +386,7 @@ export default {
     components: {
         FormConsult,
         EmploymentHistory,
+        EmploymentHistory2,
         DatamesComponent,
         DatamesData,
         DatamesData2,
