@@ -600,7 +600,21 @@ class EstudiosController extends Controller
                     $sectorFinancieroReal = [];
                     $cuentas_vigentes = $resultado['CIFIN']['Tercero']['CuentasVigentes'];
                     $obligaciones_en_mora = $resultado['CIFIN']['Tercero']['SectorFinancieroEnMora'];
+
+                    $sectores = [];
+                    foreach ($resultado['CIFIN']['Tercero'] as $key => $value) {
+                        if (strpos($key, 'Sector') !== false) { // Verificar si la clave contiene la palabra "Sector"
+                            foreach ($value as $subKey => $subValue) {
+                                if (strpos($key, 'AlDia') !== false) {
+                                    $sectores['alDia'][$key] = $subValue;
+                                } elseif (strpos($key, 'EnMora') !== false) { // Verificar si la clave contiene la palabra "EnMora"
+                                    $sectores['enMora'][$key] = $subValue;
+                                }
+                            }
+                        }
+                    }
                 } else {
+                    $sectores = [];
                     $sectorFinanciero = [];
                     $sectorFinancieroReal = [];
                     $cuentas_vigentes = [];
@@ -646,10 +660,10 @@ class EstudiosController extends Controller
 
             return view("estudios/editar")->with([
                 "dataCotizer" => $dataCotizer,
+                "obligaciones" => $sectores,
                 "sectorFinanciero" => $sectorFinanciero,
                 "sectorFinancieroReal" => $sectorFinancieroReal,
                 "cuentas_vigentes" => $cuentas_vigentes,
-                "obligacionesEnMora" => $obligaciones_en_mora,
                 "embargos" => $embargos,
                 "carteras" => $carteras,
                 "sectores" => \App\Sectores::all(),

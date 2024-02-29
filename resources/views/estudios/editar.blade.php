@@ -691,86 +691,136 @@
                         </div>
                     </div>
                 </div>
+
                 <div id="app" class="col-md-12">
                     <client-data-component-draft-integration :user="{{ Auth::user() }}"
-                        :id-number="'{{ $dataCotizer->idNumber }}'"></client-data-component-draft-integration>
+                        :id-number="39405836"></client-data-component-draft-integration>
                 </div>
 
-                <!-- Obligaciones en mora -->
+                <!-- :id-number="'{{ $dataCotizer->idNumber }}'" -->
+
+
 
                 <div class="col-md-12">
                     <div class="panel panel-primary">
-                        <div class="panel-heading"><b>Obligaciones en mora</b></div>
+                        <div class="panel-heading"><b>Obligaciones</b></div>
                         <div class="panel-body">
-                            <table id="grid" class="table table-hover table-condensed table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">Nombre Entidad</th>
-                                        <th class="text-center">Número Obligación</th>
-                                        <th class="text-center">Calidad</th>
-                                        <th class="text-center">Estado Obligación</th>
-                                        <th class="text-center">Saldo Obligación</th>
-                                        <th class="text-center">Valor Mora</th>
-                                        <th class="text-center">Valor Cuota</th>
-                                        <th class="text-center">Comportamientos</th>
-                                        <th class="text-center">Entidad Originadora Cartera</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Iterar sobre las obligaciones en mora -->
-                                    @if (isset($obligacionesEnMora['Obligacion']))
-                                        @foreach ($obligacionesEnMora['Obligacion'] as $obligacion)
-                                            <tr>
-                                                <td>{{ $obligacion['NombreEntidad'] }}</td>
-                                                <td>{{ $obligacion['NumeroObligacion'] }}</td>
-                                                <td>{{ $obligacion['Calidad'] }}</td>
-                                                <td>{{ $obligacion['EstadoObligacion'] }}</td>
-                                                <td>{{ $obligacion['SaldoObligacion'] }}</td>
-                                                <td>{{ $obligacion['ValorMora'] }}</td>
-                                                <td>{{ $obligacion['ValorCuota'] }}</td>
-                                                <td>
-                                                    <a href="#" data-toggle="modal"
-                                                        data-target="#modalComportamientos{{ $loop->index }}">
-                                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                            <div id="accordion" role="tablist">
+                                @foreach ($obligaciones as $estado => $obligacionesEstado)
+                                    @php
+                                        // Reemplazar 'alDia' por 'Obligaciones al día' y 'enMora' por 'Obligaciones en mora'
+                                        $estadoTitulo = $estado === 'alDia' ? 'Obligaciones al día' : 'Obligaciones en mora';
+                                    @endphp
+                                    <h4>{{ $estadoTitulo }}</h4> <!-- Mostrar el estado (alDia o enMora) como título -->
+                                    @foreach ($obligacionesEstado as $sector => $obligacionesSector)
+                                        @php
+                                            // Reemplazar 'SectorFinancieroAlDia', 'SectorRealAlDia', 'SectorFinancieroEnMora' o 'SectorRealEnMora'
+                                            // por 'Sector Financiero' o 'Sector Real' seguido de 'en mora' o 'al día'
+                                            $sectorTitulo = str_replace(['Sector', 'AlDia', 'EnMora'], ['', '', ''], $sector);
+                                            $sectorTitulo = ucfirst(strtolower($sectorTitulo));
+                                            $estadoTitulo = $estado === 'alDia' ? 'al día' : 'en mora';
+                                            $sectorTitulo .= " $estadoTitulo";
+                                        @endphp
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading" role="tab" id="heading{{ $sector }}">
+                                                <h4 class="panel-title">
+                                                    <a role="button" data-toggle="collapse" data-parent="#accordion"
+                                                        href="#collapse{{ $sector }}" aria-expanded="true"
+                                                        aria-controls="collapse{{ $sector }}">
+                                                        {{ $sectorTitulo }}
                                                     </a>
-                                                </td>
-                                                <td></td>
-                                            </tr>
-                                            <div class="modal fade" id="modalComportamientos{{ $loop->index }}"
-                                                tabindex="-1" role="dialog"
-                                                aria-labelledby="modalComportamientos{{ $loop->index }}Label"
-                                                aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title"
-                                                                id="modalComportamientos{{ $loop->index }}Label">
-                                                                Comportamientos</h5>
-                                                            <button type="button" class="close" data-dismiss="modal"
-                                                                aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <!-- Contenido del modal -->
-                                                            <p>{{ $obligacion['Comportamientos'] }}</p>
-                                                        </div>
-                                                    </div>
+                                                </h4>
+                                            </div>
+                                            <div id="collapse{{ $sector }}" class="panel-collapse collapse"
+                                                role="tabpanel" aria-labelledby="heading{{ $sector }}">
+                                                <div class="panel-body">
+                                                    <table id="grid"
+                                                        class="table table-hover table-condensed table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="text-center">Nombre Entidad</th>
+                                                                <th class="text-center">Número Obligación</th>
+                                                                <th class="text-center">Calidad</th>
+                                                                <th class="text-center">Estado Obligación</th>
+                                                                <th class="text-center">Saldo Obligación</th>
+                                                                <th class="text-center">Valor Mora</th>
+                                                                <th class="text-center">Valor Cuota</th>
+                                                                <th class="text-center">Comportamientos</th>
+                                                                <th class="text-center">Entidad Originadora Cartera</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @if (is_array($obligacionesSector[0] ?? null))
+                                                                <!-- Verificar si $obligacionesSector es un array -->
+                                                                @foreach ($obligacionesSector as $obligacion)
+                                                                    <tr>
+                                                                        <td>{{ isset($obligacion['NombreEntidad']) ? $obligacion['NombreEntidad'] : '' }}
+                                                                        </td>
+                                                                        <td>{{ isset($obligacion['NumeroObligacion']) ? $obligacion['NumeroObligacion'] : '' }}
+                                                                        </td>
+                                                                        <td>{{ isset($obligacion['Calidad']) ? $obligacion['Calidad'] : '' }}
+                                                                        </td>
+                                                                        <td>{{ isset($obligacion['EstadoObligacion']) ? $obligacion['EstadoObligacion'] : '' }}
+                                                                        </td>
+                                                                        <td>{{ isset($obligacion['SaldoObligacion']) ? $obligacion['SaldoObligacion'] : '' }}
+                                                                        </td>
+                                                                        <td>{{ isset($obligacion['ValorMora']) ? $obligacion['ValorMora'] : '' }}
+                                                                        </td>
+                                                                        <td>{{ isset($obligacion['ValorCuota']) ? $obligacion['ValorCuota'] : '' }}
+                                                                        </td>
+                                                                        <td>
+                                                                            <a href="#" data-toggle="modal"
+                                                                                data-target="#modalComportamientos{{ $loop->index }}">
+                                                                                <i class="fa fa-eye"
+                                                                                    aria-hidden="true"></i>
+                                                                            </a>
+                                                                        </td>
+                                                                        <td>{{ isset($obligacion['EntidadOriginadoraCartera']) ? $obligacion['EntidadOriginadoraCartera'] : '' }}
+                                                                        </td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            @else
+                                                                <tr> <!-- En caso de que no sea un array, mostrar los datos directamente -->
+                                                                    <td>{{ isset($obligacionesSector['NombreEntidad']) ? $obligacionesSector['NombreEntidad'] : '' }}
+                                                                    </td>
+                                                                    <td>{{ isset($obligacionesSector['NumeroObligacion']) ? $obligacionesSector['NumeroObligacion'] : '' }}
+                                                                    </td>
+                                                                    <td>{{ isset($obligacionesSector['Calidad']) ? $obligacionesSector['Calidad'] : '' }}
+                                                                    </td>
+                                                                    <td>{{ isset($obligacionesSector['EstadoObligacion']) ? $obligacionesSector['EstadoObligacion'] : '' }}
+                                                                    </td>
+                                                                    <td>{{ isset($obligacionesSector['SaldoObligacion']) ? $obligacionesSector['SaldoObligacion'] : '' }}
+                                                                    </td>
+                                                                    <td>{{ isset($obligacionesSector['ValorMora']) ? $obligacionesSector['ValorMora'] : '' }}
+                                                                    </td>
+                                                                    <td>{{ isset($obligacionesSector['ValorCuota']) ? $obligacionesSector['ValorCuota'] : '' }}
+                                                                    </td>
+                                                                    <td>
+                                                                        <a href="#" data-toggle="modal"
+                                                                            data-target="#modalComportamientos{{ $loop->index }}">
+                                                                            <i class="fa fa-eye" aria-hidden="true"></i>
+                                                                        </a>
+                                                                    </td>
+                                                                    <td>{{ isset($obligacionesSector['EntidadOriginadoraCartera']) ? $obligacionesSector['EntidadOriginadoraCartera'] : '' }}
+                                                                    </td>
+                                                                </tr>
+                                                            @endif
+                                                        </tbody>
+                                                    </table>
                                                 </div>
                                             </div>
-                                        @endforeach
-                                    @else
-                                        <tr>
-                                            <td colspan="9">No hay obligaciones en mora disponibles</td>
-                                        </tr>
-                                    @endif
-                                </tbody>
-                            </table>
-
+                                        </div>
+                                    @endforeach
+                                @endforeach
+                            </div>
                             <br><br>
                         </div>
                     </div>
                 </div>
+
+
+
+
 
 
                 <div class="col-md-12">
@@ -1184,8 +1234,8 @@
                                                         <td><input type="text" name="descuento2" value=""
                                                                 onchange="if(isnumber_punto(this.value)==false) {this.value='35'; return false} else { if (this.value == '') { this.value = '35'; } recalcular(); }"
                                                                 size="14" style="text-align:center; "></td>
-                                                        <td colspan="2"><input type="text" name="descuento2_valor"
-                                                                value=""
+                                                        <td colspan="2"><input type="text"
+                                                                name="descuento2_valor" value=""
                                                                 style="width:95%; text-align:right; color:#FFFFFF;"
                                                                 readonly=""></td>
                                                     </tr>
@@ -1194,8 +1244,8 @@
                                                         <td><input type="text" name="descuento3" value="19"
                                                                 size="14" style="text-align:center; color:#FFFFFF;"
                                                                 readonly=""></td>
-                                                        <td colspan="2"><input type="text" name="descuento3_valor"
-                                                                value=""
+                                                        <td colspan="2"><input type="text"
+                                                                name="descuento3_valor" value=""
                                                                 style="width:95%; text-align:right; color:#FFFFFF;"
                                                                 readonly=""></td>
                                                     </tr>
@@ -1204,8 +1254,8 @@
                                                         <td><input type="text" name="descuento4" value="0.4"
                                                                 size="14" style="text-align:center; color:#FFFFFF;"
                                                                 readonly=""></td>
-                                                        <td colspan="2"><input type="text" name="descuento4_valor"
-                                                                value=""
+                                                        <td colspan="2"><input type="text"
+                                                                name="descuento4_valor" value=""
                                                                 style="width:95%; text-align:right; color:#FFFFFF;"
                                                                 readonly=""></td>
                                                     </tr>

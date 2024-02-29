@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://services.proxy.deceval.com/">
+            <soapenv:Header/>
+            <soapenv:Body>
+               <ser:creacionGiradoresCodificados>
+                  <!--Optional:-->
+                  <arg0>
+                     <!--Optional:-->
+                     <crearGiradorDTO>
+                        <!--Optional:-->
+                        <identificacionEmisor>9004326290</identificacionEmisor>
+                        <fkIdClasePersona>1</fkIdClasePersona>
+                        <fkIdTipoDocumento>1</fkIdTipoDocumento>
+                        <numeroDocumento>39405836</numeroDocumento>
+                        <correoElectronico>wiwumero@mailinator.com</correoElectronico>
+                        <direccion1PersonaGrupo_PGP>CALLE 1 # 2 - 3</direccion1PersonaGrupo_PGP>
+                        <telefono1PersonaGrupo_PGP>+1 (875) 982-9411</telefono1PersonaGrupo_PGP>
+                        <fax1PersonaGrupo_PGP>1111111</fax1PersonaGrupo_PGP>
+                        <fkIdPaisExpedicion_Nat>CO</fkIdPaisExpedicion_Nat>
+                        <fkIdDepartamentoExpedicion_Nat>11</fkIdDepartamentoExpedicion_Nat>
+                        <fkIdCiudadExpedicion_Nat>11001</fkIdCiudadExpedicion_Nat>
+                        <fkIdPaisDomicilio_Nat>CO</fkIdPaisDomicilio_Nat>
+                        <fkIdDepartamentoDomicilio_Nat>11</fkIdDepartamentoDomicilio_Nat>
+                        <fkIdCiudadDomicilio_Nat>11001</fkIdCiudadDomicilio_Nat>
+                        <fechaExpedicion_Nat>2000-12-24T00:00:00</fechaExpedicion_Nat>
+                        <fechaNacimiento_Nat>1980-12-24T00:00:00</fechaNacimiento_Nat>
+                        <nombresNat_Nat>Abdul Isaac Park</nombresNat_Nat>
+                        <primerApellido_Nat>Christensen</primerApellido_Nat>
+                        <segundoApellido_Nat>Francis</segundoApellido_Nat>
+                        <fkIdPaisNacionalidad_Nat>CO</fkIdPaisNacionalidad_Nat>
+                        <mensajeRespuesta>?</mensajeRespuesta>
+                     </crearGiradorDTO>
+                     <!--Optional:-->
+                     <header>
+                        <!--Optional:-->
+                        <codigoDepositante>698</codigoDepositante>
+                        <!--Optional:-->
+                        <fecha>2024-02-28T13:16:37</fecha>
+                        <!--Optional:-->
+                        <hora>13:16:37</hora>
+                        <!--Optional:-->
+                        <usuario>9004326291</usuario>
+                     </header>
+                  </arg0>
+               </ser:creacionGiradoresCodificados>
+            </soapenv:Body>
+         </soapenv:Envelope>
