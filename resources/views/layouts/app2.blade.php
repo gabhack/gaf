@@ -58,14 +58,14 @@
                     @include('layouts.header2')
                     <!-- End of Topbar -->
 
-                    <div class="container-fluid breadcrumb-wrap">
+                    {{-- <div class="container-fluid breadcrumb-wrap">
                         <h1 class="h4 text-black-pearl font-weight-exbold mb-0">
                             @yield('header-content')
                         </h1>
                         <ol class="breadcrumb bg-transparent mb-0">
                             @yield('breadcrumb')
                         </ol>
-                    </div>
+                    </div> --}}
 
                     <!-- Begin Page Content -->
                     @yield('content')
