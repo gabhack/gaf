@@ -478,7 +478,6 @@ Route::group(['prefix' => 'estudios'], function () {
     Route::get('/pagos/{id}', 'EstudiosController@pagos')->name('estudio.pagos');
     Route::get('/recaudo/{id}', 'EstudiosController@recaudo')->name('estudio.recaudo');
     Route::post('/recaudos/guardar', 'EstudiosController@recaudoGuardar')->name('estudio.recaudo');
-
 });
 
 //Clientes
@@ -610,3 +609,6 @@ Route::get('reporte-planta-comercial', 'ReportesController@reportePlantaComercia
 // Contacto
 Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+
+//cupones Gabriel Nuevos metodos
+Route::get('/coupons/by-pagaduria', 'CouponsController@getCouponsByPagaduria');
