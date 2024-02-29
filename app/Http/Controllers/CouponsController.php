@@ -73,6 +73,44 @@ class CouponsController extends Controller
         return response()->json($results, 200);
     }
 
+
+    public function getCouponsByPagaduria(Request $request)
+    {
+        $pagaduria = $request->pagaduria;
+        $concept = $request->concept;
+        $code = $request->code;
+
+        $models = [
+            CouponsSedAtlantico::class,
+            CouponsSedBolivar::class,
+            CouponsSedCauca::class,
+            CouponsSedChoco::class,
+            CouponsSedCaldas::class,
+            CouponsSedCordoba::class,
+            CouponsSedFopep::class,
+            CouponsSedMagdalena::class,
+            CouponsSedValle::class,
+            CouponsSemBarranquilla::class,
+            CouponsSemPopayan::class,
+            CouponsSemMonteria::class,
+            CouponsSemQuibdo::class,
+            CouponsSemSahagun::class,
+            CouponsSemCali::class,
+            CouponsGen::class,
+        ];
+
+        $results = [];
+
+        foreach ($models as $model) {
+            $results = array_merge($results, $model::where('pagaduria', 'LIKE', '%' . $pagaduria . '%')
+                ->where('concept', 'LIKE', '%' . $concept . '%')
+                ->where('code', 'LIKE', '%' . $code . '%')
+                ->get()->toArray());
+        }
+
+        return response()->json($results, 200);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
