@@ -61,11 +61,11 @@
                                     v-model="dataclient.doc"
                                 /> -->
                                 <b-form-select v-model="anio" required class="mb-3">
-                                        <b-form-select-option value="0" disabled>Seleccione año:</b-form-select-option>
-                                        <b-form-select-option value="2022">2022</b-form-select-option>
-                                        <b-form-select-option value="2023">2023</b-form-select-option>
-                                        <b-form-select-option value="2024">2024</b-form-select-option>
-                                    </b-form-select>
+                                    <b-form-select-option value="0" disabled>Seleccione año:</b-form-select-option>
+                                    <b-form-select-option value="2022">2022</b-form-select-option>
+                                    <b-form-select-option value="2023">2023</b-form-select-option>
+                                    <b-form-select-option value="2024">2024</b-form-select-option>
+                                </b-form-select>
                             </div>
                             <div class="col-6">
                                 <b class="panel-label">MES:</b>
@@ -90,6 +90,14 @@
                                     <b-form-select-option value="noviembre" >Noviemnre</b-form-select-option>
                                     <b-form-select-option value="diciembre" >Diciembre</b-form-select-option>
                                 </b-form-select>
+                            </div>
+                            <div class="6">
+                                <input list="options" placeholder="Elige una opción o escribe">
+                                <datalist id="options">
+                                    <option value="sem choco"></option>
+                                    <option value="sem yopal"></option>
+                                    <option value="sed ibague"></option>
+                                </datalist>
                             </div>
                             
                             <!-- <div class="col-6">
@@ -118,9 +126,10 @@
                 <div class="panel-heading" style="box-shadow: 10px 5px 5px  #09ac80;">
                     <h5 class="mb-0 text-center" style="font-weight: bold;">RESULTADO</h5>
                 </div>
-                <div><carteraembargo /></div>
+                <DescapliEmpty />
+                <!-- <div><carteraembargo /></div>
                 <div><carteraaldia /></div>
-                <div><carteramora /></div>
+                <div><carteramora /></div> -->
                 
                 </div>
             </div>
@@ -143,12 +152,14 @@ import printJS from 'print-js';
 import carteraaldia from './carteraaldia'
 import carteramora from './carteramora'
 import carteraembargo from './carteraembargo'
+import DescapliEmpty from '../ConsultDataClientDraft/DescapliEmpty.vue';
 
 export default {
     components: {
         carteraaldia,
         carteramora,
-        carteraembargo
+        carteraembargo,
+        DescapliEmpty
     },
     props: ['user'],
     data() {
