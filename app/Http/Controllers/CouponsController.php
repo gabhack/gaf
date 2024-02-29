@@ -19,6 +19,8 @@ use App\CouponsSemSahagun;
 use App\CouponsSemCali;
 use App\CouponsGen;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+
 
 class CouponsController extends Controller
 {
@@ -79,6 +81,11 @@ class CouponsController extends Controller
         $pagaduria = $request->pagaduria;
         $concept = $request->concept;
         $code = $request->code;
+        $month = $request->month;
+        $year = $request->year;
+
+        $startDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)->startOfMonth();
+        $endDate = $startDate->copy()->endOfMonth();
 
         $models = [
             CouponsSedAtlantico::class,
@@ -105,11 +112,13 @@ class CouponsController extends Controller
             $results = array_merge($results, $model::where('pagaduria', 'LIKE', '%' . $pagaduria . '%')
                 ->where('concept', 'LIKE', '%' . $concept . '%')
                 ->where('code', 'LIKE', '%' . $code . '%')
+                ->whereBetween('period', [$startDate, $endDate])
                 ->get()->toArray());
         }
 
         return response()->json($results, 200);
     }
+
 
     /**
      * Store a newly created resource in storage.
