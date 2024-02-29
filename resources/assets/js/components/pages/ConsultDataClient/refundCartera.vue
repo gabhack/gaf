@@ -91,13 +91,12 @@
                                     <b-form-select-option value="diciembre" >Diciembre</b-form-select-option>
                                 </b-form-select>
                             </div>
-                            <div class="6">
-                                <input list="options" placeholder="Elige una opción o escribe">
-                                <datalist id="options">
-                                    <option value="sem choco"></option>
-                                    <option value="sem yopal"></option>
-                                    <option value="sed ibague"></option>
-                                </datalist>
+                            <div class="col-6">
+                                    <b class="panel-label">PAGADURIA:</b>
+                                    <b-form-input placeholder="Escriba y escoga pagaduria" list="lista-pagaduria"></b-form-input>
+                                    <datalist id="lista-pagaduria">
+                                        <option v-for="opcion in opciones">{{ opcion }}</option>
+                                    </datalist>
                             </div>
                             
                             <!-- <div class="col-6">
@@ -164,6 +163,7 @@ export default {
     props: ['user'],
     data() {
         return {
+            opciones: ['sem choco', 'sed boyaca', 'sem ibague', 'sed tolima'],
             dataclient: {
                 name: '',
                 tasa: null,
