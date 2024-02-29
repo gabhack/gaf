@@ -3,7 +3,7 @@
     <!-- Sidebar - Brand -->
     <div class="py-3 text-center">
         <a class="" href="{{ url('home') }}">
-            <img src="/img/logo-hego-sidebar.svg" alt="" class="img-fluid w-75 mx-auto">
+            <img src="/img/gaf-sidebar.png" alt="" class="img-fluid w-75 mx-auto">
         </a>
     </div>
 
@@ -17,26 +17,26 @@
 
     @if ((IsUser() || IsCompany()) && ( AMISilverHabilitado() || AMIGoldHabilitado() || AMIDiamondHabilitado() ) && !(IsSuperAdmin() || IsAMIAdmin() || IsHEGOAdmin()))
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#menuAMI" aria-expanded="false" aria-controls="menuAMI">
+        <a class="nav-link" href="{{ url('/home/ami') }}" data-target="#menuAMI" aria-expanded="false" aria-controls="menuAMI">
             <!-- <ami-icon></ami-icon>
             <span>AMI®</span> -->
             <img src="/img/ami-sidebar.png" alt="AMI" class="img-fluid mx-auto"/>
         </a>
-        <div id="menuAMI" class="collapse" aria-labelledby="menuAMI" data-parent="#accordionSidebar">
+        <!-- <div id="menuAMI" class="collapse" aria-labelledby="menuAMI" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner">
                 <a class="collapse-item btn-list" href="{{ url('historyClient' )}}">Listado de consultas</a>
-                <!-- <a class="collapse-item btn-list" href="{{ url('consultas/list' )}}">Listado de consultas</a>		 -->
-                <!-- <a class="collapse-item" href="/massiveCharge">Carga Masiva</a> -->
+                <a class="collapse-item btn-list" href="{{ url('consultas/list' )}}">Listado de consultas</a>		
+                <a class="collapse-item" href="/massiveCharge">Carga Masiva</a>
                 <a class="collapse-item" href="{{ url('dataClientDraft') }}">Nueva consulta +</a>
                 <a class="collapse-item" href="{{ url('cifin') }}">Nueva consulta CIFIN</a>
                 <a class="collapse-item" href="{{ url('deceval') }}">Nuevo Pagare Deceval</a>
-                <!-- <a class="collapse-item" href="#">Consulta bloque</a> 				 -->
+                <a class="collapse-item" href="#">Consulta bloque</a> 				
                 <a class="collapse-item" href="{{ url('refundCartera') }}">Recuperacion de Cartera </a>
                 <a class="collapse-item" href="{{ url('whatsapp-bot') }}">WhatsApp Bot</a>
-                <!-- <a class="collapse-item" href="#">Prospección de Mercado</a> -->
-                <!-- <a class="collapse-item" href="{{ url('consultas') }}">Nueva Consulta</a> -->
+                <a class="collapse-item" href="#">Prospección de Mercado</a>
+                <a class="collapse-item" href="{{ url('consultas') }}">Nueva Consulta</a>
             </div>
-        </div>
+        </div> -->
     </li>
     <!-- <li class="nav-item">
         <a class="nav-link" href="{{ url('pagos') }}">
@@ -51,7 +51,7 @@
         <a class="nav-link" href="{{ url('estudios') }}">
             <!-- <hego-icon></hego-icon>
             <span>HEGO®</span> -->
-            <img src="/img/hego-sidebar.png" alt="HEGO" class="" style="width: 82px;"/>
+            <img src="/img/hego-sidebar.png" alt="HEGO" class="img-fluid mx-auto"/>
         </a>
     </li>
 
@@ -126,8 +126,8 @@
     @endif
 
     <!-- Sidebar Toggler (Sidebar) -->
-    <div class="text-center d-none d-md-inline">
+    {{-- <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
-    </div>
+    </div> --}}
 </ul>
 <!-- End of Sidebar -->

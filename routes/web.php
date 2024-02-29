@@ -38,8 +38,8 @@ Route::get('/test-cupones/{ciudad}/{documento}', 'TestController@testCuponIndivi
 Auth::routes(['register' => true]);
 
 Route::get('/home', 'HomeController@index')->name('home');
-
 Route::get('/', 'HomeController@index')->name('home');
+Route::get('/home/ami', 'HomeController@ami')->name('ami');
 Route::get('/logout', 'Auth\LoginController@logout');
 Route::post('/guardar-giro', 'EstudiosController@guardarGiro')->name('estudios.giros');
 Route::post('/guardar-cartera', 'EstudiosController@guardarCartera')->name('estudios.cartera');
@@ -489,7 +489,7 @@ Route::group(['prefix' => 'clientes'], function () {
     Route::post('/actualizar', 'ClientesController@actualizar');
 });
 
-Route::post('giros/store', [GirosController::class, 'store'])->name('giros');
+// Route::post('giros/store', [GirosController::class, 'store'])->name('giros');
 
 Route::get('/dataset', 'DatasetController@index');
 Route::get('/dataset/get', 'DatasetController@get');
@@ -497,6 +497,7 @@ Route::get('/dataset/get', 'DatasetController@get');
 //Paginas de informacion
 Route::view('/welcome', 'welcome');
 Route::view('/amipersonas', 'amipersonas');
+Route::view('/ami', 'ami');
 Route::view('/moreinformation', 'moreinformation');
 Route::view('/moreinformationcartera', 'moreinformationcartera');
 Route::view('/hego', 'hego');
@@ -529,7 +530,7 @@ Route::post('consultaDescuentossedchoco', 'DescuentossedchocoController@consulta
 Route::post('consultaDescuentossemsahagun', 'DescuentossemsahagunController@consultaUnitaria');
 Route::post('consultaDescuentossemquibdo', 'DescuentosSemQuibdoController@consultaUnitaria');
 Route::post('consultaDescuentossempopayan', 'DescuentossempopayanController@consultaUnitaria');
-Route::post('consultaDescuentossedcauca', 'DescuentossedcaucaController@consultaUnitaria');
+// Route::post('consultaDescuentossedcauca', 'DescuentossedcaucaController@consultaUnitaria');
 Route::post('consultaDetalledecliente', 'DetalledeclienteController@consultaUnitaria');
 Route::post('consultaDescuentossemcali', 'DescuentosSemCaliController@consultaUnitaria');
 Route::post('consultaEmbargossemcali', 'EmbargosSemCaliController@consultaUnitaria');
@@ -547,7 +548,7 @@ Route::resource('Descuentossedchoco', 'DescuentossedchocoController');
 Route::resource('Descuentossemquibdo', 'DescuentosSemQuibdoController');
 Route::resource('Descuentossemsahagun', 'DescuentossemsahagunController');
 Route::resource('Descuentossempopayan', 'DescuentossempopayanController');
-Route::resource('Descuentossedcauca', 'DescuentossedcaucaController');
+// Route::resource('Descuentossedcauca', 'DescuentossedcaucaController');
 Route::resource('Detalledecliente', 'DetalledeclienteController');
 Route::resource('Descuentossemcali', 'DescuentosSemCaliController');
 Route::resource('embargossemcali', 'EmbargosSemCaliController');
@@ -580,7 +581,7 @@ Route::post('/datamesfidu/consultaUnitaria', 'DatamesfiduController@consultaUnit
 Route::post('/datamessedvalle/consultaUnitaria', 'DatamesSedValleController@consultaUnitaria');
 Route::resource('/datamessedvalle', 'DatamesSedValleController');
 
-Route::resource('/cotizer-data', dataCotizerController::class)->only(['store', 'index', 'show', 'update']);
+// Route::resource('/cotizer-data', dataCotizerController::class)->only(['store', 'index', 'show', 'update']);
 Route::get('/cotizer-data/borrar/{id}', 'dataCotizerController@destroy');
 Route::view('/solicitud', 'creditCalculator')->middleware('auth');
 Route::view('/RegisterCredit', 'registerCredit')->name('register.credit');
