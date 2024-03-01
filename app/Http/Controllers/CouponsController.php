@@ -19,9 +19,20 @@ use App\CouponsSemSahagun;
 use App\CouponsSemCali;
 use App\CouponsGen;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+
 
 class CouponsController extends Controller
 {
+
+    public function showCouponsForm()
+    {
+        return view('Coupons.CouponsConsult');
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -72,6 +83,58 @@ class CouponsController extends Controller
 
         return response()->json($results, 200);
     }
+
+
+    public function getCouponsByPagaduria(Request $request)
+    {
+        try {
+            if (!$request->has('month') || !$request->has('year') || !$request->has('pagaduria')) {
+                return response()->json(['error' => 'Month, year, and pagaduria are required.'], 400);
+            }
+    
+            $pagaduria = $request->pagaduria;
+            $concept = $request->concept;
+            $code = $request->code;
+            $month = str_pad($request->month, 2, '0', STR_PAD_LEFT);
+            $year = $request->year;
+    
+            $startDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)->startOfMonth()->toDateString();
+            $endDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)->endOfMonth()->toDateString();
+    
+            $query = CouponsGen::query();
+    
+            if ($concept) {
+                $query->where('concept', 'ILIKE', '%' . $concept . '%');
+            }
+    
+            if ($code) {
+                $query->where('code', 'ILIKE', '%' . $code . '%');
+            }
+    
+            $query->where('pagaduria', 'ILIKE', '%' . $pagaduria . '%');
+    
+            $query->where('inicioperiodo', '<=', $endDate);
+            $query->where('finperiodo', '>=', $startDate);
+    
+            $sql = $query->toSql();
+            $bindings = $query->getBindings();
+    
+            Log::info('Ejecutando consulta SQL: ' . $sql, $bindings);
+    
+            $results = $query->get()->toArray();
+    
+            return response()->json($results, 200);
+        } catch (\Exception $e) {
+            Log::error('Error in getCouponsByPagaduria:', ['message' => $e->getMessage(), 'trace' => $e->getTrace()]);
+    
+            return response()->json(['error' => 'Internal Server Error'], 500);
+        }
+    }
+    
+    
+             
+
+
 
     /**
      * Store a newly created resource in storage.

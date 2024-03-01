@@ -15,6 +15,8 @@ use App\DescuentosSemMonteria;
 use App\DescuentosSemQuibdo;
 use App\DescuentosGen;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Carbon;
 
 class DescuentosController extends Controller
 {
@@ -65,48 +67,45 @@ class DescuentosController extends Controller
         return response()->json($results, 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+    
+public function getDescuentosByPagaduria(Request $request)
+{
+    try {
+        if (!$request->has('month') || !$request->has('year') || !$request->has('pagaduria')) {
+            return response()->json(['error' => 'month, year, y pagaduria son requeridos.'], 400);
+        }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+        $pagaduria = $request->pagaduria;
+        $mliquid = $request->mliquid;
+        $month = str_pad($request->month, 2, '0', STR_PAD_LEFT);
+        $year = $request->year;
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $startDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)->startOfMonth();
+        $endDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)->endOfMonth();
+
+        $query = DescuentosGen::query();
+
+        if ($mliquid) {
+            $query->where('mliquid', 'ILIKE', '%' . $mliquid . '%');
+        }
+
+        $query->where('pagaduria', 'ILIKE', '%' . $pagaduria . '%');
+
+        $query->whereBetween('nomina', [$startDate, $endDate]);
+
+        $sql = $query->toSql();
+        $bindings = $query->getBindings();
+
+        Log::info('Ejecutando consulta SQL en Descuentos: ' . $sql, $bindings);
+
+        $results = $query->get()->toArray();
+
+        return response()->json($results, 200);
+    } catch (\Exception $e) {
+        Log::error('Error en getDescuentosByPagaduria:', ['message' => $e->getMessage(), 'trace' => $e->getTrace()]);
+
+        return response()->json(['error' => 'Internal Server Error'], 500);
     }
+}
 }
