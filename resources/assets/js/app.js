@@ -101,6 +101,10 @@ Vue.component(
     require('./components/pages/ConsultDataClientDraft/indexIntegration.vue').default
 );
 
+//CUPONES
+
+Vue.component('CouponsFormConsult', require('./components/pages/Coupons/CouponsFormConsult.vue').default);
+
 /* Vue Init */
 const app = new Vue({
     el: '#app',

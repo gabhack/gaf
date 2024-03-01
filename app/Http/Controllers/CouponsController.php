@@ -20,10 +20,19 @@ use App\CouponsSemCali;
 use App\CouponsGen;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 
 class CouponsController extends Controller
 {
+
+    public function showCouponsForm()
+    {
+        return view('Coupons.CouponsConsult');
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -78,46 +87,53 @@ class CouponsController extends Controller
 
     public function getCouponsByPagaduria(Request $request)
     {
-        $pagaduria = $request->pagaduria;
-        $concept = $request->concept;
-        $code = $request->code;
-        $month = $request->month;
-        $year = $request->year;
-
-        $startDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)->startOfMonth();
-        $endDate = $startDate->copy()->endOfMonth();
-
-        $models = [
-            CouponsSedAtlantico::class,
-            CouponsSedBolivar::class,
-            CouponsSedCauca::class,
-            CouponsSedChoco::class,
-            CouponsSedCaldas::class,
-            CouponsSedCordoba::class,
-            CouponsSedFopep::class,
-            CouponsSedMagdalena::class,
-            CouponsSedValle::class,
-            CouponsSemBarranquilla::class,
-            CouponsSemPopayan::class,
-            CouponsSemMonteria::class,
-            CouponsSemQuibdo::class,
-            CouponsSemSahagun::class,
-            CouponsSemCali::class,
-            CouponsGen::class,
-        ];
-
-        $results = [];
-
-        foreach ($models as $model) {
-            $results = array_merge($results, $model::where('pagaduria', 'LIKE', '%' . $pagaduria . '%')
-                ->where('concept', 'LIKE', '%' . $concept . '%')
-                ->where('code', 'LIKE', '%' . $code . '%')
-                ->whereBetween('period', [$startDate, $endDate])
-                ->get()->toArray());
+        try {
+            if (!$request->has('month') || !$request->has('year') || !$request->has('pagaduria')) {
+                return response()->json(['error' => 'Month, year, and pagaduria are required.'], 400);
+            }
+    
+            $pagaduria = $request->pagaduria;
+            $concept = $request->concept;
+            $code = $request->code;
+            $month = str_pad($request->month, 2, '0', STR_PAD_LEFT);
+            $year = $request->year;
+    
+            $startDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)->startOfMonth()->toDateString();
+            $endDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)->endOfMonth()->toDateString();
+    
+            $query = CouponsGen::query();
+    
+            if ($concept) {
+                $query->where('concept', 'ILIKE', '%' . $concept . '%');
+            }
+    
+            if ($code) {
+                $query->where('code', 'ILIKE', '%' . $code . '%');
+            }
+    
+            $query->where('pagaduria', 'ILIKE', '%' . $pagaduria . '%');
+    
+            $query->where('inicioperiodo', '<=', $endDate);
+            $query->where('finperiodo', '>=', $startDate);
+    
+            $sql = $query->toSql();
+            $bindings = $query->getBindings();
+    
+            Log::info('Ejecutando consulta SQL: ' . $sql, $bindings);
+    
+            $results = $query->get()->toArray();
+    
+            return response()->json($results, 200);
+        } catch (\Exception $e) {
+            Log::error('Error in getCouponsByPagaduria:', ['message' => $e->getMessage(), 'trace' => $e->getTrace()]);
+    
+            return response()->json(['error' => 'Internal Server Error'], 500);
         }
-
-        return response()->json($results, 200);
     }
+    
+    
+             
+
 
 
     /**
