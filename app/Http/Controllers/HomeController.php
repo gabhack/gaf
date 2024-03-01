@@ -98,4 +98,8 @@ class HomeController extends Controller
             "labels" => $labels
         ]);
     }
+
+    public function ami(){
+        return view('ami');
+    } 
 }

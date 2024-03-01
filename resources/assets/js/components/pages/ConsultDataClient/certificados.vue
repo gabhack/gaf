@@ -4,121 +4,86 @@
             <div id="consulta-container" class="row">
                 <div class="panel mb-3 col-md-12">
                     <div class="panel-heading" style=" box-shadow: 10px 5px 5px #09ac80">
-                        <h4 class="mb-0" style="font-weight: bold;">Prospección de Mercado "Diamond"</h4>
+                        <h4 class="mb-0" style="font-weight: bold;">Certificados de Nacimiento - Defunción</h4>
                     </div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-6">
-                                <b class="panel-label">PAGADURIA:</b>
-                                <input
-                                    required
-                                    class="form-control text-center"
-                                    type="text"
-                                    v-model="dataclient.name"
-                                />
+                                <b-button id="show-btn" v-on:click="showModal">Carga Masiva</b-button>
+                                <b-modal ref="modal" hide-footer title="Carga Individual">
+                                    <b class="panel-label">Nombres:</b>
+                                    <input
+                                        required
+                                        class="form-control text-center"
+                                        type="text"
+                                        v-model="dataclient.name"
+                                    />
+                                    <b class="panel-label">Cédula:</b>
+                                    <input
+                                        required
+                                        class="form-control text-center"
+                                        type="text"
+                                        v-model="dataclient.name"
+                                    />
+                                    <div class="row">
+                                        <div class="col-6 d-flex align-items-center">
+                                            <b-button class="mt-3" variant="outline-danger" block @click="hideModal">Cerrar</b-button>
+                                        </div>        
+                                        <div class="col-6 d-flex align-items-center">
+                                            <b-button class="mt-3" variant="outline-warning" block @click="hideModal">Cargar</b-button>
+                                        </div>
+                                    </div>
+                                </b-modal>
+                                <b-button id="show-btn" v-on:click="showModal2">Carga indivual</b-button>
+                                <b-modal ref="modal2" hide-footer title="Carga Individual">
+                                    <b class="panel-label">Nombres:</b>
+                                    <input
+                                        required
+                                        class="form-control text-center"
+                                        type="text"
+                                        v-model="dataclient.name"
+                                    />
+                                    <b class="panel-label">Cédula:</b>
+                                    <input
+                                        required
+                                        class="form-control text-center"
+                                        type="text"
+                                        v-model="dataclient.name"
+                                    />
+                                    <b class="panel-label">Subir certificado:</b>
+                                    <b-form-file
+                                        v-model="dataclient.file"
+                                        :state="Boolean(dataclient.file)"
+                                        placeholder="Oprime o Suelta el archivo aquí"
+                                        class="carga-archivo"
+                                    ></b-form-file>
+                                    <div class="row">
+                                        <div class="col-6 d-flex align-items-center">
+                                            <b-button class="mt-3" variant="outline-danger" block @click="hideModal2">Cerrar</b-button>
+                                        </div>        
+                                        <div class="col-6 d-flex align-items-center">
+                                            <b-button class="mt-3" variant="outline-warning" block @click="hideModal2">Cargar</b-button>
+                                        </div>
+                                    </div>
+                                </b-modal>
                             </div>
+                            <!-- <b-button
+                                type="button"
+                                variant="black-pearl"
+                                class="px-4"
+                                @click="getAllPagadurias"
+                            >
+                                CONSULTAR PAGADURIAS
+                            </b-button> -->
                             <div class="col-6">
-                                <b class="panel-label">ESTADO DE CARTERA:</b>
-                                <!-- <input
-                                    required
-                                    class="form-control text-center"
-                                    type="number"
-                                    v-model="dataclient.doc"
-                                /> -->
-                                    <b-form-select v-model="selected" required class="mb-3">
-                                        <b-form-select-option value="null" disabled>Seleccione estado cartera:</b-form-select-option>
-                                        <b-form-select-option value="cartera-dia">Cartera al Día</b-form-select-option>
-                                        <b-form-select-option value="cartera-mora">Cartera en Mora</b-form-select-option>
-                                        <b-form-select-option value="cartera-embargada">Cartera Embargada</b-form-select-option>
-                                        <b-form-select-option value="todas" >Todas</b-form-select-option>
-                                    </b-form-select>
-                                    
+                                
                             </div>
-                            <div class="col-6">
-                                <b class="panel-label">ENTIDAD (Banco-Financiera-Cooperativa-CFC):</b>
-                                <input
-                                    required
-                                    class="form-control text-center"
-                                    type="text"
-                                    v-model="dataclient.doc"
-                                />
+                            <div id="table1" style="display: none;">
+                                HOLA
                             </div>
-                            <div class="col-6" v-if="selected === 'cartera-mora' || selected === 'todas'">
-                                <b class="panel-label">CONCEPTO (Homónimo-Código):</b>
-                                <input
-                                    required
-                                    class="form-control text-center"
-                                    type="text"
-                                    id="dependInput"
-                                />
-                            </div>
-                            <div class="col-6">
-                                <b class="panel-label">AÑO:</b>
-                                <!-- <input
-                                    required
-                                    class="form-control text-center"
-                                    type="number"
-                                    v-model="dataclient.doc"
-                                /> -->
-                                <b-form-select v-model="anio" required class="mb-3">
-                                    <b-form-select-option value="0" disabled>Seleccione año:</b-form-select-option>
-                                    <b-form-select-option value="2022">2022</b-form-select-option>
-                                    <b-form-select-option value="2023">2023</b-form-select-option>
-                                    <b-form-select-option value="2024">2024</b-form-select-option>
-                                </b-form-select>
-                            </div>
-                            <div class="col-6">
-                                <b class="panel-label">MES:</b>
-                                <!-- <input
-                                    required
-                                    class="form-control text-center"
-                                    type="number"
-                                    v-model="dataclient.doc"
-                                /> -->
-                                <b-form-select v-model="mes" required class="mb-3">
-                                    <b-form-select-option value="a" disabled>Seleccione mes:</b-form-select-option>
-                                    <b-form-select-option value="enero">Enero</b-form-select-option>
-                                    <b-form-select-option value="febrero">Febrero</b-form-select-option>
-                                    <b-form-select-option value="marzo">Marzo</b-form-select-option>
-                                    <b-form-select-option value="abril" >Abril</b-form-select-option>
-                                    <b-form-select-option value="mayo" >Mayo</b-form-select-option>
-                                    <b-form-select-option value="junio" >Junio</b-form-select-option>
-                                    <b-form-select-option value="julio" >Julio</b-form-select-option>
-                                    <b-form-select-option value="agosto" >Agosto</b-form-select-option>
-                                    <b-form-select-option value="septiembre" >Septiembre</b-form-select-option>
-                                    <b-form-select-option value="octubre" >Octubre</b-form-select-option>
-                                    <b-form-select-option value="noviembre" >Noviemnre</b-form-select-option>
-                                    <b-form-select-option value="diciembre" >Diciembre</b-form-select-option>
-                                </b-form-select>
-                            </div>
-                            <div class="col-6">
-                                    <b class="panel-label">PAGADURIA:</b>
-                                    <b-form-input placeholder="Escriba y escoga pagaduria" list="lista-pagaduria"></b-form-input>
-                                    <datalist id="lista-pagaduria">
-                                        <option v-for="opcion in opciones">{{ opcion }}</option>
-                                    </datalist>
-                            </div>
-                            
-                            <!-- <div class="col-6">
-                                <b class="panel-label">TASA:</b>
-                                <input
-                                    required
-                                    class="form-control text-center"
-                                    step="0.01%"
-                                    type="number"
-                                    v-model="dataclient.tasa"
-                                />
-                            </div>
-                            <div class="col-6">
-                                <b class="panel-label">DOCUMENTOS LB</b>
-                                <b-form-file
-                                    v-model="dataclient.file"
-                                    :state="Boolean(dataclient.file)"
-                                    drop-placeholder="Suelta el archivo aquí..."
-                                ></b-form-file>
-                            </div> -->
-                            <div class="col-6 mt-4">
-                                <button type="button" class="btn btn-primary" v-on:click="getData">PROSPECTAR</button>
+
+                            <div id="table2" style="display: none;">
+                                ADIÓS
                             </div>
                         </div>
                     </div>
@@ -127,8 +92,8 @@
                 </div>
                 <!-- <DescapliEmpty /> -->
                 <!-- <div><carteraembargo /></div>
-                <div><carteraaldia /></div>-->
-                <div><carteramora /></div>
+                <div><carteraaldia /></div> -->
+                <div><carteramora /></div> 
                 
                 </div>
             </div>
@@ -139,7 +104,9 @@
 .table-text {
     font-size: 12px;
 }
-
+.carga-archivo:hover{
+    cursor: pointer;
+}
 .tables-space {
     margin-top: 15px !important;
 }
@@ -212,6 +179,18 @@ export default {
         },
     },
     methods: {
+        showModal() {
+        this.$refs['modal'].show()
+      },
+      hideModal() {
+        this.$refs['modal'].hide()
+      },
+      showModal2() {
+        this.$refs['modal2'].show()
+      },
+      hideModal2() {
+        this.$refs['modal2'].hide()
+      },
         updateSecondInput() {
       this.isRequired = this.selectedOption === "option2";
     },

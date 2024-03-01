@@ -1,0 +1,321 @@
+/* @import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
+
+body * {
+    font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
+}
+
+body span,
+body p,
+body h1,
+body h2,
+body h3,
+body h4,
+body h5,
+body h6,
+body a {
+    font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
+} */
+
+.arrow
+{
+	cursor: pointer;
+}
+
+.navbar .navbar-nav>li>.dropdown-menu {
+    position: absolute;
+    right: 0;
+    left: auto;
+    top: 37px;
+}
+
+.navbar .navbar-nav>li{
+	color: white;
+}
+
+.navbar-nav > .user-menu .user-image {
+    margin-right: -10px;
+}
+
+.navbar .navbar-nav>li>a{
+	color: white;
+	padding: 17px 10px;
+}
+
+.navbar .navbar-nav>li>a.dropdown-toggle>span{
+	margin-left: 10px;
+}
+
+.navbar .navbar-nav>li>a.dropdown-toggle>span.label{
+	margin-left: 0px;
+}
+
+.navbar .navbar-nav>li>a:hover{
+	text-decoration: none;
+}
+
+.navbar .navbar-nav .dropdown-toggle::after {
+    display: none;
+}
+
+.loader{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	background: rgba(0,0,0,.6);
+	z-index: 100000;
+}
+
+.loader .spinner-border
+{
+	position: absolute;
+	top: calc(50%);
+}
+
+table.dataTable tbody th, table.dataTable tbody td {
+    padding: 5px !important;
+}
+
+table.dataTable thead th, table.dataTable thead td,
+table.dataTable.no-footer{
+    border: 1px solid #ddd !important;
+}
+
+.dataTables_wrapper label{
+    font-weight: normal !important;
+}
+
+.dataTables_length select,
+.dataTables_filter input{
+    border: 1px solid #ddd !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button{
+    font-size: .75em !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current, 
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover{
+    font-size: .75em !important;
+    border-radius: 50% !important;
+}
+
+.table{
+	font-size: .85em;
+}
+
+.form-control{
+    font-size: 12px !important;
+}
+
+.hidden{
+	display: none;
+}
+
+.btn{
+	font-size: 0.9rem;
+}
+
+.pad{
+	font-weight: normal;
+}
+
+.label-consulta{
+	font-weight: bold;
+}
+
+.label-consulta.label-warning {
+    background-color: transparent !important;
+    color: #212529 !important;
+}
+
+.label-consulta.label-warning::before{
+	content: '!';
+	color: white;
+	padding: 2px 9px;
+	margin-right: 5px;
+	background-color: #f39c12;
+	border-radius: 100px;
+}
+
+.label-consulta.label-warning>.pad {
+    color: #f39c12 !important;
+}
+
+.label-consulta>select{
+	width: 100%;
+}
+
+.panel-heading{
+	font-size: 1.2em;
+}
+
+.input-verde{
+	background-color: #7dd47d !important;
+	border: 1px solid #2e822e;
+}
+
+.input-amarillo{
+	background-color: #efdc68 !important;
+	border: 1px solid #ab9a30;
+}
+
+.input-rojo{
+	background-color: #d47d7d !important;
+	border: 1px solid #822e2e;
+}
+
+.tipo-cliente{
+	font-weight: 600;
+}
+
+.process-status{
+	width: 10px;
+	height: 10px;
+	display: block;
+	float: right;
+	margin: 5px 5px 0 0;
+	border-radius: 100px;
+}
+
+td:nth-child(2n) { 
+    width: 10%;
+}
+
+.form-check>label{
+	margin-left: 10px;
+}
+
+.form-check>label.form-check-label {
+	margin-left: 20px;
+}
+
+.btn.eliminar-registro {
+	font-size: 1em;
+    padding: 0 5px;
+    margin-top: -4px;
+    color: #c54c4c !important;
+}
+
+.process-status.status-processing{
+	animation: pulse 1s infinite;
+	animation-direction: alternate;
+}
+
+.process-status.status-ok{
+	background-color: #7df387;
+}
+
+.process-status.status-error{
+	background-color: #f37d7d;
+}
+
+@keyframes pulse {
+  0% {
+    background-color: #f3e07d;
+  }
+  100% {
+    background-color: #e4cf60;
+  }
+}
+
+#valor-tipo-cliente{
+	font-weight: 900;
+    color: #3197d1;
+    background-color: white;
+    padding: 3px 5px 4px 5px;
+    border-radius: 5px;
+}
+
+#toast-message .col-md-4{
+	position: absolute;
+    top: 0px;
+    right: 0px;
+	z-index: 9999;
+	
+    -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadein 2s; /* Firefox < 16 */
+        -ms-animation: fadein 2s; /* Internet Explorer */
+         -o-animation: fadein 2s; /* Opera < 12.1 */
+            animation: fadein 2s;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Firefox < 16 */
+@-moz-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Internet Explorer */
+@-ms-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Opera < 12.1 */
+@-o-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+
+
+/****************** RESPONSIVE ******************/
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+	header.main-header{
+		position: fixed;
+		width: 100%;
+	}
+	.main-sidebar{
+		position: fixed;
+	}
+	.content-wrapper{
+		margin-top: 52px;
+	}
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+
+}
+
+/**************** FIN RESPONSIVE ****************/
