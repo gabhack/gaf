@@ -16,14 +16,12 @@ use App\EmbargosSemMonteria;
 use App\EmbargosSemQuibdo;
 use App\EmbargosGen;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Carbon;
 
 class EmbargosController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
 
     public function index(Request $request)
     {
@@ -68,83 +66,6 @@ class EmbargosController extends Controller
         return response()->json($results, 200);
     }
 
-    // public function index(Request $request)
-    // {
-    //     $doc = $request->doc;
-    //     $embargoType = $request->pagaduria;
-
-    //     $models = [
-    //         EmbargosSedCauca::class => 'doc',
-    //         EmbargosSedChoco::class => 'doc',
-    //         EmbargosSedCordoba::class => 'doc',
-    //         EmbargosSemBarranquilla::class => 'doc',
-    //         EmbargosSedAtlantico::class => 'doc',
-    //         EmbargosSedValle::class => 'doc',
-    //         EmbargosSedCaldas::class => 'doc',
-    //         EmbargosSemCali::class => 'doc',
-    //         EmbargosSemPopayan::class => 'doc',
-    //         EmbargosSemMonteria::class => 'doc',
-    //         EmbargosSemQuibdo::class => 'idemp',
-    //         EmbargosSedBolivar::class => 'idemp',
-    //     ];
-
-    //     $results = [];
-
-    //     foreach ($models as $model => $column) {
-    //         $className = class_basename($model);
-
-    //         if ($className == $embargoType) {
-    //             $results = $model::where($column, 'LIKE', '%' . $doc . '%')->get();
-    //         }
-    //     }
-
-    //     return response()->json($results, 200);
-    // }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 
     public function buscar($doc = null, $pagaduria = null)
     {
@@ -171,4 +92,50 @@ class EmbargosController extends Controller
 
         return $results;
     }
+
+    public function getEmbargosByPagaduria(Request $request)
+    {
+        Log::info('Request data:', $request->all());
+    
+        try {
+            if (!$request->has('month') || !$request->has('year') || !$request->has('pagaduria')) {
+                return response()->json(['error' => 'Month, year, and pagaduria are required.'], 400);
+            }
+    
+            $pagaduria = $request->pagaduria;
+            $entidadDemandante = $request->entidadDemandante;
+            $month = str_pad($request->month, 2, '0', STR_PAD_LEFT);
+            $year = $request->year;
+    
+            $startDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)->startOfMonth();
+            $endDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)->endOfMonth();
+    
+            $query = EmbargosGen::query();
+    
+            if ($entidadDemandante) {
+                $query->where('entidaddeman', 'ILIKE', '%' . $entidadDemandante . '%');
+            }
+    
+            $query->where('pagaduria', 'ILIKE', '%' . $pagaduria . '%');
+            $query->whereBetween('nomina', [$startDate, $endDate]);
+    
+            $query->select('doc', 'nomp', 'docdeman', 'entidaddeman', 'motemb', 'temb');
+    
+            // Capturar el SQL y los bindings
+            $sql = $query->toSql();
+            $bindings = $query->getBindings();
+            Log::info('Executing SQL in getEmbargosByPagaduria: ' . $sql, $bindings);
+    
+            $results = $query->get()->toArray();
+            Log::info('Results: ', $results);
+    
+            return response()->json($results, 200);
+        } catch (\Exception $e) {
+            Log::error('Error in getEmbargosByPagaduria:', ['message' => $e->getMessage(), 'trace' => $e->getTrace()]);
+    
+            return response()->json(['error' => 'Internal Server Error'], 500);
+        }
+    }
+    
+
 }

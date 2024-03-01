@@ -612,4 +612,8 @@ Route::get('/contact', [ContactController::class, 'index'])->name('contact.index
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 //cupones Gabriel Nuevos metodos
-Route::get('/coupons/by-pagaduria', 'CouponsController@getCouponsByPagaduria');
+Route::post('/coupons/by-pagaduria', 'CouponsController@getCouponsByPagaduria');
+Route::get('/coupons-form', 'CouponsController@showCouponsForm')->name('coupons.form');
+Route::get('/pagadurias/names', 'PagaduriasController@getPagaduriasNames');
+Route::post('/descuentos/by-pagaduria', [DescuentosController::class, 'getDescuentosByPagaduria']);
+Route::post('/embargos/by-pagaduria', [EmbargosController::class, 'getEmbargosByPagaduria']);

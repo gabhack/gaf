@@ -252,4 +252,11 @@ class PagaduriasController extends Controller
             return response()->json(['error' => 'Ocurrió un error al procesar la solicitud'], 500);
         }
     }
+
+    public function getPagaduriasNames()
+{
+    $nombres = Pagadurias::pluck('pagaduria');
+    return response()->json($nombres, 200);
+}
+
 }
