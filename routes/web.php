@@ -572,6 +572,7 @@ Route::view('/historyClient', 'historyClient')->middleware('auth');
 Route::view('/dataClient', 'dataClient');
 Route::view('/dataClientDraft', 'dataClientDraft')->middleware('auth');
 Route::view('/refundCartera', 'refundCartera');
+Route::view('/certificados', 'certificados');
 Route::view('/massiveCharge', 'massive');
 Route::resource('/validate', 'SolicitudValidacionController');
 
