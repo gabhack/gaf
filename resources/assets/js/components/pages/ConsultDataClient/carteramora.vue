@@ -225,21 +225,6 @@ export default {
                     sortable: true
                 },
                 {
-                    key: 'score',
-                    label: 'Entidad o Concepto',
-                    sortable: true
-                },
-                {
-                    key: 'pagaduria',
-                    label: 'Pagaduria',
-                    sortable: true
-                },
-                {
-                    key: 'score',
-                    label: 'Valor Cuota',
-                    sortable: true
-                },
-                {
                     key: 'actions',
                     label: 'Acciones'
                 }

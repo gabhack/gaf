@@ -97,7 +97,7 @@ Inicio
           <a href="" style="color: black;">Investigción de Bienes Comercial y Localización</a>
         </li>
         <li>
-          <a href="" style="color: black;">Certificados de Nacimiento - Defunción</a>
+          <a href="{{ url('certificados' )}}" style="color: black;">Certificados de Nacimiento - Defunción</a>
         </li>
 
         <b-collapse id="collapse-4">
