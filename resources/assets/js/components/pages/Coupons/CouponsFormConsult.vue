@@ -4,12 +4,12 @@
 
         <div class="panel mb-3 col-md-12">
             <div class="panel-heading">
-                <b>CONSULTAR CUPONES</b>
+                <b>Prospección de Mercado "Diamond"</b>
             </div>
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-3">
-                        <b-form-group label="Pagaduria">
+                        <b-form-group label="PAGADURÍA">
                             <b-form-select
                                 v-model="pagaduria"
                                 :options="pagaduriasList"
@@ -18,31 +18,34 @@
                         </b-form-group>
                     </div>
                     <div class="col-md-3">
-                        <b-form-group label="Estado">
-                            <b-form-select v-model="selectedEstado" :options="estadosOptions"></b-form-select>
+                        <b-form-group label="ESTADO">
+                            <b-form-select 
+                                v-model="selectedEstado" 
+                                :options="estadosOptions">
+                            </b-form-select>
                         </b-form-group>
                     </div>
 
                     <!-- Condicionales para mostrar/ocultar campos según el estado -->
                     <div class="col-md-3" v-if="selectedEstado === 'Al día'">
-                        <b-form-group label="Concepto">
+                        <b-form-group label="CONCEPTO">
                             <b-form-input v-model="concept" placeholder="Ingrese el concepto"></b-form-input>
                         </b-form-group>
                     </div>
 
                     <div class="col-md-3" v-if="selectedEstado === 'Al día'">
-                        <b-form-group label="Código">
+                        <b-form-group label="CÓDIGO">
                             <b-form-input v-model="code" placeholder="Ingrese el código"></b-form-input>
                         </b-form-group>
                     </div>
 
                     <div class="col-md-3" v-if="selectedEstado === 'En mora'">
-                        <b-form-group label="Mliquid">
-                            <b-form-input v-model="mliquid" placeholder="Ingrese el mliquid"></b-form-input>
+                        <b-form-group label="MENSAJE LIQUIDACIÓN">
+                            <b-form-input v-model="mliquid" placeholder="Ingrese el mensaje de liquidación"></b-form-input>
                         </b-form-group>
                     </div>
                     <div v-if="selectedEstado === 'Embargado'" class="col-md-3">
-                        <b-form-group label="Entidad Demandante">
+                        <b-form-group label="ENTIDAD DEMANDANTE">
                             <b-form-input
                                 v-model="entidadDemandante"
                                 placeholder="Ingrese la entidad demandante"
@@ -52,7 +55,7 @@
                     </div>
                     <!--fin de condicionales-->
                     <div class="col-md-3">
-                        <b-form-group label="Mes y Año">
+                        <b-form-group label="MES Y AÑO">
                             <div class="d-flex">
                                 <b-form-input v-model="month" placeholder="Mes" class="mr-2"></b-form-input>
                                 <b-form-input v-model="year" placeholder="Año"></b-form-input>
@@ -62,7 +65,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12 text-right">
-                        <b-button variant="primary" @click="getCoupons">Consultar Cupones</b-button>
+                        <b-button variant="primary" @click="getCoupons">PROSPECTAR</b-button>
                     </div>
                 </div>
                 <!-- Mensajes de error -->
@@ -84,34 +87,42 @@
                 <b>RESULTADOS DE LA CONSULTA</b>
             </div>
             <div class="panel-body">
-                <table class="table">
+                <div class="table-responsive">
+                    <b-table striped hover :fields="cupones" :items="coupons"></b-table>
+                </div>
+                <!-- <b-pagination
+                        v-if="coupons"
+                        v-model="coupons"
+                        :per-page="perPage"
+                        :total-rows="totalRows"
+                    >
+                </b-pagination> -->
+                <!-- <table class="table">
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Documento</th>
-                            <th>Código</th>
-                            <th>Concepto</th>
-                            <th>Ingresos</th>
-                            <th>Egresos</th>
-                            <th>Nombres</th>
                             <th>Periodo</th>
-                            <th>Pagaduria</th>
+                            <th>Pagaduría</th>
+                            <th>Documento</th>
+                            <th>Nombre Completo</th>
+                            <th>Homónimo</th>
+                            <th>Concepto</th>
+                            <th>Valor Cuota</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="coupon in coupons" :key="coupon.id">
                             <td>{{ coupon.id }}</td>
-                            <td>{{ coupon.doc }}</td>
-                            <td>{{ coupon.code }}</td>
-                            <td>{{ coupon.concept }}</td>
-                            <td>{{ coupon.ingresos }}</td>
-                            <td>{{ coupon.egresos }}</td>
-                            <td>{{ coupon.names }}</td>
                             <td>{{ coupon.period }}</td>
                             <td>{{ coupon.pagaduria }}</td>
+                            <td>{{ coupon.doc }}</td>
+                            <td>{{ coupon.names }}</td>
+                            <td>{{ coupon.code }}</td>
+                            <td>{{ coupon.concept }}</td>
+                            <td>{{ coupon.egresos }}</td>
                         </tr>
                     </tbody>
-                </table>
+                </table> -->
             </div>
         </div>
         <!-- Tabla para mostrar los resultados de EN MORA -->
@@ -121,7 +132,10 @@
                 <b>RESULTADOS DE LA CONSULTA</b>
             </div>
             <div class="panel-body">
-                <table class="table">
+                <div class="table-responsive">
+                    <b-table striped hover :fields="descuentos" :items="coupons"></b-table>
+                </div>
+                <!-- <table class="table">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -144,7 +158,7 @@
                             <td>{{ descuento.nomina }}</td>
                         </tr>
                     </tbody>
-                </table>
+                </table> -->
             </div>
         </div>
 
@@ -154,7 +168,10 @@
                 <b>RESULTADOS DE LA CONSULTA DE EMBARGOS</b>
             </div>
             <div class="panel-body">
-                <table class="table">
+                <div class="table-responsive">
+                    <b-table striped hover :fields="embargos" :items="coupons"></b-table>
+                </div>
+                <!-- <table class="table">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -177,7 +194,7 @@
                             <td>{{ embargo.temb }}</td>
                         </tr>
                     </tbody>
-                </table>
+                </table> -->
             </div>
         </div>
 
@@ -186,9 +203,16 @@
         </div>
     </div>
 </template>
-
+<style>
+.form-group legend{
+    font-family: "Poppins", sans-serif;
+    font-size: 16px;
+    font-weight: 900;
+}
+</style>
 <script>
 import axios from 'axios';
+import { sassFalse } from 'sass';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 export default {
@@ -198,6 +222,130 @@ export default {
     },
     data() {
         return {
+            cupones: [
+                {
+                    key: 'id',
+                    label: 'Id',
+                    sortable: true
+                },
+                {
+                    key: 'period',
+                    label: 'Periodo',
+                    sortable: true
+                },
+                {
+                    key: 'pagaduria',
+                    label: 'Pagaduria',
+                    sortable: false
+                },
+                {
+                    key: 'doc',
+                    label: 'Documento',
+                    sortable: true
+                },
+                {
+                    key: 'names',
+                    label: 'Nombres Completos',
+                    sortable: true
+                },
+                {
+                    key: 'code',
+                    label: 'Homónimo',
+                    sortable: true
+                },
+                {
+                    key: 'concept',
+                    label: 'Concepto',
+                    sortable: true
+                },
+                {
+                    key: 'egresos',
+                    label: 'Valor Cuota',
+                    sortable: false
+                }
+            ],
+            descuentos: [
+                {
+                    key: 'id',
+                    label: 'Id',
+                    sortable: true
+                },
+                {
+                    key: 'doc',
+                    label: 'Documento',
+                    sortable: true
+                },
+                {
+                    key: 'names',
+                    label: 'Nombre Completo',
+                    sortable: true
+                },
+                {
+                    key: 'mliquid',
+                    label: 'Mensaje Liquidación',
+                    sortable: true
+                },
+                {
+                    key: 'valor',
+                    label: 'Valor',
+                    sortable: true
+                },
+                {
+                    key: 'pagaduria',
+                    label: 'Pagaduría',
+                    sortable: false
+                },
+                {
+                    key: 'fecdata',
+                    label: 'Fecha',
+                    sortable: true
+                },
+                {
+                    key: 'nomina',
+                    label: 'Nómina',
+                    sortable: true
+                }
+            ],
+            embargos: [
+                {
+                    key: 'id',
+                    label: 'Id',
+                    sortable: true
+                },
+                {
+                    key: 'doc',
+                    label: 'Documento',
+                    sortable: true
+                },
+                {
+                    key: 'nomp',
+                    label: 'Nombre Proceso',
+                    sortable: true
+                },
+                {
+                    key: 'docdeman',
+                    label: 'Documento de la Demanda',
+                    sortable: true
+                },
+                {
+                    key: 'entidaddeman',
+                    label: 'Entidad Demandante',
+                    sortable: true
+                },
+                {
+                    key: 'motemb',
+                    label: 'Motivo del Embargo',
+                    sortable: true
+                },
+                {
+                    key: 'temb',
+                    label: 'Total Embargos',
+                    sortable: false
+                }
+            ],
+            perPage: 15,
+            totalRows: 0,
+            currentPage: 1,
             pagaduria: '',
             pagaduriasList: [],
             concept: '',
@@ -222,11 +370,15 @@ export default {
                 this.coupons = [];
                 this.searchPerformed = false;
             }
+        },
+        currentPage () {
+            this.getCoupons();
         }
     },
     async mounted() {
         await this.getPagaduriasNames();
     },
+    
     methods: {
         async getPagaduriasNames() {
             try {

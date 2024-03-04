@@ -20,7 +20,7 @@
         </div>
     </div>
     <div class="container-fluid row">
-        <div class="col-12 col-md-6 pt-5">
+        <div class="col-12 col-lg-6 pt-5">
             <div class="box-rounded bg-gainsboro text-black-pearl text-left">
                 <p class="box-label text-left"><span>VISADO</span></p>
                 <ul>
@@ -43,7 +43,7 @@
                 </ul>
             </div>
         </div>
-        <div class="col-12 col-md-6 pt-5">
+        <div class="col-12 col-lg-6 pt-5">
             <div class="box-rounded bg-gainsboro text-black-pearl text-left">
                 <p class="box-label text-left"><span>PROSPECCIÓN DE MERCADO</span></p>
                 <ul>
@@ -67,7 +67,7 @@
                 </ul>
             </div>
         </div>
-        <div class="col-12 col-md-6 pt-5">
+        <div class="col-12 col-lg-6 pt-5">
             <div class="box-rounded bg-gainsboro text-black-pearl text-left">
                 <p class="box-label text-left"><span>RECUPERACIÓN DE CARTERA</span></p>
                 <ul>
@@ -75,7 +75,7 @@
                         <a href="" style="color: black;">Consulta Gold</a>
                     </li>
                     <li>
-                        <a href="{{ url('refundCartera') }}" style="color: black;">Consulta Diamond</a>
+                        <a href="{{ url('coupons-form') }}" style="color: black;">Consulta Diamond</a>
                     </li>
 
                     <b-collapse id="collapse-3">
@@ -90,7 +90,7 @@
       </ul>
     </div>
   </div>
-  <div class="col-12 col-md-6 pt-5">
+  <div class="col-12 col-lg-6 pt-5">
     <div class="box-rounded bg-gainsboro text-black-pearl text-left">
       <p class="box-label text-left"><span>INVESTIGACIÓN</span></p>
       <ul>
