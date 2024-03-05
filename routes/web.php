@@ -581,7 +581,7 @@ Route::post('/datamesfidu/consultaUnitaria', 'DatamesfiduController@consultaUnit
 Route::post('/datamessedvalle/consultaUnitaria', 'DatamesSedValleController@consultaUnitaria');
 Route::resource('/datamessedvalle', 'DatamesSedValleController');
 
-// Route::resource('/cotizer-data', dataCotizerController::class)->only(['store', 'index', 'show', 'update']);
+Route::resource('/cotizer-data', dataCotizerController::class)->only(['store', 'index', 'show', 'update']);
 Route::get('/cotizer-data/borrar/{id}', 'dataCotizerController@destroy');
 Route::view('/solicitud', 'creditCalculator')->middleware('auth');
 Route::view('/RegisterCredit', 'registerCredit')->name('register.credit');
