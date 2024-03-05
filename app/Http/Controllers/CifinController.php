@@ -167,7 +167,16 @@ class CifinController extends Controller
 
         $xml_name = $cedula . '_' . Carbon::parse($fecha)->format('d-m-Y') . '.xml';
 
-        $doc = new DOMDocument();
+
+        //****************LEER**************** */
+
+
+        //La ultima semana de Febrero, Carlos pidió que ya no se consultara cifin automaticamente
+        //por lo cual, se arma la data, no se consulta cifin, y vamos a DECEVAL
+        //al día 5 de marzo, deceval aun no ha respondido sobre la falla
+
+        ////////////
+       /* $doc = new DOMDocument();
         $doc->loadXML($xml_post_string);
         $doc->save('cifinRequest_' . $xml_name);
 
@@ -206,7 +215,7 @@ class CifinController extends Controller
         $demo = $array['S:Envelope']['S:Body']['ns2:consultaXmlResponse']['return'];
         $resultado = XmlaPhp::createArray($demo);
 
-        $score = $resultado['CIFIN']['Tercero']['Score']['Puntaje'];
+        $score = $resultado['CIFIN']['Tercero']['Score']['Puntaje'];*/
 
         $data = [
             'nitEmisor' => '9004326290',
@@ -233,19 +242,8 @@ class CifinController extends Controller
             ],
         ];
 
-        // $cifin = Cifin::create([
-        //     'usuarioid' => Auth::user()->id,
-        //     'cedula' => $cedula,
-        //     'apellido' => $apellido,
-        //     'score' => $score,
-        //     'data' => json_encode($data),
-        // ]);
-
-        if ($score >= 0) {
             return redirect()->route('deceval.consultar', $data);
-        } else {
-            return redirect()->route('deceval.consultar', $data);
-        }
+        
     }
 
     public function consulta()
