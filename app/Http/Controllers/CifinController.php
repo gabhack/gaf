@@ -126,6 +126,7 @@ class CifinController extends Controller
         return view('cifin/consulta')->with(['resultado' => (object) $resultado]);
     }
 
+    //CONSULTAR CIFIN se llama en el registro de crédito
     public function consultar(Request $request)
     {
         $cotizer = DataCotizer::find($request->cotizerId);
@@ -227,6 +228,7 @@ class CifinController extends Controller
             'otorganteNumId' => $cotizer->idNumber,
             'otorganteCuenta' => '103869',
             'expeditionDate' => $cotizer->idExpeditionDate,
+            'decevalProcess' => $request->decevalProcess,
             'girador' => [
                 'tipoDocumento' => $typeDocument,
                 'numeroDocumento' => $cotizer->idNumber,

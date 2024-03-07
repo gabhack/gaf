@@ -8,7 +8,13 @@
                     <b-col cols="12">
                         <h3 class="tituleInfo">1. Tu Información Personal</h3>
                         <p class="labelForm genderLabel">Género</p>
-                        <b-form-radio-group id="gender" class="labelGen mb-3" v-model="form.gender" :options="genders" required>
+                        <b-form-radio-group
+                            id="gender"
+                            class="labelGen mb-3"
+                            v-model="form.gender"
+                            :options="genders"
+                            required
+                        >
                             <b-form-valid-feedback> Thank you! </b-form-valid-feedback>
                             <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                         </b-form-radio-group>
@@ -194,7 +200,13 @@
                                     <p class="labelForm">¿Cuántos hijos tienes?</p>
                                 </b-col>
                                 <b-col cols="6" class="inputContenedor">
-                                    <b-form-select id="childs" :options="childs" v-model="form.childs" class="" required />
+                                    <b-form-select
+                                        id="childs"
+                                        :options="childs"
+                                        v-model="form.childs"
+                                        class=""
+                                        required
+                                    />
                                     <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                                 </b-col>
                             </b-row>
@@ -210,7 +222,13 @@
                                     <p class="labelForm">Personas<br />a cargo</p>
                                 </b-col>
                                 <b-col cols="8" class="inputContenedor">
-                                    <b-form-select id="living" :options="living" v-model="form.living" class="" required />
+                                    <b-form-select
+                                        id="living"
+                                        :options="living"
+                                        v-model="form.living"
+                                        class=""
+                                        required
+                                    />
                                     <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                                 </b-col>
                             </b-row>
@@ -223,7 +241,13 @@
                                     <p class="labelForm">¿Cuál es tu nivel de educativo?</p>
                                 </b-col>
                                 <b-col cols="6" class="inputContenedor">
-                                    <b-form-select id="studies" :options="studies" v-model="form.studies" class="" required />
+                                    <b-form-select
+                                        id="studies"
+                                        :options="studies"
+                                        v-model="form.studies"
+                                        class=""
+                                        required
+                                    />
                                     <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                                 </b-col>
                             </b-row>
@@ -239,7 +263,7 @@
                                     <label class="labelForm"> Ciudad </label>
                                 </b-col>
                                 <b-col cols="8" class="inputContenedor">
-                                    <b-form-input id="city" class="" v-model="form.city" trim required/>
+                                    <b-form-input id="city" class="" v-model="form.city" trim required />
                                     <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                                 </b-col>
                             </b-row>
@@ -288,7 +312,13 @@
                                     <p class="labelForm">Estrato</p>
                                 </b-col>
                                 <b-col cols="8" class="inputContenedor">
-                                    <b-form-select id="estrato" class="" :options="estrato" v-model="form.estrato" required/>
+                                    <b-form-select
+                                        id="estrato"
+                                        class=""
+                                        :options="estrato"
+                                        v-model="form.estrato"
+                                        required
+                                    />
                                     <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                                 </b-col>
                             </b-row>
@@ -320,7 +350,13 @@
                                     <label class="labelForm"> Teléfono fijo </label>
                                 </b-col>
                                 <b-col cols="7" class="inputContenedor">
-                                    <b-form-input id="phoneNumberFijo" class="" v-model="form.phoneNumberFijo" trim required/>
+                                    <b-form-input
+                                        id="phoneNumberFijo"
+                                        class=""
+                                        v-model="form.phoneNumberFijo"
+                                        trim
+                                        required
+                                    />
                                     <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                                 </b-col>
                             </b-row>
@@ -336,7 +372,7 @@
                                     <p class="labelForm">Correo electrónico</p>
                                 </b-col>
                                 <b-col cols="8" class="inputContenedor">
-                                    <b-form-input id="email" v-model="form.email" trim required/>
+                                    <b-form-input id="email" v-model="form.email" trim required />
                                     <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                                 </b-col>
                             </b-row>
@@ -364,7 +400,7 @@
                 <b-row>
                     <b-col cols="12">
                         <b-form-group label-for="transport" label-class="mb-3" valid-feedback="Thank you!">
-                            <b-form-radio-group id="transport" v-model="form.transport" :options="transport" required/>
+                            <b-form-radio-group id="transport" v-model="form.transport" :options="transport" required />
                         </b-form-group>
                     </b-col>
                 </b-row>
@@ -416,7 +452,7 @@
                                     <p class="labelForm">Nombre de la empresa</p>
                                 </b-col>
                                 <b-col cols="8" class="inputContenedor">
-                                    <b-form-input id="factoryName" class="" v-model="form.factoryName" trim required/>
+                                    <b-form-input id="factoryName" class="" v-model="form.factoryName" trim required />
                                     <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                                 </b-col>
                             </b-row>
@@ -450,7 +486,7 @@
                                     <p class="labelForm">Ciudad</p>
                                 </b-col>
                                 <b-col cols="8" class="inputContenedor">
-                                    <b-form-input id="workCity" class="" v-model="form.workCity" trim required/>
+                                    <b-form-input id="workCity" class="" v-model="form.workCity" trim required />
                                     <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                                 </b-col>
                             </b-row>
@@ -463,7 +499,7 @@
                                     <p class="labelForm">Dirección laboral</p>
                                 </b-col>
                                 <b-col cols="8" class="inputContenedor">
-                                    <b-form-input id="addressWork" class="" v-model="form.addressWork" trim required/>
+                                    <b-form-input id="addressWork" class="" v-model="form.addressWork" trim required />
                                     <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                                 </b-col>
                             </b-row>
@@ -479,7 +515,7 @@
                                     <p class="labelForm">Teléfono laboral</p>
                                 </b-col>
                                 <b-col cols="8" class="inputContenedor">
-                                    <b-form-input id="phoneWork" class="" v-model="form.phoneWork" trim required/>
+                                    <b-form-input id="phoneWork" class="" v-model="form.phoneWork" trim required />
                                     <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                                 </b-col>
                             </b-row>
@@ -497,7 +533,7 @@
                                     <p class="labelForm">Total devengado</p>
                                 </b-col>
                                 <b-col cols="8" class="inputContenedor">
-                                    <b-form-input id="ingreso" class="" v-model="form.ingreso" trim required/>
+                                    <b-form-input id="ingreso" class="" v-model="form.ingreso" trim required />
                                     <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                                 </b-col>
                             </b-row>
@@ -510,7 +546,7 @@
                                     <p class="labelForm">Total Descuentos</p>
                                 </b-col>
                                 <b-col cols="8" class="inputContenedor">
-                                    <b-form-input id="gasto" class="" v-model="form.gasto" trim required/>
+                                    <b-form-input id="gasto" class="" v-model="form.gasto" trim required />
                                     <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                                 </b-col>
                             </b-row>
@@ -526,7 +562,7 @@
                                     <p class="labelForm">Neto a pagar</p>
                                 </b-col>
                                 <b-col cols="8" class="inputContenedor">
-                                    <b-form-input id="neto" class="" v-model="form.neto" trim required/>
+                                    <b-form-input id="neto" class="" v-model="form.neto" trim required />
                                     <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                                 </b-col>
                             </b-row>
@@ -560,7 +596,13 @@
                                     <p class="labelForm">Número de cuenta</p>
                                 </b-col>
                                 <b-col cols="8" class="inputContenedor">
-                                    <b-form-input id="accountNumber" class="" v-model="form.accountNumber" trim required/>
+                                    <b-form-input
+                                        id="accountNumber"
+                                        class=""
+                                        v-model="form.accountNumber"
+                                        trim
+                                        required
+                                    />
                                     <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                                 </b-col>
                             </b-row>
@@ -584,7 +626,7 @@
                                     <p class="labelForm">Nombre completo</p>
                                 </b-col>
                                 <b-col cols="8" class="inputContenedor">
-                                    <b-form-input id="referenceName" v-model="form.referenceName" trim required/>
+                                    <b-form-input id="referenceName" v-model="form.referenceName" trim required />
                                     <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                                 </b-col>
                             </b-row>
@@ -602,7 +644,7 @@
                                     <p class="labelForm">Número de<br />celular o fijo</p>
                                 </b-col>
                                 <b-col cols="7" class="inputContenedor">
-                                    <b-form-input id="referencePhone" v-model="form.referencePhone" trim required/>
+                                    <b-form-input id="referencePhone" v-model="form.referencePhone" trim required />
                                     <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                                 </b-col>
                             </b-row>
@@ -618,7 +660,7 @@
                                     <p class="labelForm">Ciudad</p>
                                 </b-col>
                                 <b-col cols="8" class="inputContenedor">
-                                    <b-form-input id="referenceCity" v-model="form.referenceCity" trim required/>
+                                    <b-form-input id="referenceCity" v-model="form.referenceCity" trim required />
                                     <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                                 </b-col>
                             </b-row>
@@ -631,7 +673,7 @@
                                     <p class="labelForm">Dirección de residencia</p>
                                 </b-col>
                                 <b-col cols="7" class="inputContenedor">
-                                    <b-form-input id="referenceAddress" v-model="form.referenceAddress" trim required/>
+                                    <b-form-input id="referenceAddress" v-model="form.referenceAddress" trim required />
                                     <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                                 </b-col>
                             </b-row>
@@ -647,7 +689,13 @@
                                     <p class="labelForm">Barrio</p>
                                 </b-col>
                                 <b-col cols="8" class="inputContenedor">
-                                    <b-form-input id="referenceBarrio" class="" v-model="form.referenceBarrio" trim required/>
+                                    <b-form-input
+                                        id="referenceBarrio"
+                                        class=""
+                                        v-model="form.referenceBarrio"
+                                        trim
+                                        required
+                                    />
                                     <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                                 </b-col>
                             </b-row>
@@ -660,7 +708,13 @@
                                     <p class="labelForm">Parentesco</p>
                                 </b-col>
                                 <b-col cols="7" class="inputContenedor">
-                                    <b-form-input id="referenceParent" class="" v-model="form.referenceParent" trim required/>
+                                    <b-form-input
+                                        id="referenceParent"
+                                        class=""
+                                        v-model="form.referenceParent"
+                                        trim
+                                        required
+                                    />
                                     <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                                 </b-col>
                             </b-row>
@@ -679,7 +733,13 @@
                                     <p class="labelForm">Nombre completo</p>
                                 </b-col>
                                 <b-col cols="8" class="inputContenedor">
-                                    <b-form-input id="referenceFName" class="" v-model="form.referenceFName" trim required/>
+                                    <b-form-input
+                                        id="referenceFName"
+                                        class=""
+                                        v-model="form.referenceFName"
+                                        trim
+                                        required
+                                    />
                                     <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                                 </b-col>
                             </b-row>
@@ -692,7 +752,13 @@
                                     <p class="labelForm">Número de<br />celular o fijo</p>
                                 </b-col>
                                 <b-col cols="7" class="inputContenedor">
-                                    <b-form-input id="referenceFPhone" class="" v-model="form.referenceFPhone" trim required/>
+                                    <b-form-input
+                                        id="referenceFPhone"
+                                        class=""
+                                        v-model="form.referenceFPhone"
+                                        trim
+                                        required
+                                    />
                                     <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                                 </b-col>
                             </b-row>
@@ -708,7 +774,13 @@
                                     <p class="labelForm">Ciudad</p>
                                 </b-col>
                                 <b-col cols="8" class="inputContenedor">
-                                    <b-form-input id="referenceFCity" class="" v-model="form.referenceFCity" trim  required/>
+                                    <b-form-input
+                                        id="referenceFCity"
+                                        class=""
+                                        v-model="form.referenceFCity"
+                                        trim
+                                        required
+                                    />
                                     <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                                 </b-col>
                             </b-row>
@@ -743,7 +815,13 @@
                                     <p class="labelForm">Barrio</p>
                                 </b-col>
                                 <b-col cols="8" class="inputContenedor">
-                                    <b-form-input id="referenceFBarrio" class="" v-model="form.referenceFBarrio" trim required/>
+                                    <b-form-input
+                                        id="referenceFBarrio"
+                                        class=""
+                                        v-model="form.referenceFBarrio"
+                                        trim
+                                        required
+                                    />
                                     <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                                 </b-col>
                             </b-row>
@@ -756,7 +834,13 @@
                                     <p class="labelForm">Parentesco</p>
                                 </b-col>
                                 <b-col cols="7" class="inputContenedor">
-                                    <b-form-input id="referenceFParent" class="" v-model="form.referenceFParent" trim required />
+                                    <b-form-input
+                                        id="referenceFParent"
+                                        class=""
+                                        v-model="form.referenceFParent"
+                                        trim
+                                        required
+                                    />
                                     <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                                 </b-col>
                             </b-row>
@@ -772,7 +856,13 @@
                                     <p class="labelForm">Estado actual</p>
                                 </b-col>
                                 <b-col cols="8" class="inputContenedor">
-                                    <b-form-input id="referenceFState" class="" v-model="form.referenceFState" trim required />
+                                    <b-form-input
+                                        id="referenceFState"
+                                        class=""
+                                        v-model="form.referenceFState"
+                                        trim
+                                        required
+                                    />
                                     <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                                 </b-col>
                             </b-row>
@@ -781,6 +871,9 @@
                 </b-row>
                 <b-row v-if="form.idNumber">
                     <b-col class="text-right">
+                        <b-form-checkbox v-model="form.decevalProcess" class="mb-3">
+                            ¿Desea realizar la consulta y proceso DECEVAL al guardar el registro de crédito?
+                        </b-form-checkbox>
                         <b-button type="submit" variant="primary" :disabled="savingData">
                             <div v-if="savingData">
                                 <b-spinner small></b-spinner>
@@ -941,7 +1034,8 @@ export default {
                 referenceFState: '',
                 others: '',
                 neto: '',
-                accountNumber: ''
+                accountNumber: '',
+                decevalProcess: false
             },
             creditInfo: null,
             genders: [
@@ -1042,11 +1136,11 @@ export default {
         ...mapState('pagaduriasModule', ['pagaduriasTypes']),
         invalidFeedback() {
             console.log(this);
-        if (this) {
-          return 'Enter at least 4 characters.'
-        }
-        return 'Please enter something.'
-      },
+            if (this) {
+                return 'Enter at least 4 characters.';
+            }
+            return 'Please enter something.';
+        },
         isAwaiting() {
             return new URLSearchParams(window.location.search).get('status') === 'awaiting';
         },
@@ -1097,7 +1191,7 @@ export default {
             const params = this.form;
 
             axios
-                .post('/cotizer-data', {creditInfo: this.creditInfo, cotizerData: params})
+                .post('/cotizer-data', { creditInfo: this.creditInfo, cotizerData: params })
                 .then(response => {
                     const cotizerId = response.data.id;
                     window.location.href = `/cifin/consultar?cotizerId=${cotizerId}`;
@@ -1122,7 +1216,7 @@ export default {
             }
         },
         async saveData() {
-            if(this.form.idNumber) {
+            if (this.form.idNumber) {
                 this.savingData = true;
                 this.selectedOffers = [];
                 this.pagaduriasClient = null;
