@@ -222,8 +222,14 @@ class DecevalController extends Controller
       ]);
    }
 
+
+   //VIENE DE CIFIN en la creacion del credito
    public function consultar(Request $request)
    {
+      if (!$request->decevalProcess) {
+         return view("estudios/index");
+     }
+     
       try {
          $nitEmisor = $request->nitEmisor;
          $idClaseDefinicionDocumento = $request->idClaseDefinicionDocumento;
