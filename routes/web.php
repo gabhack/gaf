@@ -457,6 +457,8 @@ Route::group(['prefix' => 'estudios'], function () {
     Route::post('/giros', 'TesoreriaController@agregarGiro');
     //
     Route::get('/editar/{id}', 'EstudiosController@editar');
+    Route::get('/editarSinCIFIN/{id}', 'EstudiosController@editarSinCIFIN');
+
     Route::post('/actualizar', 'EstudiosController@actualizar');
     //
     Route::get('/borrar/{id}', 'EstudiosController@eliminar');
