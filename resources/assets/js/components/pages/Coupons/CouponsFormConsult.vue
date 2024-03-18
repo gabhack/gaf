@@ -7,7 +7,7 @@
                 <b>Prospección de Mercado "Diamond"</b>
             </div>
             <div class="panel-body">
-                <div class="row">
+                <div class="row d-flex justify-content-start align-items-end">
                     <div class="col-md-3">
                         <b-form-group label="PAGADURÍA">
                             <b-form-select
@@ -27,24 +27,31 @@
                     </div>
 
                     <!-- Condicionales para mostrar/ocultar campos según el estado -->
-                    <div class="col-md-3" v-if="selectedEstado === 'Al día'">
+
+                    <!-- <div class="col-md-3" v-if="selectedEstado === 'Al día' || selectedEstado === 'Todas'">
                         <b-form-group label="CONCEPTO">
+                            <b-form-input v-model="concept" placeholder="Ingrese el concepto"></b-form-input>
+                        </b-form-group>
+                    </div> -->
+                    <div class="col-md-3" v-if="selectedEstado === 'Al día' || selectedEstado === 'Todas'">
+                        <b-form-group label="ENTIDAD (Banco-Financiera-Cooperativa-CFC):">
                             <b-form-input v-model="concept" placeholder="Ingrese el concepto"></b-form-input>
                         </b-form-group>
                     </div>
 
-                    <div class="col-md-3" v-if="selectedEstado === 'Al día'">
+                    <div class="col-md-3" v-if="selectedEstado === 'Al día' || selectedEstado === 'Todas'">
                         <b-form-group label="CÓDIGO">
                             <b-form-input v-model="code" placeholder="Ingrese el código"></b-form-input>
                         </b-form-group>
                     </div>
 
-                    <div class="col-md-3" v-if="selectedEstado === 'En mora'">
+                    <div class="col-md-3" v-if="selectedEstado === 'En mora' || selectedEstado === 'Todas'">
                         <b-form-group label="MENSAJE LIQUIDACIÓN">
-                            <b-form-input v-model="mliquid" placeholder="Ingrese el mensaje de liquidación"></b-form-input>
+                            <b-form-input type="text" v-model="mliquid" placeholder="Ingrese el mensaje de liquidación"></b-form-input>
                         </b-form-group>
                     </div>
-                    <div v-if="selectedEstado === 'Embargado'" class="col-md-3">
+
+                    <div v-if="selectedEstado === 'Embargado' || selectedEstado === 'Todas'" class="col-md-3">
                         <b-form-group label="ENTIDAD DEMANDANTE">
                             <b-form-input
                                 v-model="entidadDemandante"
@@ -53,12 +60,13 @@
                             ></b-form-input>
                         </b-form-group>
                     </div>
+                    
                     <!--fin de condicionales-->
                     <div class="col-md-3">
                         <b-form-group label="MES Y AÑO">
                             <div class="d-flex">
-                                <b-form-input v-model="month" placeholder="Mes" class="mr-2"></b-form-input>
-                                <b-form-input v-model="year" placeholder="Año"></b-form-input>
+                                <b-form-input type="number" v-model="month" placeholder="Mes" class="mr-2"></b-form-input>
+                                <b-form-input type="number" v-model="year" placeholder="Año"></b-form-input>
                             </div>
                         </b-form-group>
                     </div>
@@ -84,7 +92,7 @@
 
         <div class="panel mb-3 col-md-12" v-if="coupons && coupons.length > 0 && selectedEstado === 'Al día'">
             <div class="panel-heading">
-                <b>RESULTADOS DE LA CONSULTA</b>
+                <b>RESULTADOS DE LA CONSULTA (Cartera al Día)</b>
             </div>
             <div class="panel-body">
                 <div class="table-responsive">
@@ -129,7 +137,7 @@
 
         <div class="panel mb-3 col-md-12" v-if="coupons && coupons.length > 0 && selectedEstado === 'En mora'">
             <div class="panel-heading">
-                <b>RESULTADOS DE LA CONSULTA</b>
+                <b>RESULTADOS DE LA CONSULTA (Cartera en Mora)</b>
             </div>
             <div class="panel-body">
                 <div class="table-responsive">
@@ -165,7 +173,7 @@
         <!-- Tabla para mostrar los resultados de EMBARGOS -->
         <div class="panel mb-3 col-md-12" v-if="coupons && coupons.length > 0 && selectedEstado === 'Embargado'">
             <div class="panel-heading">
-                <b>RESULTADOS DE LA CONSULTA DE EMBARGOS</b>
+                <b>RESULTADOS DE LA CONSULTA (Cartera Embargada)</b>
             </div>
             <div class="panel-body">
                 <div class="table-responsive">
@@ -197,6 +205,19 @@
                 </table> -->
             </div>
         </div>
+        <div class="panel mb-3 col-md-12" v-if="coupons && coupons.length > 0 && selectedEstado === 'Todas'">
+            <div class="panel-heading">
+                <b>RESULTADOS DE LA CONSULTA (Todas)</b>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <b-table striped hover :fields="cupones" :items="coupons"></b-table>
+                    <b-table class="mt-3" striped hover :fields="descuentos" :items="coupons"></b-table>
+                    <b-table class="mt-3" striped hover :fields="embargos" :items="coupons"></b-table>
+                </div>
+            </div>
+        </div>
+
 
         <div v-if="searchPerformed && coupons.length === 0">
             <p>No se encontraron cupones para los criterios de búsqueda proporcionados.</p>
@@ -208,6 +229,10 @@
     font-family: "Poppins", sans-serif;
     font-size: 16px;
     font-weight: 900;
+}
+
+td, th{
+    text-align: center;
 }
 </style>
 <script>
@@ -224,39 +249,24 @@ export default {
         return {
             cupones: [
                 {
-                    key: 'id',
-                    label: 'Id',
-                    sortable: true
-                },
-                {
-                    key: 'period',
-                    label: 'Periodo',
-                    sortable: true
-                },
-                {
-                    key: 'pagaduria',
-                    label: 'Pagaduria',
-                    sortable: false
-                },
-                {
                     key: 'doc',
                     label: 'Documento',
-                    sortable: true
+                    sortable: false
                 },
                 {
                     key: 'names',
                     label: 'Nombres Completos',
-                    sortable: true
+                    sortable: false
                 },
                 {
                     key: 'code',
                     label: 'Homónimo',
-                    sortable: true
+                    sortable: false
                 },
                 {
                     key: 'concept',
                     label: 'Concepto',
-                    sortable: true
+                    sortable: false
                 },
                 {
                     key: 'egresos',
@@ -266,76 +276,51 @@ export default {
             ],
             descuentos: [
                 {
-                    key: 'id',
-                    label: 'Id',
-                    sortable: true
-                },
-                {
                     key: 'doc',
                     label: 'Documento',
-                    sortable: true
+                    sortable: false
                 },
                 {
-                    key: 'names',
+                    key: 'nomp',
                     label: 'Nombre Completo',
-                    sortable: true
+                    sortable: false
                 },
                 {
                     key: 'mliquid',
                     label: 'Mensaje Liquidación',
-                    sortable: true
+                    sortable: false
                 },
                 {
                     key: 'valor',
                     label: 'Valor',
-                    sortable: true
-                },
-                {
-                    key: 'pagaduria',
-                    label: 'Pagaduría',
                     sortable: false
-                },
-                {
-                    key: 'fecdata',
-                    label: 'Fecha',
-                    sortable: true
                 },
                 {
                     key: 'nomina',
                     label: 'Nómina',
-                    sortable: true
+                    sortable: false
                 }
             ],
             embargos: [
                 {
-                    key: 'id',
-                    label: 'Id',
-                    sortable: true
-                },
-                {
                     key: 'doc',
                     label: 'Documento',
-                    sortable: true
+                    sortable: false
                 },
                 {
                     key: 'nomp',
                     label: 'Nombre Proceso',
-                    sortable: true
+                    sortable: false
                 },
                 {
                     key: 'docdeman',
                     label: 'Documento de la Demanda',
-                    sortable: true
+                    sortable: false
                 },
                 {
                     key: 'entidaddeman',
                     label: 'Entidad Demandante',
-                    sortable: true
-                },
-                {
-                    key: 'motemb',
-                    label: 'Motivo del Embargo',
-                    sortable: true
+                    sortable: false
                 },
                 {
                     key: 'temb',
@@ -360,7 +345,8 @@ export default {
             isLoading: false,
             searchPerformed: false,
             selectedEstado: 'Al día',
-            estadosOptions: ['Al día', 'En mora', 'Embargado'],
+            estadosOptions: ['Al día', 'En mora', 'Embargado', 'Todas'],
+            entidadDemandante: '',
             isEntidadDemandanteValid: true
         };
     },
@@ -370,9 +356,6 @@ export default {
                 this.coupons = [];
                 this.searchPerformed = false;
             }
-        },
-        currentPage () {
-            this.getCoupons();
         }
     },
     async mounted() {

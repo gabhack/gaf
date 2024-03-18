@@ -51,7 +51,7 @@
                         <a href="" style="color: black;">Consulta Gold</a>
                     </li>
                     <li>
-                        <a href="{{ url('refundCartera') }}" style="color: black;">Consulta Diamond</a>
+                        <a href="{{ url('coupons-form') }}" style="color: black;">Consulta Diamond</a>
                     </li>
 
                     <b-collapse id="collapse-2">
