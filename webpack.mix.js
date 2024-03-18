@@ -21,4 +21,11 @@ mix
   .sass("resources/assets/sass/home.scss", "public/css/pages")
   .sass("resources/assets/sass/login.scss", "public/css/pages")
   .sass("resources/assets/sass/moreinformation.scss", "public/css/pages")
+  .webpackConfig({
+    resolve: {
+        fallback: {
+            "fs": false
+        },
+      },
+    })
   .vue();

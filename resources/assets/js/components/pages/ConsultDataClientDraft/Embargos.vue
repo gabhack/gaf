@@ -52,7 +52,7 @@
                         </div>
 
                         <div class="col-2 px-0">
-                            <p>{{ (item.temb || item.valor || '0') | currency }}</p>
+                            <p>{{ (item.temb || item.valor || 0) | formatCurrency }}</p>
                         </div>
 
                         <div class="col-2 px-0">
@@ -82,6 +82,30 @@ export default {
     },
     methods: {
         ...mapMutations('embargosModule', ['setSelectedPeriod'])
+    },
+    watch: {
+        // Observa los cambios en embargosPerPeriod y muestra los datos en la consola
+        embargosPerPeriod(newVal) {
+            console.log('Listado de embargos:', newVal.items);
+            // Aquí también puedes verificar si los valores están redondeados
+            newVal.items.forEach(item => {
+                console.log(
+                    `Cuota de deuda (temb o valor) para ${item.docdeman || item.iddem}:`,
+                    item.temb || item.valor
+                );
+            });
+        }
+    },
+    filters: {
+        formatCurrency(value) {
+            if (isNaN(value)) return value;
+
+            const parts = value.toString().split('.');
+
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+            return '$' + parts.join(',');
+        }
     }
 };
 </script>

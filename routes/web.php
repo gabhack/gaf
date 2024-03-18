@@ -457,6 +457,8 @@ Route::group(['prefix' => 'estudios'], function () {
     Route::post('/giros', 'TesoreriaController@agregarGiro');
     //
     Route::get('/editar/{id}', 'EstudiosController@editar');
+    Route::get('/editarSinCIFIN/{id}', 'EstudiosController@editarSinCIFIN');
+
     Route::post('/actualizar', 'EstudiosController@actualizar');
     //
     Route::get('/borrar/{id}', 'EstudiosController@eliminar');
@@ -581,7 +583,7 @@ Route::post('/datamesfidu/consultaUnitaria', 'DatamesfiduController@consultaUnit
 Route::post('/datamessedvalle/consultaUnitaria', 'DatamesSedValleController@consultaUnitaria');
 Route::resource('/datamessedvalle', 'DatamesSedValleController');
 
-// Route::resource('/cotizer-data', dataCotizerController::class)->only(['store', 'index', 'show', 'update']);
+Route::resource('/cotizer-data', dataCotizerController::class)->only(['store', 'index', 'show', 'update']);
 Route::get('/cotizer-data/borrar/{id}', 'dataCotizerController@destroy');
 Route::view('/solicitud', 'creditCalculator')->middleware('auth');
 Route::view('/RegisterCredit', 'registerCredit')->name('register.credit');
