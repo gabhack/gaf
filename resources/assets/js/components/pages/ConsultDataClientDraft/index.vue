@@ -66,19 +66,19 @@
                 <!--================================
                 DATAMES SECRETARIAS
                 ===================================-->
-                <DatamesData2
+                <!--<DatamesData2
                     v-if="
-                        pagaduriaType == 'SEMSAHAGUN'" />
+                        pagaduriaType == 'SEMSAHAGUN'" />-->
 
                 <DatamesData
                     v-if="
                         pagaduriaType == 'SEDCHOCO' ||
                         // pagaduriaType == 'SEDVALLE' ||
                         pagaduriaType == 'SEDCAUCA' ||
-                        // pagaduriaType == 'SEMSAHAGUN' ||
+                        pagaduriaType == 'SEMSAHAGUN' ||
                         // pagaduriaType == 'SEMCALI' ||
                         pagaduriaType == 'SEMQUIBDO' ||
-                        // pagaduriaType == 'SEDMAGDALENA' ||
+                        pagaduriaType == 'SEDMAGDALENA' ||
                         pagaduriaType == 'SEMPOPAYAN' ||
                         pagaduriaType == 'SEMMONTERIA' ||
                         pagaduriaType == 'SEDCORDOBA' ||
@@ -170,7 +170,7 @@
                 />
 
                 <!-- <DatamesSedChoco v-if="pagaduriaType == 'SEDCHOCO'" /> -->
-                <DatamesSedMagdalena v-if="pagaduriaType == 'SEDMAGDALENA'" />
+                <!-- <DatamesSedMagdalena v-if="pagaduriaType == 'SEDMAGDALENA'" /> -->
                 <!-- <DatamesSemSahagun v-if="pagaduriaType == 'SEMSAHAGUN'" /> -->
 
                 <!--============================

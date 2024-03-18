@@ -119,7 +119,7 @@ class EmbargosController extends Controller
             $query->where('pagaduria', 'ILIKE', '%' . $pagaduria . '%');
             $query->whereBetween('nomina', [$startDate, $endDate]);
     
-            $query->select('doc', 'nomp', 'docdeman', 'entidaddeman', 'motemb', 'temb');
+            $query->select('id', 'doc', 'nomp', 'docdeman', 'entidaddeman', 'motemb', 'temb');
     
             // Capturar el SQL y los bindings
             $sql = $query->toSql();
