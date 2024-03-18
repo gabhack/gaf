@@ -103,25 +103,25 @@
         </div>
         <!-- Tabla para mostrar los resultados de EN MORA -->
 
-        <div class="panel mb-3 col-md-12" v-if="coupons && coupons.length > 0 && selectedEstado === 'En mora'">
+        <div class="panel mb-3 col-md-12" v-if="descuentos && descuentos.length > 0 && selectedEstado === 'En mora'">
             <div class="panel-heading">
                 <b>RESULTADOS DE LA CONSULTA (Cartera en Mora)</b>
             </div>
             <div class="panel-body">
                 <div class="table-responsive">
-                    <b-table striped hover :fields="descuentos" :items="coupons"></b-table>
+                    <b-table striped hover :fields="descuentos" :items="descuentos"></b-table>
                 </div>
             </div>
         </div>
 
         <!-- Tabla para mostrar los resultados de EMBARGOS -->
-        <div class="panel mb-3 col-md-12" v-if="coupons && coupons.length > 0 && selectedEstado === 'Embargado'">
+        <div class="panel mb-3 col-md-12" v-if="embargos && embargos.length > 0 && selectedEstado === 'Embargado'">
             <div class="panel-heading">
                 <b>RESULTADOS DE LA CONSULTA (Cartera Embargada)</b>
             </div>
             <div class="panel-body">
                 <div class="table-responsive">
-                    <b-table striped hover :fields="embargos" :items="coupons"></b-table>
+                    <b-table striped hover :fields="embargos" :items="embargos"></b-table>
                 </div>
             </div>
         </div>
@@ -131,18 +131,24 @@
             </div>
             <div class="panel-body">
                 <div class="table-responsive">
-                    CUPONES
+                    <div class="panel-heading">
+                        <b>Cartera al Día</b>
+                    </div>
                     <b-table striped hover :fields="cupones" :items="coupons"></b-table>
-                    DESCUENTOS
+                    <div class="panel-heading mt-5">
+                        <b>Cartera en Mora</b>
+                    </div>
                     <b-table class="mt-3" striped hover :fields="descuentos" :items="descuentos"></b-table>
-                    EMBARGOS
+                    <div class="panel-heading mt-5">
+                        <b>Cartera Embargada</b>
+                    </div>
                     <b-table class="mt-3" striped hover :fields="embargos" :items="embargos"></b-table>
                 </div>
             </div>
         </div>
 
         <div v-if="searchPerformed && coupons.length === 0">
-            <p>No se encontraron cupones para los criterios de búsqueda proporcionados.</p>
+            <p>No se encontraron datos para los criterios de búsqueda proporcionados.</p>
         </div>
     </div>
 </template>
@@ -321,14 +327,13 @@ export default {
                 let embargosUrl = '/embargos/by-pagaduria';
 
                 if (this.selectedEstado === 'Todas') {
-                    let couponsResponse = await axios.post(couponsUrl, payload);
-                    let descuentosResponse = await axios.post(descuentosUrl, payload);
-                    let embargosResponse = await axios.post(embargosUrl, payload);
-
                     payload.concept = this.concept;
                     payload.code = this.code;
                     payload.mliquid = this.mliquid;
                     payload.entidadDemandante = this.entidadDemandante;
+                    let couponsResponse = await axios.post(couponsUrl, payload);
+                    let descuentosResponse = await axios.post(descuentosUrl, payload);
+                    let embargosResponse = await axios.post(embargosUrl, payload);
                     this.coupons = couponsResponse.data;
                     this.descuentos = descuentosResponse.data;
                     this.embargos = embargosResponse.data;
