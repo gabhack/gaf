@@ -61,7 +61,6 @@ const pagaduriasModule = {
             { label: 'SEM BUGA', value: 'SEMBUGA', key: 'SEM BUGA' },
             { label: 'SEM CUCUTA', value: 'SEMCUCUTA', key: 'SEM CUCUTA' },
             { label: 'SEM SOGAMOSO', value: 'SEMSOGAMOSO', key: 'SEM SOGAMOSO' },
-            { label: 'SEM SOLEDAD', value: 'SEMSOLEDAD', key: 'SEM SOLEDAD' },
             { label: 'SEM TULUA', value: 'SEMTULUA', key: 'SEM TULUA' },
             { label: 'SEM TUMACO', value: 'SEMTUMACO', key: 'SEM TUMACO' },
             { label: 'SEM CIENAGA', value: 'SEMCIENAGA', key: 'SEM CIENAGA' },

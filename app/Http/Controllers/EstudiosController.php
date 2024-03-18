@@ -523,313 +523,167 @@ class EstudiosController extends Controller
             $dataCotizer = dataCotizer::find($id);
             $cedula = $dataCotizer->idNumber;
             $apellido = $dataCotizer->firstLastname;
-
-            $soapUser = env('CIFIN_USER'); //  username
-            $soapPassword = env('CIFIN_PASSWORD'); // password
-            $url = env('CIFIN_URL') . '?wsdl';
-
-            $hoy = date('Y-m-d');
-            $hora = date('H:i:s');
-            $fecha = $hoy . 'T' . $hora;
-
-            $xml_post_string =
-                '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws/">
-                <soapenv:Header/>
-                    <soapenv:Body>
-                    <ws:consultaXml>
-                        <!--Optional:-->
-                        <codigoInformacion>5702</codigoInformacion>
-                        <!--Optional:-->
-                        <motivoConsulta>24</motivoConsulta>
-                        <!--Optional:-->
-                        <numeroIdentificacion>' .
-                $cedula .
-                '</numeroIdentificacion>
-                        <!--Optional:-->
-                        <primerApellido>' .
-                $apellido .
-                '</primerApellido>
-                        <!--Optional:-->
-                        <tipoIdentificacion>1</tipoIdentificacion>
-                    </ws:consultaXml>
-                </soapenv:Body>
-            </soapenv:Envelope>';
-
-            $headers = [
-                "Content-type: text/xml;charset=\"utf-8\"",
-                'Accept: text/xml',
-                'Cache-Control: no-cache',
-                'Pragma: no-cache',
-                'Accept-Encoding: gzip,deflate',
-                'Pragma: no-cache',
-                'X-Atlassian-Token: no-check',
-                'SOAPAction: ' . env('CIFIN_URL'),
-                'Content-length: ' . strlen($xml_post_string),
-            ];
-
-
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_USERPWD, $soapUser . ':' . $soapPassword); // username and password - declared at the top of the doc
-            curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $xml_post_string); // the SOAP request
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-
-            $response = curl_exec($ch);
-
-
-            curl_close($ch);
-
-            if ($response != false) {
-                $array = XmlaPhp::createArray($response);
-
-                $demo = $array['S:Envelope']['S:Body']['ns2:consultaXmlResponse']['return'];
-                if ($demo != 'error') {
-
-                    if (is_string($demo) && strpos($demo, '<?xml') === 0) {
-                    } else {
-                        Log::debug("Returned data is not a well-formed XML");
-                    }
-                    $resultado = XmlaPhp::createArray($demo);
-
-                    $sectorFinanciero = [];
-                    $sectorFinancieroReal = [];
-                    $cuentas_vigentes = $resultado['CIFIN']['Tercero']['CuentasVigentes'];
-                    $obligaciones_en_mora = $resultado['CIFIN']['Tercero']['SectorFinancieroEnMora'];
-                } else {
-                    $sectorFinanciero = [];
-                    $sectorFinancieroReal = [];
-                    $cuentas_vigentes = [];
-                    $obligaciones_en_mora = [];
-                }
-            } else {
-
-                Log::error("SOAP request failed");
-            }
-            $sectorFinanciero = [];
-            $sectorFinancieroReal = [];
-            $cuentas_vigentes = [];
+    
+            $sectores = $this->realizarConsultaSOAP($cedula, $apellido);
 
             $pagadurias = array(app(PagaduriasController::class)->perDoc($cedula));
-
             $pagaduria = '';
             if (isset($pagadurias[0])) {
                 foreach ($pagadurias[0] as $key => $value) {
                     $pagaduria = str_replace("datames", "Embargos", $key);
                 }
             }
-
+    
             $embargos = array(app(EmbargosController::class)->buscar($cedula, $pagaduria));
-
-            $arrayNewEmbargos = array();
-            if (isset($embargos[0])) {
-
-                // foreach($embargos[0] as $key => $res){
-                //     $arrayNewEmbargos[$res["entidaddeman"]] = $res;
-                // }
-                // $embargos = $arrayNewEmbargos;
-
-            } else {
+            if (!isset($embargos[0])) {
                 $embargos = [];
             }
-
+    
             if (isset($dataCotizer->estudio->id)) {
                 $carteras = \App\Carteras::where('estudios_id', $dataCotizer->estudio->id)->get();
             } else {
                 $carteras = [];
             }
-
-
             return view("estudios/editar")->with([
+                "id"=>$id,
                 "dataCotizer" => $dataCotizer,
-                "sectorFinanciero" => $sectorFinanciero,
-                "sectorFinancieroReal" => $sectorFinancieroReal,
-                "cuentas_vigentes" => $cuentas_vigentes,
-                "obligacionesEnMora" => $obligaciones_en_mora,
-                "embargos" => $embargos,
-                "carteras" => $carteras,
+                "obligaciones" => $sectores,                
+            "embargos" => $embargos,
+            "carteras" => $carteras,
                 "sectores" => \App\Sectores::all(),
                 "estadoscartera" => \App\Estadoscartera::all(),
-            ]);
-
-            $estudio = Estudios::find($id);
-            $registro = Registrosfinancieros::find($estudio->registros_id);
-            $asesor = Asesores::find($estudio->asesores_id);
-            $asesores = Asesores::all();
-            $cliente = Clientes::find($estudio->clientes_id);
-            $datacarteras = $estudio->carteras;
-            $carteras = array();
-            $aliadosusados = array();
-
-            // Parámetros
-            $smlv = Parametros::where('llave', 'SMLV')->first();
-            $iva = Parametros::where('llave', 'IVA')->first()->valor;
-            $extraprima = Parametros::where('llave', 'SEGURO_EXTRAPRIMA')->first()->valor;
-            $p_x_millon = Parametros::where('llave', 'SEGURO_P_X_MILLON')->first()->valor;
-            $tiposcliente = TiposCliente::all();
-            $aliadosCompleto = Aliados::all();
-            $factores_x_millon_kredit = array();
-            $factores_kredit = FactorXMillonKredit::all();
-            foreach ($factores_kredit as $key => $factor) {
-                $factores_x_millon_kredit[$factor->llave] = $factor->valor;
-            }
-            $factores_x_millon_gnb = array();
-            $factores_gnb = FactorXMillonGnb::all();
-            foreach ($factores_gnb as $key => $factor) {
-                $factores_x_millon_gnb[$factor->pagaduria][$factor->plazo]['normal'] = $factor->normal;
-                $factores_x_millon_gnb[$factor->pagaduria][$factor->plazo]['saneamiento'] = $factor->saneamiento;
-            }
-            $viabilidad = calcula_viabilidad_inicial($cliente);
-
-            if (sizeof($datacarteras) > 0) {
-                // Se comenta las siguientes líneas porque actualmente se modificó la funcionalidad del aliado financiero 2, antes se podía tener al aliado 1 sin aliado 2, ahora, si o si se tienen a los dos aliados o sólo el aliado 2
-                /*if (isset(array_values(array_unique(array_filter($datacarteras->pluck('compraAF1_id')->toArray(), "strlen")))[0])) {
-                    $aliado1 = array_values(array_unique(array_filter($datacarteras->pluck('compraAF1_id')->toArray(), "strlen")))[0];
-                    $aliadosusados[1] = array(
-                        'id' => $aliado1,
-                        'condiciones' => Condicionesaf::where('estudios_id', $estudio->id)->where('aliados_id', $aliado1)->first()
-                    );
-                }
-                if (isset(array_values(array_unique(array_filter($datacarteras->pluck('compraAF2_id')->toArray(), "strlen")))[0])) {
-                    $aliado2 = array_values(array_unique(array_filter($datacarteras->pluck('compraAF2_id')->toArray(), "strlen")))[0];
-                    $aliadosusados[2] = array(
-                        'id' => $aliado2,
-                        'condiciones' => Condicionesaf::where('estudios_id', $estudio->id)->where('aliados_id', $aliado2)->first()
-                    );
-                }*/
-
-                $aliadosenestudio = Condicionesaf::where('estudios_id', $estudio->id)->get();
-
-                if (isset($aliadosenestudio[0])) {
-                    $aliadosusados[1] = array(
-                        'id' => $aliadosenestudio[0]->aliados_id,
-                        'condiciones' => $aliadosenestudio[0]
-                    );
-                }
-
-                if (isset($aliadosenestudio[1])) {
-                    $aliadosusados[2] = array(
-                        'id' => $aliadosenestudio[1]->aliados_id,
-                        'condiciones' => $aliadosenestudio[1]
-                    );
-                }
-            }
-
-            //Parametros para datagrid
-            $aliados = Aliados::all()->pluck('aliado')->toArray();
-            $estadoscartera = Estadoscartera::all()->pluck('estado')->toArray();
-            $sectores = Sectores::all()->pluck('sector')->toArray();
-            $cont = 0;
-
-            foreach ($datacarteras as $key => $cartera) {
-
-                $date = new DateTime($cartera->fecha_vence);
-                $cont++;
-                $carteras[] = array(
-                    "ID" => $cont,
-                    "EnDesprendible" => ($cartera->enDesprendible == 1 ? true : false),
-                    "Entidad" => $cartera->nombre_obligacion,
-                    "SoloEfectivo" => ($cartera->solo_efectivo == 1 ? true : false),
-                    "Data" => $cartera->sectordata->sector,
-                    "Cifin" => $cartera->sectorcifin->sector,
-                    "Estado" => $cartera->estado->estado,
-                    "CompraAF1" => ($cartera->compraAF1_id !== null ? "SI" : "NO"),
-                    "CompraAF2" => ($cartera->compraAF2_id !== null ? "SI" : "NO"),
-                    "CalificacionWAB" => $cartera->calif_wab,
-                    "Cuota" => $cartera->cuota,
-                    "SaldoCarteraCentrales" => $cartera->saldo,
-                    "VlrInicioNegociacion" => $cartera->valor_ini,
-                    "DescuentoLogrado" => $cartera->dcto_logrado,
-                    "SaldoCarteraNegociada" => 0,
-                    "PctjeNegociacion" => 0,
-                    "FechaVencimiento" => $cartera->fecha_vence
-                );
-            }
-
-            $sueldobasico = $cliente->ingresos;
-            $adicional = 0;
-            if ($cliente->cargo) {
-                if (strpos($cliente->cargo, 'Rector') !== false) {
-                    $adicional = ($cliente->ingresos * .3);
-                } elseif (strpos($cliente->cargo, 'Coordinador') !== false) {
-                    $adicional = ($cliente->ingresos * .2);
-                }
-            }
-
-            $aportes = 0;
-            $vinculacion = '';
-            if ($estudio->registro->pagaduria->de_pensiones) {
-                $vinculacion = 'PENS';
-                $aportes = Parametros::where('llave', 'APORTES_PENSIONADOS')->first();
-            } else {
-                $aportes = Parametros::where('llave', 'APORTES_ACTIVOS')->first();
-            }
-            $aportes = $aportes->valor * ($sueldobasico + $adicional);
-
-            $totaldescuentos = totalizar_concepto(descuentos_por_registro($registro->id));
-
-            $cupos = calcularCapacidad(
-                $vinculacion,
-                $sueldobasico,
-                $aportes,
-                $adicional,
-                $totaldescuentos,
-                $smlv->valor
-            );
-
-            $sueldocompleto = $sueldobasico + $adicional;
-            return view("estudios/editar")->with([
-                "estudio" => $estudio,
-                "registro" => $registro,
-                "asesor" => $asesor,
-                "asesores" => $asesores,
-                "cliente" => $cliente,
-                "asignacionadicional" => $adicional,
-                "sueldocompleto" => $sueldocompleto,
-                "aportes" => $aportes,
-                "totaldescuentos" => $totaldescuentos,
-                "cupos" => $cupos,
-                "iva" => $iva,
-                "tiposcliente" => $tiposcliente,
-                "aliadosCompleto" => $aliadosCompleto,
-                "aliados" => $aliados,
-                "estadoscartera" => $estadoscartera,
-                "sectores" => $sectores,
-                "carteras" => $carteras,
-                "aliadosusados" => $aliadosusados,
-                "extraprima" => $extraprima,
-                "p_x_millon" => $p_x_millon,
-                "factores_x_millon_kredit" => $factores_x_millon_kredit,
-                "factores_x_millon_gnb" => $factores_x_millon_gnb,
-                "viabilidad" => $viabilidad
             ]);
         } catch (\Exception $e) {
             Log::error("Error al editar el estudio con ID {$id}: {$e->getMessage()}", [
                 'id' => $id,
                 'exception' => $e->getTraceAsString(),
             ]);
-            return view('error')
-                ->with('error en estudio controller editar', $e->getMessage());
-
-            if (Auth::user()->rol->id == 1 || Auth::user()->rol->id == 5) {
-                $lista = Estudios::all();
-            } else {
-                $lista = Estudios::where('user_id', Auth::user()->id)->get();
-            }
-            return view("estudios/index")->with([
-                "lista" => $lista,
-                "message" => array(
-                    'tipo' => 'error',
-                    'titulo' => 'Error',
-                    'mensaje' => 'No se pudo leer el estudio debido a un error interno. Detalles del error: ' . $e->getMessage(),
-                )
-            ]);
+            return view('error')->with('error', $e->getMessage());
         }
     }
+
+    public function editarSinCIFIN($id)
+    {
+        try {
+            $dataCotizer = dataCotizer::find($id);
+            $cedula = $dataCotizer->idNumber;
+            $apellido = $dataCotizer->firstLastname;
+    
+            $sectores = [];
+
+            $pagadurias = array(app(PagaduriasController::class)->perDoc($cedula));
+            $pagaduria = '';
+            if (isset($pagadurias[0])) {
+                foreach ($pagadurias[0] as $key => $value) {
+                    $pagaduria = str_replace("datames", "Embargos", $key);
+                }
+            }
+    
+            $embargos = array(app(EmbargosController::class)->buscar($cedula, $pagaduria));
+            if (!isset($embargos[0])) {
+                $embargos = [];
+            }
+    
+            if (isset($dataCotizer->estudio->id)) {
+                $carteras = \App\Carteras::where('estudios_id', $dataCotizer->estudio->id)->get();
+            } else {
+                $carteras = [];
+            }
+            return view("estudios/editar")->with([
+                "id"=>$id,
+                "dataCotizer" => $dataCotizer,
+                "obligaciones" => $sectores,                
+            "embargos" => $embargos,
+            "carteras" => $carteras,
+                "sectores" => \App\Sectores::all(),
+                "estadoscartera" => \App\Estadoscartera::all(),
+            ]);
+        } catch (\Exception $e) {
+            Log::error("Error al editar el estudio con ID {$id}: {$e->getMessage()}", [
+                'id' => $id,
+                'exception' => $e->getTraceAsString(),
+            ]);
+            return view('error')->with('error', $e->getMessage());
+        }
+    }
+    
+    private function realizarConsultaSOAP($cedula, $apellido)
+    {
+        $soapUser = env('CIFIN_USER');
+        $soapPassword = env('CIFIN_PASSWORD');
+        $url = env('CIFIN_URL') . '?wsdl';
+    
+        $xml_post_string = 
+            "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws/\">
+                <soapenv:Header/>
+                <soapenv:Body>
+                    <ws:consultaXml>
+                        <!--Optional:-->
+                        <codigoInformacion>5702</codigoInformacion>
+                        <!--Optional:-->
+                        <motivoConsulta>24</motivoConsulta>
+                        <!--Optional:-->
+                        <numeroIdentificacion>$cedula</numeroIdentificacion>
+                        <!--Optional:-->
+                        <primerApellido>$apellido</primerApellido>
+                        <!--Optional:-->
+                        <tipoIdentificacion>1</tipoIdentificacion>
+                    </ws:consultaXml>
+                </soapenv:Body>
+            </soapenv:Envelope>";
+    
+        $headers = [
+            "Content-type: text/xml;charset=\"utf-8\"",
+            'Accept: text/xml',
+            'Cache-Control: no-cache',
+            'Pragma: no-cache',
+            'SOAPAction: ' . $url,
+            'Content-length: ' . strlen($xml_post_string),
+        ];
+    
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_USERPWD, $soapUser . ':' . $soapPassword);
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $xml_post_string);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    
+        $response = curl_exec($ch);
+        curl_close($ch);
+    
+        $sectores = [];
+        if ($response != false) {
+            $array = XmlaPhp::createArray($response);
+    
+            $demo = $array['S:Envelope']['S:Body']['ns2:consultaXmlResponse']['return'];
+            if ($demo != 'error' && is_string($demo) && strpos($demo, '<?xml') === 0) {
+                $resultado = XmlaPhp::createArray($demo);
+    
+                foreach ($resultado['CIFIN']['Tercero'] as $key => $value) {
+                    if (strpos($key, 'Sector') !== false) {
+                        foreach ($value as $subKey => $subValue) {
+                            if (strpos($key, 'AlDia') !== false) {
+                                $sectores['alDia'][$key] = $subValue;
+                            } elseif (strpos($key, 'EnMora') !== false) {
+                                $sectores['enMora'][$key] = $subValue;
+                            }
+                        }
+                    }
+                }
+            } else {
+                Log::debug("Returned data is not a well-formed XML or an error occurred");
+            }
+        } else {
+            Log::error("SOAP request failed");
+        }
+    
+        return $sectores;
+    }
+    
 
     /**
      * Update the specified resource in storage.
