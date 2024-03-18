@@ -28,11 +28,6 @@
 
                     <!-- Condicionales para mostrar/ocultar campos según el estado -->
 
-                    <!-- <div class="col-md-3" v-if="selectedEstado === 'Al día' || selectedEstado === 'Todas'">
-                        <b-form-group label="CONCEPTO">
-                            <b-form-input v-model="concept" placeholder="Ingrese el concepto"></b-form-input>
-                        </b-form-group>
-                    </div> -->
                     <div class="col-md-3" v-if="selectedEstado === 'Al día' || selectedEstado === 'Todas'">
                         <b-form-group label="ENTIDAD (Banco-Financiera-Cooperativa-CFC):">
                             <b-form-input v-model="concept" placeholder="Ingrese el concepto"></b-form-input>
@@ -98,39 +93,6 @@
                 <div class="table-responsive">
                     <b-table striped hover :fields="cupones" :items="coupons"></b-table>
                 </div>
-                <!-- <b-pagination
-                        v-if="coupons"
-                        v-model="coupons"
-                        :per-page="perPage"
-                        :total-rows="totalRows"
-                    >
-                </b-pagination> -->
-                <!-- <table class="table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Periodo</th>
-                            <th>Pagaduría</th>
-                            <th>Documento</th>
-                            <th>Nombre Completo</th>
-                            <th>Homónimo</th>
-                            <th>Concepto</th>
-                            <th>Valor Cuota</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="coupon in coupons" :key="coupon.id">
-                            <td>{{ coupon.id }}</td>
-                            <td>{{ coupon.period }}</td>
-                            <td>{{ coupon.pagaduria }}</td>
-                            <td>{{ coupon.doc }}</td>
-                            <td>{{ coupon.names }}</td>
-                            <td>{{ coupon.code }}</td>
-                            <td>{{ coupon.concept }}</td>
-                            <td>{{ coupon.egresos }}</td>
-                        </tr>
-                    </tbody>
-                </table> -->
             </div>
         </div>
         <!-- Tabla para mostrar los resultados de EN MORA -->
@@ -143,30 +105,6 @@
                 <div class="table-responsive">
                     <b-table striped hover :fields="descuentos" :items="coupons"></b-table>
                 </div>
-                <!-- <table class="table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Documento</th>
-                            <th>Mliquid</th>
-                            <th>Valor</th>
-                            <th>Pagaduria</th>
-                            <th>Fecha</th>
-                            <th>Nomina</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="descuento in coupons" :key="descuento.id">
-                            <td>{{ descuento.id }}</td>
-                            <td>{{ descuento.doc }}</td>
-                            <td>{{ descuento.mliquid }}</td>
-                            <td>{{ descuento.valor }}</td>
-                            <td>{{ descuento.pagaduria }}</td>
-                            <td>{{ descuento.fecdata }}</td>
-                            <td>{{ descuento.nomina }}</td>
-                        </tr>
-                    </tbody>
-                </table> -->
             </div>
         </div>
 
@@ -179,30 +117,6 @@
                 <div class="table-responsive">
                     <b-table striped hover :fields="embargos" :items="coupons"></b-table>
                 </div>
-                <!-- <table class="table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Documento</th>
-                            <th>Nombre del Proceso</th>
-                            <th>Documento de la Demanda</th>
-                            <th>Entidad Demandante</th>
-                            <th>Motivo del Embargo</th>
-                            <th>Total Embargado</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="embargo in coupons" :key="embargo.id">
-                            <td>{{ embargo.id }}</td>
-                            <td>{{ embargo.doc }}</td>
-                            <td>{{ embargo.nomp }}</td>
-                            <td>{{ embargo.docdeman }}</td>
-                            <td>{{ embargo.entidaddeman }}</td>
-                            <td>{{ embargo.motemb }}</td>
-                            <td>{{ embargo.temb }}</td>
-                        </tr>
-                    </tbody>
-                </table> -->
             </div>
         </div>
         <div class="panel mb-3 col-md-12" v-if="coupons && coupons.length > 0 && selectedEstado === 'Todas'">
@@ -328,9 +242,6 @@ export default {
                     sortable: false
                 }
             ],
-            perPage: 15,
-            totalRows: 0,
-            currentPage: 1,
             pagaduria: '',
             pagaduriasList: [],
             concept: '',
@@ -376,13 +287,6 @@ export default {
             this.isMonthValid = !!this.month && this.month.length === 2;
             this.isYearValid = !!this.year && this.year.length === 4;
 
-            if (this.selectedEstado === 'Al día') {
-            } else if (this.selectedEstado === 'En mora') {
-                this.isMLiquidValid = !!this.mliquid;
-            } else if (this.selectedEstado === 'Embargado') {
-                this.isEntidadDemandanteValid = !!this.entidadDemandante;
-            }
-
             if (
                 !this.isPagaduriaValid ||
                 !this.isMonthValid ||
@@ -401,23 +305,47 @@ export default {
                     year: this.year
                 };
 
-                let url = '/coupons/by-pagaduria';
-                if (this.selectedEstado === 'Al día') {
+                let couponsUrl = '/coupons/by-pagaduria';
+                let descuentosUrl = '/descuentos/by-pagaduria';
+                let embargosUrl = '/embargos/by-pagaduria';
+
+                if (this.selectedEstado === 'Todas') {
+                    let couponsResponse = await axios.post(couponsUrl, payload);
+                    let descuentosResponse = await axios.post(descuentosUrl, payload);
+                    let embargosResponse = await axios.post(embargosUrl, payload);
+
                     payload.concept = this.concept;
                     payload.code = this.code;
-                } else if (this.selectedEstado === 'En mora') {
                     payload.mliquid = this.mliquid;
-                    url = '/descuentos/by-pagaduria';
-                } else if (this.selectedEstado === 'Embargado') {
                     payload.entidadDemandante = this.entidadDemandante;
-                    url = '/embargos/by-pagaduria';
+                    this.coupons = couponsResponse.data;
+                    this.descuentos = descuentosResponse.data;
+                    this.embargos = embargosResponse.data;
+                    
+                } else {
+                    if (this.selectedEstado === 'Al día') {
+                        payload.concept = this.concept;
+                        payload.code = this.code;
+                    } else if (this.selectedEstado === 'En mora') {
+                        payload.mliquid = this.mliquid;
+                        couponsUrl = descuentosUrl;
+                    } else if (this.selectedEstado === 'Embargado') {
+                        payload.entidadDemandante = this.entidadDemandante;
+                        couponsUrl = embargosUrl;
+                    }
+
+                    let response = await axios.post(couponsUrl, payload);
+                    this.coupons = response.data;
                 }
+
+
                 console.log(payload);
                 const response = await axios.post(url, payload);
                 this.coupons = response.data;
                 this.searchPerformed = true;
             } catch (error) {
                 console.error('Error al obtener los datos:', error);
+                console.log(error);
             } finally {
                 this.isLoading = false;
             }
