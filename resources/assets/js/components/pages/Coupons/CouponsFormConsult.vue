@@ -19,10 +19,7 @@
                     </div>
                     <div class="col-md-3">
                         <b-form-group label="ESTADO">
-                            <b-form-select 
-                                v-model="selectedEstado" 
-                                :options="estadosOptions">
-                            </b-form-select>
+                            <b-form-select v-model="selectedEstado" :options="estadosOptions"> </b-form-select>
                         </b-form-group>
                     </div>
 
@@ -42,7 +39,11 @@
 
                     <div class="col-md-3" v-if="selectedEstado === 'En mora' || selectedEstado === 'Todas'">
                         <b-form-group label="MENSAJE LIQUIDACIÓN">
-                            <b-form-input type="text" v-model="mliquid" placeholder="Ingrese el mensaje de liquidación"></b-form-input>
+                            <b-form-input
+                                type="text"
+                                v-model="mliquid"
+                                placeholder="Ingrese el mensaje de liquidación"
+                            ></b-form-input>
                         </b-form-group>
                     </div>
 
@@ -55,12 +56,17 @@
                             ></b-form-input>
                         </b-form-group>
                     </div>
-                    
+
                     <!--fin de condicionales-->
                     <div class="col-md-3">
                         <b-form-group label="MES Y AÑO">
                             <div class="d-flex">
-                                <b-form-input type="number" v-model="month" placeholder="Mes" class="mr-2"></b-form-input>
+                                <b-form-input
+                                    type="number"
+                                    v-model="month"
+                                    placeholder="Mes"
+                                    class="mr-2"
+                                ></b-form-input>
                                 <b-form-input type="number" v-model="year" placeholder="Año"></b-form-input>
                             </div>
                         </b-form-group>
@@ -125,13 +131,15 @@
             </div>
             <div class="panel-body">
                 <div class="table-responsive">
+                    CUPONES
                     <b-table striped hover :fields="cupones" :items="coupons"></b-table>
-                    <b-table class="mt-3" striped hover :fields="descuentos" :items="coupons"></b-table>
-                    <b-table class="mt-3" striped hover :fields="embargos" :items="coupons"></b-table>
+                    DESCUENTOS
+                    <b-table class="mt-3" striped hover :fields="descuentos" :items="descuentos"></b-table>
+                    EMBARGOS
+                    <b-table class="mt-3" striped hover :fields="embargos" :items="embargos"></b-table>
                 </div>
             </div>
         </div>
-
 
         <div v-if="searchPerformed && coupons.length === 0">
             <p>No se encontraron cupones para los criterios de búsqueda proporcionados.</p>
@@ -139,13 +147,14 @@
     </div>
 </template>
 <style>
-.form-group legend{
-    font-family: "Poppins", sans-serif;
+.form-group legend {
+    font-family: 'Poppins', sans-serif;
     font-size: 16px;
     font-weight: 900;
 }
 
-td, th{
+td,
+th {
     text-align: center;
 }
 </style>
@@ -250,6 +259,8 @@ export default {
             year: '',
             mliquid: '',
             coupons: [],
+            embargos: [],
+            descuentos: [],
             isPagaduriaValid: true,
             isMonthValid: true,
             isYearValid: true,
@@ -272,7 +283,7 @@ export default {
     async mounted() {
         await this.getPagaduriasNames();
     },
-    
+
     methods: {
         async getPagaduriasNames() {
             try {
@@ -321,28 +332,25 @@ export default {
                     this.coupons = couponsResponse.data;
                     this.descuentos = descuentosResponse.data;
                     this.embargos = embargosResponse.data;
-                    
                 } else {
                     if (this.selectedEstado === 'Al día') {
                         payload.concept = this.concept;
                         payload.code = this.code;
+                        const response = await axios.post(couponsUrl, payload);
+                        this.coupons = response.data;
                     } else if (this.selectedEstado === 'En mora') {
                         payload.mliquid = this.mliquid;
                         couponsUrl = descuentosUrl;
+                        const response = await axios.post(descuentosUrl, payload);
+                        this.descuentos = response.data;
                     } else if (this.selectedEstado === 'Embargado') {
                         payload.entidadDemandante = this.entidadDemandante;
                         couponsUrl = embargosUrl;
+                        const response = await axios.post(embargosUrl, payload);
+                        this.embargos = response.data;
                     }
-
-                    let response = await axios.post(couponsUrl, payload);
-                    this.coupons = response.data;
+                    this.searchPerformed = true;
                 }
-
-
-                console.log(payload);
-                const response = await axios.post(url, payload);
-                this.coupons = response.data;
-                this.searchPerformed = true;
             } catch (error) {
                 console.error('Error al obtener los datos:', error);
                 console.log(error);
