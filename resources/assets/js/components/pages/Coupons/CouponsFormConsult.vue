@@ -26,14 +26,14 @@
                     <!-- Condicionales para mostrar/ocultar campos según el estado -->
 
                     <div class="col-md-3" v-if="selectedEstado === 'Al día' || selectedEstado === 'Todas'">
-                        <b-form-group label="CONCEPTO:">
+                        <b-form-group label="ENTIDAD (Banco-Financiera-Cooperativa-CFC):">
                             <b-form-input v-model="concept" placeholder="Ingrese el concepto"></b-form-input>
                         </b-form-group>
                     </div>
 
                     <div class="col-md-3" v-if="selectedEstado === 'En mora' || selectedEstado === 'Todas'">
                         <b-form-group label="CODIGO">
-                            <b-form-input type="text" v-model="mliquid" placeholder="Ingrese el código"></b-form-input>
+                            <b-form-input type="text" v-model="mliquid" placeholder="Ingrese el mensaje de liquidación"></b-form-input>
                         </b-form-group>
                     </div>
 
@@ -79,6 +79,7 @@
                 </div>
             </div>
         </div>
+
         <!-- Tabla para mostrar los resultados de cupones AL DIA -->
 
         <div class="panel mb-3 col-md-12" v-if="coupons && coupons.length > 0 && selectedEstado === 'Al día'">
@@ -94,12 +95,40 @@
                         :total-rows="rowsAldia"
                         aria-controls="aldia-table"
                     ></b-pagination>
-                    <div class="text-right">Número total de clientes: {{ rowsAldia }}</div>
-                    <div class="text-right">Total cuotas (página): {{ totalCuotasAldia }}</div>
+                    <div class="row mb-5">
+                        <div class="col-12 col-md-3" />
+                        <div class="col-12 col-md-3" />
+                        <div class="col-12 col-md-6">
+                            <div class="row d-flex align-items-center justify-content-center">
+                                <div class="col-6">
+                                    <label class="label-consulta mb-0" for="pad">
+                                        <input class="form-control" value="Número total de clientes:" disabled />
+                                    </label>
+                                </div>
+                                <div class="col-4">
+                                    <p class="panel-value mb-0 text-center">
+                                        {{ rowsAldia }}
+                                    </p>
+                                </div>
+                                <div class="col-6">
+                                    <label class="label-consulta mb-0" for="pad">
+                                        <input class="form-control" value="Total cuotas (página):" disabled />
+                                    </label>
+                                </div>
+                                <div class="col-4">
+                                    <p class="panel-value mb-0 text-center">
+                                        {{ totalCuotasAldia }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
         <!-- Tabla para mostrar los resultados de EN MORA -->
+
         <div class="panel mb-3 col-md-12" v-if="descuentos && descuentos.length > 0 && selectedEstado === 'En mora'">
             <div class="panel-heading">
                 <b>RESULTADOS DE LA CONSULTA (Cartera en Mora)</b>
@@ -119,13 +148,40 @@
                         :total-rows="rowsMora"
                         aria-controls="mora-table"
                     ></b-pagination>
-                    <div class="text-right">Número total de clientes: {{ rowsMora }}</div>
-                    <div class="text-right">Total cuotas (página): {{ totalCuotasMora }}</div>
+                    <div class="row mb-5">
+                        <div class="col-12 col-md-3" />
+                        <div class="col-12 col-md-3" />
+                        <div class="col-12 col-md-6">
+                            <div class="row d-flex align-items-center justify-content-center">
+                                <div class="col-6">
+                                    <label class="label-consulta mb-0" for="pad">
+                                        <input class="form-control" value="Número total de clientes:" disabled />
+                                    </label>
+                                </div>
+                                <div class="col-4">
+                                    <p class="panel-value mb-0 text-center">
+                                        {{ rowsMora }}
+                                    </p>
+                                </div>
+                                <div class="col-6">
+                                    <label class="label-consulta mb-0" for="pad">
+                                        <input class="form-control" value="Total cuotas (página):" disabled />
+                                    </label>
+                                </div>
+                                <div class="col-4">
+                                    <p class="panel-value mb-0 text-center">
+                                        {{ totalCuotasMora }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Tabla para mostrar los resultados de EMBARGOS -->
+
         <div class="panel mb-3 col-md-12" v-if="embargos && embargos.length > 0 && selectedEstado === 'Embargado'">
             <div class="panel-heading">
                 <b>RESULTADOS DE LA CONSULTA (Cartera Embargada)</b>
@@ -145,8 +201,34 @@
                         :total-rows="rowsEmbargo"
                         aria-controls="embargo-table"
                     ></b-pagination>
-                    <div class="text-right">Número total de clientes: {{ rowsEmbargo }}</div>
-                    <div class="text-right">Total cuotas (página): {{ totalCuotasEmbargo }}</div>
+                    <div class="row mb-5">
+                        <div class="col-12 col-md-3" />
+                        <div class="col-12 col-md-3" />
+                        <div class="col-12 col-md-6">
+                            <div class="row d-flex align-items-center justify-content-center">
+                                <div class="col-6">
+                                    <label class="label-consulta mb-0" for="pad">
+                                        <input class="form-control" value="Número total de clientes:" disabled />
+                                    </label>
+                                </div>
+                                <div class="col-4">
+                                    <p class="panel-value mb-0 text-center">
+                                        {{ rowsEmbargo }}
+                                    </p>
+                                </div>
+                                <div class="col-6">
+                                    <label class="label-consulta mb-0" for="pad">
+                                        <input class="form-control" value="Total cuotas (página):" disabled />
+                                    </label>
+                                </div>
+                                <div class="col-4">
+                                    <p class="panel-value mb-0 text-center">
+                                        {{ totalCuotasEmbargo }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -160,14 +242,33 @@
             </div>
             <div class="panel-body">
                 <b-accordion>
-                    <!-- Cartera al Día -->
-                    <b-card no-body class="mb-1">
+                    <b-card no-body class="mb-2">
                         <b-card-header header-tag="header" class="p-1" role="tab">
-                            <b-button block v-b-toggle.accordion-1 variant="info" class="rounded-0"
-                                >Cartera al Día</b-button
-                            >
+                            <b-button class="button-tablas d-flex" block v-b-toggle.accordion-1>
+                                <div class="row" style="width: 100%">
+                                    <div class="col-11">Cartera al Día</div>
+                                    <div class="col-1 pr-0 d-flex justify-content-end align-items-center">
+                                        <svg
+                                            width="20px"
+                                            height="20px"
+                                            viewBox="0 0 24 24"
+                                            fill="white"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9"
+                                                stroke="white"
+                                                stroke-width="1.5"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                            />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </b-button>
                         </b-card-header>
-                        <b-collapse id="accordion-1" visible accordion="my-accordion" role="tabpanel">
+
+                        <b-collapse id="accordion-1" accordion="my-accordion2" role="tabpanel">
                             <b-card-body>
                                 <b-table striped hover :fields="cupones" :items="paginatedCoupons"></b-table>
                                 <b-pagination
@@ -176,19 +277,72 @@
                                     :total-rows="rowsAldia"
                                     aria-controls="aldia-table"
                                 ></b-pagination>
-                                <div class="text-right">Número total de clientes: {{ rowsAldia }}</div>
-                                <div class="text-right">Total cuotas (página): {{ totalCuotasAldia }}</div>
+                                <div class="row">
+                                    <div class="col-12 col-md-3" />
+                                    <div class="col-12 col-md-3" />
+                                    <div class="col-12 col-md-6">
+                                        <div class="row d-flex align-items-center justify-content-center">
+                                            <div class="col-6">
+                                                <label class="label-consulta mb-0" for="pad">
+                                                    <input
+                                                        class="form-control"
+                                                        value="Número total de clientes:"
+                                                        disabled
+                                                    />
+                                                </label>
+                                            </div>
+                                            <div class="col-4">
+                                                <p class="panel-value mb-0 text-center">
+                                                    {{ rowsAldia }}
+                                                </p>
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="label-consulta mb-0" for="pad">
+                                                    <input
+                                                        class="form-control"
+                                                        value="Total cuotas (página):"
+                                                        disabled
+                                                    />
+                                                </label>
+                                            </div>
+                                            <div class="col-4">
+                                                <p class="panel-value mb-0 text-center">
+                                                    {{ totalCuotasAldia }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </b-card-body>
                         </b-collapse>
                     </b-card>
-
                     <!-- Cartera en Mora -->
-                    <b-card no-body class="mb-1">
+                    <b-card no-body class="mb-2">
                         <b-card-header header-tag="header" class="p-1" role="tab">
-                            <b-button block v-b-toggle.accordion-2 variant="info" class="rounded-0"
-                                >Cartera en Mora</b-button
-                            >
+                            <b-button class="button-tablas d-flex" block v-b-toggle.accordion-2>
+                                <div class="row" style="width: 100%">
+                                    <div class="col-11">Cartera en Mora</div>
+                                    <div class="col-1 pr-0 d-flex justify-content-end align-items-center">
+                                        <svg
+                                            width="20px"
+                                            height="20px"
+                                            viewBox="0 0 24 24"
+                                            fill="white"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9"
+                                                stroke="white"
+                                                stroke-width="1.5"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                            />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </b-button>
                         </b-card-header>
+
                         <b-collapse id="accordion-2" accordion="my-accordion" role="tabpanel">
                             <b-card-body>
                                 <b-table
@@ -203,19 +357,72 @@
                                     :total-rows="rowsMora"
                                     aria-controls="mora-table"
                                 ></b-pagination>
-                                <div class="text-right">Número total de clientes: {{ rowsMora }}</div>
-                                <div class="text-right">Total cuotas (página): {{ totalCuotasMora }}</div>
+                                <div class="row">
+                                    <div class="col-12 col-md-3" />
+                                    <div class="col-12 col-md-3" />
+                                    <div class="col-12 col-md-6">
+                                        <div class="row d-flex align-items-center justify-content-center">
+                                            <div class="col-6">
+                                                <label class="label-consulta mb-0" for="pad">
+                                                    <input
+                                                        class="form-control"
+                                                        value="Número total de clientes:"
+                                                        disabled
+                                                    />
+                                                </label>
+                                            </div>
+                                            <div class="col-4">
+                                                <p class="panel-value mb-0 text-center">
+                                                    {{ rowsMora }}
+                                                </p>
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="label-consulta mb-0" for="pad">
+                                                    <input
+                                                        class="form-control"
+                                                        value="Total cuotas (página):"
+                                                        disabled
+                                                    />
+                                                </label>
+                                            </div>
+                                            <div class="col-4">
+                                                <p class="panel-value mb-0 text-center">
+                                                    {{ totalCuotasMora }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </b-card-body>
                         </b-collapse>
                     </b-card>
-
                     <!-- Cartera Embargada -->
-                    <b-card no-body class="mb-1">
+                    <b-card no-body class="mb-2">
                         <b-card-header header-tag="header" class="p-1" role="tab">
-                            <b-button block v-b-toggle.accordion-3 variant="info" class="rounded-0"
-                                >Cartera Embargada</b-button
-                            >
+                            <b-button class="button-tablas d-flex" block v-b-toggle.accordion-3>
+                                <div class="row" style="width: 100%">
+                                    <div class="col-11">Cartera Embargada</div>
+                                    <div class="col-1 pr-0 d-flex justify-content-end align-items-center">
+                                        <svg
+                                            width="20px"
+                                            height="20px"
+                                            viewBox="0 0 24 24"
+                                            fill="white"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9"
+                                                stroke="white"
+                                                stroke-width="1.5"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                            />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </b-button>
                         </b-card-header>
+
                         <b-collapse id="accordion-3" accordion="my-accordion" role="tabpanel">
                             <b-card-body>
                                 <b-table striped hover :fields="embargosFields" :items="paginatedEmbargos"></b-table>
@@ -225,8 +432,42 @@
                                     :total-rows="rowsEmbargo"
                                     aria-controls="embargo-table"
                                 ></b-pagination>
-                                <div class="text-right">Número total de clientes: {{ rowsEmbargo }}</div>
-                                <div class="text-right">Total cuotas (página): {{ totalCuotasEmbargo }}</div>
+                                <div class="row">
+                                    <div class="col-12 col-md-3" />
+                                    <div class="col-12 col-md-3" />
+                                    <div class="col-12 col-md-6">
+                                        <div class="row d-flex align-items-center justify-content-center">
+                                            <div class="col-6">
+                                                <label class="label-consulta mb-0" for="pad">
+                                                    <input
+                                                        class="form-control"
+                                                        value="Número total de clientes:"
+                                                        disabled
+                                                    />
+                                                </label>
+                                            </div>
+                                            <div class="col-4">
+                                                <p class="panel-value mb-0 text-center">
+                                                    {{ rowsEmbargo }}
+                                                </p>
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="label-consulta mb-0" for="pad">
+                                                    <input
+                                                        class="form-control"
+                                                        value="Total cuotas (página):"
+                                                        disabled
+                                                    />
+                                                </label>
+                                            </div>
+                                            <div class="col-4">
+                                                <p class="panel-value mb-0 text-center">
+                                                    {{ totalCuotasEmbargo }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </b-card-body>
                         </b-collapse>
                     </b-card>
@@ -249,6 +490,32 @@
 td,
 th {
     text-align: center;
+}
+
+.button-tablas {
+    text-align: left;
+    background: #000;
+    color: #fff;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 48px;
+}
+.button-tablas:hover {
+    background: #000 !important;
+    color: #0cedb0 !important;
+    border-color: none !important;
+}
+.button-tablas:active {
+    background: #000 !important;
+    color: #0cedb0 !important;
+    border-color: none !important;
+}
+.button-tablas:not(:disabled):not(.disabled):active,
+.button-tablas:not(:disabled):not(.disabled).active,
+.show > .button-tablas.dropdown-toggle {
+    background: #000 !important;
+    color: #0cedb0 !important;
+    border-color: none !important;
 }
 </style>
 <script>
