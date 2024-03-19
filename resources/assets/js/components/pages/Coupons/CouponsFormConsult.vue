@@ -97,19 +97,31 @@
             </div>
             <div class="panel-body">
                 <div class="table-responsive">
-                    <b-table striped hover :fields="cupones" :items="coupons"></b-table>
+                    <b-table striped id="aldia-table" hover :fields="cupones" :items="paginatedCoupons"></b-table>
+                    <b-pagination
+                        v-model="currentPageAldia"
+                        :per-page="perPageAldia"
+                        :total-rows="rowsAldia"
+                        aria-controls="aldia-table"
+                    ></b-pagination>
                 </div>
+                
             </div>
         </div>
         <!-- Tabla para mostrar los resultados de EN MORA -->
-
         <div class="panel mb-3 col-md-12" v-if="descuentos && descuentos.length > 0 && selectedEstado === 'En mora'">
             <div class="panel-heading">
                 <b>RESULTADOS DE LA CONSULTA (Cartera en Mora)</b>
             </div>
             <div class="panel-body">
                 <div class="table-responsive">
-                    <b-table striped hover :fields="descuentos" :items="descuentos"></b-table>
+                    <b-table striped id="mora-table" hover :fields="descuentos" :items="paginatedDescuentos"></b-table>
+                    <b-pagination
+                        v-model="currentPageMora"
+                        :per-page="perPageMora"
+                        :total-rows="rowsMora"
+                        aria-controls="mora-table"
+                    ></b-pagination>
                 </div>
             </div>
         </div>
@@ -121,7 +133,13 @@
             </div>
             <div class="panel-body">
                 <div class="table-responsive">
-                    <b-table striped hover :fields="embargos" :items="embargos"></b-table>
+                    <b-table striped id="embargo-table" hover :fields="embargos" :items="paginatedEmbargos"></b-table>
+                    <b-pagination
+                        v-model="currentPageEmbargo"
+                        :per-page="perPageEmbargo"
+                        :total-rows="rowsEmbargo"
+                        aria-controls="embargo-table"
+                    ></b-pagination>
                 </div>
             </div>
         </div>
@@ -275,7 +293,16 @@ export default {
             selectedEstado: 'Al día',
             estadosOptions: ['Al día', 'En mora', 'Embargado', 'Todas'],
             entidadDemandante: '',
-            isEntidadDemandanteValid: true
+            isEntidadDemandanteValid: true,
+            currentPageAldia: 1,
+            perPageAldia: 20,
+            rowsAldia: 0,
+            currentPageMora: 1,
+            perPageMora: 20,
+            rowsMora: 0,
+            currentPageEmbargo: 1,
+            perPageEmbargo: 20,
+            rowsEmbargo: 0,
         };
     },
     watch: {
@@ -284,12 +311,28 @@ export default {
                 this.coupons = [];
                 this.searchPerformed = false;
             }
-        }
+        },
     },
     async mounted() {
         await this.getPagaduriasNames();
     },
-
+    computed: {
+        paginatedCoupons() {
+            const start = (this.currentPageAldia - 1) * this.perPageAldia;
+            const end = start + this.perPageAldia;
+            return this.coupons.slice(start, end);
+        },
+        paginatedDescuentos() {
+            const start = (this.currentPageMora - 1) * this.perPageMora;
+            const end = start + this.perPageMora;
+            return this.descuentos.slice(start, end);
+        },
+        paginatedEmbargos() {
+            const start = (this.currentPageEmbargo - 1) * this.perPageEmbargo;
+            const end = start + this.perPageEmbargo;
+            return this.embargos.slice(start, end);
+        }
+    },
     methods: {
         async getPagaduriasNames() {
             try {
@@ -343,16 +386,19 @@ export default {
                         payload.code = this.code;
                         const response = await axios.post(couponsUrl, payload);
                         this.coupons = response.data;
+                        this.rowsAldia = this.coupons.length;
                     } else if (this.selectedEstado === 'En mora') {
                         payload.mliquid = this.mliquid;
                         couponsUrl = descuentosUrl;
                         const response = await axios.post(descuentosUrl, payload);
                         this.descuentos = response.data;
+                        this.rowsMora = this.descuentos.length;
                     } else if (this.selectedEstado === 'Embargado') {
                         payload.entidadDemandante = this.entidadDemandante;
                         couponsUrl = embargosUrl;
                         const response = await axios.post(embargosUrl, payload);
                         this.embargos = response.data;
+                        this.rowsEmbargo = this.embargos.length;
                     }
                     this.searchPerformed = true;
                 }
