@@ -26,24 +26,14 @@
                     <!-- Condicionales para mostrar/ocultar campos según el estado -->
 
                     <div class="col-md-3" v-if="selectedEstado === 'Al día' || selectedEstado === 'Todas'">
-                        <b-form-group label="ENTIDAD (Banco-Financiera-Cooperativa-CFC):">
+                        <b-form-group label="CONCEPTO:">
                             <b-form-input v-model="concept" placeholder="Ingrese el concepto"></b-form-input>
                         </b-form-group>
                     </div>
 
-                    <div class="col-md-3" v-if="selectedEstado === 'Al día' || selectedEstado === 'Todas'">
-                        <b-form-group label="CÓDIGO">
-                            <b-form-input v-model="code" placeholder="Ingrese el código"></b-form-input>
-                        </b-form-group>
-                    </div>
-
                     <div class="col-md-3" v-if="selectedEstado === 'En mora' || selectedEstado === 'Todas'">
-                        <b-form-group label="MENSAJE LIQUIDACIÓN">
-                            <b-form-input
-                                type="text"
-                                v-model="mliquid"
-                                placeholder="Ingrese el mensaje de liquidación"
-                            ></b-form-input>
+                        <b-form-group label="CODIGO">
+                            <b-form-input type="text" v-model="mliquid" placeholder="Ingrese el código"></b-form-input>
                         </b-form-group>
                     </div>
 
@@ -104,8 +94,8 @@
                         :total-rows="rowsAldia"
                         aria-controls="aldia-table"
                     ></b-pagination>
+                    <div class="text-right">Número total de clientes: {{ rowsAldia }}</div>
                 </div>
-                
             </div>
         </div>
         <!-- Tabla para mostrar los resultados de EN MORA -->
@@ -115,13 +105,20 @@
             </div>
             <div class="panel-body">
                 <div class="table-responsive">
-                    <b-table striped id="mora-table" hover :fields="descuentos" :items="paginatedDescuentos"></b-table>
+                    <b-table
+                        striped
+                        id="mora-table"
+                        hover
+                        :fields="descuentosFields"
+                        :items="paginatedDescuentos"
+                    ></b-table>
                     <b-pagination
                         v-model="currentPageMora"
                         :per-page="perPageMora"
                         :total-rows="rowsMora"
                         aria-controls="mora-table"
                     ></b-pagination>
+                    <div class="text-right">Número total de clientes: {{ rowsMora }}</div>
                 </div>
             </div>
         </div>
@@ -133,35 +130,101 @@
             </div>
             <div class="panel-body">
                 <div class="table-responsive">
-                    <b-table striped id="embargo-table" hover :fields="embargos" :items="paginatedEmbargos"></b-table>
+                    <b-table
+                        striped
+                        id="embargo-table"
+                        hover
+                        :fields="embargosFields"
+                        :items="paginatedEmbargos"
+                    ></b-table>
                     <b-pagination
                         v-model="currentPageEmbargo"
                         :per-page="perPageEmbargo"
                         :total-rows="rowsEmbargo"
                         aria-controls="embargo-table"
                     ></b-pagination>
+                    <div class="text-right">Número total de clientes: {{ rowsEmbargo }}</div>
                 </div>
             </div>
         </div>
-        <div class="panel mb-3 col-md-12" v-if="coupons && coupons.length > 0 && selectedEstado === 'Todas'">
+        <div
+            id="todasDiv"
+            class="panel mb-3 col-md-12"
+            v-if="coupons && coupons.length > 0 && selectedEstado === 'Todas'"
+        >
             <div class="panel-heading">
                 <b>RESULTADOS DE LA CONSULTA (Todas)</b>
             </div>
             <div class="panel-body">
-                <div class="table-responsive">
-                    <div class="panel-heading">
-                        <b>Cartera al Día</b>
-                    </div>
-                    <b-table striped hover :fields="cupones" :items="coupons"></b-table>
-                    <div class="panel-heading mt-5">
-                        <b>Cartera en Mora</b>
-                    </div>
-                    <b-table class="mt-3" striped hover :fields="descuentos" :items="descuentos"></b-table>
-                    <div class="panel-heading mt-5">
-                        <b>Cartera Embargada</b>
-                    </div>
-                    <b-table class="mt-3" striped hover :fields="embargos" :items="embargos"></b-table>
-                </div>
+                <b-accordion>
+                    <!-- Cartera al Día -->
+                    <b-card no-body class="mb-1">
+                        <b-card-header header-tag="header" class="p-1" role="tab">
+                            <b-button block v-b-toggle.accordion-1 variant="info" class="rounded-0"
+                                >Cartera al Día</b-button
+                            >
+                        </b-card-header>
+                        <b-collapse id="accordion-1" visible accordion="my-accordion" role="tabpanel">
+                            <b-card-body>
+                                <b-table striped hover :fields="cupones" :items="paginatedCoupons"></b-table>
+                                <b-pagination
+                                    v-model="currentPageAldia"
+                                    :per-page="perPageAldia"
+                                    :total-rows="rowsAldia"
+                                    aria-controls="aldia-table"
+                                ></b-pagination>
+                                <div class="text-right">Número total de clientes: {{ rowsAldia }}</div>
+                            </b-card-body>
+                        </b-collapse>
+                    </b-card>
+
+                    <!-- Cartera en Mora -->
+                    <b-card no-body class="mb-1">
+                        <b-card-header header-tag="header" class="p-1" role="tab">
+                            <b-button block v-b-toggle.accordion-2 variant="info" class="rounded-0"
+                                >Cartera en Mora</b-button
+                            >
+                        </b-card-header>
+                        <b-collapse id="accordion-2" accordion="my-accordion" role="tabpanel">
+                            <b-card-body>
+                                <b-table
+                                    striped
+                                    hover
+                                    :fields="descuentosFields"
+                                    :items="paginatedDescuentos"
+                                ></b-table>
+                                <b-pagination
+                                    v-model="currentPageMora"
+                                    :per-page="perPageMora"
+                                    :total-rows="rowsMora"
+                                    aria-controls="mora-table"
+                                ></b-pagination>
+                                <div class="text-right">Número total de clientes: {{ rowsMora }}</div>
+                            </b-card-body>
+                        </b-collapse>
+                    </b-card>
+
+                    <!-- Cartera Embargada -->
+                    <b-card no-body class="mb-1">
+                        <b-card-header header-tag="header" class="p-1" role="tab">
+                            <b-button block v-b-toggle.accordion-3 variant="info" class="rounded-0"
+                                >Cartera Embargada</b-button
+                            >
+                        </b-card-header>
+                        <b-collapse id="accordion-3" accordion="my-accordion" role="tabpanel">
+                            <b-card-body>
+                                <b-table striped hover :fields="embargosFields" :items="paginatedEmbargos"></b-table>
+                                <b-pagination
+                                    v-model="currentPageEmbargo"
+                                    :per-page="perPageEmbargo"
+                                    :total-rows="rowsEmbargo"
+                                    aria-controls="embargo-table"
+                                ></b-pagination>
+                                <div class="text-right">Número total de clientes: {{ rowsEmbargo }}</div>
+                            </b-card-body>
+                        </b-collapse>
+                    </b-card>
+                </b-accordion>
             </div>
         </div>
 
@@ -221,7 +284,7 @@ export default {
                     sortable: false
                 }
             ],
-            descuentos: [
+            descuentosFields: [
                 {
                     key: 'doc',
                     label: 'Documento',
@@ -248,7 +311,7 @@ export default {
                     sortable: false
                 }
             ],
-            embargos: [
+            embargosFields: [
                 {
                     key: 'doc',
                     label: 'Documento',
@@ -302,7 +365,7 @@ export default {
             rowsMora: 0,
             currentPageEmbargo: 1,
             perPageEmbargo: 20,
-            rowsEmbargo: 0,
+            rowsEmbargo: 0
         };
     },
     watch: {
@@ -312,6 +375,11 @@ export default {
                 this.searchPerformed = false;
             }
         },
+        currentPage(newValue, oldValue) {
+            if (newValue !== oldValue) {
+                this.getCoupons();
+            }
+        }
     },
     async mounted() {
         await this.getPagaduriasNames();
@@ -368,18 +436,24 @@ export default {
                 let couponsUrl = '/coupons/by-pagaduria';
                 let descuentosUrl = '/descuentos/by-pagaduria';
                 let embargosUrl = '/embargos/by-pagaduria';
-
+                payload.page = this.currentPage;
+                payload.perPage = this.perPage;
                 if (this.selectedEstado === 'Todas') {
                     payload.concept = this.concept;
-                    payload.code = this.code;
                     payload.mliquid = this.mliquid;
                     payload.entidadDemandante = this.entidadDemandante;
+
                     let couponsResponse = await axios.post(couponsUrl, payload);
                     let descuentosResponse = await axios.post(descuentosUrl, payload);
                     let embargosResponse = await axios.post(embargosUrl, payload);
                     this.coupons = couponsResponse.data;
+                    this.rowsAldia = this.coupons.length;
+
                     this.descuentos = descuentosResponse.data;
+                    this.rowsMora = this.descuentos.length;
+
                     this.embargos = embargosResponse.data;
+                    this.rowsEmbargo = this.embargos.length;
                 } else {
                     if (this.selectedEstado === 'Al día') {
                         payload.concept = this.concept;
@@ -402,6 +476,7 @@ export default {
                     }
                     this.searchPerformed = true;
                 }
+                console.log(this.coupons);
             } catch (error) {
                 console.error('Error al obtener los datos:', error);
                 console.log(error);
