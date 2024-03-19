@@ -95,6 +95,7 @@
                         aria-controls="aldia-table"
                     ></b-pagination>
                     <div class="text-right">Número total de clientes: {{ rowsAldia }}</div>
+                    <div class="text-right">Total cuotas (página): {{ totalCuotasAldia }}</div>
                 </div>
             </div>
         </div>
@@ -119,6 +120,7 @@
                         aria-controls="mora-table"
                     ></b-pagination>
                     <div class="text-right">Número total de clientes: {{ rowsMora }}</div>
+                    <div class="text-right">Total cuotas (página): {{ totalCuotasMora }}</div>
                 </div>
             </div>
         </div>
@@ -144,6 +146,7 @@
                         aria-controls="embargo-table"
                     ></b-pagination>
                     <div class="text-right">Número total de clientes: {{ rowsEmbargo }}</div>
+                    <div class="text-right">Total cuotas (página): {{ totalCuotasEmbargo }}</div>
                 </div>
             </div>
         </div>
@@ -174,6 +177,7 @@
                                     aria-controls="aldia-table"
                                 ></b-pagination>
                                 <div class="text-right">Número total de clientes: {{ rowsAldia }}</div>
+                                <div class="text-right">Total cuotas (página): {{ totalCuotasAldia }}</div>
                             </b-card-body>
                         </b-collapse>
                     </b-card>
@@ -200,6 +204,7 @@
                                     aria-controls="mora-table"
                                 ></b-pagination>
                                 <div class="text-right">Número total de clientes: {{ rowsMora }}</div>
+                                <div class="text-right">Total cuotas (página): {{ totalCuotasMora }}</div>
                             </b-card-body>
                         </b-collapse>
                     </b-card>
@@ -221,6 +226,7 @@
                                     aria-controls="embargo-table"
                                 ></b-pagination>
                                 <div class="text-right">Número total de clientes: {{ rowsEmbargo }}</div>
+                                <div class="text-right">Total cuotas (página): {{ totalCuotasEmbargo }}</div>
                             </b-card-body>
                         </b-collapse>
                     </b-card>
@@ -365,7 +371,10 @@ export default {
             rowsMora: 0,
             currentPageEmbargo: 1,
             perPageEmbargo: 20,
-            rowsEmbargo: 0
+            rowsEmbargo: 0,
+            totalCuotasAldia: 0,
+            totalCuotasMora: 0,
+            totalCuotasEmbargo: 0
         };
     },
     watch: {
@@ -454,25 +463,67 @@ export default {
 
                     this.embargos = embargosResponse.data;
                     this.rowsEmbargo = this.embargos.length;
+
+                    const parseToNumber = value => {
+                        const parsed = parseFloat(value);
+                        return isNaN(parsed) ? 0 : parsed;
+                    };
+
+                    this.totalCuotasAldia = this.coupons.reduce(
+                        (total, item) => total + parseToNumber(item.egresos),
+                        0
+                    );
+                    this.totalCuotasMora = this.descuentos.reduce(
+                        (total, item) => total + parseToNumber(item.valor),
+                        0
+                    );
+                    this.totalCuotasEmbargo = this.embargos.reduce(
+                        (total, item) => total + parseToNumber(item.temb),
+                        0
+                    );
                 } else {
                     if (this.selectedEstado === 'Al día') {
+                        const parseToNumber = value => {
+                            const parsed = parseFloat(value);
+                            return isNaN(parsed) ? 0 : parsed;
+                        };
                         payload.concept = this.concept;
                         payload.code = this.code;
                         const response = await axios.post(couponsUrl, payload);
                         this.coupons = response.data;
                         this.rowsAldia = this.coupons.length;
+                        this.totalCuotasAldia = this.coupons.reduce(
+                            (total, item) => total + parseToNumber(item.egresos),
+                            0
+                        );
                     } else if (this.selectedEstado === 'En mora') {
+                        const parseToNumber = value => {
+                            const parsed = parseFloat(value);
+                            return isNaN(parsed) ? 0 : parsed;
+                        };
                         payload.mliquid = this.mliquid;
                         couponsUrl = descuentosUrl;
                         const response = await axios.post(descuentosUrl, payload);
                         this.descuentos = response.data;
                         this.rowsMora = this.descuentos.length;
+                        this.totalCuotasMora = this.descuentos.reduce(
+                            (total, item) => total + parseToNumber(item.valor),
+                            0
+                        );
                     } else if (this.selectedEstado === 'Embargado') {
+                        const parseToNumber = value => {
+                            const parsed = parseFloat(value);
+                            return isNaN(parsed) ? 0 : parsed;
+                        };
                         payload.entidadDemandante = this.entidadDemandante;
                         couponsUrl = embargosUrl;
                         const response = await axios.post(embargosUrl, payload);
                         this.embargos = response.data;
                         this.rowsEmbargo = this.embargos.length;
+                        this.totalCuotasEmbargo = this.embargos.reduce(
+                            (total, item) => total + parseToNumber(item.temb),
+                            0
+                        );
                     }
                     this.searchPerformed = true;
                 }
