@@ -590,7 +590,7 @@ export default {
 
         async getPagaduriasNames() {
             try {
-                const response = await axios.get('/pagadurias/names');
+                const response = await axios.get('/pagadurias/namesAmi');
                 this.pagaduriasList = response.data;
             } catch (error) {
                 console.error('Error al obtener las pagadurías:', error);
