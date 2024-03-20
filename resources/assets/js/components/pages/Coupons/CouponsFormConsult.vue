@@ -58,6 +58,7 @@
                                     class="mr-2"
                                 ></b-form-input>
                                 <b-form-input type="number" v-model="year" placeholder="Año"></b-form-input>
+                                
                             </div>
                         </b-form-group>
                     </div>
@@ -102,7 +103,7 @@
                             <div class="row d-flex align-items-center justify-content-center">
                                 <div class="col-6">
                                     <label class="label-consulta mb-0" for="pad">
-                                        <input class="form-control" value="Número total de clientes:" disabled />
+                                        <input class="form-control" value="Número total de clientes:" disabled > </input>
                                     </label>
                                 </div>
                                 <div class="col-4">
@@ -238,6 +239,30 @@
             v-if="coupons && coupons.length > 0 && selectedEstado === 'Todas'"
         >
             <div class="panel-heading">
+                <b>RESUMEN</b>
+            </div>
+            <div class="row d-flex align-items-center justify-content-center py-4">
+                    <div class="col-4"><label class="label-titulo">Estado</label></div>
+                    <div class="col-4"><label class="label-titulo">Total Clientes</label></div>
+                    <div class="col-4"><label class="label-titulo">Total Cuotas</label></div>
+
+                    <div class="col-4 pb-2"><label class="label-resumen">Al día</label></div>
+                    <div class="col-4 pb-2"><label class="label-resumen">{{ rowsAldia }}</label></div>
+                    <div class="col-4 pb-2"><label class="label-resumen pb-2">{{ totalCuotasAldia }}</label></div>
+
+                    <div class="col-4 pb-2"><label class="label-resumen">En mora</label></div>
+                    <div class="col-4 pb-2"><label class="label-resumen">{{ rowsMora }}</label></div>
+                    <div class="col-4 pb-2"><label class="label-resumen">{{ totalCuotasMora }}</label></div>
+
+                    <div class="col-4 pb-2"><label class="label-resumen">Embargado</label></div>
+                    <div class="col-4 pb-2"><label class="label-resumen">{{ rowsEmbargo }}</label></div>
+                    <div class="col-4 pb-2"><label class="label-resumen">{{ totalCuotasEmbargo }}</label></div>
+
+                    <div class="col-4"><label class="label-resumen">Total</label></div>
+                    <div class="col-4"><label class="label-resumen">{{ totalClientes }}</label></div>
+                    <div class="col-4"><label class="label-resumen">{{ totalCuotas }}</label></div>
+                </div>
+            <div class="panel-heading">
                 <b>RESULTADOS DE LA CONSULTA (Todas)</b>
             </div>
             <div class="panel-body">
@@ -277,42 +302,6 @@
                                     :total-rows="rowsAldia"
                                     aria-controls="aldia-table"
                                 ></b-pagination>
-                                <div class="row">
-                                    <div class="col-12 col-md-3" />
-                                    <div class="col-12 col-md-3" />
-                                    <div class="col-12 col-md-6">
-                                        <div class="row d-flex align-items-center justify-content-center">
-                                            <div class="col-6">
-                                                <label class="label-consulta mb-0" for="pad">
-                                                    <input
-                                                        class="form-control"
-                                                        value="Número total de clientes:"
-                                                        disabled
-                                                    />
-                                                </label>
-                                            </div>
-                                            <div class="col-4">
-                                                <p class="panel-value mb-0 text-center">
-                                                    {{ rowsAldia }}
-                                                </p>
-                                            </div>
-                                            <div class="col-6">
-                                                <label class="label-consulta mb-0" for="pad">
-                                                    <input
-                                                        class="form-control"
-                                                        value="Total cuotas (página):"
-                                                        disabled
-                                                    />
-                                                </label>
-                                            </div>
-                                            <div class="col-4">
-                                                <p class="panel-value mb-0 text-center">
-                                                    {{ totalCuotasAldia }}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </b-card-body>
                         </b-collapse>
                     </b-card>
@@ -357,42 +346,6 @@
                                     :total-rows="rowsMora"
                                     aria-controls="mora-table"
                                 ></b-pagination>
-                                <div class="row">
-                                    <div class="col-12 col-md-3" />
-                                    <div class="col-12 col-md-3" />
-                                    <div class="col-12 col-md-6">
-                                        <div class="row d-flex align-items-center justify-content-center">
-                                            <div class="col-6">
-                                                <label class="label-consulta mb-0" for="pad">
-                                                    <input
-                                                        class="form-control"
-                                                        value="Número total de clientes:"
-                                                        disabled
-                                                    />
-                                                </label>
-                                            </div>
-                                            <div class="col-4">
-                                                <p class="panel-value mb-0 text-center">
-                                                    {{ rowsMora }}
-                                                </p>
-                                            </div>
-                                            <div class="col-6">
-                                                <label class="label-consulta mb-0" for="pad">
-                                                    <input
-                                                        class="form-control"
-                                                        value="Total cuotas (página):"
-                                                        disabled
-                                                    />
-                                                </label>
-                                            </div>
-                                            <div class="col-4">
-                                                <p class="panel-value mb-0 text-center">
-                                                    {{ totalCuotasMora }}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </b-card-body>
                         </b-collapse>
                     </b-card>
@@ -432,42 +385,6 @@
                                     :total-rows="rowsEmbargo"
                                     aria-controls="embargo-table"
                                 ></b-pagination>
-                                <div class="row">
-                                    <div class="col-12 col-md-3" />
-                                    <div class="col-12 col-md-3" />
-                                    <div class="col-12 col-md-6">
-                                        <div class="row d-flex align-items-center justify-content-center">
-                                            <div class="col-6">
-                                                <label class="label-consulta mb-0" for="pad">
-                                                    <input
-                                                        class="form-control"
-                                                        value="Número total de clientes:"
-                                                        disabled
-                                                    />
-                                                </label>
-                                            </div>
-                                            <div class="col-4">
-                                                <p class="panel-value mb-0 text-center">
-                                                    {{ rowsEmbargo }}
-                                                </p>
-                                            </div>
-                                            <div class="col-6">
-                                                <label class="label-consulta mb-0" for="pad">
-                                                    <input
-                                                        class="form-control"
-                                                        value="Total cuotas (página):"
-                                                        disabled
-                                                    />
-                                                </label>
-                                            </div>
-                                            <div class="col-4">
-                                                <p class="panel-value mb-0 text-center">
-                                                    {{ totalCuotasEmbargo }}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </b-card-body>
                         </b-collapse>
                     </b-card>
@@ -492,6 +409,30 @@ th {
     text-align: center;
 }
 
+.label-resumen{
+    font-weight: 600;
+    text-align: center;
+    background-color: #e1e1e1;
+    color: #021b1e;
+    border-radius: 38px;
+    border-color: transparent;
+    min-height: 30px;
+    margin: 0 !important;
+    display: flex;
+    align-items: center;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+.label-titulo{
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: 900;
+    margin: 0 !important;
+    display: flex;
+    align-items: center;
+}
 .button-tablas {
     text-align: left;
     background: #000;
@@ -641,7 +582,9 @@ export default {
             rowsEmbargo: 0,
             totalCuotasAldia: 0,
             totalCuotasMora: 0,
-            totalCuotasEmbargo: 0
+            totalCuotasEmbargo: 0,
+            totalClientes: 0,
+            totalCuotas: 0
         };
     },
     watch: {
