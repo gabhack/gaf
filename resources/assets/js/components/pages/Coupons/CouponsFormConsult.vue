@@ -734,18 +734,18 @@ export default {
                         (total, item) => total + parseToNumber(item.egresos),
                         0
                     );
-                    this.formatCurrency(this.totalCuotasAldia);
+                    this.totalCuotasAldia=this.formatCurrency(this.totalCuotasAldia);
                     this.totalCuotasMora = this.descuentos.reduce(
                         (total, item) => total + parseToNumber(item.valor),
                         0
                     );
-                    this.formatCurrency(this.totalCuotasMora);
+                    this.totalCuotasMora=this.formatCurrency(this.totalCuotasMora);
 
                     this.totalCuotasEmbargo = this.embargos.reduce(
                         (total, item) => total + parseToNumber(item.temb),
                         0
                     );
-                    this.formatCurrency(this.totalCuotasEmbargo);
+                    this.totalCuotasEmbargo=this.formatCurrency(this.totalCuotasEmbargo);
 
                     this.totalCuotas = this.formatCurrency(this.totalCuotasAldia + this.totalCuotasMora + this.totalCuotasEmbargo);
                     this.totalClientes = (this.rowsMora + this.rowsAldia + this.rowsEmbargo);
