@@ -70,7 +70,7 @@
                     v-if="
                         pagaduriaType == 'SEMSAHAGUN'" />-->
 
-                <DatamesData
+                <DatamesData class="col-12 col-md-6"
                     v-if="
                         pagaduriaType == 'SEDCHOCO' ||
                         // pagaduriaType == 'SEDVALLE' ||
@@ -177,14 +177,16 @@
                 COMPONENTE HISTORIAL LABORAL
                 ==============================-->
                 <template v-if="fechavinc">
-                    <EmploymentHistory2
+                    <EmploymentHistory2  
+                        class="col-12 col-md-6"
                         :fechavinc="fechavinc"
                         :datamessedvalle="datamessedvalle"
                         :datamesFidu="datamesFidu"
                         :datamessemcali="datamessemcali"
                         :user="user"
                     />
-                    <EmploymentHistory
+                    <EmploymentHistory 
+                        class="col-12 col-md-6"
                         :fechavinc="fechavinc"
                         :datamessedvalle="datamessedvalle"
                         :datamesFidu="datamesFidu"

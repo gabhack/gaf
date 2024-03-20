@@ -4,7 +4,7 @@
             <div class="panel-heading"><b>DETALLE DEL CLIENTE</b></div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-md-4 text-center">
+                    <div class="col-lg-4 text-center">
                         <label class="label-consulta col-12 mb-2" for="pad"
                             ><b>OBLIGACIONES:</b>
                             <input
@@ -42,7 +42,7 @@
                             />
                         </label>
                     </div>
-                    <div class="col-md-4 text-center">
+                    <div class="col-lg-4 text-center">
                         <label class="label-consulta col-12 mb-2" for="pad"
                             ><b>CANTIDAD OBLIGACIONES:</b>
                             <input
@@ -80,11 +80,17 @@
                             />
                         </label>
                     </div>
-                    <div class="col-md-4 text-center">
-                        <div class="row">
+                    <div class="col-lg-4 text-center">
+                        <div class="row d-flex align-items-center">
                             <div class="col-6">
-                                <label class="label-consulta" for="pad"
-                                    ><b>CUPO APROXIMADO:</b>
+                                <b>CUPO APROXIMADO:</b>
+                            </div>
+                            <div class="col-6">
+                                <b>VALOR</b>
+                            </div>
+                            <div class="col-6">
+                                <label class="label-consulta mb-0" for="pad"
+                                    >
                                     <input
                                         class="form-control"
                                         type="text"
@@ -96,6 +102,15 @@
                                         max="99"
                                         disabled
                                     />
+                                </label>
+                            </div>
+                            <div class="col-6">
+                                <p class="panel-value mb-0">
+                                    {{ totales.libreInversion | currency }}
+                                </p>
+                            </div>
+                            <div class="col-6">
+                                <label class="label-consulta mb-0" for="pad">
                                     <input
                                         class="form-control"
                                         type="text"
@@ -107,6 +122,15 @@
                                         max="99"
                                         disabled
                                     />
+                                </label>
+                            </div>
+                            <div class="col-6">
+                                <p class="panel-value mb-0">
+                                    {{ totales.compraCartera | currency }}
+                                </p>
+                            </div>
+                            <div class="col-6">
+                                <label class="label-consulta mb-0" for="pad">
                                     <input
                                         class="form-control"
                                         type="text"
@@ -118,6 +142,19 @@
                                         max="99"
                                         disabled
                                     />
+                                </label>
+                            </div>
+                            <div class="col-6">
+                                <p class="panel-value mb-0">
+                                    {{
+                                        (conteoEgresosPlus
+                                            ? conteoEgresosPlus + totales.libreInversionSuma
+                                            : totales.libreInversionSuma) | currency
+                                    }}
+                                </p>
+                            </div>
+                            <div class="col-6">
+                                <label class="label-consulta mb-0" for="pad">
                                     <input
                                         class="form-control"
                                         type="text"
@@ -132,20 +169,6 @@
                                 </label>
                             </div>
                             <div class="col-6">
-                                <b>VALOR</b>
-                                <p class="panel-value">
-                                    {{ totales.libreInversion | currency }}
-                                </p>
-                                <p class="panel-value">
-                                    {{ totales.compraCartera | currency }}
-                                </p>
-                                <p class="panel-value">
-                                    {{
-                                        (conteoEgresosPlus
-                                            ? conteoEgresosPlus + totales.libreInversionSuma
-                                            : totales.libreInversionSuma) | currency
-                                    }}
-                                </p>
                                 <input
                                     type="number"
                                     class="form-control"
