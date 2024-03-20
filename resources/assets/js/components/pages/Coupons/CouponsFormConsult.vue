@@ -108,34 +108,6 @@
                         :total-rows="rowsAldia"
                         aria-controls="aldia-table"
                     ></b-pagination>
-                    <div class="row mb-5">
-                        <div class="col-12 col-md-3" />
-                        <div class="col-12 col-md-3" />
-                        <div class="col-12 col-md-6">
-                            <div class="row d-flex align-items-center justify-content-center">
-                                <div class="col-6">
-                                    <label class="label-consulta mb-0" for="pad">
-                                        <input class="form-control" value="Número total de clientes:" disabled > </input>
-                                    </label>
-                                </div>
-                                <div class="col-4">
-                                    <p class="panel-value mb-0 text-center">
-                                        {{ rowsAldia }}
-                                    </p>
-                                </div>
-                                <div class="col-6">
-                                    <label class="label-consulta mb-0" for="pad">
-                                        <input class="form-control" value="Total cuotas (página):" disabled />
-                                    </label>
-                                </div>
-                                <div class="col-4">
-                                    <p class="panel-value mb-0 text-center">
-                                        {{ totalCuotasAldia }}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -173,34 +145,6 @@
                         :total-rows="rowsMora"
                         aria-controls="mora-table"
                     ></b-pagination>
-                    <div class="row mb-5">
-                        <div class="col-12 col-md-3" />
-                        <div class="col-12 col-md-3" />
-                        <div class="col-12 col-md-6">
-                            <div class="row d-flex align-items-center justify-content-center">
-                                <div class="col-6">
-                                    <label class="label-consulta mb-0" for="pad">
-                                        <input class="form-control" value="Número total de clientes:" disabled />
-                                    </label>
-                                </div>
-                                <div class="col-4">
-                                    <p class="panel-value mb-0 text-center">
-                                        {{ rowsMora }}
-                                    </p>
-                                </div>
-                                <div class="col-6">
-                                    <label class="label-consulta mb-0" for="pad">
-                                        <input class="form-control" value="Total cuotas (página):" disabled />
-                                    </label>
-                                </div>
-                                <div class="col-4">
-                                    <p class="panel-value mb-0 text-center">
-                                        {{ totalCuotasMora }}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -238,34 +182,6 @@
                         :total-rows="rowsEmbargo"
                         aria-controls="embargo-table"
                     ></b-pagination>
-                    <div class="row mb-5">
-                        <div class="col-12 col-md-3" />
-                        <div class="col-12 col-md-3" />
-                        <div class="col-12 col-md-6">
-                            <div class="row d-flex align-items-center justify-content-center">
-                                <div class="col-6">
-                                    <label class="label-consulta mb-0" for="pad">
-                                        <input class="form-control" value="Número total de clientes:" disabled />
-                                    </label>
-                                </div>
-                                <div class="col-4">
-                                    <p class="panel-value mb-0 text-center">
-                                        {{ rowsEmbargo }}
-                                    </p>
-                                </div>
-                                <div class="col-6">
-                                    <label class="label-consulta mb-0" for="pad">
-                                        <input class="form-control" value="Total cuotas (página):" disabled />
-                                    </label>
-                                </div>
-                                <div class="col-4">
-                                    <p class="panel-value mb-0 text-center">
-                                        {{ totalCuotasEmbargo }}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -734,20 +650,25 @@ export default {
                         (total, item) => total + parseToNumber(item.egresos),
                         0
                     );
-                    this.totalCuotasAldia=this.formatCurrency(this.totalCuotasAldia);
+                    
+
                     this.totalCuotasMora = this.descuentos.reduce(
                         (total, item) => total + parseToNumber(item.valor),
                         0
                     );
-                    this.totalCuotasMora=this.formatCurrency(this.totalCuotasMora);
+                    
 
                     this.totalCuotasEmbargo = this.embargos.reduce(
                         (total, item) => total + parseToNumber(item.temb),
                         0
                     );
-                    this.totalCuotasEmbargo=this.formatCurrency(this.totalCuotasEmbargo);
+                    
 
+                    this.totalCuotas = 0;
                     this.totalCuotas = this.formatCurrency(this.totalCuotasAldia + this.totalCuotasMora + this.totalCuotasEmbargo);
+                    this.totalCuotasAldia=this.formatCurrency(this.totalCuotasAldia);
+                    this.totalCuotasMora=this.formatCurrency(this.totalCuotasMora);
+                    this.totalCuotasEmbargo=this.formatCurrency(this.totalCuotasEmbargo);
                     this.totalClientes = (this.rowsMora + this.rowsAldia + this.rowsEmbargo);
                 } else {
                     if (this.selectedEstado === 'Al día') {
@@ -763,7 +684,9 @@ export default {
                         this.totalCuotasAldia = this.coupons.reduce(
                         (total, item) => total + parseToNumber(item.egresos),
                         0
-                    );                        this.totalCuotas = this.totalCuotasAldia;
+                    );                        
+                    this.totalCuotasAldia=this.formatCurrency(this.totalCuotasAldia);
+                    this.totalCuotas = this.totalCuotasAldia;
                     } else if (this.selectedEstado === 'En mora') {
                         const parseToNumber = value => {
                             const parsed = parseFloat(value);
@@ -777,7 +700,9 @@ export default {
                         this.totalCuotasMora = this.descuentos.reduce(
                         (total, item) => total + parseToNumber(item.valor),
                         0
-                    );                        this.totalCuotas = this.totalCuotasMora;
+                    );
+                    this.totalCuotasMora=this.formatCurrency(this.totalCuotasMora);                        
+                    this.totalCuotas = this.totalCuotasMora;
 
                     } else if (this.selectedEstado === 'Embargado') {
                         const parseToNumber = value => {
@@ -792,7 +717,9 @@ export default {
                         this.totalCuotasEmbargo = this.embargos.reduce(
                         (total, item) => total + parseToNumber(item.temb),
                         0
-                    );                        this.totalCuotas = this.totalCuotasEmbargo;
+                    );                      
+                    this.totalCuotasEmbargo=this.formatCurrency(this.totalCuotasEmbargo);  
+                    this.totalCuotas = this.totalCuotasEmbargo;
 
                     }
                     this.searchPerformed = true;
