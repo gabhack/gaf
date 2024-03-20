@@ -48,20 +48,20 @@
                 <!--============================
                     DATAMESSEDUC SED VALLE
                 ==============================-->
-                <DatamesSedValle
+                <!-- <DatamesSedValle
                     v-if="pagaduriaType == 'SEDVALLE' && datamessedvalle"
                     :user="user"
                     :datamessedvalle="datamessedvalle"
-                />
+                /> -->
 
                 <!--================================
                 SEMCALI datamessemcali
                 ===================================-->
-                <DatamesSemCali
+                <!-- <DatamesSemCali
                     v-if="pagaduriaType == 'SEMCALI' && datamessemcali"
                     :user="user"
                     :datamessemcali="datamessemcali"
-                />
+                /> -->
 
                 <!--================================
                 DATAMES SECRETARIAS
@@ -73,10 +73,10 @@
                 <DatamesData class="col-12 col-md-6"
                     v-if="
                         pagaduriaType == 'SEDCHOCO' ||
-                        // pagaduriaType == 'SEDVALLE' ||
+                        pagaduriaType == 'SEDVALLE' ||
                         pagaduriaType == 'SEDCAUCA' ||
                         pagaduriaType == 'SEMSAHAGUN' ||
-                        // pagaduriaType == 'SEMCALI' ||
+                        pagaduriaType == 'SEMCALI' ||
                         pagaduriaType == 'SEMQUIBDO' ||
                         pagaduriaType == 'SEDMAGDALENA' ||
                         pagaduriaType == 'SEMPOPAYAN' ||

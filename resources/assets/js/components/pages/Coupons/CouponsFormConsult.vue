@@ -27,13 +27,13 @@
 
                     <div class="col-md-3" v-if="selectedEstado === 'Al día' || selectedEstado === 'Todas'">
                         <b-form-group label="ENTIDAD (Banco-Financiera-Cooperativa-CFC):">
-                            <b-form-input v-model="concept" placeholder="Ingrese el concepto"></b-form-input>
+                            <b-form-input v-model="concept" placeholder="Concepto"></b-form-input>
                         </b-form-group>
                     </div>
 
                     <div class="col-md-3" v-if="selectedEstado === 'En mora' || selectedEstado === 'Todas'">
                         <b-form-group label="CODIGO">
-                            <b-form-input type="text" v-model="mliquid" placeholder="Ingrese el mensaje de liquidación"></b-form-input>
+                            <b-form-input type="text" v-model="mliquid" placeholder="Mensaje de liquidación"></b-form-input>
                         </b-form-group>
                     </div>
 
@@ -41,7 +41,7 @@
                         <b-form-group label="ENTIDAD DEMANDANTE">
                             <b-form-input
                                 v-model="entidadDemandante"
-                                placeholder="Ingrese la entidad demandante"
+                                placeholder="Entidad demandante"
                                 required
                             ></b-form-input>
                         </b-form-group>
@@ -58,6 +58,7 @@
                                     class="mr-2"
                                 ></b-form-input>
                                 <b-form-input type="number" v-model="year" placeholder="Año"></b-form-input>
+                                
                             </div>
                         </b-form-group>
                     </div>
@@ -84,6 +85,18 @@
 
         <div class="panel mb-3 col-md-12" v-if="coupons && coupons.length > 0 && selectedEstado === 'Al día'">
             <div class="panel-heading">
+                <b>RESUMEN</b>
+            </div>
+            <div class="row d-flex align-items-center justify-content-center py-4">
+                    <div class="col-4"><label class="label-titulo">Estado</label></div>
+                    <div class="col-4"><label class="label-titulo">Total Clientes</label></div>
+                    <div class="col-4"><label class="label-titulo">Total Cuotas</label></div>
+
+                    <div class="col-4 pb-2"><label class="label-resumen">Al día</label></div>
+                    <div class="col-4 pb-2"><label class="label-resumen">{{ rowsAldia }}</label></div>
+                    <div class="col-4 pb-2"><label class="label-resumen pb-2">{{ totalCuotasAldia }}</label></div>
+            </div>
+            <div class="panel-heading">
                 <b>RESULTADOS DE LA CONSULTA (Cartera al Día)</b>
             </div>
             <div class="panel-body">
@@ -95,34 +108,6 @@
                         :total-rows="rowsAldia"
                         aria-controls="aldia-table"
                     ></b-pagination>
-                    <div class="row mb-5">
-                        <div class="col-12 col-md-3" />
-                        <div class="col-12 col-md-3" />
-                        <div class="col-12 col-md-6">
-                            <div class="row d-flex align-items-center justify-content-center">
-                                <div class="col-6">
-                                    <label class="label-consulta mb-0" for="pad">
-                                        <input class="form-control" value="Número total de clientes:" disabled />
-                                    </label>
-                                </div>
-                                <div class="col-4">
-                                    <p class="panel-value mb-0 text-center">
-                                        {{ rowsAldia }}
-                                    </p>
-                                </div>
-                                <div class="col-6">
-                                    <label class="label-consulta mb-0" for="pad">
-                                        <input class="form-control" value="Total cuotas (página):" disabled />
-                                    </label>
-                                </div>
-                                <div class="col-4">
-                                    <p class="panel-value mb-0 text-center">
-                                        {{ totalCuotasAldia }}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -130,6 +115,18 @@
         <!-- Tabla para mostrar los resultados de EN MORA -->
 
         <div class="panel mb-3 col-md-12" v-if="descuentos && descuentos.length > 0 && selectedEstado === 'En mora'">
+            <div class="panel-heading">
+                <b>RESUMEN</b>
+            </div>
+            <div class="row d-flex align-items-center justify-content-center py-4">
+                    <div class="col-4"><label class="label-titulo">Estado</label></div>
+                    <div class="col-4"><label class="label-titulo">Total Clientes</label></div>
+                    <div class="col-4"><label class="label-titulo">Total Cuotas</label></div>
+
+                    <div class="col-4 pb-2"><label class="label-resumen">En mora</label></div>
+                    <div class="col-4 pb-2"><label class="label-resumen">{{ rowsMora }}</label></div>
+                    <div class="col-4 pb-2"><label class="label-resumen">{{ totalCuotasMora }}</label></div>
+            </div>    
             <div class="panel-heading">
                 <b>RESULTADOS DE LA CONSULTA (Cartera en Mora)</b>
             </div>
@@ -148,34 +145,6 @@
                         :total-rows="rowsMora"
                         aria-controls="mora-table"
                     ></b-pagination>
-                    <div class="row mb-5">
-                        <div class="col-12 col-md-3" />
-                        <div class="col-12 col-md-3" />
-                        <div class="col-12 col-md-6">
-                            <div class="row d-flex align-items-center justify-content-center">
-                                <div class="col-6">
-                                    <label class="label-consulta mb-0" for="pad">
-                                        <input class="form-control" value="Número total de clientes:" disabled />
-                                    </label>
-                                </div>
-                                <div class="col-4">
-                                    <p class="panel-value mb-0 text-center">
-                                        {{ rowsMora }}
-                                    </p>
-                                </div>
-                                <div class="col-6">
-                                    <label class="label-consulta mb-0" for="pad">
-                                        <input class="form-control" value="Total cuotas (página):" disabled />
-                                    </label>
-                                </div>
-                                <div class="col-4">
-                                    <p class="panel-value mb-0 text-center">
-                                        {{ totalCuotasMora }}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -183,6 +152,18 @@
         <!-- Tabla para mostrar los resultados de EMBARGOS -->
 
         <div class="panel mb-3 col-md-12" v-if="embargos && embargos.length > 0 && selectedEstado === 'Embargado'">
+            <div class="panel-heading">
+                <b>RESUMEN</b>
+            </div>
+            <div class="row d-flex align-items-center justify-content-center py-4">
+                    <div class="col-4"><label class="label-titulo">Estado</label></div>
+                    <div class="col-4"><label class="label-titulo">Total Clientes</label></div>
+                    <div class="col-4"><label class="label-titulo">Total Cuotas</label></div>
+
+                    <div class="col-4 pb-2"><label class="label-resumen">Embargado</label></div>
+                    <div class="col-4 pb-2"><label class="label-resumen">{{ rowsEmbargo }}</label></div>
+                    <div class="col-4 pb-2"><label class="label-resumen">{{ totalCuotasEmbargo }}</label></div>
+            </div>
             <div class="panel-heading">
                 <b>RESULTADOS DE LA CONSULTA (Cartera Embargada)</b>
             </div>
@@ -201,34 +182,6 @@
                         :total-rows="rowsEmbargo"
                         aria-controls="embargo-table"
                     ></b-pagination>
-                    <div class="row mb-5">
-                        <div class="col-12 col-md-3" />
-                        <div class="col-12 col-md-3" />
-                        <div class="col-12 col-md-6">
-                            <div class="row d-flex align-items-center justify-content-center">
-                                <div class="col-6">
-                                    <label class="label-consulta mb-0" for="pad">
-                                        <input class="form-control" value="Número total de clientes:" disabled />
-                                    </label>
-                                </div>
-                                <div class="col-4">
-                                    <p class="panel-value mb-0 text-center">
-                                        {{ rowsEmbargo }}
-                                    </p>
-                                </div>
-                                <div class="col-6">
-                                    <label class="label-consulta mb-0" for="pad">
-                                        <input class="form-control" value="Total cuotas (página):" disabled />
-                                    </label>
-                                </div>
-                                <div class="col-4">
-                                    <p class="panel-value mb-0 text-center">
-                                        {{ totalCuotasEmbargo }}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -237,6 +190,30 @@
             class="panel mb-3 col-md-12"
             v-if="coupons && coupons.length > 0 && selectedEstado === 'Todas'"
         >
+            <div class="panel-heading">
+                <b>RESUMEN</b>
+            </div>
+            <div class="row d-flex align-items-center justify-content-center py-4">
+                    <div class="col-4"><label class="label-titulo">Estado</label></div>
+                    <div class="col-4"><label class="label-titulo">Total Clientes</label></div>
+                    <div class="col-4"><label class="label-titulo">Total Cuotas</label></div>
+
+                    <div class="col-4 pb-2"><label class="label-resumen">Al día</label></div>
+                    <div class="col-4 pb-2"><label class="label-resumen">{{ rowsAldia }}</label></div>
+                    <div class="col-4 pb-2"><label class="label-resumen pb-2">{{ totalCuotasAldia }}</label></div>
+
+                    <div class="col-4 pb-2"><label class="label-resumen">En mora</label></div>
+                    <div class="col-4 pb-2"><label class="label-resumen">{{ rowsMora }}</label></div>
+                    <div class="col-4 pb-2"><label class="label-resumen">{{ totalCuotasMora }}</label></div>
+
+                    <div class="col-4 pb-2"><label class="label-resumen">Embargado</label></div>
+                    <div class="col-4 pb-2"><label class="label-resumen">{{ rowsEmbargo }}</label></div>
+                    <div class="col-4 pb-2"><label class="label-resumen">{{ totalCuotasEmbargo }}</label></div>
+
+                    <div class="col-4"><label class="label-resumen">Total</label></div>
+                    <div class="col-4"><label class="label-resumen">{{ totalClientes }}</label></div>
+                    <div class="col-4"><label class="label-resumen">{{ totalCuotas }}</label></div>
+                </div>
             <div class="panel-heading">
                 <b>RESULTADOS DE LA CONSULTA (Todas)</b>
             </div>
@@ -277,42 +254,6 @@
                                     :total-rows="rowsAldia"
                                     aria-controls="aldia-table"
                                 ></b-pagination>
-                                <div class="row">
-                                    <div class="col-12 col-md-3" />
-                                    <div class="col-12 col-md-3" />
-                                    <div class="col-12 col-md-6">
-                                        <div class="row d-flex align-items-center justify-content-center">
-                                            <div class="col-6">
-                                                <label class="label-consulta mb-0" for="pad">
-                                                    <input
-                                                        class="form-control"
-                                                        value="Número total de clientes:"
-                                                        disabled
-                                                    />
-                                                </label>
-                                            </div>
-                                            <div class="col-4">
-                                                <p class="panel-value mb-0 text-center">
-                                                    {{ rowsAldia }}
-                                                </p>
-                                            </div>
-                                            <div class="col-6">
-                                                <label class="label-consulta mb-0" for="pad">
-                                                    <input
-                                                        class="form-control"
-                                                        value="Total cuotas (página):"
-                                                        disabled
-                                                    />
-                                                </label>
-                                            </div>
-                                            <div class="col-4">
-                                                <p class="panel-value mb-0 text-center">
-                                                    {{ totalCuotasAldia }}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </b-card-body>
                         </b-collapse>
                     </b-card>
@@ -357,42 +298,6 @@
                                     :total-rows="rowsMora"
                                     aria-controls="mora-table"
                                 ></b-pagination>
-                                <div class="row">
-                                    <div class="col-12 col-md-3" />
-                                    <div class="col-12 col-md-3" />
-                                    <div class="col-12 col-md-6">
-                                        <div class="row d-flex align-items-center justify-content-center">
-                                            <div class="col-6">
-                                                <label class="label-consulta mb-0" for="pad">
-                                                    <input
-                                                        class="form-control"
-                                                        value="Número total de clientes:"
-                                                        disabled
-                                                    />
-                                                </label>
-                                            </div>
-                                            <div class="col-4">
-                                                <p class="panel-value mb-0 text-center">
-                                                    {{ rowsMora }}
-                                                </p>
-                                            </div>
-                                            <div class="col-6">
-                                                <label class="label-consulta mb-0" for="pad">
-                                                    <input
-                                                        class="form-control"
-                                                        value="Total cuotas (página):"
-                                                        disabled
-                                                    />
-                                                </label>
-                                            </div>
-                                            <div class="col-4">
-                                                <p class="panel-value mb-0 text-center">
-                                                    {{ totalCuotasMora }}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </b-card-body>
                         </b-collapse>
                     </b-card>
@@ -432,42 +337,6 @@
                                     :total-rows="rowsEmbargo"
                                     aria-controls="embargo-table"
                                 ></b-pagination>
-                                <div class="row">
-                                    <div class="col-12 col-md-3" />
-                                    <div class="col-12 col-md-3" />
-                                    <div class="col-12 col-md-6">
-                                        <div class="row d-flex align-items-center justify-content-center">
-                                            <div class="col-6">
-                                                <label class="label-consulta mb-0" for="pad">
-                                                    <input
-                                                        class="form-control"
-                                                        value="Número total de clientes:"
-                                                        disabled
-                                                    />
-                                                </label>
-                                            </div>
-                                            <div class="col-4">
-                                                <p class="panel-value mb-0 text-center">
-                                                    {{ rowsEmbargo }}
-                                                </p>
-                                            </div>
-                                            <div class="col-6">
-                                                <label class="label-consulta mb-0" for="pad">
-                                                    <input
-                                                        class="form-control"
-                                                        value="Total cuotas (página):"
-                                                        disabled
-                                                    />
-                                                </label>
-                                            </div>
-                                            <div class="col-4">
-                                                <p class="panel-value mb-0 text-center">
-                                                    {{ totalCuotasEmbargo }}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </b-card-body>
                         </b-collapse>
                     </b-card>
@@ -492,6 +361,30 @@ th {
     text-align: center;
 }
 
+.label-resumen{
+    font-weight: 600;
+    text-align: center;
+    background-color: #e1e1e1;
+    color: #021b1e;
+    border-radius: 38px;
+    border-color: transparent;
+    min-height: 30px;
+    margin: 0 !important;
+    display: flex;
+    align-items: center;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+.label-titulo{
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: 900;
+    margin: 0 !important;
+    display: flex;
+    align-items: center;
+}
 .button-tablas {
     text-align: left;
     background: #000;
@@ -572,17 +465,16 @@ export default {
                     key: 'mliquid',
                     label: 'Mensaje Liquidación',
                     sortable: false
+                },{
+                    key: 'nomina',
+                    label: 'Nómina',
+                    sortable: false
                 },
                 {
                     key: 'valor',
                     label: 'Valor',
                     sortable: false
-                },
-                {
-                    key: 'nomina',
-                    label: 'Nómina',
-                    sortable: false
-                }
+                }                
             ],
             embargosFields: [
                 {
@@ -641,7 +533,9 @@ export default {
             rowsEmbargo: 0,
             totalCuotasAldia: 0,
             totalCuotasMora: 0,
-            totalCuotasEmbargo: 0
+            totalCuotasEmbargo: 0,
+            totalClientes: 0,
+            totalCuotas: 0
         };
     },
     watch: {
@@ -661,26 +555,42 @@ export default {
         await this.getPagaduriasNames();
     },
     computed: {
-        paginatedCoupons() {
-            const start = (this.currentPageAldia - 1) * this.perPageAldia;
-            const end = start + this.perPageAldia;
-            return this.coupons.slice(start, end);
-        },
-        paginatedDescuentos() {
-            const start = (this.currentPageMora - 1) * this.perPageMora;
-            const end = start + this.perPageMora;
-            return this.descuentos.slice(start, end);
-        },
-        paginatedEmbargos() {
-            const start = (this.currentPageEmbargo - 1) * this.perPageEmbargo;
-            const end = start + this.perPageEmbargo;
-            return this.embargos.slice(start, end);
-        }
+    paginatedCoupons() {
+        const start = (this.currentPageAldia - 1) * this.perPageAldia;
+        const end = start + this.perPageAldia;
+        return this.coupons.slice(start, end).map(item => ({
+            ...item,
+            egresos: this.formatCurrency(item.egresos)
+        }));
     },
+    paginatedDescuentos() {
+        const start = (this.currentPageMora - 1) * this.perPageMora;
+        const end = start + this.perPageMora;
+        return this.descuentos.slice(start, end).map(item => ({
+            ...item,
+            valor: this.formatCurrency(item.valor)
+        }));
+    },
+    paginatedEmbargos() {
+        const start = (this.currentPageEmbargo - 1) * this.perPageEmbargo;
+        const end = start + this.perPageEmbargo;
+        return this.embargos.slice(start, end).map(item => ({
+            ...item,
+            temb: this.formatCurrency(item.temb)
+        }));
+    }
+},
+
     methods: {
+        formatCurrency(value) {
+    const number = parseFloat(value);
+    if (isNaN(number)) return value; 
+    return number.toLocaleString('es-CO', { style: 'currency', currency: 'COP' });
+},
+
         async getPagaduriasNames() {
             try {
-                const response = await axios.get('/pagadurias/names');
+                const response = await axios.get('/pagadurias/namesAmi');
                 this.pagaduriasList = response.data;
             } catch (error) {
                 console.error('Error al obtener las pagadurías:', error);
@@ -740,14 +650,26 @@ export default {
                         (total, item) => total + parseToNumber(item.egresos),
                         0
                     );
+                    
+
                     this.totalCuotasMora = this.descuentos.reduce(
                         (total, item) => total + parseToNumber(item.valor),
                         0
                     );
+                    
+
                     this.totalCuotasEmbargo = this.embargos.reduce(
                         (total, item) => total + parseToNumber(item.temb),
                         0
                     );
+                    
+
+                    this.totalCuotas = 0;
+                    this.totalCuotas = this.formatCurrency(this.totalCuotasAldia + this.totalCuotasMora + this.totalCuotasEmbargo);
+                    this.totalCuotasAldia=this.formatCurrency(this.totalCuotasAldia);
+                    this.totalCuotasMora=this.formatCurrency(this.totalCuotasMora);
+                    this.totalCuotasEmbargo=this.formatCurrency(this.totalCuotasEmbargo);
+                    this.totalClientes = (this.rowsMora + this.rowsAldia + this.rowsEmbargo);
                 } else {
                     if (this.selectedEstado === 'Al día') {
                         const parseToNumber = value => {
@@ -760,9 +682,11 @@ export default {
                         this.coupons = response.data;
                         this.rowsAldia = this.coupons.length;
                         this.totalCuotasAldia = this.coupons.reduce(
-                            (total, item) => total + parseToNumber(item.egresos),
-                            0
-                        );
+                        (total, item) => total + parseToNumber(item.egresos),
+                        0
+                    );                        
+                    this.totalCuotasAldia=this.formatCurrency(this.totalCuotasAldia);
+                    this.totalCuotas = this.totalCuotasAldia;
                     } else if (this.selectedEstado === 'En mora') {
                         const parseToNumber = value => {
                             const parsed = parseFloat(value);
@@ -774,9 +698,12 @@ export default {
                         this.descuentos = response.data;
                         this.rowsMora = this.descuentos.length;
                         this.totalCuotasMora = this.descuentos.reduce(
-                            (total, item) => total + parseToNumber(item.valor),
-                            0
-                        );
+                        (total, item) => total + parseToNumber(item.valor),
+                        0
+                    );
+                    this.totalCuotasMora=this.formatCurrency(this.totalCuotasMora);                        
+                    this.totalCuotas = this.totalCuotasMora;
+
                     } else if (this.selectedEstado === 'Embargado') {
                         const parseToNumber = value => {
                             const parsed = parseFloat(value);
@@ -788,13 +715,16 @@ export default {
                         this.embargos = response.data;
                         this.rowsEmbargo = this.embargos.length;
                         this.totalCuotasEmbargo = this.embargos.reduce(
-                            (total, item) => total + parseToNumber(item.temb),
-                            0
-                        );
+                        (total, item) => total + parseToNumber(item.temb),
+                        0
+                    );                      
+                    this.totalCuotasEmbargo=this.formatCurrency(this.totalCuotasEmbargo);  
+                    this.totalCuotas = this.totalCuotasEmbargo;
+
                     }
                     this.searchPerformed = true;
                 }
-                console.log(this.coupons);
+
             } catch (error) {
                 console.error('Error al obtener los datos:', error);
                 console.log(error);
