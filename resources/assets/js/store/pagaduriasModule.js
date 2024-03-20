@@ -12,13 +12,7 @@ const pagaduriasModule = {
             { label: 'FOPEP', value: 'FOPEP', key: 'datamesFopep' },
             { label: 'SED ANTIOQUIA', value: 'SEDANTIOQUIA', key: 'SED ANTIOQUIA' },
             { label: 'SED ARAUCA', value: 'SEDARAUCA', key: 'SED ARAUCA' },
-            {
-                label: 'SED ATLANTICO',
-                value: 'SEDATLANTICO',
-                // key: ['SED ATLANTICO', 'datamesSedAtlantico', 'atlantico', 'ATLANTICO'].join('|')
-                key: 'SED ATLANTICO'
-                // key: ['SED ATLANTICO', 'datamesSedAtlantico', 'ATLANTICO']
-            },
+            { label: 'SED ATLANTICO', value: 'SEDATLANTICO', key: 'SED ATLANTICO'},
             { label: 'SED BOLIVAR', value: 'SEDBOLIVAR', key: 'SED BOLIVAR' },
             { label: 'SED BOYACA', value: 'SEDBOYACA', key: 'SED BOYACA' },
             { label: 'SED CALDAS', value: 'SEDCALDAS', key: 'SED CALDAS' },
