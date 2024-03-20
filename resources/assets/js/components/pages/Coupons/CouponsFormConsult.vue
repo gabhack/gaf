@@ -27,13 +27,13 @@
 
                     <div class="col-md-3" v-if="selectedEstado === 'Al día' || selectedEstado === 'Todas'">
                         <b-form-group label="ENTIDAD (Banco-Financiera-Cooperativa-CFC):">
-                            <b-form-input v-model="concept" placeholder="Ingrese el concepto"></b-form-input>
+                            <b-form-input v-model="concept" placeholder="Concepto"></b-form-input>
                         </b-form-group>
                     </div>
 
                     <div class="col-md-3" v-if="selectedEstado === 'En mora' || selectedEstado === 'Todas'">
                         <b-form-group label="CODIGO">
-                            <b-form-input type="text" v-model="mliquid" placeholder="Ingrese el mensaje de liquidación"></b-form-input>
+                            <b-form-input type="text" v-model="mliquid" placeholder="Mensaje de liquidación"></b-form-input>
                         </b-form-group>
                     </div>
 
@@ -41,7 +41,7 @@
                         <b-form-group label="ENTIDAD DEMANDANTE">
                             <b-form-input
                                 v-model="entidadDemandante"
-                                placeholder="Ingrese la entidad demandante"
+                                placeholder="Entidad demandante"
                                 required
                             ></b-form-input>
                         </b-form-group>
@@ -513,17 +513,16 @@ export default {
                     key: 'mliquid',
                     label: 'Mensaje Liquidación',
                     sortable: false
+                },{
+                    key: 'nomina',
+                    label: 'Nómina',
+                    sortable: false
                 },
                 {
                     key: 'valor',
                     label: 'Valor',
                     sortable: false
-                },
-                {
-                    key: 'nomina',
-                    label: 'Nómina',
-                    sortable: false
-                }
+                }                
             ],
             embargosFields: [
                 {
@@ -604,23 +603,39 @@ export default {
         await this.getPagaduriasNames();
     },
     computed: {
-        paginatedCoupons() {
-            const start = (this.currentPageAldia - 1) * this.perPageAldia;
-            const end = start + this.perPageAldia;
-            return this.coupons.slice(start, end);
-        },
-        paginatedDescuentos() {
-            const start = (this.currentPageMora - 1) * this.perPageMora;
-            const end = start + this.perPageMora;
-            return this.descuentos.slice(start, end);
-        },
-        paginatedEmbargos() {
-            const start = (this.currentPageEmbargo - 1) * this.perPageEmbargo;
-            const end = start + this.perPageEmbargo;
-            return this.embargos.slice(start, end);
-        }
+    paginatedCoupons() {
+        const start = (this.currentPageAldia - 1) * this.perPageAldia;
+        const end = start + this.perPageAldia;
+        return this.coupons.slice(start, end).map(item => ({
+            ...item,
+            egresos: this.formatCurrency(item.egresos)
+        }));
     },
+    paginatedDescuentos() {
+        const start = (this.currentPageMora - 1) * this.perPageMora;
+        const end = start + this.perPageMora;
+        return this.descuentos.slice(start, end).map(item => ({
+            ...item,
+            valor: this.formatCurrency(item.valor)
+        }));
+    },
+    paginatedEmbargos() {
+        const start = (this.currentPageEmbargo - 1) * this.perPageEmbargo;
+        const end = start + this.perPageEmbargo;
+        return this.embargos.slice(start, end).map(item => ({
+            ...item,
+            temb: this.formatCurrency(item.temb)
+        }));
+    }
+},
+
     methods: {
+        formatCurrency(value) {
+    const number = parseFloat(value);
+    if (isNaN(number)) return value; 
+    return number.toLocaleString('es-CO', { style: 'currency', currency: 'COP' });
+},
+
         async getPagaduriasNames() {
             try {
                 const response = await axios.get('/pagadurias/names');
@@ -683,14 +698,21 @@ export default {
                         (total, item) => total + parseToNumber(item.egresos),
                         0
                     );
+                    this.formatCurrency(this.totalCuotasAldia);
                     this.totalCuotasMora = this.descuentos.reduce(
                         (total, item) => total + parseToNumber(item.valor),
                         0
                     );
+                    this.formatCurrency(this.totalCuotasMora);
+
                     this.totalCuotasEmbargo = this.embargos.reduce(
                         (total, item) => total + parseToNumber(item.temb),
                         0
                     );
+                    this.formatCurrency(this.totalCuotasEmbargo);
+
+this.totalCuotas = this.formatCurrency(this.totalCuotasAldia + this.totalCuotasMora + this.totalCuotasEmbargo);
+
                 } else {
                     if (this.selectedEstado === 'Al día') {
                         const parseToNumber = value => {
@@ -703,9 +725,9 @@ export default {
                         this.coupons = response.data;
                         this.rowsAldia = this.coupons.length;
                         this.totalCuotasAldia = this.coupons.reduce(
-                            (total, item) => total + parseToNumber(item.egresos),
-                            0
-                        );
+                        (total, item) => total + parseToNumber(item.egresos),
+                        0
+                    );                        this.totalCuotas = this.totalCuotasAldia;
                     } else if (this.selectedEstado === 'En mora') {
                         const parseToNumber = value => {
                             const parsed = parseFloat(value);
@@ -717,9 +739,10 @@ export default {
                         this.descuentos = response.data;
                         this.rowsMora = this.descuentos.length;
                         this.totalCuotasMora = this.descuentos.reduce(
-                            (total, item) => total + parseToNumber(item.valor),
-                            0
-                        );
+                        (total, item) => total + parseToNumber(item.valor),
+                        0
+                    );                        this.totalCuotas = this.totalCuotasMora;
+
                     } else if (this.selectedEstado === 'Embargado') {
                         const parseToNumber = value => {
                             const parsed = parseFloat(value);
@@ -731,13 +754,14 @@ export default {
                         this.embargos = response.data;
                         this.rowsEmbargo = this.embargos.length;
                         this.totalCuotasEmbargo = this.embargos.reduce(
-                            (total, item) => total + parseToNumber(item.temb),
-                            0
-                        );
+                        (total, item) => total + parseToNumber(item.temb),
+                        0
+                    );                        this.totalCuotas = this.totalCuotasEmbargo;
+
                     }
                     this.searchPerformed = true;
                 }
-                console.log(this.coupons);
+
             } catch (error) {
                 console.error('Error al obtener los datos:', error);
                 console.log(error);
