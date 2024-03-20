@@ -618,5 +618,7 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.stor
 Route::post('/coupons/by-pagaduria', 'CouponsController@getCouponsByPagaduria');
 Route::get('/coupons-form', 'CouponsController@showCouponsForm')->name('coupons.form');
 Route::get('/pagadurias/names', 'PagaduriasController@getPagaduriasNames');
+Route::get('/pagadurias/namesAmi', 'PagaduriasController@getPagaduriasNamesAmi');
+
 Route::post('/descuentos/by-pagaduria', [DescuentosController::class, 'getDescuentosByPagaduria']);
 Route::post('/embargos/by-pagaduria', [EmbargosController::class, 'getEmbargosByPagaduria']);
