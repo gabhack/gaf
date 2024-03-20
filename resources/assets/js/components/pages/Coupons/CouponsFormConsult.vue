@@ -85,6 +85,18 @@
 
         <div class="panel mb-3 col-md-12" v-if="coupons && coupons.length > 0 && selectedEstado === 'Al día'">
             <div class="panel-heading">
+                <b>RESUMEN</b>
+            </div>
+            <div class="row d-flex align-items-center justify-content-center py-4">
+                    <div class="col-4"><label class="label-titulo">Estado</label></div>
+                    <div class="col-4"><label class="label-titulo">Total Clientes</label></div>
+                    <div class="col-4"><label class="label-titulo">Total Cuotas</label></div>
+
+                    <div class="col-4 pb-2"><label class="label-resumen">Al día</label></div>
+                    <div class="col-4 pb-2"><label class="label-resumen">{{ rowsAldia }}</label></div>
+                    <div class="col-4 pb-2"><label class="label-resumen pb-2">{{ totalCuotasAldia }}</label></div>
+            </div>
+            <div class="panel-heading">
                 <b>RESULTADOS DE LA CONSULTA (Cartera al Día)</b>
             </div>
             <div class="panel-body">
@@ -131,6 +143,18 @@
         <!-- Tabla para mostrar los resultados de EN MORA -->
 
         <div class="panel mb-3 col-md-12" v-if="descuentos && descuentos.length > 0 && selectedEstado === 'En mora'">
+            <div class="panel-heading">
+                <b>RESUMEN</b>
+            </div>
+            <div class="row d-flex align-items-center justify-content-center py-4">
+                    <div class="col-4"><label class="label-titulo">Estado</label></div>
+                    <div class="col-4"><label class="label-titulo">Total Clientes</label></div>
+                    <div class="col-4"><label class="label-titulo">Total Cuotas</label></div>
+
+                    <div class="col-4 pb-2"><label class="label-resumen">En mora</label></div>
+                    <div class="col-4 pb-2"><label class="label-resumen">{{ rowsMora }}</label></div>
+                    <div class="col-4 pb-2"><label class="label-resumen">{{ totalCuotasMora }}</label></div>
+            </div>    
             <div class="panel-heading">
                 <b>RESULTADOS DE LA CONSULTA (Cartera en Mora)</b>
             </div>
@@ -184,6 +208,18 @@
         <!-- Tabla para mostrar los resultados de EMBARGOS -->
 
         <div class="panel mb-3 col-md-12" v-if="embargos && embargos.length > 0 && selectedEstado === 'Embargado'">
+            <div class="panel-heading">
+                <b>RESUMEN</b>
+            </div>
+            <div class="row d-flex align-items-center justify-content-center py-4">
+                    <div class="col-4"><label class="label-titulo">Estado</label></div>
+                    <div class="col-4"><label class="label-titulo">Total Clientes</label></div>
+                    <div class="col-4"><label class="label-titulo">Total Cuotas</label></div>
+
+                    <div class="col-4 pb-2"><label class="label-resumen">Embargado</label></div>
+                    <div class="col-4 pb-2"><label class="label-resumen">{{ rowsEmbargo }}</label></div>
+                    <div class="col-4 pb-2"><label class="label-resumen">{{ totalCuotasEmbargo }}</label></div>
+            </div>
             <div class="panel-heading">
                 <b>RESULTADOS DE LA CONSULTA (Cartera Embargada)</b>
             </div>
@@ -711,8 +747,8 @@ export default {
                     );
                     this.formatCurrency(this.totalCuotasEmbargo);
 
-this.totalCuotas = this.formatCurrency(this.totalCuotasAldia + this.totalCuotasMora + this.totalCuotasEmbargo);
-
+                    this.totalCuotas = this.formatCurrency(this.totalCuotasAldia + this.totalCuotasMora + this.totalCuotasEmbargo);
+                    this.totalClientes = (this.rowsMora + this.rowsAldia + this.rowsEmbargo);
                 } else {
                     if (this.selectedEstado === 'Al día') {
                         const parseToNumber = value => {
