@@ -145,9 +145,31 @@
                 <div class="table-responsive">
                     <b-table striped id="mora-table" hover :fields="descuentosFields" :items="paginatedDescuentos">
                         <template v-slot:cell(actions)="{ item }">
-                            <b-button variant="primary" @click="handleButtonClick(item.doc)">Ver Causales</b-button>
+                            <b-button v-b-modal.modal-1 variant="primary" @click="handleButtonClick(item.doc)">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="25" height="25">
+                                    <g id="_01_align_center" data-name="01 align center">
+                                        <path d="M23.821,11.181v0C22.943,9.261,19.5,3,12,3S1.057,9.261.179,11.181a1.969,1.969,0,0,0,0,1.64C1.057,14.739,4.5,21,12,21s10.943-6.261,11.821-8.181A1.968,1.968,0,0,0,23.821,11.181ZM12,19c-6.307,0-9.25-5.366-10-6.989C2.75,10.366,5.693,5,12,5c6.292,0,9.236,5.343,10,7C21.236,13.657,18.292,19,12,19Z"/>
+                                        <path d="M12,7a5,5,0,1,0,5,5A5.006,5.006,0,0,0,12,7Zm0,8a3,3,0,1,1,3-3A3,3,0,0,1,12,15Z"/>
+                                    </g>
+                                </svg>
+                            </b-button>
                         </template>
                     </b-table>
+                    <b-modal id="modal-1" centered title="Causales" @hidden="clearCausales">
+                        <ul>
+                            <h5 v-if="this.causalesFinal.length === 0">No Hay Causales en los Datos Actuales</h5>
+                            <h5 v-if="this.causalesFinal.length > 0">Embargado Por:</h5>
+                            <li v-for="causalT in causalesFinal">
+                                {{ causalT.entidad }} - {{ causalT.docentidad }}
+                            </li>
+                        </ul>
+                        <template #modal-footer="{hide}">
+                            
+                            <b-button size="md" variant="outline-secondary" @click="hide('forget')">
+                                CERRAR
+                            </b-button>
+                        </template>
+                       </b-modal>
                     <b-pagination
                         v-model="currentPageMora"
                         :per-page="perPageMora"
@@ -570,7 +592,8 @@ export default {
             totalCuotasEmbargo: 0,
             totalClientes: 0,
             totalCuotas: 0,
-            causales: []
+            causales: [],
+            causalesFinal: []
         };
     },
     watch: {
@@ -617,6 +640,9 @@ export default {
     },
 
     methods: {
+        clearCausales() {
+            this.causalesFinal = [];
+        },
         formatCurrency(value) {
             const number = parseFloat(value);
             if (isNaN(number)) return value;
@@ -678,7 +704,7 @@ export default {
                     const causal = {
                         motivo: 'Embargo',
                         entidad: embargo.entidaddeman,
-                        docentidad: embargo,
+                        docentidad: embargo.docdeman,
                         doc: embargo.doc,
                         valor: embargo.temb
                     };
@@ -731,10 +757,24 @@ export default {
         getCausalesByDoc(doc) {
             return this.causales.filter(causal => causal.doc === doc);
         },
+
         handleButtonClick(doc) {
             const causalesRelacionados = this.getCausalesByDoc(doc);
+
+            
+            causalesRelacionados.forEach(causalEmbargo => {
+                    const cuasalesDeEmbargo = {
+                        entidad: causalEmbargo.entidad,
+                        docentidad: causalEmbargo.docentidad
+                    };
+                    this.causalesFinal.push(cuasalesDeEmbargo);
+                    console.log(this.causalesFinal);
+                });
+                
+
             console.log(causalesRelacionados);
         }
+
     }
 };
 </script>

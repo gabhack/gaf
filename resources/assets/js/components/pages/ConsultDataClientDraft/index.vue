@@ -52,6 +52,7 @@
                     v-if="pagaduriaType == 'SEDVALLE' && datamessedvalle"
                     :user="user"
                     :datamessedvalle="datamessedvalle"
+
                 /> -->
 
                 <!--================================
@@ -180,15 +181,12 @@
                     <EmploymentHistory2  
                         class="col-12 col-md-6"
                         :fechavinc="fechavinc"
-                        :datamessedvalle="datamessedvalle"
                         :datamesFidu="datamesFidu"
-                        :datamessemcali="datamessemcali"
                         :user="user"
                     />
                     <EmploymentHistory 
                         class="col-12 col-md-6"
-                        :fechavinc="fechavinc"
-                        :datamessedvalle="datamessedvalle"
+                        :fechavinc="fechavinc"0
                         :datamesFidu="datamesFidu"
                         :datamessemcali="datamessemcali"
                         :user="user"
