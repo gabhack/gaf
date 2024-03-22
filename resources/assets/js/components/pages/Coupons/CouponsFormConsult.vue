@@ -160,7 +160,7 @@
                             <h5 v-if="this.causalesFinal.length === 0">No Hay Causales en los Datos Actuales</h5>
                             <h5 v-if="this.causalesFinal.length > 0">Embargado Por:</h5>
                             <li v-for="causalT in causalesFinal">
-                                {{ causalT.entidad }} - {{ causalT.docentidad }}
+                                {{ causalT.entidad }} - {{ causalT.docentidad }} - ${{ causalT.valor }}
                             </li>
                         </ul>
                         <template #modal-footer="{hide}">
@@ -765,7 +765,8 @@ export default {
             causalesRelacionados.forEach(causalEmbargo => {
                     const cuasalesDeEmbargo = {
                         entidad: causalEmbargo.entidad,
-                        docentidad: causalEmbargo.docentidad
+                        docentidad: causalEmbargo.docentidad,
+                        valor: causalEmbargo.valor
                     };
                     this.causalesFinal.push(cuasalesDeEmbargo);
                     console.log(this.causalesFinal);
