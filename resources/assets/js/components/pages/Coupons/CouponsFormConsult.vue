@@ -33,7 +33,11 @@
 
                     <div class="col-md-3" v-if="selectedEstado === 'En mora' || selectedEstado === 'Todas'">
                         <b-form-group label="CODIGO">
-                            <b-form-input type="text" v-model="mliquid" placeholder="Mensaje de liquidación"></b-form-input>
+                            <b-form-input
+                                type="text"
+                                v-model="mliquid"
+                                placeholder="Mensaje de liquidación"
+                            ></b-form-input>
                         </b-form-group>
                     </div>
 
@@ -58,7 +62,6 @@
                                     class="mr-2"
                                 ></b-form-input>
                                 <b-form-input type="number" v-model="year" placeholder="Año"></b-form-input>
-                                
                             </div>
                         </b-form-group>
                     </div>
@@ -88,13 +91,17 @@
                 <b>RESUMEN</b>
             </div>
             <div class="row d-flex align-items-center justify-content-center py-4">
-                    <div class="col-4"><label class="label-titulo">Estado</label></div>
-                    <div class="col-4"><label class="label-titulo">Total Clientes</label></div>
-                    <div class="col-4"><label class="label-titulo">Total Cuotas</label></div>
+                <div class="col-4"><label class="label-titulo">Estado</label></div>
+                <div class="col-4"><label class="label-titulo">Total Clientes</label></div>
+                <div class="col-4"><label class="label-titulo">Total Cuotas</label></div>
 
-                    <div class="col-4 pb-2"><label class="label-resumen">Al día</label></div>
-                    <div class="col-4 pb-2"><label class="label-resumen">{{ rowsAldia }}</label></div>
-                    <div class="col-4 pb-2"><label class="label-resumen pb-2">{{ totalCuotasAldia }}</label></div>
+                <div class="col-4 pb-2"><label class="label-resumen">Al día</label></div>
+                <div class="col-4 pb-2">
+                    <label class="label-resumen">{{ rowsAldia }}</label>
+                </div>
+                <div class="col-4 pb-2">
+                    <label class="label-resumen pb-2">{{ totalCuotasAldia }}</label>
+                </div>
             </div>
             <div class="panel-heading">
                 <b>RESULTADOS DE LA CONSULTA (Cartera al Día)</b>
@@ -119,26 +126,50 @@
                 <b>RESUMEN</b>
             </div>
             <div class="row d-flex align-items-center justify-content-center py-4">
-                    <div class="col-4"><label class="label-titulo">Estado</label></div>
-                    <div class="col-4"><label class="label-titulo">Total Clientes</label></div>
-                    <div class="col-4"><label class="label-titulo">Total Cuotas</label></div>
+                <div class="col-4"><label class="label-titulo">Estado</label></div>
+                <div class="col-4"><label class="label-titulo">Total Clientes</label></div>
+                <div class="col-4"><label class="label-titulo">Total Cuotas</label></div>
 
-                    <div class="col-4 pb-2"><label class="label-resumen">En mora</label></div>
-                    <div class="col-4 pb-2"><label class="label-resumen">{{ rowsMora }}</label></div>
-                    <div class="col-4 pb-2"><label class="label-resumen">{{ totalCuotasMora }}</label></div>
-            </div>    
+                <div class="col-4 pb-2"><label class="label-resumen">En mora</label></div>
+                <div class="col-4 pb-2">
+                    <label class="label-resumen">{{ rowsMora }}</label>
+                </div>
+                <div class="col-4 pb-2">
+                    <label class="label-resumen">{{ totalCuotasMora }}</label>
+                </div>
+            </div>
             <div class="panel-heading">
                 <b>RESULTADOS DE LA CONSULTA (Cartera en Mora)</b>
             </div>
             <div class="panel-body">
                 <div class="table-responsive">
-                    <b-table
-                        striped
-                        id="mora-table"
-                        hover
-                        :fields="descuentosFields"
-                        :items="paginatedDescuentos"
-                    ></b-table>
+                    <b-table striped id="mora-table" hover :fields="descuentosFields" :items="paginatedDescuentos">
+                        <template v-slot:cell(actions)="{ item }">
+                            <b-button v-b-modal.modal-1 variant="primary" @click="handleButtonClick(item.doc)">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="25" height="25">
+                                    <g id="_01_align_center" data-name="01 align center">
+                                        <path d="M23.821,11.181v0C22.943,9.261,19.5,3,12,3S1.057,9.261.179,11.181a1.969,1.969,0,0,0,0,1.64C1.057,14.739,4.5,21,12,21s10.943-6.261,11.821-8.181A1.968,1.968,0,0,0,23.821,11.181ZM12,19c-6.307,0-9.25-5.366-10-6.989C2.75,10.366,5.693,5,12,5c6.292,0,9.236,5.343,10,7C21.236,13.657,18.292,19,12,19Z"/>
+                                        <path d="M12,7a5,5,0,1,0,5,5A5.006,5.006,0,0,0,12,7Zm0,8a3,3,0,1,1,3-3A3,3,0,0,1,12,15Z"/>
+                                    </g>
+                                </svg>
+                            </b-button>
+                        </template>
+                    </b-table>
+                    <b-modal id="modal-1" centered title="Causales" @hidden="clearCausales">
+                        <ul>
+                            <h5 v-if="this.causalesFinal.length === 0">No Hay Causales en los Datos Actuales</h5>
+                            <h5 v-if="this.causalesFinal.length > 0">Embargado Por:</h5>
+                            <li v-for="causalT in causalesFinal">
+                                {{ causalT.entidad }} - {{ causalT.docentidad }} - ${{ causalT.valor }}
+                            </li>
+                        </ul>
+                        <template #modal-footer="{hide}">
+                            
+                            <b-button size="md" variant="outline-secondary" @click="hide('forget')">
+                                CERRAR
+                            </b-button>
+                        </template>
+                       </b-modal>
                     <b-pagination
                         v-model="currentPageMora"
                         :per-page="perPageMora"
@@ -156,13 +187,17 @@
                 <b>RESUMEN</b>
             </div>
             <div class="row d-flex align-items-center justify-content-center py-4">
-                    <div class="col-4"><label class="label-titulo">Estado</label></div>
-                    <div class="col-4"><label class="label-titulo">Total Clientes</label></div>
-                    <div class="col-4"><label class="label-titulo">Total Cuotas</label></div>
+                <div class="col-4"><label class="label-titulo">Estado</label></div>
+                <div class="col-4"><label class="label-titulo">Total Clientes</label></div>
+                <div class="col-4"><label class="label-titulo">Total Cuotas</label></div>
 
-                    <div class="col-4 pb-2"><label class="label-resumen">Embargado</label></div>
-                    <div class="col-4 pb-2"><label class="label-resumen">{{ rowsEmbargo }}</label></div>
-                    <div class="col-4 pb-2"><label class="label-resumen">{{ totalCuotasEmbargo }}</label></div>
+                <div class="col-4 pb-2"><label class="label-resumen">Embargado</label></div>
+                <div class="col-4 pb-2">
+                    <label class="label-resumen">{{ rowsEmbargo }}</label>
+                </div>
+                <div class="col-4 pb-2">
+                    <label class="label-resumen">{{ totalCuotasEmbargo }}</label>
+                </div>
             </div>
             <div class="panel-heading">
                 <b>RESULTADOS DE LA CONSULTA (Cartera Embargada)</b>
@@ -194,26 +229,42 @@
                 <b>RESUMEN</b>
             </div>
             <div class="row d-flex align-items-center justify-content-center py-4">
-                    <div class="col-4"><label class="label-titulo">Estado</label></div>
-                    <div class="col-4"><label class="label-titulo">Total Clientes</label></div>
-                    <div class="col-4"><label class="label-titulo">Total Cuotas</label></div>
+                <div class="col-4"><label class="label-titulo">Estado</label></div>
+                <div class="col-4"><label class="label-titulo">Total Clientes</label></div>
+                <div class="col-4"><label class="label-titulo">Total Cuotas</label></div>
 
-                    <div class="col-4 pb-2"><label class="label-resumen">Al día</label></div>
-                    <div class="col-4 pb-2"><label class="label-resumen">{{ rowsAldia }}</label></div>
-                    <div class="col-4 pb-2"><label class="label-resumen pb-2">{{ totalCuotasAldia }}</label></div>
-
-                    <div class="col-4 pb-2"><label class="label-resumen">En mora</label></div>
-                    <div class="col-4 pb-2"><label class="label-resumen">{{ rowsMora }}</label></div>
-                    <div class="col-4 pb-2"><label class="label-resumen">{{ totalCuotasMora }}</label></div>
-
-                    <div class="col-4 pb-2"><label class="label-resumen">Embargado</label></div>
-                    <div class="col-4 pb-2"><label class="label-resumen">{{ rowsEmbargo }}</label></div>
-                    <div class="col-4 pb-2"><label class="label-resumen">{{ totalCuotasEmbargo }}</label></div>
-
-                    <div class="col-4"><label class="label-resumen">Total</label></div>
-                    <div class="col-4"><label class="label-resumen">{{ totalClientes }}</label></div>
-                    <div class="col-4"><label class="label-resumen">{{ totalCuotas }}</label></div>
+                <div class="col-4 pb-2"><label class="label-resumen">Al día</label></div>
+                <div class="col-4 pb-2">
+                    <label class="label-resumen">{{ rowsAldia }}</label>
                 </div>
+                <div class="col-4 pb-2">
+                    <label class="label-resumen pb-2">{{ totalCuotasAldia }}</label>
+                </div>
+
+                <div class="col-4 pb-2"><label class="label-resumen">En mora</label></div>
+                <div class="col-4 pb-2">
+                    <label class="label-resumen">{{ rowsMora }}</label>
+                </div>
+                <div class="col-4 pb-2">
+                    <label class="label-resumen">{{ totalCuotasMora }}</label>
+                </div>
+
+                <div class="col-4 pb-2"><label class="label-resumen">Embargado</label></div>
+                <div class="col-4 pb-2">
+                    <label class="label-resumen">{{ rowsEmbargo }}</label>
+                </div>
+                <div class="col-4 pb-2">
+                    <label class="label-resumen">{{ totalCuotasEmbargo }}</label>
+                </div>
+
+                <div class="col-4"><label class="label-resumen">Total</label></div>
+                <div class="col-4">
+                    <label class="label-resumen">{{ totalClientes }}</label>
+                </div>
+                <div class="col-4">
+                    <label class="label-resumen">{{ totalCuotas }}</label>
+                </div>
+            </div>
             <div class="panel-heading">
                 <b>RESULTADOS DE LA CONSULTA (Todas)</b>
             </div>
@@ -361,7 +412,7 @@ th {
     text-align: center;
 }
 
-.label-resumen{
+.label-resumen {
     font-weight: 600;
     text-align: center;
     background-color: #e1e1e1;
@@ -377,7 +428,7 @@ th {
     padding-left: 12px;
     padding-right: 12px;
 }
-.label-titulo{
+.label-titulo {
     font-family: 'Poppins', sans-serif;
     font-size: 16px;
     font-weight: 900;
@@ -465,7 +516,8 @@ export default {
                     key: 'mliquid',
                     label: 'Mensaje Liquidación',
                     sortable: false
-                },{
+                },
+                {
                     key: 'nomina',
                     label: 'Nómina',
                     sortable: false
@@ -474,7 +526,11 @@ export default {
                     key: 'valor',
                     label: 'Valor',
                     sortable: false
-                }                
+                },
+                {
+                    key: 'actions',
+                    label: 'Acciones'
+                }
             ],
             embargosFields: [
                 {
@@ -535,7 +591,9 @@ export default {
             totalCuotasMora: 0,
             totalCuotasEmbargo: 0,
             totalClientes: 0,
-            totalCuotas: 0
+            totalCuotas: 0,
+            causales: [],
+            causalesFinal: []
         };
     },
     watch: {
@@ -555,39 +613,46 @@ export default {
         await this.getPagaduriasNames();
     },
     computed: {
-    paginatedCoupons() {
-        const start = (this.currentPageAldia - 1) * this.perPageAldia;
-        const end = start + this.perPageAldia;
-        return this.coupons.slice(start, end).map(item => ({
-            ...item,
-            egresos: this.formatCurrency(item.egresos)
-        }));
+        paginatedCoupons() {
+            const start = (this.currentPageAldia - 1) * this.perPageAldia;
+            const end = start + this.perPageAldia;
+            return this.coupons.slice(start, end).map(item => ({
+                ...item,
+                egresos: this.formatCurrency(item.egresos)
+            }));
+        },
+        paginatedDescuentos() {
+            const start = (this.currentPageMora - 1) * this.perPageMora;
+            const end = start + this.perPageMora;
+            return this.descuentos.slice(start, end).map(item => ({
+                ...item,
+                valor: this.formatCurrency(item.valor)
+            }));
+        },
+        paginatedEmbargos() {
+            const start = (this.currentPageEmbargo - 1) * this.perPageEmbargo;
+            const end = start + this.perPageEmbargo;
+            return this.embargos.slice(start, end).map(item => ({
+                ...item,
+                temb: this.formatCurrency(item.temb)
+            }));
+        }
     },
-    paginatedDescuentos() {
-        const start = (this.currentPageMora - 1) * this.perPageMora;
-        const end = start + this.perPageMora;
-        return this.descuentos.slice(start, end).map(item => ({
-            ...item,
-            valor: this.formatCurrency(item.valor)
-        }));
-    },
-    paginatedEmbargos() {
-        const start = (this.currentPageEmbargo - 1) * this.perPageEmbargo;
-        const end = start + this.perPageEmbargo;
-        return this.embargos.slice(start, end).map(item => ({
-            ...item,
-            temb: this.formatCurrency(item.temb)
-        }));
-    }
-},
 
     methods: {
+        clearCausales() {
+            this.causalesFinal = [];
+        },
         formatCurrency(value) {
-    const number = parseFloat(value);
-    if (isNaN(number)) return value; 
-    return number.toLocaleString('es-CO', { style: 'currency', currency: 'COP' });
-},
+            const number = parseFloat(value);
+            if (isNaN(number)) return value;
 
+            try {
+                return number.toLocaleString('es-CO', { style: 'currency', currency: 'COP' });
+            } catch (e) {
+                return value;
+            }
+        },
         async getPagaduriasNames() {
             try {
                 const response = await axios.get('/pagadurias/namesAmi');
@@ -597,16 +662,17 @@ export default {
             }
         },
         async getCoupons() {
+            this.coupons = [];
+            this.descuentos = [];
+            this.embargos = [];
+
             this.isPagaduriaValid = !!this.pagaduria;
             this.isMonthValid = !!this.month && this.month.length === 2;
             this.isYearValid = !!this.year && this.year.length === 4;
+            this.isEntidadDemandanteValid = this.selectedEstado !== 'Embargado' || !!this.entidadDemandante;
 
-            if (
-                !this.isPagaduriaValid ||
-                !this.isMonthValid ||
-                !this.isYearValid ||
-                (this.selectedEstado === 'Embargado' && !this.isEntidadDemandanteValid)
-            ) {
+            // Validación inicial
+            if (!this.isPagaduriaValid || !this.isMonthValid || !this.isYearValid || !this.isEntidadDemandanteValid) {
                 return;
             }
 
@@ -616,122 +682,100 @@ export default {
                 let payload = {
                     pagaduria: this.pagaduria,
                     month: this.month,
-                    year: this.year
+                    year: this.year,
+                    concept: this.concept,
+                    mliquid: this.mliquid,
+                    entidadDemandante: this.entidadDemandante
                 };
 
-                let couponsUrl = '/coupons/by-pagaduria';
-                let descuentosUrl = '/descuentos/by-pagaduria';
-                let embargosUrl = '/embargos/by-pagaduria';
-                payload.page = this.currentPage;
-                payload.perPage = this.perPage;
-                if (this.selectedEstado === 'Todas') {
-                    payload.concept = this.concept;
-                    payload.mliquid = this.mliquid;
-                    payload.entidadDemandante = this.entidadDemandante;
+                // Realiza las llamadas a las APIs para obtener los datos
+                const [couponsResponse, descuentosResponse, embargosResponse] = await Promise.all([
+                    axios.post('/coupons/by-pagaduria', payload),
+                    axios.post('/descuentos/by-pagaduria', payload),
+                    axios.post('/embargos/by-pagaduria', payload)
+                ]);
 
-                    let couponsResponse = await axios.post(couponsUrl, payload);
-                    let descuentosResponse = await axios.post(descuentosUrl, payload);
-                    let embargosResponse = await axios.post(embargosUrl, payload);
-                    this.coupons = couponsResponse.data;
-                    this.rowsAldia = this.coupons.length;
-
-                    this.descuentos = descuentosResponse.data;
-                    this.rowsMora = this.descuentos.length;
-
-                    this.embargos = embargosResponse.data;
-                    this.rowsEmbargo = this.embargos.length;
-
-                    const parseToNumber = value => {
-                        const parsed = parseFloat(value);
-                        return isNaN(parsed) ? 0 : parsed;
+                // Actualiza los arrays con los datos recibidos
+                this.coupons = couponsResponse.data;
+                this.descuentos = descuentosResponse.data;
+                this.embargos = embargosResponse.data;
+                //LLenar CAUSALES
+                this.embargos.forEach(embargo => {
+                    const causal = {
+                        motivo: 'Embargo',
+                        entidad: embargo.entidaddeman,
+                        docentidad: embargo.docdeman,
+                        doc: embargo.doc,
+                        valor: embargo.temb
                     };
+                    this.causales.push(causal);
+                });
+                console.log(this.causales);
+                // Calcula los totales y cuenta los elementos para cada tipo
+                this.rowsAldia = this.coupons.length;
+                this.rowsMora = this.descuentos.length;
+                this.rowsEmbargo = this.embargos.length;
 
-                    this.totalCuotasAldia = this.coupons.reduce(
-                        (total, item) => total + parseToNumber(item.egresos),
-                        0
-                    );
-                    
+                // Calcular totales de cuotas sin formatear aún para cálculos
+                let totalCuotasAldia = this.sumarTotalesSinFormato(this.coupons, 'egresos');
+                let totalCuotasMora = this.sumarTotalesSinFormato(this.descuentos, 'valor');
+                let totalCuotasEmbargo = this.sumarTotalesSinFormato(this.embargos, 'temb');
 
-                    this.totalCuotasMora = this.descuentos.reduce(
-                        (total, item) => total + parseToNumber(item.valor),
-                        0
-                    );
-                    
-
-                    this.totalCuotasEmbargo = this.embargos.reduce(
-                        (total, item) => total + parseToNumber(item.temb),
-                        0
-                    );
-                    
-
-                    this.totalCuotas = 0;
-                    this.totalCuotas = this.formatCurrency(this.totalCuotasAldia + this.totalCuotasMora + this.totalCuotasEmbargo);
-                    this.totalCuotasAldia=this.formatCurrency(this.totalCuotasAldia);
-                    this.totalCuotasMora=this.formatCurrency(this.totalCuotasMora);
-                    this.totalCuotasEmbargo=this.formatCurrency(this.totalCuotasEmbargo);
-                    this.totalClientes = (this.rowsMora + this.rowsAldia + this.rowsEmbargo);
-                } else {
-                    if (this.selectedEstado === 'Al día') {
-                        const parseToNumber = value => {
-                            const parsed = parseFloat(value);
-                            return isNaN(parsed) ? 0 : parsed;
-                        };
-                        payload.concept = this.concept;
-                        payload.code = this.code;
-                        const response = await axios.post(couponsUrl, payload);
-                        this.coupons = response.data;
-                        this.rowsAldia = this.coupons.length;
-                        this.totalCuotasAldia = this.coupons.reduce(
-                        (total, item) => total + parseToNumber(item.egresos),
-                        0
-                    );                        
-                    this.totalCuotasAldia=this.formatCurrency(this.totalCuotasAldia);
-                    this.totalCuotas = this.totalCuotasAldia;
-                    } else if (this.selectedEstado === 'En mora') {
-                        const parseToNumber = value => {
-                            const parsed = parseFloat(value);
-                            return isNaN(parsed) ? 0 : parsed;
-                        };
-                        payload.mliquid = this.mliquid;
-                        couponsUrl = descuentosUrl;
-                        const response = await axios.post(descuentosUrl, payload);
-                        this.descuentos = response.data;
-                        this.rowsMora = this.descuentos.length;
-                        this.totalCuotasMora = this.descuentos.reduce(
-                        (total, item) => total + parseToNumber(item.valor),
-                        0
-                    );
-                    this.totalCuotasMora=this.formatCurrency(this.totalCuotasMora);                        
-                    this.totalCuotas = this.totalCuotasMora;
-
-                    } else if (this.selectedEstado === 'Embargado') {
-                        const parseToNumber = value => {
-                            const parsed = parseFloat(value);
-                            return isNaN(parsed) ? 0 : parsed;
-                        };
-                        payload.entidadDemandante = this.entidadDemandante;
-                        couponsUrl = embargosUrl;
-                        const response = await axios.post(embargosUrl, payload);
-                        this.embargos = response.data;
-                        this.rowsEmbargo = this.embargos.length;
-                        this.totalCuotasEmbargo = this.embargos.reduce(
-                        (total, item) => total + parseToNumber(item.temb),
-                        0
-                    );                      
-                    this.totalCuotasEmbargo=this.formatCurrency(this.totalCuotasEmbargo);  
-                    this.totalCuotas = this.totalCuotasEmbargo;
-
-                    }
-                    this.searchPerformed = true;
+                // Calcular el total de cuotas según el estado seleccionado
+                if (this.selectedEstado === 'Todas') {
+                    this.totalCuotas = this.formatCurrency(totalCuotasAldia + totalCuotasMora + totalCuotasEmbargo);
+                } else if (this.selectedEstado === 'Al día') {
+                    this.totalCuotas = this.formatCurrency(totalCuotasAldia);
+                } else if (this.selectedEstado === 'En mora') {
+                    this.totalCuotas = this.formatCurrency(totalCuotasMora);
+                } else if (this.selectedEstado === 'Embargado') {
+                    this.totalCuotas = this.formatCurrency(totalCuotasEmbargo);
                 }
 
+                // Formatear totales individuales
+                this.totalCuotasAldia = this.formatCurrency(totalCuotasAldia);
+                this.totalCuotasMora = this.formatCurrency(totalCuotasMora);
+                this.totalCuotasEmbargo = this.formatCurrency(totalCuotasEmbargo);
+
+                // Actualizar el total de clientes
+                this.totalClientes = this.rowsAldia + this.rowsMora + this.rowsEmbargo;
+
+                this.searchPerformed = true;
             } catch (error) {
                 console.error('Error al obtener los datos:', error);
-                console.log(error);
             } finally {
                 this.isLoading = false;
             }
+        },
+        sumarTotalesSinFormato(items, key) {
+            const parseToNumber = value => {
+                const parsed = parseFloat(value);
+                return isNaN(parsed) ? 0 : parsed;
+            };
+            return items.reduce((total, item) => total + parseToNumber(item[key]), 0);
+        },
+        getCausalesByDoc(doc) {
+            return this.causales.filter(causal => causal.doc === doc);
+        },
+
+        handleButtonClick(doc) {
+            const causalesRelacionados = this.getCausalesByDoc(doc);
+
+            
+            causalesRelacionados.forEach(causalEmbargo => {
+                    const cuasalesDeEmbargo = {
+                        entidad: causalEmbargo.entidad,
+                        docentidad: causalEmbargo.docentidad,
+                        valor: causalEmbargo.valor
+                    };
+                    this.causalesFinal.push(cuasalesDeEmbargo);
+                    console.log(this.causalesFinal);
+                });
+                
+
+            console.log(causalesRelacionados);
         }
+
     }
 };
 </script>
