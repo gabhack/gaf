@@ -71,7 +71,8 @@
                     v-if="
                         pagaduriaType == 'SEMSAHAGUN'" />-->
 
-                <DatamesData class="col-12 col-md-6"
+                <DatamesData
+                    class="col-12 col-md-6"
                     v-if="
                         pagaduriaType == 'SEDCHOCO' ||
                         pagaduriaType == 'SEDVALLE' ||
@@ -178,21 +179,20 @@
                 COMPONENTE HISTORIAL LABORAL
                 ==============================-->
                 <template v-if="fechavinc">
-                    <EmploymentHistory2  
+                    <EmploymentHistory2
                         class="col-12 col-md-6"
                         :fechavinc="fechavinc"
                         :datamesFidu="datamesFidu"
                         :user="user"
                     />
-                    <EmploymentHistory 
+                    <EmploymentHistory
                         class="col-12 col-md-6"
-                        :fechavinc="fechavinc"0
+                        :fechavinc="fechavinc"
                         :datamesFidu="datamesFidu"
                         :datamessemcali="datamessemcali"
                         :user="user"
                     />
                     <Detallecliente :totales="totales" />
-                    
                 </template>
 
                 <template v-if="showOthers">
@@ -304,12 +304,7 @@
                     <DescnoapEmpty v-if="pagaduriaType == 'FIDUPREVISORA'" />
                     <Descnoap v-if="pagaduriaType == 'FOPEP'" :descnoap="descnoap" />
 
-                    <EmbargosEmpty
-                        v-if="
-                            pagaduriaType == 'SED' 
-                        "
-                        :embargosempty="embargosempty"
-                    />
+                    <EmbargosEmpty v-if="pagaduriaType == 'SED'" :embargosempty="embargosempty" />
                     <Embargos v-else />
 
                     <!--===================================
@@ -319,10 +314,7 @@
                         v-if="pagaduriaType == 'SEMSAHAGUN'"
                         :descuentossemsahagun="descuentossemsahagun"
                     /> -->
-                    <DescuentosEmpty
-                        v-if="pagaduriaType == 'SED'"
-                        :descuentosempty="descuentosempty"
-                    />
+                    <DescuentosEmpty v-if="pagaduriaType == 'SED'" :descuentosempty="descuentosempty" />
                     <Descuentos v-else />
 
                     <div class="col-12">
