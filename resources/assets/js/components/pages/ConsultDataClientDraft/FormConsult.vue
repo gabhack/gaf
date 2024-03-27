@@ -6,7 +6,7 @@
         <div class="panel-body">
             <loading :active.sync="isLoading" color="#0CEDB0" :can-cancel="true" :is-full-page="true" />
             <div class="row">
-                <div class="col-6" style="display: grid; align-items: end;">
+                <div class="col-6" style="display: grid; align-items: end">
                     <b class="panel-label">CÉDULA:</b>
                     <input required class="form-control text-center" type="number" v-model="dataclient.doc" />
                 </div>
@@ -23,7 +23,7 @@
                         v-model.number="dataclient.cuotadeseada"
                     />
                 </div>
-                <div class="col-6" style="display: grid; align-items: end;">
+                <div class="col-6" style="display: grid; align-items: end">
                     <b class="panel-label">MONTO:</b>
                     <input required class="form-control text-center" type="text" v-model.number="dataclient.monto" />
                 </div>
@@ -137,7 +137,7 @@ export default {
             this.setSelectedPeriod('');
 
             const response = await axios.get(`/pagadurias/per-doc/${this.dataclient.doc}`);
-
+            console.log(response);
             if (Object.keys(response.data).length > 0) {
                 this.dataclient.pagadurias = response.data;
                 this.setCuotaDeseada(this.dataclient.cuotadeseada);
