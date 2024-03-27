@@ -49,7 +49,7 @@ const pagaduriasModule = {
             { label: 'SEM RIOHACHA', value: 'SEMRIOHACHA', key: 'SEM RIOHACHA' },
             { label: 'SEM RIONEGRO', value: 'SEMRIONEGRO', key: 'SEM RIONEGRO' },
             { label: 'SEM SABANETA', value: 'SEMSABANETA', key: 'SEM SABANETA' },
-            { label: 'SEM SAN', value: 'SEMSAN', key: 'SEM SAN' },
+            { label: 'SEM SAN ANDRES', value: 'SEMSAN', key: 'SEM SAN' },
             { label: 'SEM SOACHA', value: 'SEMSOACHA', key: 'SEM SOACHA' },
             { label: 'SEM PITALITO', value: 'SEMPITALITO', key: 'SEM PITALITO' },
             { label: 'SEM BUGA', value: 'SEMBUGA', key: 'SEM BUGA' },
