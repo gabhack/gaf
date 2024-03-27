@@ -501,9 +501,8 @@ export default {
                 valorIngreso = Number(this.datamesFopep.vpension.replace(/[^0-9]/g, '').slice(0, -2));
             } else if (this.pagaduriaType == 'FIDUPREVISORA') {
                 valorIngreso = Number(this.datamesFidu.vpension.replace(/[^0-9]/g, '').slice(0, -2));
-            } else if (this.pagaduriaType === 'SEDNARINO') {
-                valorIngreso = Number(this.pagadurias.datamesSedNarino.vingreso.replace(/[^0-9]/g, '').slice(0));
-            } else {
+            }
+            else {
                 valorIngreso = this.couponsPerPeriod.items.filter(item => item.code === 'INGCUP')[0]?.ingresos || 0;
             }
 
