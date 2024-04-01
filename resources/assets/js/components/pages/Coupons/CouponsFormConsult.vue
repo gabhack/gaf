@@ -10,11 +10,10 @@
                 <div class="row d-flex justify-content-start align-items-end">
                     <div class="col-md-3">
                         <b-form-group label="PAGADURÍA">
-                            <b-form-select
-                                v-model="pagaduria"
-                                :options="pagaduriasList"
-                                placeholder="Seleccione una pagaduría"
-                            ></b-form-select>
+                            <b-form-input v-model="pagaduria" list="lista-pagadurias" placeholder="Pagaduría"></b-form-input>
+                            <div class="estilo-datalist">
+                                <b-form-datalist class="listado" id="lista-pagadurias" :options="pagaduriasList"></b-form-datalist>
+                            </div>
                         </b-form-group>
                     </div>
                     <div class="col-md-3">
@@ -447,10 +446,32 @@
     </div>
 </template>
 <style>
+
 .form-group legend {
     font-family: 'Poppins', sans-serif;
     font-size: 16px;
     font-weight: 900;
+}
+
+datalist {
+  position: absolute;
+  max-height: 20em;
+  border: 0 none;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+datalist option {
+  font-size: 0.8em;
+  padding: 0.3em 1em;
+  background-color: #ccc;
+  cursor: pointer;
+}
+
+datalist option:hover, datalist option:focus {
+  color: #fff;
+  background-color: #036;
+  outline: 0 none;
 }
 
 td,
