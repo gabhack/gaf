@@ -164,14 +164,86 @@ class PagaduriasController extends Controller
     public function perDoc($doc)
     {
         try {
-           
+            $models = [
+                DatamesFidu::class => 'doc',
+                DatamesFopep::class => 'doc',
+                DatamesSedAntioquia::class => 'doc',
+                DatamesSedArauca::class => 'doc',
+                DatamesSedAtlantico::class => 'doc',
+                DatamesSedBolivar::class => 'doc',
+                DatamesSedBoyaca::class => 'doc',
+                DatamesSedCaldas::class => 'doc',
+                DatamesSedCasanare::class => 'doc',
+                DatamesSedCauca::class => 'doc',
+                DatamesSedCesar::class => 'doc',
+                DatamesSedChoco::class => 'doc',
+                DatamesSedCordoba::class => 'doc',
+                DatamesSedCundinamarca::class => 'doc',
+                DatamesSedGuajira::class => 'doc',
+                DatamesSedHuila::class => 'doc',
+                DatamesSedMagdalena::class => 'codempleado',
+                DatamesSedMeta::class => 'doc',
+                DatamesSedNarino::class => 'doc',
+                DatamesSedNorteSantander::class => 'doc',
+                DatamesSedRisaralda::class => 'doc',
+                DatamesSedSantander::class => 'doc',
+                DatamesSedSucre::class => 'doc',
+                DatamesSedTolima::class => 'doc',
+                DatamesSedValle::class => 'doc',
+                DatamesSemBarranquilla::class => 'doc',
+                DatamesSemBuga::class => 'doc',
+                DatamesSemCali::class => 'doc',
+                DatamesSemCartagena::class => 'doc',
+                DatamesSemGirardot::class => 'doc',
+                DatamesSemIbague::class => 'doc',
+                DatamesSemIpiales::class => 'doc',
+                DatamesSemJamundi::class => 'doc',
+                DatamesSemMagangue::class => 'doc',
+                DatamesSemMedellin::class => 'doc',
+                DatamesSemMonteria::class => 'doc',
+                DatamesSemMosquera::class => 'doc',
+                DatamesSemNeiva::class => 'doc',
+                DatamesSemPalmira::class => 'doc',
+                DatamesSemPasto::class => 'doc',
+                DatamesSemPopayan::class => 'doc',
+                DatamesSemQuibdo::class => 'doc',
+                DatamesSemRioNegro::class => 'doc',
+                DatamesSemSabaneta::class => 'doc',
+                DatamesSemSahagun::class => 'codempleado',
+                DatamesSemSincelejo::class => 'doc',
+                DatamesSemSoledad::class => 'doc',
+                DatamesSemValledupar::class => 'doc',
+                DatamesSemYopal::class => 'doc',
+                DatamesSemYumbo::class => 'doc',
+                DatamesSemZipaquira::class => 'doc',
+            ];
 
-            // General datames
+            $results = [];
+
+            foreach ($models as $model => $column) {
+                $data = $model::where($column, 'LIKE', '%' . $doc . '%')
+                ->orderBy('id', 'desc')
+                ->first();
+ 
+                if ($data) {
+                    $modelName = class_basename($model);
+                    $results[Str::camel($modelName)] = $data;
+                }
+            }
+
             $dataGen = DatamesGen::where('doc', 'LIKE', '%' . $doc . '%')->get();
 
             if ($dataGen) {
                 foreach ($dataGen as $item) {
-                    $results[$item->pagaduria] = $item;
+                    // Verifica si la pagaduría ya existe en $results
+                    if (!isset($results[$item->pagaduria])) {
+                        $results[$item->pagaduria] = $item;
+                    } else {
+                        // Si ya existe, compara los IDs y conserva el más reciente
+                        if ($item->id > $results[$item->pagaduria]->id) {
+                            $results[$item->pagaduria] = $item;
+                        }
+                    }
                 }
             }
 
