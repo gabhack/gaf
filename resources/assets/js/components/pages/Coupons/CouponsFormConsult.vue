@@ -10,11 +10,10 @@
                 <div class="row d-flex justify-content-start align-items-end">
                     <div class="col-md-3">
                         <b-form-group label="PAGADURÍA">
-                            <b-form-select
-                                v-model="pagaduria"
-                                :options="pagaduriasList"
-                                placeholder="Seleccione una pagaduría"
-                            ></b-form-select>
+                            <b-form-input v-model="pagaduria" list="lista-pagadurias" placeholder="Pagaduría"></b-form-input>
+                            <div class="estilo-datalist">
+                                <b-form-datalist class="listado" id="lista-pagadurias" :options="pagaduriasList"></b-form-datalist>
+                            </div>
                         </b-form-group>
                     </div>
                     <div class="col-md-3">
@@ -142,34 +141,80 @@
                 <b>RESULTADOS DE LA CONSULTA (Cartera en Mora)</b>
             </div>
             <div class="panel-body">
+                <b-form-input
+                    v-model="filtroDescuento"
+                    placeholder="Buscar por documento..."
+                    class="mb-3"
+                ></b-form-input>
                 <div class="table-responsive">
-                    <b-table striped id="mora-table" hover :fields="descuentosFields" :items="paginatedDescuentos">
+                    <b-table striped id="mora-table" hover :fields="descuentosFields" :items="descuentosFiltrados">
                         <template v-slot:cell(actions)="{ item }">
-                            <b-button v-b-modal.modal-1 variant="primary" @click="handleButtonClick(item.doc)">
+                            <b-button v-b-modal.modal-1 variant="primary" @click="handleButtonClick(item.doc, item.id)">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="25" height="25">
                                     <g id="_01_align_center" data-name="01 align center">
-                                        <path d="M23.821,11.181v0C22.943,9.261,19.5,3,12,3S1.057,9.261.179,11.181a1.969,1.969,0,0,0,0,1.64C1.057,14.739,4.5,21,12,21s10.943-6.261,11.821-8.181A1.968,1.968,0,0,0,23.821,11.181ZM12,19c-6.307,0-9.25-5.366-10-6.989C2.75,10.366,5.693,5,12,5c6.292,0,9.236,5.343,10,7C21.236,13.657,18.292,19,12,19Z"/>
-                                        <path d="M12,7a5,5,0,1,0,5,5A5.006,5.006,0,0,0,12,7Zm0,8a3,3,0,1,1,3-3A3,3,0,0,1,12,15Z"/>
+                                        <path
+                                            d="M23.821,11.181v0C22.943,9.261,19.5,3,12,3S1.057,9.261.179,11.181a1.969,1.969,0,0,0,0,1.64C1.057,14.739,4.5,21,12,21s10.943-6.261,11.821-8.181A1.968,1.968,0,0,0,23.821,11.181ZM12,19c-6.307,0-9.25-5.366-10-6.989C2.75,10.366,5.693,5,12,5c6.292,0,9.236,5.343,10,7C21.236,13.657,18.292,19,12,19Z"
+                                        />
+                                        <path
+                                            d="M12,7a5,5,0,1,0,5,5A5.006,5.006,0,0,0,12,7Zm0,8a3,3,0,1,1,3-3A3,3,0,0,1,12,15Z"
+                                        />
                                     </g>
                                 </svg>
                             </b-button>
                         </template>
                     </b-table>
                     <b-modal id="modal-1" centered title="Causales" @hidden="clearCausales">
-                        <ul>
-                            <h5 v-if="this.causalesFinal.length === 0">No Hay Causales en los Datos Actuales</h5>
-                            <h5 v-if="this.causalesFinal.length > 0">Embargado Por:</h5>
-                            <li v-for="causalT in causalesFinal">
-                                {{ causalT.entidad }} - {{ causalT.docentidad }} - ${{ causalT.valor }}
-                            </li>
-                        </ul>
-                        <template #modal-footer="{hide}">
-                            
-                            <b-button size="md" variant="outline-secondary" @click="hide('forget')">
-                                CERRAR
-                            </b-button>
+                        <template v-if="isLoadingModal">
+                            <!-- Contenido mostrado durante la carga -->
+                            <div class="text-center">
+                                <loading
+                                    :active.sync="isLoadingModal"
+                                    :can-cancel="false"
+                                    :is-full-page="false"
+                                    color="#0CEDB0"
+                                />
+                                <p>Cargando...</p>
+                            </div>
                         </template>
-                       </b-modal>
+                        <template v-else>
+                            <!-- Contenido del modal mostrado después de cargar -->
+                            <div v-if="causalesFinal.some(c => c.motivo === 'Embargo')">
+                                <h5>Embargado Por:</h5>
+                                <ul>
+                                    <li
+                                        v-for="causal in causalesFinal.filter(c => c.motivo === 'Embargo')"
+                                        :key="causal.id"
+                                    >
+                                        {{ causal.entidad }} - {{ causal.docentidad }} - ${{ causal.valor }}
+                                    </li>
+                                </ul>
+                            </div>
+                            <div v-if="causalesFinal.some(c => c.motivo === 'Mora')">
+                                <h5>En Mora Con:</h5>
+                                <ul>
+                                    <li
+                                        v-for="causal in causalesFinal.filter(c => c.motivo === 'Mora')"
+                                        :key="causal.id"
+                                    >
+                                        {{ causal.entidad }} - por el valor de: ${{ causal.valor }}
+                                    </li>
+                                </ul>
+                            </div>
+                            <div v-if="situacionLaboral !== 'normal' && descuentos.length > 0">
+                                <h5>La situacion del trabajador no es normal</h5>
+                            </div>
+                            <div v-if="situacionLaboral === 'normal' && descuentos.length === 1">
+                                <h5>El trabajador está sobre-endeudado</h5>
+                            </div>
+                            <div v-if="causalesFinal.length === 0">
+                                <h5>No hay causales registradas en los datos actuales.</h5>
+                            </div>
+                        </template>
+                        <template #modal-footer="{ hide }">
+                            <b-button size="md" variant="outline-secondary" @click="hide('forget')">Cerrar</b-button>
+                        </template>
+                    </b-modal>
+
                     <b-pagination
                         v-model="currentPageMora"
                         :per-page="perPageMora"
@@ -401,10 +446,32 @@
     </div>
 </template>
 <style>
+
 .form-group legend {
     font-family: 'Poppins', sans-serif;
     font-size: 16px;
     font-weight: 900;
+}
+
+datalist {
+  position: absolute;
+  max-height: 20em;
+  border: 0 none;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+datalist option {
+  font-size: 0.8em;
+  padding: 0.3em 1em;
+  background-color: #ccc;
+  cursor: pointer;
+}
+
+datalist option:hover, datalist option:focus {
+  color: #fff;
+  background-color: #036;
+  outline: 0 none;
 }
 
 td,
@@ -593,7 +660,10 @@ export default {
             totalClientes: 0,
             totalCuotas: 0,
             causales: [],
-            causalesFinal: []
+            causalesFinal: [],
+            filtroDescuento: '',
+            situacionLaboral: '',
+            isLoadingModal: false
         };
     },
     watch: {
@@ -613,29 +683,25 @@ export default {
         await this.getPagaduriasNames();
     },
     computed: {
-        paginatedCoupons() {
-            const start = (this.currentPageAldia - 1) * this.perPageAldia;
-            const end = start + this.perPageAldia;
-            return this.coupons.slice(start, end).map(item => ({
-                ...item,
-                egresos: this.formatCurrency(item.egresos)
-            }));
+        descuentosFiltrados() {
+            let resultadosFiltrados = this.descuentos;
+
+            if (this.filtroDescuento) {
+                resultadosFiltrados = resultadosFiltrados.filter(descuento =>
+                    descuento.doc.toLowerCase().includes(this.filtroDescuento.toLowerCase())
+                );
+            }
+
+            if (!this.filtroDescuento) {
+                const start = (this.currentPageMora - 1) * this.perPageMora;
+                const end = start + this.perPageMora;
+                resultadosFiltrados = resultadosFiltrados.slice(start, end);
+            }
+
+            return resultadosFiltrados;
         },
-        paginatedDescuentos() {
-            const start = (this.currentPageMora - 1) * this.perPageMora;
-            const end = start + this.perPageMora;
-            return this.descuentos.slice(start, end).map(item => ({
-                ...item,
-                valor: this.formatCurrency(item.valor)
-            }));
-        },
-        paginatedEmbargos() {
-            const start = (this.currentPageEmbargo - 1) * this.perPageEmbargo;
-            const end = start + this.perPageEmbargo;
-            return this.embargos.slice(start, end).map(item => ({
-                ...item,
-                temb: this.formatCurrency(item.temb)
-            }));
+        totalRows() {
+            return this.filtroDescuento ? this.descuentosFiltrados.length : this.descuentos.length;
         }
     },
 
@@ -700,8 +766,10 @@ export default {
                 this.descuentos = descuentosResponse.data;
                 this.embargos = embargosResponse.data;
                 //LLenar CAUSALES
+                //con embargos
                 this.embargos.forEach(embargo => {
                     const causal = {
+                        id: embargo.id,
                         motivo: 'Embargo',
                         entidad: embargo.entidaddeman,
                         docentidad: embargo.docdeman,
@@ -710,7 +778,19 @@ export default {
                     };
                     this.causales.push(causal);
                 });
-                console.log(this.causales);
+                //con descuentos
+                this.descuentos.forEach(descuento => {
+                    const causal = {
+                        id: descuento.id,
+                        motivo: 'Mora',
+                        entidad: descuento.mliquid,
+                        docentidad: '',
+                        doc: descuento.doc,
+                        valor: descuento.valor
+                    };
+                    this.causales.push(causal);
+                });
+
                 // Calcula los totales y cuenta los elementos para cada tipo
                 this.rowsAldia = this.coupons.length;
                 this.rowsMora = this.descuentos.length;
@@ -754,28 +834,46 @@ export default {
             };
             return items.reduce((total, item) => total + parseToNumber(item[key]), 0);
         },
-        getCausalesByDoc(doc) {
-            return this.causales.filter(causal => causal.doc === doc);
+        getCausalesByDoc(doc, idRow) {
+            // Filtrado más complejo para obtener los causales relacionados
+            const causalesFiltrados = this.causales.filter(
+                causal =>
+                    (causal.motivo === 'Embargo' && causal.doc === doc) ||
+                    (causal.motivo === 'Mora' && causal.doc === doc && causal.id != idRow)
+            );
+            console.log(causalesFiltrados);
+            return causalesFiltrados;
         },
+        async handleButtonClick(doc, idRow) {
+            this.isLoadingModal = true; // Iniciar carga
 
-        handleButtonClick(doc) {
-            const causalesRelacionados = this.getCausalesByDoc(doc);
-
-            
+            const causalesRelacionados = this.getCausalesByDoc(doc, idRow);
             causalesRelacionados.forEach(causalEmbargo => {
-                    const cuasalesDeEmbargo = {
-                        entidad: causalEmbargo.entidad,
-                        docentidad: causalEmbargo.docentidad,
-                        valor: causalEmbargo.valor
-                    };
-                    this.causalesFinal.push(cuasalesDeEmbargo);
-                    console.log(this.causalesFinal);
-                });
-                
+                const causalesDeEmbargo = {
+                    entidad: causalEmbargo.entidad,
+                    docentidad: causalEmbargo.docentidad || '', // Asegurarse de que docentidad sea una cadena vacía si es undefined
+                    valor: causalEmbargo.valor,
+                    motivo: causalEmbargo.motivo
+                };
+                this.causalesFinal.push(causalesDeEmbargo);
+            });
 
-            console.log(causalesRelacionados);
+            try {
+                const response = await axios.get(`/pagadurias/per-doc/${doc}`);
+                const pagaduriaData = response.data[this.pagaduria];
+                if (pagaduriaData && pagaduriaData.situacion_laboral) {
+                    this.situacionLaboral = pagaduriaData.situacion_laboral.trim().toLowerCase();
+                } else {
+                    this.situacionLaboral = 'información no disponible';
+                }
+                console.log(this.situacionLaboral);
+            } catch (error) {
+                console.error('Error al obtener la situación laboral:', error);
+                this.situacionLaboral = 'error al obtener la información';
+            } finally {
+                this.isLoadingModal = false;
+            }
         }
-
     }
 };
 </script>
