@@ -10,9 +10,17 @@
                 <div class="row d-flex justify-content-start align-items-end">
                     <div class="col-md-3">
                         <b-form-group label="PAGADURÍA">
-                            <b-form-input v-model="pagaduria" list="lista-pagadurias" placeholder="Pagaduría"></b-form-input>
+                            <b-form-input
+                                v-model="pagaduria"
+                                list="lista-pagadurias"
+                                placeholder="Pagaduría"
+                            ></b-form-input>
                             <div class="estilo-datalist">
-                                <b-form-datalist class="listado" id="lista-pagadurias" :options="pagaduriasList"></b-form-datalist>
+                                <b-form-datalist
+                                    class="listado"
+                                    id="lista-pagadurias"
+                                    :options="pagaduriasList"
+                                ></b-form-datalist>
                             </div>
                         </b-form-group>
                     </div>
@@ -446,7 +454,6 @@
     </div>
 </template>
 <style>
-
 .form-group legend {
     font-family: 'Poppins', sans-serif;
     font-size: 16px;
@@ -454,24 +461,25 @@
 }
 
 datalist {
-  position: absolute;
-  max-height: 20em;
-  border: 0 none;
-  overflow-x: hidden;
-  overflow-y: auto;
+    position: absolute;
+    max-height: 20em;
+    border: 0 none;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 datalist option {
-  font-size: 0.8em;
-  padding: 0.3em 1em;
-  background-color: #ccc;
-  cursor: pointer;
+    font-size: 0.8em;
+    padding: 0.3em 1em;
+    background-color: #ccc;
+    cursor: pointer;
 }
 
-datalist option:hover, datalist option:focus {
-  color: #fff;
-  background-color: #036;
-  outline: 0 none;
+datalist option:hover,
+datalist option:focus {
+    color: #fff;
+    background-color: #036;
+    outline: 0 none;
 }
 
 td,
@@ -686,13 +694,22 @@ export default {
         descuentosFiltrados() {
             let resultadosFiltrados = this.descuentos;
 
+            // Primero, aplicar filtro basado en mliquid si está presente
+            if (this.mliquid) {
+                resultadosFiltrados = resultadosFiltrados.filter(descuento =>
+                    descuento.mliquid.toLowerCase().includes(this.mliquid.toLowerCase())
+                );
+            }
+
+            // Luego, aplicar el filtro basado en filtroDescuento si está presente
             if (this.filtroDescuento) {
                 resultadosFiltrados = resultadosFiltrados.filter(descuento =>
                     descuento.doc.toLowerCase().includes(this.filtroDescuento.toLowerCase())
                 );
             }
 
-            if (!this.filtroDescuento) {
+            // Paginación manual si es necesario (en caso de que no estés usando una paginación automática/externa)
+            if (!this.filtroDescuento && !this.mliquid) {
                 const start = (this.currentPageMora - 1) * this.perPageMora;
                 const end = start + this.perPageMora;
                 resultadosFiltrados = resultadosFiltrados.slice(start, end);
@@ -727,6 +744,7 @@ export default {
                 console.error('Error al obtener las pagadurías:', error);
             }
         },
+
         async getCoupons() {
             this.coupons = [];
             this.descuentos = [];
@@ -750,7 +768,6 @@ export default {
                     month: this.month,
                     year: this.year,
                     concept: this.concept,
-                    mliquid: this.mliquid,
                     entidadDemandante: this.entidadDemandante
                 };
 
@@ -760,11 +777,13 @@ export default {
                     axios.post('/descuentos/by-pagaduria', payload),
                     axios.post('/embargos/by-pagaduria', payload)
                 ]);
+                this.causales = [];
 
                 // Actualiza los arrays con los datos recibidos
                 this.coupons = couponsResponse.data;
                 this.descuentos = descuentosResponse.data;
                 this.embargos = embargosResponse.data;
+
                 //LLenar CAUSALES
                 //con embargos
                 this.embargos.forEach(embargo => {
