@@ -153,6 +153,7 @@
                         pagaduriaType == 'SEMSOACHA' ||
                         pagaduriaType == 'SEMSOGAMOSO' ||
                         pagaduriaType == 'SEMSOLEDAD' ||
+                        pagaduriaType == 'SEMESTRELLA' ||
                         pagaduriaType == 'SEDCAQUETA' ||
                         pagaduriaType == 'SEDANTIOQUIA' ||
                         pagaduriaType == 'SEDARAUCA' ||
@@ -246,6 +247,7 @@
                             pagaduriaType == 'SEMCARTAGO' ||
                             pagaduriaType == 'SEMDUITAMA' ||
                             pagaduriaType == 'SEMFUNZA' ||
+                            pagaduriaType == 'SEMESTRELLA' ||
                             pagaduriaType == 'SEMGIRON' ||
                             pagaduriaType == 'SEMPIEDECUESTA' ||
                             pagaduriaType == 'SEMPEREIRA' ||

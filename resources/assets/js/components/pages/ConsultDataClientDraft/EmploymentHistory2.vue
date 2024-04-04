@@ -102,7 +102,7 @@
                             SED VALLE
                     ==============================-->
 
-                    <template v-if="datamessedvalle">
+                    <!-- <template v-if="datamessedvalle">
                         <div class="col-12">
                             <div class="row">
                                 <div class="col-6">
@@ -241,7 +241,7 @@
                                 <p class="panel-value">{{ datamessedvalle.ciudad ? datamessedvalle.ciudad : '-' }}</p>
                             </div>
                         </div>
-                    </template>
+                    </template> -->
 
                     <!--============================
                         FIDUPREVISORA
@@ -289,14 +289,14 @@
                         <div class="col-6">
                             <b class="panel-label">FECHA DE INGRESO NÓMINA:</b>
                             <div>
-                                <p class="panel-value">{{ datamesSed.fecha_ingreso_nomina || datamesSed.nomfecha }}</p>
+                                <p class="panel-value">{{ datamesSed.fecha_ingreso_nomina || datamesSed.fecha_ingreso }}</p>
                             </div>
                         </div>
 
                         <div class="col-6">
                             <b class="panel-label">FECHA DE INICIO:</b>
                             <div>
-                                <p class="panel-value">{{ datamesSed.fecha_inicio || datamesSed.areaedu }}</p>
+                                <p class="panel-value">{{ datamesSed.fecha_inicio || datamesSed.fecha_ingreso  }}</p>
                             </div>
                         </div>
 
@@ -353,7 +353,8 @@
                         <div class="col-6">
                             <b class="panel-label"> FECHA DE CONTINUIDAD:</b>
                             <div>
-                                <p class="panel-value">{{ datamesSed.fecha_continuidad }}</p>
+                                <p class="panel-value" v-if="datamesSed.fecha_continuidad === 'nan' "> </p>
+                                <p class="panel-value" v-else>{{ datamesSed.fecha_continuidad }}</p>
                             </div>
                         </div>
 
