@@ -390,12 +390,32 @@
 
                         <b-collapse id="accordion-2" accordion="my-accordion" role="tabpanel">
                             <b-card-body>
-                                <b-table
-                                    striped
-                                    hover
-                                    :fields="descuentosFields"
-                                    :items="paginatedDescuentos"
-                                ></b-table>
+                                <b-table striped hover :fields="descuentosFields" :items="descuentosFiltrados">
+                                    <template v-slot:cell(actions)="{ item }">
+                                        <b-button
+                                            v-b-modal.modal-1
+                                            variant="primary"
+                                            @click="handleButtonClick(item.doc, item.id)"
+                                        >
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24"
+                                                width="25"
+                                                height="25"
+                                            >
+                                                <g id="_01_align_center" data-name="01 align center">
+                                                    <path
+                                                        d="M23.821,11.181v0C22.943,9.261,19.5,3,12,3S1.057,9.261.179,11.181a1.969,1.969,0,0,0,0,1.64C1.057,14.739,4.5,21,12,21s10.943-6.261,11.821-8.181A1.968,1.968,0,0,0,23.821,11.181ZM12,19c-6.307,0-9.25-5.366-10-6.989C2.75,10.366,5.693,5,12,5c6.292,0,9.236,5.343,10,7C21.236,13.657,18.292,19,12,19Z"
+                                                    />
+                                                    <path
+                                                        d="M12,7a5,5,0,1,0,5,5A5.006,5.006,0,0,0,12,7Zm0,8a3,3,0,1,1,3-3A3,3,0,0,1,12,15Z"
+                                                    />
+                                                </g>
+                                            </svg>
+                                        </b-button>
+                                    </template>
+                                </b-table>
+
                                 <b-pagination
                                     v-model="currentPageMora"
                                     :per-page="perPageMora"
@@ -691,24 +711,37 @@ export default {
         await this.getPagaduriasNames();
     },
     computed: {
+        paginatedCoupons() {
+            const start = (this.currentPageAldia - 1) * this.perPageAldia;
+            const end = start + this.perPageAldia;
+            return this.coupons.slice(start, end).map(item => ({
+                ...item,
+                egresos: this.formatCurrency(item.egresos)
+            }));
+        },
+        paginatedEmbargos() {
+            const start = (this.currentPageEmbargo - 1) * this.perPageEmbargo;
+            const end = start + this.perPageEmbargo;
+            return this.embargos.slice(start, end).map(item => ({
+                ...item,
+                temb: this.formatCurrency(item.temb)
+            }));
+        },
         descuentosFiltrados() {
             let resultadosFiltrados = this.descuentos;
 
-            // Primero, aplicar filtro basado en mliquid si está presente
             if (this.mliquid) {
                 resultadosFiltrados = resultadosFiltrados.filter(descuento =>
                     descuento.mliquid.toLowerCase().includes(this.mliquid.toLowerCase())
                 );
             }
 
-            // Luego, aplicar el filtro basado en filtroDescuento si está presente
             if (this.filtroDescuento) {
                 resultadosFiltrados = resultadosFiltrados.filter(descuento =>
                     descuento.doc.toLowerCase().includes(this.filtroDescuento.toLowerCase())
                 );
             }
 
-            // Paginación manual si es necesario (en caso de que no estés usando una paginación automática/externa)
             if (!this.filtroDescuento && !this.mliquid) {
                 const start = (this.currentPageMora - 1) * this.perPageMora;
                 const end = start + this.perPageMora;
@@ -746,106 +779,125 @@ export default {
         },
 
         async getCoupons() {
-            this.coupons = [];
-            this.descuentos = [];
-            this.embargos = [];
+            this.resetData();
 
-            this.isPagaduriaValid = !!this.pagaduria;
-            this.isMonthValid = !!this.month && this.month.length === 2;
-            this.isYearValid = !!this.year && this.year.length === 4;
-            this.isEntidadDemandanteValid = this.selectedEstado !== 'Embargado' || !!this.entidadDemandante;
-
-            // Validación inicial
-            if (!this.isPagaduriaValid || !this.isMonthValid || !this.isYearValid || !this.isEntidadDemandanteValid) {
+            if (!this.validateInputs()) {
                 return;
             }
 
             this.isLoading = true;
 
+            const payload = {
+                pagaduria: this.pagaduria,
+                month: this.month,
+                year: this.year,
+                concept: this.concept,
+                entidadDemandante: this.entidadDemandante
+            };
+
+            // Separar las llamadas y manejar cada una independientemente
+            this.fetchData('/coupons/by-pagaduria', payload, this.handleCouponsResponse);
+            this.fetchData('/descuentos/by-pagaduria', payload, this.handleDescuentosResponse);
+            this.fetchData('/embargos/by-pagaduria', payload, this.handleEmbargosResponse);
+        },
+
+        // Método genérico para realizar la solicitud y procesar la respuesta
+        async fetchData(url, payload, responseHandler) {
             try {
-                let payload = {
-                    pagaduria: this.pagaduria,
-                    month: this.month,
-                    year: this.year,
-                    concept: this.concept,
-                    entidadDemandante: this.entidadDemandante
-                };
-
-                // Realiza las llamadas a las APIs para obtener los datos
-                const [couponsResponse, descuentosResponse, embargosResponse] = await Promise.all([
-                    axios.post('/coupons/by-pagaduria', payload),
-                    axios.post('/descuentos/by-pagaduria', payload),
-                    axios.post('/embargos/by-pagaduria', payload)
-                ]);
-                this.causales = [];
-
-                // Actualiza los arrays con los datos recibidos
-                this.coupons = couponsResponse.data;
-                this.descuentos = descuentosResponse.data;
-                this.embargos = embargosResponse.data;
-
-                //LLenar CAUSALES
-                //con embargos
-                this.embargos.forEach(embargo => {
-                    const causal = {
-                        id: embargo.id,
-                        motivo: 'Embargo',
-                        entidad: embargo.entidaddeman,
-                        docentidad: embargo.docdeman,
-                        doc: embargo.doc,
-                        valor: embargo.temb
-                    };
-                    this.causales.push(causal);
-                });
-                //con descuentos
-                this.descuentos.forEach(descuento => {
-                    const causal = {
-                        id: descuento.id,
-                        motivo: 'Mora',
-                        entidad: descuento.mliquid,
-                        docentidad: '',
-                        doc: descuento.doc,
-                        valor: descuento.valor
-                    };
-                    this.causales.push(causal);
-                });
-
-                // Calcula los totales y cuenta los elementos para cada tipo
-                this.rowsAldia = this.coupons.length;
-                this.rowsMora = this.descuentos.length;
-                this.rowsEmbargo = this.embargos.length;
-
-                // Calcular totales de cuotas sin formatear aún para cálculos
-                let totalCuotasAldia = this.sumarTotalesSinFormato(this.coupons, 'egresos');
-                let totalCuotasMora = this.sumarTotalesSinFormato(this.descuentos, 'valor');
-                let totalCuotasEmbargo = this.sumarTotalesSinFormato(this.embargos, 'temb');
-
-                // Calcular el total de cuotas según el estado seleccionado
-                if (this.selectedEstado === 'Todas') {
-                    this.totalCuotas = this.formatCurrency(totalCuotasAldia + totalCuotasMora + totalCuotasEmbargo);
-                } else if (this.selectedEstado === 'Al día') {
-                    this.totalCuotas = this.formatCurrency(totalCuotasAldia);
-                } else if (this.selectedEstado === 'En mora') {
-                    this.totalCuotas = this.formatCurrency(totalCuotasMora);
-                } else if (this.selectedEstado === 'Embargado') {
-                    this.totalCuotas = this.formatCurrency(totalCuotasEmbargo);
-                }
-
-                // Formatear totales individuales
-                this.totalCuotasAldia = this.formatCurrency(totalCuotasAldia);
-                this.totalCuotasMora = this.formatCurrency(totalCuotasMora);
-                this.totalCuotasEmbargo = this.formatCurrency(totalCuotasEmbargo);
-
-                // Actualizar el total de clientes
-                this.totalClientes = this.rowsAldia + this.rowsMora + this.rowsEmbargo;
-
-                this.searchPerformed = true;
+                const response = await axios.post(url, payload);
+                responseHandler.call(this, response.data);
             } catch (error) {
-                console.error('Error al obtener los datos:', error);
+                console.error(`Error al obtener datos de: ${url}`, error);
             } finally {
                 this.isLoading = false;
             }
         },
+
+        // Manejadores específicos para cada tipo de respuesta
+        handleCouponsResponse(data) {
+            this.coupons = data;
+            // Lógica específica para procesar cupones, como calcular totales
+            this.updateTotals();
+        },
+
+        handleDescuentosResponse(data) {
+            this.descuentos = data;
+            // Procesar y llenar causales de descuentos
+            this.fillCausalesFromDescuentos();
+            this.updateTotals();
+        },
+
+        handleEmbargosResponse(data) {
+            this.embargos = data;
+            // Procesar y llenar causales de embargos
+            this.fillCausalesFromEmbargos();
+            this.updateTotals();
+        },
+
+        // Ejemplo de cómo podrías llenar causales específicamente para descuentos y embargos
+        fillCausalesFromDescuentos() {
+            this.descuentos.forEach(descuento => {
+                const causal = {
+                    id: descuento.id,
+                    motivo: 'Mora',
+                    entidad: descuento.mliquid,
+                    docentidad: '',
+                    doc: descuento.doc,
+                    valor: descuento.valor
+                };
+                this.causales.push(causal);
+            });
+        },
+
+        fillCausalesFromEmbargos() {
+            this.embargos.forEach(embargo => {
+                const causal = {
+                    id: embargo.id,
+                    motivo: 'Embargo',
+                    entidad: embargo.entidaddeman,
+                    docentidad: embargo.docdeman,
+                    doc: embargo.doc,
+                    valor: embargo.temb
+                };
+                this.causales.push(causal);
+            });
+        },
+        resetData() {
+            this.coupons = [];
+            this.descuentos = [];
+            this.embargos = [];
+        },
+        validateInputs() {
+            this.isPagaduriaValid = !!this.pagaduria;
+            this.isMonthValid = !!this.month && this.month.length === 2;
+            this.isYearValid = !!this.year && this.year.length === 4;
+            this.isEntidadDemandanteValid = this.selectedEstado !== 'Embargado' || !!this.entidadDemandante;
+
+            return this.isPagaduriaValid && this.isMonthValid && this.isYearValid && this.isEntidadDemandanteValid;
+        },
+
+        updateTotals() {
+            let totalCuotasAldia = this.sumarTotalesSinFormato(this.coupons, 'egresos');
+            let totalCuotasMora = this.sumarTotalesSinFormato(this.descuentos, 'valor');
+            let totalCuotasEmbargo = this.sumarTotalesSinFormato(this.embargos, 'temb');
+
+            this.totalCuotasAldia = this.formatCurrency(totalCuotasAldia);
+            this.totalCuotasMora = this.formatCurrency(totalCuotasMora);
+            this.totalCuotasEmbargo = this.formatCurrency(totalCuotasEmbargo);
+
+            if (this.selectedEstado === 'Todas') {
+                this.totalCuotas = this.formatCurrency(totalCuotasAldia + totalCuotasMora + totalCuotasEmbargo);
+            } else if (this.selectedEstado === 'Al día') {
+                this.totalCuotas = this.formatCurrency(totalCuotasAldia);
+            } else if (this.selectedEstado === 'En mora') {
+                this.totalCuotas = this.formatCurrency(totalCuotasMora);
+            } else if (this.selectedEstado === 'Embargado') {
+                this.totalCuotas = this.formatCurrency(totalCuotasEmbargo);
+            }
+
+            this.totalClientes = this.coupons.length + this.descuentos.length + this.embargos.length;
+        },
+
         sumarTotalesSinFormato(items, key) {
             const parseToNumber = value => {
                 const parsed = parseFloat(value);
