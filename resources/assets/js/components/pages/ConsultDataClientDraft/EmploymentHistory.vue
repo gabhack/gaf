@@ -332,7 +332,7 @@
                         <div class="col-6">
                             <b class="panel-label">FECHA INGRESO:</b>
                             <div>
-                                <p class="panel-value">{{ datamesSed.fingr || datamesSed.fchingreso }}</p>
+                                <p class="panel-value">{{ datamesSed.fecha_ingreso || datamesSed.fchingreso }}</p>
                             </div>
                         </div>
 
