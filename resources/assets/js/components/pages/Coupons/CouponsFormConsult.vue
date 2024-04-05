@@ -724,7 +724,7 @@ export default {
                 const end = start + this.perPageMora;
                 resultadosFiltrados = resultadosFiltrados.slice(start, end);
             }
-
+            this.rowsMora = resultadosFiltrados.length;
             return resultadosFiltrados;
         },
         totalRows() {
@@ -871,6 +871,9 @@ export default {
             } else if (this.selectedEstado === 'Embargado') {
                 this.totalCuotas = this.formatCurrency(totalCuotasEmbargo);
             }
+            this.rowsAldia = this.coupons.length;
+            this.rowsEmbargo = this.embargos.length;
+            this.rowsMora = this.descuentosFiltrados.length;
 
             this.totalClientes = this.coupons.length + this.descuentos.length + this.embargos.length;
         },
