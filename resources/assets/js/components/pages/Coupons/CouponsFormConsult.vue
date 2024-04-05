@@ -691,6 +691,8 @@ export default {
         paginatedCoupons() {
             const start = (this.currentPageAldia - 1) * this.perPageAldia;
             const end = start + this.perPageAldia;
+            this.rowsAldia = this.coupons.length;
+            this.updateTotals();
             return this.coupons.slice(start, end).map(item => ({
                 ...item,
                 egresos: this.formatCurrency(item.egresos)
@@ -699,6 +701,9 @@ export default {
         paginatedEmbargos() {
             const start = (this.currentPageEmbargo - 1) * this.perPageEmbargo;
             const end = start + this.perPageEmbargo;
+            this.rowsEmbargo = this.embargos.length;
+            this.updateTotals();
+
             return this.embargos.slice(start, end).map(item => ({
                 ...item,
                 temb: this.formatCurrency(item.temb)
@@ -719,12 +724,17 @@ export default {
                 );
             }
 
+            let totalCuotasMora = this.sumarTotalesSinFormato(resultadosFiltrados, 'valor');
+            this.totalCuotasMora = this.formatCurrency(totalCuotasMora);
+
+            this.rowsMora = resultadosFiltrados.length;
+
             if (!this.filtroDescuento && !this.mliquid) {
                 const start = (this.currentPageMora - 1) * this.perPageMora;
                 const end = start + this.perPageMora;
                 resultadosFiltrados = resultadosFiltrados.slice(start, end);
             }
-            this.rowsMora = resultadosFiltrados.length;
+
             return resultadosFiltrados;
         },
         totalRows() {
@@ -794,21 +804,18 @@ export default {
         handleCouponsResponse(data) {
             this.coupons = data;
             // Lógica específica para procesar cupones, como calcular totales
-            this.updateTotals();
         },
 
         handleDescuentosResponse(data) {
             this.descuentos = data;
             // Procesar y llenar causales de descuentos
             this.fillCausalesFromDescuentos();
-            this.updateTotals();
         },
 
         handleEmbargosResponse(data) {
             this.embargos = data;
             // Procesar y llenar causales de embargos
             this.fillCausalesFromEmbargos();
-            this.updateTotals();
         },
 
         // Ejemplo de cómo podrías llenar causales específicamente para descuentos y embargos
@@ -855,11 +862,9 @@ export default {
 
         updateTotals() {
             let totalCuotasAldia = this.sumarTotalesSinFormato(this.coupons, 'egresos');
-            let totalCuotasMora = this.sumarTotalesSinFormato(this.descuentos, 'valor');
             let totalCuotasEmbargo = this.sumarTotalesSinFormato(this.embargos, 'temb');
 
             this.totalCuotasAldia = this.formatCurrency(totalCuotasAldia);
-            this.totalCuotasMora = this.formatCurrency(totalCuotasMora);
             this.totalCuotasEmbargo = this.formatCurrency(totalCuotasEmbargo);
 
             if (this.selectedEstado === 'Todas') {
@@ -867,13 +872,9 @@ export default {
             } else if (this.selectedEstado === 'Al día') {
                 this.totalCuotas = this.formatCurrency(totalCuotasAldia);
             } else if (this.selectedEstado === 'En mora') {
-                this.totalCuotas = this.formatCurrency(totalCuotasMora);
             } else if (this.selectedEstado === 'Embargado') {
                 this.totalCuotas = this.formatCurrency(totalCuotasEmbargo);
             }
-            this.rowsAldia = this.coupons.length;
-            this.rowsEmbargo = this.embargos.length;
-            this.rowsMora = this.descuentosFiltrados.length;
 
             this.totalClientes = this.coupons.length + this.descuentos.length + this.embargos.length;
         },
