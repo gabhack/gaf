@@ -304,26 +304,31 @@ public function getPagaduriasNamesAmi()
 public function getSituacionLaboralByDoc($doc)
 {
     try {
-        $data = DatamesGen::where('documento', $doc)
+        Log::info("Consultando la situación laboral para el documento: {$doc}");
+
+        $data = DatamesGen::where('doc', $doc)
                           ->latest('id') 
                           ->first(['situacion_laboral']);
 
         if (!$data) {
+            Log::info("No se encontró la situación laboral para el documento proporcionado.", ['doc' => $doc]);
             return response()->json(['mensaje' => 'No se encontró la situación laboral para el documento proporcionado.'], 404);
         }
+
+        Log::info("Situación laboral encontrada.", ['doc' => $doc, 'situacion_laboral' => $data->situacion_laboral]);
 
         return response()->json($data->situacion_laboral, 200);
 
     } catch (\Exception $e) {
-        Log::error("Error al buscar la situación laboral por documento: {$e->getMessage()}", [
+        Log::error("Error al buscar la situación laboral por documento: {$doc}", [
             'doc' => $doc,
-            'exception' => $e->getTraceAsString(),
+            'exception' => $e->getMessage(),
+            'stack' => $e->getTraceAsString(), // Considera si realmente necesitas el stack trace completo por motivos de seguridad/privacidad.
         ]);
 
         return response()->json(['error' => 'Ocurrió un error al procesar la solicitud'], 500);
     }
 }
-
 
 }
 
