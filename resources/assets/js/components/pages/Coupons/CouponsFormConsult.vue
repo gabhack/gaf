@@ -674,7 +674,7 @@ export default {
     watch: {
         selectedEstado(newValue, oldValue) {
             if (newValue !== oldValue) {
-                this.coupons = [];
+                this.getCoupons();
                 this.searchPerformed = false;
             }
         },
@@ -692,7 +692,9 @@ export default {
             const start = (this.currentPageAldia - 1) * this.perPageAldia;
             const end = start + this.perPageAldia;
             this.rowsAldia = this.coupons.length;
-            this.updateTotals();
+            if (this.selectedEstado === 'Al día') {
+                this.updateTotals();
+            }
             return this.coupons.slice(start, end).map(item => ({
                 ...item,
                 egresos: this.formatCurrency(item.egresos)
@@ -702,7 +704,9 @@ export default {
             const start = (this.currentPageEmbargo - 1) * this.perPageEmbargo;
             const end = start + this.perPageEmbargo;
             this.rowsEmbargo = this.embargos.length;
-            this.updateTotals();
+            if (this.selectedEstado === 'Embargado') {
+                this.updateTotals();
+            }
 
             return this.embargos.slice(start, end).map(item => ({
                 ...item,
@@ -712,11 +716,14 @@ export default {
         descuentosFiltrados() {
             let resultadosFiltrados = this.descuentos;
 
+            //SI DESCOMENTAS ESTE CODIGO, EL FILTRO MLIQUID SE VUELVE DINAMICO SIN NECESIDAD DE DARLE AL BOTON PROPSECTAR
+
+            /*
             if (this.mliquid) {
                 resultadosFiltrados = resultadosFiltrados.filter(descuento =>
                     descuento.mliquid.toLowerCase().includes(this.mliquid.toLowerCase())
                 );
-            }
+            }*/
 
             if (this.filtroDescuento) {
                 resultadosFiltrados = resultadosFiltrados.filter(descuento =>
@@ -735,6 +742,10 @@ export default {
                 resultadosFiltrados = resultadosFiltrados.slice(start, end);
             }
 
+            resultadosFiltrados = resultadosFiltrados.map(descuento => ({
+                ...descuento,
+                valor: this.formatCurrency(descuento.valor)
+            }));
             return resultadosFiltrados;
         },
         totalRows() {
@@ -778,14 +789,23 @@ export default {
                 pagaduria: this.pagaduria,
                 month: this.month,
                 year: this.year,
+                mliquid: this.mliquid,
                 concept: this.concept,
                 entidadDemandante: this.entidadDemandante
             };
 
+            if (this.selectedEstado === 'Todas') {
+                this.fetchData('/coupons/by-pagaduria', payload, this.handleCouponsResponse);
+                this.fetchData('/descuentos/by-pagaduria', payload, this.handleDescuentosResponse);
+                this.fetchData('/embargos/by-pagaduria', payload, this.handleEmbargosResponse);
+            } else if (this.selectedEstado === 'Al día') {
+                this.fetchData('/coupons/by-pagaduria', payload, this.handleCouponsResponse);
+            } else if (this.selectedEstado === 'En mora') {
+                this.fetchData('/descuentos/by-pagaduria', payload, this.handleDescuentosResponse);
+            } else if (this.selectedEstado === 'Embargado') {
+                this.fetchData('/embargos/by-pagaduria', payload, this.handleEmbargosResponse);
+            }
             // Separar las llamadas y manejar cada una independientemente
-            this.fetchData('/coupons/by-pagaduria', payload, this.handleCouponsResponse);
-            this.fetchData('/descuentos/by-pagaduria', payload, this.handleDescuentosResponse);
-            this.fetchData('/embargos/by-pagaduria', payload, this.handleEmbargosResponse);
         },
 
         // Método genérico para realizar la solicitud y procesar la respuesta
