@@ -19,17 +19,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Carbon;
 
+
 class EmbargosController extends Controller
 {
     
 
-    public function index(Request $request)
-    {
-        $doc = $request->doc;
-        $embargoType = $request->pagaduria;
-        $pagaduriaLabel = $request->pagaduriaLabel;
 
-        $models = [
+    //CONSULTAR LAS TABLAS PASADAS
+    //LO QUITE POR VELOCIDAD
+
+     /*$models = [
             EmbargosSedCauca::class => 'doc',
             EmbargosSedChoco::class => 'doc',
             EmbargosSedCordoba::class => 'doc',
@@ -44,7 +43,6 @@ class EmbargosController extends Controller
             EmbargosSedBolivar::class => 'idemp',
         ];
 
-        $results = [];
 
         foreach ($models as $model => $column) {
             $className = class_basename($model);
@@ -52,19 +50,32 @@ class EmbargosController extends Controller
             if ($className == $embargoType) {
                 $results = array_merge($results, $model::where($column, 'LIKE', '%' . $doc . '%')->get()->toArray());
             }
+        }*/
+
+        public function index(Request $request)
+        {
+            $doc = $request->doc;
+            $embargoType = $request->pagaduria;
+            $pagaduriaLabel = $request->pagaduriaLabel;
+        
+            $month = str_pad($request->month, 2, '0', STR_PAD_LEFT);
+            $year = $request->year;
+            $results = [];
+
+            $dataGen = EmbargosGen::where('doc', 'LIKE', '%' . $doc . '%')
+                ->where(function ($query) use ($embargoType, $pagaduriaLabel, $month, $year) {        
+                    $startDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)->startOfMonth();
+                    $endDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)->endOfMonth();
+        
+                    $query->where('pagaduria', $embargoType)
+                        ->orWhere('pagaduria', $pagaduriaLabel)
+                        ->whereBetween('nomina', [$startDate, $endDate]);
+                })->get()->toArray();
+        
+            $results = array_merge($results, $dataGen);
+        
+            return response()->json($results, 200);
         }
-
-        // General embargos
-        $dataGen = EmbargosGen::where('doc', 'LIKE', '%' . $doc . '%')
-            ->where(function ($query) use ($embargoType, $pagaduriaLabel) {
-                $query->where('pagaduria', $embargoType)
-                    ->orWhere('pagaduria', $pagaduriaLabel);
-            })->get()->toArray();
-
-        $results = array_merge($results, $dataGen);
-
-        return response()->json($results, 200);
-    }
 
 
     public function buscar($doc = null, $pagaduria = null)

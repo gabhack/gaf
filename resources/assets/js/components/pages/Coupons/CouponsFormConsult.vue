@@ -208,9 +208,13 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div v-if="situacionLaboral !== 'normal' && descuentos.length > 0">
-                                <h5>La situacion del trabajador no es normal</h5>
+                            <div v-if="situacionLaboral === 'normal'">
+                                <h6 style="color: green">La situación laboral es normal</h6>
                             </div>
+                            <div v-else-if="descuentos.length > 0">
+                                <h6 style="color: red">La situación del trabajador no es normal</h6>
+                            </div>
+
                             <div v-if="situacionLaboral === 'normal' && descuentos.length === 1">
                                 <h5>El trabajador está sobre-endeudado</h5>
                             </div>
@@ -802,13 +806,12 @@ export default {
                 this.fetchData('/coupons/by-pagaduria', payload, this.handleCouponsResponse);
             } else if (this.selectedEstado === 'En mora') {
                 this.fetchData('/descuentos/by-pagaduria', payload, this.handleDescuentosResponse);
+                this.fetchData('/embargos/by-pagaduria', payload, this.handleEmbargosResponse);
             } else if (this.selectedEstado === 'Embargado') {
                 this.fetchData('/embargos/by-pagaduria', payload, this.handleEmbargosResponse);
             }
-            // Separar las llamadas y manejar cada una independientemente
         },
 
-        // Método genérico para realizar la solicitud y procesar la respuesta
         async fetchData(url, payload, responseHandler) {
             try {
                 const response = await axios.post(url, payload);
@@ -830,12 +833,14 @@ export default {
             this.descuentos = data;
             // Procesar y llenar causales de descuentos
             this.fillCausalesFromDescuentos();
+
+            console.log('lo hizo');
         },
 
         handleEmbargosResponse(data) {
             this.embargos = data;
-            // Procesar y llenar causales de embargos
             this.fillCausalesFromEmbargos();
+            console.log('lo hizo 2');
         },
 
         // Ejemplo de cómo podrías llenar causales específicamente para descuentos y embargos
@@ -932,8 +937,13 @@ export default {
 
             try {
                 const response = await axios.get(`/situacion-laboral/${doc}`);
-                if (response.data && response.data.situacion_laboral) {
-                    this.situacionLaboral = response.data.situacion_laboral.trim().toLowerCase();
+
+                if (response.data) {
+                    if (typeof response.data === 'object' && response.data.miPropiedad) {
+                        this.situacionLaboral = response.data.miPropiedad.trim().toLowerCase();
+                    } else if (typeof response.data === 'string') {
+                        this.situacionLaboral = response.data.trim().toLowerCase();
+                    }
                 } else {
                     this.situacionLaboral = 'información no disponible';
                 }
