@@ -208,6 +208,9 @@
                                     </li>
                                 </ul>
                             </div>
+                            <template v-if="incapacidades">
+                                <h6 style="color: red">El trabajador tiene pago de incapacidades recurrente</h6>
+                            </template>
                             <div v-if="situacionLaboral === 'normal'">
                                 <h6 style="color: green">La situación laboral es normal</h6>
                             </div>
@@ -216,10 +219,10 @@
                             </div>
 
                             <div v-if="situacionLaboral === 'normal' && descuentos.length === 1">
-                                <h5>El trabajador está sobre-endeudado</h5>
+                                <h6 style="color: red">El trabajador está sobre-endeudado</h6>
                             </div>
                             <div v-if="causalesFinal.length === 0">
-                                <h5>No hay causales registradas en los datos actuales.</h5>
+                                <h6>No hay causales registradas en los datos actuales.</h6>
                             </div>
                         </template>
                         <template #modal-footer="{ hide }">
@@ -672,13 +675,15 @@ export default {
             causalesFinal: [],
             filtroDescuento: '',
             situacionLaboral: '',
-            isLoadingModal: false
+            isLoadingModal: false,
+            incapacidades: false,
+            filtroAplicado: false
         };
     },
     watch: {
         selectedEstado(newValue, oldValue) {
             if (newValue !== oldValue) {
-                this.getCoupons();
+                this.resetData();
                 this.searchPerformed = false;
             }
         },
@@ -720,14 +725,12 @@ export default {
         descuentosFiltrados() {
             let resultadosFiltrados = this.descuentos;
 
-            //SI DESCOMENTAS ESTE CODIGO, EL FILTRO MLIQUID SE VUELVE DINAMICO SIN NECESIDAD DE DARLE AL BOTON PROPSECTAR
-
-            /*
+            //SI DESCOMENTAS o COMENTAS ESTE CODIGO, EL FILTRO MLIQUID SE VUELVE DINAMICO SIN NECESIDAD DE DARLE AL BOTON PROPSECTAR
             if (this.mliquid) {
                 resultadosFiltrados = resultadosFiltrados.filter(descuento =>
                     descuento.mliquid.toLowerCase().includes(this.mliquid.toLowerCase())
                 );
-            }*/
+            }
 
             if (this.filtroDescuento) {
                 resultadosFiltrados = resultadosFiltrados.filter(descuento =>
@@ -761,6 +764,7 @@ export default {
         clearCausales() {
             this.causalesFinal = [];
         },
+
         formatCurrency(value) {
             const number = parseFloat(value);
             if (isNaN(number)) return value;
@@ -793,7 +797,6 @@ export default {
                 pagaduria: this.pagaduria,
                 month: this.month,
                 year: this.year,
-                mliquid: this.mliquid,
                 concept: this.concept,
                 entidadDemandante: this.entidadDemandante
             };
@@ -810,6 +813,10 @@ export default {
             } else if (this.selectedEstado === 'Embargado') {
                 this.fetchData('/embargos/by-pagaduria', payload, this.handleEmbargosResponse);
             }
+
+            this.descuentosFiltradosPorMliquid = this.descuentos.filter(descuento =>
+                descuento.mliquid.toLowerCase().includes(this.mliquid.toLowerCase())
+            );
         },
 
         async fetchData(url, payload, responseHandler) {
@@ -823,27 +830,18 @@ export default {
             }
         },
 
-        // Manejadores específicos para cada tipo de respuesta
         handleCouponsResponse(data) {
             this.coupons = data;
-            // Lógica específica para procesar cupones, como calcular totales
         },
-
         handleDescuentosResponse(data) {
             this.descuentos = data;
-            // Procesar y llenar causales de descuentos
             this.fillCausalesFromDescuentos();
-
-            console.log('lo hizo');
         },
-
         handleEmbargosResponse(data) {
             this.embargos = data;
             this.fillCausalesFromEmbargos();
-            console.log('lo hizo 2');
         },
 
-        // Ejemplo de cómo podrías llenar causales específicamente para descuentos y embargos
         fillCausalesFromDescuentos() {
             this.descuentos.forEach(descuento => {
                 const causal = {
@@ -872,9 +870,11 @@ export default {
             });
         },
         resetData() {
+            this.filtroDescuento = '';
             this.coupons = [];
             this.descuentos = [];
             this.embargos = [];
+            this.causales = [];
         },
         validateInputs() {
             this.isPagaduriaValid = !!this.pagaduria;
@@ -912,19 +912,30 @@ export default {
             return items.reduce((total, item) => total + parseToNumber(item[key]), 0);
         },
         getCausalesByDoc(doc, idRow) {
-            // Filtrado más complejo para obtener los causales relacionados
             const causalesFiltrados = this.causales.filter(
                 causal =>
                     (causal.motivo === 'Embargo' && causal.doc === doc) ||
                     (causal.motivo === 'Mora' && causal.doc === doc && causal.id != idRow)
             );
-            console.log(causalesFiltrados);
+
             return causalesFiltrados;
+        },
+        async checkIncapacidades(doc, month, year) {
+            try {
+                const response = await axios.get(`/incapacidad/${doc}/${month}/${year}`);
+                this.incapacidades = response.data.incapacidad_dura_dos_meses_o_mas === 'Sí';
+            } catch (error) {
+                console.error('Error al verificar las incapacidades:', error);
+                this.incapacidades = false;
+            }
         },
         async handleButtonClick(doc, idRow) {
             this.isLoadingModal = true;
+            this.causalesFinal = [];
+            this.situacionLaboral = '';
 
             const causalesRelacionados = this.getCausalesByDoc(doc, idRow);
+
             causalesRelacionados.forEach(causalEmbargo => {
                 const causalesDeEmbargo = {
                     entidad: causalEmbargo.entidad,
@@ -934,6 +945,8 @@ export default {
                 };
                 this.causalesFinal.push(causalesDeEmbargo);
             });
+
+            await this.checkIncapacidades(doc, this.month, this.year);
 
             try {
                 const response = await axios.get(`/situacion-laboral/${doc}`);

@@ -133,51 +133,43 @@ class CouponsController extends Controller
     
     
              
-
-
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function getIncapacidadByDoc(Request $request)
     {
-        //
+        try {
+            $doc = $request->doc;
+            $month = $request->month;
+            $year = $request->year;
+    
+            // Asegurar que el mes tenga 2 dígitos
+            $month = str_pad($month, 2, '0', STR_PAD_LEFT);
+    
+            // Crear fechas de inicio y fin para el mes actual
+            $startDateCurrentMonth = Carbon::createFromFormat('Y-m', $year . '-' . $month)->startOfMonth()->toDateString();
+            $endDateCurrentMonth = Carbon::createFromFormat('Y-m', $year . '-' . $month)->endOfMonth()->toDateString();
+    
+            // Calcular el mes anterior
+            $previousMonthDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)->subMonth();
+            $startDatePreviousMonth = $previousMonthDate->startOfMonth()->toDateString();
+            $endDatePreviousMonth = $previousMonthDate->endOfMonth()->toDateString();
+    
+            // Consulta para el mes actual y el anterior con el concepto específico
+            $count = CouponsGen::where('doc', 'LIKE', '%' . $doc . '%')
+                ->where('concept', '=', 'Pago Incapacidad Comun Ambulatoria')
+                ->where(function ($query) use ($startDateCurrentMonth, $endDateCurrentMonth, $startDatePreviousMonth, $endDatePreviousMonth) {
+                    $query->whereBetween('inicioperiodo', [$startDatePreviousMonth, $endDateCurrentMonth])
+                          ->orWhereBetween('finperiodo', [$startDatePreviousMonth, $endDateCurrentMonth]);
+                })->count();
+    
+            // Verificar si la incapacidad dura dos meses o más
+            $response = $count > 0 ? "Sí" : "No";
+    
+            return response()->json(['incapacidad_dura_dos_meses_o_mas' => $response], 200);
+        } catch (\Exception $e) {
+            Log::error('Error in getIncapacidadByDoc:', ['message' => $e->getMessage(), 'trace' => $e->getTrace()]);
+    
+            return response()->json(['error' => 'Internal Server Error'], 500);
+        }
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+    
+    
 }
