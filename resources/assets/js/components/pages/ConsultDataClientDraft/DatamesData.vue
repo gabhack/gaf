@@ -36,6 +36,7 @@ export default {
     name: 'DatamesData',
     data() {
         return {
+            fecha: '10/10/1997',
             labels: [
                 { label: 'TIPO DOCUMENTO', field: 'documentType' },
                 { label: 'NÚMERO DOCUMENTO', field: 'doc' },
@@ -44,20 +45,35 @@ export default {
                 { label: 'EDAD', field: 'edad' },
                 { label: 'TELÉFONO / CELULAR', field: 'telefono' },
                 { label: 'DIRECCIÓN', field: 'direccion_residencial' },
-                // { label: 'DEPARTAMENTO', field: 'departamento' },
                 { label: 'CIUDAD / MUNICIPIO', field: 'ciudad' },
                 { label: 'EMAIL', field: 'correo_electronico' },
-                // { label: 'EPS', field: 'eps' },
-                // { label: 'BANCO', field: 'banco' },
-                // { label: 'SUCURSAL', field: 'sucursal' },
-                { label: 'PAGADURIA', field: 'pagaduria' },
-                // { label: 'RESOLUCION', field: 'numero_resolucion' },
-                // { label: 'FECHA RESOLUCION', field: 'fecha_resolucion' },
+                { label: 'PAGADURIA', field: 'pagaduria' }
             ]
         };
     },
     computed: {
-        ...mapState('datamesModule', ['datamesSed'])
-    }
+        ...mapState('datamesModule', ['datamesSed']),
+        edad() {
+            return this.calcularEdad(this.datamesSed.fecha_nacimiento);
+            // return this.calcularEdad(this.fecha);
+        }
+    },
+    methods: {
+        calcularEdad(fechaNacimiento) {
+            console.log(this.datamesSed.fecha_nacimiento);
+            var hoy = new Date();
+            // var fechaString = fechaNacimiento.toString();
+            var cumpleanos = new Date(fechaNacimiento);
+            var edad = hoy.getFullYear() - cumpleanos.getFullYear();
+            var m = hoy.getMonth() - cumpleanos.getMonth();
+
+            if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate())) {
+                edad = edad - 1;
+            }
+            return edad;
+            
+        },
+    
+  }
 };
 </script>
