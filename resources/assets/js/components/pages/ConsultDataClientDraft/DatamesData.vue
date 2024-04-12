@@ -23,6 +23,14 @@
                             </p>
                         </div>
                     </div>
+                    <div class="col-6">
+                        <p class="panel-label mb-0">
+                            EDAD
+                        </p>
+                        <p class="panel-value">
+                            {{ edad }}
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -36,13 +44,12 @@ export default {
     name: 'DatamesData',
     data() {
         return {
-            fecha: '10/10/1997',
+            fecha: '30/10/1997',
             labels: [
                 { label: 'TIPO DOCUMENTO', field: 'documentType' },
                 { label: 'NÚMERO DOCUMENTO', field: 'doc' },
                 { label: 'NOMBRE Y APELLIDO', field: 'nombre_usuario' },
                 { label: 'FECHA DE NACIMIENTO', field: 'fecha_nacimiento' },
-                { label: 'EDAD', field: 'edad' },
                 { label: 'TELÉFONO / CELULAR', field: 'telefono' },
                 { label: 'DIRECCIÓN', field: 'direccion_residencial' },
                 { label: 'CIUDAD / MUNICIPIO', field: 'ciudad' },
@@ -53,23 +60,31 @@ export default {
     },
     computed: {
         ...mapState('datamesModule', ['datamesSed']),
+        fechaNacimiento() {
+            return this.datamesSed.fecha_nacimiento;
+        },
+        mostrar(){
+            return this.fechaNacimiento;
+        },
         edad() {
-            return this.calcularEdad(this.datamesSed.fecha_nacimiento);
+            return this.calcularEdad(this.fechaNacimiento);
             // return this.calcularEdad(this.fecha);
         }
     },
     methods: {
         calcularEdad(fechaNacimiento) {
-            console.log(this.datamesSed.fecha_nacimiento);
+            var partes = fechaNacimiento.split('/');
+            // Crear una nueva cadena en el formato esperado (MM/DD/YYYY)
+            var fechaNacimientoFormatoCorrecto = partes[1] + '/' + partes[0] + '/' + partes[2];
             var hoy = new Date();
-            // var fechaString = fechaNacimiento.toString();
-            var cumpleanos = new Date(fechaNacimiento);
+            var cumpleanos = new Date(fechaNacimientoFormatoCorrecto);
             var edad = hoy.getFullYear() - cumpleanos.getFullYear();
             var m = hoy.getMonth() - cumpleanos.getMonth();
 
             if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate())) {
                 edad = edad - 1;
             }
+            console.log(fechaNacimiento, cumpleanos, hoy, hoy.getFullYear(), cumpleanos.getFullYear(), hoy.getMonth(), cumpleanos.getMonth());
             return edad;
             
         },
