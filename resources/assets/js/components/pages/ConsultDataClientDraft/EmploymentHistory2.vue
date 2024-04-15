@@ -301,18 +301,18 @@
                         </div>
 
                         <div class="col-6">
-                            <b class="panel-label">ANTIGUEDAD:</b>
+                            <b class="panel-label">ANTIGUEDAD LABORAL:</b>
                             <div>
-                                <p class="panel-value">{{ datamesSed.antiguedad }}</p>
+                                <p class="panel-value">{{ antiguedad }} años</p>
                             </div>
                         </div>
 
-                        <div class="col-6">
+                        <!-- <div class="col-6">
                             <b class="panel-label">PUESTO DE TRABAJO:</b>
                             <div>
                                 <p class="panel-value">{{ datamesSed.puesto_trabajo }}</p>
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="col-6">
                             <b class="panel-label">CARGO:</b>
@@ -321,42 +321,42 @@
                             </div>
                         </div>
 
-                        <div class="col-6">
+                        <!-- <div class="col-6">
                             <b class="panel-label"> ENCARGO:</b>
                             <div>
                                 <p class="panel-value">{{ coupons.encargo }}</p> 
-                                <!-- ESTA EN CUPONES -->
+                                
                             </div>
-                        </div>
+                        </div> -->
 
-                        <div class="col-6">
+                        <!-- <div class="col-6">
                             <b class="panel-label"> FECHA DE NOMBRAMIENTO:</b>
                             <div>
                                 <p class="panel-value">{{ datamesSed.fecha_nombramiento }}</p>
                             </div>
-                        </div>
+                        </div> -->
 
-                        <div class="col-6">
+                        <!-- <div class="col-6">
                             <b class="panel-label"> FECHA DE POSESIÓN:</b>
                             <div>
                                 <p class="panel-value">{{ datamesSed.fecha_posesion }}</p>
                             </div>
-                        </div>
+                        </div> -->
 
-                        <div class="col-6">
+                        <!-- <div class="col-6">
                             <b class="panel-label"> CONTINUIDAD:</b>
                             <div>
                                 <p class="panel-value">{{ datamesSed.continuidad }}</p>
                             </div>
-                        </div>
+                        </div> -->
 
-                        <div class="col-6">
+                        <!-- <div class="col-6">
                             <b class="panel-label"> FECHA DE CONTINUIDAD:</b>
                             <div>
                                 <p class="panel-value" v-if="datamesSed.fecha_continuidad === 'nan' "> </p>
                                 <p class="panel-value" v-else>{{ datamesSed.fecha_continuidad }}</p>
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="col-6">
                             <b class="panel-label"> TIPO DE CONTRATO:</b>
@@ -372,33 +372,33 @@
                             </div>
                         </div>
 
-                        <div class="col-6">
+                        <!-- <div class="col-6">
                             <b class="panel-label"> ESTADO DE VINCULACIÓN:</b>
                             <div>
                                 <p class="panel-value">{{ datamesSed.estado_vinculacion}}</p>
                             </div>
-                        </div>
+                        </div> -->
 
-                        <div class="col-6">
+                        <!-- <div class="col-6">
                             <b class="panel-label"> SEDE PRINCIPAL:</b>
                             <div>
                                 <p class="panel-value">{{ datamesSed.sede_principal}}</p>
                             </div>
-                        </div>
+                        </div> -->
 
-                        <div class="col-6">
+                        <!-- <div class="col-6">
                             <b class="panel-label"> SEDE LABORAL:</b>
                             <div>
                                 <p class="panel-value">{{ datamesSed.sede_laboral }}</p>
                             </div>
-                        </div>
+                        </div> -->
 
-                        <div class="col-6">
+                        <!-- <div class="col-6">
                             <b class="panel-label"> PROFESIÓN:</b>
                             <div>
                                 <p class="panel-value">{{ datamesSed.profesion }}</p>
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="col-6">
                             <b class="panel-label"> ÁREA DE DESEMPEÑO:</b>
@@ -407,12 +407,12 @@
                             </div>
                         </div>
 
-                        <div class="col-6">
+                        <!-- <div class="col-6">
                             <b class="panel-label"> MESADA COMPARTIDA:</b>
                             <div>
                                 <p class="panel-value">{{ datamesSed.mesa_compartida }}</p>
                             </div>
-                        </div>
+                        </div> -->
                     </template>
 
                     <div
@@ -463,12 +463,6 @@
                             <p class="panel-value">{{ fechavinc.anodata }}</p>
                         </div>
                     </div>
-                    <div class="col-6">
-                        <b class="panel-label">ANTIGUEDAD LABORAL:</b>
-                        <div>
-                            <p class="panel-value">{{ fechavinc.vinc }}</p>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -486,7 +480,30 @@ export default {
         ...mapState('pagaduriasModule', ['pagaduriaType']),
         ...mapGetters('pagaduriasModule', ['couponsIngresos']),
         ...mapState('pagaduriasModule', ['coupons']),
-        ...mapGetters('pagaduriasModule', ['ingresosExtras', 'salarioBasico', 'valorIngreso'])
+        ...mapGetters('pagaduriasModule', ['ingresosExtras', 'salarioBasico', 'valorIngreso']),
+        fechaIngreso() {
+            return this.datamesSed.fecha_ingreso;
+        },
+        antiguedad(){
+            return this.calcularAntiguedad(this.fechaIngreso);
+        }
+    },
+
+    methods: {
+        calcularAntiguedad(fechaIngreso) {
+            var partes = fechaIngreso.split('/');
+            var fechaNacimientoFormatoCorrecto = partes[1] + '/' + partes[0] + '/' + partes[2];
+            var hoy = new Date();
+            var ingreso = new Date(fechaNacimientoFormatoCorrecto);
+            var antiguedad = hoy.getFullYear() - ingreso.getFullYear();
+            var m = hoy.getMonth() - ingreso.getMonth();
+
+            if (m < 0 || (m === 0 && hoy.getDate() < ingreso.getDate())) {
+                antiguedad = antiguedad - 1;
+            }
+            return antiguedad;
+            
+        },
     }
 };
 </script>
