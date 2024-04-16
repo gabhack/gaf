@@ -488,7 +488,7 @@ datalist option:focus {
 
 td,
 th {
-    text-align: center;
+    text-align: left;
 }
 
 .label-resumen {
@@ -619,12 +619,12 @@ export default {
                 },
                 {
                     key: 'nomp',
-                    label: 'Nombre Proceso',
+                    label: 'Cliente Demandado',
                     sortable: false
                 },
                 {
                     key: 'docdeman',
-                    label: 'Documento de la Demanda',
+                    label: 'Número de Pagaré',
                     sortable: false
                 },
                 {
@@ -634,7 +634,7 @@ export default {
                 },
                 {
                     key: 'temb',
-                    label: 'Total Embargos',
+                    label: 'Cuota Embargada',
                     sortable: false
                 }
             ],
