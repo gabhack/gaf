@@ -756,14 +756,12 @@ export default {
 
             resultadosFiltrados = resultadosFiltrados.map(embargo => ({
                 ...embargo,
-                valor: this.formatCurrency(embargo.temb)
+                temb: this.formatCurrency(embargo.temb)
             }));
             return resultadosFiltrados;
         },
         cuponesFiltrados() {
             let resultadosFiltrados = this.coupons;
-
-          
 
             let totalCuotasAldia = this.sumarTotalesSinFormato(resultadosFiltrados, 'egresos');
             this.totalCuotasAldia = this.formatCurrency(totalCuotasAldia);
@@ -794,11 +792,18 @@ export default {
         },
 
         formatCurrency(value) {
-            const number = parseFloat(value);
+            let formattedValue = value.toString().replace(/,/g, '');
+
+            const number = parseFloat(formattedValue);
             if (isNaN(number)) return value;
 
             try {
-                return number.toLocaleString('es-CO', { style: 'currency', currency: 'COP' });
+                return number.toLocaleString('es-CO', {
+                    style: 'currency',
+                    currency: 'COP',
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                });
             } catch (e) {
                 return value;
             }
@@ -933,11 +938,12 @@ export default {
 
         sumarTotalesSinFormato(items, key) {
             const parseToNumber = value => {
-                const parsed = parseFloat(value);
+                const parsed = parseFloat(value.replace(/,/g, ''));
                 return isNaN(parsed) ? 0 : parsed;
             };
             return items.reduce((total, item) => total + parseToNumber(item[key]), 0);
         },
+
         getCausalesByDoc(doc, idRow) {
             const causalesFiltrados = this.causales.filter(
                 causal =>
