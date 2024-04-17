@@ -114,8 +114,9 @@
                 <b>RESULTADOS DE LA CONSULTA (Cartera al Día)</b>
             </div>
             <div class="panel-body">
+                <b-form-input v-model="filtroCupon" placeholder="Buscar por documento..." class="mb-3"></b-form-input>
                 <div class="table-responsive">
-                    <b-table striped id="aldia-table" hover :fields="cupones" :items="paginatedCoupons"></b-table>
+                    <b-table striped id="aldia-table" hover :fields="cupones" :items="cuponesFiltrados"></b-table>
                     <b-pagination
                         v-model="currentPageAldia"
                         :per-page="perPageAldia"
@@ -263,13 +264,14 @@
                 <b>RESULTADOS DE LA CONSULTA (Cartera Embargada)</b>
             </div>
             <div class="panel-body">
+                <b-form-input v-model="filtroEmbargo" placeholder="Buscar por documento..." class="mb-3"></b-form-input>
                 <div class="table-responsive">
                     <b-table
                         striped
                         id="embargo-table"
                         hover
                         :fields="embargosFields"
-                        :items="paginatedEmbargos"
+                        :items="embargosFiltrados"
                     ></b-table>
                     <b-pagination
                         v-model="currentPageEmbargo"
@@ -674,6 +676,8 @@ export default {
             causales: [],
             causalesFinal: [],
             filtroDescuento: '',
+            filtroEmbargo: '',
+            filtroCupon: '',
             situacionLaboral: '',
             isLoadingModal: false,
             incapacidades: false,
@@ -697,31 +701,6 @@ export default {
         await this.getPagaduriasNames();
     },
     computed: {
-        paginatedCoupons() {
-            const start = (this.currentPageAldia - 1) * this.perPageAldia;
-            const end = start + this.perPageAldia;
-            this.rowsAldia = this.coupons.length;
-            if (this.selectedEstado === 'Al día') {
-                this.updateTotals();
-            }
-            return this.coupons.slice(start, end).map(item => ({
-                ...item,
-                egresos: this.formatCurrency(item.egresos)
-            }));
-        },
-        paginatedEmbargos() {
-            const start = (this.currentPageEmbargo - 1) * this.perPageEmbargo;
-            const end = start + this.perPageEmbargo;
-            this.rowsEmbargo = this.embargos.length;
-            if (this.selectedEstado === 'Embargado') {
-                this.updateTotals();
-            }
-
-            return this.embargos.slice(start, end).map(item => ({
-                ...item,
-                temb: this.formatCurrency(item.temb)
-            }));
-        },
         descuentosFiltrados() {
             let resultadosFiltrados = this.descuentos;
 
@@ -755,9 +734,58 @@ export default {
             }));
             return resultadosFiltrados;
         },
-        totalRows() {
-            return this.filtroDescuento ? this.descuentosFiltrados.length : this.descuentos.length;
+        embargosFiltrados() {
+            let resultadosFiltrados = this.embargos;
+
+            if (this.filtroEmbargo) {
+                resultadosFiltrados = resultadosFiltrados.filter(embargo =>
+                    embargo.doc.toLowerCase().includes(this.filtroEmbargo.toLowerCase())
+                );
+            }
+
+            let totalCuotasEmbargo = this.sumarTotalesSinFormato(resultadosFiltrados, 'temb');
+            this.totalCuotasEmbargo = this.formatCurrency(totalCuotasEmbargo);
+
+            this.rowsEmbargo = resultadosFiltrados.length;
+
+            if (!this.filtroEmbargo) {
+                const start = (this.currentPageEmbargo - 1) * this.perPageEmbargo;
+                const end = start + this.perPageEmbargo;
+                resultadosFiltrados = resultadosFiltrados.slice(start, end);
+            }
+
+            resultadosFiltrados = resultadosFiltrados.map(embargo => ({
+                ...embargo,
+                valor: this.formatCurrency(embargo.temb)
+            }));
+            return resultadosFiltrados;
+        },
+        cuponesFiltrados() {
+            let resultadosFiltrados = this.coupons;
+
+          
+
+            let totalCuotasAldia = this.sumarTotalesSinFormato(resultadosFiltrados, 'egresos');
+            this.totalCuotasAldia = this.formatCurrency(totalCuotasAldia);
+
+            this.rowsAldia = resultadosFiltrados.length;
+
+            if (!this.filtroCupon) {
+                const start = (this.currentPageAldia - 1) * this.perPageAldia;
+                const end = start + this.perPageAldia;
+                resultadosFiltrados = resultadosFiltrados.slice(start, end);
+            }
+
+            resultadosFiltrados = resultadosFiltrados.map(cupon => ({
+                ...cupon,
+                egresos: this.formatCurrency(cupon.egresos)
+            }));
+
+            return resultadosFiltrados;
         }
+        /*totalRows() {
+            return this.filtroDescuento ? this.descuentosFiltrados.length : this.descuentos.length;
+        }*/
     },
 
     methods: {
@@ -813,10 +841,6 @@ export default {
             } else if (this.selectedEstado === 'Embargado') {
                 this.fetchData('/embargos/by-pagaduria', payload, this.handleEmbargosResponse);
             }
-
-            this.descuentosFiltradosPorMliquid = this.descuentos.filter(descuento =>
-                descuento.mliquid.toLowerCase().includes(this.mliquid.toLowerCase())
-            );
         },
 
         async fetchData(url, payload, responseHandler) {
@@ -871,6 +895,9 @@ export default {
         },
         resetData() {
             this.filtroDescuento = '';
+            this.filtroCupon = '';
+            this.filtroEmbargo = '';
+
             this.coupons = [];
             this.descuentos = [];
             this.embargos = [];
