@@ -306,8 +306,8 @@ public function getSituacionLaboralByDoc($doc)
     try {
         Log::info("Consultando la situación laboral para el documento: {$doc}");
 
-        $data = DatamesGen::where('doc', $doc)
-                          ->latest('id') 
+        $data = DatamesGen::where('doc', 'like', "%{$doc}%")
+                          ->latest('id')
                           ->first(['situacion_laboral']);
 
         if (!$data) {
@@ -323,12 +323,44 @@ public function getSituacionLaboralByDoc($doc)
         Log::error("Error al buscar la situación laboral por documento: {$doc}", [
             'doc' => $doc,
             'exception' => $e->getMessage(),
-            'stack' => $e->getTraceAsString(), // Considera si realmente necesitas el stack trace completo por motivos de seguridad/privacidad.
+            'stack' => $e->getTraceAsString(),
         ]);
 
         return response()->json(['error' => 'Ocurrió un error al procesar la solicitud'], 500);
     }
 }
 
-}
+public function getSituacionLaboralByDocs(Request $request)
+{
+    try {
+        $documentos = $request->input('documentos', []);
+        Log::info("Consultando la situación laboral para múltiples documentos.");
 
+        $situaciones = DatamesGen::whereIn('doc', $documentos)
+                                ->latest('id')
+                                ->get()
+                                ->keyBy('doc')  // Esto asume que 'doc' es único
+                                ->map(function ($item) {
+                                    return $item->situacion_laboral;
+                                });
+
+        if ($situaciones->isEmpty()) {
+            Log::info("No se encontraron situaciones laborales para los documentos proporcionados.");
+            return response()->json(['mensaje' => 'No se encontraron situaciones laborales para los documentos proporcionados.'], 404);
+        }
+
+        Log::info("Situaciones laborales encontradas.", ['situaciones' => $situaciones]);
+
+        return response()->json($situaciones, 200);
+
+    } catch (\Exception $e) {
+        Log::error("Error al buscar las situaciones laborales por documentos", [
+            'documentos' => $documentos,
+            'exception' => $e->getMessage(),
+            'stack' => $e->getTraceAsString(),
+        ]);
+
+        return response()->json(['error' => 'Ocurrió un error al procesar la solicitud'], 500);
+    }
+}
+}
