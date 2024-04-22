@@ -114,7 +114,18 @@
                 <b>RESULTADOS DE LA CONSULTA (Cartera al Día)</b>
             </div>
             <div class="panel-body">
-                <b-form-input v-model="filtroCupon" placeholder="Buscar por documento..." class="mb-3"></b-form-input>
+                <div class="row">
+                    <div class="col-sm-10">
+                        <b-form-input
+                            v-model="inputFiltroCupon"
+                            placeholder="Buscar por documento..."
+                            class="mb-3"
+                        ></b-form-input>
+                    </div>
+                    <div class="col-sm-2">
+                        <b-button @click="aplicarFiltroCupon" variant="primary">Filtrar</b-button>
+                    </div>
+                </div>
                 <div class="table-responsive">
                     <b-table striped id="aldia-table" hover :fields="cupones" :items="cuponesFiltrados"></b-table>
                     <b-pagination
@@ -215,7 +226,13 @@
                             <div v-if="situacionLaboral === 'normal'">
                                 <h6 style="color: green">La situación laboral es normal</h6>
                             </div>
-                            <div v-else-if="descuentos.length > 0">
+                            <template v-if="situacionLaboral === 'información no disponible'">
+                                <h6 style="color: red">
+                                    Hubo un inconveniente al consultar la situación laboral de este trabajador.
+                                </h6>
+                            </template>
+
+                            <div v-else-if="situacionLaboral != 'normal'">
                                 <h6 style="color: red">La situación del trabajador no es normal</h6>
                             </div>
 
@@ -677,11 +694,13 @@ export default {
             causalesFinal: [],
             filtroDescuento: '',
             filtroEmbargo: '',
+            inputFiltroCupon: '',
             filtroCupon: '',
             situacionLaboral: '',
             isLoadingModal: false,
             incapacidades: false,
-            filtroAplicado: false
+            filtroAplicado: false,
+            situacionesLaborales: {}
         };
     },
     watch: {
@@ -762,7 +781,11 @@ export default {
         },
         cuponesFiltrados() {
             let resultadosFiltrados = this.coupons;
-
+            if (this.filtroCupon) {
+                resultadosFiltrados = resultadosFiltrados.filter(cupon =>
+                    cupon.doc.toLowerCase().includes(this.filtroCupon.toLowerCase())
+                );
+            }
             let totalCuotasAldia = this.sumarTotalesSinFormato(resultadosFiltrados, 'egresos');
             this.totalCuotasAldia = this.formatCurrency(totalCuotasAldia);
 
@@ -789,6 +812,9 @@ export default {
     methods: {
         clearCausales() {
             this.causalesFinal = [];
+        },
+        aplicarFiltroCupon() {
+            this.filtroCupon = this.inputFiltroCupon;
         },
 
         formatCurrency(value) {
@@ -847,18 +873,41 @@ export default {
                 this.fetchData('/embargos/by-pagaduria', payload, this.handleEmbargosResponse);
             }
         },
-
         async fetchData(url, payload, responseHandler) {
             try {
                 const response = await axios.post(url, payload);
                 responseHandler.call(this, response.data);
+                if (url.includes('descuentos')) {
+                    // Asegúrate de llamar a la carga de situaciones laborales solo después de completar la respuesta
+                    this.$nextTick(() => {
+                        this.loadSituacionLaboral();
+                    });
+                }
             } catch (error) {
                 console.error(`Error al obtener datos de: ${url}`, error);
             } finally {
                 this.isLoading = false;
             }
         },
+        async loadSituacionLaboral() {
+            const currentPageItems = this.descuentosFiltrados.slice(
+                (this.currentPageMora - 1) * this.perPageMora,
+                this.currentPageMora * this.perPageMora
+            );
+            const docs = currentPageItems.map(item => item.doc);
 
+            try {
+                const response = await axios.post('/api/situacion-laboral-batch', { documentos: docs });
+                docs.forEach(doc => {
+                    if (response.data[doc]) {
+                        this.situacionesLaborales[doc] = response.data[doc];
+                    }
+                });
+                console.log('Situaciones laborales cargadas para la página actual:', this.situacionesLaborales);
+            } catch (error) {
+                console.error('Error al cargar situaciones laborales para documentos paginados:', error);
+            }
+        },
         handleCouponsResponse(data) {
             this.coupons = data;
         },
@@ -870,7 +919,6 @@ export default {
             this.embargos = data;
             this.fillCausalesFromEmbargos();
         },
-
         fillCausalesFromDescuentos() {
             this.descuentos.forEach(descuento => {
                 const causal = {
@@ -965,40 +1013,23 @@ export default {
         async handleButtonClick(doc, idRow) {
             this.isLoadingModal = true;
             this.causalesFinal = [];
-            this.situacionLaboral = '';
+            console.log('Datos disponibles al abrir modal:', this.situacionesLaborales[doc]);
 
             const causalesRelacionados = this.getCausalesByDoc(doc, idRow);
-
-            causalesRelacionados.forEach(causalEmbargo => {
+            causalesRelacionados.forEach(causal => {
                 const causalesDeEmbargo = {
-                    entidad: causalEmbargo.entidad,
-                    docentidad: causalEmbargo.docentidad || '',
-                    valor: causalEmbargo.valor,
-                    motivo: causalEmbargo.motivo
+                    entidad: causal.entidad,
+                    docentidad: causal.docentidad || '',
+                    valor: causal.valor,
+                    motivo: causal.motivo
                 };
                 this.causalesFinal.push(causalesDeEmbargo);
             });
 
             await this.checkIncapacidades(doc, this.month, this.year);
+            this.situacionLaboral = (this.situacionesLaborales[doc] || 'información no disponible').toLowerCase();
 
-            try {
-                const response = await axios.get(`/situacion-laboral/${doc}`);
-
-                if (response.data) {
-                    if (typeof response.data === 'object' && response.data.miPropiedad) {
-                        this.situacionLaboral = response.data.miPropiedad.trim().toLowerCase();
-                    } else if (typeof response.data === 'string') {
-                        this.situacionLaboral = response.data.trim().toLowerCase();
-                    }
-                } else {
-                    this.situacionLaboral = 'información no disponible';
-                }
-            } catch (error) {
-                console.error('Error al obtener la situación laboral:', error);
-                this.situacionLaboral = 'error al obtener la información';
-            } finally {
-                this.isLoadingModal = false;
-            }
+            this.isLoadingModal = false;
         }
     }
 };

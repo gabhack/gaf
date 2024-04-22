@@ -621,6 +621,7 @@ Route::get('/pagadurias/names', 'PagaduriasController@getPagaduriasNames');
 Route::get('/pagadurias/namesAmi', 'PagaduriasController@getPagaduriasNamesAmi');
 Route::get('/situacion-laboral/{doc}', 'PagaduriasController@getSituacionLaboralByDoc');
 Route::get('/incapacidad/{doc}/{month}/{year}', 'CouponsController@getIncapacidadByDoc')->name('incapacidad.byDoc');
+Route::post('/api/situacion-laboral-batch', 'PagaduriasController@getSituacionLaboralByDocs');
 
 Route::post('/descuentos/by-pagaduria', [DescuentosController::class, 'getDescuentosByPagaduria']);
 Route::post('/embargos/by-pagaduria', [EmbargosController::class, 'getEmbargosByPagaduria']);
