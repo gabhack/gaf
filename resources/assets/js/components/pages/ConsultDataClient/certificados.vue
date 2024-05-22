@@ -3,323 +3,377 @@
         <div v-if="type_consult === 'individual'">
             <div id="consulta-container" class="row">
                 <div class="panel mb-3 col-md-12">
-                    <div class="panel-heading" style=" box-shadow: 10px 5px 5px #09ac80">
-                        <h4 class="mb-0" style="font-weight: bold;">Certificados de Nacimiento - Defunción</h4>
+                    <div class="panel-heading" style="box-shadow: 10px 5px 5px #09ac80">
+                        <h4 class="mb-0" style="font-weight: bold">Registro de Documentos</h4>
                     </div>
                     <div class="panel-body">
-                        <div class="row">
-                            <div class="col-6">
-                                <b-button id="show-btn" v-on:click="showModal">Carga Masiva</b-button>
-                                <b-modal ref="modal" hide-footer title="Carga Individual">
-                                    <b class="panel-label">Nombres:</b>
-                                    <input
-                                        required
-                                        class="form-control text-center"
-                                        type="text"
-                                        v-model="dataclient.name"
-                                    />
-                                    <b class="panel-label">Cédula:</b>
-                                    <input
-                                        required
-                                        class="form-control text-center"
-                                        type="text"
-                                        v-model="dataclient.name"
-                                    />
-                                    <div class="row">
-                                        <div class="col-6 d-flex align-items-center">
-                                            <b-button class="mt-3" variant="outline-danger" block @click="hideModal">Cerrar</b-button>
-                                        </div>        
-                                        <div class="col-6 d-flex align-items-center">
-                                            <b-button class="mt-3" variant="outline-warning" block @click="hideModal">Cargar</b-button>
-                                        </div>
-                                    </div>
-                                </b-modal>
-                                <b-button id="show-btn" v-on:click="showModal2">Carga indivual</b-button>
-                                <b-modal ref="modal2" hide-footer title="Carga Individual">
-                                    <b class="panel-label">Nombres:</b>
-                                    <input
-                                        required
-                                        class="form-control text-center"
-                                        type="text"
-                                        v-model="dataclient.name"
-                                    />
-                                    <b class="panel-label">Cédula:</b>
-                                    <input
-                                        required
-                                        class="form-control text-center"
-                                        type="text"
-                                        v-model="dataclient.name"
-                                    />
-                                    <b class="panel-label">Subir certificado:</b>
-                                    <b-form-file
-                                        v-model="dataclient.file"
-                                        :state="Boolean(dataclient.file)"
-                                        placeholder="Oprime o Suelta el archivo aquí"
-                                        class="carga-archivo"
-                                    ></b-form-file>
-                                    <div class="row">
-                                        <div class="col-6 d-flex align-items-center">
-                                            <b-button class="mt-3" variant="outline-danger" block @click="hideModal2">Cerrar</b-button>
-                                        </div>        
-                                        <div class="col-6 d-flex align-items-center">
-                                            <b-button class="mt-3" variant="outline-warning" block @click="hideModal2">Cargar</b-button>
-                                        </div>
-                                    </div>
-                                </b-modal>
-                            </div>
-                            <!-- <b-button
-                                type="button"
-                                variant="black-pearl"
-                                class="px-4"
-                                @click="getAllPagadurias"
-                            >
-                                CONSULTAR PAGADURIAS
-                            </b-button> -->
-                            <div class="col-6">
-                                
-                            </div>
-                            <div id="table1" style="display: none;">
-                                HOLA
-                            </div>
-
-                            <div id="table2" style="display: none;">
-                                ADIÓS
-                            </div>
-                        </div>
+                        <button class="btn btn-primary" @click="showModalToAdd"><i class="fas fa-plus"></i></button>
+                        <button class="btn btn-primary" @click="showBulkUploadModal">
+                            <i class="fas fa-upload"></i> Crear Registro Masivo
+                        </button>
+                        <table class="table table-striped mt-3">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Fecha/Hora</th>
+                                    <th>Compañía</th>
+                                    <th>Usuario</th>
+                                    <th>Cédula</th>
+                                    <th>Nombre Completo</th>
+                                    <th>Tipo de Documento</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="item in items" :key="item.id">
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.timestamp }}</td>
+                                    <td>{{ item.company }}</td>
+                                    <td>{{ item.user }}</td>
+                                    <td>{{ item.documentId }}</td>
+                                    <td>{{ item.fullName }}</td>
+                                    <td>{{ item.documentType }}</td>
+                                    <td>{{ item.status }}</td>
+                                    <td>
+                                        <button class="btn btn-success" @click="showUploadModal(item)">
+                                            <i class="fas fa-upload"></i>
+                                        </button>
+                                        <button class="btn btn-danger" @click="deletePdf(item)">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                        <a href="#" v-if="item.pdfUrl" @click="downloadPdf(item)" class="btn btn-info">
+                                            <i class="fas fa-download"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                <div class="panel-heading" style="box-shadow: 10px 5px 5px  #09ac80;">
-                    <h5 class="mb-0 text-center" style="font-weight: bold;">RESULTADO</h5>
-                </div>
-                <!-- <DescapliEmpty /> -->
-                <!-- <div><carteraembargo /></div>
-                <div><carteraaldia /></div> -->
-                <div><carteramora /></div> 
-                
                 </div>
             </div>
         </div>
-    </div>          
+
+        <!-- Modal for adding/editing a document -->
+        <div class="modal" tabindex="-1" role="dialog" style="display: none" ref="editModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{ currentItem.id ? 'Editar Documento' : 'Agregar Documento' }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="hideModal">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form @submit.prevent="submitForm">
+                            <div class="form-group">
+                                <label for="company">Compañía</label>
+                                <input
+                                    type="text"
+                                    id="company"
+                                    v-model="currentItem.company"
+                                    class="form-control"
+                                    required
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label for="user">Usuario</label>
+                                <input type="text" id="user" v-model="currentItem.user" class="form-control" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="documentId">Cédula</label>
+                                <input
+                                    type="text"
+                                    id="documentId"
+                                    v-model="currentItem.documentId"
+                                    class="form-control"
+                                    required
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label for="fullName">Nombre Completo</label>
+                                <input
+                                    type="text"
+                                    id="fullName"
+                                    v-model="currentItem.fullName"
+                                    class="form-control"
+                                    required
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label for="documentType">Tipo de Documento</label>
+                                <select
+                                    id="documentType"
+                                    v-model="currentItem.documentType"
+                                    class="form-control"
+                                    required
+                                >
+                                    <option disabled value="">Seleccione uno</option>
+                                    <option value="certificado de defunción">Certificado de Defunción</option>
+                                    <option value="nacimiento">Nacimiento</option>
+                                    <option value="historia clínica">Historia Clínica</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                {{ currentItem.id ? 'Actualizar' : 'Agregar' }}
+                            </button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @click="hideModal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for uploading PDF -->
+        <div class="modal" tabindex="-1" role="dialog" style="display: none" ref="uploadModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Cargar PDF para Documento</h5>
+                        <button
+                            type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                            @click="hideUploadModal"
+                        >
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="file" @change="handleFileUpload" class="form-control" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" @click="uploadPdf">Subir</button>
+                        <button type="button" class="btn btn-secondary" @click="hideUploadModal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for bulk uploading documents -->
+        <div class="modal" tabindex="-1" role="dialog" style="display: none" ref="bulkUploadModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Cargar Archivo Excel para Documentos</h5>
+                        <button
+                            type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                            @click="hideBulkUploadModal"
+                        >
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="file" @change="handleBulkFileUpload" class="form-control" />
+                        <p class="mt-3">
+                            Por favor asegúrese de que el archivo Excel tenga los siguientes encabezados (en cualquier
+                            orden) y que los datos sean válidos:
+                        </p>
+                        <ul>
+                            <li>Compañia | Usuario | Cedula | NombreCompleto | Tipo (1, 2, o 3)</li>
+                        </ul>
+                        <div v-if="bulkUploadError" class="alert alert-danger mt-3">
+                            <p>Error al cargar el archivo:</p>
+                            <ul>
+                                <li v-for="message in bulkUploadErrorMessages" :key="message">{{ message }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" @click="uploadBulkFile">Subir</button>
+                        <button type="button" class="btn btn-secondary" @click="hideBulkUploadModal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
-<style>
-.table-text {
-    font-size: 12px;
-}
-.carga-archivo:hover{
-    cursor: pointer;
-}
-.tables-space {
-    margin-top: 15px !important;
-}
-</style>
-<script src="print.js"></script>
-<script rel="stylesheet" type="text/css" href="print.css" />
+
 <script>
-import printJS from 'print-js';
-import carteraaldia from './carteraaldia'
-import carteramora from './carteramora'
-import carteraembargo from './carteraembargo'
-import DescapliEmpty from '../ConsultDataClientDraft/DescapliEmpty.vue';
+import axios from 'axios';
 
 export default {
-    components: {
-        carteraaldia,
-        carteramora,
-        carteraembargo,
-        DescapliEmpty
-    },
-    props: ['user'],
     data() {
         return {
-            opciones: ['sem choco', 'sed boyaca', 'sem ibague', 'sed tolima'],
-            dataclient: {
-                name: '',
-                tasa: null,
-                file: 0
-            },
-            plan: 'basico',
-            selected: '',
-            anio: '',
-            mes: '',
-            enableFirstStep: false,
-            enableSecondStep: false,
-            enableThirdStep: false,
-            enableFourStep: false,
-            dataPlusFopep: false,
-            dataPlusFidu: false,
-            dataPlusFode: false,
-            file1: false,
-            consultaDescapli: [],
-            actualDate: new Date().toLocaleString(),
-            pagare: [],
-            pagareSelected: [],
-            nomterSelect: [],
-            resultPagare: [],
-            filter: '',
+            items: [],
             type_consult: 'individual',
-
-            datames: [],
-            fechaVinc: [],
-            descapli: [],
-            descnoap: [],
-            datamesfidu: [],
-            datamessedvalle: [],
-            id_consulta: null
+            currentItem: {},
+            editMode: false,
+            bulkFile: null,
+            bulkUploadError: false,
+            bulkUploadErrorMessages: []
         };
     },
-    computed: {
-        filteredRows() {
-            if (!this.resultPagare.entidad) return false;
-
-            return this.resultPagare.entidad.filter(row => {
-                const pagare = row.toString().toLowerCase();
-                const searchTerm = this.filter.toLowerCase();
-
-                return pagare.includes(searchTerm);
-            });
-        },
+    created() {
+        this.fetchDocuments();
     },
     methods: {
-        showModal() {
-        this.$refs['modal'].show()
-      },
-      hideModal() {
-        this.$refs['modal'].hide()
-      },
-      showModal2() {
-        this.$refs['modal2'].show()
-      },
-      hideModal2() {
-        this.$refs['modal2'].hide()
-      },
-        updateSecondInput() {
-      this.isRequired = this.selectedOption === "option2";
-    },
-        getData() {
-            this.getDatames();
-            this.getFechaVinc();
-            this.getDescapli();
-            this.getDescnoap();
-            this.getDatamesfidu();
-            this.getDatamesSedValle();
-        },
-        getDatames() {
-            axios.get(`datames/${this.dataclient.doc}`).then(response => {
-                this.datames = response.data;
-            });
-        },
-        getFechaVinc() {
-            axios.get(`fechavinc/${this.dataclient.doc}`).then(response => {
-                this.fechaVinc = response.data;
-            });
-        },
-        getDescapli() {
-            axios.get(`descapli/${this.dataclient.doc}`).then(response => {
-                this.descapli = response.data;
-            });
-        },
-        getDescnoap() {
-            axios.get(`descnoap/${this.dataclient.doc}`).then(response => {
-                console.log(response.data);
-                this.descnoap = response.data;
-            });
-        },
-        getDatamesfidu() {
-            axios.post('/datamesfidu/consultaUnitaria', { doc: this.dataclient.doc }).then(response => {
-                this.datamesfidu = response.data.data;
-            });
-        },
-        getDatamesSedValle() {
-            axios.post('/datamessedvalle/consultaUnitaria', { doc: this.dataclient.doc }).then(response => {
-                console.log(response.data);
-                this.datamessedvalle = response.data.data;
-            });
-        },
-        enableSteps(enable) {
-            if (enable === true) {
-                this.plan === 'premium';
-                this.enableFirstStep = true;
-                this.enableSecondStep = true;
-                this.enableThirdStep = true;
-                this.enableFourStep = true;
-                this.sendPagare();
-            } else {
-            }
-        },
-        getDataClient() {
+        fetchDocuments() {
             axios
-                .post('consultaDescnoap', { data: this.dataclient })
+                .get('/documents')
                 .then(response => {
-                    if (response.data.message === 'El cliente seleccionado tiene inconsistencias.') {
-                        this.consultaDescapli = response.data.data;
+                    this.items = response.data;
+                })
+                .catch(error => {
+                    console.error('There was an error fetching the documents: ', error);
+                });
+        },
+        downloadPdf(item) {
+            const url = `/documents/${item.id}/download-pdf`;
+            axios
+                .get(url, { responseType: 'blob' })
+                .then(response => {
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', `Document-${item.id}.pdf`);
+                    document.body.appendChild(link);
+                    link.click();
+                    link.remove();
+                })
+                .catch(error => {
+                    console.error('Error downloading the PDF:', error.response.data);
+                    console.log('Detailed path info:', error.response.data.path);
+                });
+        },
+        showModalToAdd() {
+            this.currentItem = { status: 'Pendiente' };
+            this.$refs.editModal.style.display = 'block';
+            this.editMode = false;
+        },
+        showModal(item) {
+            this.currentItem = Object.assign({}, item);
+            this.$refs.editModal.style.display = 'block';
+            this.editMode = true;
+        },
+        hideModal() {
+            this.$refs.editModal.style.display = 'none';
+        },
+        showUploadModal(item) {
+            this.currentItem = Object.assign({}, item);
+            this.$refs.uploadModal.style.display = 'block';
+        },
+        hideUploadModal() {
+            this.$refs.uploadModal.style.display = 'none';
+        },
+        handleFileUpload(event) {
+            this.currentItem.file = event.target.files[0];
+        },
+        submitForm() {
+            let method = this.editMode ? 'put' : 'post';
+            let url = `documents${this.editMode ? '/' + this.currentItem.id : ''}`;
+            axios[method](url, this.currentItem)
+                .then(response => {
+                    this.fetchDocuments();
+                    this.hideModal();
+                })
+                .catch(error => {
+                    console.error('There was an error submitting the form: ', error);
+                });
+        },
+        uploadPdf() {
+            if (!this.currentItem.file) {
+                alert('Please select a file.');
+                return;
+            }
+            const formData = new FormData();
+            formData.append('pdf', this.currentItem.file);
+            axios
+                .post(`documents/${this.currentItem.id}/upload-pdf`, formData)
+                .then(response => {
+                    this.currentItem.status = 'Procesado';
+                    this.fetchDocuments();
+                    this.hideUploadModal();
+                })
+                .catch(error => {
+                    console.error('There was an error uploading the file: ', error);
+                });
+        },
+        deletePdf(item) {
+            axios
+                .post(`/documents/${item.id}/delete-pdf`)
+                .then(response => {
+                    item.status = 'PDF Eliminado';
+                    this.fetchDocuments();
+                    console.log('PDF deleted successfully');
+                })
+                .catch(error => {
+                    console.error('There was an error deleting the PDF: ', error);
+                });
+        },
+        showBulkUploadModal() {
+            this.$refs.bulkUploadModal.style.display = 'block';
+        },
+        hideBulkUploadModal() {
+            this.$refs.bulkUploadModal.style.display = 'none';
+        },
+        handleBulkFileUpload(event) {
+            this.bulkFile = event.target.files[0];
+        },
+        uploadBulkFile() {
+            if (!this.bulkFile) {
+                alert('Por favor seleccione un archivo.');
+                return;
+            }
+            const formData = new FormData();
+            formData.append('file', this.bulkFile);
+            axios
+                .post('/documents/upload-bulk', formData)
+                .then(response => {
+                    this.fetchDocuments();
+                    this.hideBulkUploadModal();
+                    this.bulkUploadError = false;
+                    this.bulkUploadErrorMessages = [];
+                })
+                .catch(error => {
+                    if (error.response && error.response.status === 422) {
+                        this.bulkUploadError = true;
+                        this.bulkUploadErrorMessages = error.response.data.messages;
                     } else {
-                        axios
-                            .post('consultaUnitaria', { data: this.dataclient })
-                            .then(response => {
-                                if (response.data.message === 'El cliente seleccionado tiene inconsistencias.') {
-                                    toastr.success(response.data.message);
-                                    this.consultaDescapli = response.data.data;
-                                } else {
-                                    this.consultaDescapli = response.data.data;
-                                }
-                            })
-                            .catch(error => {
-                                toastr.success(response.data.message);
-                            });
+                        console.error('Hubo un error al cargar el archivo: ', error);
                     }
-                })
-                .catch(error => {
-                    console.log(error);
                 });
-        },
-
-        vAplicado(value, data, pagareSelect, nomterSelected) {
-            if (value === true) {
-                this.pagareSelected.push(data);
-            }
-
-            this.dataclient.pagareSelected = this.pagareSelected;
-
-            if (value === true) {
-                this.pagare.push(data);
-                this.nomterSelect.push(nomterSelected);
-                this.dataclient.v_aplicado = this.pagare;
-                this.dataclient.nomterSelect = this.nomterSelect;
-            } else {
-                let pagare = this.pagare.filter(function (item) {
-                    return item !== nomterSelected;
-                });
-                this.dataclient.v_aplicado = pagare;
-
-                let pagareSelected = this.pagareSelected.filter(function (item) {
-                    return item.pagare !== pagareSelect;
-                });
-                this.dataclient.pagareSelected = pagareSelected;
-
-                let nomterSelect = this.nomterSelect.filter(function (item) {
-                    return item !== nomterSelected;
-                });
-                this.dataclient.nomterSelect =
-                    nomterSelect.length === 0 ? nomterSelected : this.nomterSelect.push(nomterSelected);
-            }
-            console.log(this.dataclient);
-        },
-
-        sendPagare() {
-            axios
-                .post('resultadoAprobacion', { data: this.dataclient })
-                .then(response => {
-                    toastr.success(response.data.message);
-                    this.id_consulta = response.data.data.id_consulta;
-                    this.resultPagare = response.data.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-        },
-
-        print() {
-            window.print();
         }
     }
 };
 </script>
+
+<style scoped>
+.panel-heading {
+    box-shadow: 10px 5px 5px #09ac80;
+    font-weight: bold;
+}
+.btn-primary,
+.btn-warning,
+.btn-danger,
+.btn-success {
+    margin-right: 8px;
+}
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.modal-dialog {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 600px; /* Adjust the width as needed */
+}
+.modal-body {
+    max-height: 70vh; /* Adjust the height as needed */
+    overflow-y: auto;
+}
+</style>

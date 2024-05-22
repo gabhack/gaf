@@ -17,6 +17,8 @@ use App\Http\Controllers\EmbargosController;
 use App\Http\Controllers\VisadoController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DocumentController;
+
 
 /* Route::get('/get-test', 'TestController@index');
 Route::get('/get-test/{doc}', 'TestController@search'); */
@@ -625,3 +627,16 @@ Route::post('/api/situacion-laboral-batch', 'PagaduriasController@getSituacionLa
 
 Route::post('/descuentos/by-pagaduria', [DescuentosController::class, 'getDescuentosByPagaduria']);
 Route::post('/embargos/by-pagaduria', [EmbargosController::class, 'getEmbargosByPagaduria']);
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
+    Route::post('/documents', [DocumentController::class, 'store'])->name('documents.store');
+    Route::post('/documents/{id}/update-status', [DocumentController::class, 'updateStatus'])->name('documents.update.status');
+    Route::post('/documents/{id}/upload-pdf', [DocumentController::class, 'uploadPdf'])->name('documents.upload.pdf');
+    Route::post('/documents/{id}/delete-pdf', [DocumentController::class, 'deletePdf'])->name('documents.delete.pdf');
+    Route::delete('/documents/{id}', [DocumentController::class, 'destroy'])->name('documents.destroy');
+    Route::get('/documents/{id}/download-pdf', [DocumentController::class, 'downloadPdf'])->name('documents.download.pdf')->middleware('auth');
+
+    Route::get('/documents/template', [DocumentController::class, 'downloadTemplate']);
+    Route::post('/documents/upload-bulk', [DocumentController::class, 'uploadBulk']);
+});
