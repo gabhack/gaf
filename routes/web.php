@@ -18,6 +18,7 @@ use App\Http\Controllers\VisadoController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\DemograficoController;
 
 
 /* Route::get('/get-test', 'TestController@index');
@@ -627,6 +628,10 @@ Route::post('/api/situacion-laboral-batch', 'PagaduriasController@getSituacionLa
 
 Route::post('/descuentos/by-pagaduria', [DescuentosController::class, 'getDescuentosByPagaduria']);
 Route::post('/embargos/by-pagaduria', [EmbargosController::class, 'getEmbargosByPagaduria']);
+
+
+Route::get('/demografico', [DemograficoController::class, 'show'])->name('demografico.show');
+Route::post('/demografico/upload', [DemograficoController::class, 'upload'])->name('demografico.upload');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');

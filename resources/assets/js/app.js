@@ -24,7 +24,6 @@ import Vuelidate from 'vuelidate';
 Vue.use(Vuelidate);
 
 import VueIframe from 'vue-iframes';
-
 Vue.use(VueIframe);
 
 import VueCurrencyFilter from 'vue-currency-filter';
@@ -36,6 +35,8 @@ Vue.use(Loading);
 
 import VueSwal from 'vue-swal';
 Vue.use(VueSwal);
+
+import DemographicData from './components/pages/Demographic/DemographicData.vue';
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -105,6 +106,9 @@ Vue.component(
 //CUPONES
 
 Vue.component('CouponsFormConsult', require('./components/pages/Coupons/CouponsFormConsult.vue').default);
+
+//Datos demograficos de datames
+Vue.component('DemographicData', DemographicData);
 
 /* Vue Init */
 const app = new Vue({
