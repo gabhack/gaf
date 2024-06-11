@@ -37,7 +37,7 @@ import VueSwal from 'vue-swal';
 Vue.use(VueSwal);
 
 import DemographicData from './components/pages/Demographic/DemographicData.vue';
-
+import UploadPensiones from './components/pages/Pensiones/upload.vue';
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -109,6 +109,7 @@ Vue.component('CouponsFormConsult', require('./components/pages/Coupons/CouponsF
 
 //Datos demograficos de datames
 Vue.component('DemographicData', DemographicData);
+Vue.component('UploadPensiones', UploadPensiones);
 
 /* Vue Init */
 const app = new Vue({

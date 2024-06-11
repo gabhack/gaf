@@ -25,6 +25,14 @@
                 <b>Resultados</b>
             </div>
             <div class="panel-body">
+                <div class="form-group">
+                    <input
+                        type="text"
+                        v-model="searchQuery"
+                        placeholder="Buscar por documento"
+                        class="form-control mb-3"
+                    />
+                </div>
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -36,7 +44,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="result in results" :key="result.doc">
+                        <tr v-for="result in filteredResults" :key="result.doc">
                             <td>{{ result.doc }}</td>
                             <td>{{ result.cel }}</td>
                             <td>{{ result.direccion_residencial }}</td>
@@ -71,8 +79,16 @@ export default {
             file: null,
             isLoading: false,
             results: [],
+            searchQuery: '',
             error: null
         };
+    },
+    computed: {
+        filteredResults() {
+            return this.results.filter(result => {
+                return result.doc.toString().includes(this.searchQuery);
+            });
+        }
     },
     methods: {
         handleFileUpload(event) {

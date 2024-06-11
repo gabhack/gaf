@@ -1152,20 +1152,6 @@ export default {
                 FOPEP: {
                     amount: { key: 'Monto Solicitado', value: 1000000 },
                     dues: { key: 'Cuotas', value: this.creditInfo.dues }
-                    // amount: { key: 'Monto Solicitado', value: this.creditInfo.amount },
-                    // dues: { key: 'Cuotas', value: this.creditInfo.dues }
-                    // aval: { key: 'Aval', value: this.creditInfo.aval },
-                    // ivaAval: { key: 'Aval IVA', value: this.creditInfo.ivaAval },
-                    // comision: { key: 'Comisión', value: this.creditInfo.comision },
-                    // val1TR: { key: 'val1TR', value: this.creditInfo.val1TR },
-                    // val2t: { key: 'val2t', value: this.creditInfo.val2t },
-                    // ivaCK: { key: 'IVA CK', value: this.creditInfo.ivaCK },
-                    // totalCredit: { key: 'Credito Total', value: this.creditInfo.totalCredit },
-                    // interesInicial: { key: 'Interes Inicial', value: this.creditInfo.interesInicial },
-                    // gmf: { key: 'GMF', value: this.creditInfo.gmf },
-                    // totalCredit2: { key: 'Total', value: this.creditInfo.totalCredit2 },
-                    // seguro: { key: 'Seguro', value: this.creditInfo.seguro },
-                    // cuota: { key: 'Cuota', value: this.creditInfo.cuota }
                 },
                 FIDUPREVISORA: {
                     amount: { key: 'Monto Solicitado', value: 2000000 },

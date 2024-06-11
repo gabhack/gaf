@@ -19,6 +19,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\DemograficoController;
+use App\Http\Controllers\ColpensionesController;
+use App\Http\Controllers\FiducidiariaController;
+use App\Http\Controllers\UploadController;
+
 
 
 /* Route::get('/get-test', 'TestController@index');
@@ -645,3 +649,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/documents/template', [DocumentController::class, 'downloadTemplate']);
     Route::post('/documents/upload-bulk', [DocumentController::class, 'uploadBulk']);
 });
+
+
+Route::get('/pensiones', [UploadController::class, 'index']);
+
+Route::post('/colpensiones/upload', [ColpensionesController::class, 'upload']);
+Route::get('/colpensiones/progress/{id}', [ColpensionesController::class, 'progress']);
+Route::post('/colpensiones/test-upload', [ColpensionesController::class, 'testUpload']); // Ruta de prueba
+
+
+Route::post('/fiducidiaria/upload', [FiducidiariaController::class, 'upload']);
+Route::get('/fiducidiaria/progress/{id}', [FiducidiariaController::class, 'progress']);
