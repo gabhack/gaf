@@ -85,6 +85,9 @@ export default {
     },
     computed: {
         filteredResults() {
+            if (this.searchQuery.length < 3) {
+                return this.results;
+            }
             return this.results.filter(result => {
                 return result.doc.toString().includes(this.searchQuery);
             });
