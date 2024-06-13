@@ -4,10 +4,10 @@
 
         <div class="panel mb-3 col-md-12">
             <div class="panel-heading">
-                <b>Carga de Archivo y Proceso de Datos</b>
+                <b>Busqueda de Cedulas</b>
             </div>
             <div class="panel-body">
-                <form @submit.prevent="submit" v-if="!processing && !completed">
+                <form @submit.prevent="submitFile" v-if="!uploading && !processing">
                     <b-form-group label="Seleccione el archivo para cargar">
                         <b-form-file @change="handleFileUpload" required></b-form-file>
                     </b-form-group>
@@ -24,13 +24,26 @@
 
                 <div v-if="processing">
                     <div class="overlay">
-                        <p>Processing the file, please wait... This may take up to 15 minutes.</p>
+                        <p>Processing the file, please wait...</p>
                     </div>
                 </div>
 
-                <div v-if="completed">
-                    <p>File processing completed!</p>
-                    <b-button variant="success" @click="reset">Upload Another File</b-button>
+                <div v-if="results.length > 0">
+                    <div class="mb-3">
+                        <b-form-input
+                            v-model="searchQuery"
+                            placeholder="Buscar por cédula (mínimo 3 caracteres)"
+                            @input="filterResults"
+                        ></b-form-input>
+                    </div>
+                    <div class="table-responsive">
+                        <b-table striped hover :fields="fields" :items="filteredResults">
+                            <template v-slot:cell(found)="row">
+                                <span v-if="row.item.found">Found</span>
+                                <span v-else>No se encontró</span>
+                            </template>
+                        </b-table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -51,17 +64,46 @@ export default {
             file: null,
             uploading: false,
             processing: false,
-            completed: false,
             progress: 0,
             isLoading: false,
-            progressKey: null
+            cedulas: [],
+            results: [],
+            searchQuery: '',
+            fields: [
+                { key: 'cedula', label: 'Cedula' },
+                { key: 'primer_apellido', label: 'Primer Apellido' },
+                { key: 'segundo_apellido', label: 'Segundo Apellido' },
+                { key: 'primer_nombre', label: 'Primer Nombre' },
+                { key: 'segundo_nombre', label: 'Segundo Nombre' },
+                { key: 'direccion', label: 'Direccion' },
+                { key: 'telefono', label: 'Telefono' },
+                { key: 'correo_electronico', label: 'Correo Electronico' },
+                { key: 'nacimiento', label: 'Nacimiento' },
+                { key: 'sexo', label: 'Sexo' },
+                { key: 'departamento', label: 'Departamento' },
+                { key: 'municipio', label: 'Municipio' },
+                { key: 'vpensiones', label: 'VPensiones' },
+                { key: 'vsalud', label: 'VSalud' },
+                { key: 'vembargo', label: 'VEmbargo' },
+                { key: 'vdescuentos', label: 'VDescuentos' },
+                { key: 'capacidad', label: 'Capacidad' },
+                { key: 'found', label: 'Encontrado' }
+            ]
         };
+    },
+    computed: {
+        filteredResults() {
+            if (this.searchQuery.length < 3) {
+                return this.results;
+            }
+            return this.results.filter(item => item.cedula.toString().includes(this.searchQuery));
+        }
     },
     methods: {
         handleFileUpload(event) {
             this.file = event.target.files[0];
         },
-        async submit() {
+        async submitFile() {
             if (!this.file) {
                 alert('Please select a file to upload');
                 return;
@@ -74,7 +116,7 @@ export default {
             this.progress = 0;
 
             try {
-                const response = await axios.post('/colpensiones/upload', formData, {
+                const response = await axios.post('/joinpensiones/upload', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     },
@@ -89,9 +131,8 @@ export default {
                     console.log(response.data.message);
                     this.uploading = false;
                     this.processing = true;
-                    this.progressKey = response.data.progressKey;
-                    this.isLoading = true;
-                    this.checkProgress();
+                    this.cedulas = response.data.cedulas;
+                    this.searchCedulas();
                 } else {
                     console.error(response.data.message);
                     this.uploading = false;
@@ -101,30 +142,15 @@ export default {
                 this.uploading = false;
             }
         },
-        async checkProgress() {
+        async searchCedulas() {
             try {
-                const response = await axios.get(`/colpensiones/progress/${this.progressKey}`);
-
-                if (response.data.completed) {
-                    this.processing = false;
-                    this.completed = true;
-                    this.isLoading = false;
-                } else {
-                    setTimeout(this.checkProgress, 5000); // Check progress every 5 seconds
-                }
+                const response = await axios.post('/joinpensiones/search', { cedulas: this.cedulas });
+                this.results = response.data.results;
+                this.processing = false;
             } catch (error) {
-                console.error('Error checking progress:', error);
-                setTimeout(this.checkProgress, 5000);
+                console.error('Error searching cedulas:', error);
+                this.processing = false;
             }
-        },
-        reset() {
-            this.file = null;
-            this.uploading = false;
-            this.processing = false;
-            this.completed = false;
-            this.progress = 0;
-            this.isLoading = false;
-            this.progressKey = null;
         }
     }
 };
@@ -164,60 +190,5 @@ export default {
     justify-content: center;
     z-index: 1000;
     color: white;
-}
-
-.label-resumen {
-    font-weight: 600;
-    text-align: center;
-    background-color: #e1e1e1;
-    color: #021b1e;
-    border-radius: 38px;
-    border-color: transparent;
-    min-height: 30px;
-    margin: 0 !important;
-    display: flex;
-    align-items: center;
-    padding-top: 6px;
-    padding-bottom: 6px;
-    padding-left: 12px;
-    padding-right: 12px;
-}
-
-.label-titulo {
-    font-family: 'Poppins', sans-serif;
-    font-size: 16px;
-    font-weight: 900;
-    margin: 0 !important;
-    display: flex;
-    align-items: center;
-}
-
-.button-tablas {
-    text-align: left;
-    background: #000;
-    color: #fff;
-    font-weight: bold;
-    padding: 10px 20px;
-    border-radius: 48px;
-}
-
-.button-tablas:hover {
-    background: #000 !important;
-    color: #0cedb0 !important;
-    border-color: none !important;
-}
-
-.button-tablas:active {
-    background: #000 !important;
-    color: #0cedb0 !important;
-    border-color: none !important;
-}
-
-.button-tablas:not(:disabled):not(.disabled):active,
-.button-tablas:not(:disabled):not(.disabled).active,
-.show > .button-tablas.dropdown-toggle {
-    background: #000 !important;
-    color: #0cedb0 !important;
-    border-color: none !important;
 }
 </style>

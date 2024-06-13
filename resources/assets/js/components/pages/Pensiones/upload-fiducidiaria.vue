@@ -4,7 +4,7 @@
 
         <div class="panel mb-3 col-md-12">
             <div class="panel-heading">
-                <b>Carga de Archivo y Proceso de Datos</b>
+                <b>Carga de Archivo y Proceso de Datos Fiducidiaria</b>
             </div>
             <div class="panel-body">
                 <form @submit.prevent="submit" v-if="!processing && !completed">
@@ -74,7 +74,7 @@ export default {
             this.progress = 0;
 
             try {
-                const response = await axios.post('/colpensiones/upload', formData, {
+                const response = await axios.post('/fiducidiaria/upload', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     },
@@ -103,7 +103,7 @@ export default {
         },
         async checkProgress() {
             try {
-                const response = await axios.get(`/colpensiones/progress/${this.progressKey}`);
+                const response = await axios.get(`/fiducidiaria/progress/${this.progressKey}`);
 
                 if (response.data.completed) {
                     this.processing = false;

@@ -2,44 +2,42 @@
 
 namespace App\Imports;
 
-use App\Models\Fiducidiaria;
-use App\Models\UploadProgress;
+use App\Fiducidiaria;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class FiducidiariaImport implements ToModel, WithHeadingRow
 {
-    protected $progress;
-
-    public function __construct(UploadProgress $progress)
-    {
-        $this->progress = $progress;
-    }
-
     public function model(array $row)
     {
-        $fiducidiaria = Fiducidiaria::updateOrCreate(
-            ['documento' => $row['documento']],
+        return Fiducidiaria::updateOrCreate(
             [
-                'nombres' => $row['nombres'],
-                'apellidos' => $row['apellidos'],
-                'sexo' => $row['sexo'],
-                'estado_civil' => $row['estado_civil'],
-                'fecha_nacimiento_docente' => $row['fecha_nacimiento_docente'],
-                'edad_actual' => $row['edad_actual'],
-                'estado_pensionado' => $row['estado_pensionado'],
-                'nom_depto' => $row['nom_depto'],
-                'valor_mesada' => $row['valor_mesada'],
-                'valorbruto' => $row['valorbruto'],
-                'valordescuentos' => $row['valordescuentos'],
-                'pago_net' => $row['pago_net']
+                'DOCUMENTO' => $row['documento'],
+            ],
+            [
+                'NOMBRES' => $row['nombres'],
+                'APELLIDOS' => $row['apellidos'],
+                'SEXO' => $row['sexo'],
+                'ESTADO_CIVIL' => $row['estado_civil'],
+                'FECHA_NACIMIENTO_DOCENTE' => $this->transformDate($row['fecha_nacimiento_docente']),
+                'EDAD_ACTUAL' => $row['edad_actual'],
+                'ESTADO_PENSIONADO' => $row['estado_pensionado'],
+                'NOM_DEPTO' => $row['nom_depto'],
+                'VALOR_MESADA' => $row['valor_mesada'],
+                'VALORBRUTO' => $row['valorbruto'],
+                'VALORDESCUENTOS' => $row['valordescuentos'],
+                'PAGO_NET' => $row['pago_net'],
             ]
         );
+    }
 
-        // Update progress
-        $this->progress->processed_rows++;
-        $this->progress->save();
-
-        return $fiducidiaria;
+    private function transformDate($value)
+    {
+        if (is_numeric($value)) {
+            return Carbon::createFromDate(1900, 1, 1)->addDays($value - 2)->format('Y-m-d');
+        }
+        return null;
     }
 }

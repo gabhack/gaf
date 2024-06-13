@@ -3,78 +3,48 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Jobs\ProcessFiducidiariaExcel;
-use App\Models\UploadProgress;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Jobs\ProcessFiducidiariaExcel;
+use Illuminate\Support\Facades\Cache;
+
 
 class FiducidiariaController extends Controller
 {
-    public function upload(Request $request)
+    public function index()
     {
-        Log::info('Upload endpoint for Fiducidiaria hit.');
-
-        $validator = Validator::make($request->all(), [
-            'file' => 'required|file|mimes:xlsx',
-        ]);
-
-        if ($validator->fails()) {
-            Log::error('Validation failed.', ['errors' => $validator->errors()]);
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation error',
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
-        try {
-            Log::info('Validation passed. Storing file.');
-            $path = $request->file('file')->store('uploads');
-            Log::info('File stored at: ' . $path);
-
-            // Create upload progress record
-            $progress = UploadProgress::create([
-                'file_name' => $path,
-                'status' => 'processing',
-            ]);
-
-            // Dispatch the job to process the Excel file
-            Log::info('Dispatching job to process Fiducidiaria Excel file.');
-            ProcessFiducidiariaExcel::dispatch($path, $progress->id);
-
-            Log::info('Job dispatched.');
-
-            return response()->json([
-                'success' => true,
-                'progressId' => $progress->id,
-                'message' => 'File uploaded successfully and processing started.'
-            ]);
-        } catch (\Exception $e) {
-            Log::error('An error occurred while uploading the file.', ['exception' => $e]);
-            return response()->json([
-                'success' => false,
-                'message' => 'An error occurred while uploading the file.',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        return view('pensiones.uploadFiducidiaria');
     }
 
-    public function progress($id)
+    public function upload(Request $request)
     {
-        $progress = UploadProgress::find($id);
+        Log::info('Fiducidiaria upload endpoint hit.');
+        $request->validate([
+            'file' => 'required|mimes:xlsx',
+        ]);
 
-        if ($progress) {
-            return response()->json([
-                'success' => true,
-                'progress' => $progress->total_rows ? ($progress->processed_rows / $progress->total_rows) * 100 : 0,
-                'status' => $progress->status,
-            ]);
+        Log::info('Validation passed. Storing file.');
+
+        $filePath = $request->file('file')->store('uploads');
+
+        Log::info('File stored at: ' . $filePath);
+
+        Log::info('Dispatching job to process Excel file.');
+        $job = new ProcessFiducidiariaExcel($filePath);
+        dispatch($job);
+
+        return response()->json(['success' => true, 'message' => 'File uploaded successfully and processing started. This may take up to 15 minutes.', 'progressKey' => $job->progressKey]);
+    }
+
+    public function checkProgress($progressKey)
+    {
+        $progress = Cache::get($progressKey);
+        $total = Cache::get($progressKey . '_total');
+
+        if ($progress === null || $total === null) {
+            return response()->json(['completed' => true]);
         }
 
-        return response()->json([
-            'success' => false,
-            'message' => 'Progress not found'
-        ], 404);
+        return response()->json(['completed' => false, 'progress' => $progress, 'total' => $total]);
     }
 }

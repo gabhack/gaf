@@ -1,25 +1,22 @@
 <?php
-
 namespace App\Imports;
 
 use App\Models\Colpensiones;
-use App\Models\UploadProgress;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class ColpensionesImport implements ToModel, WithHeadingRow
 {
-    protected $progress;
-
-    public function __construct(UploadProgress $progress)
-    {
-        $this->progress = $progress;
-    }
-
     public function model(array $row)
     {
-        $colpensiones = Colpensiones::updateOrCreate(
-            ['documento' => $row['documento']],
+        $nacimiento = $this->transformDate($row['nacimiento']);
+    
+        return Colpensiones::updateOrCreate(
+            [
+                'documento' => $row['documento'],
+            ],
             [
                 'primer_apellido' => $row['primer_apellido'],
                 'segundo_apellido' => $row['segundo_apellido'],
@@ -28,22 +25,24 @@ class ColpensionesImport implements ToModel, WithHeadingRow
                 'direccion' => $row['direccion'],
                 'telefono' => $row['telefono'],
                 'correo_electronico' => $row['correo_electronico'],
-                'nacimiento' => $row['nacimiento'],
+                'nacimiento' => $nacimiento,
                 'sexo' => $row['sexo'],
                 'departamento' => $row['departamento'],
                 'municipio' => $row['municipio'],
                 'vpensiones' => $row['vpensiones'],
                 'vsalud' => $row['vsalud'],
                 'vembargo' => $row['vembargo'],
-                'vedescuentos' => $row['vedescuentos'],
+                'vdescuentos' => $row['vdescuentos'],
                 'capacidad' => $row['capacidad'],
             ]
         );
+    }
 
-        // Update progress
-        $this->progress->processed_rows++;
-        $this->progress->save();
-
-        return $colpensiones;
+    private function transformDate($value)
+    {
+        if (is_numeric($value)) {
+            return Carbon::createFromDate(1900, 1, 1)->addDays($value - 2)->format('Y-m-d');
+        }
+        return null;
     }
 }

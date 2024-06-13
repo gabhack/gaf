@@ -22,7 +22,7 @@ use App\Http\Controllers\DemograficoController;
 use App\Http\Controllers\ColpensionesController;
 use App\Http\Controllers\FiducidiariaController;
 use App\Http\Controllers\UploadController;
-
+use App\Http\Controllers\JoinPensionesController;
 
 
 /* Route::get('/get-test', 'TestController@index');
@@ -56,6 +56,9 @@ Route::group(['prefix' => 'profile'], function () {
     Route::post('/store', 'ProfileController@saveProfile');
 });
 
+Route::get('/phpinfo', function () {
+    phpinfo();
+});
 
 
 // Roles
@@ -651,12 +654,15 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-Route::get('/pensiones', [UploadController::class, 'index']);
-
+Route::get('/colpensiones', [UploadController::class, 'index']);
 Route::post('/colpensiones/upload', [ColpensionesController::class, 'upload']);
-Route::get('/colpensiones/progress/{id}', [ColpensionesController::class, 'progress']);
-Route::post('/colpensiones/test-upload', [ColpensionesController::class, 'testUpload']); // Ruta de prueba
+Route::get('/colpensiones/progress/{progressKey}', [ColpensionesController::class, 'checkProgress']);
 
+Route::get('/joinpensiones', [JoinPensionesController::class, 'index']);
+Route::post('/joinpensiones/upload', [JoinPensionesController::class, 'upload']);
+Route::post('/joinpensiones/search', [JoinPensionesController::class, 'search']);
 
+Route::get('/fiducidiaria', [FiducidiariaController::class, 'index']);
 Route::post('/fiducidiaria/upload', [FiducidiariaController::class, 'upload']);
-Route::get('/fiducidiaria/progress/{id}', [FiducidiariaController::class, 'progress']);
+Route::get('/fiducidiaria/progress/{progressKey}', [FiducidiariaController::class, 'checkProgress']);
+Route::post('/fiducidiaria/search', [FiducidiariaController::class, 'search']);
