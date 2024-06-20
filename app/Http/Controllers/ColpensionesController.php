@@ -3,109 +3,84 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Imports\ColpensionesImport;
-use App\Imports\FiduciariaImport;
-use App\UploadProgress;
-use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
+use App\Jobs\ProcessColpensionesCsv;
+use Illuminate\Support\Facades\Cache;
+use App\FileUploadLog;
 
 class ColpensionesController extends Controller
 {
+    public function index()
+    {
+        return view('pensiones.uploadColpensiones');
+    }
+
     public function upload(Request $request)
     {
-        Log::info('Upload endpoint hit.');
+        // Aumentar el tiempo máximo de ejecución
+        set_time_limit(300); // 300 segundos = 5 minutos
 
-        $validator = Validator::make($request->all(), [
-            'file' => 'required|file|mimes:xlsx',
+        Log::info('Upload endpoint hit.');
+        $request->validate([
+            'file' => 'required|mimes:csv,txt',
         ]);
 
-        if ($validator->fails()) {
-            Log::error('Validation failed.', ['errors' => $validator->errors()]);
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation error',
-                'errors' => $validator->errors()
-            ], 422);
-        }
+        Log::info('Validation passed. Storing file.');
 
-        try {
-            Log::info('Validation passed. Storing file.');
-            $file = $request->file('file');
-            $path = $file->store('uploads');
-            Log::info('File stored at: ' . $path);
+        $filePath = $request->file('file')->store('uploads');
 
-            // Create a record in upload_progress table
-            $filename = $file->getClientOriginalName();
-            $progress = UploadProgress::create([
-                'file_name' => $filename,
-                'total_rows' => 0,
-                'processed_rows' => 0,
-                'status' => 'pending'
-            ]);
+        Log::info('File stored at: ' . $filePath);
 
-            Log::info('Created progress record.', ['progressId' => $progress->id]);
+        // Insertar registro en file_upload_logs
+        $uploadLog = FileUploadLog::create([
+            'file_path' => $filePath,
+            'total_registros' => 0, // Aquí se actualizará después de contar los registros
+            'registros_procesados' => 0,
+            'total_por_registrar' => 0,
+            'http_status' => null
+        ]);
 
-            // Process the Excel file
-            Log::info('Processing Excel file.');
-            if (Str::contains($filename, 'colpensar')) {
-                $this->processExcelFile($path, $progress->id, new ColpensionesImport);
-            } elseif (Str::contains($filename, 'fiduciaria')) {
-                $this->processExcelFile($path, $progress->id, new FiduciariaImport);
-            }
+        // Dispatch a job to process the CSV file
+        Log::info('Dispatching job to process CSV file.');
+        $job = new ProcessColpensionesCsv($filePath);
+        dispatch($job);
 
-            return response()->json([
-                'success' => true,
-                'progressId' => $progress->id,
-                'message' => 'File uploaded successfully and processing started.'
-            ]);
-        } catch (\Exception $e) {
-            Log::error('An error occurred while uploading the file.', ['exception' => $e]);
-            return response()->json([
-                'success' => false,
-                'message' => 'An error occurred while uploading the file.',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        // Hacer una solicitud HTTP al servidor Flask
+        $url = 'http://localhost:5000/process_csv';
+        $data = [
+            'file_path' => storage_path('app/' . $filePath),
+            'document_type' => 'colpensiones'
+        ];
+        
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        
+        $response = curl_exec($ch);
+        $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        // Actualizar el estado HTTP en file_upload_logs
+        $uploadLog->http_status = $http_status;
+        $uploadLog->save();
+
+        // Log the response from the Flask API
+        Log::info('Flask API response: ' . $response);
+
+        return response()->json(['success' => true, 'message' => 'File uploaded and processing started.']);
     }
 
-    private function processExcelFile($path, $progressId, $importClass)
+    public function checkProgress($progressKey)
     {
-        try {
-            Excel::import($importClass, $path, null, \Maatwebsite\Excel\Excel::XLSX);
-            UploadProgress::where('id', $progressId)->update([
-                'processed_rows' => 100,
-                'status' => 'completed',
-                'updated_at' => now()
-            ]);
-            Log::info('Excel file processed successfully.', ['progressId' => $progressId]);
-        } catch (\Exception $e) {
-            UploadProgress::where('id', $progressId)->update([
-                'status' => 'failed',
-                'updated_at' => now()
-            ]);
-            Log::error('An error occurred while processing the Excel file.', ['exception' => $e, 'progressId' => $progressId]);
-        }
-    }
+        $progress = Cache::get($progressKey);
+        $total = Cache::get($progressKey . '_total');
 
-    public function progress($progressId)
-    {
-        Log::info('Progress endpoint hit.', ['progressId' => $progressId]);
-
-        $progress = UploadProgress::find($progressId);
-
-        if ($progress) {
-            return response()->json([
-                'progress' => $progress->processed_rows,
-                'status' => $progress->status,
-            ]);
+        if ($progress === null || $total === null) {
+            return response()->json(['completed' => true]);
         }
 
-        Log::error('Progress not found.', ['progressId' => $progressId]);
-        return response()->json([
-            'success' => false,
-            'message' => 'Progress not found'
-        ], 404);
+        return response()->json(['completed' => false, 'progress' => $progress, 'total' => $total]);
     }
 }

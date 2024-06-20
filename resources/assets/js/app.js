@@ -37,7 +37,11 @@ import VueSwal from 'vue-swal';
 Vue.use(VueSwal);
 
 import DemographicData from './components/pages/Demographic/DemographicData.vue';
-import UploadPensiones from './components/pages/Pensiones/upload.vue';
+import UploadPensiones from './components/pages/Pensiones/uploadColpensiones.vue';
+import UploadFiducidiaria from './components/pages/Pensiones/upload-fiducidiaria.vue';
+
+import JoinPensiones from './components/pages/Pensiones/joinpensiones.vue';
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -110,6 +114,8 @@ Vue.component('CouponsFormConsult', require('./components/pages/Coupons/CouponsF
 //Datos demograficos de datames
 Vue.component('DemographicData', DemographicData);
 Vue.component('UploadPensiones', UploadPensiones);
+Vue.component('UploadFiducidiaria', UploadFiducidiaria);
+Vue.component('join-pensiones', JoinPensiones);
 
 /* Vue Init */
 const app = new Vue({

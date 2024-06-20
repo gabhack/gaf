@@ -2,10 +2,12 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class UploadProgress extends Model
 {
+
     protected $connection = 'pgsql'; 
     protected $table = 'upload_progress';
 

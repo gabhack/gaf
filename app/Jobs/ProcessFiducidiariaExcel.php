@@ -2,48 +2,54 @@
 
 namespace App\Jobs;
 
-use App\Imports\FiducidiariaImport;
-use App\Models\UploadProgress;
+use App\Fiducidiaria;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\FiducidiariaImport;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 
 class ProcessFiducidiariaExcel implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $path;
-    protected $progressId;
+    public $filePath;
+    public $progressKey;
 
-    public function __construct($path, $progressId)
+    /**
+     * Create a new job instance.
+     *
+     * @param string $filePath
+     */
+    public function __construct($filePath)
     {
-        $this->path = $path;
-        $this->progressId = $progressId;
+        $this->filePath = $filePath;
+        $this->progressKey = 'fiducidiaria_progress_' . now()->timestamp;
     }
 
+    /**
+     * Execute the job.
+     *
+     * @return void
+     */
     public function handle()
     {
-        $progress = UploadProgress::find($this->progressId);
+        $import = new FiducidiariaImport();
+        $rows = Excel::toArray($import, storage_path('app/' . $this->filePath))[0];
 
-        if (!$progress) {
-            return;
+        $batchSize = 10; // Tamaño del lote
+        $totalRows = count($rows);
+
+        Cache::put($this->progressKey, 0);
+        Cache::put($this->progressKey . '_total', ceil($totalRows / $batchSize));
+
+        for ($i = 0; $i < $totalRows; $i += $batchSize) {
+            $batch = array_slice($rows, $i, $batchSize);
+            ProcessFiducidiariaBatch::dispatch($batch, $this->progressKey);
         }
-
-        $progress->status = 'processing';
-        $progress->save();
-
-        // Get total rows
-        $totalRows = Excel::toCollection(null, $this->path)->first()->count();
-        $progress->total_rows = $totalRows;
-        $progress->save();
-
-        // Import data
-        Excel::import(new FiducidiariaImport($progress), $this->path);
-
-        $progress->status = 'completed';
-        $progress->save();
     }
 }

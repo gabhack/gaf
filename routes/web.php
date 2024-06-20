@@ -22,7 +22,8 @@ use App\Http\Controllers\DemograficoController;
 use App\Http\Controllers\ColpensionesController;
 use App\Http\Controllers\FiducidiariaController;
 use App\Http\Controllers\UploadController;
-
+use App\Http\Controllers\JoinPensionesController;
+use App\Http\Controllers\FileUploadLogController;
 
 
 /* Route::get('/get-test', 'TestController@index');
@@ -56,6 +57,9 @@ Route::group(['prefix' => 'profile'], function () {
     Route::post('/store', 'ProfileController@saveProfile');
 });
 
+Route::get('/phpinfo', function () {
+    phpinfo();
+});
 
 
 // Roles
@@ -636,6 +640,7 @@ Route::post('/embargos/by-pagaduria', [EmbargosController::class, 'getEmbargosBy
 
 Route::get('/demografico', [DemograficoController::class, 'show'])->name('demografico.show');
 Route::post('/demografico/upload', [DemograficoController::class, 'upload'])->name('demografico.upload');
+Route::get('/demografico/recent-consultations', [DemograficoController::class, 'getRecentConsultations']);
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
@@ -651,12 +656,17 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-Route::get('/pensiones', [UploadController::class, 'index']);
-
+Route::get('/colpensiones', [UploadController::class, 'index']);
 Route::post('/colpensiones/upload', [ColpensionesController::class, 'upload']);
-Route::get('/colpensiones/progress/{id}', [ColpensionesController::class, 'progress']);
-Route::post('/colpensiones/test-upload', [ColpensionesController::class, 'testUpload']); // Ruta de prueba
+Route::get('/colpensiones/progress/{progressKey}', [ColpensionesController::class, 'checkProgress']);
 
+Route::get('/joinpensiones', [JoinPensionesController::class, 'index']);
+Route::post('/joinpensiones/upload', [JoinPensionesController::class, 'upload']);
+Route::post('/joinpensiones/search', [JoinPensionesController::class, 'search']);
 
+Route::get('/fiducidiaria', [FiducidiariaController::class, 'index']);
 Route::post('/fiducidiaria/upload', [FiducidiariaController::class, 'upload']);
-Route::get('/fiducidiaria/progress/{id}', [FiducidiariaController::class, 'progress']);
+Route::get('/fiducidiaria/progress/{progressKey}', [FiducidiariaController::class, 'checkProgress']);
+Route::post('/fiducidiaria/search', [FiducidiariaController::class, 'search']);
+
+Route::get('/file-upload-logs', [FileUploadLogController::class, 'getLogs']);
