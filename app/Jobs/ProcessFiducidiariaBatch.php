@@ -8,8 +8,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 
 class ProcessFiducidiariaBatch implements ShouldQueue
@@ -38,45 +38,77 @@ class ProcessFiducidiariaBatch implements ShouldQueue
      */
     public function handle()
     {
-        foreach ($this->batch as $row) {
-            if (empty($row['DOCUMENTO'])) {
-                continue; // Ignorar filas con 'DOCUMENTO' nulo
-            }
+        try {
+            $rowsToInsert = [];
+            $now = Carbon::now();
 
-            $nacimiento = $this->transformDate($row['FECHA_NACIMIENTO_DOCENTE']);
+            foreach ($this->batch as $row) {
+                if (empty($row['DOCUMENTO'])) {
+                    continue;
+                }
 
-            Fiducidiaria::updateOrCreate(
-                [
+                $fechaNacimiento = $this->transformDate($row['FECHA_NACIMIENTO_DOCENTE']);
+                $valorMesada = $this->sanitizeNumericValue($row['VALOR_MESADA']);
+                $valorBruto = $this->sanitizeNumericValue($row['VALORBRUTO']);
+                $valorDescuentos = $this->sanitizeNumericValue($row['VALORDESCUENTOS']);
+                $pagoNet = $this->sanitizeNumericValue($row['PAGO_NET']);
+
+                $rowsToInsert[] = [
                     'DOCUMENTO' => $row['DOCUMENTO'],
-                ],
-                [
                     'NOMBRES' => $row['NOMBRES'],
                     'APELLIDOS' => $row['APELLIDOS'],
                     'SEXO' => $row['SEXO'],
                     'ESTADO_CIVIL' => $row['ESTADO_CIVIL'],
-                    'FECHA_NACIMIENTO_DOCENTE' => $nacimiento,
+                    'FECHA_NACIMIENTO_DOCENTE' => $fechaNacimiento,
                     'EDAD_ACTUAL' => $row['EDAD_ACTUAL'],
                     'ESTADO_PENSIONADO' => $row['ESTADO_PENSIONADO'],
                     'NOM_DEPTO' => $row['NOM_DEPTO'],
-                    'VALOR_MESADA' => $row['VALOR_MESADA'],
-                    'VALORBRUTO' => $row['VALORBRUTO'],
-                    'VALORDESCUENTOS' => $row['VALORDESCUENTOS'],
-                    'PAGO_NET' => $row['PAGO_NET'],
-                ]
-            );
-        }
-        Cache::increment($this->progressKey);
-        if (Cache::get($this->progressKey) == Cache::get($this->progressKey . '_total')) {
-            Cache::forget($this->progressKey);
-            Cache::forget($this->progressKey . '_total');
+                    'VALOR_MESADA' => $valorMesada,
+                    'VALORBRUTO' => $valorBruto,
+                    'VALORDESCUENTOS' => $valorDescuentos,
+                    'PAGO_NET' => $pagoNet,
+                    'created_at' => $now,
+                    'updated_at' => $now
+                ];
+            }
+
+            // Inserción masiva utilizando DB::table
+            if (!empty($rowsToInsert)) {
+                DB::table('fiducidiaria')->insert($rowsToInsert);
+            }
+
+            Cache::increment($this->progressKey);
+            if (Cache::get($this->progressKey) == Cache::get($this->progressKey . '_total')) {
+                Cache::forget($this->progressKey);
+                Cache::forget($this->progressKey . '_total');
+            }
+        } catch (\Exception $e) {
+            // Aquí puedes agregar un log de error si es necesario.
         }
     }
 
     private function transformDate($value)
     {
-        if (is_numeric($value)) {
-            return Carbon::createFromDate(1900, 1, 1)->addDays($value - 2)->format('Y-m-d');
+        try {
+            if (is_numeric($value)) {
+                return Carbon::createFromDate(1900, 1, 1)->addDays($value - 2)->format('Y-m-d');
+            }
+            return null;
+        } catch (\Exception $e) {
+            return null;
         }
-        return null;
+    }
+
+    private function sanitizeNumericValue($value)
+    {
+        try {
+            $cleanValue = str_replace([',', ' '], ['', ''], $value);
+            if (is_numeric($cleanValue)) {
+                return floatval($cleanValue);
+            }
+            return 0;
+        } catch (\Exception $e) {
+            return 0;
+        }
     }
 }

@@ -5,7 +5,7 @@
 
             <div class="panel mb-3 col-md-12">
                 <div class="panel-heading">
-                    <b>Carga de Archivo Fiducidiaria</b>
+                    <b>Carga de Archivo Colpensiones</b>
                 </div>
                 <div class="panel-body">
                     <form @submit.prevent="submit" v-if="!processing && !completed && !uploadingComplete">
@@ -35,7 +35,7 @@
                     <div v-if="completed">
                         <p>Se registraron los clientes en la base de datos!</p>
                         <b-button variant="success" @click="reset" :disabled="processing"
-                            >Subir otro archivo fiducidiaria</b-button
+                            >Subir otro archivo colpensiones</b-button
                         >
                     </div>
                 </div>
@@ -113,7 +113,7 @@ export default {
             this.cancelTokenSource = axios.CancelToken.source();
 
             try {
-                const response = await axios.post('/fiducidiaria/upload', formData, {
+                const response = await axios.post('/colpensiones/upload', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     },
@@ -148,7 +148,7 @@ export default {
         },
         async checkProgress() {
             try {
-                const response = await axios.get(`/fiducidiaria/progress/${this.progressKey}`);
+                const response = await axios.get(`/colpensiones/progress/${this.progressKey}`);
 
                 if (response.data.completed) {
                     this.processing = false;

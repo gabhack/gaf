@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Jobs;
 
 use App\Colpensiones;
@@ -7,8 +8,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 
 class ProcessColpensionesBatch implements ShouldQueue
@@ -37,18 +38,24 @@ class ProcessColpensionesBatch implements ShouldQueue
      */
     public function handle()
     {
-        foreach ($this->batch as $row) {
-            if (empty($row['documento'])) {
-                continue; // Ignorar filas con 'documento' nulo
-            }
+        try {
+            $rowsToInsert = [];
+            $now = Carbon::now();
 
-            $nacimiento = $this->transformDate($row['nacimiento']);
-        
-            Colpensiones::updateOrCreate(
-                [
+            foreach ($this->batch as $row) {
+                if (empty($row['documento'])) {
+                    continue;
+                }
+
+                $nacimiento = $this->transformDate($row['nacimiento']);
+                $vpensiones = $this->sanitizeNumericValue($row[' vpensiones ']);
+                $vsalud = $this->sanitizeNumericValue($row[' vsalud ']);
+                $vembargo = $this->sanitizeNumericValue($row[' vembargo ']);
+                $vdescuentos = $this->sanitizeNumericValue($row[' vdescuentos ']);
+                $capacidad = $this->sanitizeNumericValue($row['Capacidad']);
+
+                $rowsToInsert[] = [
                     'documento' => $row['documento'],
-                ],
-                [
                     'primer_apellido' => $row['primer_apellido'],
                     'segundo_apellido' => $row['segundo_apellido'],
                     'primer_nombre' => $row['primer_nombre'],
@@ -60,26 +67,53 @@ class ProcessColpensionesBatch implements ShouldQueue
                     'sexo' => $row['sexo'],
                     'departamento' => $row['departamento'],
                     'municipio' => $row['municipio'],
-                    'vpensiones' => $row['vpensiones'],
-                    'vsalud' => $row['vsalud'],
-                    'vembargo' => $row['vembargo'],
-                    'vdescuentos' => $row['vdescuentos'],
-                    'capacidad' => $row['capacidad'],
-                ]
-            );
-        }
-        Cache::increment($this->progressKey);
-        if (Cache::get($this->progressKey) == Cache::get($this->progressKey . '_total')) {
-            Cache::forget($this->progressKey);
-            Cache::forget($this->progressKey . '_total');
+                    'vpensiones' => $vpensiones,
+                    'vsalud' => $vsalud,
+                    'vembargo' => $vembargo,
+                    'vdescuentos' => $vdescuentos,
+                    'capacidad' => $capacidad,
+                    'created_at' => $now,
+                    'updated_at' => $now
+                ];
+            }
+
+            // Inserción masiva utilizando DB::table
+            if (!empty($rowsToInsert)) {
+                DB::table('colpensiones')->insert($rowsToInsert);
+            }
+
+            Cache::increment($this->progressKey);
+            if (Cache::get($this->progressKey) == Cache::get($this->progressKey . '_total')) {
+                Cache::forget($this->progressKey);
+                Cache::forget($this->progressKey . '_total');
+            }
+        } catch (\Exception $e) {
+            // Aquí puedes agregar un log de error si es necesario.
         }
     }
 
     private function transformDate($value)
     {
-        if (is_numeric($value)) {
-            return Carbon::createFromDate(1900, 1, 1)->addDays($value - 2)->format('Y-m-d');
+        try {
+            if (is_numeric($value)) {
+                return Carbon::createFromDate(1900, 1, 1)->addDays($value - 2)->format('Y-m-d');
+            }
+            return null;
+        } catch (\Exception $e) {
+            return null;
         }
-        return null;
+    }
+
+    private function sanitizeNumericValue($value)
+    {
+        try {
+            $cleanValue = str_replace([',', ' '], ['', ''], $value);
+            if (is_numeric($cleanValue)) {
+                return floatval($cleanValue);
+            }
+            return 0;
+        } catch (\Exception $e) {
+            return 0;
+        }
     }
 }

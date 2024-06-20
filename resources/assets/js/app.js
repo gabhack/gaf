@@ -37,7 +37,7 @@ import VueSwal from 'vue-swal';
 Vue.use(VueSwal);
 
 import DemographicData from './components/pages/Demographic/DemographicData.vue';
-import UploadPensiones from './components/pages/Pensiones/upload.vue';
+import UploadPensiones from './components/pages/Pensiones/uploadColpensiones.vue';
 import UploadFiducidiaria from './components/pages/Pensiones/upload-fiducidiaria.vue';
 
 import JoinPensiones from './components/pages/Pensiones/joinpensiones.vue';

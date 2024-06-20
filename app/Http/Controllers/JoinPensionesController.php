@@ -10,6 +10,11 @@ use App\Colpensiones;
 
 class JoinPensionesController extends Controller
 {
+    public function __construct()
+    {
+        // Aumentar el tiempo máximo de ejecución para este controlador
+        ini_set('max_execution_time', 300);
+    }
     public function index()
     {
         return view('pensiones.joinpensiones');

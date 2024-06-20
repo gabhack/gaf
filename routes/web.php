@@ -23,6 +23,7 @@ use App\Http\Controllers\ColpensionesController;
 use App\Http\Controllers\FiducidiariaController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\JoinPensionesController;
+use App\Http\Controllers\FileUploadLogController;
 
 
 /* Route::get('/get-test', 'TestController@index');
@@ -639,6 +640,7 @@ Route::post('/embargos/by-pagaduria', [EmbargosController::class, 'getEmbargosBy
 
 Route::get('/demografico', [DemograficoController::class, 'show'])->name('demografico.show');
 Route::post('/demografico/upload', [DemograficoController::class, 'upload'])->name('demografico.upload');
+Route::get('/demografico/recent-consultations', [DemograficoController::class, 'getRecentConsultations']);
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
@@ -666,3 +668,5 @@ Route::get('/fiducidiaria', [FiducidiariaController::class, 'index']);
 Route::post('/fiducidiaria/upload', [FiducidiariaController::class, 'upload']);
 Route::get('/fiducidiaria/progress/{progressKey}', [FiducidiariaController::class, 'checkProgress']);
 Route::post('/fiducidiaria/search', [FiducidiariaController::class, 'search']);
+
+Route::get('/file-upload-logs', [FileUploadLogController::class, 'getLogs']);

@@ -15,11 +15,7 @@
                 </form>
 
                 <div v-if="uploading">
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" :style="{ width: progress + '%' }">
-                            {{ progress }}%
-                        </div>
-                    </div>
+                    <div class="alert alert-info" role="alert">Cargando archivo al servidor...</div>
                 </div>
 
                 <div v-if="processing">
@@ -37,10 +33,9 @@
                         ></b-form-input>
                     </div>
                     <div class="table-responsive">
-                        <b-table striped hover :fields="fields" :items="filteredResults">
-                            <template v-slot:cell(found)="row">
-                                <span v-if="row.item.found">Found</span>
-                                <span v-else>No se encontró</span>
+                        <b-table striped hover :fields="fields" :items="filteredResults" :row-class="rowClass">
+                            <template v-slot:cell(cedula)="row">
+                                <span :class="{ 'text-danger': !row.item.found }">{{ row.item.cedula }}</span>
                             </template>
                         </b-table>
                     </div>
@@ -145,12 +140,18 @@ export default {
         async searchCedulas() {
             try {
                 const response = await axios.post('/joinpensiones/search', { cedulas: this.cedulas });
-                this.results = response.data.results;
+                this.results = response.data.results.map(result => ({
+                    ...result,
+                    found: Object.keys(result).some(key => result[key] !== null && result[key] !== '')
+                }));
                 this.processing = false;
             } catch (error) {
                 console.error('Error searching cedulas:', error);
                 this.processing = false;
             }
+        },
+        rowClass(item) {
+            return item.found ? '' : 'table-danger';
         }
     }
 };
@@ -161,20 +162,6 @@ export default {
     font-family: 'Poppins', sans-serif;
     font-size: 16px;
     font-weight: 900;
-}
-
-.progress {
-    width: 100%;
-    background-color: #f3f3f3;
-}
-
-.progress-bar {
-    width: 0%;
-    height: 20px;
-    background-color: #4caf50;
-    text-align: center;
-    line-height: 20px;
-    color: white;
 }
 
 .overlay {
@@ -190,5 +177,13 @@ export default {
     justify-content: center;
     z-index: 1000;
     color: white;
+}
+
+.text-danger {
+    color: red !important;
+}
+
+.table-danger {
+    background-color: #f8d7da !important;
 }
 </style>

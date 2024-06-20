@@ -4,7 +4,6 @@ namespace App\Imports;
 use App\Models\Colpensiones;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
 class ColpensionesImport implements ToModel, WithHeadingRow
