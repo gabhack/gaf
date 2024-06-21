@@ -85,21 +85,27 @@
               <li>
               <a href="" style="color: black;"></a>
               </li>  --}}
-        </b-collapse>
-        <div class="d-flex justify-content-end"><a v-b-toggle.collapse-3 class="text-right" style="cursor: pointer; color: #10dd8e;">Ver más <i class="fas fa-angle-right"></i></a></div>
-      </ul>
-    </div>
-  </div>
-  <div class="col-12 col-lg-6 pt-5">
-    <div class="box-rounded bg-gainsboro text-black-pearl text-left">
-      <p class="box-label text-left"><span>INVESTIGACIÓN</span></p>
-      <ul>
-        <li>
-          <a href="" style="color: black;">Investigción de Bienes Comercial y Localización</a>
-        </li>
-        <li>
-          <a href="{{ url('certificados' )}}" style="color: black;">Certificados de Nacimiento - Defunción</a>
-        </li>
+                    </b-collapse>
+                    <div class="d-flex justify-content-end"><a v-b-toggle.collapse-3 class="text-right"
+                            style="cursor: pointer; color: #10dd8e;">Ver más <i class="fas fa-angle-right"></i></a></div>
+                </ul>
+            </div>
+        </div>
+        <div class="col-12 col-lg-6 pt-5">
+            <div class="box-rounded bg-gainsboro text-black-pearl text-left">
+                <p class="box-label text-left"><span>INVESTIGACIÓN</span></p>
+                <ul>
+                    <li>
+                        <a href="" style="color: black;">Investigación de Bienes Comercial y Localización</a>
+                    </li>
+                    <li>
+                        <a href="{{ url('certificados') }}" style="color: black;">Certificados de Nacimiento -
+                            Defunción</a>
+                    </li>
+                    <li>
+                        <a href="{{ url('demografico') }}" style="color: black;">Consultar masivamente datos demográficos
+                            por documento</a>
+                    </li>
 
                     <b-collapse id="collapse-4">
                         <li>
