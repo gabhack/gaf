@@ -664,9 +664,9 @@ Route::get('/joinpensiones', [JoinPensionesController::class, 'index']);
 Route::post('/joinpensiones/upload', [JoinPensionesController::class, 'upload']);
 Route::post('/joinpensiones/search', [JoinPensionesController::class, 'search']);
 
-Route::get('/fiducidiaria', [FiducidiariaController::class, 'index']);
-Route::post('/fiducidiaria/upload', [FiducidiariaController::class, 'upload']);
-Route::get('/fiducidiaria/progress/{progressKey}', [FiducidiariaController::class, 'checkProgress']);
-Route::post('/fiducidiaria/search', [FiducidiariaController::class, 'search']);
+Route::get('/fiduprevisora', [FiducidiariaController::class, 'index']);
+Route::post('/fiduprevisora/upload', [FiducidiariaController::class, 'upload']);
+Route::get('/fiduprevisora/progress/{progressKey}', [FiducidiariaController::class, 'checkProgress']);
+Route::post('/fiduciprevisora/search', [FiducidiariaController::class, 'search']);
 
 Route::get('/file-upload-logs', [FileUploadLogController::class, 'getLogs']);
