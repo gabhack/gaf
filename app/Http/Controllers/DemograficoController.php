@@ -139,4 +139,27 @@ class DemograficoController extends Controller
     {
         return view('Demographic.DemographicData');
     }
+
+    public function getDemograficoPorDoc($doc)
+    {
+        try {
+            $record = DatamesGen::where('doc', $doc)
+                ->select('doc', 'nombre_usuario', 'cel', 'telefono', 'correo_electronico', 'ciudad', 'direccion_residencial', 'created_at')
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+            if (!$record) {
+                return response()->json(['error' => 'Documento no encontrado'], 404);
+            }
+
+            return response()->json($record);
+        } catch (\Exception $e) {
+            Log::error('Error fetching demographic data: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
+            ]);
+            return response()->json(['error' => 'Error fetching demographic data'], 500);
+        }
+    }
 }
