@@ -168,6 +168,7 @@ export default {
                     this.saveVisados(val).then(status => {
                         if (status != 200) return;
                         this.$emit('emitInfo', this.dataclient);
+                        console.log(this.dataclient);
                     });
                 });
         },
@@ -175,12 +176,24 @@ export default {
             try {
                 this.isLoading = true;
 
+                // Llamada para obtener datos demográficos
+                const demograficoResponse = await axios.get(`/demografico/${this.dataclient.doc}`);
+                const demograficoData = demograficoResponse.data;
+
+                // Verificar si se obtuvo el nombre
+                if (!demograficoData.nombre_usuario) {
+                    toastr.error('No se encontró el nombre del usuario');
+                    this.isLoading = false;
+                    return;
+                }
+
+                // Llamada a selectedPagaduria
                 this.selectedPagaduria();
 
                 const data = {
                     pagaduria: this.dataclient.pagaduria,
-                    nombre: this.datamesSed.nombenef || this.datamesSed.empleado || this.datamesSed.nomp,
-                    doc: this.datamesSed.doc || this.datamesSed.codempleado
+                    nombre: demograficoData.nombre_usuario,
+                    doc: this.dataclient.doc
                 };
 
                 const response = await axios.post('/visados', data);
