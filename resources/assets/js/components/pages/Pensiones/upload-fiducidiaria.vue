@@ -113,7 +113,7 @@ export default {
             this.cancelTokenSource = axios.CancelToken.source();
 
             try {
-                const response = await axios.post('/fiducidiaria/upload', formData, {
+                const response = await axios.post('/fiduprevisora/upload', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     },
@@ -148,7 +148,7 @@ export default {
         },
         async checkProgress() {
             try {
-                const response = await axios.get(`/fiducidiaria/progress/${this.progressKey}`);
+                const response = await axios.get(`/fiduprevisora/progress/${this.progressKey}`);
 
                 if (response.data.completed) {
                     this.processing = false;

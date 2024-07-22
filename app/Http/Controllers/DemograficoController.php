@@ -73,7 +73,7 @@ class DemograficoController extends Controller
                     if ($record->telefono) {
                         $phones = explode(',', $record->telefono);
                         foreach ($phones as $phone) {
-                            $phone = trim($phone);
+                            $phone = preg_replace('/\.\d+$/', '', trim($phone));
                             if (strlen($phone) === 10) {
                                 $cellphones[] = $phone;
                             } else {
@@ -85,7 +85,7 @@ class DemograficoController extends Controller
                     if ($record->cel) {
                         $phones = explode(',', $record->cel);
                         foreach ($phones as $phone) {
-                            $phone = trim($phone);
+                            $phone = preg_replace('/\.\d+$/', '', trim($phone));
                             if (strlen($phone) === 10) {
                                 $cellphones[] = $phone;
                             } else {
@@ -93,6 +93,12 @@ class DemograficoController extends Controller
                             }
                         }
                     }
+
+                    Log::info('Datos originales:', ['record' => $record->toArray()]);
+                    Log::info('Teléfonos transformados:', [
+                        'cel' => $cellphones,
+                        'tel' => $landlines
+                    ]);
 
                     $results->push([
                         'doc' => $record->doc,
