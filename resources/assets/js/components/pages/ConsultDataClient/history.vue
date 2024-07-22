@@ -57,10 +57,16 @@
                                 v-model="queryParams.tipoConsulta"
                             ></b-form-select>
                         </b-form-group>
-                        <b-button type="submit" variant="info" class="align-self-end mb-3">
-                            <i class="fa fa-filter" aria-hidden="true"></i>
-                            Filtrar
-                        </b-button>
+                        <div class="align-self-end mb-3 d-flex">
+                            <b-button type="submit" variant="info" class="mr-2">
+                                <i class="fa fa-filter" aria-hidden="true"></i>
+                                Filtrar
+                            </b-button>
+                            <b-button @click="exportToPDF" variant="danger">
+                                <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                                Exportar a PDF
+                            </b-button>
+                        </div>
                     </div>
 
                     <div class="table-responsive">
@@ -131,12 +137,12 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label>Cantidad Libre InversiÃ³n</label>
+                                        <label>Cantidad Libre Inversión</label>
                                         <input disabled class="form-control" :value="detailHistory.clibinv" />
                                     </div>
 
                                     <div class="form-group">
-                                        <label>Cantidad Maxima IncorporaciÃ³n</label>
+                                        <label>Cantidad Maxima Incorporación</label>
                                         <input disabled class="form-control" :value="detailHistory.cmaxincorp" />
                                     </div>
 
@@ -175,7 +181,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label>Fecha VinculaciÃ³n</label>
+                                        <label>Fecha Vinculación</label>
                                         <input disabled class="form-control" :value="detailHistory.fvinculacion" />
                                     </div>
 
@@ -190,7 +196,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label>Porcentaje IncorporaciÃ³n</label>
+                                        <label>Porcentaje Incorporación</label>
                                         <input disabled class="form-control" :value="detailHistory.porcincorp" />
                                     </div>
 
@@ -228,14 +234,20 @@
                 </template>
                 <template v-else>
                     <button class="btn btn-primary mb-4" v-on:click="back">Volver</button>
-                    <!--      <detail-history-component :id="id_consult" :user="user"></detail-history-component>-->
+
                     <detail-history-component-draft :id="id_consult" :user="user" :pagaduriaType="pagaduriaType" />
                 </template>
             </div>
         </div>
     </div>
 </template>
+
+
 <script>
+import axios from 'axios';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+
 export default {
     props: ['user'],
     data() {
@@ -310,10 +322,6 @@ export default {
                     key: 'consultant_email',
                     label: 'Empresa',
                     sortable: true
-                },
-                {
-                    key: 'actions',
-                    label: 'Acciones'
                 }
             ],
             pagaduriasOptions: [
@@ -396,9 +404,7 @@ export default {
                                     const type_consulta = row.tipo_consulta.toString().toLowerCase();
                                     const searchTerm = this.filter.toLowerCase();
                                     let data5 = type_consulta.includes(searchTerm);
-                                    // if(data5 === true){
                                     return type_consulta.includes(searchTerm);
-                                    // }
                                 }
                             }
                         }
@@ -430,13 +436,24 @@ export default {
         },
         back() {
             this.id_consult = null;
+        },
+        exportToPDF() {
+            const doc = new jsPDF('landscape');
+            const columns = this.fields.filter(field => field.key !== 'actions').map(field => field.label);
+            const rows = this.HistoryConsult.data.map(item => this.fields.filter(field => field.key !== 'actions').map(field => item[field.key]));
+            doc.autoTable({
+                head: [columns],
+                body: rows,
+                theme: 'striped',
+                styles: {
+                    fontSize: 8
+                },
+                headStyles: {
+                    fillColor: [22, 160, 133]
+                }
+            });
+            doc.save('historial_consultas.pdf');
         }
     }
 };
 </script>
-
-<style lang="scss" scoped>
-.small-input {
-    width: 100px;
-}
-</style>
