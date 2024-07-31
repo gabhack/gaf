@@ -343,7 +343,7 @@
                             </div>
                         </div>
 
-                        <div class="col-6">
+                        <div class="col-6" v-if="datamesSed.esquema || datamesSed.areaedu">
                             <b class="panel-label">AREA DE DESEMPEÑO:</b>
                             <div>
                                 <p class="panel-value">{{ datamesSed.esquema || datamesSed.areaedu }}</p>
@@ -357,14 +357,14 @@
                             </div>
                         </div>
 
-                        <div class="col-6">
+                        <div class="col-6" v-if="datamesSed.ncontr || datamesSed.ncontrata || datamesSed.nivelcontratacion">
                             <b class="panel-label"> TIPO DE CONTRATO:</b>
                             <div>
                                 <p class="panel-value">{{ datamesSed.ncontr || datamesSed.ncontrata || datamesSed.nivelcontratacion }}</p>
                             </div>
                         </div>
 
-                        <div class="col-6">
+                        <div class="col-6" v-if="datamesSed.grado || datamesSed.grad">
                             <b class="panel-label"> GRADO:</b>
                             <div>
                                 <p class="panel-value">{{ datamesSed.grado || datamesSed.grad }}</p>
@@ -378,7 +378,7 @@
                             </div>
                         </div>
 
-                        <div class="col-6">
+                        <div class="col-6" v-if="datamesSed.cencosto || datamesSed.estabedu || datamesSed.ie_sede_area">
                             <b class="panel-label"> SEDE:</b>
                             <div>
                                 <p class="panel-value">{{ datamesSed.cencosto || datamesSed.estabedu || datamesSed.ie_sede_area}}</p>
@@ -441,7 +441,7 @@
                             <p class="panel-value">{{ fechavinc.anodata }}</p>
                         </div>
                     </div>
-                    <div class="col-6">
+                    <div class="col-6" v-if="fechavinc.vinc">
                         <b class="panel-label">ANTIGUEDAD LABORAL:</b>
                         <div>bbb
                             <p class="panel-value">{{ fechavinc.vinc }}</p>
