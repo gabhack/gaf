@@ -9,6 +9,7 @@
                         <option :value="period" v-for="period in pagaduriaPeriodos" :key="period">
                             {{ period }}
                         </option>
+                        <option v-if="isLoading" disabled>CARGANDO...</option>
                     </select>
                 </div>
             </div>
@@ -100,7 +101,15 @@ export default {
     computed: {
         ...mapState('datamesModule', ['cuotadeseada']),
         ...mapState('pagaduriasModule', ['coupons']),
-        ...mapGetters('pagaduriasModule', ['couponsIngresos', 'pagaduriaPeriodos'])
+        ...mapGetters('pagaduriasModule', ['couponsIngresos', 'pagaduriaPeriodos']),
+        isLoading() {
+            console.log(this.pagaduriaPeriodos)
+            if(this.pagaduriaPeriodos.length < 2){
+                return true;
+            }else{
+                return false;
+            }
+        }
     },
     methods: {
         ...mapMutations('datamesModule', ['setConteoEgresos', 'setConteoEgresosPlus']),
