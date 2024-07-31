@@ -6,13 +6,14 @@
                 <div class="d-flex align-items-center">
                     <b class="mr-2">PERIODO:</b>
                     <select 
-    class="form-control" 
-    @change="setSelectedPeriod($event.target.value)" 
-    :value="selectedPeriod">
-    <option :value="period" v-for="period in pagaduriaPeriodos" :key="period">
-        {{ period }}
-    </option>
-</select>
+                        class="form-control" 
+                        @change="setSelectedPeriod($event.target.value)" 
+                        :value="selectedPeriod">
+                        <option :value="period" v-for="period in pagaduriaPeriodos" :key="period">
+                            {{ period }}
+                        </option>
+                        <option v-if="isLoading" disabled>CARGANDO...</option>
+                    </select>
                 </div>
             </div>
             <div class="panel-body">

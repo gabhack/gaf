@@ -9,6 +9,7 @@
                         <option :value="period" v-for="period in descuentosPeriodos" :key="period">
                             {{ period }}
                         </option>
+                        <option v-if="isLoading" disabled>CARGANDO...</option>
                     </select>
                 </div>
             </div>
@@ -76,7 +77,15 @@ export default {
     },
     computed: {
         ...mapState('descuentosModule', ['descuentos']),
-        ...mapGetters('descuentosModule', ['descuentosPeriodos', 'descuentosPerPeriod'])
+        ...mapGetters('descuentosModule', ['descuentosPeriodos', 'descuentosPerPeriod']),
+        isLoading() {
+            console.log(this.descuentosPeriodos)
+            if(this.descuentosPeriodos.length < 2){
+                return true;
+            }else{
+                return false;
+            }
+        }
     },
     methods: {
         ...mapMutations('descuentosModule', ['setSelectedPeriod']),

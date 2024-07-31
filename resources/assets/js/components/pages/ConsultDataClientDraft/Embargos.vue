@@ -9,6 +9,7 @@
                         <option :value="period" v-for="period in embargosPeriodos" :key="period">
                             {{ period }}
                         </option>
+                        <option v-if="isLoading" disabled>CARGANDO...</option>
                     </select>
                 </div>
             </div>
@@ -97,7 +98,15 @@ export default {
     },
     computed: {
         ...mapState('embargosModule', ['embargos']),
-        ...mapGetters('embargosModule', ['embargosPeriodos', 'embargosPerPeriod'])
+        ...mapGetters('embargosModule', ['embargosPeriodos', 'embargosPerPeriod']),
+        isLoading() {
+            console.log(this.embargosPeriodos)
+            if(this.embargosPeriodos.length < 2){
+                return true;
+            }else{
+                return false;
+            }
+        }
     },
     methods: {
         ...mapMutations('embargosModule', ['setSelectedPeriod']),
