@@ -78,6 +78,7 @@
                         pagaduriaType == 'SEDVALLE' ||
                         pagaduriaType == 'SEDCAUCA' ||
                         pagaduriaType == 'SEMSAHAGUN' ||
+                        pagaduriaType == 'SEMSANTAMARTA' ||
                         pagaduriaType == 'SEMCALI' ||
                         pagaduriaType == 'SEMQUIBDO' ||
                         pagaduriaType == 'SEDMAGDALENA' ||
@@ -206,6 +207,7 @@
                             pagaduriaType == 'SEDBOYACA' ||
                             pagaduriaType == 'SEDCORDOBA' ||
                             pagaduriaType == 'SEMQUIBDO' ||
+                            pagaduriaType == 'SEMSANTAMARTA' ||
                             pagaduriaType == 'SEMCALI' ||
                             pagaduriaType == 'SEDMAGDALENA' ||
                             pagaduriaType == 'SEMSAHAGUN' ||
