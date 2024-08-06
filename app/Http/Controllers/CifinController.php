@@ -31,19 +31,19 @@ class CifinController extends Controller
     public function index()
     {
         if (IsSuperAdmin() || IsAMIAdmin() || IsHEGOAdmin()) {
-            $lista = Cifin::all()
-                ->orderBy('id', 'DESC')
-                ->paginate(20);
+            $lista = Cifin::orderBy('id', 'DESC')
+                          ->paginate(20);
         } else {
             $lista = Cifin::where('usuarioid', Auth::user()->id)
-                ->orderBy('id', 'DESC')
-                ->paginate(15);
+                          ->orderBy('id', 'DESC')
+                          ->paginate(15);
         }
-
+    
         $links = $lista->links();
-
-        return view('cifin/index')->with(['links' => $links, 'lista' => $lista]);
+    
+        return view('cifin/index', compact('lista', 'links'));
     }
+    
 
     public function consultarAdmin(Request $request)
     {
@@ -70,7 +70,7 @@ class CifinController extends Controller
                     <!--Optional:-->
                     <numeroIdentificacion>' .
             $cedula .
-            '</numeroIdentificacion>
+            '</numeroIdentificacion>zz
                     <!--Optional:-->
                     <primerApellido>' .
             $apellido .

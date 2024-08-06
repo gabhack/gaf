@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -57,7 +56,7 @@ class DemograficoController extends Controller
 
             // Usar subconsulta para obtener el último registro según created_at para cada documento
             $latestRecords = DatamesGen::whereIn('doc', $cedulas)
-                ->select('doc', 'nombre_usuario', 'cel', 'telefono', 'correo_electronico', 'ciudad', 'direccion_residencial', 'created_at')
+                ->select('doc', 'nombre_usuario', 'cel', 'telefono', 'correo_electronico', 'ciudad', 'direccion_residencial', 'municipio', 'cencosto', 'tipo_contrato', 'edad', 'created_at')
                 ->orderBy('created_at', 'desc')
                 ->get()
                 ->unique('doc')
@@ -107,7 +106,11 @@ class DemograficoController extends Controller
                         'tel' => implode(', ', $landlines),
                         'correo_electronico' => $record->correo_electronico,
                         'ciudad' => $record->ciudad,
-                        'direccion_residencial' => $record->direccion_residencial
+                        'direccion_residencial' => $record->direccion_residencial,
+                        'municipio' => $record->municipio,
+                        'cencosto' => $record->cencosto,
+                        'tipo_contrato' => $record->tipo_contrato,
+                        'edad' => $record->edad
                     ]);
                 }
             }
@@ -150,7 +153,7 @@ class DemograficoController extends Controller
     {
         try {
             $record = DatamesGen::where('doc', $doc)
-                ->select('doc', 'nombre_usuario', 'cel', 'telefono', 'correo_electronico', 'ciudad', 'direccion_residencial', 'created_at')
+                ->select('doc', 'nombre_usuario', 'cel', 'telefono', 'correo_electronico', 'ciudad', 'direccion_residencial', 'municipio', 'cencosto', 'tipo_contrato', 'edad', 'created_at')
                 ->orderBy('created_at', 'desc')
                 ->first();
 
