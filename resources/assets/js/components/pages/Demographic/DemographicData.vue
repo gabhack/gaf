@@ -5,8 +5,8 @@
         <div class="panel mb-3 col-md-12">
             <div class="panel-heading">
                 <b>Datos Demográficos</b>
-                <b-button @click="fetchRecentConsultations" variant="info" class="float-right"
-                    >Ver Consultas Recientes</b-button
+                <b-button @click="toggleRecentConsultations" variant="info" class="float-right"
+                    >{{ showRecentConsultations ? 'Ocultar Consultas Recientes' : 'Ver Consultas Recientes' }}</b-button
                 >
             </div>
             <div class="panel-body">
@@ -24,7 +24,7 @@
         </div>
 
         <!-- Card para mostrar las consultas recientes -->
-        <div v-if="recentConsultations.length" class="card recent-consultations">
+        <div v-if="showRecentConsultations && recentConsultations.length" class="card recent-consultations">
             <div class="card-header">
                 <b>Consultas Recientes</b>
             </div>
@@ -64,6 +64,10 @@
                             <th>Email</th>
                             <th>Ciudad</th>
                             <th>Dirección</th>
+                            <th>Municipio</th>
+                            <th>Centro de Costo</th>
+                            <th>Tipo de Contrato</th>
+                            <th>Edad</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -75,6 +79,10 @@
                             <td>{{ result.correo_electronico }}</td>
                             <td>{{ result.ciudad }}</td>
                             <td>{{ result.direccion_residencial }}</td>
+                            <td>{{ result.municipio }}</td>
+                            <td>{{ result.cencosto }}</td>
+                            <td>{{ result.tipo_contrato }}</td>
+                            <td>{{ result.edad }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -109,7 +117,8 @@ export default {
             results: [],
             searchQuery: '',
             error: null,
-            recentConsultations: []
+            recentConsultations: [],
+            showRecentConsultations: false
         };
     },
     computed: {
@@ -142,6 +151,7 @@ export default {
                     }
                 });
 
+                console.log('Resultados:', response.data); // Log para ver los resultados
                 this.results = response.data;
                 this.error = null;
             } catch (error) {
@@ -165,9 +175,12 @@ export default {
         loadConsultationData(data) {
             this.results = data;
         },
+        toggleRecentConsultations() {
+            this.showRecentConsultations = !this.showRecentConsultations;
+        },
         exportToPDF() {
             const doc = new jsPDF();
-            const columns = ['Documento', 'Nombre', 'Celular', 'Teléfono Fijo', 'Email', 'Ciudad', 'Dirección'];
+            const columns = ['Documento', 'Nombre', 'Celular', 'Teléfono Fijo', 'Email', 'Ciudad', 'Dirección', 'Municipio', 'Centro de Costo', 'Tipo de Contrato', 'Edad'];
             const rows = this.results.map(item => [
                 item.doc,
                 item.nombre_usuario,
@@ -175,54 +188,31 @@ export default {
                 item.tel,
                 item.correo_electronico,
                 item.ciudad,
-                item.direccion_residencial
+                item.direccion_residencial,
+                item.municipio,
+                item.cencosto,
+                item.tipo_contrato,
+                item.edad
             ]);
             doc.autoTable(columns, rows);
             doc.save('resultados.pdf');
         },
         exportToExcel() {
-            // Determinar el número máximo de celulares y teléfonos
-            let maxCellphones = 0;
-            let maxLandlines = 0;
-            const processedResults = this.results.map(item => {
-                const cellphones = item.cel ? item.cel.split(', ') : [];
-                const landlines = item.tel ? item.tel.split(', ') : [];
-                maxCellphones = Math.max(maxCellphones, cellphones.length);
-                maxLandlines = Math.max(maxLandlines, landlines.length);
-                return {
-                    ...item,
-                    cellphones,
-                    landlines
-                };
-            });
-
-            // Crear las columnas dinámicamente
-            let columns = ['Documento', 'Nombre', 'Email', 'Ciudad', 'Dirección'];
-            for (let i = 1; i <= maxCellphones; i++) {
-                columns.push(`Celular ${i}`);
-            }
-            for (let i = 1; i <= maxLandlines; i++) {
-                columns.push(`Teléfono Fijo ${i}`);
-            }
-
-            // Crear las filas con las columnas dinámicas
-            const rows = processedResults.map(item => {
-                const row = [
-                    item.doc,
-                    item.nombre_usuario,
-                    item.correo_electronico,
-                    item.ciudad,
-                    item.direccion_residencial
-                ];
-                for (let i = 0; i < maxCellphones; i++) {
-                    row.push(item.cellphones[i] || '');
-                }
-                for (let i = 0; i < maxLandlines; i++) {
-                    row.push(item.landlines[i] || '');
-                }
-                return row;
-            });
-
+            const columns = ['Documento', 'Nombre', 'Celular', 'Teléfono Fijo', 'Email', 'Ciudad', 'Dirección', 'Municipio', 'Centro de Costo', 'Tipo de Contrato', 'Edad'];
+            const rows = this.results.map(item => [
+                item.doc,
+                item.nombre_usuario,
+                item.cel,
+                item.tel,
+                item.correo_electronico,
+                item.ciudad,
+                item.direccion_residencial,
+                item.municipio,
+                item.cencosto,
+                item.tipo_contrato,
+                item.edad
+            ]);
+            
             // Convertir las filas a una hoja de trabajo de Excel
             const worksheet = XLSX.utils.aoa_to_sheet([columns, ...rows]);
             const workbook = XLSX.utils.book_new();
