@@ -1,12 +1,15 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\DatamesGen;
+use App\CouponsGen; // Asegúrate de importar el modelo CouponsGen
 use App\DemographicConsultLog;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use Carbon\Carbon; // Importa Carbon para el manejo de fechas
 
 class DemograficoController extends Controller
 {
@@ -54,9 +57,9 @@ class DemograficoController extends Controller
 
             Log::info('Cedulas extraídas:', ['cedulas' => $cedulas]);
 
-            // Usar subconsulta para obtener el último registro según created_at para cada documento
+            // Usar subconsulta para obtener el último registro según created_at para cada documento en DatamesGen
             $latestRecords = DatamesGen::whereIn('doc', $cedulas)
-                ->select('doc', 'nombre_usuario', 'cel', 'telefono', 'correo_electronico', 'ciudad', 'direccion_residencial', 'municipio', 'cencosto', 'tipo_contrato', 'edad', 'created_at')
+                ->select('doc', 'nombre_usuario', 'cel', 'telefono', 'correo_electronico', 'ciudad', 'direccion_residencial', 'municipio', 'tipo_contrato', 'fecha_nacimiento', 'created_at')
                 ->orderBy('created_at', 'desc')
                 ->get()
                 ->unique('doc')
@@ -65,6 +68,14 @@ class DemograficoController extends Controller
             $results = collect();
             foreach ($cedulas as $cedula) {
                 if ($record = $latestRecords->get($cedula)) {
+                    // Obtener centro_costo de la tabla CouponsGen
+                    $centroCosto = CouponsGen::where('doc', $cedula)
+                        ->orderBy('id', 'desc')
+                        ->value('centro_costo');
+
+                    // Formatear fecha_nacimiento
+                    $fechaNacimiento = $this->formatFechaNacimiento($record->fecha_nacimiento);
+
                     // Separar y clasificar teléfonos y celulares
                     $cellphones = [];
                     $landlines = [];
@@ -108,9 +119,9 @@ class DemograficoController extends Controller
                         'ciudad' => $record->ciudad,
                         'direccion_residencial' => $record->direccion_residencial,
                         'municipio' => $record->municipio,
-                        'cencosto' => $record->cencosto,
+                        'centro_costo' => $centroCosto,
                         'tipo_contrato' => $record->tipo_contrato,
-                        'edad' => $record->edad
+                        'fecha_nacimiento' => $fechaNacimiento
                     ]);
                 }
             }
@@ -134,6 +145,21 @@ class DemograficoController extends Controller
         }
     }
 
+    private function formatFechaNacimiento($fecha)
+    {
+        $formats = ['Y-m-d', 'd/m/Y', 'm-d-Y'];
+
+        foreach ($formats as $format) {
+            try {
+                return Carbon::createFromFormat($format, $fecha)->format('Y-m-d');
+            } catch (\Exception $e) {
+                continue;
+            }
+        }
+
+        return 'N/A';
+    }
+
     public function getRecentConsultations()
     {
         $recentConsultations = DemographicConsultLog::where('user_id', Auth::id())
@@ -153,7 +179,7 @@ class DemograficoController extends Controller
     {
         try {
             $record = DatamesGen::where('doc', $doc)
-                ->select('doc', 'nombre_usuario', 'cel', 'telefono', 'correo_electronico', 'ciudad', 'direccion_residencial', 'municipio', 'cencosto', 'tipo_contrato', 'edad', 'created_at')
+                ->select('doc', 'nombre_usuario', 'cel', 'telefono', 'correo_electronico', 'ciudad', 'direccion_residencial', 'municipio', 'tipo_contrato', 'fecha_nacimiento', 'created_at')
                 ->orderBy('created_at', 'desc')
                 ->first();
 
@@ -161,7 +187,27 @@ class DemograficoController extends Controller
                 return response()->json(['error' => 'Documento no encontrado'], 404);
             }
 
-            return response()->json($record);
+            // Obtener centro_costo de la tabla CouponsGen
+            $centroCosto = CouponsGen::where('doc', $doc)
+                ->orderBy('id', 'desc')
+                ->value('centro_costo');
+
+            // Formatear fecha_nacimiento
+            $fechaNacimiento = $this->formatFechaNacimiento($record->fecha_nacimiento);
+
+            return response()->json([
+                'doc' => $record->doc,
+                'nombre_usuario' => $record->nombre_usuario,
+                'cel' => $record->cel,
+                'tel' => $record->telefono,
+                'correo_electronico' => $record->correo_electronico,
+                'ciudad' => $record->ciudad,
+                'direccion_residencial' => $record->direccion_residencial,
+                'municipio' => $record->municipio,
+                'centro_costo' => $centroCosto,
+                'tipo_contrato' => $record->tipo_contrato,
+                'fecha_nacimiento' => $fechaNacimiento
+            ]);
         } catch (\Exception $e) {
             Log::error('Error fetching demographic data: ' . $e->getMessage(), [
                 'trace' => $e->getTraceAsString(),

@@ -5,9 +5,9 @@
         <div class="panel mb-3 col-md-12">
             <div class="panel-heading">
                 <b>Datos Demográficos</b>
-                <b-button @click="toggleRecentConsultations" variant="info" class="float-right"
-                    >{{ showRecentConsultations ? 'Ocultar Consultas Recientes' : 'Ver Consultas Recientes' }}</b-button
-                >
+                <b-button @click="toggleRecentConsultations" variant="info" class="float-right">
+                    {{ showRecentConsultations ? 'Ocultar Consultas Recientes' : 'Ver Consultas Recientes' }}
+                </b-button>
             </div>
             <div class="panel-body">
                 <div class="alert alert-info">
@@ -47,45 +47,42 @@
             </div>
             <div class="panel-body">
                 <div class="form-group">
-                    <input
-                        type="text"
-                        v-model="searchQuery"
-                        placeholder="Buscar por documento"
-                        class="form-control mb-3"
-                    />
+                    <input type="text" v-model="searchQuery" placeholder="Buscar por documento" class="form-control mb-3" />
                 </div>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Documento</th>
-                            <th>Nombre</th>
-                            <th>Celular</th>
-                            <th>Teléfono Fijo</th>
-                            <th>Email</th>
-                            <th>Ciudad</th>
-                            <th>Dirección</th>
-                            <th>Municipio</th>
-                            <th>Centro de Costo</th>
-                            <th>Tipo de Contrato</th>
-                            <th>Edad</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="result in filteredResults" :key="result.doc">
-                            <td>{{ result.doc }}</td>
-                            <td>{{ result.nombre_usuario }}</td>
-                            <td>{{ result.cel }}</td>
-                            <td>{{ result.tel }}</td>
-                            <td>{{ result.correo_electronico }}</td>
-                            <td>{{ result.ciudad }}</td>
-                            <td>{{ result.direccion_residencial }}</td>
-                            <td>{{ result.municipio }}</td>
-                            <td>{{ result.cencosto }}</td>
-                            <td>{{ result.tipo_contrato }}</td>
-                            <td>{{ result.edad }}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div style="overflow-x: auto;">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Documento</th>
+                                <th>Nombre</th>
+                                <th>Celular</th>
+                                <th>Teléfono Fijo</th>
+                                <th>Email</th>
+                                <th>Ciudad</th>
+                                <th>Dirección</th>
+                                <th>Municipio</th>
+                                <th>Centro de Costo</th>
+                                <th>Tipo de Contrato</th>
+                                <th>Fecha de Nacimiento</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="result in filteredResults" :key="result.doc">
+                                <td>{{ result.doc }}</td>
+                                <td>{{ result.nombre_usuario }}</td>
+                                <td>{{ result.cel }}</td>
+                                <td>{{ result.tel }}</td>
+                                <td>{{ result.correo_electronico }}</td>
+                                <td>{{ result.ciudad }}</td>
+                                <td>{{ result.direccion_residencial }}</td>
+                                <td>{{ result.municipio || 'N/A' }}</td>
+                                <td>{{ result.centro_costo || 'N/A' }}</td>
+                                <td>{{ result.tipo_contrato || 'N/A' }}</td>
+                                <td>{{ result.fecha_nacimiento || 'N/A' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
@@ -180,7 +177,7 @@ export default {
         },
         exportToPDF() {
             const doc = new jsPDF();
-            const columns = ['Documento', 'Nombre', 'Celular', 'Teléfono Fijo', 'Email', 'Ciudad', 'Dirección', 'Municipio', 'Centro de Costo', 'Tipo de Contrato', 'Edad'];
+            const columns = ['Documento', 'Nombre', 'Celular', 'Teléfono Fijo', 'Email', 'Ciudad', 'Dirección', 'Municipio', 'Centro de Costo', 'Tipo de Contrato', 'Fecha de Nacimiento'];
             const rows = this.results.map(item => [
                 item.doc,
                 item.nombre_usuario,
@@ -189,16 +186,16 @@ export default {
                 item.correo_electronico,
                 item.ciudad,
                 item.direccion_residencial,
-                item.municipio,
-                item.cencosto,
-                item.tipo_contrato,
-                item.edad
+                item.municipio || 'N/A',
+                item.centro_costo || 'N/A',
+                item.tipo_contrato || 'N/A',
+                item.fecha_nacimiento || 'N/A'
             ]);
             doc.autoTable(columns, rows);
             doc.save('resultados.pdf');
         },
         exportToExcel() {
-            const columns = ['Documento', 'Nombre', 'Celular', 'Teléfono Fijo', 'Email', 'Ciudad', 'Dirección', 'Municipio', 'Centro de Costo', 'Tipo de Contrato', 'Edad'];
+            const columns = ['Documento', 'Nombre', 'Celular', 'Teléfono Fijo', 'Email', 'Ciudad', 'Dirección', 'Municipio', 'Centro de Costo', 'Tipo de Contrato', 'Fecha de Nacimiento'];
             const rows = this.results.map(item => [
                 item.doc,
                 item.nombre_usuario,
@@ -207,10 +204,10 @@ export default {
                 item.correo_electronico,
                 item.ciudad,
                 item.direccion_residencial,
-                item.municipio,
-                item.cencosto,
-                item.tipo_contrato,
-                item.edad
+                item.municipio || 'N/A',
+                item.centro_costo || 'N/A',
+                item.tipo_contrato || 'N/A',
+                item.fecha_nacimiento || 'N/A'
             ]);
             
             // Convertir las filas a una hoja de trabajo de Excel
