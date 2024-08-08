@@ -641,6 +641,8 @@ Route::post('/embargos/by-pagaduria', [EmbargosController::class, 'getEmbargosBy
 Route::get('/demografico', [DemograficoController::class, 'show'])->name('demografico.show');
 Route::post('/demografico/upload', [DemograficoController::class, 'upload'])->name('demografico.upload');
 Route::get('/demografico/recent-consultations', [DemograficoController::class, 'getRecentConsultations']);
+Route::get('/demografico/fetch-paginated-results', [DemograficoController::class, 'fetchPaginatedResults']);
+
 Route::get('/demografico/{doc}', [DemograficoController::class, 'getDemograficoPorDoc'])->name('demografico.get');
 
 Route::middleware(['auth'])->group(function () {

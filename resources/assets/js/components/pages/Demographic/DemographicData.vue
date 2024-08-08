@@ -1,13 +1,15 @@
 <template>
     <div>
-        <loading :active.sync="isLoading" :can-cancel="false" :is-full-page="true" color="#0CEDB0" />
+        <div v-if="isLoading" class="loading-overlay">
+            <div class="spinner"></div>
+        </div>
 
         <div class="panel mb-3 col-md-12">
             <div class="panel-heading">
                 <b>Datos Demográficos</b>
-                <b-button @click="toggleRecentConsultations" variant="info" class="float-right">
+                <button @click="toggleRecentConsultations" class="btn btn-info float-right">
                     {{ showRecentConsultations ? 'Ocultar Consultas Recientes' : 'Ver Consultas Recientes' }}
-                </b-button>
+                </button>
             </div>
             <div class="panel-body">
                 <div class="alert alert-info">
@@ -18,7 +20,7 @@
                 </div>
                 <div class="form-group">
                     <input type="file" @change="handleFileUpload" class="form-control mb-3" />
-                    <b-button @click="uploadFile" variant="primary">Subir</b-button>
+                    <button @click="uploadFile" class="btn btn-primary">Subir</button>
                 </div>
             </div>
         </div>
@@ -41,15 +43,20 @@
             <div class="panel-heading">
                 <b>Resultados</b>
                 <div class="float-right">
-                    <b-button @click="exportToPDF" variant="danger" class="mr-2">Exportar a PDF</b-button>
-                    <b-button @click="exportToExcel" variant="success">Exportar a Excel</b-button>
+                    <button @click="exportToPDF" class="btn btn-danger mr-2">Exportar a PDF</button>
+                    <button @click="exportToExcel" class="btn btn-success">Exportar a Excel</button>
                 </div>
             </div>
             <div class="panel-body">
                 <div class="form-group">
-                    <input type="text" v-model="searchQuery" placeholder="Buscar por documento" class="form-control mb-3" />
+                    <input
+                        type="text"
+                        v-model="searchQuery"
+                        placeholder="Buscar por documento"
+                        class="form-control mb-3"
+                    />
                 </div>
-                <div style="overflow-x: auto;">
+                <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
                             <tr>
@@ -60,9 +67,9 @@
                                 <th>Email</th>
                                 <th>Ciudad</th>
                                 <th>Dirección</th>
-                                <th>Municipio</th>
                                 <th>Centro de Costo</th>
                                 <th>Tipo de Contrato</th>
+                                <th>Edad</th>
                                 <th>Fecha de Nacimiento</th>
                             </tr>
                         </thead>
@@ -75,13 +82,17 @@
                                 <td>{{ result.correo_electronico }}</td>
                                 <td>{{ result.ciudad }}</td>
                                 <td>{{ result.direccion_residencial }}</td>
-                                <td>{{ result.municipio || 'N/A' }}</td>
-                                <td>{{ result.centro_costo || 'N/A' }}</td>
-                                <td>{{ result.tipo_contrato || 'N/A' }}</td>
-                                <td>{{ result.fecha_nacimiento || 'N/A' }}</td>
+                                <td>{{ result.centro_costo }}</td>
+                                <td>{{ result.tipo_contrato }}</td>
+                                <td>{{ result.edad }}</td>
+                                <td>{{ result.fecha_nacimiento }}</td>
                             </tr>
                         </tbody>
                     </table>
+                </div>
+                <div class="pagination">
+                    <button @click="fetchPaginatedResults(page - 1)" :disabled="page === 1" class="btn btn-primary">Anterior</button>
+                    <button @click="fetchPaginatedResults(page + 1)" :disabled="page * perPage >= total" class="btn btn-primary">Siguiente</button>
                 </div>
             </div>
         </div>
@@ -94,19 +105,9 @@
 
 <script>
 import axios from 'axios';
-import { BButton } from 'bootstrap-vue';
-import Loading from 'vue-loading-overlay';
-import 'vue-loading-overlay/dist/vue-loading.css';
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
-import * as XLSX from 'xlsx';
 
 export default {
     name: 'DemographicData',
-    components: {
-        BButton,
-        Loading
-    },
     data() {
         return {
             file: null,
@@ -115,7 +116,10 @@ export default {
             searchQuery: '',
             error: null,
             recentConsultations: [],
-            showRecentConsultations: false
+            showRecentConsultations: false,
+            page: 1,
+            perPage: 30,
+            total: 0
         };
     },
     computed: {
@@ -151,14 +155,14 @@ export default {
                 console.log('Resultados:', response.data); // Log para ver los resultados
                 this.results = response.data;
                 this.error = null;
+                await this.fetchPaginatedResults(1); // Fetch the first page of results
             } catch (error) {
                 if (error.response && error.response.data) {
                     this.error = error.response.data.error;
                 } else {
                     this.error = 'Error subiendo el archivo';
                 }
-            } finally {
-                this.isLoading = false;
+                this.isLoading = false; // Stop loading if there is an error
             }
         },
         async fetchRecentConsultations() {
@@ -169,15 +173,33 @@ export default {
                 console.error('Error fetching recent consultations:', error);
             }
         },
+        async fetchPaginatedResults(page) {
+            this.isLoading = true;
+            try {
+                let response = await axios.get(`/demografico/fetch-paginated-results?page=${page}&perPage=${this.perPage}`);
+                this.results = response.data.data;
+                this.total = response.data.total;
+                this.page = response.data.page;
+                this.perPage = response.data.perPage;
+            } catch (error) {
+                console.error('Error fetching paginated results:', error);
+                this.error = 'Error al buscar los resultados paginados';
+            } finally {
+                this.isLoading = false; // Stop loading after results are fetched
+            }
+        },
         loadConsultationData(data) {
             this.results = data;
         },
         toggleRecentConsultations() {
+            if (!this.showRecentConsultations) {
+                this.fetchRecentConsultations();
+            }
             this.showRecentConsultations = !this.showRecentConsultations;
         },
         exportToPDF() {
             const doc = new jsPDF();
-            const columns = ['Documento', 'Nombre', 'Celular', 'Teléfono Fijo', 'Email', 'Ciudad', 'Dirección', 'Municipio', 'Centro de Costo', 'Tipo de Contrato', 'Fecha de Nacimiento'];
+            const columns = ['Documento', 'Nombre', 'Celular', 'Teléfono Fijo', 'Email', 'Ciudad', 'Dirección', 'Centro de Costo', 'Tipo de Contrato', 'Edad', 'Fecha de Nacimiento'];
             const rows = this.results.map(item => [
                 item.doc,
                 item.nombre_usuario,
@@ -186,16 +208,16 @@ export default {
                 item.correo_electronico,
                 item.ciudad,
                 item.direccion_residencial,
-                item.municipio || 'N/A',
-                item.centro_costo || 'N/A',
-                item.tipo_contrato || 'N/A',
-                item.fecha_nacimiento || 'N/A'
+                item.centro_costo,
+                item.tipo_contrato,
+                item.edad,
+                item.fecha_nacimiento
             ]);
             doc.autoTable(columns, rows);
             doc.save('resultados.pdf');
         },
         exportToExcel() {
-            const columns = ['Documento', 'Nombre', 'Celular', 'Teléfono Fijo', 'Email', 'Ciudad', 'Dirección', 'Municipio', 'Centro de Costo', 'Tipo de Contrato', 'Fecha de Nacimiento'];
+            const columns = ['Documento', 'Nombre', 'Celular', 'Teléfono Fijo', 'Email', 'Ciudad', 'Dirección', 'Centro de Costo', 'Tipo de Contrato', 'Edad', 'Fecha de Nacimiento'];
             const rows = this.results.map(item => [
                 item.doc,
                 item.nombre_usuario,
@@ -204,26 +226,50 @@ export default {
                 item.correo_electronico,
                 item.ciudad,
                 item.direccion_residencial,
-                item.municipio || 'N/A',
-                item.centro_costo || 'N/A',
-                item.tipo_contrato || 'N/A',
-                item.fecha_nacimiento || 'N/A'
+                item.centro_costo,
+                item.tipo_contrato,
+                item.edad,
+                item.fecha_nacimiento
             ]);
-            
+
             // Convertir las filas a una hoja de trabajo de Excel
             const worksheet = XLSX.utils.aoa_to_sheet([columns, ...rows]);
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, 'Resultados');
             XLSX.writeFile(workbook, 'resultados.xlsx');
         }
-    },
-    mounted() {
-        this.fetchRecentConsultations();
     }
 };
 </script>
 
 <style scoped>
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.spinner {
+    border: 16px solid #f3f3f3;
+    border-top: 16px solid #3498db;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 .panel-heading {
     background-color: #007bff;
     color: #fff;
@@ -232,6 +278,10 @@ export default {
 
 .panel-body {
     padding: 15px;
+}
+
+.table-responsive {
+    overflow-x: auto;
 }
 
 .table-striped > tbody > tr:nth-of-type(odd) {
