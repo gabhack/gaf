@@ -103,14 +103,6 @@ export default {
     computed: {
         ...mapState('embargosModule', ['embargos']),
         ...mapGetters('embargosModule', ['embargosPeriodos', 'embargosPerPeriod']),
-        isLoading() {
-            console.log(this.embargosPeriodos)
-            if(this.embargosPeriodos.length < 2){
-                return true;
-            }else{
-                return false;
-            }
-        }
     },
     methods: {
         ...mapMutations('embargosModule', ['setSelectedPeriod']),
