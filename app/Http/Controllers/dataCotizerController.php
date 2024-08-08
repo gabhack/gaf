@@ -6,7 +6,6 @@ use App\dataCotizer;
 use App\Estudiostr;
 use App\Pagadurias;
 use App\SolicitudCredito;
-
 use Illuminate\Http\Request;
 use App\PlanPago;
 use Illuminate\Support\Facades\Log;
@@ -22,10 +21,10 @@ class dataCotizerController extends Controller
      */
     public function index(Request $request)
     {
-        //Query
+        // Query
         $lista = dataCotizer::orderBy('id', 'desc');
 
-        //Preparar la salida
+        // Preparar la salida
         $listaOut = $lista->paginate(20)->appends(request()->except('page'));
         $links = $listaOut->links();
         $options = array(
@@ -33,7 +32,7 @@ class dataCotizerController extends Controller
             "links" => $links
         );
 
-        //Parametros de busqueda y filtrado para front
+        // Parámetros de búsqueda y filtrado para front
         if (isset($request->busq) && $request->busq !== '') {
             $options['busq'] = $request->busq;
         }
@@ -69,17 +68,22 @@ class dataCotizerController extends Controller
         Log::info('Datos de cotizador y crédito extraídos.', ['cotizerData' => $input, 'pagaduriaCode' => $pagaduriaCode]);
 
         // Creación y guardado del cotizador
-        $cotizador = new DataCotizer($input);
+        $cotizador = new dataCotizer($input);
         $cotizador->save();
         Log::info('Cotizador creado y guardado con éxito.', ['cotizadorId' => $cotizador->id]);
 
         // Obtención del ID de la pagaduría seleccionada
         $pagaduria = Pagadurias::where('codigo', $pagaduriaCode)->first();
+        if ($pagaduria === null) {
+            // Manejar el caso en el que no se encuentra la pagaduría
+            Log::error('No se encontró la pagaduría con el código proporcionado.', ['codigo' => $pagaduriaCode]);
+            return response()->json(['error' => 'Pagaduría no encontrada.'], 404);
+        }
 
         // Creación y guardado del estudio
         $estudio = new Estudiostr();
         $estudio->user_id = auth()->user()->id;
-        $estudio->pagaduria_id = 1;
+        $estudio->pagaduria_id = $pagaduria->id;
         $estudio->clientes_id = 200;
         $estudio->fecha = Carbon::now()->toDateString();
         $estudio->decision = 'PROS';
