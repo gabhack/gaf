@@ -83,13 +83,8 @@ export default {
         ...mapState('descuentosModule', ['descuentos']),
         ...mapGetters('descuentosModule', ['descuentosPeriodos', 'descuentosPerPeriod']),
         isLoading() {
-            console.log(this.descuentosPeriodos)
-            if(this.descuentosPeriodos.length < 2){
-                return true;
-            }else{
-                return false;
-            }
-        }
+            return !this.descuentosPeriodos || this.descuentosPeriodos.length === 0;
+        },
     },
     methods: {
         ...mapMutations('descuentosModule', ['setSelectedPeriod']),
