@@ -726,7 +726,7 @@
                                                 $sectorTitulo = str_replace(
                                                     ['Sector', 'AlDia', 'EnMora'],
                                                     ['', '', ''],
-                                                    $sector,
+                                                    $sector
                                                 );
                                                 $sectorTitulo = ucfirst(strtolower($sectorTitulo));
                                                 $estadoTitulo = $estado === 'alDia' ? 'al día' : 'en mora';
