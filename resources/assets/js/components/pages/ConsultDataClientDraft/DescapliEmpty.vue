@@ -112,15 +112,23 @@ export default {
             item.check = false;
             return item;
         });
+        console.log('REVISAR ACA' + this.couponsIngresos.items);
     },
     computed: {
         ...mapState('datamesModule', ['cuotadeseada']),
         ...mapState('pagaduriasModule', ['coupons']),
         ...mapGetters('pagaduriasModule', ['couponsIngresos', 'pagaduriaPeriodos']),
-        arrayCoupons() {
-        console.log('Cupones recalculados en DescapliEmpty:', this.couponsIngresos.items);
-        return [...this.couponsIngresos.items];
-    }
+        isLoading() {
+            console.log(this.pagaduriaPeriodos)
+            if(this.pagaduriaPeriodos.length < 2){
+                return true;
+            }else{
+                return false;
+            }
+        },
+        revisarAca(){
+           return this.couponsIngresos.items;
+        }
     },
     methods: {
         ...mapMutations('datamesModule', ['setConteoEgresos', 'setConteoEgresosPlus']),

@@ -391,6 +391,12 @@
                                 <p class="panel-value">{{ datamesSed.ciudad || datamesSed.ciud }}</p>
                             </div>
                         </div>
+                        <div class="col-6">
+                            <b class="panel-label"> DIAS LABORADOS:</b>
+                            <div>
+                                <p class="panel-value">{{ this.arrayCoupons.length>0 ? this.arrayCoupons[0].dias_laborados : '--' }}</p>
+                            </div>
+                        </div>
                     </template>
 
                     <div
@@ -459,10 +465,33 @@ import { mapState, mapGetters } from 'vuex';
 export default {
     name: 'EmploymentHistory',
     props: ['fechavinc', 'datamessedvalle', 'datamesfidu', 'datamessemcali', 'user'],
+    data(){
+        return{
+            arrayCoupons: []
+        }
+    },
     computed: {
         ...mapState('datamesModule', ['datamesSed']),
-        ...mapState('pagaduriasModule', ['pagaduriaType']),
-        ...mapGetters('pagaduriasModule', ['ingresosExtras', 'salarioBasico', 'valorIngreso'])
+        ...mapState('pagaduriasModule', ['pagaduriaType', 'setSelectedPeriod']),
+        ...mapGetters('pagaduriasModule', ['ingresosExtras', 'salarioBasico', 
+                      'valorIngreso', 'couponsIngresos', 'pagaduriaPeriodos']),
+                      
+        revisarAca(){
+           return this.couponsIngresos.items;
+        }
+    },
+    watch:{
+        couponsIngresos() {
+            this.arrayCoupons = [];
+            this.arrayCoupons = [...this.couponsIngresos.items];
+            function extractNumber(str) {
+                const match = str.match(/\d+/);
+                return match ? match[0] : null;
+            }
+            this.arrayCoupons.forEach(coupon => {
+                coupon.dias_laborados = extractNumber(coupon.dias_laborados);
+            });
+        }
     }
 };
 </script>
