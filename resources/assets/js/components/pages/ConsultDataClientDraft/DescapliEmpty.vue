@@ -125,9 +125,6 @@ export default {
             }else{
                 return false;
             }
-        },
-        revisarAca(){
-           return this.couponsIngresos.items;
         }
     },
     methods: {
