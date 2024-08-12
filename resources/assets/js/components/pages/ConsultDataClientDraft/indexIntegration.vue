@@ -27,7 +27,6 @@
             <div id="consulta-container" class="row">
                 <div class="col-12">
                     <form-consult-integration :id-number="idNumber" @emitInfo="emitInfo" />
-
                     <!--============================
                 DATAMES FOPEP -
                 ==============================-->
@@ -65,126 +64,29 @@
                     />
 
                     <!--================================
-                DATAMES SECRETARIAS
+                DATAMES SECRETARIAS ELimiando por carlos 12/08
                 ===================================-->
-                    <DatamesData2 v-if="pagaduriaType == 'SEMSAHAGUN'" />
-
-                    <DatamesData
-                        v-if="
-                            pagaduriaType == 'SEDCHOCO' ||
-                            // pagaduriaType == 'SEDVALLE' ||
-                            pagaduriaType == 'SEDCAUCA' ||
-                            // pagaduriaType == 'SEMSAHAGUN' ||
-                            // pagaduriaType == 'SEMCALI' ||
-                            pagaduriaType == 'SEMQUIBDO' ||
-                            // pagaduriaType == 'SEDMAGDALENA' ||
-                            pagaduriaType == 'SEMPOPAYAN' ||
-                            pagaduriaType == 'SEMMONTERIA' ||
-                            pagaduriaType == 'SEDCORDOBA' ||
-                            pagaduriaType == 'SEDCALDAS' ||
-                            pagaduriaType == 'SEDBOYACA' ||
-                            pagaduriaType == 'SEDBOLIVAR' ||
-                            pagaduriaType == 'SEMBARRANQUILLA' ||
-                            pagaduriaType == 'SEDATLANTICO' ||
-                            pagaduriaType == 'SEDHUILA' ||
-                            pagaduriaType == 'SEDRISARALDA' ||
-                            pagaduriaType == 'SEDMETA' ||
-                            pagaduriaType == 'SEDCUNDINAMARCA' ||
-                            pagaduriaType == 'SEMMOSQUERA' ||
-                            pagaduriaType == 'SEMMAGANGUE' ||
-                            pagaduriaType == 'SEMBUGA' ||
-                            pagaduriaType == 'SEMNEIVA' ||
-                            pagaduriaType == 'SEMFUNZA' ||
-                            pagaduriaType == 'SEMZIPAQUIRA' ||
-                            pagaduriaType == 'SEMYUMBO' ||
-                            pagaduriaType == 'SEMYOPAL' ||
-                            pagaduriaType == 'SEMIPIALES' ||
-                            pagaduriaType == 'SEMPIEDECUESTA' ||
-                            pagaduriaType == 'SEMVALLEDUPAR' ||
-                            pagaduriaType == 'SEMURIBIA' ||
-                            pagaduriaType == 'SEMTURBO' ||
-                            pagaduriaType == 'SEMTUNJA' ||
-                            pagaduriaType == 'SEMBUCARAMANGA' ||
-                            pagaduriaType == 'SEMMANIZALES' ||
-                            pagaduriaType == 'SEMMAICAO' ||
-                            pagaduriaType == 'SEMMALAMBO' ||
-                            pagaduriaType == 'SEMPASTO' ||
-                            pagaduriaType == 'SEMBUENAVENTURA' ||
-                            pagaduriaType == 'SEMPALMIRA' ||
-                            pagaduriaType == 'SEMJAMUNDI' ||
-                            pagaduriaType == 'SEMCARTAGO' ||
-                            pagaduriaType == 'SEMDUITAMA' ||
-                            pagaduriaType == 'SEMGIRON' ||
-                            pagaduriaType == 'SEMGIRARDOT' ||
-                            pagaduriaType == 'SEMCHIA' ||
-                            pagaduriaType == 'SEMBELLO' ||
-                            pagaduriaType == 'SEMCIENAGA' ||
-                            pagaduriaType == 'SEMCUCUTA' ||
-                            pagaduriaType == 'SEMMEDELLIN' ||
-                            pagaduriaType == 'SEMDOSQUEBRADAS' ||
-                            pagaduriaType == 'SEMCARTAGENA' ||
-                            pagaduriaType == 'SEMFUSAGAZUGA' ||
-                            pagaduriaType == 'SEMENVIGADO' ||
-                            pagaduriaType == 'SEMFACATATIVA' ||
-                            pagaduriaType == 'SEMARMENIA' ||
-                            pagaduriaType == 'SEMVILLAVICENCIO' ||
-                            pagaduriaType == 'SEMFLORENCIA' ||
-                            pagaduriaType == 'SEMFLORIDABLANCA' ||
-                            pagaduriaType == 'SEDNORTEDESANTANDER' ||
-                            pagaduriaType == 'SEDSANTANDER' ||
-                            pagaduriaType == 'SEMGUAINIA' ||
-                            pagaduriaType == 'SEMIBAGUE' ||
-                            pagaduriaType == 'SEMLORICA' ||
-                            pagaduriaType == 'SEDCASANARE' ||
-                            pagaduriaType == 'SEMPEREIRA' ||
-                            pagaduriaType == 'SEMITAGUI' ||
-                            pagaduriaType == 'SEMAPARTADO' ||
-                            pagaduriaType == 'SEMBARRANCABERMEJA' ||
-                            pagaduriaType == 'SEMPITALITO' ||
-                            pagaduriaType == 'SEMRIOHACHA' ||
-                            pagaduriaType == 'SEMRIONEGRO' ||
-                            pagaduriaType == 'SEMTULUA' ||
-                            pagaduriaType == 'SEMTUMACO' ||
-                            pagaduriaType == 'SEMSABANETA' ||
-                            pagaduriaType == 'SEMSAN' ||
-                            pagaduriaType == 'SEMSOACHA' ||
-                            pagaduriaType == 'SEMSOGAMOSO' ||
-                            pagaduriaType == 'SEMSOLEDAD' ||
-                            pagaduriaType == 'SEDCAQUETA' ||
-                            pagaduriaType == 'SEDANTIOQUIA' ||
-                            pagaduriaType == 'SEDARAUCA' ||
-                            pagaduriaType == 'SEDPUTUMAYO' ||
-                            pagaduriaType == 'SEDQUINDIO' ||
-                            pagaduriaType == 'SEDSINCELEJO' ||
-                            pagaduriaType == 'SEDSUCRE' ||
-                            pagaduriaType == 'SEDCESAR' ||
-                            pagaduriaType == 'SEDAMAZONAS' ||
-                            pagaduriaType == 'SEDTOLIMA' ||
-                            pagaduriaType == 'SEDVAUPES' ||
-                            pagaduriaType == 'SEDVICHADA' ||
-                            pagaduriaType == 'SEDGUAJIRA' ||
-                            pagaduriaType == 'SEDGUAVIARE' ||
-                            pagaduriaType == 'SEDNARINO'
-                        "
-                    />
-
-                    <!-- <DatamesSedChoco v-if="pagaduriaType == 'SEDCHOCO'" /> -->
-                    <DatamesSedMagdalena v-if="pagaduriaType == 'SEDMAGDALENA'" />
-                    <!-- <DatamesSemSahagun v-if="pagaduriaType == 'SEMSAHAGUN'" /> -->
+                
+                <div class="row">
+    <div class="col-12">
+        <label for="periodSelect">Selecciona un período:</label>
+        <select
+                id="periodSelect"
+                class="form-control"
+                v-model="selectedPeriod"
+                @change="updatePeriodForAll"
+            >
+                <option v-for="period in pagaduriaPeriodos" :key="period" :value="period">
+                    {{ period }}
+                </option>
+            </select>
+    </div>
+</div>
 
                     <!--============================
-                COMPONENTE HISTORIAL LABORAL
+                COMPONENTE HISTORIAL LABORAL (ELIMINADO por calros el 12/08)
                 ==============================-->
-                    <template v-if="fechavinc">
-                        <EmploymentHistory
-                            :fechavinc="fechavinc"
-                            :datamessedvalle="datamessedvalle"
-                            :datamesFidu="datamesFidu"
-                            :datamessemcali="datamessemcali"
-                            :user="user"
-                        />
-                        <Detallecliente :totales="totales" />
-                    </template>
+                  
 
                     <template v-if="showOthers">
                         <DescapliEmpty
@@ -287,6 +189,7 @@
                                 pagaduriaType == 'SEDNARINO'
                             "
                             :disabledProspect="disabledProspect"
+                            :selectedPeriod="selectedPeriod"
                         />
 
                         <!--===================================
@@ -295,8 +198,10 @@
                         <DescnoapEmpty v-if="pagaduriaType == 'FIDUPREVISORA'" />
                         <Descnoap v-if="pagaduriaType == 'FOPEP'" :descnoap="descnoap" />
 
-                        <EmbargosEmpty v-if="pagaduriaType == 'SED'" :embargosempty="embargosempty" />
-                        <Embargos v-else />
+                        <EmbargosEmpty v-if="pagaduriaType == 'SED'" :embargosempty="embargosempty"  
+                                                   :selectedPeriod="selectedPeriod"
+                        />
+                        <Embargos v-else :selectedPeriod="selectedPeriod"/>
 
                         <!--===================================
                             LIQUIDACIONES
@@ -305,8 +210,11 @@
                         v-if="pagaduriaType == 'SEMSAHAGUN'"
                         :descuentossemsahagun="descuentossemsahagun"
                     /> -->
-                        <DescuentosEmpty v-if="pagaduriaType == 'SED'" :descuentosempty="descuentosempty" />
-                        <Descuentos v-else />
+                        <DescuentosEmpty v-if="pagaduriaType == 'SED'" :descuentosempty="descuentosempty"                     
+                        :selectedPeriod="selectedPeriod"
+
+                        />
+                        <Descuentos v-else :selectedPeriod="selectedPeriod"/>
 
                         <div class="col-12">
                             <b-button class="mb-3" variant="black-pearl" @click="visadoFunction">Visar</b-button>
@@ -472,6 +380,15 @@ export default {
             'couponsIngresos',
             'ingresosExtras'
         ]),
+        ...mapGetters('pagaduriasModule', ['pagaduriaPeriodos']),
+    selectedPeriod: {
+        get() {
+            return this.$store.state.pagaduriasModule.selectedPeriod;
+        },
+        set(value) {
+            this.$store.commit('pagaduriasModule/setSelectedPeriod', value);
+        }
+    },
         ...mapState('embargosModule', ['embargosType']),
         ...mapState('descuentosModule', ['descuentosType']),
         ...mapState('datamesModule', ['cuotadeseada', 'conteoEgresosPlus']),
@@ -622,6 +539,10 @@ export default {
                 this.isLoading = false;
             });
         },
+        updatePeriodForAll() {
+        // Aquí debemos actualizar el select de periodo de los 3 componentes
+        console.log(`Periodo seleccionado: ${this.selectedPeriod}`);
+    },
         async getDatames(payload) {
             const response = await axios.get(`/datamesfopep/${payload.doc}`);
             this.datamesFopep = response.data;

@@ -163,6 +163,8 @@ class PagaduriasController extends Controller
 
     public function perDoc($doc)
     {
+        Log::info("ENtro a buscar la cedula: ",  ['doc' => $doc]);
+
         try {
             $models = [
                 DatamesFidu::class => 'doc',
@@ -251,14 +253,15 @@ class PagaduriasController extends Controller
 
             return response()->json($results, 200);
         } catch (\Exception $e) {
-            // Aquí se captura la excepción y se logra el error
             Log::error("Error al buscar pagadurías por documento: {$e->getMessage()}", [
                 'doc' => $doc, // Incluye el documento para identificar la consulta que causó el error
                 'exception' => $e->getTraceAsString(), // Para un diagnóstico más detallado
             ]);
-
-            // Opcional: Devuelve una respuesta o maneja el error como sea apropiado
-            return response()->json(['error' => 'Ocurrió un error al procesar la solicitud'], 500);
+        
+            return response()->json([
+                'error' => 'Ocurrió un error al procesar la solicitud',
+                'message' => $e->getMessage(), // Mensaje exacto del error
+            ], 500);
         }
     }
 

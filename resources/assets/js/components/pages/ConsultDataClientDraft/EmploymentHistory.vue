@@ -443,7 +443,7 @@
                     </div>
                     <div class="col-6">
                         <b class="panel-label">ANTIGUEDAD LABORAL:</b>
-                        <div>
+                        <div>bbb
                             <p class="panel-value">{{ fechavinc.vinc }}</p>
                         </div>
                     </div>
