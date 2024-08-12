@@ -5,11 +5,14 @@
                 <b>OBLIGACIONES VIGENTES AL DIA</b>
                 <div class="d-flex align-items-center">
                     <b class="mr-2">PERIODO:</b>
-                    <select class="form-control" @change="setSelectedPeriod($event.target.value)">
-                        <option :value="period" v-for="period in pagaduriaPeriodos" :key="period">
-                            {{ period }}
-                        </option>
-                    </select>
+                    <select 
+    class="form-control" 
+    @change="setSelectedPeriod($event.target.value)" 
+    :value="selectedPeriod">
+    <option :value="period" v-for="period in pagaduriaPeriodos" :key="period">
+        {{ period }}
+    </option>
+</select>
                 </div>
             </div>
             <div class="panel-body">
@@ -75,7 +78,11 @@ export default {
         disabledProspect: {
             type: Boolean,
             default: false
-        }
+        },
+        selectedPeriod: {
+        type: String,
+        required: true
+    }
     },
     data() {
         return {
@@ -91,6 +98,8 @@ export default {
         };
     },
     mounted() {
+        console.log('Cupones recibidos en DescapliEmpty:', this.arrayCoupons);
+
         this.arrayCoupons = [...this.couponsIngresos.items];
         this.arrayCoupons.map(item => {
             item.check = false;
@@ -100,7 +109,11 @@ export default {
     computed: {
         ...mapState('datamesModule', ['cuotadeseada']),
         ...mapState('pagaduriasModule', ['coupons']),
-        ...mapGetters('pagaduriasModule', ['couponsIngresos', 'pagaduriaPeriodos'])
+        ...mapGetters('pagaduriasModule', ['couponsIngresos', 'pagaduriaPeriodos']),
+        arrayCoupons() {
+        console.log('Cupones recalculados en DescapliEmpty:', this.couponsIngresos.items);
+        return [...this.couponsIngresos.items];
+    }
     },
     methods: {
         ...mapMutations('datamesModule', ['setConteoEgresos', 'setConteoEgresosPlus']),

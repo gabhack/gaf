@@ -5,7 +5,7 @@
                 <b>OBLIGACIONES VIGENTES EN MORA</b>
                 <div class="d-flex align-items-center">
                     <b class="mr-2">PERIODO:</b>
-                    <select class="form-control" @change="setSelectedPeriod($event.target.value)">
+                    <select class="form-control" v-model="internalSelectedPeriod" @change="onPeriodChange">
                         <option :value="period" v-for="period in descuentosPeriodos" :key="period">
                             {{ period }}
                         </option>
@@ -55,12 +55,83 @@ import { mapState, mapGetters, mapMutations } from 'vuex';
 
 export default {
     name: 'Descuentos',
+    props: {
+        selectedPeriod: {
+            type: String,
+            required: true
+        }
+    },
+    data() {
+        return {
+            internalSelectedPeriod: null
+        };
+    },
+    watch: {
+        selectedPeriod: {
+            immediate: true,
+            handler(newVal) {
+                this.setSelectedPeriodByDate(newVal);
+            }
+        }
+    },
     computed: {
         ...mapState('descuentosModule', ['descuentos']),
         ...mapGetters('descuentosModule', ['descuentosPeriodos', 'descuentosPerPeriod'])
     },
     methods: {
-        ...mapMutations('descuentosModule', ['setSelectedPeriod'])
+        ...mapMutations('descuentosModule', ['setSelectedPeriod']),
+        formatPeriodDate(dateStr) {
+            const date = new Date(dateStr);
+            const year = date.getFullYear();
+            const month = (`0${date.getMonth() + 1}`).slice(-2); // Mes en formato MM
+            return `${year}-${month}`;
+        },
+        setSelectedPeriodByDate(dateStr) {
+            const formattedDate = this.formatPeriodDate(dateStr);
+            console.log(`Periodo seleccionado: ${dateStr}`);
+            console.log(`Selected period to match: ${formattedDate}`);
+
+            let matchedPeriod = null;
+            this.descuentosPeriodos.forEach(period => {
+                const formattedPeriod = this.formatPeriodDate(period);
+                console.log(`Comparing with: ${formattedPeriod}`);
+                
+                if (formattedPeriod === formattedDate) {
+                    matchedPeriod = period;
+                }
+            });
+
+            if (matchedPeriod) {
+                let [year, month, day] = matchedPeriod.split('-');
+                month = parseInt(month) - 1;
+
+                if (month === 0) {
+                    month = 12;
+                    year = parseInt(year) - 1;
+                }
+
+                const previousMonthPeriod = `${year}-${month.toString().padStart(2, '0')}-${day}`;
+                console.log(`Final selected period: ${previousMonthPeriod}`);
+                this.internalSelectedPeriod = previousMonthPeriod;
+                this.setSelectedPeriod(previousMonthPeriod); // Actualiza el periodo seleccionado en Vuex
+            } else {
+                console.log('No matching period found');
+            }
+        },
+        onPeriodChange() {
+            this.setSelectedPeriod(this.internalSelectedPeriod);
+        }
+    },
+    filters: {
+        formatCurrency(value) {
+            if (isNaN(value)) return value;
+
+            const parts = value.toString().split('.');
+
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+            return '$' + parts.join(',');
+        }
     }
 };
 </script>
