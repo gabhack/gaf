@@ -56,7 +56,7 @@
                         <div class="col-3 px-0">
                             <!-- <p v-if="item.nomtercero == 'None'">$ 0</p>
                             <p v-else>{{ item.vaplicado | currency }}</p> -->
-                            <p>{{ item.vaplicado | currency }}</p>
+                            <p>{{ Math.abs(item.vaplicado) | currency }}</p>
                         </div>
                     </div>
 
