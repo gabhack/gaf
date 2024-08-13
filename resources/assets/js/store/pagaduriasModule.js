@@ -46,6 +46,7 @@ const pagaduriasModule = {
             },
             { label: 'SEM APARTADO', value: 'SEMAPARTADO', key: 'SEM APARTADO' },
             { label: 'SEM ESTRELLA', value: 'SEMESTRELLA', key: 'SEM ESTRELLA' },
+            { label: 'SEM SANTA MARTA', value: 'SEMSANTAMARTA', key: 'SEM SANTA MARTA' },
             { label: 'SEM BARRANCABERMEJA', value: 'SEMBARRANCABERMEJA', key: 'SEM BARRANCABERMEJA' },
             { label: 'SEM RIOHACHA', value: 'SEMRIOHACHA', key: 'SEM RIOHACHA' },
             { label: 'SEM RIONEGRO', value: 'SEMRIONEGRO', key: 'SEM RIONEGRO' },

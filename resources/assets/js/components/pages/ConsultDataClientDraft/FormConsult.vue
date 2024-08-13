@@ -42,11 +42,11 @@
                         @change="modalConfirmConsultPag"
                     >
                         <option :value="null" disabled hidden>Elija una pagaduria</option>
-                        <template v-for="type in pagaduriasTypes">
-                            <option v-if="dataclient.pagadurias[type.key]" :value="type.value" :key="type.key">
+                        <!-- <template v-for="type in pagaduriasTypes"> -->
+                            <option v-for="type in pagaduriasTypes" v-if="dataclient.pagadurias[type.key]" :value="type.value" :key="type.key">
                                 {{ type.label }}
                             </option>
-                        </template>
+                        <!-- </template> -->
                     </b-form-select>
 
                     <b-form-select v-else v-model="dataclient.pagaduria" class="text-center">
@@ -90,6 +90,9 @@ export default {
             isLoading: false
         };
     },
+    mounted() {
+        console.log(this.pagaduriasTypes);
+    },
     computed: {
         ...mapState('datamesModule', ['datamesSed', 'cuotadeseada']),
         ...mapState('pagaduriasModule', ['pagaduriasTypes'])
@@ -109,6 +112,7 @@ export default {
 
             if (this.dataclient.pagaduria) {
                 const type = this.pagaduriasTypes.find(type => type.value === this.dataclient.pagaduria);
+                
                 const pagaduria = this.dataclient.pagadurias[type.key];
                 this.dataclient.pagaduriaKey = type.key.slice(7).toLowerCase();
                 pagaduria.documentType = 'documentType';
@@ -137,7 +141,7 @@ export default {
             this.setSelectedPeriod('');
 
             const response = await axios.get(`/pagadurias/per-doc/${this.dataclient.doc}`);
-            console.log(response);
+            console.log(response.data);
             if (Object.keys(response.data).length > 0) {
                 this.dataclient.pagadurias = response.data;
                 this.setCuotaDeseada(this.dataclient.cuotadeseada);
@@ -146,7 +150,7 @@ export default {
             }
 
             this.isLoading = false;
-
+            console.log(this.pagaduriasTypes);
             return Promise.resolve(response.data);
         },
         modalConfirmConsultPag(val) {

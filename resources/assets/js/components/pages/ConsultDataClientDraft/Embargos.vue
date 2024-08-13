@@ -5,11 +5,16 @@
                 <b>DETALLE DE EMBARGOS</b>
                 <div class="d-flex align-items-center">
                     <b class="mr-2">PERIODO:</b>
-                    <select class="form-control" v-model="internalSelectedPeriod" @change="onPeriodChange">
+                    <select class="form-control" disabled :disabled="isLoading" @change="setSelectedPeriod($event.target.value)">
                         <option :value="period" v-for="period in embargosPeriodos" :key="period">
                             {{ period }}
                         </option>
+                        <option v-if="isLoading" disabled>CARGANDO...</option>
                     </select>
+                    <svg v-if="isLoading" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" width="41" height="41" style="shape-rendering: auto; display: block; background: transparent;" xmlns:xlink="http://www.w3.org/1999/xlink"><g><circle stroke-dasharray="169.64600329384882 58.548667764616276" r="36" stroke-width="10" stroke="#000000" fill="none" cy="50" cx="50">
+                        <animateTransform keyTimes="0;1" values="0 50 50;360 50 50" dur="1s" repeatCount="indefinite" type="rotate" attributeName="transform"></animateTransform>
+                        </circle><g></g></g>
+                    </svg>
                 </div>
             </div>
             <div class="panel-body">
@@ -97,7 +102,10 @@ export default {
     },
     computed: {
         ...mapState('embargosModule', ['embargos']),
-        ...mapGetters('embargosModule', ['embargosPeriodos', 'embargosPerPeriod'])
+        ...mapGetters('embargosModule', ['embargosPeriodos', 'embargosPerPeriod']),
+        isLoading() {
+            return !this.embargosPeriodos || this.embargosPeriodos.length === 0;
+        },
     },
     methods: {
         ...mapMutations('embargosModule', ['setSelectedPeriod']),
