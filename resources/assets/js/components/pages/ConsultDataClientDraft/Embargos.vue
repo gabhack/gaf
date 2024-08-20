@@ -27,7 +27,7 @@
                             <b class="panel-label table-text">NOMBRE ENTIDAD ACTUAL:</b>
                         </div>
                         <div class="col-2 px-0">
-                            <b class="panel-label table-text">NUMERO DE PAGARE:</b>
+                            <b class="panel-label table-text">DOCUMENTO DEMANDANTE:</b>
                         </div>
                         <div class="col-2 px-0">
                             <b class="panel-label table-text">CUOTA DEUDA:</b>
@@ -36,7 +36,7 @@
                             <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
                         </div>
                         <div class="col-2 px-0">
-                            <b class="panel-label table-text">INCONSISTENCIA:</b>
+                            <b class="panel-label table-text">DETALLE DEL EMBARGO:</b>
                         </div>
                     </div>
 

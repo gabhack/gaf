@@ -154,9 +154,22 @@ const pagaduriasModule = {
         // salarioBasico: (state, getters) => {
         //     return getters.couponsPerPeriod.items.find(coupon => coupon.code === 'SUEBA')?.ingresos || 0;
         // },
+
+
+        // salarioBasico: (state, getters) => {
+        //     return getters.couponsPerPeriod.items.filter(coupon => coupon.code === 'SUEBA').map(coupon => coupon.ingresos);
+        // },
+        
         salarioBasico: (state, getters) => {
-            return getters.couponsPerPeriod.items.filter(coupon => coupon.code === 'SUEBA').map(coupon => coupon.ingresos);
+            return getters.couponsPerPeriod.items
+                .filter(coupon => coupon.code === 'SUEBA')
+                .map(coupon => ({
+                    concept: coupon.concept,
+                    ingresos: coupon.ingresos
+                }));
         },
+
+
         pagaduriaPeriodos: state => {
             let periodos = state.coupons.reduce((acc, coupon) => {
                 if (acc.indexOf(coupon.finperiodo) === -1) {

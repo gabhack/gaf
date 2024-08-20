@@ -296,7 +296,12 @@
                                 </div>
                                 <div class="col-6">
                                     <div>
-                                        <p class="panel-value" v-if="salarioBasico">{{ item | currency }}</p>
+                                        <p class="panel-value" v-if="salarioBasico">
+                                            <span v-if="item.concept.includes('RJ') == true">
+                                                <b>RJ</b>
+                                            </span>
+                                            {{ item.ingresos | currency }}
+                                        </p>
                                         <p class="panel-value" v-else>
                                             {{ datamesSed.vingresos || datamesSed.basico | currency }}
                                         </p>
@@ -449,7 +454,7 @@
                     </div>
                     <div class="col-6" v-if="fechavinc.vinc">
                         <b class="panel-label">ANTIGUEDAD LABORAL:</b>
-                        <div>bbb
+                        <div>
                             <p class="panel-value">{{ fechavinc.vinc }}</p>
                         </div>
                     </div>
