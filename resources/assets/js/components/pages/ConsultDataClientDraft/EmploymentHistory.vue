@@ -290,13 +290,18 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row" v-for="item, index in salarioBasico" :key="index">
                                 <div class="col-6">
                                     <b class="panel-label">SUELDO BASICO:</b>
                                 </div>
                                 <div class="col-6">
                                     <div>
-                                        <p class="panel-value" v-if="salarioBasico">{{ salarioBasico | currency }}</p>
+                                        <p class="panel-value" v-if="salarioBasico">
+                                            <span v-if="item.concept.includes('RJ') == true">
+                                                <b>RJ</b>
+                                            </span>
+                                            {{ item.ingresos | currency }}
+                                        </p>
                                         <p class="panel-value" v-else>
                                             {{ datamesSed.vingresos || datamesSed.basico | currency }}
                                         </p>
@@ -449,7 +454,7 @@
                     </div>
                     <div class="col-6" v-if="fechavinc.vinc">
                         <b class="panel-label">ANTIGUEDAD LABORAL:</b>
-                        <div>bbb
+                        <div>
                             <p class="panel-value">{{ fechavinc.vinc }}</p>
                         </div>
                     </div>

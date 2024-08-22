@@ -128,13 +128,17 @@ const pagaduriasModule = {
         },
         couponsIngresos: (state, getters) => {
             const items = getters.couponsPerPeriod.items.filter(
-                item => item.code !== 'SUEBA' && Number(item.egresos) > 0
+                item => Number(item.egresos) > 0
             );
 
             return {
                 items: items,
                 total: items.length,
-                amount: items.reduce((egresos, item) => egresos + Number(item.egresos), 0)
+                // amount: items.reduce((egresos, item) => egresos + Number(item.egresos), 0)
+                amount: items.reduce((egresos, item) => {
+                    const valorEgresos = Number(item.egresos);
+                    return valorEgresos >= 0 ? egresos + valorEgresos : egresos;
+                }, 0)
             };
         },
         ingresosExtras: (state, getters) => {
@@ -147,9 +151,25 @@ const pagaduriasModule = {
         valorIngreso: (state, getters) => {
             return getters.couponsPerPeriod.items.find(coupon => coupon.code === 'INGCUP')?.ingresos || 0;
         },
+        // salarioBasico: (state, getters) => {
+        //     return getters.couponsPerPeriod.items.find(coupon => coupon.code === 'SUEBA')?.ingresos || 0;
+        // },
+
+
+        // salarioBasico: (state, getters) => {
+        //     return getters.couponsPerPeriod.items.filter(coupon => coupon.code === 'SUEBA').map(coupon => coupon.ingresos);
+        // },
+        
         salarioBasico: (state, getters) => {
-            return getters.couponsPerPeriod.items.find(coupon => coupon.code === 'SUEBA')?.ingresos || 0;
+            return getters.couponsPerPeriod.items
+                .filter(coupon => coupon.code === 'SUEBA')
+                .map(coupon => ({
+                    concept: coupon.concept,
+                    ingresos: coupon.ingresos
+                }));
         },
+
+
         pagaduriaPeriodos: state => {
             let periodos = state.coupons.reduce((acc, coupon) => {
                 if (acc.indexOf(coupon.finperiodo) === -1) {

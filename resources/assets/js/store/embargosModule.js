@@ -9,7 +9,10 @@ const embargosModule = {
     },
     getters: {
         embargosPeriodos: state => {
+            console.log("EMBARGOS:");
             let periodos = state.embargos.reduce((acc, embargo) => {
+                
+                console.log(embargo.nomina);
                 if (acc.indexOf(embargo.nomina) === -1) {
                     acc.push(embargo.nomina);
                 }

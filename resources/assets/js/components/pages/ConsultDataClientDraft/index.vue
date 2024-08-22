@@ -794,11 +794,13 @@ export default {
                 .post(`/visados/${this.visado.id}`, data)
                 .then(response => {
                     console.log('response', response);
+                    window.location.href = '/historyClient';
+                    
                 })
                 .catch(error => {
                     console.log(error);
                 });
-        }
+        },
     }
 };
 </script>

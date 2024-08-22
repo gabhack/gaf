@@ -70,7 +70,7 @@
                     </div>
 
                     <div class="table-responsive">
-                        <b-table striped hover :fields="fields" :items="HistoryConsult.data" :busy="isBusy">
+                        <b-table style="border: 1px solid #b9bdc3; border-radius: 10px" responsive bordered striped hover :fields="fields" :items="HistoryConsult.data" :busy="isBusy">
                             <template #table-busy>
                                 <div class="text-center text-black-pearl my-2">
                                     <b-spinner class="align-middle"></b-spinner>
