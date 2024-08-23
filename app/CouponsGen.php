@@ -22,5 +22,7 @@ class CouponsGen extends Model
         'pagaduria',
         'inicioperiodo',
         'finperiodo',
+        'cargo',
+        'tipo_contrato'
     ];
 }

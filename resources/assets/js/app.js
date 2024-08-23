@@ -110,6 +110,8 @@ Vue.component(
 //CUPONES
 
 Vue.component('CouponsFormConsult', require('./components/pages/Coupons/CouponsFormConsult.vue').default);
+//parametros
+Vue.component('parametros', require('./components/pages/Parametros.vue').default);
 
 //Datos demograficos de datames
 Vue.component('DemographicData', DemographicData);
