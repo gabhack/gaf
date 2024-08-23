@@ -95,6 +95,7 @@ class DatamesGen extends Model
         'novedad',
         'planta',
         'novplanta',
+        'tipo_contrato',
         'zode',
         'mun',
         'ie',

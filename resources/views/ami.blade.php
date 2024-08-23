@@ -39,23 +39,27 @@
             </div>
         </div>
         <div class="col-12 col-lg-6 pt-5">
-            <div class="box-rounded bg-gainsboro text-black-pearl text-left">
-                <p class="box-label text-left"><span>PROSPECCIÓN DE MERCADO</span></p>
-                <ul>
-                    <li>
-                        <a href="" style="color: black;">Consulta Gold</a>
-                    </li>
-                    <li>
-                        <a href="{{ url('coupons-form') }}" style="color: black;">Consulta Diamond</a>
-                    </li>
-                    <b-collapse id="collapse-2"></b-collapse>
-                    <div class="d-flex justify-content-end">
-                        <a v-b-toggle.collapse-2 class="text-right" style="cursor: pointer; color: #10dd8e;">Ver más <i
-                                class="fas fa-angle-right"></i></a>
-                    </div>
-                </ul>
+    <div class="box-rounded bg-gainsboro text-black-pearl text-left">
+        <p class="box-label text-left"><span>PROSPECCIÓN DE MERCADO</span></p>
+        <ul>
+            <li>
+                <a href="{{ route('parametros-comparativa.index') }}" style="color: black;">Parametros de control para comparativa fondo/originador</a>
+            </li>
+            <li>
+                <a href="{{ url('coupons-form') }}" style="color: black;">Prospección de cartera</a>
+            </li>
+            <li>
+                <a href="{{ route('parametros_comparativa.comparativa') }}" style="color: black;">Comparativa fondo vs originador</a>
+            </li>
+            <b-collapse id="collapse-2"></b-collapse>
+            <div class="d-flex justify-content-end">
+                <a v-b-toggle.collapse-2 class="text-right" style="cursor: pointer; color: #10dd8e;">Ver más <i
+                        class="fas fa-angle-right"></i></a>
             </div>
-        </div>
+        </ul>
+    </div>
+</div>
+
         <div class="col-12 col-lg-6 pt-5">
             <div class="box-rounded bg-gainsboro text-black-pearl text-left">
                 <p class="box-label text-left"><span>RECUPERACIÓN DE CARTERA</span></p>
