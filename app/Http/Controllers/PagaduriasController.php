@@ -233,8 +233,8 @@ class PagaduriasController extends Controller
                 }
             }
 
-            $dataGen = DatamesGen::where('doc', 'LIKE', '%' . $doc . '%')->get();
-
+            // $dataGen = DatamesGen::where('doc', 'like', '%' . $doc . '%')->get();
+            $dataGen = DatamesGen::where('doc', '=', $doc )->get();
             if ($dataGen) {
                 foreach ($dataGen as $item) {
                     // Verifica si la pagaduría ya existe en $results

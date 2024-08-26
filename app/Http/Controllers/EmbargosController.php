@@ -77,10 +77,13 @@ class EmbargosController extends Controller
                   ->whereBetween('nomina', [$startDate, $endDate]);
         });
     } else {
-        $dataGenQuery = $dataGenQuery->where(function ($query) use ($embargoType, $pagaduriaLabel) {
-            $query->where('pagaduria', $embargoType)
-                  ->orWhere('pagaduria', $pagaduriaLabel);
-        });
+        // $dataGenQuery = $dataGenQuery->where(function ($query) use ($embargoType, $pagaduriaLabel) {
+        //     $query->where('pagaduria', $embargoType)
+        //           ->orWhere('pagaduria', $pagaduriaLabel);
+        // });
+        $dataGen = EmbargosGen::where('doc', 'LIKE', '%' . $doc . '%')
+            ->orWhere('pagaduria', $embargoType)
+            ->orWhere('pagaduria', $pagaduriaLabel);
     }
 
     $dataGen = $dataGenQuery->get()->toArray();
