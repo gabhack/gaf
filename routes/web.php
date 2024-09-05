@@ -24,6 +24,9 @@ use App\Http\Controllers\FiducidiariaController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\JoinPensionesController;
 use App\Http\Controllers\FileUploadLogController;
+use App\Http\Controllers\ParametrosComparativaController;
+use App\Http\Controllers\JelouController;
+
 
 
 /* Route::get('/get-test', 'TestController@index');
@@ -56,11 +59,6 @@ Route::group(['prefix' => 'profile'], function () {
     Route::get('/', 'ProfileController@profile');
     Route::post('/store', 'ProfileController@saveProfile');
 });
-
-Route::get('/phpinfo', function () {
-    phpinfo();
-});
-
 
 // Roles
 Route::group(['prefix' => 'roles'], function () {
@@ -140,6 +138,8 @@ Route::group(['prefix' => 'pagadurias'], function () {
     Route::get('/delete/{id}', 'PagaduriasController@destroy');
 
     Route::get('/per-doc/{doc}', 'PagaduriasController@perDoc');
+    Route::get('/per-doc-express/{doc}', 'PagaduriasController@perDocExpress');
+
 });
 
 //Pagos
@@ -550,7 +550,6 @@ Route::post('consultaEmbargossedvalle', 'EmbargosSedValleController@consultaUnit
 Route::post('consultaEmbargossedchoco', 'EmbargossedchocoController@consultaUnitaria');
 Route::post('consultaEmbargossedcauca', 'EmbargossedcaucaController@consultaUnitaria');
 Route::post('consultaEmbargossemquibdo', 'EmbargosSemQuibdoController@consultaUnitaria');
-Route::post('consultaEmbargossempopayan', 'EmbargossempopayanController@consultaUnitaria');
 
 Route::resource('datamessemcali', 'DatamesSemCaliController');
 Route::resource('deduccionessemcali', 'DeduccionesSemCaliController');
@@ -568,7 +567,6 @@ Route::resource('embargossedvalle', 'EmbargosSedValleController');
 Route::resource('embargossedchoco', 'EmbargossedchocoController');
 Route::resource('embargossedcauca', 'EmbargossedcaucaController');
 Route::resource('embargossemquibdo', 'EmbargosSemQuibdoController');
-Route::resource('embargossempopayan', 'EmbargossempopayanController');
 
 //FIN //
 Route::resource('datamesfopep', 'DataMesController');
@@ -673,3 +671,18 @@ Route::get('/fiduprevisora/progress/{progressKey}', [FiducidiariaController::cla
 Route::post('/fiduprevisora/search', [FiducidiariaController::class, 'search']);
 
 Route::get('/file-upload-logs', [FileUploadLogController::class, 'getLogs']);
+
+// Parámetros Comparativa Fondo/Originador
+Route::group(['prefix' => 'parametros-comparativa'], function () {
+    Route::get('/opciones', 'ParametrosComparativaController@opciones');
+Route::get('/', 'ParametrosComparativaController@index')->name('parametros-comparativa.index');
+    Route::post('/store', 'ParametrosComparativaController@store')->name('parametros-comparativa.store');
+    Route::get('/comparativa', 'ParametrosComparativaController@comparativa')->name('parametros_comparativa.comparativa');
+    Route::post('/upload', 'ParametrosComparativaController@upload')->name('parametros_comparativa.upload');
+    Route::get('/opciones', 'ParametrosComparativaController@opciones')->name('parametros-comparativa.opciones');
+
+});
+
+Route::view('/politicas/autorizacion', 'politicas.autorizacion')->name('politicas.autorizacion');
+Route::view('/politicas/tratamiento-datos', 'politicas.tratamiento')->name('politicas.tratamiento');
+Route::get('jelou/get-factor/{doc}', [JelouController::class, 'getFactorPerDoc']);

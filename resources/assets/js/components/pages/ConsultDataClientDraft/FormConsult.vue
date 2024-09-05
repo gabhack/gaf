@@ -41,16 +41,14 @@
                         required
                         @change="modalConfirmConsultPag"
                     >
-                        <option :value="null" disabled hidden>Elija una pagaduria</option>
-                        <!-- <template v-for="type in pagaduriasTypes"> -->
-                            <option v-for="type in pagaduriasTypes" v-if="dataclient.pagadurias[type.key]" :value="type.value" :key="type.key">
-                                {{ type.label }}
-                            </option>
-                        <!-- </template> -->
+                        <option :value="null" disabled hidden>Elija una pagaduría</option>
+                        <option v-for="(value, key) in dataclient.pagadurias" :key="key" :value="value.value">
+                            {{ value.label }}
+                        </option>
                     </b-form-select>
 
                     <b-form-select v-else v-model="dataclient.pagaduria" class="text-center">
-                        <option :value="null" disabled>Ingresa una cedula y presiona consultar</option>
+                        <option :value="null" disabled>Ingresa una cédula y presiona consultar</option>
                     </b-form-select>
                 </div>
 
@@ -60,10 +58,12 @@
                         variant="black-pearl"
                         v-if="dataclient.doc && dataclient.name"
                         class="px-4"
-                        @click="getAllPagadurias"
+                        @click="getExpressPagadurias"
                     >
                         CONSULTAR PAGADURIAS
                     </b-button>
+
+                   
                 </div>
             </div>
         </div>
@@ -107,6 +107,7 @@ export default {
         ]),
         ...mapMutations('embargosModule', ['setEmbargosType']),
         ...mapMutations('descuentosModule', ['setDescuentosType']),
+        
         selectedPagaduria() {
             this.setPagaduriaType(this.dataclient.pagaduria);
 
@@ -123,15 +124,16 @@ export default {
 
                 this.setCouponsType(type.key.includes('datames') ? `Coupons${type.key.slice(7)}` : type.key);
                 this.setEmbargosType(type.key.includes('datames') ? `Embargos${type.key.slice(7)}` : type.key);
-                // prettier-ignore
                 this.setDescuentosType(type.key.includes('datames') ? `Descuentos${type.key.slice(7)}` : type.key);
 
                 this.setDatamesSed(pagaduria);
             }
         },
+
         emitInfo() {
             this.getAllPagadurias();
         },
+
         async getAllPagadurias() {
             this.isLoading = true;
             this.dataclient.pagadurias = null;
@@ -153,6 +155,31 @@ export default {
             console.log(this.pagaduriasTypes);
             return Promise.resolve(response.data);
         },
+
+        async getExpressPagadurias() {
+            this.isLoading = true;
+            try {
+                const response = await axios.get(`/pagadurias/per-doc-express/${this.dataclient.doc}`);
+                console.log(response.data);
+
+                if (response.data.length > 0) {
+                    // Transformar el array en un objeto que contenga las claves y valores que el select espera
+                    this.dataclient.pagadurias = response.data.reduce((acc, item, index) => {
+                        acc[`express_${index}`] = { label: item, value: item };
+                        return acc;
+                    }, {});
+                } else {
+                    toastr.info('No se encontraron pagadurías para este documento en modo express.');
+                    this.dataclient.pagadurias = null;
+                }
+            } catch (error) {
+                console.error('Error en la consulta express:', error);
+                toastr.error('Error al realizar la consulta express.');
+            } finally {
+                this.isLoading = false;
+            }
+        },
+
         modalConfirmConsultPag(val) {
             this.$bvModal
                 .msgBoxConfirm('Esta acción tiene un costo', {
@@ -176,6 +203,7 @@ export default {
                     });
                 });
         },
+
         async saveVisados() {
             try {
                 this.isLoading = true;

@@ -163,7 +163,7 @@ class PagaduriasController extends Controller
 
     public function perDoc($doc)
     {
-        Log::info("ENtro a buscar la cedula: ",  ['doc' => $doc]);
+        
 
         try {
             $models = [
@@ -262,6 +262,33 @@ class PagaduriasController extends Controller
                 'error' => 'Ocurrió un error al procesar la solicitud',
                 'message' => $e->getMessage(), // Mensaje exacto del error
             ], 500);
+        }
+    }
+
+    public function perDocExpress($doc)
+    {
+        try {
+            $pagadurias = DatamesGen::where('doc', 'LIKE', "%{$doc}%")
+                ->distinct('pagaduria')
+                ->pluck('pagaduria');
+
+            if ($pagadurias->isEmpty()) {
+                Log::info("No se encontraron pagadurías para el documento proporcionado.", ['doc' => $doc]);
+                return response()->json(['mensaje' => 'No se encontraron pagadurías para el documento proporcionado.'], 404);
+            }
+
+            Log::info("Pagadurías encontradas para el documento.", ['doc' => $doc, 'pagadurias' => $pagadurias]);
+
+            return response()->json($pagadurias, 200);
+
+        } catch (\Exception $e) {
+            Log::error("Error al buscar pagadurías por documento: {$doc}", [
+                'doc' => $doc,
+                'exception' => $e->getMessage(),
+                'stack' => $e->getTraceAsString(),
+            ]);
+
+            return response()->json(['error' => 'Ocurrió un error al procesar la solicitud'], 500);
         }
     }
 
