@@ -98,84 +98,83 @@ class DemograficoController extends Controller
     }
 
     private function processCedulas($cedulas)
-    {
-        Log::info('Inicio del proceso de processCedulas', ['cedulas' => $cedulas]);
+{
+    Log::info('Inicio del proceso de processCedulas', ['cedulas' => $cedulas]);
 
-        $latestRecords = DatamesGen::whereIn('doc', $cedulas)
-            ->select('doc', 'nombre_usuario', 'cel', 'telefono', 'correo_electronico', 'ciudad', 'direccion_residencial', 'cencosto as centro_costo', 'tipo_contrato', 'edad', 'fecha_nacimiento', 'created_at')
-            ->orderBy('created_at', 'desc')
-            ->get()
-            ->unique('doc')
-            ->keyBy('doc');
+    $latestRecords = DatamesGen::whereIn('doc', $cedulas)
+        ->select('doc', 'nombre_usuario', 'cencosto as centro_costo', 'tipo_contrato', 'edad', 'fecha_nacimiento', 'created_at')
+        ->orderBy('created_at', 'desc')
+        ->get()
+        ->unique('doc')
+        ->keyBy('doc');
 
-        $couponsgenRecords = CouponsGen::whereIn('doc', $cedulas)
-            ->select('doc', 'centro_costo', 'id')
-            ->orderBy('id', 'desc')
-            ->get()
-            ->keyBy('doc');
+    $couponsgenRecords = CouponsGen::whereIn('doc', $cedulas)
+        ->select('doc', 'centro_costo', 'id')
+        ->orderBy('id', 'desc')
+        ->get()
+        ->keyBy('doc');
 
-        $results = collect();
-        foreach ($cedulas as $cedula) {
-            if ($record = $latestRecords->get($cedula)) {
-                $cellphones = [];
-                $landlines = [];
+    $results = collect();
+    foreach ($cedulas as $cedula) {
+        // Asegúrate de que la cédula sea una cadena o un entero
+        $cedula = is_numeric($cedula) ? (int)$cedula : (string)$cedula;
 
-                if ($record->telefono) {
-                    $phones = explode(',', $record->telefono);
-                    foreach ($phones as $phone) {
-                        $phone = preg_replace('/\.\d+$/', '', trim($phone));
-                        if (strlen($phone) === 10) {
-                            $cellphones[] = $phone;
-                        } else {
-                            $landlines[] = $phone;
-                        }
+        if ($record = $latestRecords->get($cedula)) {
+            $cellphones = [];
+            $landlines = [];
+
+            if ($record->telefono) {
+                $phones = explode(',', $record->telefono);
+                foreach ($phones as $phone) {
+                    $phone = preg_replace('/\.\d+$/', '', trim($phone));
+                    if (strlen($phone) === 10) {
+                        $cellphones[] = $phone;
+                    } else {
+                        $landlines[] = $phone;
                     }
                 }
-
-                if ($record->cel) {
-                    $phones = explode(',', $record->cel);
-                    foreach ($phones as $phone) {
-                        $phone = preg_replace('/\.\d+$/', '', trim($phone));
-                        if (strlen($phone) === 10) {
-                            $cellphones[] = $phone;
-                        } else {
-                            $landlines[] = $phone;
-                        }
-                    }
-                }
-
-                Log::info('Datos originales:', ['record' => $record->toArray()]);
-                Log::info('Teléfonos transformados:', [
-                    'cel' => $cellphones,
-                    'tel' => $landlines
-                ]);
-
-                $centroCosto = $record->centro_costo;
-                if ($coupon = $couponsgenRecords->get($cedula)) {
-                    $centroCosto = $coupon->centro_costo;
-                }
-
-                $results->push([
-                    'doc' => $record->doc,
-                    'nombre_usuario' => $record->nombre_usuario,
-                    'cel' => implode(', ', $cellphones),
-                    'tel' => implode(', ', $landlines),
-                    'correo_electronico' => $record->correo_electronico,
-                    'ciudad' => $record->ciudad,
-                    'direccion_residencial' => $record->direccion_residencial,
-                    'centro_costo' => $centroCosto,
-                    'tipo_contrato' => $record->tipo_contrato,
-                    'edad' => $record->edad,
-                    'fecha_nacimiento' => $record->fecha_nacimiento
-                ]);
-            } else {
-                Log::info('Documento no encontrado:', ['cedula' => $cedula]);
             }
-        }
 
-        Log::info('Fin del proceso de processCedulas', ['results' => $results]);
-        return $results;
+            if ($record->cel) {
+                $phones = explode(',', $record->cel);
+                foreach ($phones as $phone) {
+                    $phone = preg_replace('/\.\d+$/', '', trim($phone));
+                    if (strlen($phone) === 10) {
+                        $cellphones[] = $phone;
+                    } else {
+                        $landlines[] = $phone;
+                    }
+                }
+            }
+
+            Log::info('Datos originales:', ['record' => $record->toArray()]);
+            Log::info('Teléfonos transformados:', [
+                'cel' => $cellphones,
+                'tel' => $landlines
+            ]);
+
+            $centroCosto = $record->centro_costo;
+            if ($coupon = $couponsgenRecords->get($cedula)) {
+                $centroCosto = $coupon->centro_costo;
+            }
+
+            $results->push([
+                'doc' => $record->doc,
+                'nombre_usuario' => $record->nombre_usuario,
+                'centro_costo' => $centroCosto,
+                'tipo_contrato' => $record->tipo_contrato,
+                'edad' => $record->edad,
+                'fecha_nacimiento' => $record->fecha_nacimiento
+            ]);
+        } else {
+            Log::info('Documento no encontrado:', ['cedula' => $cedula]);
+        }
     }
+
+    Log::info('Fin del proceso de processCedulas', ['results' => $results]);
+    return $results;
+}
+
 
     public function getRecentConsultations()
     {
@@ -201,7 +200,7 @@ class DemograficoController extends Controller
 
         try {
             $record = DatamesGen::where('doc', $doc)
-                ->select('doc', 'nombre_usuario', 'cel', 'telefono', 'correo_electronico', 'ciudad', 'direccion_residencial', 'cencosto as centro_costo', 'tipo_contrato', 'edad', 'fecha_nacimiento', 'created_at')
+                ->select('doc', 'nombre_usuario', 'cencosto as centro_costo', 'tipo_contrato', 'edad', 'fecha_nacimiento', 'created_at')
                 ->orderBy('created_at', 'desc')
                 ->first();
 
@@ -221,4 +220,6 @@ class DemograficoController extends Controller
             return response()->json(['error' => 'Error fetching demographic data'], 500);
         }
     }
+
+    
 }

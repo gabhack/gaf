@@ -25,7 +25,8 @@ use App\Http\Controllers\UploadController;
 use App\Http\Controllers\JoinPensionesController;
 use App\Http\Controllers\FileUploadLogController;
 use App\Http\Controllers\ParametrosComparativaController;
-use App\Http\Controllers\dataCotizerController;
+use App\Http\Controllers\JelouController;
+
 
 
 /* Route::get('/get-test', 'TestController@index');
@@ -137,6 +138,8 @@ Route::group(['prefix' => 'pagadurias'], function () {
     Route::get('/delete/{id}', 'PagaduriasController@destroy');
 
     Route::get('/per-doc/{doc}', 'PagaduriasController@perDoc');
+    Route::get('/per-doc-express/{doc}', 'PagaduriasController@perDocExpress');
+
 });
 
 //Pagos
@@ -680,4 +683,6 @@ Route::get('/', 'ParametrosComparativaController@index')->name('parametros-compa
 
 });
 
-
+Route::view('/politicas/autorizacion', 'politicas.autorizacion')->name('politicas.autorizacion');
+Route::view('/politicas/tratamiento-datos', 'politicas.tratamiento')->name('politicas.tratamiento');
+Route::get('jelou/get-factor/{doc}', [JelouController::class, 'getFactorPerDoc']);

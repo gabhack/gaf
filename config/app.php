@@ -124,6 +124,11 @@ return [
 
     'log_level' => env('APP_LOG_LEVEL', 'debug'),
 
+    'api_user' => env('API_USER'),
+'api_password' => env('API_PASSWORD'),
+'salario_minimo' => env('SALARIO_MINIMO'),
+
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
