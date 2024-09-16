@@ -33,24 +33,29 @@
                 </div>
 
                 <div class="col-6">
-                    <b class="panel-label">PAGADURIAS:</b>
-                    <b-form-select
-                        v-if="dataclient.pagadurias"
-                        v-model="dataclient.pagaduria"
-                        class="text-center"
-                        required
-                        @change="modalConfirmConsultPag"
-                    >
-                        <option :value="null" disabled hidden>Elija una pagaduría</option>
-                        <option v-for="(value, key) in dataclient.pagadurias" :key="key" :value="value.value">
-                            {{ value.label }}
-                        </option>
-                    </b-form-select>
+    <b class="panel-label">PAGADURIAS:</b>
+    <b-form-select
+        v-if="dataclient.pagadurias && dataclient.pagadurias.length > 0"
+        v-model="dataclient.pagaduria"
+        class="text-center"
+        required
+        @change="modalConfirmConsultPag"
+    >
+        <option :value="null" disabled hidden>Elija una pagaduría</option>
+        <option 
+            v-for="(pagaduria, index) in dataclient.pagadurias" 
+            :key="index"
+            :value="pagaduria"
+        >
+            {{ pagaduria.label }}
+        </option>
+    </b-form-select>
 
-                    <b-form-select v-else v-model="dataclient.pagaduria" class="text-center">
-                        <option :value="null" disabled>Ingresa una cédula y presiona consultar</option>
-                    </b-form-select>
-                </div>
+    <b-form-select v-else v-model="dataclient.pagaduria" class="text-center">
+        <option :value="null" disabled>Ingresa una cédula y presiona consultar</option>
+    </b-form-select>
+</div>
+
 
                 <div class="col-6 mt-4">
                     <b-button
@@ -58,12 +63,10 @@
                         variant="black-pearl"
                         v-if="dataclient.doc && dataclient.name"
                         class="px-4"
-                        @click="getExpressPagadurias"
+                        @click="getAllPagadurias"
                     >
                         CONSULTAR PAGADURIAS
                     </b-button>
-
-                   
                 </div>
             </div>
         </div>
@@ -91,7 +94,7 @@ export default {
         };
     },
     mounted() {
-        console.log(this.pagaduriasTypes);
+        
     },
     computed: {
         ...mapState('datamesModule', ['datamesSed', 'cuotadeseada']),
@@ -107,78 +110,77 @@ export default {
         ]),
         ...mapMutations('embargosModule', ['setEmbargosType']),
         ...mapMutations('descuentosModule', ['setDescuentosType']),
-        
         selectedPagaduria() {
-            this.setPagaduriaType(this.dataclient.pagaduria);
 
             if (this.dataclient.pagaduria) {
-                const type = this.pagaduriasTypes.find(type => type.value === this.dataclient.pagaduria);
+                const type = this.dataclient.pagadurias.find(p => p.value === this.dataclient.pagaduria.value);
                 
-                const pagaduria = this.dataclient.pagadurias[type.key];
-                this.dataclient.pagaduriaKey = type.key.slice(7).toLowerCase();
-                pagaduria.documentType = 'documentType';
-                this.dataclient.cargo = pagaduria.cargo;
+                if (!type) {
+                    console.error("No se encontró el tipo de pagaduría para:", this.dataclient.pagaduria);
+                    return;
+                }
+        
 
-                const pagaduriaLabel = type.label;
-                this.setPagaduriaLabel(pagaduriaLabel);
+        const pagaduria = type.value;
 
-                this.setCouponsType(type.key.includes('datames') ? `Coupons${type.key.slice(7)}` : type.key);
-                this.setEmbargosType(type.key.includes('datames') ? `Embargos${type.key.slice(7)}` : type.key);
-                this.setDescuentosType(type.key.includes('datames') ? `Descuentos${type.key.slice(7)}` : type.key);
+        this.dataclient.pagaduriaKey = type.label.toLowerCase();
 
-                this.setDatamesSed(pagaduria);
-            }
-        },
+        this.setPagaduriaType(type.label);
+        this.setPagaduriaLabel(type.label);
 
+        if (type.label.includes('datames')) {
+            this.setCouponsType(`Coupons${type.label.slice(7)}`);
+            this.setEmbargosType(`Embargos${type.label.slice(7)}`);
+            this.setDescuentosType(`Descuentos${type.label.slice(7)}`);
+        } else {
+            this.setCouponsType(type.label);
+            this.setEmbargosType(type.label);
+            this.setDescuentosType(type.label);
+        }
+
+        this.setDatamesSed(pagaduria);
+        console.log("Estado final de dataclient después de asignar pagaduría:", this.dataclient);
+    }
+}
+,
         emitInfo() {
             this.getAllPagadurias();
         },
-
         async getAllPagadurias() {
             this.isLoading = true;
-            this.dataclient.pagadurias = null;
+            this.dataclient.pagadurias = [];
 
             this.setDatamesSed(null);
             this.setPagaduriaType('');
             this.setSelectedPeriod('');
 
-            const response = await axios.get(`/pagadurias/per-doc/${this.dataclient.doc}`);
-            console.log(response.data);
-            if (Object.keys(response.data).length > 0) {
-                this.dataclient.pagadurias = response.data;
-                this.setCuotaDeseada(this.dataclient.cuotadeseada);
-            } else {
-                toastr.info('No tenemos información de este documento en el momento');
-            }
-
-            this.isLoading = false;
-            console.log(this.pagaduriasTypes);
-            return Promise.resolve(response.data);
-        },
-
-        async getExpressPagadurias() {
-            this.isLoading = true;
             try {
                 const response = await axios.get(`/pagadurias/per-doc-express/${this.dataclient.doc}`);
-                console.log(response.data);
+                console.log("Response data:", response.data);
 
-                if (response.data.length > 0) {
-                    // Transformar el array en un objeto que contenga las claves y valores que el select espera
-                    this.dataclient.pagadurias = response.data.reduce((acc, item, index) => {
-                        acc[`express_${index}`] = { label: item, value: item };
-                        return acc;
-                    }, {});
+                if (response.data && typeof response.data === 'object' && Object.keys(response.data).length > 0) {
+                    // Transformamos el objeto en un array de objetos con label y value
+                    this.dataclient.pagadurias = Object.keys(response.data).map(key => {
+                        return {
+                            label: key,           // La clave es la etiqueta
+                            value: response.data[key] // El valor asociado es el objeto completo
+                        };
+                    });
+
+                    console.log("Final dataclient.pagadurias:", this.dataclient.pagadurias);
+                    this.setCuotaDeseada(this.dataclient.cuotadeseada);
                 } else {
-                    toastr.info('No se encontraron pagadurías para este documento en modo express.');
-                    this.dataclient.pagadurias = null;
+                    toastr.info('No tenemos información de este documento en el momento');
                 }
+
             } catch (error) {
-                console.error('Error en la consulta express:', error);
-                toastr.error('Error al realizar la consulta express.');
+                console.error('Error en la consulta de pagadurías:', error);
+                toastr.error('Error al realizar la consulta de pagadurías.');
             } finally {
                 this.isLoading = false;
             }
-        },
+        }
+,
 
         modalConfirmConsultPag(val) {
             this.$bvModal
@@ -203,43 +205,49 @@ export default {
                     });
                 });
         },
-
         async saveVisados() {
-            try {
-                this.isLoading = true;
+            const selectedPeriod = this.$store.state.pagaduriasModule.selectedPeriod;
+            console.log("Selected Period:", selectedPeriod);
+    try {
+        this.isLoading = true;
 
-                // Llamada para obtener datos demográficos
-                const demograficoResponse = await axios.get(`/demografico/${this.dataclient.doc}`);
-                const demograficoData = demograficoResponse.data;
+        const demograficoResponse = await axios.get(`/demografico/${this.dataclient.doc}`);
+        const demograficoData = demograficoResponse.data;
 
-                // Verificar si se obtuvo el nombre
-                if (!demograficoData.nombre_usuario) {
-                    toastr.error('No se encontró el nombre del usuario');
-                    this.isLoading = false;
-                    return;
-                }
-
-                // Llamada a selectedPagaduria
-                this.selectedPagaduria();
-
-                const data = {
-                    pagaduria: this.dataclient.pagaduria,
-                    nombre: demograficoData.nombre_usuario,
-                    doc: this.dataclient.doc
-                };
-
-                const response = await axios.post('/visados', data);
-
-                this.dataclient.visado = response.data;
-
-                return Promise.resolve(response.status);
-            } catch (e) {
-                toastr.error('Error al guardar el visado');
-                return Promise.reject(e);
-            } finally {
-                this.isLoading = false;
-            }
+        if (!demograficoData.nombre_usuario) {
+            toastr.error('No se encontró el nombre del usuario');
+            this.isLoading = false;
+            return;
         }
+  
+            this.selectedPagaduria();
+
+        const data = {
+            doc: this.dataclient.doc,
+            nombre: demograficoData.nombre_usuario,
+            pagaduria: this.dataclient.pagaduria.label,  
+            entidad: this.dataclient.pagaduria.value.id,  
+            tipo_consulta: 'Diamond',
+            consultant_email: 'cch@gmail.com',  
+            consultant_name: 'JUAN', 
+        };
+
+        console.log("Datos corregidos que se envían al controlador:", data);
+
+        const response = await axios.post('/visados', data);
+
+        this.dataclient.visado = response.data;
+        return Promise.resolve(response.status);
+    } catch (e) {
+        console.error("Error al guardar el visado:", e);
+        toastr.error('Error al guardar el visado');
+        return Promise.reject(e);
+    } finally {
+        this.isLoading = false;
+    }
+}
+
+
     }
 };
 </script>
