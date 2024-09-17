@@ -33,29 +33,26 @@
                 </div>
 
                 <div class="col-6">
-    <b class="panel-label">PAGADURIAS:</b>
-    <b-form-select
-        v-if="dataclient.pagadurias && dataclient.pagadurias.length > 0"
-        v-model="dataclient.pagaduria"
-        class="text-center"
-        required
-        @change="modalConfirmConsultPag"
-    >
-        <option :value="null" disabled hidden>Elija una pagaduría</option>
-        <option 
-            v-for="(pagaduria, index) in dataclient.pagadurias" 
-            :key="index"
-            :value="pagaduria"
-        >
-            {{ pagaduria.label }}
-        </option>
-    </b-form-select>
+                    <b class="panel-label">PAGADURIAS:</b>
+                    <b-form-select
+                        v-if="dataclient.pagadurias"
+                        v-model="dataclient.pagaduria"
+                        class="text-center"
+                        required
+                        @change="modalConfirmConsultPag"
+                    >
+                        <option :value="null" disabled hidden>Elija una pagaduria</option>
+                        <!-- <template v-for="type in pagaduriasTypes"> -->
+                            <option v-for="type in pagaduriasTypes" v-if="dataclient.pagadurias[type.key]" :value="type.value" :key="type.key">
+                                {{ type.label }}
+                            </option>
+                        <!-- </template> -->
+                    </b-form-select>
 
-    <b-form-select v-else v-model="dataclient.pagaduria" class="text-center">
-        <option :value="null" disabled>Ingresa una cédula y presiona consultar</option>
-    </b-form-select>
-</div>
-
+                    <b-form-select v-else v-model="dataclient.pagaduria" class="text-center">
+                        <option :value="null" disabled>Ingresa una cedula y presiona consultar</option>
+                    </b-form-select>
+                </div>
 
                 <div class="col-6 mt-4">
                     <b-button
@@ -94,7 +91,7 @@ export default {
         };
     },
     mounted() {
-        
+        console.log(this.pagaduriasTypes);
     },
     computed: {
         ...mapState('datamesModule', ['datamesSed', 'cuotadeseada']),
@@ -111,77 +108,51 @@ export default {
         ...mapMutations('embargosModule', ['setEmbargosType']),
         ...mapMutations('descuentosModule', ['setDescuentosType']),
         selectedPagaduria() {
+            this.setPagaduriaType(this.dataclient.pagaduria);
 
             if (this.dataclient.pagaduria) {
-                const type = this.dataclient.pagadurias.find(p => p.value === this.dataclient.pagaduria.value);
+                const type = this.pagaduriasTypes.find(type => type.value === this.dataclient.pagaduria);
                 
-                if (!type) {
-                    console.error("No se encontró el tipo de pagaduría para:", this.dataclient.pagaduria);
-                    return;
-                }
-        
+                const pagaduria = this.dataclient.pagadurias[type.key];
+                this.dataclient.pagaduriaKey = type.key.slice(7).toLowerCase();
+                pagaduria.documentType = 'documentType';
+                this.dataclient.cargo = pagaduria.cargo;
 
-        const pagaduria = type.value;
+                const pagaduriaLabel = type.label;
+                this.setPagaduriaLabel(pagaduriaLabel);
 
-        this.dataclient.pagaduriaKey = type.label.toLowerCase();
+                this.setCouponsType(type.key.includes('datames') ? `Coupons${type.key.slice(7)}` : type.key);
+                this.setEmbargosType(type.key.includes('datames') ? `Embargos${type.key.slice(7)}` : type.key);
+                // prettier-ignore
+                this.setDescuentosType(type.key.includes('datames') ? `Descuentos${type.key.slice(7)}` : type.key);
 
-        this.setPagaduriaType(type.label);
-        this.setPagaduriaLabel(type.label);
-
-        if (type.label.includes('datames')) {
-            this.setCouponsType(`Coupons${type.label.slice(7)}`);
-            this.setEmbargosType(`Embargos${type.label.slice(7)}`);
-            this.setDescuentosType(`Descuentos${type.label.slice(7)}`);
-        } else {
-            this.setCouponsType(type.label);
-            this.setEmbargosType(type.label);
-            this.setDescuentosType(type.label);
-        }
-
-        this.setDatamesSed(pagaduria);
-        console.log("Estado final de dataclient después de asignar pagaduría:", this.dataclient);
-    }
-}
-,
+                this.setDatamesSed(pagaduria);
+            }
+        },
         emitInfo() {
             this.getAllPagadurias();
         },
         async getAllPagadurias() {
             this.isLoading = true;
-            this.dataclient.pagadurias = [];
+            this.dataclient.pagadurias = null;
 
             this.setDatamesSed(null);
             this.setPagaduriaType('');
             this.setSelectedPeriod('');
 
-            try {
-                const response = await axios.get(`/pagadurias/per-doc-express/${this.dataclient.doc}`);
-                console.log("Response data:", response.data);
-
-                if (response.data && typeof response.data === 'object' && Object.keys(response.data).length > 0) {
-                    // Transformamos el objeto en un array de objetos con label y value
-                    this.dataclient.pagadurias = Object.keys(response.data).map(key => {
-                        return {
-                            label: key,           // La clave es la etiqueta
-                            value: response.data[key] // El valor asociado es el objeto completo
-                        };
-                    });
-
-                    console.log("Final dataclient.pagadurias:", this.dataclient.pagadurias);
-                    this.setCuotaDeseada(this.dataclient.cuotadeseada);
-                } else {
-                    toastr.info('No tenemos información de este documento en el momento');
-                }
-
-            } catch (error) {
-                console.error('Error en la consulta de pagadurías:', error);
-                toastr.error('Error al realizar la consulta de pagadurías.');
-            } finally {
-                this.isLoading = false;
+            const response = await axios.get(`/pagadurias/per-doc/${this.dataclient.doc}`);
+            console.log(response.data);
+            if (Object.keys(response.data).length > 0) {
+                this.dataclient.pagadurias = response.data;
+                this.setCuotaDeseada(this.dataclient.cuotadeseada);
+            } else {
+                toastr.info('No tenemos información de este documento en el momento');
             }
-        }
-,
 
+            this.isLoading = false;
+            console.log(this.pagaduriasTypes);
+            return Promise.resolve(response.data);
+        },
         modalConfirmConsultPag(val) {
             this.$bvModal
                 .msgBoxConfirm('Esta acción tiene un costo', {
@@ -206,48 +177,41 @@ export default {
                 });
         },
         async saveVisados() {
-            const selectedPeriod = this.$store.state.pagaduriasModule.selectedPeriod;
-            console.log("Selected Period:", selectedPeriod);
-    try {
-        this.isLoading = true;
+            try {
+                this.isLoading = true;
 
-        const demograficoResponse = await axios.get(`/demografico/${this.dataclient.doc}`);
-        const demograficoData = demograficoResponse.data;
+                // Llamada para obtener datos demográficos
+                const demograficoResponse = await axios.get(`/demografico/${this.dataclient.doc}`);
+                const demograficoData = demograficoResponse.data;
 
-        if (!demograficoData.nombre_usuario) {
-            toastr.error('No se encontró el nombre del usuario');
-            this.isLoading = false;
-            return;
+                // Verificar si se obtuvo el nombre
+                if (!demograficoData.nombre_usuario) {
+                    toastr.error('No se encontró el nombre del usuario');
+                    this.isLoading = false;
+                    return;
+                }
+
+                // Llamada a selectedPagaduria
+                this.selectedPagaduria();
+
+                const data = {
+                    pagaduria: this.dataclient.pagaduria,
+                    nombre: demograficoData.nombre_usuario,
+                    doc: this.dataclient.doc
+                };
+
+                const response = await axios.post('/visados', data);
+
+                this.dataclient.visado = response.data;
+
+                return Promise.resolve(response.status);
+            } catch (e) {
+                toastr.error('Error al guardar el visado');
+                return Promise.reject(e);
+            } finally {
+                this.isLoading = false;
+            }
         }
-  
-            this.selectedPagaduria();
-
-        const data = {
-            doc: this.dataclient.doc,
-            nombre: demograficoData.nombre_usuario,
-            pagaduria: this.dataclient.pagaduria.label,  
-            entidad: this.dataclient.pagaduria.value.id,  
-            tipo_consulta: 'Diamond',
-            consultant_email: 'cch@gmail.com',  
-            consultant_name: 'JUAN', 
-        };
-
-        console.log("Datos corregidos que se envían al controlador:", data);
-
-        const response = await axios.post('/visados', data);
-
-        this.dataclient.visado = response.data;
-        return Promise.resolve(response.status);
-    } catch (e) {
-        console.error("Error al guardar el visado:", e);
-        toastr.error('Error al guardar el visado');
-        return Promise.reject(e);
-    } finally {
-        this.isLoading = false;
-    }
-}
-
-
     }
 };
 </script>
