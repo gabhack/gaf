@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Log;
+
 use App\DatamesSedCauca;
 use App\DatamesSedValle;
 use App\DatamesSemCali;
@@ -61,22 +62,44 @@ use Illuminate\Support\Str;
 
 class PagaduriasController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
     public function __construct()
     {
         $this->middleware('auth');
+        // $this->middleware('role:ADMIN_SISTEMA');
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $lista = Pagadurias::all();
         return view('pagadurias/index')->with(['lista' => $lista]);
     }
 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
         return view('pagadurias/crear');
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request)
     {
         $pagaduria = new Pagadurias();
@@ -87,12 +110,36 @@ class PagaduriasController extends Controller
         return redirect('pagadurias');
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
     public function edit($id)
     {
         $pagaduria = Pagadurias::find($id);
         return view('pagadurias/editar')->with(['pagaduria' => $pagaduria]);
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
     public function update(Request $request, $id)
     {
         $pagaduria = Pagadurias::find($id);
@@ -102,6 +149,12 @@ class PagaduriasController extends Controller
         return redirect('pagadurias');
     }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
     public function destroy($id)
     {
         Pagadurias::find($id)->delete();
@@ -110,6 +163,8 @@ class PagaduriasController extends Controller
 
     public function perDoc($doc)
     {
+        Log::info("ENtro a buscar la cedula: ",  ['doc' => $doc]);
+
         try {
             $models = [
                 DatamesFidu::class => 'doc',
@@ -169,26 +224,26 @@ class PagaduriasController extends Controller
 
             foreach ($models as $model => $column) {
                 $data = $model::where($column, 'LIKE', '%' . $doc . '%')
-                    ->orderBy('id', 'desc')
-                    ->first();
-
+                ->orderBy('id', 'desc')
+                ->first();
+ 
                 if ($data) {
                     $modelName = class_basename($model);
                     $results[Str::camel($modelName)] = $data;
                 }
             }
 
-            $dataGen = DatamesGen::where('doc', 'LIKE', '%' . $doc . '%')->get();
-
+            // $dataGen = DatamesGen::where('doc', 'like', '%' . $doc . '%')->get();
+            $dataGen = DatamesGen::where('doc', '=', $doc )->get();
             if ($dataGen) {
                 foreach ($dataGen as $item) {
-                    $pagaduria = trim($item->pagaduria); // Eliminamos espacios adicionales
-
-                    if (!isset($results[$pagaduria])) {
-                        $results[$pagaduria] = $item;
+                    // Verifica si la pagaduría ya existe en $results
+                    if (!isset($results[$item->pagaduria])) {
+                        $results[$item->pagaduria] = $item;
                     } else {
-                        if ($item->id > $results[$pagaduria]->id) {
-                            $results[$pagaduria] = $item;
+                        // Si ya existe, compara los IDs y conserva el más reciente
+                        if ($item->id > $results[$item->pagaduria]->id) {
+                            $results[$item->pagaduria] = $item;
                         }
                     }
                 }
@@ -199,47 +254,76 @@ class PagaduriasController extends Controller
             return response()->json($results, 200);
         } catch (\Exception $e) {
             Log::error("Error al buscar pagadurías por documento: {$e->getMessage()}", [
-                'doc' => $doc,
-                'exception' => $e->getTraceAsString(),
+                'doc' => $doc, // Incluye el documento para identificar la consulta que causó el error
+                'exception' => $e->getTraceAsString(), // Para un diagnóstico más detallado
             ]);
-
+        
             return response()->json([
                 'error' => 'Ocurrió un error al procesar la solicitud',
-                'message' => $e->getMessage(),
+                'message' => $e->getMessage(), // Mensaje exacto del error
             ], 500);
         }
     }
 
-    public function perDocExpress($doc)
+    public function getPagaduriasNames()
+{
+    $nombres = Pagadurias::pluck('pagaduria');
+    return response()->json($nombres, 200);
+}
+
+public function getPagaduriasNamesAmi()
+{
+    $nombres = [
+        "SED AMAZONAS", "SED ANTIOQUIA", "SED ARAUCA", "SED ATLANTICO",
+        "SED BOLIVAR", "SED BOYACA", "SED CALDAS", "SED CAQUETA",
+        "SED CASANARE", "SED CAUCA", "SED CESAR", "SED CHOCO",
+        "SED CORDOBA", "SED CUNDINAMARCA", "SED GUAJIRA", "SED GUAVIARE",
+        "SED HUILA", "SED MAGDALENA", "SED META", "SED NARINO",
+        "SED NORTE DE SANTANDER", "SED PUTUMAYO", "SED QUINDIO", "SED RISARALDA",
+        "SED SANTANDER", "SED SINCELEJO", "SED SUCRE", "SED TOLIMA",
+        "SED VALLE", "SED VAUPES", "SED VICHADA", "SEM APARTADO",
+        "SEM ARMENIA", "SEM BARRANCABERMEJA", "SEM BARRANQUILLA", "SEM BELLO",
+        "SEM BUCARAMANGA", "SEM BUENAVENTURA", "SEM BUGA", "SEM CALI",
+        "SEM CARTAGENA", "SEM CARTAGO", "SEM CHIA", "SEM CIENAGA",
+        "SEM CUCUTA", "SEM DOSQUEBRADAS", "SEM DUITAMA", "SEM ENVIGADO",
+        "SEM FACATATIVA", "SEM FLORENCIA", "SEM FLORIDABLANCA", "SEM FUNZA",
+        "SEM FUSAGASUGA", "SEM GIRARDOT", "SEM GIRON", "SEM GUAINIA",
+        "SEM IBAGUE", "SEM IPIALES", "SEM ITAGUI", "SEM JAMUNDI",
+        "SEM LORICA", "SEM MAGANGUE", "SEM MAICAO", "SEM MALAMBO",
+        "SEM MANIZALES", "SEM MEDELLIN", "SEM MONTERIA", "SEM MOSQUERA",
+        "SEM NEIVA", "SEM PALMIRA", "SEM PASTO", "SEM PEREIRA",
+        "SEM PIEDECUESTA", "SEM PITALITO", "SEM POPAYAN", "SEM QUIBDO",
+        "SEM RIOHACHA", "SEM RIONEGRO", "SEM SABANETA", "SEM SAHAGUN",
+        "SEM SAN ANDRES", "SEM SANTA MARTA", "SEM SOACHA", "SEM SOGAMOSO",
+        "SEM SOLEDAD", "SEM TULUA", "SEM TUMACO", "SEM TUNJA",
+        "SEM TURBO", "SEM URIBIA", "SEM VALLEDUPAR", "SEM VILLAVICENCIO",
+        "SEM YOPAL", "SEM YUMBO", "SEM ZIPAQUIRA"
+    ];
+    
+
+    return response()->json($nombres, 200);
+}
+
+public function getSituacionLaboralByDoc($doc)
 {
     try {
-        $results = [];
+        Log::info("Consultando la situación laboral para el documento: {$doc}");
 
-        // Obtener las pagadurías distintas del modelo DatamesGen
-        $dataGen = DatamesGen::where('doc', 'LIKE', "%{$doc}%")->get();
+        $data = DatamesGen::where('doc', 'like', "%{$doc}%")
+                          ->latest('id')
+                          ->first(['situacion_laboral']);
 
-        if ($dataGen->isEmpty()) {
-            Log::info("No se encontraron pagadurías para el documento proporcionado.", ['doc' => $doc]);
-            return response()->json(['mensaje' => 'No se encontraron pagadurías para el documento proporcionado.'], 404);
+        if (!$data) {
+            Log::info("No se encontró la situación laboral para el documento proporcionado.", ['doc' => $doc]);
+            return response()->json(['mensaje' => 'No se encontró la situación laboral para el documento proporcionado.'], 404);
         }
 
-        foreach ($dataGen as $item) {
-            // Verifica si la pagaduría ya existe en $results
-            if (!isset($results[$item->pagaduria])) {
-                $results[$item->pagaduria] = $item;
-            } else {
-                // Si ya existe, compara los IDs y conserva el más reciente
-                if ($item->id > $results[$item->pagaduria]->id) {
-                    $results[$item->pagaduria] = $item;
-                }
-            }
-        }
+        Log::info("Situación laboral encontrada.", ['doc' => $doc, 'situacion_laboral' => $data->situacion_laboral]);
 
-        Log::info("Pagadurías encontradas para el documento.", ['doc' => $doc, 'results' => $results]);
+        return response()->json($data->situacion_laboral, 200);
 
-        return response()->json($results, 200);
     } catch (\Exception $e) {
-        Log::error("Error al buscar pagadurías por documento: {$doc}", [
+        Log::error("Error al buscar la situación laboral por documento: {$doc}", [
             'doc' => $doc,
             'exception' => $e->getMessage(),
             'stack' => $e->getTraceAsString(),
@@ -249,105 +333,37 @@ class PagaduriasController extends Controller
     }
 }
 
+public function getSituacionLaboralByDocs(Request $request)
+{
+    try {
+        $documentos = $request->input('documentos', []);
+        Log::info("Consultando la situación laboral para múltiples documentos.");
 
-    public function getPagaduriasNames()
-    {
-        $nombres = Pagadurias::pluck('pagaduria');
-        return response()->json($nombres, 200);
-    }
+        $situaciones = DatamesGen::whereIn('doc', $documentos)
+                                ->latest('id')
+                                ->get()
+                                ->keyBy('doc')  // Esto asume que 'doc' es único
+                                ->map(function ($item) {
+                                    return $item->situacion_laboral;
+                                });
 
-    public function getPagaduriasNamesAmi()
-    {
-        $nombres = [
-            "SED AMAZONAS", "SED ANTIOQUIA", "SED ARAUCA", "SED ATLANTICO",
-            "SED BOLIVAR", "SED BOYACA", "SED CALDAS", "SED CAQUETA",
-            "SED CASANARE", "SED CAUCA", "SED CESAR", "SED CHOCO",
-            "SED CORDOBA", "SED CUNDINAMARCA", "SED GUAJIRA", "SED GUAVIARE",
-            "SED HUILA", "SED MAGDALENA", "SED META", "SED NARINO",
-            "SED NORTE DE SANTANDER", "SED PUTUMAYO", "SED QUINDIO", "SED RISARALDA",
-            "SED SANTANDER", "SED SINCELEJO", "SED SUCRE", "SED TOLIMA",
-            "SED VALLE", "SED VAUPES", "SED VICHADA", "SEM APARTADO",
-            "SEM ARMENIA", "SEM BARRANCABERMEJA", "SEM BARRANQUILLA", "SEM BELLO",
-            "SEM BUCARAMANGA", "SEM BUENAVENTURA", "SEM BUGA", "SEM CALI",
-            "SEM CARTAGENA", "SEM CARTAGO", "SEM CHIA", "SEM CIENAGA",
-            "SEM CUCUTA", "SEM DOSQUEBRADAS", "SEM DUITAMA", "SEM ENVIGADO",
-            "SEM FACATATIVA", "SEM FLORENCIA", "SEM FLORIDABLANCA", "SEM FUNZA",
-            "SEM FUSAGASUGA", "SEM GIRARDOT", "SEM GIRON", "SEM GUAINIA",
-            "SEM IBAGUE", "SEM IPIALES", "SEM ITAGUI", "SEM JAMUNDI",
-            "SEM LORICA", "SEM MAGANGUE", "SEM MAICAO", "SEM MALAMBO",
-            "SEM MANIZALES", "SEM MEDELLIN", "SEM MONTERIA", "SEM MOSQUERA",
-            "SEM NEIVA", "SEM PALMIRA", "SEM PASTO", "SEM PEREIRA",
-            "SEM PIEDECUESTA", "SEM PITALITO", "SEM POPAYAN", "SEM QUIBDO",
-            "SEM RIOHACHA", "SEM RIONEGRO", "SEM SABANETA", "SEM SAHAGUN",
-            "SEM SAN ANDRES", "SEM SANTA MARTA", "SEM SOACHA", "SEM SOGAMOSO",
-            "SEM SOLEDAD", "SEM TULUA", "SEM TUMACO", "SEM TUNJA",
-            "SEM TURBO", "SEM URIBIA", "SEM VALLEDUPAR", "SEM VILLAVICENCIO",
-            "SEM YOPAL", "SEM YUMBO", "SEM ZIPAQUIRA"
-        ];
-
-        return response()->json($nombres, 200);
-    }
-
-    public function getSituacionLaboralByDoc($doc)
-    {
-        try {
-            Log::info("Consultando la situación laboral para el documento: {$doc}");
-
-            $data = DatamesGen::where('doc', 'like', "%{$doc}%")
-                              ->latest('id')
-                              ->first(['situacion_laboral']);
-
-            if (!$data) {
-                Log::info("No se encontró la situación laboral para el documento proporcionado.", ['doc' => $doc]);
-                return response()->json(['mensaje' => 'No se encontró la situación laboral para el documento proporcionado.'], 404);
-            }
-
-            Log::info("Situación laboral encontrada.", ['doc' => $doc, 'situacion_laboral' => $data->situacion_laboral]);
-
-            return response()->json($data->situacion_laboral, 200);
-
-        } catch (\Exception $e) {
-            Log::error("Error al buscar la situación laboral por documento: {$doc}", [
-                'doc' => $doc,
-                'exception' => $e->getMessage(),
-                'stack' => $e->getTraceAsString(),
-            ]);
-
-            return response()->json(['error' => 'Ocurrió un error al procesar la solicitud'], 500);
+        if ($situaciones->isEmpty()) {
+            Log::info("No se encontraron situaciones laborales para los documentos proporcionados.");
+            return response()->json(['mensaje' => 'No se encontraron situaciones laborales para los documentos proporcionados.'], 404);
         }
+
+        Log::info("Situaciones laborales encontradas.", ['situaciones' => $situaciones]);
+
+        return response()->json($situaciones, 200);
+
+    } catch (\Exception $e) {
+        Log::error("Error al buscar las situaciones laborales por documentos", [
+            'documentos' => $documentos,
+            'exception' => $e->getMessage(),
+            'stack' => $e->getTraceAsString(),
+        ]);
+
+        return response()->json(['error' => 'Ocurrió un error al procesar la solicitud'], 500);
     }
-
-    public function getSituacionLaboralByDocs(Request $request)
-    {
-        try {
-            $documentos = $request->input('documentos', []);
-            Log::info("Consultando la situación laboral para múltiples documentos.");
-
-            $situaciones = DatamesGen::whereIn('doc', $documentos)
-                                    ->latest('id')
-                                    ->get()
-                                    ->keyBy('doc')
-                                    ->map(function ($item) {
-                                        return $item->situacion_laboral;
-                                    });
-
-            if ($situaciones->isEmpty()) {
-                Log::info("No se encontraron situaciones laborales para los documentos proporcionados.");
-                return response()->json(['mensaje' => 'No se encontraron situaciones laborales para los documentos proporcionados.'], 404);
-            }
-
-            Log::info("Situaciones laborales encontradas.", ['situaciones' => $situaciones]);
-
-            return response()->json($situaciones, 200);
-
-        } catch (\Exception $e) {
-            Log::error("Error al buscar las situaciones laborales por documentos", [
-                'documentos' => $documentos,
-                'exception' => $e->getMessage(),
-                'stack' => $e->getTraceAsString(),
-            ]);
-
-            return response()->json(['error' => 'Ocurrió un error al procesar la solicitud'], 500);
-        }
-    }
+}
 }
