@@ -35,8 +35,11 @@
                         <div class="col-2 px-0">
                             <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
                         </div>
-                        <div class="col-2 px-0">
-                            <b class="panel-label table-text">DETALLE DEL EMBARGO:</b>
+                        <div class="col-1 px-0">
+                            <b class="panel-label table-text">TIPO DEL EMBARGO:</b>
+                        </div>
+                        <div class="col-1 px-0">
+                            <b class="panel-label table-text">MOTIVO DEL EMBARGO:</b>
                         </div>
                     </div>
 
@@ -63,8 +66,10 @@
                         <div class="col-2 px-0">
                             <p>{{ item.fembini || '-' }}</p>
                         </div>
-
-                        <div class="col-2 px-0">
+                        <div class="col-1 px-0">
+                            <p>{{ item.tipoembargo || '-' }}</p>
+                        </div>
+                        <div class="col-1 px-0">
                             <p>{{ item.motemb || '-' }}</p>
                         </div>
                     </div>

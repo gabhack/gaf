@@ -26,5 +26,6 @@ class EmbargosGen extends Model
         'netoemb',
         'pagaduria',
         'nomina',
+        'tipoembargo'
     ];
 }
