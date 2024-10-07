@@ -3,7 +3,7 @@
     <!-- Sidebar - Brand -->
     <div class="py-3 text-center">
         <a class="" href="{{ url('home') }}">
-            <img src="/img/gaf-sidebar.png" alt="" class="img-fluid w-75 mx-auto">
+            <img src="/img/gaf-sidebar.png" alt="" class="img-fluid w-100 mx-auto">
         </a>
     </div>
 
@@ -15,7 +15,7 @@
         </a>
     </li> -->
 
-    @if ((IsUser() || IsCompany()) && ( AMISilverHabilitado() || AMIGoldHabilitado() || AMIDiamondHabilitado() ) && !(IsSuperAdmin() || IsAMIAdmin() || IsHEGOAdmin()))
+    @if ((IsUser()) && ( AMISilverHabilitado() || AMIGoldHabilitado() || AMIDiamondHabilitado() ) && !(IsSuperAdmin() || IsAMIAdmin() || IsHEGOAdmin()))
     <li class="nav-item">
         <a class="nav-link" href="{{ url('/home/ami') }}" data-target="#menuAMI" aria-expanded="false" aria-controls="menuAMI">
             <!-- <ami-icon></ami-icon>
@@ -44,6 +44,80 @@
             <span>Pagos</span>
         </a>
     </li> -->
+    @endif
+
+    @if(IsCompany())
+        <li class="nav-item dropdown">
+            <div>
+                <button class="btn btn-success btn-block">Dashboard</button>
+            </div>
+            <div class="dropdown-divider"></div>
+            <div>
+                <h3 class="text-white">AMI</h3>
+                <p style="color:gray;">Análisis de mercado inteligente</p>
+            </div>
+        </li>
+        <li class="nav-item dropdown">
+            <div class="col-md-6 dropdown text-white">
+                <p class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Visado
+                </p>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#">Nueva Consulta</a>
+                    <a class="dropdown-item" href="#">Listado de Consultas</a>
+                </div>
+            </div>
+        </li>
+        <li class="nav-item dropdown">
+            <div class="col-md-6 dropdown text-white">
+                <p class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Prospección de mercado
+                </p>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#">Parametros de control</a>
+                    <a class="dropdown-item" href="#">Prospección de cartera</a>
+                    <a class="dropdown-item" href="#">Comparativas</a>
+                </div>
+            </div>
+        </li>
+        <li class="nav-item dropdown">
+            <div class="col-md-6 dropdown text-white">
+                <p class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Recuperación de mercado
+                </p>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#">Consulta Gold</a>
+                    <a class="dropdown-item" href="#">Consulta Diamante</a>
+                </div>
+            </div>
+        </li>
+        <li class="nav-item dropdown">
+            <div class="col-md-6 dropdown text-white">
+                <p class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Investigación
+                </p>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#">Investigación de bienes</a>
+                    <a class="dropdown-item" href="#">Certificado de nacimiento</a>
+                    <a class="dropdown-item" href="#">Datos demograficos</a>
+                    <a class="dropdown-item" href="#">Datos personales</a>
+                    <a class="dropdown-item" href="#">Información financiera</a>
+                </div>
+            </div>
+        </li>
+        <li class="nav-item dropdown">
+            <div class="col-md-6 dropdown text-white">
+                <p class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Localización de usuarios
+                </p>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#">Colpensiones</a>
+                    <a class="dropdown-item" href="#">Fiduprevisora</a>
+                    <a class="dropdown-item" href="#">Localizar cdulas</a>
+                </div>
+            </div>
+        </li>
+        <div class="dropdown-divider"></div>
     @endif
 
     @if (HEGOAccess())
