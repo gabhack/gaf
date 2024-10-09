@@ -1,5 +1,6 @@
 @import './sb-admin/sb-admin-2';
 @import '~sweetalert2/src/sweetalert2';
+@import './variables'
 
 input[type='range']::-webkit-slider-runnable-track {
   height: 5px;

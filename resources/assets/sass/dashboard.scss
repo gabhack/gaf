@@ -54,13 +54,13 @@
     .nav-item {
       &.active {
         .nav-link {
-          width: 6rem;
+          width: 10rem;
           padding-left: 0.35rem;
         }
       }
 
       .nav-link {
-        flex-direction: column;
+        flex-direction: initial;
 
         svg {
           margin-bottom: 0.5rem;
@@ -78,7 +78,7 @@
 
       .nav-link {
         width: 6rem;
-        background-color: $white;
+        background-color: $green-side;
         border-top-left-radius: 10px;
         @media (max-width: 768px) {
           padding-left: 0.35rem;
@@ -94,7 +94,7 @@
         }
 
         &::after {
-          color: rgba($caribbean-green, 0.5);
+          color: $white;
         }
       }
     }
@@ -112,11 +112,11 @@
       }
 
       &:hover {
-        background-color: $white;
+        background-color: $green-2side;
         font-weight: 700;
 
         &::after {
-          color: rgba($caribbean-green, 0.5);
+          color: $white;
         }
       }
 
@@ -133,10 +133,8 @@
       }
 
       span {
-        color: $caribbean-green;
-        font-weight: bold;
-        letter-spacing: 0.27em;
-        text-transform: uppercase;
+        color: $white;
+        font-weight: 400;
         line-height: 1em;
       }
     }
@@ -147,6 +145,7 @@
 
       .collapse-inner {
         border-bottom-left-radius: 10px;
+        color:#fff;
       }
     }
   }
