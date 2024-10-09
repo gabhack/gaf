@@ -1,43 +1,95 @@
 <!-- Sidebar -->
-<ul class="navbar-nav bg-black-pearl sidebar sidebar-dark accordion toggled" style="display: grid; justify-content: space-evenly;" id="accordionSidebar">
+<ul class="navbar-nav bg-black-pearl sidebar sidebar-dark accordion" id="accordionSidebar">
     <!-- Sidebar - Brand -->
-    <div class="py-3 text-center">
+    <div class="pt-4 pl-3 pb-2 text-left">
         <a class="" href="{{ url('home') }}">
-            <img src="/img/gaf-sidebar.png" alt="" class="img-fluid w-100 mx-auto">
+            <img src="/img/GAFlogosidebar.png" alt="" class="img-fluid w-60 mx-auto">
         </a>
     </div>
-
     <!-- Nav Items-->
-    <!-- <li class="nav-item">
-        <a class="nav-link" href="{{ url('home') }}">
-            <home-icon></home-icon>
-            <span>Inicio</span>
-        </a>
-    </li> -->
-
-    @if ((IsUser()) && ( AMISilverHabilitado() || AMIGoldHabilitado() || AMIDiamondHabilitado() ) && !(IsSuperAdmin() || IsAMIAdmin() || IsHEGOAdmin()))
     <li class="nav-item">
-        <a class="nav-link" href="{{ url('/home/ami') }}" data-target="#menuAMI" aria-expanded="false" aria-controls="menuAMI">
-            <!-- <ami-icon></ami-icon>
-            <span>AMI®</span> -->
-            <img src="/img/ami-sidebar.png" alt="AMI" class="img-fluid mx-auto"/>
+        <a class="nav-link" href="{{ url('home') }}">
+            <dash-icon></dash-icon>
+            <span class="pl-2">Dashboard</span>
         </a>
-        <!-- <div id="menuAMI" class="collapse" aria-labelledby="menuAMI" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner">
-                <a class="collapse-item btn-list" href="{{ url('historyClient' )}}">Listado de consultas</a>
-                <a class="collapse-item btn-list" href="{{ url('consultas/list' )}}">Listado de consultas</a>		
-                <a class="collapse-item" href="/massiveCharge">Carga Masiva</a>
-                <a class="collapse-item" href="{{ url('dataClientDraft') }}">Nueva consulta +</a>
-                <a class="collapse-item" href="{{ url('cifin') }}">Nueva consulta CIFIN</a>
-                <a class="collapse-item" href="{{ url('deceval') }}">Nuevo Pagare Deceval</a>
-                <a class="collapse-item" href="#">Consulta bloque</a> 				
-                <a class="collapse-item" href="{{ url('refundCartera') }}">Recuperacion de Cartera </a>
-                <a class="collapse-item" href="{{ url('whatsapp-bot') }}">WhatsApp Bot</a>
-                <a class="collapse-item" href="#">Prospección de Mercado</a>
-                <a class="collapse-item" href="{{ url('consultas') }}">Nueva Consulta</a>
-            </div>
-        </div> -->
     </li>
+    <div class="borders-space">
+        @if(IsCompany())
+        <div class="pl-2 mb-4">
+            <span class="sidebar-titles1">AMI®</span></br>
+            <span class="sidebar-titles2">Análisis de mercado inteligente</span>
+        </div>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#menuVisados" aria-expanded="false" aria-controls="menuVisados">
+                <visado-icon></visado-icon>    
+                <span class="pl-2">Visado</span>
+            </a>
+            <div id="menuVisados" class="collapse" aria-labelledby="menuVisados" data-parent="#accordionSidebar">
+                <div class="bg-green-side py-2 collapse-inner">
+                    <a class="collapse-item" href="{{ url('dataClientDraft') }}">Nueva consulta ></a>
+                    <a class="collapse-item btn-list" href="{{ url('historyClient' )}}">Listado de consultas ></a>
+                </div>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#menuProspeccion" aria-expanded="false" aria-controls="menuProspeccion">
+                <mercado-icon></mercado-icon>    
+                <span class="pl-2">Prospección de mercado</span>
+            </a>
+            <div id="menuProspeccion" class="collapse" aria-labelledby="menuProspeccion" data-parent="#accordionSidebar">
+                <div class="bg-green-side py-2 collapse-inner">
+                    <a class="dropdown-item" href="#">Parametros de control</a>
+                    <a class="dropdown-item" href="#">Prospección de cartera</a>
+                    <a class="dropdown-item" href="#">Comparativas</a>
+                </div>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#menuRecuperacion" aria-expanded="false" aria-controls="menuRecuperacion">
+                <cartera-icon></cartera-icon>    
+                <span class="pl-2">Recuperación de cartera</span>
+            </a>
+            <div id="menuRecuperacion" class="collapse" aria-labelledby="menuRecuperacion" data-parent="#accordionSidebar">
+                <div class="bg-green-side py-2 collapse-inner">
+                    <a class="dropdown-item" href="#">Consulta Gold</a>
+                    <a class="dropdown-item" href="#">Consulta Diamante</a>
+                </div>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#menuInvestigacion" aria-expanded="false" aria-controls="menuInvestigacion">
+                <investigacion-icon></investigacion-icon>    
+                <span class="pl-2">Investigación</span>
+            </a>
+            <div id="menuInvestigacion" class="collapse" aria-labelledby="menuInvestigacion" data-parent="#accordionSidebar">
+                <div class="bg-green-side py-2 collapse-inner">
+                    <a class="dropdown-item" href="#">Investigación de bienes</a>
+                    <a class="dropdown-item" href="#">Certificado de nacimiento</a>
+                    <a class="dropdown-item" href="#">Datos demograficos</a>
+                    <a class="dropdown-item" href="#">Datos personales</a>
+                    <a class="dropdown-item" href="#">Información financiera</a>
+                </div>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#menuLocalizacion" aria-expanded="false" aria-controls="menuLocalizacion">
+                <localizacion-icon></localizacion-icon>    
+                <span class="pl-2">Localización de usuarios</span>
+            </a>
+            <div id="menuLocalizacion" class="collapse" aria-labelledby="menuLocalizacion" data-parent="#accordionSidebar">
+                <div class="bg-green-side py-2 collapse-inner">
+                    <a class="dropdown-item" href="#">Colpensiones</a>
+                    <a class="dropdown-item" href="#">Fiduprevisora</a>
+                    <a class="dropdown-item" href="#">Localizar cdulas</a>
+                </div>
+            </div>
+        </li>
+    </div>
+    <div class="pl-3 mt-4">
+        <span class="sidebar-titles1">HEGO®</span></br>
+        <span class="sidebar-titles2">Herramienta ejecutora</span>
+    </div>
+    
     <!-- <li class="nav-item">
         <a class="nav-link" href="{{ url('pagos') }}">
             <ami-icon></ami-icon>
@@ -46,7 +98,7 @@
     </li> -->
     @endif
 
-    @if(IsCompany())
+    <!-- @if(IsCompany())
         <li class="nav-item dropdown">
             <div>
                 <button class="btn btn-success btn-block">Dashboard</button>
@@ -118,16 +170,16 @@
             </div>
         </li>
         <div class="dropdown-divider"></div>
-    @endif
+    @endif -->
 
     @if (HEGOAccess())
-    <li class="nav-item">
+    <!-- <li class="nav-item">
         <a class="nav-link" href="{{ url('estudios') }}">
-            <!-- <hego-icon></hego-icon>
-            <span>HEGO®</span> -->
+            <hego-icon></hego-icon>
+            <span>HEGO®</span>
             <img src="/img/hego-sidebar.png" alt="HEGO" class="img-fluid mx-auto"/>
         </a>
-    </li>
+    </li> -->
 
     <!-- <li class="nav-item">
         <a class="nav-link" href="/solicitud">
@@ -200,8 +252,8 @@
     @endif
 
     <!-- Sidebar Toggler (Sidebar) -->
-    {{-- <div class="text-center d-none d-md-inline">
+    <div class="text-center d-none d-md-inline pt-4">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
-    </div> --}}
+    </div>
 </ul>
 <!-- End of Sidebar -->

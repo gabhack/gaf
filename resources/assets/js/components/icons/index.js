@@ -8,6 +8,12 @@ import YoutubeIcon from './YoutubeIcon.vue';
 import AdminSettingsIcon from './AdminSettingsIcon.vue';
 import AmiIcon from './AmiIcon.vue';
 import HegoIcon from './HegoIcon.vue';
+import DashIcon from './DashIcon.vue';
+import VisadoIcon from './VisadoIcon.vue';
+import MercadoIcon from './MercadoIcon.vue';
+import CarteraIcon from './CarteraIcon.vue';
+import InvestigacionIcon from './InvestigacionIcon.vue';
+import LocalizacionIcon from './LocalizacionIcon.vue';
 
 export {
   CompaniesIcon,
@@ -19,5 +25,11 @@ export {
   TwitterIcon,
   AdminSettingsIcon,
   AmiIcon,
-  HegoIcon
+  HegoIcon,
+  DashIcon,
+  VisadoIcon,
+  MercadoIcon,
+  CarteraIcon,
+  InvestigacionIcon,
+  LocalizacionIcon,
 };
