@@ -76,7 +76,9 @@
                 <div class="row">
                     <div class="col-md-12 text-right">
                         <b-button variant="primary" @click="getCoupons">PROSPECTAR</b-button>
-                    </div>
+<b-button variant="success" @click="exportToExcel">Exportar a Excel</b-button>
+</div>
+
                 </div>
                 <!-- Mensajes de error -->
                 <div
@@ -562,6 +564,7 @@ th {
 </style>
 <script>
 import axios from 'axios';
+import * as XLSX from 'xlsx';
 import { sassFalse } from 'sass';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
@@ -1030,7 +1033,70 @@ export default {
             this.situacionLaboral = (this.situacionesLaborales[doc] || 'información no disponible').toLowerCase();
 
             this.isLoadingModal = false;
+        },
+        exportToExcel() {
+        const wb = XLSX.utils.book_new();
+
+        if (this.coupons && this.coupons.length > 0) {
+            const columnsCoupons = ['Documento', 'Nombres Completos', 'Homónimo', 'Concepto', 'Valor Cuota'];
+            const dataCoupons = this.coupons.map(item => [
+                item.doc,
+                item.names,
+                item.code,
+                item.concept,
+                this.parseNumber(item.egresos) 
+            ]);
+            dataCoupons.push([]);
+            dataCoupons.push(['Total Clientes', this.coupons.length]);
+            dataCoupons.push(['Total Cuotas', this.parseNumber(this.totalCuotasAldia)]);
+
+            const wsCoupons = XLSX.utils.aoa_to_sheet([columnsCoupons, ...dataCoupons]);
+            XLSX.utils.book_append_sheet(wb, wsCoupons, 'Cartera al Día');
         }
+
+        if (this.descuentos && this.descuentos.length > 0) {
+            const columnsDescuentos = ['Documento', 'Nombre Completo', 'Mensaje Liquidación', 'Nómina', 'Valor'];
+            const dataDescuentos = this.descuentos.map(item => [
+                item.doc,
+                item.nomp,
+                item.mliquid,
+                item.nomina,
+                this.parseNumber(item.valor)
+            ]);
+            dataDescuentos.push([]);
+            dataDescuentos.push(['Total Clientes', this.descuentos.length]);
+            dataDescuentos.push(['Total Cuotas', this.parseNumber(this.totalCuotasMora)]);
+
+            const wsDescuentos = XLSX.utils.aoa_to_sheet([columnsDescuentos, ...dataDescuentos]);
+            XLSX.utils.book_append_sheet(wb, wsDescuentos, 'Cartera en Mora');
+        }
+
+        if (this.embargos && this.embargos.length > 0) {
+            const columnsEmbargos = ['Documento', 'Cliente Demandado', 'Número de Pagaré', 'Entidad Demandante', 'Cuota Embargada'];
+            const dataEmbargos = this.embargos.map(item => [
+                item.doc,
+                item.nomp,
+                item.docdeman,
+                item.entidaddeman,
+                this.parseNumber(item.temb)
+            ]);
+            dataEmbargos.push([]);
+            dataEmbargos.push(['Total Clientes', this.embargos.length]);
+            dataEmbargos.push(['Total Cuotas', this.parseNumber(this.totalCuotasEmbargo)]);
+
+            const wsEmbargos = XLSX.utils.aoa_to_sheet([columnsEmbargos, ...dataEmbargos]);
+            XLSX.utils.book_append_sheet(wb, wsEmbargos, 'Cartera Embargada');
+        }
+
+        XLSX.writeFile(wb, 'resultados.xlsx');
+    },
+
+    parseNumber(value) {
+        if (typeof value === 'string') {
+            return parseFloat(value.replace(/[^0-9.-]+/g,""));
+        }
+        return value;
+    },
     }
 };
 </script>
