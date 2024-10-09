@@ -30,10 +30,10 @@
                             />
                         </div>
                         <div class="form-group col-md-3">
-                            <label for="">Documento</label>
+                            <label for="" style="color: black;">Documento</label>
                             <input style="border: 1px solid #b9bdc3; background-color:white; border-radius: 10px" class="form-control" placeholder="Documento" v-model="filter" />
                         </div>
-                        <b-button type="submit" class="mr-2 align-self-end mb-3 ml-5" variant="success" id="filtrarButton" style="border: 1px solid #b9bdc3; border-radius: 10px">
+                        <b-button type="submit" class="align-self-end mb-3 ml-5" variant="success" id="filtrarButton" style="border: 1px solid #b9bdc3; border-radius: 10px">
                             <i class="fa fa-filter" aria-hidden="true"></i>
                             Filtrar
                         </b-button>
