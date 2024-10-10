@@ -12,8 +12,9 @@
 @endsection
 
 @section('content')
-    <div class="container-fluid">
-        @if (IsUser() || (IsCompany() && !IsSuperAdmin()))
+    <div class="container-fluid"  style="background-color: #f9fafc;">
+        <dashboard></dashboard>
+        {{-- @if (IsUser() || (IsCompany() && !IsSuperAdmin()))
             <div class="row mb-5">
                 <div class="col-12 col-md-4 mb-4 mb-md-0">
                     <div class="box-rounded bg-black-pearl text-white text-center">
@@ -104,6 +105,6 @@
                     </div>
                 </div>
             @endif
-        @endif
+        @endif --}}
     </div>
 @endsection
