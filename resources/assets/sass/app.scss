@@ -57,6 +57,14 @@
     display: flex;
     justify-content: space-between;
 }
+.table .thead-dark th {
+    background-color: #3a565a !important;
+    border-color: #3a565a !important;
+}
+
+#filtrarButton{
+    background-color: #0D614F !important;   
+}
 
 .panel-table-subtitle {
     background-color: rgba(#0cedb0, 0.6);

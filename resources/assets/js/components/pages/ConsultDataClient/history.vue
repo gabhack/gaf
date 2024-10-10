@@ -3,74 +3,44 @@
         <div class="row">
             <div class="col-12">
                 <template v-if="id_consult === null">
-                    <h2 class="title text-center">Historial de Consultas</h2>
-                    <div class="form-group col-md-2">
-                        <label for="">Buscar</label>
-                        <input class="form-control" placeholder="Buscar" v-model="filter" />
+                    <div class="mb-4 mt-5">
+                        <h2 class="title"><strong>Listado de Consultas</strong></h2>
                     </div>
-                    <div class="d-flex">
-                        <div class="mr-2">
-                            <label class="mr-2" for="inline-form-custom-select-pref">Fechas</label>
-                            <div class="d-flex align-items-center">
-                                <b-form-input
-                                    id="input-anio"
-                                    placeholder="Año"
-                                    v-model.number="queryParams.empresaOUsuario"
-                                    type="number"
-                                    class="small-input"
-                                />
-                                <strong class="mx-2">-</strong>
-                                <b-form-input
-                                    id="input-mes"
-                                    placeholder="Mes"
-                                    v-model.number="queryParams.empresaOUsuario"
-                                    type="number"
-                                    class="small-input"
-                                />
-                            </div>
-                        </div>
-                        <b-form-group label="Tipo de Pagadurias" label-for="select-pagadurias" class="mr-2">
-                            <b-form-select
-                                id="select-pagadurias"
-                                :options="pagaduriasOptions"
-                                v-model="queryParams.pagadurias"
-                            ></b-form-select>
-                        </b-form-group>
-                        <b-form-group label="Empresa o Usuario" label-for="input-empresa-usuario" class="mr-2">
+                    <div class="d-flex mt-3 mb-3" justified style="color:#ffff; border: 1px solid #b9bdc3; border-radius: 10px">
+                        <div class="form-group col-md-3">
+                            <label for="" style="color: black;">Desde</label>
                             <b-form-input
-                                id="input-empresa-usuario"
-                                placeholder="Empresa o Usuario"
-                                v-model="queryParams.empresaOUsuario"
-                            ></b-form-input>
-                        </b-form-group>
-                        <b-form-group label="Resultado" label-for="input-resultado" class="mr-2">
-                            <b-form-input
-                                id="input-resultado"
-                                placeholder="Resultado"
-                                v-model="queryParams.resultado"
-                            ></b-form-input>
-                        </b-form-group>
-                        <b-form-group label="Tipo de Consulta" label-for="select-tipo-consulta" class="mr-2">
-                            <b-form-select
-                                id="select-tipo-consulta"
-                                :options="tipoConsultaOptions"
-                                v-model="queryParams.tipoConsulta"
-                            ></b-form-select>
-                        </b-form-group>
-                        <div class="align-self-end mb-3 d-flex">
-                            <b-button type="submit" variant="info" class="mr-2">
-                                <i class="fa fa-filter" aria-hidden="true"></i>
-                                Filtrar
-                            </b-button>
-                            <b-button @click="exportToPDF" variant="danger">
-                                <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-                                Exportar a PDF
-                            </b-button>
+                                id="input-anio"
+                                placeholder="Desde"
+                                v-model.number="queryParams.empresaOUsuario"
+                                type="date"
+                                class="small-input"
+                                style="border: 1px solid #b9bdc3; background-color:white; border-radius: 10px"
+                            />
                         </div>
+                        <div class="form-group col-md-3">
+                            <label for="" style="color: black;">Hasta</label>
+                            <b-form-input
+                                id="input-mes"
+                                placeholder="Hasta"
+                                v-model.number="queryParams.empresaOUsuario"
+                                type="date"
+                                class="small-input"
+                                style="border: 1px solid #b9bdc3; background-color:white; border-radius: 10px"
+                            />
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="" style="color: black;">Documento</label>
+                            <input style="border: 1px solid #b9bdc3; background-color:white; border-radius: 10px" class="form-control" placeholder="Documento" v-model="filter" />
+                        </div>
+                        <b-button type="submit" class="align-self-end mb-3 ml-5" variant="success" id="filtrarButton" style="border: 1px solid #b9bdc3; border-radius: 10px">
+                            <i class="fa fa-filter" aria-hidden="true"></i>
+                            Filtrar
+                        </b-button>
+                        
                     </div>
-
                     <div class="table-responsive">
-                        <b-table style="border: 1px solid #b9bdc3; border-radius: 10px" responsive bordered striped hover :fields="fields" :items="HistoryConsult.data" :busy="isBusy">
+                        <b-table head-variant="dark" style="border: 1px solid #b9bdc3; border-radius: 10px" responsive bordered striped hover :fields="fields" :items="HistoryConsult.data" :busy="isBusy">
                             <template #table-busy>
                                 <div class="text-center text-black-pearl my-2">
                                     <b-spinner class="align-middle"></b-spinner>
@@ -234,7 +204,6 @@
                 </template>
                 <template v-else>
                     <button class="btn btn-primary mb-4" v-on:click="back">Volver</button>
-
                     <detail-history-component-draft :id="id_consult" :user="user" :pagaduriaType="pagaduriaType" />
                 </template>
             </div>
@@ -259,23 +228,8 @@ export default {
             pagaduriaType: '',
             fields: [
                 {
-                    key: 'id',
-                    label: 'Id',
-                    sortable: true
-                },
-                {
                     key: 'created_at',
                     label: 'Fecha y Hora',
-                    sortable: true
-                },
-                {
-                    key: 'ced',
-                    label: 'Cedula',
-                    sortable: true
-                },
-                {
-                    key: 'nombre',
-                    label: 'Nombre Completo',
                     sortable: true
                 },
                 {
@@ -289,40 +243,15 @@ export default {
                     sortable: true
                 },
                 {
-                    key: 'score',
-                    label: 'Puntaje',
+                    key: 'ced',
+                    label: 'Cedula',
                     sortable: true
                 },
                 {
-                    key: 'cuotacredito',
-                    label: 'Cuota',
+                    key: 'nombre',
+                    label: 'Nombre Completo',
                     sortable: true
                 },
-                {
-                    key: 'monto',
-                    label: 'Monto',
-                    sortable: true
-                },
-                {
-                    key: 'estado',
-                    label: 'Resultado',
-                    sortable: true
-                },
-                {
-                    key: 'causal',
-                    label: 'Causal',
-                    sortable: true
-                },
-                {
-                    key: 'consultant_name',
-                    label: 'Usuario',
-                    sortable: true
-                },
-                {
-                    key: 'consultant_email',
-                    label: 'Empresa',
-                    sortable: true
-                }
             ],
             pagaduriasOptions: [
                 { text: 'Pagadurias', value: null },
