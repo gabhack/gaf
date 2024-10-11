@@ -1,10 +1,9 @@
 <template>
     <div class="col-6">
         <div class="panel mb-3">
-            <div class="panel-heading">
-                <b>INFORMACIÓN LABORAL</b>
-            </div>
-            <div class="panel-body">
+            <h3 class="heading-title mb-0 pt-5">Información laboral</h3>
+
+            <div class="panel-body pt-0">
                 <div class="row">
                     <!--============================
                             FOPEP
@@ -98,7 +97,6 @@
                         </div>
                     </template>
 
-                    
                     <!--============================
                         FIDUPREVISORA
                     ==============================-->
@@ -135,140 +133,13 @@
                     <!-- DATAMES SED -->
                     <template v-if="datamesfidu || datamessedvalle || pagaduriaType === 'FOPEP'"> </template>
                     <template v-else-if="datamesSed">
-                        <div class="col-6">
-                            <b class="panel-label">FECHA INGRESO:</b>
-                            <div>
-                                <p class="panel-value">{{ datamesSed.fecha_ingreso || datamesSed.fchingreso }}</p>
-                            </div>
-                        </div>
-
-                        <div class="col-6">
-                            <b class="panel-label">FECHA DE INGRESO NÓMINA:</b>
-                            <div>
-                                <p class="panel-value">{{ datamesSed.fecha_ingreso_nomina || datamesSed.fecha_ingreso }}</p>
-                            </div>
-                        </div>
-
-                        <div class="col-6">
-                            <b class="panel-label">FECHA DE INICIO:</b>
-                            <div>
-                                <p class="panel-value">{{ datamesSed.fecha_inicio || datamesSed.fecha_ingreso  }}</p>
-                            </div>
-                        </div>
-
-                        <div class="col-6">
-                            <b class="panel-label">ANTIGUEDAD LABORAL:</b>
-                            <div>
-                                <p class="panel-value">{{ antiguedad }} años</p>
-                            </div>
-                        </div>
-
-                        <!-- <div class="col-6">
-                            <b class="panel-label">PUESTO DE TRABAJO:</b>
-                            <div>
-                                <p class="panel-value">{{ datamesSed.puesto_trabajo }}</p>
-                            </div>
-                        </div> -->
-
-                        <div class="col-6">
-                            <b class="panel-label">CARGO:</b>
-                            <div>
-                                <p class="panel-value">{{ datamesSed.cargo}}</p>
-                            </div>
-                        </div>
-
-                        <!-- <div class="col-6">
-                            <b class="panel-label"> ENCARGO:</b>
-                            <div>
-                                <p class="panel-value">{{ coupons.encargo }}</p> 
-                                
-                            </div>
-                        </div> -->
-
-                        <!-- <div class="col-6">
-                            <b class="panel-label"> FECHA DE NOMBRAMIENTO:</b>
-                            <div>
-                                <p class="panel-value">{{ datamesSed.fecha_nombramiento }}</p>
-                            </div>
-                        </div> -->
-
-                        <!-- <div class="col-6">
-                            <b class="panel-label"> FECHA DE POSESIÓN:</b>
-                            <div>
-                                <p class="panel-value">{{ datamesSed.fecha_posesion }}</p>
-                            </div>
-                        </div> -->
-
-                        <!-- <div class="col-6">
-                            <b class="panel-label"> CONTINUIDAD:</b>
-                            <div>
-                                <p class="panel-value">{{ datamesSed.continuidad }}</p>
-                            </div>
-                        </div> -->
-
-                        <!-- <div class="col-6">
-                            <b class="panel-label"> FECHA DE CONTINUIDAD:</b>
-                            <div>
-                                <p class="panel-value" v-if="datamesSed.fecha_continuidad === 'nan' "> </p>
-                                <p class="panel-value" v-else>{{ datamesSed.fecha_continuidad }}</p>
-                            </div>
-                        </div> -->
-
-                        <div class="col-6">
-                            <b class="panel-label"> TIPO DE CONTRATO:</b>
-                            <div>
-                                <p class="panel-value">{{ datamesSed.tipo_contrato }}</p>
-                            </div>
-                        </div>
-
-                        <div class="col-6">
-                            <b class="panel-label"> SITUACIÓN LABORAL:</b>
-                            <div>
-                                <p class="panel-value">{{ datamesSed.situacion_laboral}}</p>
-                            </div>
-                        </div>
-
-                        <!-- <div class="col-6">
-                            <b class="panel-label"> ESTADO DE VINCULACIÓN:</b>
-                            <div>
-                                <p class="panel-value">{{ datamesSed.estado_vinculacion}}</p>
-                            </div>
-                        </div> -->
-
-                        <!-- <div class="col-6">
-                            <b class="panel-label"> SEDE PRINCIPAL:</b>
-                            <div>
-                                <p class="panel-value">{{ datamesSed.sede_principal}}</p>
-                            </div>
-                        </div> -->
-
-                        <!-- <div class="col-6">
-                            <b class="panel-label"> SEDE LABORAL:</b>
-                            <div>
-                                <p class="panel-value">{{ datamesSed.sede_laboral }}</p>
-                            </div>
-                        </div> -->
-
-                        <!-- <div class="col-6">
-                            <b class="panel-label"> PROFESIÓN:</b>
-                            <div>
-                                <p class="panel-value">{{ datamesSed.profesion }}</p>
-                            </div>
-                        </div> -->
-
-                        <div class="col-6">
-                            <b class="panel-label"> ÁREA DE DESEMPEÑO:</b>
-                            <div>
-                                <p class="panel-value">{{ datamesSed.area_desempeño }}</p>
-                            </div>
-                        </div>
-
-                        <!-- <div class="col-6">
-                            <b class="panel-label"> MESADA COMPARTIDA:</b>
-                            <div>
-                                <p class="panel-value">{{ datamesSed.mesa_compartida }}</p>
-                            </div>
-                        </div> -->
+                        <b-table
+                            :items="datamesSedArray"
+                            :fields="fields"
+                            class="mt-3"
+                            responsive
+                            thead-class="table-header-nowrap"
+                        ></b-table>
                     </template>
 
                     <div
@@ -330,6 +201,68 @@ import { mapState, mapGetters } from 'vuex';
 
 export default {
     name: 'EmploymentHistory',
+    data() {
+        return {
+            fields: [
+                {
+                    key: 'fecha_ingreso',
+                    label: 'Fecha ingreso',
+                    sortable: false,
+                    formatter: value => {
+                        return value || '--';
+                    }
+                },
+                {
+                    key: 'fecha_ingreso_nomina',
+                    label: 'Fecha ingreso nómina',
+                    sortable: false,
+                    formatter: value => {
+                        return value || '--';
+                    }
+                },
+                {
+                    key: 'fecha_inicio',
+                    label: 'Fecha de inicio',
+                    sortable: false,
+                    formatter: value => {
+                        return value || '--';
+                    }
+                },
+                {
+                    key: 'antiguedad',
+                    label: 'Antiguedad laboral',
+                    sortable: false,
+                    formatter: value => {
+                        return value || '--';
+                    }
+                },
+                {
+                    key: 'cargo',
+                    label: 'Cargo',
+                    sortable: false,
+                    formatter: value => {
+                        return value || '--';
+                    }
+                },
+                {
+                    key: 'tipo_contrato',
+                    label: 'Tipo de contrato',
+                    sortable: false,
+                    formatter: value => {
+                        return value || '--';
+                    }
+                },
+                {
+                    key: 'situacion_laboral',
+                    label: 'Situación laboral',
+                    sortable: false,
+                    formatter: value => {
+                        return value || '--';
+                    }
+                }
+            ]
+        };
+    },
     props: ['fechavinc', 'datamessedvalle', 'datamesfidu', 'datamessemcali', 'user'],
     computed: {
         ...mapState('datamesModule', ['datamesSed']),
@@ -340,8 +273,11 @@ export default {
         fechaIngreso() {
             return this.datamesSed.fecha_ingreso;
         },
-        antiguedad(){
+        antiguedad() {
             return this.calcularAntiguedad(this.fechaIngreso);
+        },
+        datamesSedArray() {
+            return [this.datamesSed];
         }
     },
 
@@ -358,8 +294,41 @@ export default {
                 antiguedad = antiguedad - 1;
             }
             return antiguedad;
-            
-        },
+        }
     }
 };
 </script>
+<style lang="scss" scoped>
+::v-deep .table-responsive {
+    margin-left: -3px;
+}
+::v-deep .table {
+    & thead {
+        background-color: #3a5659;
+        white-space: nowrap;
+        color: white;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 18.23px;
+        & tr th {
+            padding: 12px 40px;
+            text-align: center;
+            min-height: 50px !important;
+            & div {
+                min-height: 50px;
+                display: flex;
+                align-items: center;
+            }
+        }
+    }
+    & tbody {
+        background-color: #fff;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 18.23px;
+        & td {
+            text-align: center;
+        }
+    }
+}
+</style>
