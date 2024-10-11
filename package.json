@@ -33,6 +33,7 @@
     "print-js": "^1.6.0",
     "pusher-js": "^8.4.0-rc2",
     "toastr": "^2.1.4",
+    "vue-apexcharts": "^1.6.2",
     "vue-currency-filter": "^5.2.0",
     "vue-iframes": "0.0.19",
     "vue-loading-overlay": "^3.0.1",

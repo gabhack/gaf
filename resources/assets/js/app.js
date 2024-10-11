@@ -62,6 +62,7 @@ Vue.component('Hego', require('./components/pages/Hego').default);
 Vue.component('HegoInformation', require('./components/pages/HegoInformation').default);
 Vue.component('Politicas', require('./components/pages/Politicas').default);
 Vue.component('download-pdf-button', require('./components/DownloadPdfButton').default);
+Vue.component('Dashboard', require('./components/pages/Dashboard/Dashboard').default);
 
 // Pages
 Vue.component('ConsultasIndex', require('./components/pages/Consultas/Index').default);
