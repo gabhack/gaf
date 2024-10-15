@@ -89,7 +89,6 @@
                         <CustomButton text="Prospectar" @click="getCoupons"/>
                         <CustomButton text="Exportar a Excel" @click="exportToExcel"/>    
                     </div>
-
                 </div>
                 <!-- Mensajes de error -->
                 <div

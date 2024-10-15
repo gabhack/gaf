@@ -41,7 +41,6 @@
                         </b-col>
                     </b-row>
                 </b-card>
-
                 <b-card class="usr-camp-card mb-3 mb-md-0">
                     <b-row>
                         <b-col cols="6" class="d-flex align-items-center">
@@ -298,5 +297,4 @@ label {
     font-weight: 500;
     line-height: 23.44px;
 }
-
 </style>
