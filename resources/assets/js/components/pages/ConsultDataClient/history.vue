@@ -38,6 +38,26 @@
                                     Filtrar
                             </CustomButton>
                         </div>
+                        <div class="form-group col-md-3">
+                            <label for="" style="color: black;">Hasta</label>
+                            <b-form-input
+                                id="input-mes"
+                                placeholder="Hasta"
+                                v-model.number="queryParams.empresaOUsuario"
+                                type="date"
+                                class="small-input"
+                                style="border: 1px solid #b9bdc3; background-color:white; border-radius: 10px"
+                            />
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="">Documento</label>
+                            <input style="border: 1px solid #b9bdc3; background-color:white; border-radius: 10px" class="form-control" placeholder="Documento" v-model="filter" />
+                        </div>
+                        <b-button type="submit" class="mr-2 align-self-end mb-3 ml-5" variant="success" id="filtrarButton" style="border: 1px solid #b9bdc3; border-radius: 10px">
+                            <i class="fa fa-filter" aria-hidden="true"></i>
+                            Filtrar
+                        </b-button>
+                        
                     </div>
                     <div class="table-responsive">
                         <b-table head-variant="dark" style="border: 1px solid #b9bdc3; border-radius: 10px" responsive bordered striped hover :fields="fields" :items="HistoryConsult.data" :busy="isBusy">
