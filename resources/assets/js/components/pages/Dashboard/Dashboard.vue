@@ -1,7 +1,7 @@
 <template>
     <div class="pt-3">
         <b-row>
-            <b-col cols="12" md="7">
+            <b-col cols="12" md="7" class="pb-3 pb-md-0">
                 <b-card class="mb-2" style="height: 100%;">
                     <div>
                         <b-row>
@@ -9,8 +9,8 @@
                                 <label class="ml-3 mb-0 table">Cantidad de consultas</label
                                 ><span class="num-consultas">238</span>
                             </b-col>
-                            <b-col cols="12" md="4" class="d-flex align-items-center justify-content-end">
-                                <CustomButton @click="showMore('table')"
+                            <b-col cols="12" md="4" class="d-flex align-items-center justify-content-start justify-content-md-end">
+                                <CustomButton @click="showMore('table')" class="ml-3 ml-md-0"
                                     >Ver todo <ArrowRight class="ml-2" />
                                 </CustomButton>
                             </b-col>
@@ -20,7 +20,7 @@
                 </b-card>
             </b-col>
             <b-col cols="12" md="5" class="d-flex flex-column justify-content-between">
-                <b-card class="usr-camp-card">
+                <b-card class="usr-camp-card mb-3 mb-md-0">
                     <b-row>
                         <b-col cols="6" class="d-flex align-items-center">
                             <Users class="mr-2" />
@@ -41,8 +41,7 @@
                         </b-col>
                     </b-row>
                 </b-card>
-
-                <b-card class="usr-camp-card">
+                <b-card class="usr-camp-card mb-3 mb-md-0">
                     <b-row>
                         <b-col cols="6" class="d-flex align-items-center">
                             <Compania class="mr-2" />
@@ -67,9 +66,33 @@
         </b-row>
 
         <b-row class="pt-5">
-          <b-col cols="12" class="d-flex">
+          <b-col cols="12" class="d-flex ">
             <h4 class="mes-consulta">Consultas AMI: <b>{{ mesActual }}</b></h4> 
           </b-col>
+        </b-row>
+
+        <b-row>
+            <b-col cols="12" md="4" class="pb-3 pb-md-0">
+                <b-card class="relative-card silver">
+                    <div class="visitas"><b>SILVER</b></div>
+                    <div class="d-flex align-items-center" style="gap: 16px;"><span class="num-consultas">15</span> <span class="visitas">visitas</span></div>
+                    <div class="absolute-content"><span class="porcentaje" style="color: #04B53F;">+33,45% <GoUpArrow class="ml-1"/></span></div>
+                </b-card>
+            </b-col>
+            <b-col cols="12" md="4" class="pb-3 pb-md-0">
+                <b-card class="relative-card gold">
+                    <div class="visitas"><b>GOLD</b></div>
+                    <div class="d-flex align-items-center" style="gap: 16px;"><span class="num-consultas">15</span><span class="visitas">visitas</span> </div>
+                    <div class="absolute-content"><span class="porcentaje" style="color: #F34235;">-12,5% <GoDownArrow class="ml-1"/></span></div>
+                </b-card>
+            </b-col>
+            <b-col cols="12" md="4" class="pb-3 pb-md-0">
+                <b-card class="relative-card diamond">
+                    <div class="visitas"><b>DIAMOND</b></div>
+                    <div class="d-flex align-items-center" style="gap: 16px;"><span class="num-consultas">15</span> <span class="visitas">visitas</span></div>
+                    <div class="absolute-content"><span class="porcentaje" style="color: #04B53F;">+52,1% <GoUpArrow class="ml-1"/></span></div>
+                </b-card>
+            </b-col>
         </b-row>
     </div>
 </template>
@@ -79,13 +102,18 @@ import CustomButton from '../../customComponents/CustomButton.vue';
 import ArrowRight from '../../icons/ArrowRight.vue';
 import Users from '../../icons/users.vue';
 import Compania from '../../icons/Compania.vue';
+import GoDownArrow from '../../icons/GoDownArrow.vue';
+import GoUpArrow from '../../icons/GoUpArrow.vue';
+
 export default {
     components: {
         VueApexCharts,
         CustomButton,
         Users,
         Compania,
-        ArrowRight
+        ArrowRight,
+        GoDownArrow,
+        GoUpArrow
     },
     data() {
         return {
@@ -132,7 +160,7 @@ export default {
                 plotOptions: {
                     bar: {
                         distributed: true,
-                        borderRadius: 4,
+                        borderRadius: 0,
                         horizontal: false
                     }
                 },
@@ -234,5 +262,40 @@ label {
   font-size: 25px;
   font-weight: 500;
   line-height: 32.55px;
+}
+.relative-card{
+    position: relative;
+    & .card-body{
+        min-height: 150px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    & .absolute-content{
+        position: absolute; 
+        bottom: 7%;
+        right: 5%;
+
+
+        & span.porcentaje{
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 18.23px;
+        }
+    }
+    &.silver{
+        background-color: #edf8fe;
+    }
+    &.gold{
+        background-color: #fcf6e8;
+    }
+    &.diamond{
+        background-color: #edf8fe;
+    }
+}
+.visitas{
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 23.44px;
 }
 </style>

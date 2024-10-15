@@ -1,5 +1,5 @@
 <template>
-    <div class="container-fluid">
+    <div class="container-fluid" style="background-color: #f9fafc;">
         <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="true" color="#0CEDB0" />
 
         <b-toast id="toast-incapacidad-month" title="Alerta del Sistema" solid auto-hide-delay="10000" variant="info">
@@ -17,10 +17,11 @@
                             </h2>
                         </div>
                     </div>
-                    <button type="button" v-on:click="print" class="btn btn-black-pearl ml-auto px-3">
+                    <!-- BOTON DOWNLOAD ORIGINAL -->
+                    <!-- <button type="button" v-on:click="print" class="btn btn-black-pearl ml-auto px-3">
                         <span class="mr-1">Descargar PDF</span>
                         <DownloadIcon fill="#fff" />
-                    </button>
+                    </button> -->
                 </div>
             </div>
 
@@ -72,7 +73,7 @@
                         pagaduriaType == 'SEMSAHAGUN'" />-->
 
                 <DatamesData
-                    class="col-12 col-md-6"
+                    class="col-12"
                     v-if="
                         pagaduriaType == 'SEDCHOCO' ||
                         pagaduriaType == 'SEDVALLE' ||
@@ -182,13 +183,13 @@
                 ==============================-->
                 <template v-if="fechavinc">
                     <EmploymentHistory2
-                        class="col-12 col-md-6"
+                        class="col-12"
                         :fechavinc="fechavinc"
                         :datamesFidu="datamesFidu"
                         :user="user"
                     />
                     <EmploymentHistory
-                        class="col-12 col-md-6"
+                        class="col-12"
                         :fechavinc="fechavinc"
                         :datamesFidu="datamesFidu"
                         :datamessemcali="datamessemcali"
@@ -196,7 +197,7 @@
                     />
                     <Detallecliente :totales="totales" />
                 </template>
-
+                
                 <template v-if="showOthers">
                     <DescapliEmpty
                         v-if="
@@ -301,7 +302,7 @@
                         "
                         :disabledProspect="disabledProspect"
                     />
-
+                    <hr class="divider" >
                     <!--===================================
                             OBLIGACIONES VIGENTES EN MORA
                     ========================================-->
@@ -310,7 +311,7 @@
 
                     <EmbargosEmpty v-if="pagaduriaType == 'SED'" :embargosempty="embargosempty" />
                     <Embargos v-else />
-
+                    <hr class="divider" >
                     <!--===================================
                             LIQUIDACIONES
                     ========================================-->
@@ -320,13 +321,15 @@
                     /> -->
                     <DescuentosEmpty v-if="pagaduriaType == 'SED'" :descuentosempty="descuentosempty" />
                     <Descuentos v-else />
-
+                    <hr class="divider" >
                     <div class="col-12">
-                        <b-button class="mb-3" variant="black-pearl" @click="visadoFunction">Visar</b-button>
+                        <CustomButton text="Visar" style="width: 164px;" @click="visadoFunction"/>
+                        <!-- <b-button class="mb-3" variant="black-pearl" @click="visadoFunction">Visar</b-button> -->
                     </div>
+                    
                 </template>
 
-                <Others
+                <!-- <Others
                     v-if="showOthers && pagadurias"
                     :pagaduriaType="pagaduriaType"
                     :pagadurias="pagadurias"
@@ -335,7 +338,7 @@
                     :descnoap="descnoap"
                     :embargossedvalle="embargossedvalle"
                     :user="user"
-                />
+                /> -->
             </div>
         </div>
     </div>
@@ -350,7 +353,7 @@ import FormConsult from './FormConsult';
 import EmploymentHistory from './EmploymentHistory';
 import EmploymentHistory2 from './EmploymentHistory2';
 import DatamesComponent from './Datames.vue';
-
+import CustomButton from '../../customComponents/CustomButton.vue';
 import DatamesData from './DatamesData';
 import DatamesData2 from './DatamesData2';
 import DatamesFidu from './DatamesFidu';
@@ -403,6 +406,7 @@ export default {
         Descuentossemsahagun,
         DescuentosEmpty,
         EmbargosEmpty,
+        CustomButton,
         Loading
     },
 
@@ -811,5 +815,13 @@ export default {
 
 .tables-space {
     margin-top: 15px !important;
+}
+
+.divider{
+    width: 100%;             
+    height: 2px;             
+    background-color: #70777f;   
+    border: none;           
+    margin: 20px 12px;        
 }
 </style>

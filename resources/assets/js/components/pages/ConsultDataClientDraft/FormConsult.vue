@@ -1,82 +1,121 @@
 <template>
     <div class="panel mb-3 col-md-12">
-        <div class="panel-heading">
+        <!-- <div class="panel-heading">
             <b>REALIZAR CONSULTA</b>
-        </div>
-        <div class="panel-body">
+        </div> -->
+        <b-row>
+            <b-col cols="6">
+                <h3 class="heading-title">Realizar consulta</h3>
+            </b-col>
+            <b-col cols="6" class="d-flex justify-content-end align-items-center">
+                <CustomButton :class="'white'"> Descargar PDF <Download class="ml-2" /> </CustomButton>
+            </b-col>
+        </b-row>
+        <div class="panel-body px-0">
             <loading :active.sync="isLoading" color="#0CEDB0" :can-cancel="true" :is-full-page="true" />
-            <div class="row">
-                <div class="col-6" style="display: grid; align-items: end">
-                    <b class="panel-label">CÉDULA:</b>
-                    <input required class="form-control text-center" type="number" v-model="dataclient.doc" />
-                </div>
-                <div class="col-6">
-                    <b class="panel-label">NOMBRES Y APELLIDOS:</b>
-                    <input required class="form-control text-center" type="text" v-model="dataclient.name" />
-                </div>
-                <div class="col-6">
-                    <b class="panel-label">CUOTA DESEADA:</b>
+            <b-row>
+                <b-col cols="12" md="4" class="mb-md-4">
+                    <b class="panel-label mb-2">Cédula (*)</b>
                     <input
                         required
-                        class="form-control text-center"
+                        class="form-control2"
+                        placeholder="N° de documento"
+                        type="number"
+                        v-model="dataclient.doc"
+                    />
+                </b-col>
+                <b-col cols="12" md="4">
+                    <b class="panel-label mb-2">Nombres y apellidos (*)</b>
+                    <input
+                        required
+                        class="form-control2"
+                        placeholder="Ingrese nombre completo"
+                        type="text"
+                        v-model="dataclient.name"
+                    />
+                </b-col>
+                <b-col cols="12" md="4">
+                    <b class="panel-label mb-2">Monto (*)</b>
+                    <input
+                        required
+                        class="form-control2"
+                        placeholder="Ingrese un monto"
+                        type="text"
+                        v-model.number="dataclient.monto"
+                    />
+                </b-col>
+                <b-col cols="12" md="4" class="mb-md-4">
+                    <b class="panel-label mb-2">Cuota deseada (*)</b>
+                    <input
+                        required
+                        class="form-control2"
+                        placeholder="Cantidad de cuotas"
                         type="number"
                         v-model.number="dataclient.cuotadeseada"
                     />
-                </div>
-                <div class="col-6" style="display: grid; align-items: end">
-                    <b class="panel-label">MONTO:</b>
-                    <input required class="form-control text-center" type="text" v-model.number="dataclient.monto" />
-                </div>
-                <div class="col-6">
-                    <b class="panel-label">PLAZO:</b>
-                    <input required class="form-control text-center" type="text" />
-                </div>
+                </b-col>
+                <b-col cols="12" md="4">
+                    <b class="panel-label mb-2">Plazo (*)</b>
+                    <input required class="form-control2" type="text" placeholder="Ingrese el plazo" />
+                </b-col>
+            </b-row>
+            <b-row>
+                <b-col cols="12" md="4" v-if="!dataclient.pagadurias && !flag">
+                    <CustomButton text="Consultar Pagadurias" @click="getAllPagadurias" />
+                </b-col>
 
-                <div class="col-6">
-                    <b class="panel-label">PAGADURIAS:</b>
-                    <b-form-select
-                        v-if="dataclient.pagadurias"
-                        v-model="dataclient.pagaduria"
-                        class="text-center"
-                        required
-                        @change="modalConfirmConsultPag"
-                    >
-                        <option :value="null" disabled hidden>Elija una pagaduria</option>
-                        <!-- <template v-for="type in pagaduriasTypes"> -->
-                            <option v-for="type in pagaduriasTypes" v-if="dataclient.pagadurias[type.key]" :value="type.value" :key="type.key">
+                <b-col cols="12" md="4" v-else>
+                    <div v-if="!flag">
+                        <h3 style="padding-bottom: 24px;" class="heading-title">Consultar pagadurias</h3>
+                        <b class="panel-label mb-2">Pagadurias</b>
+                        <b-form-select
+                            v-if="dataclient.pagadurias"
+                            v-model="dataclient.pagaduria"
+                            required
+                            @change="modalConfirmConsultPag"
+                        >
+                            <option :value="null" disabled hidden>Elija una pagaduria</option>
+                            <option
+                                v-for="type in pagaduriasTypes"
+                                v-if="dataclient.pagadurias[type.key]"
+                                :value="type.value"
+                                :key="type.key"
+                            >
                                 {{ type.label }}
                             </option>
-                        <!-- </template> -->
-                    </b-form-select>
+                        </b-form-select>
 
-                    <b-form-select v-else v-model="dataclient.pagaduria" class="text-center">
-                        <option :value="null" disabled>Ingresa una cedula y presiona consultar</option>
-                    </b-form-select>
-                </div>
-
-                <div class="col-6 mt-4">
-                    <b-button
+                        <b-form-select v-else v-model="dataclient.pagaduria" class="text-center">
+                            <option :value="null" disabled>Ingresa una cedula y presiona consultar</option>
+                        </b-form-select>
+                    </div>
+                </b-col>
+            </b-row>
+        </div>
+    </div>
+</template>
+<!-- <b-button
                         type="button"
                         variant="black-pearl"
                         v-if="dataclient.doc && dataclient.name"
                         class="px-4"
                         @click="getAllPagadurias"
-                    >
-                        CONSULTAR PAGADURIAS
-                    </b-button>
-                </div>
-            </div>
-        </div>
-    </div>
-</template>
-
+   >
+    CONSULTAR PAGADURIAS
+</b-button> -->
 <script>
 import { mapState, mapMutations } from 'vuex';
-
+import CustomButton from '../../customComponents/CustomButton.vue';
+import Download from '../../icons/Download.vue';
 export default {
     name: 'FormConsult',
+    components: {
+        CustomButton,
+        Download
+    },
     data() {
         return {
+            flag: false,
             dataclient: {
                 doc: '',
                 name: '',
@@ -112,7 +151,7 @@ export default {
 
             if (this.dataclient.pagaduria) {
                 const type = this.pagaduriasTypes.find(type => type.value === this.dataclient.pagaduria);
-                
+
                 const pagaduria = this.dataclient.pagadurias[type.key];
                 this.dataclient.pagaduriaKey = type.key.slice(7).toLowerCase();
                 pagaduria.documentType = 'documentType';
@@ -133,25 +172,34 @@ export default {
             this.getAllPagadurias();
         },
         async getAllPagadurias() {
-            this.isLoading = true;
-            this.dataclient.pagadurias = null;
+            if (this.dataclient.doc && this.dataclient.name) {
+                this.isLoading = true;
+                this.dataclient.pagadurias = null;
 
-            this.setDatamesSed(null);
-            this.setPagaduriaType('');
-            this.setSelectedPeriod('');
+                this.setDatamesSed(null);
+                this.setPagaduriaType('');
+                this.setSelectedPeriod('');
 
-            const response = await axios.get(`/pagadurias/per-doc/${this.dataclient.doc}`);
-            console.log(response.data);
-            if (Object.keys(response.data).length > 0) {
-                this.dataclient.pagadurias = response.data;
-                this.setCuotaDeseada(this.dataclient.cuotadeseada);
+                const response = await axios.get(`/pagadurias/per-doc/${this.dataclient.doc}`);
+                console.log(response.data);
+                if (Object.keys(response.data).length > 0) {
+                    this.dataclient.pagadurias = response.data;
+                    this.setCuotaDeseada(this.dataclient.cuotadeseada);
+                } else {
+                    toastr.info('No tenemos información de este documento en el momento');
+                }
+
+                this.isLoading = false;
+                console.log(this.pagaduriasTypes);
+                return Promise.resolve(response.data);
             } else {
-                toastr.info('No tenemos información de este documento en el momento');
+                this.$bvToast.toast(`LLenar los campos obligatorios`, {
+                    title: '¡Error!',
+                    autoHideDelay: 5000,
+                    solid: true,
+                    variant: 'danger'
+                });
             }
-
-            this.isLoading = false;
-            console.log(this.pagaduriasTypes);
-            return Promise.resolve(response.data);
         },
         modalConfirmConsultPag(val) {
             this.$bvModal
@@ -173,8 +221,11 @@ export default {
                         if (status != 200) return;
                         this.$emit('emitInfo', this.dataclient);
                         console.log(this.dataclient);
+                        this.dataclient.pagadurias = null;
+                        this.flag = true;
                     });
                 });
+                
         },
         async saveVisados() {
             try {
@@ -215,3 +266,10 @@ export default {
     }
 };
 </script>
+<style scoped lang="scss">
+.panel-label {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 18.23px;
+}
+</style>
