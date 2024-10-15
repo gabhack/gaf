@@ -14,8 +14,7 @@
                                 placeholder="Desde"
                                 v-model.number="queryParams.empresaOUsuario"
                                 type="date"
-                                class="small-input"
-                                style="border: 1px solid #b9bdc3; background-color:white; border-radius: 10px"
+                                class="small-input form-control2"
                             />
                         </div>
                         <div class="form-group col-md-3">
@@ -25,19 +24,20 @@
                                 placeholder="Hasta"
                                 v-model.number="queryParams.empresaOUsuario"
                                 type="date"
-                                class="small-input"
-                                style="border: 1px solid #b9bdc3; background-color:white; border-radius: 10px"
+                                class="small-input form-control2"
+                            
                             />
                         </div>
                         <div class="form-group col-md-3">
                             <label for="" style="color: black;">Documento</label>
-                            <input style="border: 1px solid #b9bdc3; background-color:white; border-radius: 10px" class="form-control" placeholder="Documento" v-model="filter" />
+                            <input class="form-control2" placeholder="Documento" v-model="filter" />
                         </div>
-                        <b-button type="submit" class="align-self-end mb-3 ml-5" variant="success" id="filtrarButton" style="border: 1px solid #b9bdc3; border-radius: 10px">
-                            <i class="fa fa-filter" aria-hidden="true"></i>
-                            Filtrar
-                        </b-button>
-                        
+                        <div class="form-group col-md-3 mt-4 mr-5">
+                            <CustomButton>
+                                <i class="fa fa-filter" aria-hidden="true"></i>
+                                    Filtrar
+                            </CustomButton>
+                        </div>
                     </div>
                     <div class="table-responsive">
                         <b-table head-variant="dark" style="border: 1px solid #b9bdc3; border-radius: 10px" responsive bordered striped hover :fields="fields" :items="HistoryConsult.data" :busy="isBusy">
@@ -88,111 +88,111 @@
                                 <div class="modal-body">
                                     <div class="form-group">
                                         <label>Nombre</label>
-                                        <input disabled class="form-control" :value="detailHistory.nombre" />
+                                        <input disabled class="form-control2" :value="detailHistory.nombre" />
                                     </div>
 
                                     <div class="form-group">
                                         <label>Cedula</label>
-                                        <input disabled class="form-control" :value="detailHistory.ced" />
+                                        <input disabled class="form-control2" :value="detailHistory.ced" />
                                     </div>
 
                                     <div class="form-group">
                                         <label>Aprobado</label>
-                                        <input disabled class="form-control" :value="detailHistory.aprobado" />
+                                        <input disabled class="form-control2" :value="detailHistory.aprobado" />
                                     </div>
 
                                     <div class="form-group">
                                         <label>Cuota Compra</label>
-                                        <input disabled class="form-control" :value="detailHistory.ccompra" />
+                                        <input disabled class="form-control2" :value="detailHistory.ccompra" />
                                     </div>
 
                                     <div class="form-group">
                                         <label>Cantidad Libre Inversión</label>
-                                        <input disabled class="form-control" :value="detailHistory.clibinv" />
+                                        <input disabled class="form-control2" :value="detailHistory.clibinv" />
                                     </div>
 
                                     <div class="form-group">
                                         <label>Cantidad Maxima Incorporación</label>
-                                        <input disabled class="form-control" :value="detailHistory.cmaxincorp" />
+                                        <input disabled class="form-control2" :value="detailHistory.cmaxincorp" />
                                     </div>
 
                                     <div class="form-group">
                                         <label>Consecutivo</label>
                                         <input
                                             disabled
-                                            class="form-control"
+                                            class="form-control2"
                                             :value="detailHistory.conc ? detailHistory.conc : detailHistory.id"
                                         />
                                     </div>
 
                                     <div class="form-group">
                                         <label>Cuota Credito</label>
-                                        <input disabled class="form-control" :value="detailHistory.cuotacredito" />
+                                        <input disabled class="form-control2" :value="detailHistory.cuotacredito" />
                                     </div>
 
                                     <div class="form-group">
                                         <label>Entidad</label>
-                                        <input disabled class="form-control" :value="detailHistory.entidad" />
+                                        <input disabled class="form-control2" :value="detailHistory.entidad" />
                                     </div>
 
                                     <div class="form-group">
                                         <label>Estado</label>
-                                        <input disabled class="form-control" :value="detailHistory.estado" />
+                                        <input disabled class="form-control2" :value="detailHistory.estado" />
                                     </div>
 
                                     <div class="form-group">
                                         <label>Fecha Consulta AMI</label>
-                                        <input disabled class="form-control" :value="detailHistory.fconsultaami" />
+                                        <input disabled class="form-control2" :value="detailHistory.fconsultaami" />
                                     </div>
 
                                     <div class="form-group">
                                         <label>Fecha Respuesta</label>
-                                        <input disabled class="form-control" :value="detailHistory.frespuesta" />
+                                        <input disabled class="form-control2" :value="detailHistory.frespuesta" />
                                     </div>
 
                                     <div class="form-group">
                                         <label>Fecha Vinculación</label>
-                                        <input disabled class="form-control" :value="detailHistory.fvinculacion" />
+                                        <input disabled class="form-control2" :value="detailHistory.fvinculacion" />
                                     </div>
 
                                     <div class="form-group">
                                         <label>Pagare</label>
-                                        <input disabled class="form-control" :value="detailHistory.pagare" />
+                                        <input disabled class="form-control2" :value="detailHistory.pagare" />
                                     </div>
 
                                     <div class="form-group">
                                         <label>Plazo</label>
-                                        <input disabled class="form-control" :value="detailHistory.plazo" />
+                                        <input disabled class="form-control2" :value="detailHistory.plazo" />
                                     </div>
 
                                     <div class="form-group">
                                         <label>Porcentaje Incorporación</label>
-                                        <input disabled class="form-control" :value="detailHistory.porcincorp" />
+                                        <input disabled class="form-control2" :value="detailHistory.porcincorp" />
                                     </div>
 
                                     <div class="form-group">
                                         <label>Total Credito</label>
-                                        <input disabled class="form-control" :value="detailHistory.tcredito" />
+                                        <input disabled class="form-control2" :value="detailHistory.tcredito" />
                                     </div>
 
                                     <div class="form-group">
                                         <label>Tipo Consulta</label>
-                                        <input disabled class="form-control" :value="detailHistory.tipo_consulta" />
+                                        <input disabled class="form-control2" :value="detailHistory.tipo_consulta" />
                                     </div>
 
                                     <div class="form-group">
                                         <label>Tipo Vinculación</label>
-                                        <input disabled class="form-control" :value="detailHistory.tvinculacion" />
+                                        <input disabled class="form-control2" :value="detailHistory.tvinculacion" />
                                     </div>
 
                                     <div class="form-group">
                                         <label>Valor Credito</label>
-                                        <input disabled class="form-control" :value="detailHistory.vcredito" />
+                                        <input disabled class="form-control2" :value="detailHistory.vcredito" />
                                     </div>
 
                                     <div class="form-group">
                                         <label>vdesembolso</label>
-                                        <input disabled class="form-control" :value="detailHistory.vdesembolso" />
+                                        <input disabled class="form-control2" :value="detailHistory.vdesembolso" />
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -216,9 +216,13 @@
 import axios from 'axios';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import CustomButton from '../../customComponents/CustomButton.vue';
 
 export default {
     props: ['user'],
+    components:{
+        CustomButton
+    },
     data() {
         return {
             HistoryConsult: null,

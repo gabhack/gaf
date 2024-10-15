@@ -14,7 +14,7 @@
                                 v-model="pagaduria"
                                 list="lista-pagadurias"
                                 placeholder="Pagaduría"
-                                class="input_style_b"
+                                class="form-control2"
                             ></b-form-input>
                             <div class="estilo-datalist">
                                 <b-form-datalist
@@ -28,7 +28,7 @@
 
                     <div class="col-md-4">
                         <b-form-group label="ESTADO">
-                            <b-form-select class="input_style_b" v-model="selectedEstado" :options="estadosOptions"> </b-form-select>
+                            <b-form-select class="form-control2" v-model="selectedEstado" :options="estadosOptions"> </b-form-select>
                         </b-form-group>
                     </div>
 
@@ -36,14 +36,14 @@
 
                     <div class="col-md-4" v-if="selectedEstado === 'Al día' || selectedEstado === 'Todas'">
                         <b-form-group label="ENTIDAD (Banco o Financiera)">
-                            <b-form-input class="input_style_b" v-model="concept" placeholder="Concepto"></b-form-input>
+                            <b-form-input class="form-control2" v-model="concept" placeholder="Concepto"></b-form-input>
                         </b-form-group>
                     </div>
 
                     <div class="col-md-4" v-if="selectedEstado === 'En mora' || selectedEstado === 'Todas'">
                         <b-form-group label="CODIGO">
                             <b-form-input
-                                class="input_style_b"
+                                class="form-control2"
                                 type="text"
                                 v-model="mliquid"
                                 placeholder="Mensaje de liquidación"
@@ -54,7 +54,7 @@
                     <div class="col-md-4" v-if="selectedEstado === 'Embargado' || selectedEstado === 'Todas'">
                         <b-form-group label="ENTIDAD DEMANDANTE">
                             <b-form-input
-                                class="input_style_b"
+                                class="form-control2"
                                 v-model="entidadDemandante"
                                 placeholder="Entidad demandante"
                                 required
@@ -67,7 +67,7 @@
                         <b-form-group label="MES">
                             <div class="d-flex">
                                 <b-form-input
-                                    class="input_style_b mr2"
+                                    class="form-control2 mr2"
                                     type="number"
                                     v-model="month"
                                     placeholder="Mes"
@@ -79,7 +79,7 @@
                     <div class="col-md-4">
                         <b-form-group label="AÑO">
                             <div class="d-flex">
-                                <b-form-input class="input_style_b" type="number" v-model="year" placeholder="Año"></b-form-input>
+                                <b-form-input class="form-control2" type="number" v-model="year" placeholder="Año"></b-form-input>
                             </div>
                         </b-form-group>
                     </div>
@@ -114,13 +114,13 @@
                 <div class="col-4"><label class="label-titulo">Total Cuotas</label></div>
 
                 <div class="col-4 pb-2">
-                    <b-form-input disabled class="input_style_b" :value="'Al día'">Al día</b-form-input>
+                    <b-form-input type="text" disabled class="form-control2" :value="'Al día'">Al día</b-form-input>
                 </div>
                 <div class="col-4 pb-2">
-                    <b-form-input disabled class="input_style_b" :value="rowsAldia"></b-form-input>
+                    <b-form-input type="text" disabled class="form-control2" :value="rowsAldia"></b-form-input>
                 </div>
                 <div class="col-4 pb-2">
-                    <b-form-input disabled class="pb-2 input_style_b" :value="totalCuotasAldia"></b-form-input>
+                    <b-form-input type="text" disabled class="pb-2 form-control2" :value="totalCuotasAldia"></b-form-input>
                 </div>
             </div>
 
@@ -133,7 +133,7 @@
                         <b-form-input
                             v-model="inputFiltroCupon"
                             placeholder="Buscar por documento..."
-                            class="mb-3 input_style_b"
+                            class="mb-3 form-control2"
                         ></b-form-input>
                     </div>
                     <div class="col-sm-2">
@@ -178,7 +178,7 @@
                 <b-form-input
                     v-model="filtroDescuento"
                     placeholder="Buscar por documento..."
-                    class="mb-3 input_style_b"
+                    class="mb-3 form-control2"
                 ></b-form-input>
                 <div class="table-responsive">
                     <b-table head-variant="dark" style="border: 1px solid #b9bdc3; border-radius: 10px" striped id="mora-table" hover :fields="descuentosFields" :items="descuentosFiltrados">
@@ -295,7 +295,7 @@
                 <h2 class="title"><strong>RESULTADOS DE LA CONSULTA (Cartera Embargada)</strong></h2>
             </div>
             <div class="panel-body">
-                <b-form-input v-model="filtroEmbargo" placeholder="Buscar por documento..." class="mb-3 input_style_b"></b-form-input>
+                <b-form-input v-model="filtroEmbargo" placeholder="Buscar por documento..." class="mb-3 form-control2"></b-form-input>
                 <div class="table-responsive">
                     <b-table 
                         head-variant="dark"
@@ -328,44 +328,46 @@
                 <div class="col-4"><label class="label-titulo">Total Clientes</label></div>
                 <div class="col-4"><label class="label-titulo">Total Cuotas</label></div>
 
-                <div class="col-4 pb-2"><label class="label-resumen">Al día</label></div>
                 <div class="col-4 pb-2">
-                    <label class="label-resumen">{{ rowsAldia }}</label>
+                    <label><strong>Al día</strong></label>
                 </div>
                 <div class="col-4 pb-2">
-                    <label class="label-resumen pb-2">{{ totalCuotasAldia }}</label>
-                </div>
-
-                <div class="col-4 pb-2"><label class="label-resumen">En mora</label></div>
-                <div class="col-4 pb-2">
-                    <label class="label-resumen">{{ rowsMora }}</label>
+                    <b-form-input disabled :value="rowsAldia" class="form-control2"/>
                 </div>
                 <div class="col-4 pb-2">
-                    <label class="label-resumen">{{ totalCuotasMora }}</label>
+                    <b-form-input disabled :value="totalCuotasAldia" class="form-control2 pb-2"/>
                 </div>
 
-                <div class="col-4 pb-2"><label class="label-resumen">Embargado</label></div>
+                <div class="col-4 pb-2"><label><strong>En mora</strong></label></div>
                 <div class="col-4 pb-2">
-                    <label class="label-resumen">{{ rowsEmbargo }}</label>
+                    <b-form-input disabled :value="rowsMora" class="form-control2"/>
                 </div>
                 <div class="col-4 pb-2">
-                    <label class="label-resumen">{{ totalCuotasEmbargo }}</label>
+                    <b-form-input disabled :value="totalCuotasMora" class="form-control2"/>
                 </div>
 
-                <div class="col-4"><label class="label-resumen">Total</label></div>
+                <div class="col-4 pb-2"><label><strong>Embargado</strong></label></div>
+                <div class="col-4 pb-2">
+                    <b-form-input disabled :value="rowsEmbargo" class="form-control2"/>
+                </div>
+                <div class="col-4 pb-2">
+                    <b-form-input disabled :value="totalCuotasEmbargo" class="form-control2"/>
+                </div>
+
+                <div class="col-4"><label><strong>Total</strong></label></div>
                 <div class="col-4">
-                    <label class="label-resumen">{{ totalClientes }}</label>
+                    <b-form-input disabled :value="totalClientes" class="form-control2"/>
                 </div>
                 <div class="col-4">
-                    <label class="label-resumen">{{ totalCuotas }}</label>
+                    <b-form-input disabled :value="totalCuotas" class="form-control2"/>
                 </div>
             </div>
             <div class="mb-2 mt-5">
                 <h2 class="title"><strong>RESULTADOS DE LA CONSULTA (Todas)</strong></h2>
             </div>
             <div class="panel-body">
-                <b-accordion>
-                    <b-card no-body class="mb-2">
+                <!-- <b-accordion> -->
+                    <!-- <b-card no-body class="mb-2">
                         <b-card-header header-tag="header" class="p-1" role="tab">
                             <b-button class="button-tablas d-flex" block v-b-toggle.accordion-1>
                                 <div class="row" style="width: 100%">
@@ -389,10 +391,13 @@
                                     </div>
                                 </div>
                             </b-button>
-                        </b-card-header>
+                        </b-card-header> -->
 
-                        <b-collapse id="accordion-1" accordion="my-accordion2" role="tabpanel">
-                            <b-card-body>
+                        <!-- <b-collapse id="accordion-1" accordion="my-accordion2" role="tabpanel">
+                            <b-card-body> -->
+                                <div class="mb-2 mt-5">
+                                    <h2 class="title"><strong>Cartera al Día</strong></h2>
+                                </div>
                                 <b-table head-variant="dark" style="border: 1px solid #b9bdc3; border-radius: 10px" striped hover :fields="cupones" :items="paginatedCoupons"></b-table>
                                 <b-pagination
                                     v-model="currentPageAldia"
@@ -400,11 +405,11 @@
                                     :total-rows="rowsAldia"
                                     aria-controls="aldia-table"
                                 ></b-pagination>
-                            </b-card-body>
+                            <!-- </b-card-body>
                         </b-collapse>
-                    </b-card>
+                    </b-card> -->
                     <!-- Cartera en Mora -->
-                    <b-card no-body class="mb-2">
+                    <!-- <b-card no-body class="mb-2">
                         <b-card-header header-tag="header" class="p-1" role="tab">
                             <b-button class="button-tablas d-flex" block v-b-toggle.accordion-2>
                                 <div class="row" style="width: 100%">
@@ -428,10 +433,13 @@
                                     </div>
                                 </div>
                             </b-button>
-                        </b-card-header>
+                        </b-card-header> -->
 
-                        <b-collapse id="accordion-2" accordion="my-accordion" role="tabpanel">
-                            <b-card-body>
+                        <!-- <b-collapse id="accordion-2" accordion="my-accordion" role="tabpanel">
+                            <b-card-body> -->
+                                <div class="mb-2 mt-5">
+                                    <h2 class="title"><strong>Cartera en Mora</strong></h2>
+                                </div>
                                 <b-table head-variant="dark" style="border: 1px solid #b9bdc3; border-radius: 10px" striped hover :fields="descuentosFields" :items="descuentosFiltrados">
                                 </b-table>
 
@@ -441,11 +449,11 @@
                                     :total-rows="rowsMora"
                                     aria-controls="mora-table"
                                 ></b-pagination>
-                            </b-card-body>
+                            <!-- </b-card-body>
                         </b-collapse>
-                    </b-card>
+                    </b-card> -->
                     <!-- Cartera Embargada -->
-                    <b-card no-body class="mb-2">
+                    <!-- <b-card no-body class="mb-2">
                         <b-card-header header-tag="header" class="p-1" role="tab">
                             <b-button class="button-tablas d-flex" block v-b-toggle.accordion-3>
                                 <div class="row" style="width: 100%">
@@ -469,10 +477,13 @@
                                     </div>
                                 </div>
                             </b-button>
-                        </b-card-header>
+                        </b-card-header> -->
 
-                        <b-collapse id="accordion-3" accordion="my-accordion" role="tabpanel">
-                            <b-card-body>
+                        <!-- <b-collapse id="accordion-3" accordion="my-accordion" role="tabpanel">
+                            <b-card-body> -->
+                                <div class="mb-2 mt-5">
+                                    <h2 class="title"><strong>Cartera Embargada</strong></h2>
+                                </div>
                                 <b-table head-variant="dark" style="border: 1px solid #b9bdc3; border-radius: 10px" striped hover :fields="embargosFields" :items="paginatedEmbargos"></b-table>
                                 <b-pagination
                                     v-model="currentPageEmbargo"
@@ -480,10 +491,10 @@
                                     :total-rows="rowsEmbargo"
                                     aria-controls="embargo-table"
                                 ></b-pagination>
-                            </b-card-body>
+                            <!-- </b-card-body>
                         </b-collapse>
-                    </b-card>
-                </b-accordion>
+                    </b-card> -->
+                <!-- </b-accordion> -->
             </div>
         </div>
 
@@ -525,7 +536,7 @@ td,
 th {
     text-align: left;
 }
-.input_style_b{
+.form-control2{
     border: 1px solid #b9bdc3; 
     background-color:white;
     border-radius: 10px

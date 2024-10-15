@@ -42,3 +42,6 @@ public/consultaFirmadoResponse.xml
 public/firmaExecutionResponse.xml
 public/generateCodeResponse.xml
 public/generateCodeResponseContent.xml
+
+resource/assets/js/app.js
+public/css/styles.css
