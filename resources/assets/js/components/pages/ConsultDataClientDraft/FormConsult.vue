@@ -8,7 +8,7 @@
                 <h3 class="heading-title">Realizar consulta</h3>
             </b-col>
             <b-col cols="6" class="d-flex justify-content-end align-items-center">
-                <CustomButton :class="'white'"> Descargar PDF <Download class="ml-2" /> </CustomButton>
+                <CustomButton :class="'white'" @click="pdfEmit"> Descargar PDF <Download class="ml-2" /> </CustomButton>
             </b-col>
         </b-row>
         <div class="panel-body px-0">
@@ -146,6 +146,9 @@ export default {
         ]),
         ...mapMutations('embargosModule', ['setEmbargosType']),
         ...mapMutations('descuentosModule', ['setDescuentosType']),
+        pdfEmit(){
+            this.$emit('downloadPdf');
+        },
         selectedPagaduria() {
             this.setPagaduriaType(this.dataclient.pagaduria);
 

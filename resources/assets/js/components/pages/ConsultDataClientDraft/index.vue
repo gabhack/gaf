@@ -26,7 +26,7 @@
             </div>
 
             <div id="consulta-container" class="row">
-                <FormConsult @emitInfo="emitInfo" />
+                <FormConsult @emitInfo="emitInfo" @downloadPdf="print" />
 
                 <!--============================
                 DATAMES FOPEP -
