@@ -9,12 +9,8 @@
                                 <h2 class="title"><strong>Registro de Documentos</strong></h2>
                             </div>
                             <div class="col-sm mb-2 mt-5" v-if="items.length > 0">
-                                <button class="btn btn-sm btn-success" style="border: 1px solid #b9bdc3; border-radius: 10px" @click="showModalToAdd">
-                                    Agregar Documento
-                                </button>
-                                <button class="btn btn-sm btn-outline-success" style="border: 1px solid #b9bdc3; border-radius: 10px" @click="showBulkUploadModal">
-                                    Crear Registro Masivo
-                                </button>
+                                <CustomButton text="Agregar Documento" @click="showModalToAdd"/>
+                                <CustomButton class="white" text="Crear Registro Masivo" @click="showBulkUploadModal"/>
                             </div>
                         </div>
                         <table class="table table-striped mt-3" style="border: 1px solid #b9bdc3; border-radius: 10px" v-if="items.length > 0">
@@ -55,16 +51,12 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <div v-else>
+                        <div v-if="items.length === 0">
                             <div class="text-center" style="margin-top: 100px;">
                                 <Lupa style="margin-bottom: 50px;"></Lupa>
                                 <h2>Aun no tienes archivos cargados, Puedes...</h2>
-                                <button class="btn btn-success" style="border: 1px solid #b9bdc3; border-radius: 10px" @click="showModalToAdd">
-                                    Agregar Documento
-                                </button>
-                                <button class="btn btn-outline-success" style="border: 1px solid #b9bdc3; border-radius: 10px" @click="showBulkUploadModal">
-                                    Crear Registro Masivo
-                                </button>
+                                <CustomButton text="Agregar Documento" @click="showModalToAdd"/>
+                                <CustomButton class="white" text="Crear Registro Masivo" @click="showBulkUploadModal"/>
                             </div>
 
                         </div>
@@ -91,14 +83,14 @@
                                     type="text"
                                     id="company"
                                     v-model="currentItem.company"
-                                    class="form-control2"
+                                    class="form-control"
                                     style="border: 1px solid #b9bdc3; background-color:white; border-radius: 10px"
                                     required
                                 />
                             </div>
                             <div class="form-group">
                                 <label for="user">Usuario</label>
-                                <input type="text" id="user" v-model="currentItem.user" class="form-control2" style="border: 1px solid #b9bdc3; background-color:white; border-radius: 10px" required />
+                                <input type="text" id="user" v-model="currentItem.user" class="form-control" style="border: 1px solid #b9bdc3; background-color:white; border-radius: 10px" required />
                             </div>
                             <div class="form-group">
                                 <label for="documentId">Cédula</label>
@@ -106,7 +98,7 @@
                                     type="text"
                                     id="documentId"
                                     v-model="currentItem.documentId"
-                                    class="form-control2"
+                                    class="form-control"
                                     style="border: 1px solid #b9bdc3; background-color:white; border-radius: 10px"
                                     required
                                 />
@@ -117,7 +109,7 @@
                                     type="text"
                                     id="fullName"
                                     v-model="currentItem.fullName"
-                                    class="form-control2"
+                                    class="form-control"
                                     style="border: 1px solid #b9bdc3; background-color:white; border-radius: 10px"
                                     required
                                 />
@@ -127,7 +119,7 @@
                                 <select
                                     id="documentType"
                                     v-model="currentItem.documentType"
-                                    class="form-control2"
+                                    class="form-control"
                                     style="border: 1px solid #b9bdc3; background-color:white; border-radius: 10px"
                                     required
                                 >
@@ -166,7 +158,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <input type="file" @change="handleFileUpload" class="form-control2" style="border: 1px solid #b9bdc3; background-color:white; border-radius: 10px"/>
+                        <input type="file" @change="handleFileUpload" class="form-control" style="border: 1px solid #b9bdc3; background-color:white; border-radius: 10px"/>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" @click="uploadPdf">Subir</button>
@@ -199,7 +191,7 @@
                                 orden) y que los datos sean válidos: <strong>Compañia, Usuario, Cedula, NombreCompleto, Tipo (1, 2, o 3)</strong>
                             </div>
                         </div>
-                        <input type="file" @change="handleBulkFileUpload" class="form-control2" style="border: 1px solid #b9bdc3; background-color:white; border-radius: 10px" />
+                        <input type="file" @change="handleBulkFileUpload" class="form-control" style="border: 1px solid #b9bdc3; background-color:white; border-radius: 10px" />
                         <div v-if="bulkUploadError" class="alert alert-danger mt-3">
                             <p>Error al cargar el archivo:</p>
                             <ul>
@@ -220,6 +212,7 @@
 <script>
 import axios from 'axios';
 import Lupa from '../../icons/Lupa.vue';
+import CustomButton from '../../customComponents/CustomButton.vue';
 
 export default {
     data() {
@@ -235,6 +228,7 @@ export default {
     },
     components: {
         Lupa,
+        CustomButton
     },
     created() {
         this.fetchDocuments();

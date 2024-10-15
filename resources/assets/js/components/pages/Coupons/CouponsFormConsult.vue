@@ -86,7 +86,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12 text-left mt-4">
-                        <b-button @click="getCoupons" class="button_style_b">Prospectar</b-button>
+                        <CustomButton text="Prospectar" @click="getCoupons"/>
                     </div>
                 </div>
                 <!-- Mensajes de error -->
@@ -137,7 +137,7 @@
                         ></b-form-input>
                     </div>
                     <div class="col-sm-2">
-                        <b-button @click="aplicarFiltroCupon" variant="primary" class="button_style_b">Filtrar</b-button>
+                        <CustomButton text="Filtrar" @click="aplicarFiltroCupon"/>
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -602,10 +602,12 @@ import axios from 'axios';
 import { sassFalse } from 'sass';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
+import CustomButton from '../../customComponents/CustomButton.vue';
 export default {
     name: 'CouponsFormConsult',
     components: {
-        Loading
+        Loading,
+        CustomButton
     },
     data() {
         return {
