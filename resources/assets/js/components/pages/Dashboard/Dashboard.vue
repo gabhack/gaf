@@ -41,7 +41,6 @@
                         </b-col>
                     </b-row>
                 </b-card>
-
                 <b-card class="usr-camp-card mb-3 mb-md-0">
                     <b-row>
                         <b-col cols="6" class="d-flex align-items-center">
@@ -105,6 +104,7 @@ import Users from '../../icons/users.vue';
 import Compania from '../../icons/Compania.vue';
 import GoDownArrow from '../../icons/GoDownArrow.vue';
 import GoUpArrow from '../../icons/GoUpArrow.vue';
+
 export default {
     components: {
         VueApexCharts,
@@ -298,5 +298,4 @@ label {
     font-weight: 500;
     line-height: 23.44px;
 }
-
 </style>
