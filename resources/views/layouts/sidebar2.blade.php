@@ -1,5 +1,5 @@
 <!-- Sidebar -->
-<ul class="navbar-nav bg-black-pearl sidebar sidebar-dark accordion" id="accordionSidebar">
+<ul class="navbar-nav bg-black-pearl sidebar sidebar-dark accordion" id="accordionSidebar" style="height: 100%">
     <!-- Sidebar - Brand -->
     <div class="pt-4 pl-3 pb-2 text-left">
         <a class="" href="{{ url('home') }}">
