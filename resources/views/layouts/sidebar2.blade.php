@@ -27,7 +27,7 @@
             <div id="menuVisados" class="collapse" aria-labelledby="menuVisados" data-parent="#accordionSidebar">
                 <div class="bg-green-side py-2 collapse-inner">
                     <a class="collapse-item" href="{{ url('dataClientDraft') }}">Nueva consulta ></a>
-                    <a class="collapse-item btn-list" href="{{ url('historyClient' )}}">Listado de consultas ></a>
+                    <a class="collapse-item" href="{{ url('historyClient' )}}">Listado de consultas ></a>
                 </div>
             </div>
         </li>
@@ -38,9 +38,9 @@
             </a>
             <div id="menuProspeccion" class="collapse" aria-labelledby="menuProspeccion" data-parent="#accordionSidebar">
                 <div class="bg-green-side py-2 collapse-inner">
-                    <a class="dropdown-item" href="#">Parametros de control</a>
-                    <a class="dropdown-item" href="#">Prospección de cartera</a>
-                    <a class="dropdown-item" href="#">Comparativas</a>
+                    <a class="collapse-item" href="/parametros-comparativa">Parámetros de control</a>
+                    <a class="collapse-item" href="/coupons-form">Prospección de cartera</a>
+                    <a class="collapse-item" href="/parametros-comparativa/comparativa">Comparativas</a>
                 </div>
             </div>
         </li>
@@ -51,8 +51,8 @@
             </a>
             <div id="menuRecuperacion" class="collapse" aria-labelledby="menuRecuperacion" data-parent="#accordionSidebar">
                 <div class="bg-green-side py-2 collapse-inner">
-                    <a class="dropdown-item" href="#">Consulta Gold</a>
-                    <a class="dropdown-item" href="#">Consulta Diamante</a>
+                    <a class="collapse-item" href="#">Consulta Gold</a>
+                    <a class="collapse-item" href="/coupons-form">Consulta Diamante</a>
                 </div>
             </div>
         </li>
@@ -63,11 +63,11 @@
             </a>
             <div id="menuInvestigacion" class="collapse" aria-labelledby="menuInvestigacion" data-parent="#accordionSidebar">
                 <div class="bg-green-side py-2 collapse-inner">
-                    <a class="dropdown-item" href="#">Investigación de bienes</a>
-                    <a class="dropdown-item" href="#">Certificado de nacimiento</a>
-                    <a class="dropdown-item" href="#">Datos demograficos</a>
-                    <a class="dropdown-item" href="#">Datos personales</a>
-                    <a class="dropdown-item" href="#">Información financiera</a>
+                    <a class="collapse-item" href="#">Investigación de bienes</a>
+                    <a class="collapse-item" href="/certificados">Certificado de nacimiento</a>
+                    <a class="collapse-item" href="/demografico">Datos demograficos</a>
+                    <a class="collapse-item" href="#">Datos personales</a>
+                    <a class="collapse-item" href="#">Información financiera</a>
                 </div>
             </div>
         </li>
@@ -78,9 +78,9 @@
             </a>
             <div id="menuLocalizacion" class="collapse" aria-labelledby="menuLocalizacion" data-parent="#accordionSidebar">
                 <div class="bg-green-side py-2 collapse-inner">
-                    <a class="dropdown-item" href="#">Colpensiones</a>
-                    <a class="dropdown-item" href="#">Fiduprevisora</a>
-                    <a class="dropdown-item" href="#">Localizar cdulas</a>
+                    <a class="collapse-item" href="/colpensiones">Colpensiones</a>
+                    <a class="collapse-item" href="/fiduprevisora">Fiduprevisora</a>
+                    <a class="collapse-item" href="/joinpensiones">Localizar cédulas</a>
                 </div>
             </div>
         </li>
