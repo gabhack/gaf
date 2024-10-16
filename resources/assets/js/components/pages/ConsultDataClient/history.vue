@@ -280,6 +280,26 @@ export default {
                     key: 'nombre',
                     label: 'Nombre Completo',
                     sortable: true
+                },
+                {
+                    key: 'score',
+                    label: 'Score',
+                    sortable: true
+                },
+                {
+                    key: 'cuota',
+                    label: 'Cuota',
+                    sortable: true
+                },
+                {
+                    key: 'monto',
+                    label: 'Monto',
+                    sortable: true
+                },
+                {
+                    key: 'plazo',
+                    label: 'Plazo',
+                    sortable: true
                 }
             ],
             pagaduriasOptions: [
