@@ -1,28 +1,109 @@
 <template>
-    <div>
+    <div style="padding: 30px">
         <div v-if="isLoading" class="loading-overlay">
             <div class="spinner"></div>
         </div>
 
-        <div class="panel mb-3 col-md-12">
-            <div class="panel-heading">
-                <b>Datos Demográficos</b>
-                <button @click="toggleRecentConsultations" class="btn btn-info float-right">
-                    {{ showRecentConsultations ? 'Ocultar Consultas Recientes' : 'Ver Consultas Recientes' }}
-                </button>
+        <b-row>
+            <b-col cols="12" md="9">
+                <h3 class="heading-title">Datos demográficos</h3>
+                <p>Lörem ipsum despejode anas. Heteros ståpaddling. Dekameling agnostityp</p>
+            </b-col>
+            <b-col cols="12" md="3" class="d-flex justify-content-start justify-content-md-end align-items-center">
+                <CustomButton @click="toggleRecentConsultations">{{
+                    showRecentConsultations ? 'Ocultar Consultas Recientes' : 'Ver Consultas Recientes'
+                }}</CustomButton>
+            </b-col>
+        </b-row>
+        <div
+            style="min-height: 500px"
+            class="panel mb-3 col-md-12 d-flex justify-content-center align-items-center"
+            v-if="!results.length"
+        >
+            <div class="d-flex flex-column align-items-center justify-content-center">
+                <Lupa class="mb-3" />
+                <p>
+                    Aún no tienes archivos <br />
+                    cargados, puedes...
+                </p>
+                <CustomButton text="Cargar archivo" @click="$bvModal.show('bv-modal-example')" />
             </div>
-            <div class="panel-body">
-                <div class="alert alert-info">
-                    <p>
-                        Por favor, asegúrese de que el archivo Excel tiene una columna con el encabezado
-                        <strong>'cedulas'</strong> y que contiene los números de cédula.
-                    </p>
+            <b-modal id="bv-modal-example" hide-footer style="min-width: 1000px">
+                <template #modal-title><span class="heading-title">Agregar datos demográficos</span></template>
+                <div class="" style="background-color: #f9fafc; border-left: 4px solid #249fe3; border-radius: 4px">
+                    <b-row style="padding: 16px">
+                        <b-col cols="1" class="d-flex justify-content-center align-items-center">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 16 16"
+                                fill="none"
+                            >
+                                <path
+                                    fill-rule="evenodd"
+                                    clip-rule="evenodd"
+                                    d="M16 8C16 12.4183 12.4183 16 8 16C3.58172 16 0 12.4183 0 8C0 3.58172 3.58172 0 8 0C12.4183 0 16 3.58172 16 8ZM9 4C9 4.55228 8.55228 5 8 5C7.44772 5 7 4.55228 7 4C7 3.44772 7.44772 3 8 3C8.55228 3 9 3.44772 9 4ZM7 7C6.44772 7 6 7.44772 6 8C6 8.55229 6.44772 9 7 9V12C7 12.5523 7.44772 13 8 13H9C9.55228 13 10 12.5523 10 12C10 11.4477 9.55228 11 9 11V8C9 7.44772 8.55228 7 8 7H7Z"
+                                    fill="#20A0E9"
+                                />
+                            </svg>
+                        </b-col>
+                        <b-col cols="11" class="d-flex justify-content-center align-items-center">
+                            <p class="modal-text">
+                                Por favor, asegúrese de que el archivo Excel tiene una columna con el encabezado
+                                <strong>'cedulas'</strong> y que contiene los números de cédula.
+                            </p>
+                        </b-col>
+                    </b-row>
                 </div>
-                <div class="form-group">
-                    <input type="file" @change="handleFileUpload" class="form-control mb-3" />
-                    <button @click="uploadFile" class="btn btn-primary">Subir</button>
+                <b-row class="py-3">
+                    <b-col
+                        cols="12"
+                        style="
+                            min-height: 150px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            cursor: pointer;
+                        "
+                        @click="triggerFileInput"
+                        @dragover.prevent="handleDragOver"
+                        @dragleave.prevent="handleDragLeave"
+                        @drop.prevent="handleDrop"
+                    >
+                        <div
+                            style="display: flex; flex-direction: column; align-items: center; justify-content: center"
+                        >
+                            <UploadFile class="mb-2" />
+                            <p class="text-center" style="margin-bottom: 0.5rem">
+                                Arrastre o suelte el archivo <br />
+                                o
+                            </p>
+                            <CustomButton text="Seleccionar archivo" :color="'white'" />
+                        </div>
+                        <input type="file" ref="fileInput" @change="handleFileUpload" style="display: none" />
+                    </b-col>
+                </b-row>
+                <div class="d-flex justify-content-center align-item-center mb-5" style="width: 100%" v-if="file">
+                    <div
+                        style="
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                            width: 300px;
+                            border-bottom: 1px solid #babcbe;
+                            padding: 8px;
+                        "
+                    >
+                        <span style="font-size: 12px; font-weight: 400; line-height: 15.62px; color: black">{{
+                            file.name
+                        }}</span>
+                        <button style="padding: 0; margin: 0; border: none; background: none;" @click="deleteFile"><Trash /></button>
+                    </div>
                 </div>
-            </div>
+                <CustomButton @click="uploadFile" text="Subir archivo" v-if="file" />
+                <CustomButton @click="$bvModal.hide('bv-modal-example')" :color="'white'" text="Cerrar" />
+            </b-modal>
         </div>
 
         <!-- Card para mostrar las consultas recientes -->
@@ -91,8 +172,16 @@
                     </table>
                 </div>
                 <div class="pagination">
-                    <button @click="fetchPaginatedResults(page - 1)" :disabled="page === 1" class="btn btn-primary">Anterior</button>
-                    <button @click="fetchPaginatedResults(page + 1)" :disabled="page * perPage >= total" class="btn btn-primary">Siguiente</button>
+                    <button @click="fetchPaginatedResults(page - 1)" :disabled="page === 1" class="btn btn-primary">
+                        Anterior
+                    </button>
+                    <button
+                        @click="fetchPaginatedResults(page + 1)"
+                        :disabled="page * perPage >= total"
+                        class="btn btn-primary"
+                    >
+                        Siguiente
+                    </button>
                 </div>
             </div>
         </div>
@@ -105,9 +194,18 @@
 
 <script>
 import axios from 'axios';
-
+import CustomButton from '../../customComponents/CustomButton.vue';
+import Lupa from '../../icons/Lupa.vue';
+import UploadFile from '../../icons/UploadFile.vue';
+import Trash from '../../icons/Trash.vue';
 export default {
     name: 'DemographicData',
+    components: {
+        CustomButton,
+        Lupa,
+        UploadFile,
+        Trash
+    },
     data() {
         return {
             file: null,
@@ -133,8 +231,29 @@ export default {
         }
     },
     methods: {
+        deleteFile() {
+            this.file = null;
+        },
+        triggerFileInput() {
+            this.$refs.fileInput.click();
+        },
         handleFileUpload(event) {
             this.file = event.target.files[0];
+        },
+        handleDragOver(event) {
+            this.isDragging = true; 
+        },
+        handleDragLeave(event) {
+            this.isDragging = false; 
+        },
+        handleDrop(event) {
+            const file = event.dataTransfer.files[0];
+            if (file) {
+                this.file = file;
+                this.handleFileUpload({ target: { files: [file] } }); 
+                console.log('Archivo cargado desde drag & drop:', file);
+            }
+            this.isDragging = false;
         },
         async uploadFile() {
             if (!this.file) {
@@ -176,7 +295,9 @@ export default {
         async fetchPaginatedResults(page) {
             this.isLoading = true;
             try {
-                let response = await axios.get(`/demografico/fetch-paginated-results?page=${page}&perPage=${this.perPage}`);
+                let response = await axios.get(
+                    `/demografico/fetch-paginated-results?page=${page}&perPage=${this.perPage}`
+                );
                 this.results = response.data.data;
                 this.total = response.data.total;
                 this.page = response.data.page;
@@ -199,7 +320,19 @@ export default {
         },
         exportToPDF() {
             const doc = new jsPDF();
-            const columns = ['Documento', 'Nombre', 'Celular', 'Teléfono Fijo', 'Email', 'Ciudad', 'Dirección', 'Centro de Costo', 'Tipo de Contrato', 'Edad', 'Fecha de Nacimiento'];
+            const columns = [
+                'Documento',
+                'Nombre',
+                'Celular',
+                'Teléfono Fijo',
+                'Email',
+                'Ciudad',
+                'Dirección',
+                'Centro de Costo',
+                'Tipo de Contrato',
+                'Edad',
+                'Fecha de Nacimiento'
+            ];
             const rows = this.results.map(item => [
                 item.doc,
                 item.nombre_usuario,
@@ -217,7 +350,19 @@ export default {
             doc.save('resultados.pdf');
         },
         exportToExcel() {
-            const columns = ['Documento', 'Nombre', 'Celular', 'Teléfono Fijo', 'Email', 'Ciudad', 'Dirección', 'Centro de Costo', 'Tipo de Contrato', 'Edad', 'Fecha de Nacimiento'];
+            const columns = [
+                'Documento',
+                'Nombre',
+                'Celular',
+                'Teléfono Fijo',
+                'Email',
+                'Ciudad',
+                'Dirección',
+                'Centro de Costo',
+                'Tipo de Contrato',
+                'Edad',
+                'Fecha de Nacimiento'
+            ];
             const rows = this.results.map(item => [
                 item.doc,
                 item.nombre_usuario,
@@ -266,14 +411,12 @@ export default {
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.panel-heading {
-    background-color: #007bff;
-    color: #fff;
-    padding: 10px;
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .panel-body {
@@ -303,5 +446,23 @@ export default {
     width: 300px;
     max-height: 400px;
     overflow-y: auto;
+}
+::v-deep {
+    & .modal-header {
+        border-bottom: none;
+    }
+    & .modal-dialog {
+        min-width: 600px;
+    }
+}
+.modal-text {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 18.23px;
+    margin: 0;
+}
+.drag-over {
+    border: 2px dashed #007bff;
+    background-color: #f0f8ff;
 }
 </style>

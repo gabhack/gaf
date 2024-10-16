@@ -1,5 +1,5 @@
 <!-- Sidebar -->
-<ul class="navbar-nav bg-black-pearl sidebar sidebar-dark accordion" id="accordionSidebar">
+<ul class="navbar-nav bg-black-pearl sidebar sidebar-dark accordion" id="accordionSidebar" style="height: 100%">
     <!-- Sidebar - Brand -->
     <div class="pt-4 pl-3 pb-2 text-left">
         <a class="" href="{{ url('home') }}">
@@ -8,14 +8,14 @@
     </div>
     <!-- Nav Items-->
     <li class="nav-item">
-        <a class="nav-link" href="{{ url('home') }}">
+        <a class="nav-link" style="padding-left: 28px;" href="{{ url('home') }}">
             <dash-icon></dash-icon>
             <span class="pl-2">Dashboard</span>
         </a>
     </li>
     <div class="borders-space">
         @if(IsCompany())
-        <div class="pl-2 mb-4">
+        <div class="pl-4 mb-4" >
             <span class="sidebar-titles1">AMI®</span></br>
             <span class="sidebar-titles2">Análisis de mercado inteligente</span>
         </div>
@@ -27,7 +27,7 @@
             <div id="menuVisados" class="collapse" aria-labelledby="menuVisados" data-parent="#accordionSidebar">
                 <div class="bg-green-side py-2 collapse-inner">
                     <a class="collapse-item" href="{{ url('dataClientDraft') }}">Nueva consulta ></a>
-                    <a class="collapse-item btn-list" href="{{ url('historyClient' )}}">Listado de consultas ></a>
+                    <a class="collapse-item" href="{{ url('historyClient' )}}">Listado de consultas ></a>
                 </div>
             </div>
         </li>
@@ -38,9 +38,9 @@
             </a>
             <div id="menuProspeccion" class="collapse" aria-labelledby="menuProspeccion" data-parent="#accordionSidebar">
                 <div class="bg-green-side py-2 collapse-inner">
-                    <a class="dropdown-item" href="#">Parametros de control</a>
-                    <a class="dropdown-item" href="#">Prospección de cartera</a>
-                    <a class="dropdown-item" href="#">Comparativas</a>
+                    <a class="collapse-item" href="/parametros-comparativa">Parámetros de control</a>
+                    <a class="collapse-item" href="/coupons-form">Prospección de cartera</a>
+                    <a class="collapse-item" href="/parametros-comparativa/comparativa">Comparativas</a>
                 </div>
             </div>
         </li>
@@ -51,8 +51,8 @@
             </a>
             <div id="menuRecuperacion" class="collapse" aria-labelledby="menuRecuperacion" data-parent="#accordionSidebar">
                 <div class="bg-green-side py-2 collapse-inner">
-                    <a class="dropdown-item" href="#">Consulta Gold</a>
-                    <a class="dropdown-item" href="#">Consulta Diamante</a>
+                    <a class="collapse-item" href="#">Consulta Gold</a>
+                    <a class="collapse-item" href="/coupons-form">Consulta Diamante</a>
                 </div>
             </div>
         </li>
@@ -63,11 +63,11 @@
             </a>
             <div id="menuInvestigacion" class="collapse" aria-labelledby="menuInvestigacion" data-parent="#accordionSidebar">
                 <div class="bg-green-side py-2 collapse-inner">
-                    <a class="dropdown-item" href="#">Investigación de bienes</a>
-                    <a class="dropdown-item" href="#">Certificado de nacimiento</a>
-                    <a class="dropdown-item" href="#">Datos demograficos</a>
-                    <a class="dropdown-item" href="#">Datos personales</a>
-                    <a class="dropdown-item" href="#">Información financiera</a>
+                    <a class="collapse-item" href="#">Investigación de bienes</a>
+                    <a class="collapse-item" href="/certificados">Certificado de nacimiento</a>
+                    <a class="collapse-item" href="/demografico">Datos demograficos</a>
+                    <a class="collapse-item" href="#">Datos personales</a>
+                    <a class="collapse-item" href="#">Información financiera</a>
                 </div>
             </div>
         </li>
@@ -78,17 +78,29 @@
             </a>
             <div id="menuLocalizacion" class="collapse" aria-labelledby="menuLocalizacion" data-parent="#accordionSidebar">
                 <div class="bg-green-side py-2 collapse-inner">
-                    <a class="dropdown-item" href="#">Colpensiones</a>
-                    <a class="dropdown-item" href="#">Fiduprevisora</a>
-                    <a class="dropdown-item" href="#">Localizar cdulas</a>
+                    <a class="collapse-item" href="/colpensiones">Colpensiones</a>
+                    <a class="collapse-item" href="/fiduprevisora">Fiduprevisora</a>
+                    <a class="collapse-item" href="/joinpensiones">Localizar cédulas</a>
                 </div>
             </div>
         </li>
+        
     </div>
-    <div class="pl-3 mt-4">
-        <span class="sidebar-titles1">HEGO®</span></br>
-        <span class="sidebar-titles2">Herramienta ejecutora</span>
-    </div>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="/estudios" 
+        style="display: flex; flex-direction: column; align-items: start; justify-content:center; padding-left: 28px;"
+        >
+            <span style="font-size: 16px; font-weight: 700; line-height: 20.83px;">
+                HEGO®</br> <span style="font-size: 14px; font-weight: 400; line-height: 18.23px; text-align: left; color: #A1A7AF">Herramienta ejecutora</span></span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="/solicitud" style="padding-left: 27px;">
+            <img src="/img/solicitudCredito.png" alt="" class="img-fluid mr-2" style="width: 30px; height: auto;">   
+            <span class="pl-2">Solicitud de crédito</span>
+        </a>
+    </li>
+    
     
     <!-- <li class="nav-item">
         <a class="nav-link" href="{{ url('pagos') }}">
@@ -252,8 +264,8 @@
     @endif
 
     <!-- Sidebar Toggler (Sidebar) -->
-    <div class="text-center d-none d-md-inline pt-4">
+    {{-- <div class="text-center d-none d-md-inline pt-4">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
-    </div>
+    </div> --}}
 </ul>
 <!-- End of Sidebar -->

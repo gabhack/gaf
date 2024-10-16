@@ -2,68 +2,86 @@
     <div class="col-md-12">
         <div class="panel panel-primary">
             <b-row>
-                <b-col cols="12" md="10" class="">
+                <b-col cols="12" md="10">
                     <h3 class="heading-title mb-0 pb-3">Detalle de embargos</h3>
-                    <template v-if="embargosPerPeriod.items.length > 0">
-                        <div class="row">
-                            <div class="col-1">
-                                <b class="panel-label table-text"></b>
-                            </div>
-                            <div class="col-3 px-0">
-                                <b class="panel-label table-text">NOMBRE ENTIDAD ACTUAL:</b>
-                            </div>
-                            <div class="col-2 px-0">
-                                <b class="panel-label table-text">DOCUMENTO DEMANDANTE:</b>
-                            </div>
-                            <div class="col-2 px-0">
-                                <b class="panel-label table-text">CUOTA DEUDA:</b>
-                            </div>
-                            <div class="col-2 px-0">
-                                <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
-                            </div>
-                            <div class="col-1 px-0">
-                                <b class="panel-label table-text">TIPO DEL EMBARGO:</b>
-                            </div>
-                            <div class="col-1 px-0">
-                                <b class="panel-label table-text">MOTIVO DEL EMBARGO:</b>
-                            </div>
-                        </div>
-
-                        <div
-                            v-for="(item, key) in embargosPerPeriod.items"
-                            :key="key"
-                            class="row panel-br-light-green pt-3"
+                </b-col>
+                <b-col cols="2" class="d-none d-md-flex justify-content-end align-items-start">
+                    <div>
+                        <b class="mr-2 periodo">Periodo</b>
+                        <select
+                            class="form-control2"
+                            disabled
+                            :disabled="isLoading"
+                            @change="setSelectedPeriod($event.target.value)"
                         >
-                            <div class="col-1 pr-0">
-                                <b class="panel-label table-text"></b>
-                            </div>
-                            <div class="col-3 px-0">
-                                <p>{{ item.entidaddeman || item.ndem || '-' }}</p>
-                            </div>
+                            <option :value="period" v-for="period in embargosPeriodos" :key="period">
+                                {{ period }}
+                            </option>
+                            <option v-if="isLoading" disabled>CARGANDO...</option>
+                        </select>
+                        <svg
+                            v-if="isLoading"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 100 100"
+                            preserveAspectRatio="xMidYMid"
+                            width="41"
+                            height="41"
+                            style="shape-rendering: auto; display: block; background: transparent"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                        >
+                            <g>
+                                <circle
+                                    stroke-dasharray="169.64600329384882 58.548667764616276"
+                                    r="36"
+                                    stroke-width="10"
+                                    stroke="#000000"
+                                    fill="none"
+                                    cy="50"
+                                    cx="50"
+                                >
+                                    <animateTransform
+                                        keyTimes="0;1"
+                                        values="0 50 50;360 50 50"
+                                        dur="1s"
+                                        repeatCount="indefinite"
+                                        type="rotate"
+                                        attributeName="transform"
+                                    ></animateTransform>
+                                </circle>
+                                <g></g>
+                            </g>
+                        </svg>
+                    </div>
+                </b-col>
+                <b-col cols="12">
+                    <template v-if="embargosPerPeriod.items.length > 0">
+                        <b-table :items="embargosPerPeriod.items" :fields="fields" responsive striped hover class="pt-2">
+                            <template #cell(entidaddeman)="data">
+                                <p>{{ data.item.entidaddeman || data.item.ndem || '--' }}</p>
+                            </template>
+                            <template #cell(docdeman)="data">
+                                <p>{{ data.item.docdeman || data.item.ndem || '--' }}</p>
+                            </template>
+                            <template #cell(temb)="data">
+                                <p>{{ data.item.temb || data.item.ndem || '--' | currency }}</p>
+                            </template>
+                            <template #cell(fembini)="data">
+                                <p>{{ data.item.fembini ||  '--' }}</p>
+                            </template>
 
-                            <div class="col-2 px-0">
-                                <p>{{ item.docdeman || item.iddem || '-' }}</p>
-                            </div>
+                            <template #cell(tipoembargo)="data">
+                                <p class="mb-0">{{ data.item.tipoembargo || '-' }}</p>
+                            </template>
 
-                            <div class="col-2 px-0">
-                                <p>{{ (item.temb || item.valor || 0) | formatCurrency }}</p>
-                            </div>
-
-                            <div class="col-2 px-0">
-                                <p>{{ item.fembini || '-' }}</p>
-                            </div>
-                            <div class="col-1 px-0">
-                                <p>{{ item.tipoembargo || '-' }}</p>
-                            </div>
-                            <div class="col-1 px-0">
-                                <p>{{ item.motemb || '-' }}</p>
-                            </div>
-                        </div>
+                            <template #cell(motemb)="data">
+                                <p class="mb-0">{{ data.item.motemb }}</p>
+                            </template>
+                        </b-table>
                     </template>
                     <p v-else-if="embargos.length == 0">El cliente no cuenta con embargos registrados.</p>
                     <p v-else>No se encontraron embargos para el periodo seleccionado.</p>
                 </b-col>
-                <b-col cols="12" md="2" class="d-flex justify-content-end align-items-start">
+                <b-col cols="12" md="2" class="d-flex d-md-none justify-content-end align-items-start">
                     <div>
                         <b class="mr-2 periodo">Periodo</b>
                         <select
@@ -129,6 +147,14 @@ export default {
     },
     data() {
         return {
+            fields: [
+                { key: 'entidaddeman', label: 'Nombre entidad actual:' },
+                { key: 'docdeman', label: 'Documento demandante' },
+                { key: 'temb', label: 'Cuota deuda' },
+                { key: 'fembini', label: 'Fecha inicio deuda' },
+                { key: 'tipoembargo', label: 'Tipo embargo' },
+                { key: 'motemb', label: 'Motivo embargo' },
+            ],
             internalSelectedPeriod: null
         };
     },
@@ -205,3 +231,24 @@ export default {
     }
 };
 </script>
+<style scoped lang="scss">
+::v-deep .table {
+    & thead {
+        background-color: #3a5659;
+        white-space: nowrap;
+        color: white;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 18.23px;
+        & tr th {
+            min-height: 50px !important;
+        }
+    }
+    & tbody {
+        background-color: #fff;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 18.23px;
+    }
+}
+</style>
