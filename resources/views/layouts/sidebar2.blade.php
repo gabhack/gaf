@@ -96,7 +96,7 @@
     </li>
     <li class="nav-item">
         <a class="nav-link collapsed" href="/solicitud" style="padding-left: 27px;">
-            <img src="/img/solicitudCredito.png" alt="" class="img-fluid">   
+            <img src="/img/solicitudCredito.png" alt="" class="img-fluid mr-2" style="width: 30px; height: auto;">   
             <span class="pl-2">Solicitud de crédito</span>
         </a>
     </li>
