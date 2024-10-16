@@ -272,10 +272,15 @@ export default {
                     sortable: true
                 },
                 {
+                    key: 'estado',
+                    label: 'Estado',
+                    sortable: true
+                },
+                {
                     key: 'nombre',
                     label: 'Nombre Completo',
                     sortable: true
-                },
+                }
             ],
             pagaduriasOptions: [
                 { text: 'Pagadurias', value: null },
