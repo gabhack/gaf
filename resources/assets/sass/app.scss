@@ -40,7 +40,7 @@
 
 .btn-list {
     color: #fff;
-    background-color: #0cedb0;
+    background-color: #0D614F;
 }
 
 .custom-alert-toast {
@@ -56,6 +56,14 @@
     padding: 8px 12px;
     display: flex;
     justify-content: space-between;
+}
+.table .thead-dark th {
+    background-color: #3a565a !important;
+    border-color: #3a565a !important;
+}
+
+#filtrarButton{
+    background-color: #0D614F !important;   
 }
 
 .panel-table-subtitle {

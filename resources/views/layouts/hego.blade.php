@@ -21,29 +21,29 @@
                     <li class="nav-item">
                         <a class="nav-link {{ Route::is('hego.estudios') ? 'active' : '' }}"
                            href="{{ route('hego.estudios') }}">
-                            <b>Todas las simulaciones</b>
+                            <b style="color:#0e866b;">Todas las simulaciones</b>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ Route::is('hego.tesoreria') ? 'active' : '' }}"
                            href="{{ route('hego.tesoreria') }}">
-                            <b>Tesorería</b>
+                            <b style="color:#0e866b;">Tesorería</b>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ Route::is('hego.cartera') ? 'active' : '' }}"
                            href="{{ route('hego.cartera') }}">
-                            <b>Cartera</b>
+                            <b style="color:#0e866b;">Cartera</b>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ Route::is('hego.venta-cartera') ? 'active' : '' }}"
                            href="{{ route('hego.venta-cartera') }}">
-                            <b>Venta de Cartera</b>
+                            <b style="color:#0e866b;">Venta de Cartera</b>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ Route::is('hego.nuevo-estudio') ? 'active' : '' }}"
+                        <a style="color:#0e866b;"class="nav-link {{ Route::is('hego.nuevo-estudio') ? 'active' : '' }}"
                            href="{{ route('hego.nuevo-estudio') }}">
                             Nueva
                             <i class="fa fa-plus" aria-hidden="true"></i>

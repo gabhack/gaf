@@ -16,8 +16,9 @@
             width: $sidebar-collapsed-width;
 
             span {
-                font-size: 0.65rem;
+                font-size: 16px;
                 display: block;
+                color: $white;
             }
         }
 
@@ -66,10 +67,10 @@
                 }
 
                 .collapse-item {
-                    padding: 0.5rem 1rem;
+                    padding: 16px 10px;
                     margin: 0 0.5rem;
                     display: block;
-                    color: $gray-900;
+                    color: $white;
                     text-decoration: none;
                     border-radius: $border-radius;
                     white-space: nowrap;
@@ -184,6 +185,22 @@
             font-size: 0.75rem;
             color: fade-out($white, 0.5);
         }
+    }
+
+    .sidebar-titles1 {
+        font-size: 16px;
+        color: $white;
+        font-weight: bold;
+    }
+    .sidebar-titles2 {
+        font-size: 14px;
+        color: $white;
+    }
+    .borders-space {
+        padding: 17px 0px;
+        border-top: solid 1px white;
+        border-bottom: solid 1px white;
+        margin: 0px 10px;
     }
 }
 

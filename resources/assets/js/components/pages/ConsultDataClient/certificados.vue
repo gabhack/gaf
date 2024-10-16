@@ -3,26 +3,27 @@
         <div v-if="type_consult === 'individual'">
             <div id="consulta-container" class="row">
                 <div class="panel mb-3 col-md-12">
-                    <div class="panel-heading" style="box-shadow: 10px 5px 5px #09ac80">
-                        <h4 class="mb-0" style="font-weight: bold">Registro de Documentos</h4>
-                    </div>
                     <div class="panel-body">
-                        <button class="btn btn-primary" @click="showModalToAdd"><i class="fas fa-plus"></i></button>
-                        <button class="btn btn-primary" @click="showBulkUploadModal">
-                            <i class="fas fa-upload"></i> Crear Registro Masivo
-                        </button>
-                        <table class="table table-striped mt-3">
+                        <div class="row">
+                            <div class="col-sm mb-2 mt-5">
+                                <h2 class="title"><strong>Registro de Documentos</strong></h2>
+                            </div>
+                            <div class="col-sm mb-2 mt-5" v-if="items.length > 0">
+                                <CustomButton text="Agregar Documento" @click="showModalToAdd"/>
+                                <CustomButton class="white" text="Crear Registro Masivo" @click="showBulkUploadModal"/>
+                            </div>
+                        </div>
+                        <table class="table table-striped mt-3" style="border: 1px solid #b9bdc3; border-radius: 10px" v-if="items.length > 0">
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Fecha/Hora</th>
+                                    <th>Fecha y Hora</th>
                                     <th>Compañía</th>
                                     <th>Usuario</th>
                                     <th>Cédula</th>
                                     <th>Nombre Completo</th>
                                     <th>Tipo de Documento</th>
                                     <th>Estado</th>
-                                    <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -34,8 +35,9 @@
                                     <td>{{ item.documentId }}</td>
                                     <td>{{ item.fullName }}</td>
                                     <td>{{ item.documentType }}</td>
-                                    <td>{{ item.status }}</td>
                                     <td>
+                                        {{ item.status }}
+                                    
                                         <button class="btn btn-success" @click="showUploadModal(item)">
                                             <i class="fas fa-upload"></i>
                                         </button>
@@ -49,6 +51,15 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <div v-if="items.length === 0">
+                            <div class="text-center" style="margin-top: 100px;">
+                                <Lupa style="margin-bottom: 50px;"></Lupa>
+                                <h2>Aun no tienes archivos cargados, Puedes...</h2>
+                                <CustomButton text="Agregar Documento" @click="showModalToAdd"/>
+                                <CustomButton class="white" text="Crear Registro Masivo" @click="showBulkUploadModal"/>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -73,12 +84,13 @@
                                     id="company"
                                     v-model="currentItem.company"
                                     class="form-control"
+                                    style="border: 1px solid #b9bdc3; background-color:white; border-radius: 10px"
                                     required
                                 />
                             </div>
                             <div class="form-group">
                                 <label for="user">Usuario</label>
-                                <input type="text" id="user" v-model="currentItem.user" class="form-control" required />
+                                <input type="text" id="user" v-model="currentItem.user" class="form-control" style="border: 1px solid #b9bdc3; background-color:white; border-radius: 10px" required />
                             </div>
                             <div class="form-group">
                                 <label for="documentId">Cédula</label>
@@ -87,6 +99,7 @@
                                     id="documentId"
                                     v-model="currentItem.documentId"
                                     class="form-control"
+                                    style="border: 1px solid #b9bdc3; background-color:white; border-radius: 10px"
                                     required
                                 />
                             </div>
@@ -97,6 +110,7 @@
                                     id="fullName"
                                     v-model="currentItem.fullName"
                                     class="form-control"
+                                    style="border: 1px solid #b9bdc3; background-color:white; border-radius: 10px"
                                     required
                                 />
                             </div>
@@ -106,6 +120,7 @@
                                     id="documentType"
                                     v-model="currentItem.documentType"
                                     class="form-control"
+                                    style="border: 1px solid #b9bdc3; background-color:white; border-radius: 10px"
                                     required
                                 >
                                     <option disabled value="">Seleccione uno</option>
@@ -143,7 +158,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <input type="file" @change="handleFileUpload" class="form-control" />
+                        <input type="file" @change="handleFileUpload" class="form-control" style="border: 1px solid #b9bdc3; background-color:white; border-radius: 10px"/>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" @click="uploadPdf">Subir</button>
@@ -158,7 +173,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Cargar Archivo Excel para Documentos</h5>
+                        <h5 class="modal-title">Crear un registro masivo</h5>
                         <button
                             type="button"
                             class="close"
@@ -170,14 +185,13 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <input type="file" @change="handleBulkFileUpload" class="form-control" />
-                        <p class="mt-3">
-                            Por favor asegúrese de que el archivo Excel tenga los siguientes encabezados (en cualquier
-                            orden) y que los datos sean válidos:
-                        </p>
-                        <ul>
-                            <li>Compañia | Usuario | Cedula | NombreCompleto | Tipo (1, 2, o 3)</li>
-                        </ul>
+                        <div class="card" style="background: 5px solid #3498db; border-radius: 10px; border-left: 5px solid #3498db; margin-bottom: 30px;">
+                            <div class="card-body" style="background: #f9fafc;">
+                                Por favor asegúrese de que el archivo Excel tenga los siguientes encabezados (en cualquier
+                                orden) y que los datos sean válidos: <strong>Compañia, Usuario, Cedula, NombreCompleto, Tipo (1, 2, o 3)</strong>
+                            </div>
+                        </div>
+                        <input type="file" @change="handleBulkFileUpload" class="form-control" style="border: 1px solid #b9bdc3; background-color:white; border-radius: 10px" />
                         <div v-if="bulkUploadError" class="alert alert-danger mt-3">
                             <p>Error al cargar el archivo:</p>
                             <ul>
@@ -197,6 +211,8 @@
 
 <script>
 import axios from 'axios';
+import Lupa from '../../icons/Lupa.vue';
+import CustomButton from '../../customComponents/CustomButton.vue';
 
 export default {
     data() {
@@ -209,6 +225,10 @@ export default {
             bulkUploadError: false,
             bulkUploadErrorMessages: []
         };
+    },
+    components: {
+        Lupa,
+        CustomButton
     },
     created() {
         this.fetchDocuments();
@@ -366,14 +386,35 @@ export default {
     justify-content: center;
     align-items: center;
 }
+.modal-content {
+    border-color:white;
+}
 .modal-dialog {
     background: white;
     padding: 20px;
     border-radius: 5px;
-    max-width: 600px; /* Adjust the width as needed */
+    max-width: 662px; /* Adjust the width as needed */
 }
 .modal-body {
     max-height: 70vh; /* Adjust the height as needed */
     overflow-y: auto;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background-color: #3e575b; /* Color de fondo de las cabeceras */
+    color: white; /* Color del texto para contraste */
+    padding: 10px;
+    text-align: left;
+}
+td {
+    padding: 10px;
+    border: 1px solid #ddd; /* Borde de las celdas */
+}
+tr:nth-child(even) {
+    background-color: #f9f9f9; /* Color de fondo para filas pares */
 }
 </style>

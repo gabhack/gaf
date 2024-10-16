@@ -54,13 +54,13 @@
     .nav-item {
       &.active {
         .nav-link {
-          width: 6rem;
+          width: 10rem;
           padding-left: 0.35rem;
         }
       }
 
       .nav-link {
-        flex-direction: column;
+        flex-direction: initial;
 
         svg {
           margin-bottom: 0.5rem;
@@ -78,7 +78,7 @@
 
       .nav-link {
         width: 6rem;
-        background-color: $white;
+        background-color: $green-side;
         border-top-left-radius: 10px;
         @media (max-width: 768px) {
           padding-left: 0.35rem;
@@ -94,7 +94,7 @@
         }
 
         &::after {
-          color: rgba($caribbean-green, 0.5);
+          color: $white;
         }
       }
     }
@@ -112,11 +112,11 @@
       }
 
       &:hover {
-        background-color: $white;
+        background-color: $green-2side;
         font-weight: 700;
 
         &::after {
-          color: rgba($caribbean-green, 0.5);
+          color: $white;
         }
       }
 
@@ -133,10 +133,8 @@
       }
 
       span {
-        color: $caribbean-green;
-        font-weight: bold;
-        letter-spacing: 0.27em;
-        text-transform: uppercase;
+        color: $white;
+        font-weight: 400;
         line-height: 1em;
       }
     }
@@ -147,6 +145,7 @@
 
       .collapse-inner {
         border-bottom-left-radius: 10px;
+        color:#fff;
       }
     }
   }
@@ -244,10 +243,10 @@
 
 .form-control {
   font-weight: 600;
-  text-align: center;
+  text-align: left;
 
   background-color: $gainsboro;
-  color: $black-pearl;
+  color: $gainsboro;
   border-radius: 38px;
   border-color: transparent;
   min-height: 30px;
@@ -257,26 +256,45 @@
     color: $caribbean-green;
   }
 }
-
+.form-control2 {
+  padding-left: 15px;
+  min-height: 35px;
+  border: 1px solid #73777f;
+  border-radius: 4px;
+  color: black;
+  background-color: #fff;
+  width: 100%;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18.23px;
+}
+.periodo {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18.23px;
+}
 .custom-select {
-  border-radius: 38px;
-  border-color: transparent;
-  background-color: $gainsboro;
-  font-weight: 600;
-  padding-left: 1rem;
-  color: $black-pearl;
+  padding-left: 15px;
+  min-height: 35px;
+  border: 1px solid #73777f;
+  border-radius: 4px;
+  color: black;
+  background-color: #fff;
+  width: 100%;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18.23px;
 
   &.is-valid,
   &.is-invalid {
     background-color: $gainsboro;
   }
-
-  &:focus {
-    background-color: $black-pearl;
-    color: $caribbean-green;
-  }
 }
-
+.heading-title{
+  font-size: 25px;
+  font-weight: 500;
+  line-height: 32.55px;
+}
 .custom-file {
   &-label {
     border-radius: 38px;

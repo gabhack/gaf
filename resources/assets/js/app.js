@@ -62,6 +62,7 @@ Vue.component('Hego', require('./components/pages/Hego').default);
 Vue.component('HegoInformation', require('./components/pages/HegoInformation').default);
 Vue.component('Politicas', require('./components/pages/Politicas').default);
 Vue.component('download-pdf-button', require('./components/DownloadPdfButton').default);
+Vue.component('Dashboard', require('./components/pages/Dashboard/Dashboard').default);
 
 // Pages
 Vue.component('ConsultasIndex', require('./components/pages/Consultas/Index').default);
@@ -72,6 +73,12 @@ Vue.component('AdminSettingsIcon', require('./components/icons/AdminSettingsIcon
 Vue.component('AmiIcon', require('./components/icons/AmiIcon').default);
 Vue.component('HegoIcon', require('./components/icons/HegoIcon').default);
 Vue.component('HomeIcon', require('./components/icons/HomeIcon').default);
+Vue.component('DashIcon', require('./components/icons/DashIcon').default);
+Vue.component('VisadoIcon', require('./components/icons/VisadoIcon').default);
+Vue.component('MercadoIcon', require('./components/icons/MercadoIcon').default);
+Vue.component('CarteraIcon', require('./components/icons/CarteraIcon').default);
+Vue.component('InvestigacionIcon', require('./components/icons/InvestigacionIcon').default);
+Vue.component('LocalizacionIcon', require('./components/icons/LocalizacionIcon').default);
 Vue.component('DownloadIcon', require('./components/icons/DownloadIcon').default);
 
 //Intragration Pages
