@@ -8,14 +8,14 @@
     </div>
     <!-- Nav Items-->
     <li class="nav-item">
-        <a class="nav-link" href="{{ url('home') }}">
+        <a class="nav-link" style="padding-left: 28px;" href="{{ url('home') }}">
             <dash-icon></dash-icon>
             <span class="pl-2">Dashboard</span>
         </a>
     </li>
     <div class="borders-space">
         @if(IsCompany())
-        <div class="pl-2 mb-4">
+        <div class="pl-4 mb-4" >
             <span class="sidebar-titles1">AMI®</span></br>
             <span class="sidebar-titles2">Análisis de mercado inteligente</span>
         </div>
@@ -84,11 +84,23 @@
                 </div>
             </div>
         </li>
+        
     </div>
-    <div class="pl-3 mt-4">
-        <span class="sidebar-titles1">HEGO®</span></br>
-        <span class="sidebar-titles2">Herramienta ejecutora</span>
-    </div>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="/estudios" 
+        style="display: flex; flex-direction: column; align-items: start; justify-content:center; padding-left: 28px;"
+        >
+            <span style="font-size: 16px; font-weight: 700; line-height: 20.83px;">
+                HEGO®</br> <span style="font-size: 14px; font-weight: 400; line-height: 18.23px; text-align: left; color: #A1A7AF">Herramienta ejecutora</span></span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="/solicitud" style="padding-left: 27px;">
+            <img src="/img/solicitudCredito.png" alt="" class="img-fluid mr-2" style="width: 30px; height: auto;">   
+            <span class="pl-2">Solicitud de crédito</span>
+        </a>
+    </li>
+    
     
     <!-- <li class="nav-item">
         <a class="nav-link" href="{{ url('pagos') }}">
@@ -252,8 +264,8 @@
     @endif
 
     <!-- Sidebar Toggler (Sidebar) -->
-    <div class="text-center d-none d-md-inline pt-4">
+    {{-- <div class="text-center d-none d-md-inline pt-4">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
-    </div>
+    </div> --}}
 </ul>
 <!-- End of Sidebar -->
