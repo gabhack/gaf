@@ -272,10 +272,35 @@ export default {
                     sortable: true
                 },
                 {
+                    key: 'estado',
+                    label: 'Estado',
+                    sortable: true
+                },
+                {
                     key: 'nombre',
                     label: 'Nombre Completo',
                     sortable: true
                 },
+                {
+                    key: 'score',
+                    label: 'Score',
+                    sortable: true
+                },
+                {
+                    key: 'cuota',
+                    label: 'Cuota',
+                    sortable: true
+                },
+                {
+                    key: 'monto',
+                    label: 'Monto',
+                    sortable: true
+                },
+                {
+                    key: 'plazo',
+                    label: 'Plazo',
+                    sortable: true
+                }
             ],
             pagaduriasOptions: [
                 { text: 'Pagadurias', value: null },
