@@ -51,7 +51,7 @@
             <!-- End of Sidebar -->
 
             <!-- Content Wrapper -->
-            <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content-wrapper" class="d-flex flex-column" style="background: #f9fafc;">
                 <!-- Main Content -->
                 <div id="content">
                     <!-- Topbar -->
@@ -77,7 +77,7 @@
                 <footer class="sticky-footer py-3">
                     <div class="container-fluid">
                         <div class="copyright">
-                            <p class="text-spring-green font-weight-light mb-0">Developed by <span class="font-weight-bold">GAF Solutions™</span></p>
+                            <p class="text-spring-green font-weight-light mb-0" style="color: #0c876b !important">Developed by <span class="font-weight-bold">GAF Solutions™</span></p>
                         </div>
                     </div>
                 </footer>
