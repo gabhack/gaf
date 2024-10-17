@@ -1,9 +1,9 @@
 <template>
     <div class="col-6">
-        <div class="panel mb-3">
+        <div class="panel mb-0">
             <h3 class="heading-title mb-0 pt-5">Información laboral</h3>
 
-            <div class="panel-body pt-0">
+            <div class="panel-body pt-0 pb-0">
                 <div class="row">
                     <!--============================
                             FOPEP

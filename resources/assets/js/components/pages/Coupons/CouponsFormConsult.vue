@@ -1,24 +1,24 @@
 <template>
-    <div>
+    <div class="panel container-fluid">
         <loading :active.sync="isLoading" :can-cancel="false" :is-full-page="true" color="#0CEDB0" />
 
-        <div class="panel mb-3 col-md-12">
+        <div class="p-0 mb-3 col-md-12">
             <div class="mb-4 mt-5">
-                <h2 class="title"><strong>Prospección de Cartera</strong></h2>
+                <h3 class="heading-title">Prospección de Cartera</h3>
             </div>
-            <div class="panel-body">
+            <div class="">
                 <div class="row d-flex justify-content-start align-items-end">
                     <div class="col-md-4">
-                        <b-form-group label="PAGADURÍA">
+                        <b-form-group label="Pagaduría">
                             <b-form-input
                                 v-model="pagaduria"
                                 list="lista-pagadurias"
                                 placeholder="Pagaduría"
-                                class="form-control2"
+                                class="input_style_b form-control2"
                             ></b-form-input>
                             <div class="estilo-datalist">
                                 <b-form-datalist
-                                    class="listado"
+                                    class="listado form-control2"
                                     id="lista-pagadurias"
                                     :options="pagaduriasList"
                                 ></b-form-datalist>
@@ -27,23 +27,23 @@
                     </div>
 
                     <div class="col-md-4">
-                        <b-form-group label="ESTADO">
-                            <b-form-select class="form-control2" v-model="selectedEstado" :options="estadosOptions"> </b-form-select>
+                        <b-form-group label="Estado">
+                            <b-form-select class="input_style_b form-control2" v-model="selectedEstado" :options="estadosOptions"> </b-form-select>
                         </b-form-group>
                     </div>
 
                     <!-- Condicionales para mostrar/ocultar campos según el estado -->
 
                     <div class="col-md-4" v-if="selectedEstado === 'Al día' || selectedEstado === 'Todas'">
-                        <b-form-group label="ENTIDAD (Banco o Financiera)">
-                            <b-form-input class="form-control2" v-model="concept" placeholder="Concepto"></b-form-input>
+                        <b-form-group label="Entidad (Banco o Financiera)">
+                            <b-form-input class="input_style_b form-control2" v-model="concept" placeholder="Concepto"></b-form-input>
                         </b-form-group>
                     </div>
 
                     <div class="col-md-4" v-if="selectedEstado === 'En mora' || selectedEstado === 'Todas'">
-                        <b-form-group label="CODIGO">
+                        <b-form-group label="Codigo">
                             <b-form-input
-                                class="form-control2"
+                                class="input_style_b form-control2"
                                 type="text"
                                 v-model="mliquid"
                                 placeholder="Mensaje de liquidación"
@@ -52,9 +52,9 @@
                     </div>
 
                     <div class="col-md-4" v-if="selectedEstado === 'Embargado' || selectedEstado === 'Todas'">
-                        <b-form-group label="ENTIDAD DEMANDANTE">
+                        <b-form-group label="Entidad demandante">
                             <b-form-input
-                                class="form-control2"
+                                class="input_style_b form-control2"
                                 v-model="entidadDemandante"
                                 placeholder="Entidad demandante"
                                 required
@@ -64,10 +64,10 @@
                 </div>
                 <div class="row d-flex justify-content-start align-items-end">
                     <div class="col-md-4">
-                        <b-form-group label="MES">
+                        <b-form-group label="Mes">
                             <div class="d-flex">
                                 <b-form-input
-                                    class="form-control2 mr2"
+                                    class="input_style_b mr2 form-control2"
                                     type="number"
                                     v-model="month"
                                     placeholder="Mes"
@@ -77,9 +77,9 @@
                     </div>
 
                     <div class="col-md-4">
-                        <b-form-group label="AÑO">
+                        <b-form-group label="Año">
                             <div class="d-flex">
-                                <b-form-input class="form-control2" type="number" v-model="year" placeholder="Año"></b-form-input>
+                                <b-form-input class="input_style_b form-control2" type="number" v-model="year" placeholder="Año"></b-form-input>
                             </div>
                         </b-form-group>
                     </div>
@@ -506,9 +506,9 @@
 </template>
 <style>
 .form-group legend {
-    font-family: 'Poppins', sans-serif;
-    font-size: 16px;
-    font-weight: 900;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 18.23px;
 }
 
 datalist {

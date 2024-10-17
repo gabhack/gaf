@@ -1,140 +1,130 @@
 <template>
-  <form id="credit-form" @submit.prevent="submitData" class="d-flex align-items-center" :class="collapsed ? 'collapsed' : null">
-    <b-card no-body class="card-main mt-5 mb-5 ml-5">
-      <b-card-body>
-        <!-- <div v-if="form.requestAmount >= 1000000">
-          <p>Sí es tu primera vez, sólo puedes solicitar hasta $650,000.</p>
-        </div>         -->
+  <form id="credit-form" @submit.prevent="submitData"  :class="collapsed ? 'collapsed' : null">
+    <b-row style="width: 100%; padding: 5rem;">
+      <b-col cols="12" md="6" class="pr-0">
+        <b-card no-body class="card-main mt-5 mb-5 ml-5" style="border-top-right-radius: 0px !important; border-bottom-right-radius: 0px !important; margin: 0 !important;">
+          <b-card-body style="padding-top: 3rem;">
+            <!-- <div v-if="form.requestAmount >= 1000000">
+              <p>Sí es tu primera vez, sólo puedes solicitar hasta $650,000.</p>
+            </div>         -->
 
-        <h2 class="title mb-3">Calcula tu crédito</h2>
+            <h3 class="heading-title mb-3">Calcula tu crédito</h3>
 
-        <b-form-row>
-          <b-col cols="12">
-            <b-form-group label="¿Cuánto dinero necesitas?" label-for="requestAmount" class="mb-0">
-              <b-form-input
-                id="requestAmount"
-                v-model.number="form.requestAmount"
-                type="number"
-                trim
-                required
-              />
-            </b-form-group>
-            <b-form-group>
-              <b-input-group class="amount">
-                <b-input-group-prepend>
-                  <b-input-group-text> {{ valuesRange.min | currency }} </b-input-group-text>
-                </b-input-group-prepend>
-                <b-form-input
-                  type="range"
-                  :min="valuesRange.min"
-                  :max="valuesRange.max"
-                  id="amountRange"
-                  v-model.number="form.requestAmount"
-                  :step="10000"
-                />
-                <b-input-group-append>
-                  <b-input-group-text> {{ valuesRange.max | currency }} </b-input-group-text>
-                </b-input-group-append>
-              </b-input-group>
-            </b-form-group>
-          </b-col>
-        </b-form-row>
-        <b-form-row>
-          <b-col cols="12">
-            <b-form-group label-for="payDate" class="mb-0">
-              <template v-slot:label>
-                <span>¿En cuántas cuotas?</span>
-                <small>Maximo <b>180 meses</b></small>
-              </template>
-            </b-form-group>
-          </b-col>
-        </b-form-row>    
-        <b-form-row>
-          <b-col cols="12">
-            <b-form-group>
-              <!-- <b-form-select v-model="form.due" :options="duesOptions" /> -->
-              <b-input-group class="dues">
-                <b-input-group-prepend>
-                  <b-input-group-text>Cuotas</b-input-group-text>                
-                </b-input-group-prepend>
-                <b-form-select
-                  id="gender"
-                  v-model="form.due"
-                  :options="selectDues"
-                  required
-                />
-              </b-input-group>
-            </b-form-group>
-          </b-col>
-        </b-form-row>
+            <b-form-row>
+              <b-col cols="12">
+                <b-form-group label="¿Cuánto dinero necesitas?" label-for="requestAmount" class="mb-0">
+                  <b-form-input
+                    id="requestAmount"
+                    class="form-control2"
+                    v-model.number="form.requestAmount"
+                    type="number"
+                    trim
+                    required
+                  />
+                </b-form-group>
+                <b-form-group>
+                  <b-input-group class="amount">
+                    <b-input-group-prepend>
+                      <b-input-group-text> {{ valuesRange.min | currency }} </b-input-group-text>
+                    </b-input-group-prepend>
+                    <b-form-input
+                      type="range"
+                      :min="valuesRange.min"
+                      :max="valuesRange.max"
+                      id="amountRange"
+                      v-model.number="form.requestAmount"
+                      :step="10000"
+                    />
+                    <b-input-group-append>
+                      <b-input-group-text> {{ valuesRange.max | currency }} </b-input-group-text>
+                    </b-input-group-append>
+                  </b-input-group>
+                </b-form-group>
+              </b-col>
+            </b-form-row>
+            <b-form-row>
+              <b-col cols="12">
+                <b-form-group label-for="payDate" class="mb-0">
+                  <template v-slot:label>
+                    <span>¿En cuántas cuotas?</span>
+                    <small>Maximo <b>180 meses</b></small>
+                  </template>
+                </b-form-group>
+              </b-col>
+            </b-form-row>    
+            <b-form-row>
+              <b-col cols="12">
+                <b-form-group>
+                  <!-- <b-form-select v-model="form.due" :options="duesOptions" /> -->
+                  <b-input-group class="dues">
+                    <b-form-select
+                      id="gender"
+                      v-model="form.due"
+                      :options="selectDues"
+                      required
+                    />
+                  </b-input-group>
+                </b-form-group>
+              </b-col>
+            </b-form-row>
 
-        <b-form-row>
-          <b-col cols="6">
-            <b-form-group label-for="gender" class="form-group-icon"> 
-              <ClientTypeIcon class="icon" />             
-              <b-form-select
-                id="gender"
-                v-model="form.gender"
-                :options="gender"
-                required
-              />
-            </b-form-group>
-          </b-col>
-          <b-col cols="6">
-            <b-form-group label-for="age" class="form-group-icon"> 
-              <ClientTypeIcon class="icon" />             
-              <b-form-input
-                placeholder="Edad"
-                id="age"
-                v-model.number="form.age"
-                type="number"    
-                required            
-              />
-            </b-form-group>
-          </b-col>
-        </b-form-row>
-        <b-form-row>
-          <b-col cols="12">
-            <b-form-group label-for="clientType" class="form-group-icon">
-              <ClientTypeIcon class="icon" />
-              <b-form-select
-                id="clientType"
-                v-model="form.client"
-                :options="clientType"
-                @change="setEntidades()"
-                required
-              />
-            </b-form-group>
-          </b-col>
-        </b-form-row>
-        <b-form-row v-if="form.client">
-          <b-col cols="12">
-            <b-form-group label-for="clientType" class="form-group-icon">
-              <ClientTypeIcon class="icon" />
-              <b-form-select id="clientType" v-model="form.entidad" :options="entidades"  required/>
-            </b-form-group>
-          </b-col>
-        </b-form-row>
-        <b-form-row>
-          <b-col cols="12">
-            <b-form-group class="form-group-icon">
-              <CreditTypeIcon class="icon" />
-              <b-form-select v-model="form.credit" :options="creditType"  required/>
-            </b-form-group>
-          </b-col>
-        </b-form-row>
-        <div class="btn-credit-wrap" v-if="showButton">
-          <b-button
-            class="btn-credit rounded-pill py-3 px-5"
-            variant="slate-blue" 
-            type="submit"
-          >
-            Solicita tu crédito
-          </b-button>
-        </div>
-      </b-card-body>
-    </b-card>
-    <div id="credit-detail">
+            <b-form-row>
+              <b-col cols="6">
+                <b-form-group label-for="gender" class="form-group">    
+                  <b-form-select
+                    id="gender"
+                    v-model="form.gender"
+                    :options="gender"
+                    required
+                  />
+                </b-form-group>
+              </b-col>
+              <b-col cols="6">
+                <b-form-group label-for="age"> 
+                  <b-form-input
+                    class="form-control2"
+                    placeholder="Edad"
+                    id="age"
+                    v-model.number="form.age"
+                    type="number"    
+                    required            
+                  />
+                </b-form-group>
+              </b-col>
+            </b-form-row>
+            <b-form-row>
+              <b-col cols="12">
+                <b-form-group label-for="clientType" class="form-group">
+                  <b-form-select
+                    id="clientType"
+                    v-model="form.client"
+                    :options="clientType"
+                    @change="setEntidades()"
+                    required
+                  />
+                </b-form-group>
+              </b-col>
+            </b-form-row>
+            <b-form-row v-if="form.client">
+              <b-col cols="12">
+                <b-form-group label-for="clientType" class="form-group">
+                  <b-form-select id="clientType" v-model="form.entidad" :options="entidades"  required/>
+                </b-form-group>
+              </b-col>
+            </b-form-row>
+            <b-form-row>
+              <b-col cols="12">
+                <b-form-group class="form-group">
+                  <b-form-select v-model="form.credit" :options="creditType"  required/>
+                </b-form-group>
+              </b-col>
+            </b-form-row>
+            <CustomButton v-if="showButton" text="Solicita tu crédito" @click="submitData"/>
+          </b-card-body>
+        </b-card>
+      </b-col>
+      <b-col cols="12" md="6" class="pl-0">
+        <div id="credit-detail">
       <b-list-group>
         <b-list-group-item>
           <b-row>
@@ -291,6 +281,10 @@
         </b-list-group-item>        
       </b-list-group>
     </div>
+      </b-col>
+    </b-row>
+    
+    
     <div class="btn-wrap">
       <button type="button" class="btn btn-slate-blue btn-collapse" @click="setCollapsed">
         <LeftArrowIcon />
@@ -304,6 +298,7 @@ import CalendarIcon from '../../icons/CalendarIcon.vue';
 import ClientTypeIcon from '../../icons/ClientTypeIcon.vue';
 import CreditTypeIcon from '../../icons/CreditTypeIcon.vue';
 import LeftArrowIcon from '../../icons/LeftArrowIcon.vue';
+import CustomButton from '../../customComponents/CustomButton.vue'
 
 export default {
   props: {
@@ -319,6 +314,7 @@ export default {
     CalendarIcon,
     ClientTypeIcon,
     CreditTypeIcon,
+    CustomButton,
     LeftArrowIcon
   },
   data() {
@@ -342,7 +338,7 @@ export default {
       form: {
         requestAmount: 1000000,
         payDate: '',
-        due: 1,
+        due: null,
         client: null,
         credit: null,
         entidad: null,
@@ -412,7 +408,11 @@ export default {
         }
       ],
 
-      selectDues: [{
+      selectDues: [
+        {
+          value: null,
+          text: 'Seleccione cuotas'
+        },{
           value: 12,
           text: '12 Meses'
         },{
@@ -651,7 +651,7 @@ export default {
   }
 
   &::-webkit-slider-thumb {
-    background: $slate-blue;
+    background: $dark-green;
     height: 8px;
     width: 8px;
     border: none;
@@ -667,12 +667,6 @@ export default {
   }
 }
 
-input.form-control {
-  background-color: $lavender;
-  border-radius: 25px;
-  padding: 0.5rem 1.5rem;
-  border: none;
-}
 
 .b-form-datepicker.form-control {
   background-color: $lavender;
@@ -694,12 +688,16 @@ input.form-control {
   }
 }
 .custom-select {
-  background-color: $lavender;
-  border-radius: 25px;
-  padding: 0.5rem 1.5rem;
-  border: none;
-  height: auto;
-  cursor: pointer;
+  padding-left: 15px;
+  min-height: 35px;
+  border: 1px solid #73777f;
+  border-radius: 4px;
+  color: black;
+  background-color: #fff;
+  width: 100%;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18.23px;
 }
 
 .form-group {
@@ -770,14 +768,11 @@ $card-width: 570px;
 }
 
 #credit-detail {
-  padding: 3rem;
   background: #021b1e;
   background: linear-gradient(90deg, #021b1e 0%, #021b1e 80%);
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
-
-  position: absolute;
-  transform: translateX(100%);
+  max-height: 570px;
 
   .list-group-item {
     background: #021b1e;
@@ -804,12 +799,12 @@ $card-width: 570px;
     }
 
     .total-val {
-      background: #021b1e;
-      background: linear-gradient(90deg, #021b1e 50%, #021b1e 100%);
-      border-radius: 6px;
-      padding-top: 5px;
-      padding-bottom: 3px;
-      display: block;
+      // background: #021b1e;
+      // background: linear-gradient(90deg, #021b1e 50%, #021b1e 100%);
+      // border-radius: 6px;
+      // padding-top: 5px;
+      // padding-bottom: 3px;
+      // display: block;
     }
   }
 }
@@ -838,7 +833,6 @@ $card-width: 570px;
     border-radius: 1rem;
     border: none;
     box-shadow: 7px 7px 18px 3px rgba(0, 0, 0, 0.1);
-    max-width: $card-width;
 
     .card-body {
       padding: 4.25rem 2.8rem 3.25rem 2.8rem;
@@ -935,7 +929,7 @@ input[type='number'] {
 
   &.amount {
     .input-group-text {
-      color: $slate-blue;
+      color: black;
       font-size: 0.9rem;
     }
   }
