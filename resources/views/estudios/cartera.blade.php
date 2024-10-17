@@ -113,8 +113,8 @@ Cartera
                         <td>0</td>
                         <td class="text-center">
                             <div class="row">
-                                <a class="btn btn-sm" style="color:green" href="#" title="Modificar"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-                                <a class="btn btn-sm" style="color:green" onclick="return confirm('Seguro que desea eliminar este registro y su informacion relacionada?')" href="#" title="Eliminar"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                <a class="btn btn-sm" style="padding:3px" href="#" title="Modificar"><img src="{{ asset('img/EditIcon.png') }}"/></a>
+                                <a class="btn btn-sm" style="padding:3px" onclick="return confirm('Seguro que desea eliminar este registro y su informacion relacionada?')" href="#" title="Eliminar"><img src="{{ asset('img/DeleteIcon.png') }}"/></a>
                             </div>
                         </td>
                     </tr>
