@@ -4,7 +4,7 @@
 
         <div class="p-0 mb-3 col-md-12">
             <div class="mb-4 mt-5">
-                <h3 class="heading-heading-title">Prospección de Cartera</h3>
+                <h3 class="heading-title">Prospección de Cartera</h3>
             </div>
             <div class="">
                 <div class="row d-flex justify-content-start align-items-end">
