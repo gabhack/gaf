@@ -1,10 +1,18 @@
 <template>
-    <div class="d-flex vh-100 flex-column">
+    <div class="panel d-flex vh-100 flex-column">
         <b-card class="flex-grow-1 w-100">
             <loading :active.sync="isLoading" :can-cancel="false" :is-full-page="true" color="#0CEDB0" />
 
-            <div class="panel mb-3 col-md-12 mt-4 mb-3">
-                <h3 class="heading-title">Carga de Archivo Colpensiones</h3>
+            <div class="p-0 mb-3 col-md-12 mt-4 mb-3">
+                <div class="row">
+                    <div class="col-sm mb-2 mt-5">
+                        <h3 class="heading-title">Carga de Archivo Colpensiones</h3>
+                    </div>
+                    <div class="col-sm mb-2 mt-5" v-if="logs.length > 0">
+                        <CustomButton text="Agregar Documento" @click="showModalToAdd"/>
+                    </div>
+                </div>
+                
                 <div v-if="logs.length === 0">
                     <div class="text-center" style="margin-top: 100px;">
                         <Lupa style="margin-bottom: 50px;"></Lupa>
@@ -13,16 +21,6 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <form @submit.prevent="submit" v-if="!processing && !completed && !uploadingComplete">
-                        <b-form-group label="Seleccione el archivo para cargar">
-                            <b-form-file @change="handleFileUpload" accept=".csv,.txt" required></b-form-file>
-                        </b-form-group>
-                        <b-button type="submit" variant="primary" :disabled="uploading || processing"
-                            >Cargar archivo</b-button
-                        >
-                        <b-button v-if="uploading" @click="cancelUpload" variant="danger">Cancelar</b-button>
-                    </form>
-
                     <div v-if="uploading">
                         <div class="alert alert-info" role="alert">Cargando archivo al servidor...</div>
                     </div>
@@ -46,7 +44,7 @@
                 </div>
             </div>
 
-            <div class="panel mb-3 col-md-12" v-if="logs.length">
+            <div class="p-0 mb-3 col-md-12" v-if="logs.length">
                 <h3 class="heading-title">Archivos en Proceso</h3>
         
                 <div class="panel-body">
@@ -54,6 +52,31 @@
                 </div>
             </div>
         </b-card>
+
+        <div class="modal" tabindex="-1" role="dialog" style="display: none" ref="editModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Agregar Documento</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="hideModal">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form @submit.prevent="submit" v-if="!processing && !completed && !uploadingComplete">
+                            <b-form-group label="Seleccione el archivo para cargar">
+                                <b-form-file @change="handleFileUpload" accept=".csv,.txt" required></b-form-file>
+                            </b-form-group>
+                            <CustomButton type="submit" text="Cargar archivo" :disabled="uploading || processing"/>
+                            <CustomButton v-if="uploading" text="Cancelar" @click="cancelUpload" class="white"/>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @click="hideModal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -98,6 +121,13 @@ export default {
         }
     },
     methods: {
+        showModalToAdd() {
+            this.$refs.editModal.style.display = 'block';
+            this.editMode = false;
+        },
+        hideModal() {
+            this.$refs.editModal.style.display = 'none';
+        },
         handleFileUpload(event) {
             const file = event.target.files[0];
             if (file && (file.type === 'text/csv' || file.name.endsWith('.csv') || file.name.endsWith('.txt'))) {

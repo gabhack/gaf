@@ -3,8 +3,14 @@
         <loading :active.sync="isLoading" :can-cancel="false" :is-full-page="true" color="#0CEDB0" />
 
         <div class="panel mb-3 col-md-12">    
-            <h3 class="heading-title mt-4 mb-3">Busqueda de Cedulas</h3>
-            
+            <div class="row">
+                <div class="col-sm mb-2 mt-5">
+                    <h3 class="heading-title">Busqueda de Cedulas</h3>
+                </div>
+                <div class="col-sm mb-2 mt-5" v-if="results.length > 0">
+                    <CustomButton text="Agregar Documento" @click="showModalToAdd"/>
+                </div>
+            </div>
             <div v-if="results.length === 0">
                 <div class="text-center" style="margin-top: 100px;">
                     <Lupa style="margin-bottom: 50px;"></Lupa>
@@ -14,13 +20,6 @@
             </div>
             
             <div class="panel-body">
-                <form @submit.prevent="submitFile" v-if="!uploading && !processing">
-                    <b-form-group label="Seleccione el archivo para cargar">
-                        <b-form-file @change="handleFileUpload" required></b-form-file>
-                    </b-form-group>
-                    <b-button type="submit" variant="primary">Upload File</b-button>
-                </form>
-
                 <div v-if="uploading">
                     <div class="alert alert-info" role="alert">Cargando archivo al servidor...</div>
                 </div>
@@ -45,6 +44,29 @@
                                 <span :class="{ 'text-danger': !row.item.found }">{{ row.item.cedula }}</span>
                             </template>
                         </b-table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal" tabindex="-1" role="dialog" style="display: none" ref="editModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Agregar Documento</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="hideModal">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form @submit.prevent="submitFile" v-if="!uploading && !processing">
+                            <b-form-group label="Seleccione el archivo para cargar">
+                                <b-form-file @change="handleFileUpload" required></b-form-file>
+                            </b-form-group>
+                            <CustomButton type="submit" text="Upload File"/>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @click="hideModal">Cerrar</button>
                     </div>
                 </div>
             </div>
@@ -106,6 +128,13 @@ export default {
         }
     },
     methods: {
+        showModalToAdd() {
+            this.$refs.editModal.style.display = 'block';
+            this.editMode = false;
+        },
+        hideModal() {
+            this.$refs.editModal.style.display = 'none';
+        },
         handleFileUpload(event) {
             this.file = event.target.files[0];
         },

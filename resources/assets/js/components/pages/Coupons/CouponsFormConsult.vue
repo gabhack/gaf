@@ -85,7 +85,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12 text-right">
+                    <div class="col-md-12 text-left">
                         <CustomButton text="Prospectar" @click="getCoupons"/>
                         <CustomButton text="Exportar a Excel" @click="exportToExcel"/>    
                     </div>
@@ -105,14 +105,14 @@
 
         <!-- Tabla para mostrar los resultados de cupones AL DIA -->
 
-        <div class="panel mb-3 col-md-12" v-if="coupons && coupons.length > 0 && selectedEstado === 'Al día'">
+        <div class="p-0 mb-3 col-md-12" v-if="coupons && coupons.length > 0 && selectedEstado === 'Al día'">
             <div class="mb-2 mt-5">
-                <h2 class="title"><strong>RESUMEN</strong></h2>
+                <h3 class="heading-title">RESUMEN</h3>
             </div>
             <div class="row d-flex align-items-center justify-content-center py-4">
-                <div class="col-4"><label class="label-titulo">Estado</label></div>
-                <div class="col-4"><label class="label-titulo">Total Clientes</label></div>
-                <div class="col-4"><label class="label-titulo">Total Cuotas</label></div>
+                <div class="col-4"><label class="heading-title">Estado</label></div>
+                <div class="col-4"><label class="heading-title">Total Clientes</label></div>
+                <div class="col-4"><label class="heading-title">Total Cuotas</label></div>
 
                 <div class="col-4 pb-2">
                     <b-form-input type="text" disabled class="form-control2" :value="'Al día'">Al día</b-form-input>
@@ -126,7 +126,7 @@
             </div>
 
             <div class="mb-2 mt-5">
-                <h2 class="title"><strong>RESULTADOS DE LA CONSULTA (Cartera al Día)</strong></h2>
+                <h3 class="heading-title">RESULTADOS DE LA CONSULTA (Cartera al Día)</h3>
             </div>
             <div class="panel-body">
                 <div class="row">
@@ -155,14 +155,14 @@
 
         <!-- Tabla para mostrar los resultados de EN MORA -->
 
-        <div class="panel mb-3 col-md-12" v-if="descuentos && descuentos.length > 0 && selectedEstado === 'En mora'">
+        <div class="p-0 mb-3 col-md-12" v-if="descuentos && descuentos.length > 0 && selectedEstado === 'En mora'">
             <div class="mb-2 mt-5">
-                <h2 class="title"><strong>RESUMEN</strong></h2>
+                <h3 class="heading-title">RESUMEN</h3>
             </div>
             <div class="row d-flex align-items-center justify-content-center py-4">
-                <div class="col-4"><label class="label-titulo">Estado</label></div>
-                <div class="col-4"><label class="label-titulo">Total Clientes</label></div>
-                <div class="col-4"><label class="label-titulo">Total Cuotas</label></div>
+                <div class="col-4"><label class="heading-title">Estado</label></div>
+                <div class="col-4"><label class="heading-title">Total Clientes</label></div>
+                <div class="col-4"><label class="heading-title">Total Cuotas</label></div>
 
                 <div class="col-4 pb-2"><label class="label-resumen">En mora</label></div>
                 <div class="col-4 pb-2">
@@ -173,7 +173,7 @@
                 </div>
             </div>
             <div class="mb-2 mt-5">
-                <h2 class="title"><strong>RESULTADOS DE LA CONSULTA (Cartera en Mora)</strong></h2>
+                <h3 class="heading-title">RESULTADOS DE LA CONSULTA (Cartera en Mora)</h3>
             </div>
             <div class="panel-body">
                 <b-form-input
@@ -198,7 +198,7 @@
                             </b-button>
                         </template>
                     </b-table>
-                    <b-modal id="modal-1" centered title="Causales" @hidden="clearCausales">
+                    <b-modal id="modal-1" centered heading-title="Causales" @hidden="clearCausales">
                         <template v-if="isLoadingModal">
                             <!-- Contenido mostrado durante la carga -->
                             <div class="text-center">
@@ -275,14 +275,14 @@
 
         <!-- Tabla para mostrar los resultados de EMBARGOS -->
 
-        <div class="panel mb-3 col-md-12" v-if="embargos && embargos.length > 0 && selectedEstado === 'Embargado'">
+        <div class="p-0 mb-3 col-md-12" v-if="embargos && embargos.length > 0 && selectedEstado === 'Embargado'">
             <div class="mb-2 mt-5">
-                <h2 class="title"><strong>RESUMEN</strong></h2>
+                <h3 class="heading-title">RESUMEN</h3>
             </div>
             <div class="row d-flex align-items-center justify-content-center py-4">
-                <div class="col-4"><label class="label-titulo">Estado</label></div>
-                <div class="col-4"><label class="label-titulo">Total Clientes</label></div>
-                <div class="col-4"><label class="label-titulo">Total Cuotas</label></div>
+                <div class="col-4"><h3 class="heading-title">Estado</h3></div>
+                <div class="col-4"><h3 class="heading-title">Total Clientes</h3></div>
+                <div class="col-4"><h3 class="heading-title">Total Cuotas</h3></div>
 
                 <div class="col-4 pb-2"><label class="label-resumen">Embargado</label></div>
                 <div class="col-4 pb-2">
@@ -293,7 +293,7 @@
                 </div>
             </div>
             <div class="mb-2 mt-5">
-                <h2 class="title"><strong>RESULTADOS DE LA CONSULTA (Cartera Embargada)</strong></h2>
+                <h3 class="heading-title">RESULTADOS DE LA CONSULTA (Cartera Embargada)</h3>
             </div>
             <div class="panel-body">
                 <b-form-input v-model="filtroEmbargo" placeholder="Buscar por documento..." class="mb-3 form-control2"></b-form-input>
@@ -318,19 +318,19 @@
         </div>
         <div
             id="todasDiv"
-            class="panel mb-3 col-md-12"
+            class="p-0 mb-3 col-md-12"
             v-if="coupons && coupons.length > 0 && selectedEstado === 'Todas'"
         >
             <div class="mb-2 mt-5">
-                <h2 class="title"><strong>RESUMEN</strong></h2>
+                <h3 class="heading-title">RESUMEN</h3>
             </div>
             <div class="row d-flex align-items-center justify-content-center py-4">
-                <div class="col-4"><label class="label-titulo">Estado</label></div>
-                <div class="col-4"><label class="label-titulo">Total Clientes</label></div>
-                <div class="col-4"><label class="label-titulo">Total Cuotas</label></div>
+                <div class="col-4"><label class="heading-title">Estado</label></div>
+                <div class="col-4"><label class="heading-title">Total Clientes</label></div>
+                <div class="col-4"><label class="heading-title">Total Cuotas</label></div>
 
                 <div class="col-4 pb-2">
-                    <label><strong>Al día</strong></label>
+                    <label>Al día</label>
                 </div>
                 <div class="col-4 pb-2">
                     <b-form-input disabled :value="rowsAldia" class="form-control2"/>
@@ -339,7 +339,7 @@
                     <b-form-input disabled :value="totalCuotasAldia" class="form-control2 pb-2"/>
                 </div>
 
-                <div class="col-4 pb-2"><label><strong>En mora</strong></label></div>
+                <div class="col-4 pb-2"><label>En mora</label></div>
                 <div class="col-4 pb-2">
                     <b-form-input disabled :value="rowsMora" class="form-control2"/>
                 </div>
@@ -347,7 +347,7 @@
                     <b-form-input disabled :value="totalCuotasMora" class="form-control2"/>
                 </div>
 
-                <div class="col-4 pb-2"><label><strong>Embargado</strong></label></div>
+                <div class="col-4 pb-2"><label>Embargado</label></div>
                 <div class="col-4 pb-2">
                     <b-form-input disabled :value="rowsEmbargo" class="form-control2"/>
                 </div>
@@ -355,7 +355,7 @@
                     <b-form-input disabled :value="totalCuotasEmbargo" class="form-control2"/>
                 </div>
 
-                <div class="col-4"><label><strong>Total</strong></label></div>
+                <div class="col-4"><label>Total</label></div>
                 <div class="col-4">
                     <b-form-input disabled :value="totalClientes" class="form-control2"/>
                 </div>
@@ -364,9 +364,9 @@
                 </div>
             </div>
             <div class="mb-2 mt-5">
-                <h2 class="title"><strong>RESULTADOS DE LA CONSULTA (Todas)</strong></h2>
+                <h3 class="heading-title">RESULTADOS DE LA CONSULTA (Todas)</h3>
             </div>
-            <div class="panel-body">
+            <!-- <div class="panel-body"> -->
                 <!-- <b-accordion> -->
                     <!-- <b-card no-body class="mb-2">
                         <b-card-header header-tag="header" class="p-1" role="tab">
@@ -397,7 +397,7 @@
                         <!-- <b-collapse id="accordion-1" accordion="my-accordion2" role="tabpanel">
                             <b-card-body> -->
                                 <div class="mb-2 mt-5">
-                                    <h2 class="title"><strong>Cartera al Día</strong></h2>
+                                    <h3 class="heading-title">Cartera al Día</h3>
                                 </div>
                                 <b-table head-variant="dark" style="border: 1px solid #b9bdc3; border-radius: 10px" striped hover :fields="cupones" :items="paginatedCoupons"></b-table>
                                 <b-pagination
@@ -439,7 +439,7 @@
                         <!-- <b-collapse id="accordion-2" accordion="my-accordion" role="tabpanel">
                             <b-card-body> -->
                                 <div class="mb-2 mt-5">
-                                    <h2 class="title"><strong>Cartera en Mora</strong></h2>
+                                    <h3 class="heading-title">Cartera en Mora</h3>
                                 </div>
                                 <b-table head-variant="dark" style="border: 1px solid #b9bdc3; border-radius: 10px" striped hover :fields="descuentosFields" :items="descuentosFiltrados">
                                 </b-table>
@@ -483,7 +483,7 @@
                         <!-- <b-collapse id="accordion-3" accordion="my-accordion" role="tabpanel">
                             <b-card-body> -->
                                 <div class="mb-2 mt-5">
-                                    <h2 class="title"><strong>Cartera Embargada</strong></h2>
+                                    <h3 class="heading-title">Cartera Embargada</h3>
                                 </div>
                                 <b-table head-variant="dark" style="border: 1px solid #b9bdc3; border-radius: 10px" striped hover :fields="embargosFields" :items="paginatedEmbargos"></b-table>
                                 <b-pagination
@@ -496,7 +496,7 @@
                         </b-collapse>
                     </b-card> -->
                 <!-- </b-accordion> -->
-            </div>
+            <!-- </div> -->
         </div>
 
         <div v-if="searchPerformed && coupons.length === 0">
@@ -564,7 +564,7 @@ th {
     padding-left: 12px;
     padding-right: 12px;
 }
-.label-titulo {
+.heading-title {
     font-family: 'Poppins', sans-serif;
     font-size: 16px;
     font-weight: 900;
