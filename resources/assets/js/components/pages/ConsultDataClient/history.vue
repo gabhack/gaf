@@ -1,5 +1,5 @@
 <template>
-    <div class="container-fluid">
+    <div class="panel container-fluid">
         <div class="row">
             <div class="col-12">
                 <template v-if="id_consult === null">

@@ -1,9 +1,9 @@
 <template>
-    <div class="d-flex vh-100 flex-column">
+    <div class="panel d-flex vh-100 flex-column">
         <b-card class="flex-grow-1 w-100">
             <loading :active.sync="isLoading" :can-cancel="false" :is-full-page="true" color="#0CEDB0" />
 
-            <div class="panel mb-3 col-md-12 mt-4 mb-3">
+            <div class="p-0 mb-3 col-md-12 mt-4 mb-3">
                 <div class="row">
                     <div class="col-sm mb-2 mt-5">
                         <h3 class="heading-title">Carga de Archivo Colpensiones</h3>
@@ -44,7 +44,7 @@
                 </div>
             </div>
 
-            <div class="panel mb-3 col-md-12" v-if="logs.length">
+            <div class="p-0 mb-3 col-md-12" v-if="logs.length">
                 <h3 class="heading-title">Archivos en Proceso</h3>
         
                 <div class="panel-body">
