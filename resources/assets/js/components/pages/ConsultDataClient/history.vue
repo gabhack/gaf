@@ -4,7 +4,7 @@
             <div class="col-12">
                 <template v-if="id_consult === null">
                     <div class="mb-4 mt-5">
-                        <h2 class="title"><strong>Listado de Consultas</strong></h2>
+                        <h2 class="heading-title">Listado de Consultas</h2>
                     </div>
                     <div class="d-flex mt-3 mb-3" justified style="color:#ffff; border: 1px solid #b9bdc3; border-radius: 10px">
                         <div class="form-group col-md-3">
