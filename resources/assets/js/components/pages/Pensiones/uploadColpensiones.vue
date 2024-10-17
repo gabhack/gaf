@@ -3,9 +3,14 @@
         <b-card class="flex-grow-1 w-100">
             <loading :active.sync="isLoading" :can-cancel="false" :is-full-page="true" color="#0CEDB0" />
 
-            <div class="panel mb-3 col-md-12">
-                <div class="panel-heading">
-                    <b>Carga de Archivo Colpensiones</b>
+            <div class="panel mb-3 col-md-12 mt-4 mb-3">
+                <h3 class="heading-title">Carga de Archivo Colpensiones</h3>
+                <div v-if="logs.length === 0">
+                    <div class="text-center" style="margin-top: 100px;">
+                        <Lupa style="margin-bottom: 50px;"></Lupa>
+                        <h2>Aun no tienes archivos cargados, Puedes...</h2>
+                        <CustomButton text="Agregar Documento" @click="showModalToAdd"/>
+                    </div>
                 </div>
                 <div class="panel-body">
                     <form @submit.prevent="submit" v-if="!processing && !completed && !uploadingComplete">
@@ -42,11 +47,10 @@
             </div>
 
             <div class="panel mb-3 col-md-12" v-if="logs.length">
-                <div class="panel-heading">
-                    <b>Archivos en Proceso</b>
-                </div>
+                <h3 class="heading-title">Archivos en Proceso</h3>
+        
                 <div class="panel-body">
-                    <b-table striped hover :items="sortedLogs" :fields="fields" :row-class="rowClass"></b-table>
+                    <b-table head-variant="dark" style="border: 1px solid #b9bdc3; border-radius: 10px" striped hover :items="sortedLogs" :fields="fields" :row-class="rowClass"></b-table>
                 </div>
             </div>
         </b-card>
@@ -57,10 +61,14 @@
 import axios from 'axios';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
+import Lupa from '../../icons/Lupa.vue';
+import CustomButton from '../../customComponents/CustomButton.vue';
 
 export default {
     components: {
-        Loading
+        Loading,
+        Lupa,
+        CustomButton
     },
     data() {
         return {

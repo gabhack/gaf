@@ -85,8 +85,9 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12 text-left mt-4">
-                        <b-button @click="getCoupons" class="button_style_b">Prospectar</b-button>
+                    <div class="col-md-12 text-right">
+                        <CustomButton text="Prospectar" @click="getCoupons"/>
+                        <CustomButton text="Exportar a Excel" @click="exportToExcel"/>    
                     </div>
                 </div>
                 <!-- Mensajes de error -->
@@ -114,13 +115,13 @@
                 <div class="col-4"><label class="label-titulo">Total Cuotas</label></div>
 
                 <div class="col-4 pb-2">
-                    <b-form-input disabled class="input_style_b" :value="'Al día'">Al día</b-form-input>
+                    <b-form-input type="text" disabled class="form-control2" :value="'Al día'">Al día</b-form-input>
                 </div>
                 <div class="col-4 pb-2">
-                    <b-form-input disabled class="input_style_b" :value="rowsAldia"></b-form-input>
+                    <b-form-input type="text" disabled class="form-control2" :value="rowsAldia"></b-form-input>
                 </div>
                 <div class="col-4 pb-2">
-                    <b-form-input disabled class="pb-2 input_style_b" :value="totalCuotasAldia"></b-form-input>
+                    <b-form-input type="text" disabled class="pb-2 form-control2" :value="totalCuotasAldia"></b-form-input>
                 </div>
             </div>
 
@@ -133,11 +134,11 @@
                         <b-form-input
                             v-model="inputFiltroCupon"
                             placeholder="Buscar por documento..."
-                            class="mb-3 input_style_b"
+                            class="mb-3 form-control2"
                         ></b-form-input>
                     </div>
                     <div class="col-sm-2">
-                        <b-button @click="aplicarFiltroCupon" variant="primary" class="button_style_b">Filtrar</b-button>
+                        <CustomButton text="Filtrar" @click="aplicarFiltroCupon"/>
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -178,7 +179,7 @@
                 <b-form-input
                     v-model="filtroDescuento"
                     placeholder="Buscar por documento..."
-                    class="mb-3 input_style_b"
+                    class="mb-3 form-control2"
                 ></b-form-input>
                 <div class="table-responsive">
                     <b-table head-variant="dark" style="border: 1px solid #b9bdc3; border-radius: 10px" striped id="mora-table" hover :fields="descuentosFields" :items="descuentosFiltrados">
@@ -295,7 +296,7 @@
                 <h2 class="title"><strong>RESULTADOS DE LA CONSULTA (Cartera Embargada)</strong></h2>
             </div>
             <div class="panel-body">
-                <b-form-input v-model="filtroEmbargo" placeholder="Buscar por documento..." class="mb-3 input_style_b"></b-form-input>
+                <b-form-input v-model="filtroEmbargo" placeholder="Buscar por documento..." class="mb-3 form-control2"></b-form-input>
                 <div class="table-responsive">
                     <b-table 
                         head-variant="dark"
@@ -328,44 +329,46 @@
                 <div class="col-4"><label class="label-titulo">Total Clientes</label></div>
                 <div class="col-4"><label class="label-titulo">Total Cuotas</label></div>
 
-                <div class="col-4 pb-2"><label class="label-resumen">Al día</label></div>
                 <div class="col-4 pb-2">
-                    <label class="label-resumen">{{ rowsAldia }}</label>
+                    <label><strong>Al día</strong></label>
                 </div>
                 <div class="col-4 pb-2">
-                    <label class="label-resumen pb-2">{{ totalCuotasAldia }}</label>
-                </div>
-
-                <div class="col-4 pb-2"><label class="label-resumen">En mora</label></div>
-                <div class="col-4 pb-2">
-                    <label class="label-resumen">{{ rowsMora }}</label>
+                    <b-form-input disabled :value="rowsAldia" class="form-control2"/>
                 </div>
                 <div class="col-4 pb-2">
-                    <label class="label-resumen">{{ totalCuotasMora }}</label>
+                    <b-form-input disabled :value="totalCuotasAldia" class="form-control2 pb-2"/>
                 </div>
 
-                <div class="col-4 pb-2"><label class="label-resumen">Embargado</label></div>
+                <div class="col-4 pb-2"><label><strong>En mora</strong></label></div>
                 <div class="col-4 pb-2">
-                    <label class="label-resumen">{{ rowsEmbargo }}</label>
+                    <b-form-input disabled :value="rowsMora" class="form-control2"/>
                 </div>
                 <div class="col-4 pb-2">
-                    <label class="label-resumen">{{ totalCuotasEmbargo }}</label>
+                    <b-form-input disabled :value="totalCuotasMora" class="form-control2"/>
                 </div>
 
-                <div class="col-4"><label class="label-resumen">Total</label></div>
+                <div class="col-4 pb-2"><label><strong>Embargado</strong></label></div>
+                <div class="col-4 pb-2">
+                    <b-form-input disabled :value="rowsEmbargo" class="form-control2"/>
+                </div>
+                <div class="col-4 pb-2">
+                    <b-form-input disabled :value="totalCuotasEmbargo" class="form-control2"/>
+                </div>
+
+                <div class="col-4"><label><strong>Total</strong></label></div>
                 <div class="col-4">
-                    <label class="label-resumen">{{ totalClientes }}</label>
+                    <b-form-input disabled :value="totalClientes" class="form-control2"/>
                 </div>
                 <div class="col-4">
-                    <label class="label-resumen">{{ totalCuotas }}</label>
+                    <b-form-input disabled :value="totalCuotas" class="form-control2"/>
                 </div>
             </div>
             <div class="mb-2 mt-5">
                 <h2 class="title"><strong>RESULTADOS DE LA CONSULTA (Todas)</strong></h2>
             </div>
             <div class="panel-body">
-                <b-accordion>
-                    <b-card no-body class="mb-2">
+                <!-- <b-accordion> -->
+                    <!-- <b-card no-body class="mb-2">
                         <b-card-header header-tag="header" class="p-1" role="tab">
                             <b-button class="button-tablas d-flex" block v-b-toggle.accordion-1>
                                 <div class="row" style="width: 100%">
@@ -389,10 +392,13 @@
                                     </div>
                                 </div>
                             </b-button>
-                        </b-card-header>
+                        </b-card-header> -->
 
-                        <b-collapse id="accordion-1" accordion="my-accordion2" role="tabpanel">
-                            <b-card-body>
+                        <!-- <b-collapse id="accordion-1" accordion="my-accordion2" role="tabpanel">
+                            <b-card-body> -->
+                                <div class="mb-2 mt-5">
+                                    <h2 class="title"><strong>Cartera al Día</strong></h2>
+                                </div>
                                 <b-table head-variant="dark" style="border: 1px solid #b9bdc3; border-radius: 10px" striped hover :fields="cupones" :items="paginatedCoupons"></b-table>
                                 <b-pagination
                                     v-model="currentPageAldia"
@@ -400,11 +406,11 @@
                                     :total-rows="rowsAldia"
                                     aria-controls="aldia-table"
                                 ></b-pagination>
-                            </b-card-body>
+                            <!-- </b-card-body>
                         </b-collapse>
-                    </b-card>
+                    </b-card> -->
                     <!-- Cartera en Mora -->
-                    <b-card no-body class="mb-2">
+                    <!-- <b-card no-body class="mb-2">
                         <b-card-header header-tag="header" class="p-1" role="tab">
                             <b-button class="button-tablas d-flex" block v-b-toggle.accordion-2>
                                 <div class="row" style="width: 100%">
@@ -428,10 +434,13 @@
                                     </div>
                                 </div>
                             </b-button>
-                        </b-card-header>
+                        </b-card-header> -->
 
-                        <b-collapse id="accordion-2" accordion="my-accordion" role="tabpanel">
-                            <b-card-body>
+                        <!-- <b-collapse id="accordion-2" accordion="my-accordion" role="tabpanel">
+                            <b-card-body> -->
+                                <div class="mb-2 mt-5">
+                                    <h2 class="title"><strong>Cartera en Mora</strong></h2>
+                                </div>
                                 <b-table head-variant="dark" style="border: 1px solid #b9bdc3; border-radius: 10px" striped hover :fields="descuentosFields" :items="descuentosFiltrados">
                                 </b-table>
 
@@ -441,11 +450,11 @@
                                     :total-rows="rowsMora"
                                     aria-controls="mora-table"
                                 ></b-pagination>
-                            </b-card-body>
+                            <!-- </b-card-body>
                         </b-collapse>
-                    </b-card>
+                    </b-card> -->
                     <!-- Cartera Embargada -->
-                    <b-card no-body class="mb-2">
+                    <!-- <b-card no-body class="mb-2">
                         <b-card-header header-tag="header" class="p-1" role="tab">
                             <b-button class="button-tablas d-flex" block v-b-toggle.accordion-3>
                                 <div class="row" style="width: 100%">
@@ -469,10 +478,13 @@
                                     </div>
                                 </div>
                             </b-button>
-                        </b-card-header>
+                        </b-card-header> -->
 
-                        <b-collapse id="accordion-3" accordion="my-accordion" role="tabpanel">
-                            <b-card-body>
+                        <!-- <b-collapse id="accordion-3" accordion="my-accordion" role="tabpanel">
+                            <b-card-body> -->
+                                <div class="mb-2 mt-5">
+                                    <h2 class="title"><strong>Cartera Embargada</strong></h2>
+                                </div>
                                 <b-table head-variant="dark" style="border: 1px solid #b9bdc3; border-radius: 10px" striped hover :fields="embargosFields" :items="paginatedEmbargos"></b-table>
                                 <b-pagination
                                     v-model="currentPageEmbargo"
@@ -480,10 +492,10 @@
                                     :total-rows="rowsEmbargo"
                                     aria-controls="embargo-table"
                                 ></b-pagination>
-                            </b-card-body>
+                            <!-- </b-card-body>
                         </b-collapse>
-                    </b-card>
-                </b-accordion>
+                    </b-card> -->
+                <!-- </b-accordion> -->
             </div>
         </div>
 
@@ -525,7 +537,7 @@ td,
 th {
     text-align: left;
 }
-.input_style_b{
+.form-control2{
     border: 1px solid #b9bdc3; 
     background-color:white;
     border-radius: 10px
@@ -588,13 +600,16 @@ th {
 </style>
 <script>
 import axios from 'axios';
+import * as XLSX from 'xlsx';
 import { sassFalse } from 'sass';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
+import CustomButton from '../../customComponents/CustomButton.vue';
 export default {
     name: 'CouponsFormConsult',
     components: {
-        Loading
+        Loading,
+        CustomButton
     },
     data() {
         return {
@@ -1056,7 +1071,70 @@ export default {
             this.situacionLaboral = (this.situacionesLaborales[doc] || 'información no disponible').toLowerCase();
 
             this.isLoadingModal = false;
+        },
+        exportToExcel() {
+        const wb = XLSX.utils.book_new();
+
+        if (this.coupons && this.coupons.length > 0) {
+            const columnsCoupons = ['Documento', 'Nombres Completos', 'Homónimo', 'Concepto', 'Valor Cuota'];
+            const dataCoupons = this.coupons.map(item => [
+                item.doc,
+                item.names,
+                item.code,
+                item.concept,
+                this.parseNumber(item.egresos) 
+            ]);
+            dataCoupons.push([]);
+            dataCoupons.push(['Total Clientes', this.coupons.length]);
+            dataCoupons.push(['Total Cuotas', this.parseNumber(this.totalCuotasAldia)]);
+
+            const wsCoupons = XLSX.utils.aoa_to_sheet([columnsCoupons, ...dataCoupons]);
+            XLSX.utils.book_append_sheet(wb, wsCoupons, 'Cartera al Día');
         }
+
+        if (this.descuentos && this.descuentos.length > 0) {
+            const columnsDescuentos = ['Documento', 'Nombre Completo', 'Mensaje Liquidación', 'Nómina', 'Valor'];
+            const dataDescuentos = this.descuentos.map(item => [
+                item.doc,
+                item.nomp,
+                item.mliquid,
+                item.nomina,
+                this.parseNumber(item.valor)
+            ]);
+            dataDescuentos.push([]);
+            dataDescuentos.push(['Total Clientes', this.descuentos.length]);
+            dataDescuentos.push(['Total Cuotas', this.parseNumber(this.totalCuotasMora)]);
+
+            const wsDescuentos = XLSX.utils.aoa_to_sheet([columnsDescuentos, ...dataDescuentos]);
+            XLSX.utils.book_append_sheet(wb, wsDescuentos, 'Cartera en Mora');
+        }
+
+        if (this.embargos && this.embargos.length > 0) {
+            const columnsEmbargos = ['Documento', 'Cliente Demandado', 'Número de Pagaré', 'Entidad Demandante', 'Cuota Embargada'];
+            const dataEmbargos = this.embargos.map(item => [
+                item.doc,
+                item.nomp,
+                item.docdeman,
+                item.entidaddeman,
+                this.parseNumber(item.temb)
+            ]);
+            dataEmbargos.push([]);
+            dataEmbargos.push(['Total Clientes', this.embargos.length]);
+            dataEmbargos.push(['Total Cuotas', this.parseNumber(this.totalCuotasEmbargo)]);
+
+            const wsEmbargos = XLSX.utils.aoa_to_sheet([columnsEmbargos, ...dataEmbargos]);
+            XLSX.utils.book_append_sheet(wb, wsEmbargos, 'Cartera Embargada');
+        }
+
+        XLSX.writeFile(wb, 'resultados.xlsx');
+    },
+
+    parseNumber(value) {
+        if (typeof value === 'string') {
+            return parseFloat(value.replace(/[^0-9.-]+/g,""));
+        }
+        return value;
+    },
     }
 };
 </script>

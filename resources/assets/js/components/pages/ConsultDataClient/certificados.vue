@@ -9,12 +9,8 @@
                                 <h2 class="title"><strong>Registro de Documentos</strong></h2>
                             </div>
                             <div class="col-sm mb-2 mt-5" v-if="items.length > 0">
-                                <button class="btn btn-sm btn-success" style="border: 1px solid #b9bdc3; border-radius: 10px" @click="showModalToAdd">
-                                    Agregar Documento
-                                </button>
-                                <button class="btn btn-sm btn-outline-success" style="border: 1px solid #b9bdc3; border-radius: 10px" @click="showBulkUploadModal">
-                                    Crear Registro Masivo
-                                </button>
+                                <CustomButton text="Agregar Documento" @click="showModalToAdd"/>
+                                <CustomButton class="white" text="Crear Registro Masivo" @click="showBulkUploadModal"/>
                             </div>
                         </div>
                         <table class="table table-striped mt-3" style="border: 1px solid #b9bdc3; border-radius: 10px" v-if="items.length > 0">
@@ -55,16 +51,12 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <div v-else>
+                        <div v-if="items.length === 0">
                             <div class="text-center" style="margin-top: 100px;">
                                 <Lupa style="margin-bottom: 50px;"></Lupa>
                                 <h2>Aun no tienes archivos cargados, Puedes...</h2>
-                                <button class="btn btn-success" style="border: 1px solid #b9bdc3; border-radius: 10px" @click="showModalToAdd">
-                                    Agregar Documento
-                                </button>
-                                <button class="btn btn-outline-success" style="border: 1px solid #b9bdc3; border-radius: 10px" @click="showBulkUploadModal">
-                                    Crear Registro Masivo
-                                </button>
+                                <CustomButton text="Agregar Documento" @click="showModalToAdd"/>
+                                <CustomButton class="white" text="Crear Registro Masivo" @click="showBulkUploadModal"/>
                             </div>
 
                         </div>
@@ -220,6 +212,7 @@
 <script>
 import axios from 'axios';
 import Lupa from '../../icons/Lupa.vue';
+import CustomButton from '../../customComponents/CustomButton.vue';
 
 export default {
     data() {
@@ -235,6 +228,7 @@ export default {
     },
     components: {
         Lupa,
+        CustomButton
     },
     created() {
         this.fetchDocuments();

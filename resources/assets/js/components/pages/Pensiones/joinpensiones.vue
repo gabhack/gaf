@@ -2,10 +2,17 @@
     <div>
         <loading :active.sync="isLoading" :can-cancel="false" :is-full-page="true" color="#0CEDB0" />
 
-        <div class="panel mb-3 col-md-12">
-            <div class="panel-heading">
-                <b>Busqueda de Cedulas</b>
+        <div class="panel mb-3 col-md-12">    
+            <h3 class="heading-title mt-4 mb-3">Busqueda de Cedulas</h3>
+            
+            <div v-if="results.length === 0">
+                <div class="text-center" style="margin-top: 100px;">
+                    <Lupa style="margin-bottom: 50px;"></Lupa>
+                    <h2>Aun no tienes archivos cargados, Puedes...</h2>
+                    <CustomButton text="Agregar Documento" @click="showModalToAdd"/>
+                </div>
             </div>
+            
             <div class="panel-body">
                 <form @submit.prevent="submitFile" v-if="!uploading && !processing">
                     <b-form-group label="Seleccione el archivo para cargar">
@@ -49,10 +56,14 @@
 import axios from 'axios';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
+import Lupa from '../../icons/Lupa.vue';
+import CustomButton from '../../customComponents/CustomButton.vue';
 
 export default {
     components: {
-        Loading
+        Loading,
+        Lupa,
+        CustomButton
     },
     data() {
         return {
