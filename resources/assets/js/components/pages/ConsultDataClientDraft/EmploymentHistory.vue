@@ -2,8 +2,7 @@
     <div class="col-6">
         <div class="panel mb-3">
             <h3 class="heading-title mb-0 pt-5">Historial laboral</h3>
-            <div class="panel-body">
-                <div class="row">
+            <div class="panel-body pa-0" style="padding-left: 5px !important; padding-right: 5px !important;">
                     <!--============================
                             FOPEP
                     ==============================-->
@@ -277,14 +276,19 @@
                     <!-- DATAMES SED -->
                     <template v-if="datamesfidu || datamessedvalle || pagaduriaType === 'FOPEP'"> </template>
                     <template v-else-if="datamesSed">
-                        <b-table
-                            :items="datamesSedArray"
-                            :fields="fields"
-                            class="mt-3"
-                            responsive
-                            thead-class="table-header-nowrap"
-                        ></b-table>
-                        <b-row style="width: 100%">
+                        <b-row>
+                            <b-col cols="12" class="pa-0">
+                                <b-table
+                                    :items="datamesSedArray"
+                                    :fields="fields"
+                                    class="mt-3"
+                                    responsive
+                                    thead-class="table-header-nowrap"
+                                ></b-table>
+                            </b-col>
+                        </b-row>
+                        
+                        <b-row>
                             <b-col cols="12" md="6">
                                 <table v-if="arrayCoupons.length > 0" style="width: 100%; border-collapse: collapse">
                                     <thead
@@ -321,7 +325,7 @@
                                     </tbody>
                                 </table>
                             </b-col>
-                            <b-col cols="12" md="6" class="pr-0">
+                            <b-col cols="12" md="6" style="width: 100%;">
                                 <b-table
                                     v-if="salarioBasico.length > 0"
                                     :items="salarioBasico"
@@ -341,7 +345,7 @@
                                     </template>
                                 </b-table>
                             </b-col>
-                            <b-col cols="12" class="pr-0">
+                            <b-col cols="12" style="padding-left: 15px !important;">
                                 <b-table
                                     v-if="ingresosExtras.length > 0"
                                     :items="ingresosExtras"
@@ -362,7 +366,7 @@
                                     </template>
                                 </b-table>
                             </b-col>
-                            <b-col cols="12" class="pr-0">
+                            <b-col cols="12">
                                 <table v-if="arrayCoupons.length > 0" style="width: 100%; border-collapse: collapse">
                                     <thead
                                         style="height: 78.5px; font-size: 14px; font-weight: 700; line-height: 18.23px"
@@ -459,7 +463,6 @@
                 </div>
             </div>
         </div>
-    </div>
 </template>
 
 <script>

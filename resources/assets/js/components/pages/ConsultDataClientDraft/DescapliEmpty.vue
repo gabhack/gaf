@@ -77,15 +77,12 @@
                                 <p class="mb-0">{{ Math.abs(data.item.vaplicado) | currency }}</p>
                             </template>
                         </b-table>
-
-                        <div class="row pt-3">
-                            <div class="offset-2 col-3 text-right">
-                                <b>TOTAL:</b>
-                            </div>
-                            <div class="col-2">
+                        <b-row>
+                            <b-col cols="12" class="d-flex justify-content-center align-items-center">
+                                <b class="mr-2">TOTAL:</b>
                                 <b>{{ couponsIngresos.amount | currency }}</b>
-                            </div>
-                        </div>
+                            </b-col>
+                        </b-row>
                     </template>
                     <p v-else-if="coupons.length == 0">El cliente no cuenta con obligaciones vigentes al día.</p>
                     <p v-else>No se encontraron obligaciones vigentes al día para el periodo seleccionado.</p>

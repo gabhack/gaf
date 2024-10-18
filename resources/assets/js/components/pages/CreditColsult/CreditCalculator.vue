@@ -285,11 +285,11 @@
     </b-row>
     
     
-    <div class="btn-wrap">
+    <!-- <div class="btn-wrap">
       <button type="button" class="btn btn-slate-blue btn-collapse" @click="setCollapsed">
         <LeftArrowIcon />
       </button>
-    </div>
+    </div> -->
   </form>
 </template>
 
