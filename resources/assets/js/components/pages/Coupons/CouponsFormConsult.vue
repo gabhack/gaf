@@ -565,12 +565,9 @@ th {
     padding-right: 12px;
 }
 .heading-title {
-    font-family: 'Poppins', sans-serif;
-    font-size: 16px;
-    font-weight: 900;
-    margin: 0 !important;
-    display: flex;
-    align-items: center;
+    font-size: 25px;
+    font-weight: 500;
+    line-height: 32.55px;
 }
 .button-tablas {
     text-align: left;
