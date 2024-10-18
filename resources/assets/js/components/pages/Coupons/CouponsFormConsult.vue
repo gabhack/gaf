@@ -107,9 +107,9 @@
 
         <div class="p-0 mb-3 col-md-12" v-if="coupons && coupons.length > 0 && selectedEstado === 'Al día'">
             <div class="mb-2 mt-5">
-                <h3 class="heading-title">RESUMEN</h3>
+                <h3 class="heading-title">Resumen</h3>
             </div>
-            <div class="row d-flex align-items-center justify-content-center py-4">
+            <div class="row d-flex align-items-center justify-content-center py-2">
                 <div class="col-4"><label class="heading-title">Estado</label></div>
                 <div class="col-4"><label class="heading-title">Total Clientes</label></div>
                 <div class="col-4"><label class="heading-title">Total Cuotas</label></div>
@@ -126,9 +126,9 @@
             </div>
 
             <div class="mb-2 mt-5">
-                <h3 class="heading-title">RESULTADOS DE LA CONSULTA (Cartera al Día)</h3>
+                <h3 class="heading-title">Resultados de la consulta (Cartera al Día)</h3>
             </div>
-            <div class="panel-body">
+            <div class="">
                 <div class="row">
                     <div class="col-sm-10">
                         <b-form-input
@@ -157,9 +157,9 @@
 
         <div class="p-0 mb-3 col-md-12" v-if="descuentos && descuentos.length > 0 && selectedEstado === 'En mora'">
             <div class="mb-2 mt-5">
-                <h3 class="heading-title">RESUMEN</h3>
+                <h3 class="heading-title">Resumen</h3>
             </div>
-            <div class="row d-flex align-items-center justify-content-center py-4">
+            <div class="row d-flex align-items-center justify-content-center py-2">
                 <div class="col-4"><label class="heading-title">Estado</label></div>
                 <div class="col-4"><label class="heading-title">Total Clientes</label></div>
                 <div class="col-4"><label class="heading-title">Total Cuotas</label></div>
@@ -173,9 +173,9 @@
                 </div>
             </div>
             <div class="mb-2 mt-5">
-                <h3 class="heading-title">RESULTADOS DE LA CONSULTA (Cartera en Mora)</h3>
+                <h3 class="heading-title">Resultados de la consulta (Cartera en Mora)</h3>
             </div>
-            <div class="panel-body">
+            <div class="">
                 <b-form-input
                     v-model="filtroDescuento"
                     placeholder="Buscar por documento..."
@@ -277,9 +277,9 @@
 
         <div class="p-0 mb-3 col-md-12" v-if="embargos && embargos.length > 0 && selectedEstado === 'Embargado'">
             <div class="mb-2 mt-5">
-                <h3 class="heading-title">RESUMEN</h3>
+                <h3 class="heading-title">Resumen</h3>
             </div>
-            <div class="row d-flex align-items-center justify-content-center py-4">
+            <div class="row d-flex align-items-center justify-content-center py-2">
                 <div class="col-4"><h3 class="heading-title">Estado</h3></div>
                 <div class="col-4"><h3 class="heading-title">Total Clientes</h3></div>
                 <div class="col-4"><h3 class="heading-title">Total Cuotas</h3></div>
@@ -293,9 +293,9 @@
                 </div>
             </div>
             <div class="mb-2 mt-5">
-                <h3 class="heading-title">RESULTADOS DE LA CONSULTA (Cartera Embargada)</h3>
+                <h3 class="heading-title">Resultados de la consulta (Cartera Embargada)</h3>
             </div>
-            <div class="panel-body">
+            <div class="">
                 <b-form-input v-model="filtroEmbargo" placeholder="Buscar por documento..." class="mb-3 form-control2"></b-form-input>
                 <div class="table-responsive">
                     <b-table 
@@ -322,9 +322,9 @@
             v-if="coupons && coupons.length > 0 && selectedEstado === 'Todas'"
         >
             <div class="mb-2 mt-5">
-                <h3 class="heading-title">RESUMEN</h3>
+                <h3 class="heading-title">Resumen</h3>
             </div>
-            <div class="row d-flex align-items-center justify-content-center py-4">
+            <div class="row d-flex align-items-center justify-content-center py-2">
                 <div class="col-4"><label class="heading-title">Estado</label></div>
                 <div class="col-4"><label class="heading-title">Total Clientes</label></div>
                 <div class="col-4"><label class="heading-title">Total Cuotas</label></div>
@@ -364,7 +364,7 @@
                 </div>
             </div>
             <div class="mb-2 mt-5">
-                <h3 class="heading-title">RESULTADOS DE LA CONSULTA (Todas)</h3>
+                <h3 class="heading-title">Resultados de la consulta (Todas)</h3>
             </div>
             <!-- <div class="panel-body"> -->
                 <!-- <b-accordion> -->
