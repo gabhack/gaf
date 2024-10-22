@@ -5,11 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\DatamesGen;
 use App\CouponsGen;
+use App\EmbargosGen;
+use App\DescuentosGen;
+use App\Colpensiones;
+use App\Fiducidiaria;
 use App\DemographicConsultLog;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use PhpOffice\PhpSpreadsheet\IOFactory;
+use Illuminate\Support\Facades\DB;
 
+use Carbon\Carbon;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 class DemograficoController extends Controller
 {
     public function upload(Request $request)
@@ -71,11 +77,19 @@ class DemograficoController extends Controller
     }
 
     public function fetchPaginatedResults(Request $request)
-    {
-        Log::info('Inicio del proceso de fetchPaginatedResults');
+{
+    Log::info('Inicio del proceso de fetchPaginatedResults');
 
+    try {
         $page = $request->query('page', 1);
         $perPage = $request->query('perPage', 30);
+        
+        $mes = $request->query('mes');
+        $año = $request->query('año');
+        
+        if (!$mes || !$año) {
+            return response()->json(['error' => 'Mes y año son requeridos'], 400);
+        }
 
         $cedulas = $request->session()->get('cedulas', []);
         $offset = ($page - 1) * $perPage;
@@ -86,7 +100,8 @@ class DemograficoController extends Controller
             return response()->json(['data' => [], 'total' => count($cedulas)], 200);
         }
 
-        $results = $this->processCedulas($cedulasChunk);
+        // Aquí es donde se puede lanzar una excepción
+        $results = $this->processCedulas($cedulasChunk, $mes, $año);
 
         Log::info('Fin del proceso de fetchPaginatedResults');
         return response()->json([
@@ -95,85 +110,133 @@ class DemograficoController extends Controller
             'page' => $page,
             'perPage' => $perPage
         ]);
+    } catch (\Exception $e) {
+        Log::error('Error en fetchPaginatedResults: ' . $e->getMessage(), [
+            'trace' => $e->getTraceAsString(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine()
+        ]);
+        return response()->json(['error' => 'Error en la obtención de resultados paginados'], 500);
     }
-
-    private function processCedulas($cedulas)
-{
-    Log::info('Inicio del proceso de processCedulas', ['cedulas' => $cedulas]);
-
-    $latestRecords = DatamesGen::whereIn('doc', $cedulas)
-        ->select('doc', 'nombre_usuario', 'cencosto as centro_costo', 'tipo_contrato', 'edad', 'fecha_nacimiento', 'created_at')
-        ->orderBy('created_at', 'desc')
-        ->get()
-        ->unique('doc')
-        ->keyBy('doc');
-
-    $couponsgenRecords = CouponsGen::whereIn('doc', $cedulas)
-        ->select('doc', 'centro_costo', 'id')
-        ->orderBy('id', 'desc')
-        ->get()
-        ->keyBy('doc');
-
-    $results = collect();
-    foreach ($cedulas as $cedula) {
-        // Asegúrate de que la cédula sea una cadena o un entero
-        $cedula = is_numeric($cedula) ? (int)$cedula : (string)$cedula;
-
-        if ($record = $latestRecords->get($cedula)) {
-            $cellphones = [];
-            $landlines = [];
-
-            if ($record->telefono) {
-                $phones = explode(',', $record->telefono);
-                foreach ($phones as $phone) {
-                    $phone = preg_replace('/\.\d+$/', '', trim($phone));
-                    if (strlen($phone) === 10) {
-                        $cellphones[] = $phone;
-                    } else {
-                        $landlines[] = $phone;
-                    }
-                }
-            }
-
-            if ($record->cel) {
-                $phones = explode(',', $record->cel);
-                foreach ($phones as $phone) {
-                    $phone = preg_replace('/\.\d+$/', '', trim($phone));
-                    if (strlen($phone) === 10) {
-                        $cellphones[] = $phone;
-                    } else {
-                        $landlines[] = $phone;
-                    }
-                }
-            }
-
-            Log::info('Datos originales:', ['record' => $record->toArray()]);
-            Log::info('Teléfonos transformados:', [
-                'cel' => $cellphones,
-                'tel' => $landlines
-            ]);
-
-            $centroCosto = $record->centro_costo;
-            if ($coupon = $couponsgenRecords->get($cedula)) {
-                $centroCosto = $coupon->centro_costo;
-            }
-
-            $results->push([
-                'doc' => $record->doc,
-                'nombre_usuario' => $record->nombre_usuario,
-                'centro_costo' => $centroCosto,
-                'tipo_contrato' => $record->tipo_contrato,
-                'edad' => $record->edad,
-                'fecha_nacimiento' => $record->fecha_nacimiento
-            ]);
-        } else {
-            Log::info('Documento no encontrado:', ['cedula' => $cedula]);
-        }
-    }
-
-    Log::info('Fin del proceso de processCedulas', ['results' => $results]);
-    return $results;
 }
+private function processCedulas($cedulas, $mes, $año)
+{
+    Log::info('Inicio del proceso de processCedulas', ['cedulas' => $cedulas, 'mes' => $mes, 'año' => $año]);
+
+    try {
+        $startDate = Carbon::createFromFormat('Y-m', $año . '-' . $mes)->startOfMonth()->toDateString();
+        $endDate = Carbon::createFromFormat('Y-m', $año . '-' . $mes)->endOfMonth()->toDateString();
+
+        $cedulasList = implode(", ", array_map(function($cedula) {
+            return "'" . addslashes((string)$cedula) . "'";
+        }, $cedulas));
+
+        $sql = "SELECT DISTINCT ON (doc) *
+                FROM datamesgen
+                WHERE doc IN ($cedulasList)
+                ORDER BY doc, created_at DESC;";
+
+        $latestRecords = collect(DB::connection('pgsql')->select($sql))->keyBy('doc');
+
+        // Consulta de cupones
+        $coupons = CouponsGen::whereIn('doc', $cedulas)
+            ->where(function ($query) use ($startDate, $endDate) {
+                $query->whereBetween('inicioperiodo', [$startDate, $endDate])
+                      ->orWhereBetween('finperiodo', [$startDate, $endDate]);
+            })
+            ->get()
+            ->groupBy('doc');
+
+        // Consulta de embargos (usando 'nomina' para filtrar por fecha)
+        $embargos = EmbargosGen::whereIn('doc', $cedulas)
+            ->whereBetween('nomina', [$startDate, $endDate])
+            ->get()
+            ->groupBy('doc');
+
+        // Consulta de descuentos (usando 'nomina' para filtrar por fecha)
+        $descuentos = DescuentosGen::whereIn('doc', $cedulas)
+            ->whereBetween('nomina', [$startDate, $endDate])
+            ->get()
+            ->groupBy('doc');
+
+        $results = collect();
+        $salarioMinimo = 1300000; // Ajusta este valor según corresponda
+
+        foreach ($cedulas as $cedula) {
+            $cedulaStr = (string)$cedula;
+
+            // Verificar si la cédula existe en Colpensiones
+            $existsInColpensiones = Colpensiones::where('documento', $cedulaStr)->exists();
+
+            // Verificar si la cédula existe en Fiducidiaria
+            $existsInFiducidiaria = Fiducidiaria::where('documento', $cedulaStr)->exists();
+
+            if ($record = $latestRecords->get($cedulaStr)) {
+                // Obtener el último ingreso para el documento
+                $ingresoRecord = CouponsGen::where('doc', $cedulaStr)
+                    ->where('concept', 'IgresosCupon')
+                    ->orderBy('inicioperiodo', 'desc')
+                    ->first();
+
+                $ingreso = $ingresoRecord ? $ingresoRecord->ingresos : 0;
+
+                // Sumar los egresos de los cupones para el documento
+                $cuponesDoc = $coupons->get($cedulaStr, collect());
+                $sumEgresosCupones = $cuponesDoc->sum('egresos');
+
+                // Calcular el cupo libre de inversión
+                if ($ingreso > 2 * $salarioMinimo) {
+                    $cupoLibreInversion = ($ingreso / 2) - $sumEgresosCupones;
+                } else {
+                    $cupoLibreInversion = (($ingreso - $salarioMinimo) / 2) - $sumEgresosCupones;
+                }
+
+                // Asegurarse de que el cupo libre no sea negativo
+                $cupoLibreInversion = max(0, $cupoLibreInversion);
+
+                $results->push([
+                    'doc' => $record->doc,
+                    'nombre_usuario' => $record->nombre_usuario,
+                    'tipo_contrato' => $record->tipo_contrato,
+                    'edad' => $record->edad,
+                    'fecha_nacimiento' => $record->fecha_nacimiento,
+                    'cupo_libre' => $cupoLibreInversion,
+                    'cupones' => $cuponesDoc->values(),
+                    'embargos' => $embargos->get($cedulaStr, collect())->values(),
+                    'descuentos' => $descuentos->get($cedulaStr, collect())->values(),
+                    'colpensiones' => $existsInColpensiones,
+                    'fiducidiaria' => $existsInFiducidiaria,
+                ]);
+            } else {
+                Log::info('Documento no encontrado en DatamesGen', ['cedula' => $cedulaStr]);
+                // Si deseas agregar una entrada vacía para las cédulas no encontradas, puedes hacerlo aquí
+                $results->push([
+                    'doc' => $cedulaStr,
+                    'nombre_usuario' => null,
+                    'tipo_contrato' => null,
+                    'edad' => null,
+                    'fecha_nacimiento' => null,
+                    'cupo_libre' => null,
+                    'cupones' => collect(),
+                    'embargos' => collect(),
+                    'descuentos' => collect(),
+                    'colpensiones' => $existsInColpensiones,
+                    'fiducidiaria' => $existsInFiducidiaria,
+                ]);
+            }
+        }
+        Log::info('Resultados completos de processCedulas', ['results' => $results]);
+        return $results;
+    } catch (\Exception $e) {
+        Log::error('Error en processCedulas: ' . $e->getMessage(), [
+            'trace' => $e->getTraceAsString(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine()
+        ]);
+        throw $e;
+    }
+}
+
 
 
     public function getRecentConsultations()
@@ -221,5 +284,82 @@ class DemograficoController extends Controller
         }
     }
 
-    
+
+    public function getCouponsPerDoc(Request $request)
+    {
+        try {
+            $doc = $request->doc;
+            $month = str_pad($request->month, 2, '0', STR_PAD_LEFT);
+            $year = $request->year;
+
+            $startDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)->startOfMonth()->toDateString();
+            $endDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)->endOfMonth()->toDateString();
+
+            $coupons = CouponsGen::where('doc', $doc)
+                ->whereBetween('inicioperiodo', [$startDate, $endDate])
+                ->orWhereBetween('finperiodo', [$startDate, $endDate])
+                ->orderBy('pagaduria', 'asc')
+                ->get()
+                ->groupBy('pagaduria');
+
+            Log::info("Consulta ejecutada para obtener cupones del documento {$doc}, mes {$month} y año {$year}: ", ['coupons' => $coupons]);
+
+            return response()->json($coupons, 200);
+        } catch (\Exception $e) {
+            Log::error("Error al obtener cupones para el documento {$doc}: " . $e->getMessage());
+            return response()->json(['error' => 'Error al obtener cupones'], 500);
+        }
+    }
+
+    public function getEmbargosPerDoc(Request $request)
+    {
+        try {
+            $doc = $request->doc;
+            $month = str_pad($request->month, 2, '0', STR_PAD_LEFT);
+            $year = $request->year;
+
+            $startDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)->startOfMonth()->toDateString();
+            $endDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)->endOfMonth()->toDateString();
+
+            $embargos = EmbargosGen::where('doc', $doc)
+                ->whereBetween('fembini', [$startDate, $endDate])
+                ->orWhereBetween('fembfin', [$startDate, $endDate])
+                ->orderBy('pagaduria', 'asc')
+                ->get()
+                ->groupBy('pagaduria');
+
+            Log::info("Consulta ejecutada para obtener embargos del documento {$doc}, mes {$month} y año {$year}: ", ['embargos' => $embargos]);
+
+            return response()->json($embargos, 200);
+        } catch (\Exception $e) {
+            Log::error("Error al obtener embargos para el documento {$doc}: " . $e->getMessage());
+            return response()->json(['error' => 'Error al obtener embargos'], 500);
+        }
+    }
+
+    public function getDescuentosPerDoc(Request $request)
+    {
+        try {
+            $doc = $request->doc;
+            $month = str_pad($request->month, 2, '0', STR_PAD_LEFT);
+            $year = $request->year;
+
+            $startDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)->startOfMonth()->toDateString();
+            $endDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)->endOfMonth()->toDateString();
+
+            $descuentos = DescuentosGen::where('doc', $doc)
+                ->whereBetween('fecdata', [$startDate, $endDate])
+                ->orderBy('pagaduria', 'asc')
+                ->get()
+                ->groupBy('pagaduria');
+
+            Log::info("Consulta ejecutada para obtener descuentos del documento {$doc}, mes {$month} y año {$year}: ", ['descuentos' => $descuentos]);
+
+            return response()->json($descuentos, 200);
+        } catch (\Exception $e) {
+            Log::error("Error al obtener descuentos para el documento {$doc}: " . $e->getMessage());
+            return response()->json(['error' => 'Error al obtener descuentos'], 500);
+        }
+    }
+
 }
