@@ -116,6 +116,7 @@
                                         v-if="result.embargos && result.embargos.length"
                                         class="btn btn-link"
                                         @click="toggleDetails(result, 'embargos')"
+                                        data-toggle="modal" data-target="#modalEmbargos"
                                     >
                                         {{ isRowExpanded(result, 'embargos') ? 'Ocultar Detalle' : 'Ver Detalle' }}
                                     </button>
@@ -126,16 +127,19 @@
                                         v-if="result.cupones && result.cupones.length"
                                         class="btn btn-link"
                                         @click="toggleDetails(result, 'cupones')"
+                                        data-toggle="modal" data-target="#modalCupones"
                                     >
                                         {{ isRowExpanded(result, 'cupones') ? 'Ocultar Cupones' : 'Ver Cupones' }}
                                     </button>
-                                    <span v-else>No hay cupones</span>
+                                    <span v-else>No hay cupones</span>        
                                 </td>
+                                
                                 <td>
                                     <button
                                         v-if="result.descuentos && result.descuentos.length"
                                         class="btn btn-link"
                                         @click="toggleDetails(result, 'descuentos')"
+                                        data-toggle="modal" data-target="#modalDescuentos"
                                     >
                                         {{ isRowExpanded(result, 'descuentos') ? 'Ocultar Descuentos' : 'Ver Descuentos' }}
                                     </button>
@@ -151,63 +155,105 @@
                             </tr>
                         </tbody>
                     </table>
-
-                    <div class="mt-4" v-for="(result, index) in filteredResults" :key="'embargos-' + result.doc + '-' + index" v-if="isRowExpanded(result, 'embargos')">
-                        <h5>Detalle de Embargos</h5>
-                        <table class="table table-lg">
-                            <thead>
-                                <tr>
-                                    <th>Documento Demandante</th>
-                                    <th>Entidad Demandante</th>
-                                    <th>Fecha Inicio</th>
-                                    <th>Valor</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="embargo in result.embargos" :key="embargo.id">
-                                    <td>{{ embargo.docdeman || 'No disponible' }}</td>
-                                    <td>{{ embargo.entidaddeman || 'No disponible' }}</td>
-                                    <td>{{ embargo.fembini || 'No disponible' }}</td>
-                                    <td>{{ formatCurrency(embargo.valor || embargo.netoemb) }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <!-- Modal de Cupones -->
+                    <div class="modal fade" id="modalCupones" tabindex="-1" role="dialog" aria-labelledby="modalCuponesLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalCuponesLabel">Cupones</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body" v-for="(result, index) in filteredResults" :key="'cupones-' + result.doc + '-' + index" v-if="isRowExpanded(result, 'cupones')">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Concepto</th>
+                                                <th>Egresos</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="cupon in result.cupones" :key="cupon.id">
+                                                <td>{{ cupon.concept || 'No disponible' }}</td>
+                                                <td>{{ formatCurrency(cupon.egresos) }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <!-- Filas de Detalles: Cupones -->
-                    <div class="mt-4" v-for="(result, index) in filteredResults" :key="'cupones-' + result.doc + '-' + index" v-if="isRowExpanded(result, 'cupones')">
-                        <h5>Cupones</h5>
-                        <table class="table table-lg">
-                            <thead>
-                                <tr>
-                                    <th>Concepto</th>
-                                    <th>Egresos</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="cupon in result.cupones" :key="cupon.id">
-                                    <td>{{ cupon.concept || 'No disponible' }}</td>
-                                    <td>{{ formatCurrency(cupon.egresos) }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <!-- Modal de Embargos -->
+                    <div class="modal fade" id="modalEmbargos" tabindex="-1" role="dialog" aria-labelledby="modalEmbargosLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalEmbargosLabel">Detalle de Embargos</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body" v-for="(result, index) in filteredResults" :key="'embargos-' + result.doc + '-' + index" v-if="isRowExpanded(result, 'embargos')">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Documento Demandante</th>
+                                                <th>Entidad Demandante</th>
+                                                <th>Fecha Inicio</th>
+                                                <th>Valor</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="embargo in result.embargos" :key="embargo.id">
+                                                <td>{{ embargo.docdeman || 'No disponible' }}</td>
+                                                <td>{{ embargo.entidaddeman || 'No disponible' }}</td>
+                                                <td>{{ embargo.fembini || 'No disponible' }}</td>
+                                                <td>{{ formatCurrency(embargo.valor || embargo.netoemb) }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <!-- Filas de Detalles: Descuentos -->
-                    <div class="mt-4" v-for="(result, index) in filteredResults" :key="'descuentos-' + result.doc + '-' + index" v-if="isRowExpanded(result, 'descuentos')">
-                        <h5>Obligaciones vigentes en mora</h5>
-                        <table class="table table-lg">
-                            <thead>
-                                <tr>
-                                    <th>Mliquid</th>
-                                    <th>Valor</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="descuento in result.descuentos" :key="descuento.id">
-                                    <td>{{ descuento.mliquid || 'No disponible' }}</td>
-                                    <td>{{ formatCurrency(descuento.valor) }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <!-- Modal de descuentos -->
+                    <div class="modal fade" id="modalDescuentos" tabindex="-1" role="dialog" aria-labelledby="modalDescuentosLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalDescuentosLabel">Obligaciones vigentes en mora</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body" v-for="(result, index) in filteredResults" :key="'descuentos-' + result.doc + '-' + index" v-if="isRowExpanded(result, 'descuentos')">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Mliquid</th>
+                                                <th>Valor</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="descuento in result.descuentos" :key="descuento.id">
+                                                <td>{{ descuento.mliquid || 'No disponible' }}</td>
+                                                <td>{{ formatCurrency(descuento.valor) }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <!-- Paginación -->
