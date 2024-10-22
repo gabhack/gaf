@@ -291,9 +291,9 @@
   }
 }
 .heading-title{
-  font-size: 25px;
-  font-weight: 500;
-  line-height: 32.55px;
+  font-size: 25px !important;
+  font-weight: 500 !important;
+  line-height: 32.55px !important;
 }
 .custom-file {
   &-label {
@@ -325,6 +325,44 @@
         color: $caribbean-green;
       }
     }
+  }
+}
+
+// TABLAS NUEVOS DISEÑOS
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #dadcdd;
+  & thead {
+      height: 34px;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 18.23px;
+
+      & tr {
+          background-color: #f2f2f2;
+          & th {
+              padding: 10px;
+              padding-left: 25px;
+              text-align: left;
+              background-color: #3a5659;
+              color: white;
+          }
+      }
+  }
+  & tbody {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 18.23px;
+
+      & tr {
+          & td {
+              padding: 10px;
+              padding-left: 25px;
+              height: 66px;
+          }
+      }
   }
 }
 

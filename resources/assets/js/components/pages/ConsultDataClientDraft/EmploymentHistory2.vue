@@ -2,7 +2,120 @@
     <div class="col-6">
         <div class="panel mb-0">
             <h3 class="heading-title mb-0 pt-5">Información laboral</h3>
-
+            <b-row class="mt-3"  v-if="datamesSed">
+                <b-col cols="12" sm="6" class="pb-4">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Fecha ingreso</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ datamesSed.fecha_ingreso || '--' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </b-col>
+                <b-col cols="12" sm="6" class="pb-4">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Fecha ingreso nómina</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ datamesSed.fecha_ingreso_nomina || '--' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </b-col>
+                <b-col cols="12" sm="6" class="pb-4">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Fecha de inicio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ datamesSed.fecha_inicio || '--' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </b-col>
+                <b-col cols="12" sm="6" class="pb-4">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Antiguedad laboral</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ datamesSed.antiguedad ? datamesSed.antiguedad + ' años' : '--' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </b-col>
+                <b-col cols="12" sm="6" class="pb-4">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Cargo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ datamesSed.cargo || '--' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </b-col>
+                <b-col cols="12" sm="6" class="pb-4">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tipo de contrato</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ datamesSed.tipo_contrato || '--' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </b-col>
+                <b-col cols="12" sm="6">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Situación laboral</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ datamesSed.situacion_laboral || '--' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </b-col>
+                <b-col cols="12" sm="6">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Área de desempeño</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ datamesSed.area_desempeño || '--' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </b-col>
+            </b-row>
             <div class="panel-body pt-0 pb-0">
                 <div class="row">
                     <!--============================
@@ -132,15 +245,7 @@
 
                     <!-- DATAMES SED -->
                     <template v-if="datamesfidu || datamessedvalle || pagaduriaType === 'FOPEP'"> </template>
-                    <template v-else-if="datamesSed">
-                        <b-table
-                            :items="datamesSedArray"
-                            :fields="fields"
-                            class="mt-3"
-                            responsive
-                            thead-class="table-header-nowrap"
-                        ></b-table>
-                    </template>
+                    <template v-else-if="datamesSed"> </template>
 
                     <div
                         class="col-6"
@@ -201,68 +306,6 @@ import { mapState, mapGetters } from 'vuex';
 
 export default {
     name: 'EmploymentHistory',
-    data() {
-        return {
-            fields: [
-                {
-                    key: 'fecha_ingreso',
-                    label: 'Fecha ingreso',
-                    sortable: false,
-                    formatter: value => {
-                        return value || '--';
-                    }
-                },
-                {
-                    key: 'fecha_ingreso_nomina',
-                    label: 'Fecha ingreso nómina',
-                    sortable: false,
-                    formatter: value => {
-                        return value || '--';
-                    }
-                },
-                {
-                    key: 'fecha_inicio',
-                    label: 'Fecha de inicio',
-                    sortable: false,
-                    formatter: value => {
-                        return value || '--';
-                    }
-                },
-                {
-                    key: 'antiguedad',
-                    label: 'Antiguedad laboral',
-                    sortable: false,
-                    formatter: value => {
-                        return value || '--';
-                    }
-                },
-                {
-                    key: 'cargo',
-                    label: 'Cargo',
-                    sortable: false,
-                    formatter: value => {
-                        return value || '--';
-                    }
-                },
-                {
-                    key: 'tipo_contrato',
-                    label: 'Tipo de contrato',
-                    sortable: false,
-                    formatter: value => {
-                        return value || '--';
-                    }
-                },
-                {
-                    key: 'situacion_laboral',
-                    label: 'Situación laboral',
-                    sortable: false,
-                    formatter: value => {
-                        return value || '--';
-                    }
-                }
-            ]
-        };
-    },
     props: ['fechavinc', 'datamessedvalle', 'datamesfidu', 'datamessemcali', 'user'],
     computed: {
         ...mapState('datamesModule', ['datamesSed']),
@@ -298,37 +341,3 @@ export default {
     }
 };
 </script>
-<style lang="scss" scoped>
-::v-deep .table-responsive {
-    margin-left: -3px;
-}
-::v-deep .table {
-    & thead {
-        background-color: #3a5659;
-        white-space: nowrap;
-        color: white;
-        font-size: 14px;
-        font-weight: 700;
-        line-height: 18.23px;
-        & tr th {
-            padding: 12px 40px;
-            text-align: center;
-            min-height: 50px !important;
-            & div {
-                min-height: 50px;
-                display: flex;
-                align-items: center;
-            }
-        }
-    }
-    & tbody {
-        background-color: #fff;
-        font-size: 14px;
-        font-weight: 400;
-        line-height: 18.23px;
-        & td {
-            text-align: center;
-        }
-    }
-}
-</style>

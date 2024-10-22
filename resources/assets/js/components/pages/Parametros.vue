@@ -1,11 +1,11 @@
 <template>
     <div class="container mt-5" v-if="!loadingOptions">
-        <h2>Parámetros Comparativa</h2>
+        <h3 class="heading-title pb-2">Parámetros Comparativa</h3>
 
         <!-- Select for Pensionados or Docentes -->
         <div class="form-group">
             <label for="tipo">Tipo:</label>
-            <select v-model="form.tipo" class="form-control" @change="handleTipoChange">
+            <select v-model="form.tipo" class="form-control2" @change="handleTipoChange">
                 <option value="">Seleccione Tipo</option>
                 <option value="pensionados">Pensionados</option>
                 <option value="docentes">Docentes</option>
@@ -27,16 +27,16 @@
 
         <!-- Step 2: Age, Type of Contract, and Job Title per Gender -->
         <div v-for="gender in form.generos" :key="gender">
-            <h4>Género: {{ gender === 'M' ? 'Masculino' : 'Femenino' }}</h4>
+            <h4 class="heading-title pb-2">Género: {{ gender === 'M' ? 'Masculino' : 'Femenino' }}</h4>
 
             <div class="form-group">
                 <label :for="'edad-' + gender">Edad:</label>
-                <input type="number" v-model="form['edad_' + gender]" :id="'edad-' + gender" class="form-control" :disabled="!form['edadEnabled_' + gender]">
+                <input type="number" class="form-control2" v-model="form['edad_' + gender]" :id="'edad-' + gender" :disabled="!form['edadEnabled_' + gender]">
             </div>
 
             <div class="form-group">
                 <label :for="'tipo_contrato-' + gender">Tipo de Contrato:</label>
-                <select v-model="form['tipo_contrato_' + gender]" :id="'tipo_contrato-' + gender" class="form-control">
+                <select v-model="form['tipo_contrato_' + gender]" :id="'tipo_contrato-' + gender" class="form-control2">
                     <option value="">Seleccione Tipo de Contrato</option>
                     <option v-for="contrato in tiposContrato" :key="contrato" :value="contrato">{{ contrato }}</option>
                 </select>
@@ -44,7 +44,7 @@
 
             <div class="form-group">
                 <label :for="'cargo-' + gender">Cargo:</label>
-                <select v-model="form['cargo_' + gender]" :id="'cargo-' + gender" class="form-control" @change="handleCargoChange(gender)">
+                <select v-model="form['cargo_' + gender]" :id="'cargo-' + gender" class="form-control2" @change="handleCargoChange(gender)">
                     <option value="">Seleccione Cargo</option>
                     <option v-for="cargo in cargos" :key="cargo" :value="cargo">{{ cargo }}</option>
                 </select>
@@ -56,7 +56,7 @@
                 <input type="checkbox" v-model="form['horas_extras_' + gender]">
                 <div v-if="form['horas_extras_' + gender]" class="form-group">
                     <label>Porcentaje:</label>
-                    <input type="number" v-model="form['porcentaje_' + gender]" class="form-control" min="0" max="100">
+                    <input type="number" v-model="form['porcentaje_' + gender]" class="form-control2" min="0" max="100">
                 </div>
             </div>
 
@@ -65,7 +65,7 @@
                 <input type="checkbox" v-model="form['asignacion_aa_' + gender]">
                 <div v-if="form['asignacion_aa_' + gender]" class="form-group">
                     <label>Porcentaje:</label>
-                    <input type="number" v-model="form['porcentaje_' + gender]" class="form-control" min="0" max="100">
+                    <input type="number" v-model="form['porcentaje_' + gender]" class="form-control2" min="0" max="100">
                 </div>
             </div>
 
@@ -74,7 +74,7 @@
                 <input type="checkbox" v-model="form['asignacion_aaa_' + gender]">
                 <div v-if="form['asignacion_aaa_' + gender]" class="form-group">
                     <label>Porcentaje:</label>
-                    <input type="number" v-model="form['porcentaje_' + gender]" class="form-control" min="0" max="100">
+                    <input type="number" v-model="form['porcentaje_' + gender]" class="form-control2" min="0" max="100">
                 </div>
             </div>
         </div>
@@ -82,10 +82,10 @@
         <!-- Input for Coupon Code -->
         <div v-if="form.generos.length > 0" class="form-group">
             <label for="codigo_cupon">Código de Cupón:</label>
-            <input type="text" v-model="form.codigo_cupon" id="codigo_cupon" class="form-control" required>
+            <input type="text" v-model="form.codigo_cupon" id="codigo_cupon" class="form-control2" required>
         </div>
 
-        <button type="submit" class="btn btn-primary" @click="submitForm">Guardar</button>
+        <CustomButton v-if="form.tipo && form.generos.length > 0" text="Guardar" @click="submitForm" />
 
     </div>
 
@@ -97,7 +97,11 @@
 </template>
 
 <script>
+import CustomButton from '../../components/customComponents/CustomButton.vue'
 export default {
+    components:{
+        CustomButton
+    },
     data() {
         return {
             form: {
