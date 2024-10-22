@@ -1,52 +1,130 @@
 <template>
-    <div>
-        <!-- Overlay de carga -->
+    <div style="padding: 30px">
         <div v-if="isLoading" class="loading-overlay">
             <div class="spinner"></div>
         </div>
 
-        <!-- Panel de carga de datos demográficos -->
-        <div class="panel mb-3 col-md-12">
-            <div class="panel-heading">
-                <b>Datos Demográficos</b>
-                <button @click="toggleRecentConsultations" class="btn btn-info float-right">
-                    {{ showRecentConsultations ? 'Ocultar Consultas Recientes' : 'Ver Consultas Recientes' }}
-                </button>
+        <b-row>
+            <b-col cols="12" md="9">
+                <h3 class="heading-title">Datos demográficos</h3>
+                <p>Lörem ipsum despejode anas. Heteros ståpaddling. Dekameling agnostityp</p>
+            </b-col>
+            <b-col cols="12" md="3" class="d-flex justify-content-start justify-content-md-end align-items-center">
+                <CustomButton @click="toggleRecentConsultations">{{
+                    showRecentConsultations ? 'Ocultar Consultas Recientes' : 'Ver Consultas Recientes'
+                }}</CustomButton>
+            </b-col>
+        </b-row>
+        <div
+            style="min-height: 500px"
+            class="panel mb-3 col-md-12 d-flex justify-content-center align-items-center"
+            v-if="!results.length"
+        >
+            <div class="d-flex flex-column align-items-center justify-content-center">
+                <Lupa class="mb-3" />
+                <p>
+                    Aún no tienes archivos <br />
+                    cargados, puedes...
+                </p>
+                <CustomButton text="Cargar archivo" @click="$bvModal.show('bv-modal-example')" />
             </div>
-            <div class="panel-body">
-                <div class="alert alert-info">
-                    <p>
-                        Por favor, asegúrese de que el archivo Excel tiene una columna con el encabezado
-                        <strong>'cedulas'</strong> y que contiene los números de cédula.
-                    </p>
+            <b-modal id="bv-modal-example" hide-footer style="min-width: 1000px">
+                <template #modal-title><span class="heading-title">Agregar datos demográficos</span></template>
+                <div class="" style="background-color: #f9fafc; border-left: 4px solid #249fe3; border-radius: 4px">
+                    <b-row style="padding: 16px">
+                        <b-col cols="1" class="d-flex justify-content-center align-items-center">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 16 16"
+                                fill="none"
+                            >
+                                <path
+                                    fill-rule="evenodd"
+                                    clip-rule="evenodd"
+                                    d="M16 8C16 12.4183 12.4183 16 8 16C3.58172 16 0 12.4183 0 8C0 3.58172 3.58172 0 8 0C12.4183 0 16 3.58172 16 8ZM9 4C9 4.55228 8.55228 5 8 5C7.44772 5 7 4.55228 7 4C7 3.44772 7.44772 3 8 3C8.55228 3 9 3.44772 9 4ZM7 7C6.44772 7 6 7.44772 6 8C6 8.55229 6.44772 9 7 9V12C7 12.5523 7.44772 13 8 13H9C9.55228 13 10 12.5523 10 12C10 11.4477 9.55228 11 9 11V8C9 7.44772 8.55228 7 8 7H7Z"
+                                    fill="#20A0E9"
+                                />
+                            </svg>
+                        </b-col>
+                        <b-col cols="11" class="d-flex justify-content-center align-items-center">
+                            <p class="modal-text">
+                                Por favor, asegúrese de que el archivo Excel tiene una columna con el encabezado
+                                <strong>'cedulas'</strong> y que contiene los números de cédula.
+                            </p>
+                        </b-col>
+                    </b-row>
                 </div>
-                <div class="form-group">
-                    <label for="mes">Mes (MM):</label>
-                    <input
-                        type="text"
-                        id="mes"
-                        v-model="mes"
-                        maxlength="2"
-                        placeholder="Mes en dos dígitos"
-                        class="form-control mb-3"
-                    />
+                <b-row class="py-3">
+                    <div class="col-md-12">
+                        <b-form-group label="Mes (MM):">
+                            <b-form-input
+                                v-model="mes"
+                                placeholder="01"
+                                maxlength="2"
+                                class="input_style_b form-control2"
+                            ></b-form-input>
+                        </b-form-group>
+                    </div>
+
+                    <div class="col-md-12">
+                        <b-form-group label="Año (YYYY):">
+                            <b-form-input
+                                v-model="año"
+                                placeholder="2024"
+                                maxlength="4"
+                                class="input_style_b form-control2"
+                            ></b-form-input>
+                        </b-form-group>
+                    </div>
+                    <b-col
+                        cols="12"
+                        style="
+                            min-height: 150px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            cursor: pointer;
+                        "
+                        @click="triggerFileInput"
+                        @dragover.prevent="handleDragOver"
+                        @dragleave.prevent="handleDragLeave"
+                        @drop.prevent="handleDrop"
+                    >
+                        <div
+                            style="display: flex; flex-direction: column; align-items: center; justify-content: center"
+                        >
+                            <UploadFile class="mb-2" />
+                            <p class="text-center" style="margin-bottom: 0.5rem">
+                                Arrastre o suelte el archivo <br />
+                                o
+                            </p>
+                            <CustomButton text="Seleccionar archivo" :color="'white'" />
+                        </div>
+                        <input type="file" ref="fileInput" @change="handleFileUpload" style="display: none" />
+                    </b-col>
+                </b-row>
+                <div class="d-flex justify-content-center align-item-center mb-5" style="width: 100%" v-if="file">
+                    <div
+                        style="
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                            width: 300px;
+                            border-bottom: 1px solid #babcbe;
+                            padding: 8px;
+                        "
+                    >
+                        <span style="font-size: 12px; font-weight: 400; line-height: 15.62px; color: black">{{
+                            file.name
+                        }}</span>
+                        <button style="padding: 0; margin: 0; border: none; background: none;" @click="deleteFile"><Trash /></button>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="año">Año (YYYY):</label>
-                    <input
-                        type="text"
-                        id="año"
-                        v-model="año"
-                        maxlength="4"
-                        placeholder="Año en cuatro dígitos"
-                        class="form-control mb-3"
-                    />
-                </div>
-                <div class="form-group">
-                    <input type="file" @change="handleFileUpload" class="form-control mb-3" />
-                    <button @click="uploadFile" class="btn btn-primary">Subir</button>
-                </div>
-            </div>
+                <CustomButton @click="uploadFile($bvModal)" text="Subir archivo" v-if="file" />
+                <CustomButton @click="$bvModal.hide('bv-modal-example')" :color="'white'" text="Cerrar" />
+            </b-modal>
         </div>
 
         <!-- Card para mostrar las consultas recientes -->
@@ -112,37 +190,33 @@
                                 <td>{{ formatCurrency(result.cupo_libre) }}</td>
                                 <td>{{ result.embargos && result.embargos.length > 0 ? 'Sí' : 'No' }}</td>
                                 <td>
-                                    <button
+                                    <CustomButton
                                         v-if="result.embargos && result.embargos.length"
                                         class="btn btn-link"
                                         @click="toggleDetails(result, 'embargos')"
                                         data-toggle="modal" data-target="#modalEmbargos"
-                                    >
-                                        {{ isRowExpanded(result, 'embargos') ? 'Ocultar Detalle' : 'Ver Detalle' }}
-                                    </button>
+                                        :text="isRowExpanded(result, 'embargos') ? 'Ocultar Embargos' : 'Ver Embargos'"    
+                                    />
                                     <span v-else>No hay embargos</span>
                                 </td>
                                 <td>
-                                    <button
+                                    <CustomButton
                                         v-if="result.cupones && result.cupones.length"
-                                        class="btn btn-link"
                                         @click="toggleDetails(result, 'cupones')"
                                         data-toggle="modal" data-target="#modalCupones"
-                                    >
-                                        {{ isRowExpanded(result, 'cupones') ? 'Ocultar Cupones' : 'Ver Cupones' }}
-                                    </button>
+                                        :text="isRowExpanded(result, 'cupones') ? 'Ocultar Cupones' : 'Ver Cupones'"
+                                    />
                                     <span v-else>No hay cupones</span>        
                                 </td>
                                 
                                 <td>
-                                    <button
+                                    <CustomButton
                                         v-if="result.descuentos && result.descuentos.length"
                                         class="btn btn-link"
                                         @click="toggleDetails(result, 'descuentos')"
                                         data-toggle="modal" data-target="#modalDescuentos"
-                                    >
-                                        {{ isRowExpanded(result, 'descuentos') ? 'Ocultar Descuentos' : 'Ver Descuentos' }}
-                                    </button>
+                                        :text="isRowExpanded(result, 'descuentos') ? 'Ocultar Descuentos' : 'Ver Descuentos'"
+                                    />
                                     <span v-else>No hay descuentos</span>
                                 </td>
                                 <td>{{ result.colpensiones ? 'Sí' : 'No' }}</td>
@@ -156,12 +230,12 @@
                         </tbody>
                     </table>
                     <!-- Modal de Cupones -->
-                    <div class="modal fade" id="modalCupones" tabindex="-1" role="dialog" aria-labelledby="modalCuponesLabel" aria-hidden="true">
+                    <div class="modal fade" id="modalCupones" tabindex="-1" role="dialog" aria-labelledby="modalCuponesLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="modalCuponesLabel">Cupones</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <button @click="closeExpandedRows" type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
@@ -182,18 +256,18 @@
                                     </table>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                    <CustomButton data-dismiss="modal" @click="closeExpandedRows" text="Cerrar"/>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!-- Modal de Embargos -->
-                    <div class="modal fade" id="modalEmbargos" tabindex="-1" role="dialog" aria-labelledby="modalEmbargosLabel" aria-hidden="true">
+                    <div class="modal fade" id="modalEmbargos" tabindex="-1" role="dialog" aria-labelledby="modalEmbargosLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="modalEmbargosLabel">Detalle de Embargos</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <button @click="closeExpandedRows" type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
@@ -218,18 +292,18 @@
                                     </table>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                    <CustomButton data-dismiss="modal" @click="closeExpandedRows" text="Cerrar"/>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!-- Modal de descuentos -->
-                    <div class="modal fade" id="modalDescuentos" tabindex="-1" role="dialog" aria-labelledby="modalDescuentosLabel" aria-hidden="true">
+                    <div class="modal fade" id="modalDescuentos" tabindex="-1" role="dialog" aria-labelledby="modalDescuentosLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="modalDescuentosLabel">Obligaciones vigentes en mora</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <button @click="closeExpandedRows" type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
@@ -250,7 +324,7 @@
                                     </table>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                    <CustomButton data-dismiss="modal" @click="closeExpandedRows" text="Cerrar"/>
                                 </div>
                             </div>
                         </div>
@@ -273,9 +347,19 @@
 
 <script>
 import axios from 'axios';
+import CustomButton from '../../customComponents/CustomButton.vue';
+import Lupa from '../../icons/Lupa.vue';
+import UploadFile from '../../icons/UploadFile.vue';
+import Trash from '../../icons/Trash.vue';
 
 export default {
     name: 'DemographicData',
+    components: {
+        CustomButton,
+        Lupa,
+        UploadFile,
+        Trash
+    },
     data() {
         return {
             file: null,
@@ -310,10 +394,31 @@ export default {
         }
     },
     methods: {
+        deleteFile() {
+            this.file = null;
+        },
+        triggerFileInput() {
+            this.$refs.fileInput.click();
+        },
         handleFileUpload(event) {
             this.file = event.target.files[0];
         },
-        async uploadFile() {
+        handleDragOver(event) {
+            this.isDragging = true; 
+        },
+        handleDragLeave(event) {
+            this.isDragging = false; 
+        },
+        handleDrop(event) {
+            const file = event.dataTransfer.files[0];
+            if (file) {
+                this.file = file;
+                this.handleFileUpload({ target: { files: [file] } }); 
+                console.log('Archivo cargado desde drag & drop:', file);
+            }
+            this.isDragging = false;
+        },
+        async uploadFile(modal) {
             if (!this.file) {
                 alert('Seleccione un archivo primero');
                 return;
@@ -335,7 +440,7 @@ export default {
                         'Content-Type': 'multipart/form-data'
                     }
                 });
-
+                modal.hide('bv-modal-example');
                 this.error = null;
                 await this.fetchPaginatedResults(1); // Obtener la primera página de resultados
             } catch (error) {
@@ -410,6 +515,9 @@ export default {
             const key = `${result.doc}-${type}`;
             return this.expandedRows.includes(key);
         },
+        closeExpandedRows(){
+            this.expandedRows = [];
+        },
         exportToPDF() {
             // Implementación de exportación a PDF si es necesario
         },
@@ -458,14 +566,12 @@ export default {
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.panel-heading {
-    background-color: #007bff;
-    color: #fff;
-    padding: 10px;
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .panel-body {
@@ -496,14 +602,22 @@ export default {
     max-height: 400px;
     overflow-y: auto;
 }
-
-.pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
+::v-deep {
+    & .modal-header {
+        border-bottom: none;
+    }
+    & .modal-dialog {
+        min-width: 600px;
+    }
 }
-
-.pagination .btn {
-    margin: 0 5px;
+.modal-text {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 18.23px;
+    margin: 0;
+}
+.drag-over {
+    border: 2px dashed #007bff;
+    background-color: #f0f8ff;
 }
 </style>
