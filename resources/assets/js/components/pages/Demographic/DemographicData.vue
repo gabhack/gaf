@@ -1,9 +1,11 @@
 <template>
     <div>
+        <!-- Overlay de carga -->
         <div v-if="isLoading" class="loading-overlay">
             <div class="spinner"></div>
         </div>
 
+        <!-- Panel de carga de datos demográficos -->
         <div class="panel mb-3 col-md-12">
             <div class="panel-heading">
                 <b>Datos Demográficos</b>
@@ -61,6 +63,7 @@
             </ul>
         </div>
 
+        <!-- Panel de Resultados -->
         <div v-if="results.length" class="panel mb-3 col-md-12">
             <div class="panel-heading">
                 <b>Resultados</b>
@@ -87,24 +90,26 @@
                                 <th>Fecha Nacimiento</th>
                                 <th>Edad</th>
                                 <th>Tipo de Contrato</th>
+                                <th>Pagaduría</th>
                                 <th>Cupo Libre</th>
                                 <th>Embargo</th>
                                 <th>Detalle Embargo</th>
-                                <th>Cupones</th> <!-- Nueva columna para Cupones -->
+                                <th>Cupones</th>
                                 <th>Descuentos</th>
                                 <th>Colpensiones</th>
                                 <th>Fiducidiaria</th>
                             </tr>
                         </thead>
-                        <tbody v-for="result in filteredResults" :key="result.doc">
-                            <tr>
+                        <tbody>
+                            <!-- Fila Principal -->
+                            <tr v-for="(result, index) in filteredResults" :key="result.doc + '-' + index">
                                 <td>{{ result.doc }}</td>
                                 <td>{{ result.nombre_usuario || 'No disponible' }}</td>
                                 <td>{{ result.fecha_nacimiento || 'No disponible' }}</td>
                                 <td>{{ result.edad || 'No disponible' }}</td>
                                 <td>{{ result.tipo_contrato || 'No disponible' }}</td>
+                                <td>{{ result.pagaduria || 'No disponible' }}</td>
                                 <td>{{ formatCurrency(result.cupo_libre) }}</td>
-                                <!-- Si hay embargos, mostramos 'Sí', de lo contrario 'No' -->
                                 <td>{{ result.embargos && result.embargos.length > 0 ? 'Sí' : 'No' }}</td>
                                 <td>
                                     <button
@@ -112,18 +117,17 @@
                                         class="btn btn-link"
                                         @click="toggleDetails(result, 'embargos')"
                                     >
-                                        Ver Detalle
+                                        {{ isRowExpanded(result, 'embargos') ? 'Ocultar Detalle' : 'Ver Detalle' }}
                                     </button>
                                     <span v-else>No hay embargos</span>
                                 </td>
-                                <!-- Nueva columna para Cupones -->
                                 <td>
                                     <button
                                         v-if="result.cupones && result.cupones.length"
                                         class="btn btn-link"
                                         @click="toggleDetails(result, 'cupones')"
                                     >
-                                        Ver Cupones
+                                        {{ isRowExpanded(result, 'cupones') ? 'Ocultar Cupones' : 'Ver Cupones' }}
                                     </button>
                                     <span v-else>No hay cupones</span>
                                 </td>
@@ -133,94 +137,92 @@
                                         class="btn btn-link"
                                         @click="toggleDetails(result, 'descuentos')"
                                     >
-                                        Ver Descuentos
+                                        {{ isRowExpanded(result, 'descuentos') ? 'Ocultar Descuentos' : 'Ver Descuentos' }}
                                     </button>
                                     <span v-else>No hay descuentos</span>
                                 </td>
-                                <!-- Nuevas columnas con 'Sí' o 'No' -->
                                 <td>{{ result.colpensiones ? 'Sí' : 'No' }}</td>
                                 <td>{{ result.fiducidiaria ? 'Sí' : 'No' }}</td>
                             </tr>
-                            <!-- Detalle de Embargos -->
-                            <tr v-if="result.showEmbargos">
-                                <!-- Ajustar colspan al número total de columnas -->
-                                <td colspan="12">
+                            <!-- Filas de Detalles: Embargos -->
+                            <tr
+                                v-for="(result, index) in filteredResults"
+                                :key="'embargos-' + result.doc + '-' + index"
+                                v-if="isRowExpanded(result, 'embargos')"
+                            >
+                                <td colspan="13">
                                     <h5>Detalle de Embargos</h5>
                                     <table class="table table-sm">
                                         <thead>
                                             <tr>
-                                                <th>Entidad</th>
-                                                <th>Valor</th>
+                                                <th>Documento Demandante</th>
+                                                <th>Entidad Demandante</th>
                                                 <th>Fecha Inicio</th>
-                                                <th>Fecha Fin</th>
-                                                <!-- Agrega más columnas según los datos disponibles -->
+                                                <th>Valor</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr v-for="embargo in result.embargos" :key="embargo.id">
-                                                <td>{{ embargo.entidad || 'No disponible' }}</td>
-                                                <td>{{ formatCurrency(embargo.valor) }}</td>
+                                                <td>{{ embargo.docdeman || 'No disponible' }}</td>
+                                                <td>{{ embargo.entidaddeman || 'No disponible' }}</td>
                                                 <td>{{ embargo.fembini || 'No disponible' }}</td>
-                                                <td>{{ embargo.fembfin || 'No disponible' }}</td>
-                                                <!-- Agrega más datos según sea necesario -->
+                                                <td>{{ formatCurrency(embargo.valor || embargo.netoemb) }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </td>
                             </tr>
-                            <!-- Detalle de Cupones -->
-                            <tr v-if="result.showCupones">
-                                <!-- Ajustar colspan al número total de columnas -->
-                                <td colspan="12">
+                            <!-- Filas de Detalles: Cupones -->
+                            <tr
+                                v-for="(result, index) in filteredResults"
+                                :key="'cupones-' + result.doc + '-' + index"
+                                v-if="isRowExpanded(result, 'cupones')"
+                            >
+                                <td colspan="13">
                                     <h5>Cupones</h5>
                                     <table class="table table-sm">
                                         <thead>
                                             <tr>
                                                 <th>Concepto</th>
-                                                <th>Ingresos</th>
                                                 <th>Egresos</th>
-                                                <th>Fecha Inicio</th>
-                                                <th>Fecha Fin</th>
-                                                <!-- Agrega más columnas según los datos disponibles -->
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr v-for="cupon in result.cupones" :key="cupon.id">
                                                 <td>{{ cupon.concept || 'No disponible' }}</td>
-                                                <td>{{ formatCurrency(cupon.ingresos) }}</td>
                                                 <td>{{ formatCurrency(cupon.egresos) }}</td>
-                                                <td>{{ cupon.inicioperiodo || 'No disponible' }}</td>
-                                                <td>{{ cupon.finperiodo || 'No disponible' }}</td>
-                                                <!-- Agrega más datos según sea necesario -->
                                             </tr>
                                         </tbody>
                                     </table>
                                 </td>
                             </tr>
-                            <!-- Detalle de Descuentos -->
-                            <tr v-if="result.showDescuentos">
-                                <!-- Ajustar colspan al número total de columnas -->
-                                <td colspan="12">
-                                    <h5>Descuentos</h5>
+                            <!-- Filas de Detalles: Descuentos -->
+                            <tr
+                                v-for="(result, index) in filteredResults"
+                                :key="'descuentos-' + result.doc + '-' + index"
+                                v-if="isRowExpanded(result, 'descuentos')"
+                            >
+                                <td colspan="13">
+                                    <h5>Obligaciones vigentes en mora</h5>
                                     <table class="table table-sm">
                                         <thead>
                                             <tr>
-                                                <th>Concepto</th>
+                                                <th>Mliquid</th>
                                                 <th>Valor</th>
-                                                <th>Fecha Nómina</th>
-                                                <!-- Agrega más columnas según los datos disponibles -->
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr v-for="descuento in result.descuentos" :key="descuento.id">
-                                                <td>{{ descuento.concepto || 'No disponible' }}</td>
+                                                <td>{{ descuento.mliquid || 'No disponible' }}</td>
                                                 <td>{{ formatCurrency(descuento.valor) }}</td>
-                                                <td>{{ descuento.nomina || 'No disponible' }}</td>
-                                                <!-- Agrega más datos según sea necesario -->
                                             </tr>
                                         </tbody>
                                     </table>
                                 </td>
+                            </tr>
+                            <!-- Fila para mostrar mensaje si no hay resultados -->
+                            <tr v-if="filteredResults.length === 0">
+                                <td colspan="13">No hay resultados</td>
                             </tr>
                         </tbody>
                     </table>
@@ -233,6 +235,7 @@
             </div>
         </div>
 
+        <!-- Mensaje de error -->
         <div v-if="error" class="alert alert-danger mt-3">
             {{ error }}
         </div>
@@ -257,15 +260,22 @@ export default {
             perPage: 30,
             total: 0,
             mes: '',
-            año: ''
+            año: '',
+            expandedRows: [] // Lista para rastrear filas expandidas
         };
     },
     computed: {
         filteredResults() {
-            if (this.searchQuery.length < 3) {
-                return this.results;
+            if (!this.results || !Array.isArray(this.results)) {
+                return [];
             }
             return this.results.filter(result => {
+                if (!result || !result.doc) {
+                    return false;
+                }
+                if (this.searchQuery.length < 3) {
+                    return true;
+                }
                 return result.doc.toString().includes(this.searchQuery);
             });
         }
@@ -316,8 +326,11 @@ export default {
                         año: this.año
                     }
                 });
+
+                console.log('Datos recibidos:', response.data.data); // Depuración
+
                 // Mapear los resultados para agregar propiedades para mostrar detalles
-                this.results = response.data.data.map(item => ({
+                this.results = response.data.data.filter(item => item && typeof item === 'object').map(item => ({
                     ...item,
                     showCupones: false,
                     showEmbargos: false,
@@ -339,7 +352,13 @@ export default {
             return mesRegex.test(this.mes) && añoRegex.test(this.año);
         },
         loadConsultationData(data) {
-            this.results = data;
+            // Asegúrate de que los datos cargados tengan las propiedades necesarias
+            this.results = data.filter(item => item && typeof item === 'object').map(item => ({
+                ...item,
+                showCupones: false,
+                showEmbargos: false,
+                showDescuentos: false
+            }));
         },
         toggleRecentConsultations() {
             if (!this.showRecentConsultations) {
@@ -348,13 +367,19 @@ export default {
             this.showRecentConsultations = !this.showRecentConsultations;
         },
         toggleDetails(result, type) {
-            if (type === 'cupones') {
-                result.showCupones = !result.showCupones;
-            } else if (type === 'embargos') {
-                result.showEmbargos = !result.showEmbargos;
-            } else if (type === 'descuentos') {
-                result.showDescuentos = !result.showDescuentos;
+            const key = `${result.doc}-${type}`;
+            const index = this.expandedRows.indexOf(key);
+            if (index > -1) {
+                // Si ya está expandido, lo eliminamos
+                this.expandedRows.splice(index, 1);
+            } else {
+                // Si no está expandido, lo añadimos
+                this.expandedRows.push(key);
             }
+        },
+        isRowExpanded(result, type) {
+            const key = `${result.doc}-${type}`;
+            return this.expandedRows.includes(key);
         },
         exportToPDF() {
             // Implementación de exportación a PDF si es necesario
@@ -371,7 +396,7 @@ export default {
             }
         },
         formatCurrency(value) {
-            if (value == null) {
+            if (value == null || isNaN(value)) {
                 return 'No disponible';
             }
             return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(value);

@@ -121,121 +121,159 @@ class DemograficoController extends Controller
 }
 private function processCedulas($cedulas, $mes, $año)
 {
-    Log::info('Inicio del proceso de processCedulas', ['cedulas' => $cedulas, 'mes' => $mes, 'año' => $año]);
-
     try {
         $startDate = Carbon::createFromFormat('Y-m', $año . '-' . $mes)->startOfMonth()->toDateString();
         $endDate = Carbon::createFromFormat('Y-m', $año . '-' . $mes)->endOfMonth()->toDateString();
 
-        $cedulasList = implode(", ", array_map(function($cedula) {
-            return "'" . addslashes((string)$cedula) . "'";
-        }, $cedulas));
-
-        $sql = "SELECT DISTINCT ON (doc) *
-                FROM datamesgen
-                WHERE doc IN ($cedulasList)
-                ORDER BY doc, created_at DESC;";
-
-        $latestRecords = collect(DB::connection('pgsql')->select($sql))->keyBy('doc');
-
-        // Consulta de cupones
-        $coupons = CouponsGen::whereIn('doc', $cedulas)
-            ->where(function ($query) use ($startDate, $endDate) {
-                $query->whereBetween('inicioperiodo', [$startDate, $endDate])
-                      ->orWhereBetween('finperiodo', [$startDate, $endDate]);
-            })
+        $latestRecords = DatamesGen::whereIn('doc', $cedulas)
+            ->orderBy('created_at', 'desc')
             ->get()
-            ->groupBy('doc');
+            ->keyBy('doc');
 
-        // Consulta de embargos (usando 'nomina' para filtrar por fecha)
-        $embargos = EmbargosGen::whereIn('doc', $cedulas)
-            ->whereBetween('nomina', [$startDate, $endDate])
-            ->get()
-            ->groupBy('doc');
-
-        // Consulta de descuentos (usando 'nomina' para filtrar por fecha)
-        $descuentos = DescuentosGen::whereIn('doc', $cedulas)
-            ->whereBetween('nomina', [$startDate, $endDate])
-            ->get()
-            ->groupBy('doc');
+        $colpensionesDocs = Colpensiones::whereIn('documento', $cedulas)->pluck('documento')->toArray();
+        $fiducidiariaDocs = Fiducidiaria::whereIn('documento', $cedulas)->pluck('documento')->toArray();
 
         $results = collect();
-        $salarioMinimo = 1300000; // Ajusta este valor según corresponda
+        $salarioMinimo = 1300000;
 
         foreach ($cedulas as $cedula) {
             $cedulaStr = (string)$cedula;
 
-            // Verificar si la cédula existe en Colpensiones
-            $existsInColpensiones = Colpensiones::where('documento', $cedulaStr)->exists();
+            $existsInColpensiones = in_array($cedulaStr, $colpensionesDocs);
+            $existsInFiducidiaria = in_array($cedulaStr, $fiducidiariaDocs);
 
-            // Verificar si la cédula existe en Fiducidiaria
-            $existsInFiducidiaria = Fiducidiaria::where('documento', $cedulaStr)->exists();
+            $record = $latestRecords->get($cedulaStr);
 
-            if ($record = $latestRecords->get($cedulaStr)) {
-                // Obtener el último ingreso para el documento
+            $pagadurias = CouponsGen::where('doc', $cedulaStr)
+                ->whereBetween('inicioperiodo', [$startDate, $endDate])
+                ->distinct()
+                ->pluck('pagaduria');
+
+            Log::info("Procesando cédula: {$cedulaStr}", [
+                'colpensiones' => $existsInColpensiones,
+                'fiducidiaria' => $existsInFiducidiaria,
+                'pagadurias' => $pagadurias,
+            ]);
+
+            if ($pagadurias->isEmpty()) {
+                $pagadurias = collect(['No disponible']);
+            }
+
+            $edad = null;
+                $fechaNacimiento = null;
+                if ($record && $record->fecha_nacimiento) {
+                    $cleanedFechaNacimiento = trim($record->fecha_nacimiento); 
+                    try {
+                        $fechaNacimiento = Carbon::createFromFormat('d/m/Y', $cleanedFechaNacimiento);
+                        if (!$record->edad) {
+                            $edad = $fechaNacimiento->age;
+                        }
+                        Log::info("Fecha de nacimiento y edad calculada para {$cedulaStr}: ", [
+                            'fecha_nacimiento' => $record->fecha_nacimiento,
+                            'edad' => $edad
+                        ]);
+                    } catch (\Exception $e) {
+                        Log::error("Error al procesar la fecha de nacimiento para {$cedulaStr}: " . $e->getMessage());
+                    }
+                } else {
+                    Log::warning("Fecha de nacimiento no disponible para {$cedulaStr}");
+                }
+
+
+            foreach ($pagadurias as $pagaduria) {
+                $cupones = CouponsGen::where('doc', $cedulaStr)
+                    ->where('pagaduria', $pagaduria)
+                    ->where('egresos', '>', 0)
+                    ->whereBetween('inicioperiodo', [$startDate, $endDate])
+                    ->get();
+
+                $embargos = EmbargosGen::where('doc', $cedulaStr)
+                    ->where('pagaduria', $pagaduria)
+                    ->whereBetween('nomina', [$startDate, $endDate])
+                    ->select('docdeman', 'entidaddeman', 'fembini', 'netoemb as valor')
+                    ->get();
+
+                $descuentos = DescuentosGen::where('doc', $cedulaStr)
+                    ->where('pagaduria', $pagaduria)
+                    ->whereBetween('nomina', [$startDate, $endDate])
+                    ->get()
+                    ->filter(function ($descuento) {
+                        return $descuento->mliquid != 'ALERTA';
+                    });
+
                 $ingresoRecord = CouponsGen::where('doc', $cedulaStr)
-                    ->where('concept', 'IgresosCupon')
+                    ->where('pagaduria', $pagaduria)
+                    ->where('code', 'SUEBA')
+                    ->whereBetween('inicioperiodo', [$startDate, $endDate])
                     ->orderBy('inicioperiodo', 'desc')
                     ->first();
 
                 $ingreso = $ingresoRecord ? $ingresoRecord->ingresos : 0;
+                Log::info("Ingreso encontrado para {$cedulaStr}: ", ['ingreso' => $ingreso]);
 
-                // Sumar los egresos de los cupones para el documento
-                $cuponesDoc = $coupons->get($cedulaStr, collect());
-                $sumEgresosCupones = $cuponesDoc->sum('egresos');
-
-                // Calcular el cupo libre de inversión
-                if ($ingreso > 2 * $salarioMinimo) {
-                    $cupoLibreInversion = ($ingreso / 2) - $sumEgresosCupones;
-                } else {
-                    $cupoLibreInversion = (($ingreso - $salarioMinimo) / 2) - $sumEgresosCupones;
+                $increase = 0;
+                if ($record && $record->cargo == 'Rector Institucion Educativa Completa') {
+                    $increase = $ingreso * 0.3;
+                } elseif ($record && $record->cargo == 'Coordinador') {
+                    $increase = $ingreso * 0.2;
+                } elseif ($record && $record->cargo == 'Director De Nucleo') {
+                    $increase = $ingreso * 0.35;
                 }
+                $ingreso += $increase;
 
-                // Asegurarse de que el cupo libre no sea negativo
-                $cupoLibreInversion = max(0, $cupoLibreInversion);
+                Log::info("Ingreso ajustado por tipo de cargo para {$cedulaStr}: ", ['ingreso' => $ingreso]);
 
-                $results->push([
-                    'doc' => $record->doc,
-                    'nombre_usuario' => $record->nombre_usuario,
-                    'tipo_contrato' => $record->tipo_contrato,
-                    'edad' => $record->edad,
-                    'fecha_nacimiento' => $record->fecha_nacimiento,
-                    'cupo_libre' => $cupoLibreInversion,
-                    'cupones' => $cuponesDoc->values(),
-                    'embargos' => $embargos->get($cedulaStr, collect())->values(),
-                    'descuentos' => $descuentos->get($cedulaStr, collect())->values(),
-                    'colpensiones' => $existsInColpensiones,
-                    'fiducidiaria' => $existsInFiducidiaria,
+                $descuento = 0.08;
+                if (in_array($pagaduria, ['FOPEP', 'FIDUPREVISORA'])) {
+                    if ($ingreso == $salarioMinimo) {
+                        $descuento = 0.04;
+                    } elseif ($ingreso > $salarioMinimo && $ingreso < $salarioMinimo * 2) {
+                        $descuento = 0.08;
+                    } elseif ($ingreso >= $salarioMinimo * 2) {
+                        $descuento = 0.12;
+                    }
+                }
+                $ingresoConDescuento = $ingreso - ($ingreso * $descuento);
+
+                Log::info("Ingreso con descuento aplicado para {$cedulaStr}: ", ['ingresoConDescuento' => $ingresoConDescuento]);
+
+                // Calcular cupo libre de inversión
+                $egresos = $cupones->sum('egresos');
+                Log::info("Total egresos para {$cedulaStr}: ", ['egresos' => $egresos]);
+
+                $cupoLibreInversion = ($ingresoConDescuento / 2) - $egresos;
+
+                Log::info("Cupo libre de inversión calculado para {$cedulaStr}: ", [
+                    'cupoLibreInversion' => $cupoLibreInversion,
+                    'ingresoConDescuento' => $ingresoConDescuento,
+                    'egresos' => $egresos,
                 ]);
-            } else {
-                Log::info('Documento no encontrado en DatamesGen', ['cedula' => $cedulaStr]);
-                // Si deseas agregar una entrada vacía para las cédulas no encontradas, puedes hacerlo aquí
+
                 $results->push([
                     'doc' => $cedulaStr,
-                    'nombre_usuario' => null,
-                    'tipo_contrato' => null,
-                    'edad' => null,
-                    'fecha_nacimiento' => null,
-                    'cupo_libre' => null,
-                    'cupones' => collect(),
-                    'embargos' => collect(),
-                    'descuentos' => collect(),
+                    'nombre_usuario' => $record ? $record->nombre_usuario : null,
+                    'tipo_contrato' => $record ? $record->tipo_contrato : null,
+                    'edad' => $edad,
+                    'fecha_nacimiento' => $record ? $record->fecha_nacimiento : null,
+                    'pagaduria' => $pagaduria,
+                    'cupo_libre' => $cupoLibreInversion,
+                    'cupones' => $cupones,
+                    'embargos' => $embargos,
+                    'descuentos' => $descuentos,
                     'colpensiones' => $existsInColpensiones,
                     'fiducidiaria' => $existsInFiducidiaria,
                 ]);
             }
         }
-        Log::info('Resultados completos de processCedulas', ['results' => $results]);
+
         return $results;
     } catch (\Exception $e) {
-        Log::error('Error en processCedulas: ' . $e->getMessage(), [
-            'trace' => $e->getTraceAsString(),
-            'file' => $e->getFile(),
-            'line' => $e->getLine()
-        ]);
         throw $e;
     }
 }
+
+
+
 
 
 
