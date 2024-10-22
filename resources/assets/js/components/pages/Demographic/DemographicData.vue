@@ -145,87 +145,70 @@
                                 <td>{{ result.fiducidiaria ? 'Sí' : 'No' }}</td>
                             </tr>
                             <!-- Filas de Detalles: Embargos -->
-                            <tr
-                                v-for="(result, index) in filteredResults"
-                                :key="'embargos-' + result.doc + '-' + index"
-                                v-if="isRowExpanded(result, 'embargos')"
-                            >
-                                <td colspan="13">
-                                    <h5>Detalle de Embargos</h5>
-                                    <table class="table table-sm">
-                                        <thead>
-                                            <tr>
-                                                <th>Documento Demandante</th>
-                                                <th>Entidad Demandante</th>
-                                                <th>Fecha Inicio</th>
-                                                <th>Valor</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="embargo in result.embargos" :key="embargo.id">
-                                                <td>{{ embargo.docdeman || 'No disponible' }}</td>
-                                                <td>{{ embargo.entidaddeman || 'No disponible' }}</td>
-                                                <td>{{ embargo.fembini || 'No disponible' }}</td>
-                                                <td>{{ formatCurrency(embargo.valor || embargo.netoemb) }}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                            <!-- Filas de Detalles: Cupones -->
-                            <tr
-                                v-for="(result, index) in filteredResults"
-                                :key="'cupones-' + result.doc + '-' + index"
-                                v-if="isRowExpanded(result, 'cupones')"
-                            >
-                                <td colspan="13">
-                                    <h5>Cupones</h5>
-                                    <table class="table table-sm">
-                                        <thead>
-                                            <tr>
-                                                <th>Concepto</th>
-                                                <th>Egresos</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="cupon in result.cupones" :key="cupon.id">
-                                                <td>{{ cupon.concept || 'No disponible' }}</td>
-                                                <td>{{ formatCurrency(cupon.egresos) }}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                            <!-- Filas de Detalles: Descuentos -->
-                            <tr
-                                v-for="(result, index) in filteredResults"
-                                :key="'descuentos-' + result.doc + '-' + index"
-                                v-if="isRowExpanded(result, 'descuentos')"
-                            >
-                                <td colspan="13">
-                                    <h5>Obligaciones vigentes en mora</h5>
-                                    <table class="table table-sm">
-                                        <thead>
-                                            <tr>
-                                                <th>Mliquid</th>
-                                                <th>Valor</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="descuento in result.descuentos" :key="descuento.id">
-                                                <td>{{ descuento.mliquid || 'No disponible' }}</td>
-                                                <td>{{ formatCurrency(descuento.valor) }}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
                             <!-- Fila para mostrar mensaje si no hay resultados -->
                             <tr v-if="filteredResults.length === 0">
                                 <td colspan="13">No hay resultados</td>
                             </tr>
                         </tbody>
                     </table>
+
+                    <div class="mt-4" v-for="(result, index) in filteredResults" :key="'embargos-' + result.doc + '-' + index" v-if="isRowExpanded(result, 'embargos')">
+                        <h5>Detalle de Embargos</h5>
+                        <table class="table table-lg">
+                            <thead>
+                                <tr>
+                                    <th>Documento Demandante</th>
+                                    <th>Entidad Demandante</th>
+                                    <th>Fecha Inicio</th>
+                                    <th>Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="embargo in result.embargos" :key="embargo.id">
+                                    <td>{{ embargo.docdeman || 'No disponible' }}</td>
+                                    <td>{{ embargo.entidaddeman || 'No disponible' }}</td>
+                                    <td>{{ embargo.fembini || 'No disponible' }}</td>
+                                    <td>{{ formatCurrency(embargo.valor || embargo.netoemb) }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Filas de Detalles: Cupones -->
+                    <div class="mt-4" v-for="(result, index) in filteredResults" :key="'cupones-' + result.doc + '-' + index" v-if="isRowExpanded(result, 'cupones')">
+                        <h5>Cupones</h5>
+                        <table class="table table-lg">
+                            <thead>
+                                <tr>
+                                    <th>Concepto</th>
+                                    <th>Egresos</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="cupon in result.cupones" :key="cupon.id">
+                                    <td>{{ cupon.concept || 'No disponible' }}</td>
+                                    <td>{{ formatCurrency(cupon.egresos) }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Filas de Detalles: Descuentos -->
+                    <div class="mt-4" v-for="(result, index) in filteredResults" :key="'descuentos-' + result.doc + '-' + index" v-if="isRowExpanded(result, 'descuentos')">
+                        <h5>Obligaciones vigentes en mora</h5>
+                        <table class="table table-lg">
+                            <thead>
+                                <tr>
+                                    <th>Mliquid</th>
+                                    <th>Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="descuento in result.descuentos" :key="descuento.id">
+                                    <td>{{ descuento.mliquid || 'No disponible' }}</td>
+                                    <td>{{ formatCurrency(descuento.valor) }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <!-- Paginación -->
                 <div class="pagination">
