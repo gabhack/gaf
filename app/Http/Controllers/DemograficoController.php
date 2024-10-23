@@ -65,7 +65,7 @@ class DemograficoController extends Controller
             $request->session()->put('cedulas', $cedulas);
 
             Log::info('Fin del proceso de carga de archivo');
-            return response()->json(['message' => 'Cédulas cargadas correctamente, por favor proceda a consultar los resultados paginados.']);
+            return response()->json(['message' => 'Cédulas cargadas correctamente']);
         } catch (\Exception $e) {
             Log::error('Error processing file upload: ' . $e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
@@ -302,6 +302,7 @@ private function processCedulas($cedulas, $mes, $año)
         return view('Demographic.DemographicData');
     }
 
+   
     public function getDemograficoPorDoc($doc)
     {
         Log::info('Inicio del proceso de getDemograficoPorDoc', ['doc' => $doc]);
@@ -406,5 +407,128 @@ private function processCedulas($cedulas, $mes, $año)
             return response()->json(['error' => 'Error al obtener descuentos'], 500);
         }
     }
+
+    //antiguo modulo deografico
+
+    public function fetchPaginatedResultsDemografico(Request $request)
+    {
+        Log::info('Inicio del proceso de fetchPaginatedResults');
+
+        $page = $request->query('page', 1);
+        $perPage = $request->query('perPage', 30);
+
+        $cedulas = $request->session()->get('cedulas', []);
+        $offset = ($page - 1) * $perPage;
+        $cedulasChunk = array_slice($cedulas, $offset, $perPage);
+
+        if (empty($cedulasChunk)) {
+            Log::info('No se encontraron cédulas para esta página');
+            return response()->json(['data' => [], 'total' => count($cedulas)], 200);
+        }
+
+        $results = $this->processCedulasDemografico($cedulasChunk);
+
+        Log::info('Fin del proceso de fetchPaginatedResults');
+        return response()->json([
+            'data' => $results,
+            'total' => count($cedulas),
+            'page' => $page,
+            'perPage' => $perPage
+        ]);
+    }
+
+    private function processCedulasDemografico($cedulas)
+{
+    $formats = ['Y-m-d', 'd/m/Y', 'm-d-Y'];
+    Log::info('Inicio del proceso de processCedulas', ['cedulas' => $cedulas]);
+    
+    // Asegurar que todas las cédulas sean tratadas como enteros
+    $cedulas = array_map('intval', $cedulas);
+
+    $latestRecords = DatamesGen::whereIn('doc', $cedulas)
+        ->select('doc', 'nombre_usuario', 'cel', 'telefono', 'correo_electronico', 'ciudad', 'direccion_residencial', 'cencosto as centro_costo', 'tipo_contrato', 'edad', 'fecha_nacimiento', 'created_at')
+        ->orderBy('created_at', 'desc')
+        ->get()
+        ->unique('doc')
+        ->keyBy('doc');
+    
+    $couponsgenRecords = CouponsGen::whereIn('doc', $cedulas)
+        ->select('doc', 'centro_costo', 'id')
+        ->orderBy('id', 'desc')
+        ->get()
+        ->keyBy('doc');
+    
+    $results = collect();
+
+    foreach ($cedulas as $cedula) {
+        if (is_string($cedula) || is_int($cedula)) {
+            if ($record = $latestRecords->get($cedula)) {
+                $cellphones = [];
+                $landlines = [];
+
+                if ($record->telefono) {
+                    $phones = explode(',', $record->telefono);
+                    foreach ($phones as $phone) {
+                        $phone = preg_replace('/\.\d+$/', '', trim($phone));
+                        if (strlen($phone) === 10) {
+                            $cellphones[] = $phone;
+                        } else {
+                            $landlines[] = $phone;
+                        }
+                    }
+                }
+
+                if ($record->cel) {
+                    $phones = explode(',', $record->cel);
+                    foreach ($phones as $phone) {
+                        $phone = preg_replace('/\.\d+$/', '', trim($phone));
+                        if (strlen($phone) === 10) {
+                            $cellphones[] = $phone;
+                        } else {
+                            $landlines[] = $phone;
+                        }
+                    }
+                }
+
+                Log::info('Datos originales:', ['record' => $record->toArray()]);
+                Log::info('Teléfonos transformados:', [
+                    'cel' => $cellphones,
+                    'tel' => $landlines
+                ]);
+
+                $centroCosto = $record->centro_costo;
+                if ($coupon = $couponsgenRecords->get($cedula)) {
+                    $centroCosto = $coupon->centro_costo;
+                }
+
+                $results->push([
+                    'doc' => $record->doc,
+                    'nombre_usuario' => $record->nombre_usuario,
+                    'cel' => implode(', ', $cellphones),
+                    'tel' => implode(', ', $landlines),
+                    'correo_electronico' => $record->correo_electronico,
+                    'ciudad' => $record->ciudad,
+                    'direccion_residencial' => $record->direccion_residencial,
+                    'centro_costo' => $centroCosto,
+                    'tipo_contrato' => $record->tipo_contrato,
+                    'edad' => $record->edad,
+                    'fecha_nacimiento' => $record->fecha_nacimiento
+                ]);
+            } else {
+                Log::info('Documento no encontrado:', ['cedula' => $cedula]);
+            }
+        } else {
+            Log::warning('Cedula con tipo inválido', ['cedula' => $cedula, 'type' => gettype($cedula)]);
+        }
+    }
+
+    Log::info('Fin del proceso de processCedulas', ['results' => $results]);
+
+    return $results;
+}
+
+    
+
+
 
 }
