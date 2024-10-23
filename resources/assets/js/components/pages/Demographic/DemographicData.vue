@@ -9,11 +9,11 @@
                 <h3 class="heading-title">Datos demográficos</h3>
                 <p>Lörem ipsum despejode anas. Heteros ståpaddling. Dekameling agnostityp</p>
             </b-col>
-            <b-col cols="12" md="3" class="d-flex justify-content-start justify-content-md-end align-items-center">
+            <!-- <b-col cols="12" md="3" class="d-flex justify-content-start justify-content-md-end align-items-center">
                 <CustomButton @click="toggleRecentConsultations">{{
                     showRecentConsultations ? 'Ocultar Consultas Recientes' : 'Ver Consultas Recientes'
                 }}</CustomButton>
-            </b-col>
+            </b-col> -->
         </b-row>
         <div
             style="min-height: 500px"
@@ -143,24 +143,25 @@
 
         <!-- Panel de Resultados -->
         <div v-if="results.length" class="panel mb-3 col-md-12">
-            <div class="panel-heading">
-                <b>Resultados</b>
-                <div class="float-right">
-                    <button @click="exportToPDF" class="btn btn-danger mr-2">Exportar a PDF</button>
-                    <button @click="exportToExcel" class="btn btn-success">Exportar a Excel</button>
-                </div>
-            </div>
+            <b-row>
+                <b-col cols="12" md="9">
+                    <h3 class="heading-title">Resultados</h3>
+                </b-col>
+                <!-- <b-col cols="12" md="3" class="d-flex justify-content-start justify-content-md-end align-items-center">
+                    <CustomButton @click="exportToPDF" class="btn btn-danger mr-2" text="Exportar a PDF" />
+                    <CustomButton @click="exportToExcel" class="btn btn-success" text="Exportar a Excel" />
+                </b-col> -->
+            </b-row>
             <div class="panel-body">
-                <div class="form-group">
-                    <input
-                        type="text"
+                <b-form-group>
+                    <b-form-input
                         v-model="searchQuery"
                         placeholder="Buscar por documento"
-                        class="form-control mb-3"
-                    />
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-striped">
+                        class="input_style_b form-control2"
+                    ></b-form-input>
+                </b-form-group>
+                <div>
+                    <table class="table table-responsive">
                         <thead>
                             <tr>
                                 <th>Cédula</th>
@@ -170,12 +171,11 @@
                                 <th>Tipo de Contrato</th>
                                 <th>Pagaduría</th>
                                 <th>Cupo Libre</th>
-                                <th>Embargo</th>
-                                <th>Detalle Embargo</th>
-                                <th>Cupones</th>
-                                <th>Descuentos</th>
+                                <th>Detalle de Embargo</th>
+                                <th>Detalle de Egresos</th>
+                                <th>Detalle de Mora</th>
                                 <th>Colpensiones</th>
-                                <th>Fiducidiaria</th>
+                                <th>Fiduprevisora</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -188,7 +188,6 @@
                                 <td>{{ result.tipo_contrato || 'No disponible' }}</td>
                                 <td>{{ result.pagaduria || 'No disponible' }}</td>
                                 <td>{{ formatCurrency(result.cupo_libre) }}</td>
-                                <td>{{ result.embargos && result.embargos.length > 0 ? 'Sí' : 'No' }}</td>
                                 <td>
                                     <CustomButton
                                         v-if="result.embargos && result.embargos.length"
@@ -619,5 +618,8 @@ export default {
 .drag-over {
     border: 2px dashed #007bff;
     background-color: #f0f8ff;
+}
+th {
+    white-space: nowrap; /* Evita el salto de línea */
 }
 </style>
