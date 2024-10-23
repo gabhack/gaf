@@ -169,6 +169,8 @@
                                 <th>Fecha Nacimiento</th>
                                 <th>Edad</th>
                                 <th>Tipo de Contrato</th>
+                                <th>Cargo</th>
+                                <th>Situación Laboral</th>
                                 <th>Pagaduría</th>
                                 <th>Cupo Libre</th>
                                 <th>Detalle de Embargo</th>
@@ -186,6 +188,8 @@
                                 <td>{{ result.fecha_nacimiento || 'No disponible' }}</td>
                                 <td>{{ result.edad || 'No disponible' }}</td>
                                 <td>{{ result.tipo_contrato || 'No disponible' }}</td>
+                                <td>{{ result.cargo || 'No disponible' }}</td>
+                                <td>{{ result.situacion_laboral || 'No disponible' }}</td>
                                 <td>{{ result.pagaduria || 'No disponible' }}</td>
                                 <td>{{ formatCurrency(result.cupo_libre) }}</td>
                                 <td>
@@ -224,7 +228,7 @@
                             <!-- Filas de Detalles: Embargos -->
                             <!-- Fila para mostrar mensaje si no hay resultados -->
                             <tr v-if="filteredResults.length === 0">
-                                <td colspan="13">No hay resultados</td>
+                                <td colspan="15">No hay resultados</td>
                             </tr>
                         </tbody>
                     </table>

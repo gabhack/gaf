@@ -37,10 +37,12 @@ import VueSwal from 'vue-swal';
 Vue.use(VueSwal);
 
 import DemographicData from './components/pages/Demographic/DemographicData.vue';
+import DemographicIndex from './components/pages/Demographic/IndexDemografico.vue';
 import UploadPensiones from './components/pages/Pensiones/uploadColpensiones.vue';
 import UploadFiducidiaria from './components/pages/Pensiones/upload-fiducidiaria.vue';
 
 import JoinPensiones from './components/pages/Pensiones/joinpensiones.vue';
+import Index from './components/pages/Integrations/index.vue';
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -122,6 +124,7 @@ Vue.component('parametros', require('./components/pages/Parametros.vue').default
 
 //Datos demograficos de datames
 Vue.component('DemographicData', DemographicData);
+Vue.component('DemographicIndex', DemographicIndex);
 Vue.component('UploadPensiones', UploadPensiones);
 Vue.component('UploadFiducidiaria', UploadFiducidiaria);
 Vue.component('join-pensiones', JoinPensiones);
