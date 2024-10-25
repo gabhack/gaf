@@ -187,7 +187,7 @@
                                 <td>{{ result.nombre_usuario || 'No disponible' }}</td>
                                 <td>{{ result.fecha_nacimiento || 'No disponible' }}</td>
                                 <td>{{ result.edad || 'No disponible' }}</td>
-                                <td>{{ result.tipo_contrato || 'No disponible' }}</td>
+                                <td>{{ capitalizeFirstLetter(result.tipo_contrato) || 'No disponible' }}</td>
                                 <td>{{ result.cargo || 'No disponible' }}</td>
                                 <td>{{ result.situacion_laboral || 'No disponible' }}</td>
                                 <td>{{ result.pagaduria || 'No disponible' }}</td>
@@ -539,7 +539,11 @@ export default {
             if (value == null || isNaN(value)) {
                 return 'No disponible';
             }
-            return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(value);
+            return new Intl.NumberFormat('es-CO').format(value);
+        },
+        capitalizeFirstLetter(string) {
+            if (!string) return '';
+            return string.charAt(0).toUpperCase() + string.slice(1);
         }
     }
 };
