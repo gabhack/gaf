@@ -497,6 +497,17 @@ export default {
         totales() {
             const valrSM = 1300000;
 
+            //REGLAS BASICAS:
+
+    //Si el sueldo (sueba)(despues de aportes) es menor a dos minimos entonces - 1 minimo
+    //si el sueldo (sueba) (despues de aportes) es mayor a dos minimos entonces se pica por la mitad 
+    //Si el sueldo (sueba) es mayor a 5.2millones se resta ademas de los aportes el 1% de solidaridad y se pica por la mitad
+    //si el sueld basico (code sueba) es mayor a 6.2 millones entonces  sueldo -aportes-solidaridad- promedio 4 meses de renta y piquelo por la mitad 
+
+    //TODO LO ANTERIOR se le llama COMPRA CARTERA (una variable)
+    //CUPO LIBRE INVERSION es COmpra Cartera - egresos (no incluye, porque ya se incluyo aporte, solidaridad y promedio de renta)
+
+
             let totalWithoutHealthPension = 0;
             this.couponsIngresos.items.forEach(item => {
                 if (item.code !== 'APFPM' && item.code !== 'APEPEN' && item.code !== 'APESDN') {
@@ -505,17 +516,17 @@ export default {
             });
 
             let valorIngreso = 0;
-            if (this.pagaduriaType === 'FOPEP') {
+            if (this.pagaduriaType === 'FOPEP') { // (aparte del 8% de pagadurias) 3 reglas: <=minimo entonces 4% --- > minimo < 3.900.000 10% ---  >3900000 12% 
                 valorIngreso = Number(this.datamesFopep.vpension.replace(/[^0-9]/g, '').slice(0, -2));
             } else if (this.pagaduriaType == 'FIDUPREVISORA') {
                 valorIngreso = Number(this.datamesFidu.vpension.replace(/[^0-9]/g, '').slice(0, -2));
             }
             else {
-                valorIngreso = this.couponsPerPeriod.items.filter(item => item.code === 'INGCUP')[0]?.ingresos || 0;
+                valorIngreso = this.couponsPerPeriod.items.filter(item => item.code === 'INGCUP')[0]?.ingresos || 0; //buscar concepto
             }
 
             let increase = 0;
-            if (this.cargo == 'Rector Institucion Educativa Completa') {
+            if (this.cargo == 'Rector Institucion Educativa Completa') {  ///comprobar los cargos 
                 increase = valorIngreso * 0.3;
                 valorIngreso = parseFloat(valorIngreso) + parseFloat(increase);
             } else if (this.cargo == 'Coordinador') {
@@ -530,12 +541,15 @@ export default {
             if (this.pagaduriaType === 'FOPEP' || this.pagaduriaType == 'FIDUPREVISORA') {
                 if (valorIngreso == valrSM) {
                     disccount = 0.04;
-                } else if (valorIngreso > valrSM && valorIngreso < valrSM * 2) {
+                } else if (valorIngreso > valrSM && valorIngreso < valrSM * 2) { //no aplica, son 3900000
                     disccount = 0.08;
                 } else if (valorIngreso >= valrSM * 2) {
                     disccount = 0.12;
                 }
             }
+
+            //hay que adicionar un 1% menos de los ingresos para personas que ganen màs de 5.2 millones antes de deducciones
+            //hay que restar la retencion (cuadrar con briyit)
 
             const valorIngresoTemp = valorIngreso - valorIngreso * disccount;
             console.log('valoringresotemp', valorIngresoTemp);
