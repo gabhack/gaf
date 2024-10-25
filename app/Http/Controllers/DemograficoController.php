@@ -526,7 +526,73 @@ private function processCedulas($cedulas, $mes, $año)
 
     return $results;
 }
+    public function calculoLibreInversionCompraCartera(Request $request){
+        //Variable $minimo es temporal, pendiente saber de donde se puede obtener de forma dinamica
+        $minimo = 1300000;
+        $solidaridad = 0.01;
+        $aportes = 250000;
+        $renta = 250000;
 
+        $cupones = CouponsGen::where('doc', $cedulaStr)->where('egresos', '>', 0)->get();
+        $egresos = $cupones->sum('egresos');
+
+        $sueldo = CouponsGen::where('doc', $request->cedula)->where('code', 'SUEBA')->first();
+        $compraCartera = null;
+        $cupoLibreInversion = null;
+        
+        if ($sueldo < $minimo*2) {
+            $compraCartera = $sueldo - $minimo;
+        }else if($sueldo > $minimo*2){
+            $$compraCartera = $sueldo / 2;
+        }else if($sueldo > 5200000){
+            $sueldo = $sueldo - $solidaridad;
+            $compraCartera = $sueldo/2;
+        }else if($sueldo > 6200000){
+            $sueldo = $sueldo - $solidaridad - $aportes;
+            $compraCartera = $sueldo / 2;
+        }
+
+        $cupoLibreInversion = ($compraCartera - $cupoLibreInversion);
+
+        $valorIngreso = 0;
+        $increase = 0;
+        if($request->pagaduriaType === 'FOPEP' ){
+            $valorIngreso = (int)$request->datamesFopep['vpension'];
+        }else if($request->pagaduriaType === 'FIDUPREVISORA' ){
+            $valorIngreso = (int)$request->datamesFidu['vpension'];
+        }else {
+            $valorIngreso = 0;
+            foreach ($request->couponsPerPeriod['items'] as $item) {
+                if ($item['code'] === 'INGCUP') {
+                    $valorIngreso = isset($item['ingresos']) ? $item['ingresos'] : 0;
+                    break; 
+                }
+            }
+        }
+
+        if ($sueldo <= $minimo) {
+            $valorIngreso = $valorIngreso -0.04;
+        }else if($sueldo > $minimo && $sueldo < 3900000){
+            $valorIngreso = $valorIngreso -0.10;
+        }else if($sueldo > 3900000){
+            $valorIngreso = $valorIngreso -0.12;
+        }
+
+        array_filter($request->cargo, function($cargo) {
+            if(stripos($cargo, 'coordinador')){ 
+                $increase = $valorIngreso * 0.2;
+                $valorIngreso = float($valorIngreso) + float($increase);
+            }else if( stripos($cargo, 'Rector') ){
+                $increase = $valorIngreso * 0.3;
+                $valorIngreso = float($valorIngreso) + float($increase);
+            }else if( stripos($cargo, 'Director') ){
+                $increase = $valorIngreso * 0.35;
+                $valorIngreso = float($valorIngreso) + float($increase);
+            }
+        });
+
+
+    }
     
 
 
