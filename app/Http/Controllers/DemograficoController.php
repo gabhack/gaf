@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\DatamesGen;
 use App\CouponsGen;
 use App\EmbargosGen;
+use App\DatamesFidu;
+use App\DatamesFopep;
 use App\DescuentosGen;
 use App\Colpensiones;
 use App\Fiducidiaria;
@@ -101,7 +103,7 @@ class DemograficoController extends Controller
         }
 
         // Aquí es donde se puede lanzar una excepción
-        $results = $this->processCedulas($cedulasChunk, $mes, $año);
+        $results = $this->processCedulas_vista($cedulasChunk, $mes, $año);
 
         Log::info('Fin del proceso de fetchPaginatedResults');
         return response()->json([
@@ -119,19 +121,57 @@ class DemograficoController extends Controller
         return response()->json(['error' => 'Error en la obtención de resultados paginados'], 500);
     }
 }
-private function processCedulas($cedulas, $mes, $año)
+
+public function processCedulas($cedulas, $mes, $año)
 {
     try {
         $startDate = Carbon::createFromFormat('Y-m', $año . '-' . $mes)->startOfMonth()->toDateString();
         $endDate = Carbon::createFromFormat('Y-m', $año . '-' . $mes)->endOfMonth()->toDateString();
 
+        // Fetch all necessary data in batches before entering the loop
+
+        // Get latest DatamesGen records for each cedula
         $latestRecords = DatamesGen::whereIn('doc', $cedulas)
             ->orderBy('created_at', 'desc')
             ->get()
+            ->unique('doc') // Ensure one record per doc
             ->keyBy('doc');
 
+        // Fetch Colpensiones and Fiducidiaria documents
         $colpensionesDocs = Colpensiones::whereIn('documento', $cedulas)->pluck('documento')->toArray();
         $fiducidiariaDocs = Fiducidiaria::whereIn('documento', $cedulas)->pluck('documento')->toArray();
+
+        // Fetch CouponsGen records for all cedulas within the date range
+        $couponsGenRecords = CouponsGen::whereIn('doc', $cedulas)
+            ->whereBetween('inicioperiodo', [$startDate, $endDate])
+            ->get()
+            ->groupBy('doc'); // Group by doc for quick access
+
+        // Fetch EmbargosGen records
+        $embargosGenRecords = EmbargosGen::whereIn('doc', $cedulas)
+            ->whereBetween('nomina', [$startDate, $endDate])
+            ->select('doc', 'docdeman', 'entidaddeman', 'fembini', 'temb as valor', 'pagaduria')
+            ->get()
+            ->groupBy('doc');
+
+        // Fetch DescuentosGen records
+        $descuentosGenRecords = DescuentosGen::whereIn('doc', $cedulas)
+            ->whereBetween('nomina', [$startDate, $endDate])
+            ->get()
+            ->groupBy('doc');
+
+        // Fetch DatamesFopep and DatamesFidu records
+        $datamesFopepRecords = DatamesFopep::whereIn('doc', $cedulas)
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->unique('doc')
+            ->keyBy('doc');
+
+        $datamesFiduRecords = DatamesFidu::whereIn('doc', $cedulas)
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->unique('doc')
+            ->keyBy('doc');
 
         $results = collect();
         $salarioMinimo = 1300000;
@@ -139,17 +179,17 @@ private function processCedulas($cedulas, $mes, $año)
         foreach ($cedulas as $cedula) {
             $cedulaStr = (string)$cedula;
 
+            // Use pre-fetched data
             $existsInColpensiones = in_array($cedulaStr, $colpensionesDocs);
             $existsInFiducidiaria = in_array($cedulaStr, $fiducidiariaDocs);
 
-            // Obtener el último registro de DatamesGen para 'situacion_laboral'
             $record = $latestRecords->get($cedulaStr);
             $situacionLaboral = $record ? $record->situacion_laboral : 'No disponible';
 
-            // Obtener el cargo desde CouponsGen (cualquier registro)
-            $cargoRecord = CouponsGen::where('doc', $cedulaStr)
-                ->whereBetween('inicioperiodo', [$startDate, $endDate])
-                ->first();
+            $couponsForCedula = $couponsGenRecords->get($cedulaStr, collect());
+
+            // Get cargo from coupons
+            $cargoRecord = $couponsForCedula->first();
             $cargo = $cargoRecord ? $cargoRecord->cargo : 'No disponible';
 
             Log::info("Procesando cédula: {$cedulaStr}", [
@@ -159,10 +199,8 @@ private function processCedulas($cedulas, $mes, $año)
                 'situacion_laboral' => $situacionLaboral
             ]);
 
-            $pagadurias = CouponsGen::where('doc', $cedulaStr)
-                ->whereBetween('inicioperiodo', [$startDate, $endDate])
-                ->distinct()
-                ->pluck('pagaduria');
+            // Get unique pagadurias from coupons
+            $pagadurias = $couponsForCedula->pluck('pagaduria')->unique();
 
             if ($pagadurias->isEmpty()) {
                 $pagadurias = collect(['No disponible']);
@@ -171,91 +209,138 @@ private function processCedulas($cedulas, $mes, $año)
             $edad = null;
             $fechaNacimiento = null;
             if ($record && $record->fecha_nacimiento) {
-                $cleanedFechaNacimiento = trim($record->fecha_nacimiento); 
+                $cleanedFechaNacimiento = trim($record->fecha_nacimiento);
                 try {
                     $fechaNacimiento = Carbon::createFromFormat('d/m/Y', $cleanedFechaNacimiento);
                     if (!$record->edad) {
                         $edad = $fechaNacimiento->age;
+                    } else {
+                        $edad = $record->edad;
                     }
-                    Log::info("Fecha de nacimiento y edad calculada para {$cedulaStr}: ", [
-                        'fecha_nacimiento' => $record->fecha_nacimiento,
-                        'edad' => $edad
-                    ]);
                 } catch (\Exception $e) {
-                    Log::error("Error al procesar la fecha de nacimiento para {$cedulaStr}: " . $e->getMessage());
+                    Log::error("Error processing fecha_nacimiento for $cedulaStr: " . $e->getMessage());
                 }
-            } else {
-                Log::warning("Fecha de nacimiento no disponible para {$cedulaStr}");
             }
 
             foreach ($pagadurias as $pagaduria) {
-                $cupones = CouponsGen::where('doc', $cedulaStr)
-                    ->where('pagaduria', $pagaduria)
-                    ->where('egresos', '>', 0)
-                    ->whereBetween('inicioperiodo', [$startDate, $endDate])
-                    ->get();
+                Log::info("Procesando pagaduría: {$pagaduria} para cédula: {$cedulaStr}");
 
-                $embargos = EmbargosGen::where('doc', $cedulaStr)
-                    ->where('pagaduria', $pagaduria)
-                    ->whereBetween('nomina', [$startDate, $endDate])
-                    ->select('docdeman', 'entidaddeman', 'fembini', 'temb as valor')
-                    ->get();
+                // Get coupons for cedula and pagaduria
+                $cupones = $couponsForCedula->where('pagaduria', $pagaduria);
 
-                $descuentos = DescuentosGen::where('doc', $cedulaStr)
-                    ->where('pagaduria', $pagaduria)
-                    ->whereBetween('nomina', [$startDate, $endDate])
-                    ->get()
+                // Calculate totalWithoutHealthPension
+                $couponsIngresos = $cupones->whereNotIn('code', ['APFPM', 'APEPEN', 'APESDN']);
+                $totalWithoutHealthPension = $couponsIngresos->sum('vaplicado');
+
+                // Get embargos and descuentos for cedula and pagaduria
+                $embargosForCedula = $embargosGenRecords->get($cedulaStr, collect());
+                $embargos = $embargosForCedula->where('pagaduria', $pagaduria);
+
+                $descuentosForCedula = $descuentosGenRecords->get($cedulaStr, collect());
+                $descuentos = $descuentosForCedula->where('pagaduria', $pagaduria)
                     ->filter(function ($descuento) {
                         return $descuento->mliquid != 'ALERTA';
                     });
 
-                $ingresoRecord = CouponsGen::where('doc', $cedulaStr)
-                    ->where('pagaduria', $pagaduria)
-                    ->where('code', 'SUEBA')
-                    ->whereBetween('inicioperiodo', [$startDate, $endDate])
-                    ->orderBy('inicioperiodo', 'desc')
-                    ->first();
+                // Obtain valorIngreso based on pagaduria
+                $valorIngreso = 0;
+                if (in_array($pagaduria, ['FOPEP', 'FIDUPREVISORA'])) {
+                    Log::info("Pagaduría es {$pagaduria}, obteniendo valorIngreso de DatamesFopep o DatamesFidu");
 
-                $ingreso = $ingresoRecord ? $ingresoRecord->ingresos : 0;
-                Log::info("Ingreso encontrado para {$cedulaStr}: ", ['ingreso' => $ingreso]);
+                    // Get valorIngreso from DatamesFopep or DatamesFidu
+                    if ($pagaduria == 'FOPEP') {
+                        $datames = $datamesFopepRecords->get($cedulaStr);
+                    } elseif ($pagaduria == 'FIDUPREVISORA') {
+                        $datames = $datamesFiduRecords->get($cedulaStr);
+                    }
+                    if ($datames && $datames->vpension) {
+                        $valorIngresoStr = preg_replace('/[^0-9]/', '', $datames->vpension);
+                        $valorIngreso = substr($valorIngresoStr, 0, -2); // Remove last two digits
+                        $valorIngreso = floatval($valorIngreso);
+                    } else {
+                        Log::warning("No se encontró valorIngreso en Datames para {$cedulaStr}");
+                    }
+                } else {
+                    Log::info("Pagaduría no es FOPEP ni FIDUPREVISORA, obteniendo valorIngreso de CouponsGen");
 
-                $increase = 0;
-                if ($cargo == 'Rector Institucion Educativa Completa') {
-                    $increase = $ingreso * 0.3;
-                } elseif ($cargo == 'Coordinador') {
-                    $increase = $ingreso * 0.2;
-                } elseif ($cargo == 'Director De Nucleo') {
-                    $increase = $ingreso * 0.35;
+                    // Get valorIngreso from CouponsGen where code is 'INGCUP'
+                    $ingresoRecord = $cupones->where('code', 'INGCUP')->first();
+                    $valorIngreso = $ingresoRecord ? floatval($ingresoRecord->ingresos) : 0;
                 }
-                $ingreso += $increase;
 
-                Log::info("Ingreso ajustado por tipo de cargo para {$cedulaStr}: ", ['ingreso' => $ingreso]);
+                // Apply increases based on cargo using "like" comparison
+                $increase = 0;
+                $cargoLower = strtolower($cargo);
 
+                if (strpos($cargoLower, 'rector') !== false) {
+                    $increase = $valorIngreso * 0.3;
+                    Log::info("Cargo contiene 'rector', aumento de 30% aplicado", ['increase' => $increase]);
+                } elseif (strpos($cargoLower, 'coordinador') !== false) {
+                    $increase = $valorIngreso * 0.2;
+                    Log::info("Cargo contiene 'coordinador', aumento de 20% aplicado", ['increase' => $increase]);
+                } elseif (strpos($cargoLower, 'director') !== false) {
+                    $increase = $valorIngreso * 0.35;
+                    Log::info("Cargo contiene 'director', aumento de 35% aplicado", ['increase' => $increase]);
+                } else {
+                    Log::info("Cargo no aplica para incrementos", ['cargo' => $cargo]);
+                }
+                $valorIngreso += $increase;
+
+                Log::info("Valor ingreso después de incrementos para {$cedulaStr}: ", ['valorIngreso' => $valorIngreso]);
+
+                // Calculate discount
                 $descuento = 0.08;
                 if (in_array($pagaduria, ['FOPEP', 'FIDUPREVISORA'])) {
-                    if ($ingreso == $salarioMinimo) {
+                    if ($valorIngreso == $salarioMinimo) {
                         $descuento = 0.04;
-                    } elseif ($ingreso > $salarioMinimo && $ingreso < $salarioMinimo * 2) {
+                        Log::info("Valor ingreso igual al salario mínimo, descuento de 4% aplicado");
+                    } elseif ($valorIngreso > $salarioMinimo && $valorIngreso < $salarioMinimo * 2) {
                         $descuento = 0.08;
-                    } elseif ($ingreso >= $salarioMinimo * 2) {
+                        Log::info("Valor ingreso entre 1 y 2 salarios mínimos, descuento de 8% aplicado");
+                    } elseif ($valorIngreso >= $salarioMinimo * 2) {
                         $descuento = 0.12;
+                        Log::info("Valor ingreso mayor o igual a 2 salarios mínimos, descuento de 12% aplicado");
                     }
                 }
-                $ingresoConDescuento = $ingreso - ($ingreso * $descuento);
+                Log::info("Descuento total aplicado para {$cedulaStr}: ", ['descuento' => $descuento]);
 
-                Log::info("Ingreso con descuento aplicado para {$cedulaStr}: ", ['ingresoConDescuento' => $ingresoConDescuento]);
+                $valorIngresoConDescuento = $valorIngreso - ($valorIngreso * $descuento);
 
-                $egresos = $cupones->sum('egresos');
-                Log::info("Total egresos para {$cedulaStr}: ", ['egresos' => $egresos]);
+                Log::info("Valor ingreso con descuento para {$cedulaStr}: ", ['valorIngresoConDescuento' => $valorIngresoConDescuento]);
 
-                $cupoLibreInversion = ($ingresoConDescuento / 2) - $egresos;
+                // Calculate compraCartera
+                if ($valorIngresoConDescuento < $salarioMinimo * 2) {
+                    $compraCartera = $valorIngresoConDescuento - $salarioMinimo - $totalWithoutHealthPension;
+                    Log::info("Valor ingreso con descuento es menor a 2 salarios mínimos, cálculo de compraCartera ajustado", [
+                        'compraCartera' => $compraCartera
+                    ]);
+                } else {
+                    $compraCartera = ($valorIngresoConDescuento / 2) - $totalWithoutHealthPension;
+                    Log::info("Valor ingreso con descuento es mayor o igual a 2 salarios mínimos, cálculo de compraCartera estándar", [
+                        'compraCartera' => $compraCartera
+                    ]);
+                }
 
-                Log::info("Cupo libre de inversión calculado para {$cedulaStr}: ", [
-                    'cupoLibreInversion' => $cupoLibreInversion,
-                    'ingresoConDescuento' => $ingresoConDescuento,
-                    'egresos' => $egresos,
-                ]);
+                $compraCartera = max($compraCartera, 0); // Ensure it's not negative
 
+                // Calculate total egresos excluding certain codes
+                $egresosExcluidos = ['APFPM', 'APEPEN', 'APESDN']; // Codes to exclude
+                $egresos = $cupones->whereNotIn('code', $egresosExcluidos)
+                    ->where(function ($coupon) {
+                        return preg_match('/^\d+(\.\d+)?$/', $coupon->egresos);
+                    })
+                    ->sum(function ($coupon) {
+                        return (float)$coupon->egresos;
+                    });
+
+                Log::info("Total de egresos (excluyendo pensión y salud) para {$cedulaStr}: ", ['egresos' => $egresos]);
+
+                // Calculate libreInversion
+                $libreInversion = $compraCartera - $egresos;
+
+                Log::info("Cupo libre de inversión final para {$cedulaStr}: ", ['libreInversion' => $libreInversion]);
+
+                // Push the result
                 $results->push([
                     'doc' => $cedulaStr,
                     'nombre_usuario' => $record ? $record->nombre_usuario : null,
@@ -265,7 +350,154 @@ private function processCedulas($cedulas, $mes, $año)
                     'pagaduria' => $pagaduria,
                     'cargo' => $cargo,
                     'situacion_laboral' => $situacionLaboral,
-                    'cupo_libre' => $cupoLibreInversion,
+                    'compra_cartera' => $compraCartera,
+                    'cupo_libre' => $libreInversion,
+                    'cupones' => $cupones->values(), // Reset keys
+                    'embargos' => $embargos->values(),
+                    'descuentos' => $descuentos->values(),
+                    'colpensiones' => $existsInColpensiones,
+                    'fiducidiaria' => $existsInFiducidiaria,
+                ]);
+            }
+        }
+
+        return $results;
+    } catch (\Exception $e) {
+        Log::error("Error en processCedulas: " . $e->getMessage());
+        throw $e;
+    }
+}
+
+
+public function processCedulas_vista($cedulas, $mes, $año)
+{
+    try {
+        $mes = (int)$mes;
+        $año = (int)$año;
+
+        $resultsData = DB::connection('pgsql')
+            ->table('fast_aggregate_data')
+            ->whereIn('doc', $cedulas)
+            ->get();
+
+        $colpensionesDocs = Colpensiones::on('pgsql')
+            ->whereIn('documento', $cedulas)
+            ->pluck('documento')
+            ->toArray();
+
+        $fiducidiariaDocs = Fiducidiaria::on('pgsql')
+            ->whereIn('documento', $cedulas)
+            ->pluck('documento')
+            ->toArray();
+
+        $results = collect();
+        $salarioMinimo = 1300000;
+
+        foreach ($cedulas as $cedula) {
+            $cedulaStr = (string)$cedula;
+            $dataForCedula = $resultsData->where('doc', $cedulaStr);
+
+            if ($dataForCedula->isEmpty()) {
+                continue;
+            }
+
+            foreach ($dataForCedula as $data) {
+                $pagaduria = $data->pagaduria;
+                $nombre_usuario = $data->nombre_usuario;
+                $tipo_contrato = $data->tipo_contrato;
+                $cargo = $data->cargos;
+                $edad = $data->edad;
+                $fecha_nacimiento = $data->fecha_nacimiento ?? null;
+                $total_egresos = $data->total_egresos;
+                $ingresosExtras = $data->ingresos_ajustados;
+
+                // Detalle de embargos con log
+                $embargos = collect(explode(', ', $data->embargos_concatenados))->map(function ($embargo) {
+                    $parts = explode(', ', $embargo);
+                    if (count($parts) === 4) {
+                        [$docdeman, $entidaddeman, $fembini, $netoemb] = $parts;
+                        $embargoData = [
+                            'docdeman' => trim($docdeman),
+                            'entidaddeman' => trim($entidaddeman),
+                            'fembini' => trim($fembini),
+                            'valor' => (float)trim($netoemb)
+                        ];
+                        Log::info("Embargo detalle:", $embargoData); // Log del embargo
+                        return $embargoData;
+                    }
+                    return [
+                        'docdeman' => null,
+                        'entidaddeman' => null,
+                        'fembini' => null,
+                        'valor' => null
+                    ];
+                });
+                $embargos = $embargos->isEmpty() ? null : $embargos;
+
+                // Detalle de cupones y descuentos
+                $cupones = collect(explode(', ', $data->cupones_concatenados))->map(function ($cupon) {
+                    $parts = explode(': ', $cupon);
+                    if (count($parts) === 2) {
+                        [$concept, $egresos] = $parts;
+                        return ['concept' => trim($concept), 'egresos' => (float)trim($egresos)];
+                    }
+                    return ['concept' => null, 'egresos' => null];
+                });
+                $cupones = $cupones->isEmpty() ? null : $cupones;
+
+                $descuentos = collect(explode(', ', $data->descuentos_concatenados))
+                    ->filter(function ($descuento) {
+                        return !str_contains($descuento, 'ALERTA');
+                    })
+                    ->map(function ($descuento) {
+                        $parts = explode(': ', $descuento);
+                        if (count($parts) === 2) {
+                            [$mliquid, $valor] = $parts;
+                            return ['mliquid' => trim($mliquid), 'valor' => (float)trim($valor)];
+                        }
+                        return ['mliquid' => null, 'valor' => null];
+                    })
+                    ->filter(function ($descuento) {
+                        return $descuento['valor'] > 0;
+                    });
+                $descuentos = $descuentos->isEmpty() ? null : $descuentos;
+
+                // Cálculo usando ingresos ajustados (con extras) para compraCartera y libreInversion
+                $valorIngreso = $ingresosExtras;
+                $descuento = 0.08;
+                if (in_array($pagaduria, ['FOPEP', 'FIDUPREVISORA'])) {
+                    if ($valorIngreso == $salarioMinimo) {
+                        $descuento = 0.04;
+                    } elseif ($valorIngreso > $salarioMinimo && $valorIngreso < $salarioMinimo * 2) {
+                        $descuento = 0.08;
+                    } elseif ($valorIngreso >= $salarioMinimo * 2) {
+                        $descuento = 0.12;
+                    }
+                }
+
+                $valorIngresoConDescuento = $valorIngreso - ($valorIngreso * $descuento);
+
+                $compraCartera = ($valorIngresoConDescuento < $salarioMinimo * 2)
+                    ? $valorIngresoConDescuento - $salarioMinimo - $total_egresos
+                    : ($valorIngresoConDescuento / 2) - $total_egresos;
+
+                $compraCartera = max($compraCartera, 0);
+                $libreInversion = $compraCartera - $total_egresos;
+
+                $existsInColpensiones = in_array($cedulaStr, $colpensionesDocs);
+                $existsInFiducidiaria = in_array($cedulaStr, $fiducidiariaDocs);
+
+                $results->push([
+                    'doc' => $cedulaStr,
+                    'nombre_usuario' => $nombre_usuario,
+                    'tipo_contrato' => $tipo_contrato,
+                    'edad' => $edad,
+                    'fecha_nacimiento' => $fecha_nacimiento,
+                    'pagaduria' => $pagaduria,
+                    'cargo' => $cargo,
+                    'situacion_laboral' => null,
+                    'compra_cartera' => $compraCartera,
+                    'cupo_libre' => $libreInversion,
                     'cupones' => $cupones,
                     'embargos' => $embargos,
                     'descuentos' => $descuentos,
@@ -277,9 +509,36 @@ private function processCedulas($cedulas, $mes, $año)
 
         return $results;
     } catch (\Exception $e) {
+        Log::error("Error in processCedulas_vista: " . $e->getMessage());
         throw $e;
     }
 }
+
+
+
+
+
+
+
+/**
+ * Helper function to parse concatenated strings back into arrays.
+ */
+private function parseConcatenatedString($concatenatedString)
+{
+    if (empty($concatenatedString)) {
+        return [];
+    }
+
+    $items = explode(', ', $concatenatedString);
+    $result = [];
+
+    foreach ($items as $item) {
+        $result[] = $item;
+    }
+
+    return $result;
+}
+
 
 
 

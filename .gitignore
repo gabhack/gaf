@@ -43,6 +43,8 @@ public/firmaExecutionResponse.xml
 public/generateCodeResponse.xml
 public/generateCodeResponseContent.xml
 
+/python
+
 resource/assets/js/app.js
 public/css/styles.css
 yarn.lock
