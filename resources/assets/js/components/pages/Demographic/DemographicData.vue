@@ -166,14 +166,9 @@
                             <tr>
                                 <th>Cédula</th>
                                 <th>Nombre del Cliente</th>
-                                <th>Fecha Nacimiento</th>
-                                <th>Edad</th>
-                                <th>Tipo de Contrato</th>
                                 <th>Cargo</th>
-                                <th>Situación Laboral</th>
                                 <th>Pagaduría</th>
                                 <th>Cupo Libre</th>
-                                <th>Detalle de Embargo</th>
                                 <th>Detalle de Egresos</th>
                                 <th>Detalle de Mora</th>
                                 <th>Colpensiones</th>
