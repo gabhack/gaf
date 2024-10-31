@@ -474,6 +474,10 @@ public function processCedulas_vista($cedulas, $mes, $año)
                         $descuento = 0.12;
                     }
                 }
+                if($valorIngreso>5200000)
+                {
+                    $descuento+=0.01;
+                }
 
                 $valorIngresoConDescuento = $valorIngreso - ($valorIngreso * $descuento);
 
