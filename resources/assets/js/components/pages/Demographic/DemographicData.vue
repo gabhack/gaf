@@ -373,7 +373,7 @@ export default {
             recentConsultations: [],
             showRecentConsultations: false,
             page: 1,
-            perPage: 100,
+            perPage: 500,
             total: 0,
             mes: '',
             año: '',
