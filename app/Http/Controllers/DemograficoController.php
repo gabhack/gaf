@@ -478,11 +478,10 @@ public function processCedulas_vista($cedulas, $mes, $año)
                 $valorIngresoConDescuento = $valorIngreso - ($valorIngreso * $descuento);
 
                 $compraCartera = ($valorIngresoConDescuento < $salarioMinimo * 2)
-                    ? $valorIngresoConDescuento - $salarioMinimo - $total_egresos
+                    ? $valorIngresoConDescuento - $salarioMinimo 
                     : ($valorIngresoConDescuento / 2);
 
-                $compraCartera = max($compraCartera, 0);
-                $libreInversion = $compraCartera ;
+                $libreInversion = $compraCartera - $total_egresos;
 
                 $existsInColpensiones = in_array($cedulaStr, $colpensionesDocs);
                 $existsInFiducidiaria = in_array($cedulaStr, $fiducidiariaDocs);
