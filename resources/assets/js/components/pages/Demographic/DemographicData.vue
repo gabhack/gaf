@@ -166,6 +166,7 @@
                             <tr>
                                 <th>Cédula</th>
                                 <th>Nombre del Cliente</th>
+                                <th>Tipo de Contrato</th>
                                 <th>Cargo</th>
                                 <th>Pagaduría</th>
                                 <th>Cupo Libre</th>
@@ -180,23 +181,10 @@
                             <tr v-for="(result, index) in filteredResults" :key="result.doc + '-' + index">
                                 <td>{{ result.doc }}</td>
                                 <td>{{ result.nombre_usuario || 'No disponible' }}</td>
-                                <td>{{ result.fecha_nacimiento || 'No disponible' }}</td>
-                                <td>{{ result.edad || 'No disponible' }}</td>
                                 <td>{{ capitalizeFirstLetter(result.tipo_contrato) || 'No disponible' }}</td>
                                 <td>{{ result.cargo || 'No disponible' }}</td>
-                                <td>{{ result.situacion_laboral || 'No disponible' }}</td>
                                 <td>{{ result.pagaduria || 'No disponible' }}</td>
                                 <td>{{ formatCurrency(result.cupo_libre) }}</td>
-                                <td>
-                                    <CustomButton
-                                        v-if="result.embargos && result.embargos.length"
-                                        class="btn btn-link"
-                                        @click="toggleDetails(result, 'embargos')"
-                                        data-toggle="modal" data-target="#modalEmbargos"
-                                        :text="isRowExpanded(result, 'embargos') ? 'Ocultar Embargos' : 'Ver Embargos'"    
-                                    />
-                                    <span v-else>No hay embargos</span>
-                                </td>
                                 <td>
                                     <CustomButton
                                         v-if="result.cupones && result.cupones.length"
@@ -220,10 +208,9 @@
                                 <td>{{ result.colpensiones ? 'Sí' : 'No' }}</td>
                                 <td>{{ result.fiducidiaria ? 'Sí' : 'No' }}</td>
                             </tr>
-                            <!-- Filas de Detalles: Embargos -->
                             <!-- Fila para mostrar mensaje si no hay resultados -->
                             <tr v-if="filteredResults.length === 0">
-                                <td colspan="15">No hay resultados</td>
+                                <td colspan="10">No hay resultados</td>
                             </tr>
                         </tbody>
                     </table>
