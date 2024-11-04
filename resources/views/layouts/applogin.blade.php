@@ -11,6 +11,9 @@
 		<title>{{ config('app.name', 'AMI') }}</title>
 
 		<base href="{{url('/')}}">
+		
+		<!-- Favicon -->
+		<link rel="icon" type="image/png" href="/favicon.png">
 
 		<!-- Styles -->
 		<link href="{{ asset('css/all.css') }}" rel="stylesheet">
