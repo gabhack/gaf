@@ -6,14 +6,10 @@
 
         <b-row>
             <b-col cols="12" md="9">
-                <h3 class="heading-title">Datos demográficos</h3>
-                <p>Lörem ipsum despejode anas. Heteros ståpaddling. Dekameling agnostityp</p>
+                <h3 class="heading-title">Recuperación de cartera</h3>
+                <p>Obtenga informaciòn relevante para decisiones de compra de cartera usando las cédulas de los empleados/pensionados</p>
             </b-col>
-            <!-- <b-col cols="12" md="3" class="d-flex justify-content-start justify-content-md-end align-items-center">
-                <CustomButton @click="toggleRecentConsultations">{{
-                    showRecentConsultations ? 'Ocultar Consultas Recientes' : 'Ver Consultas Recientes'
-                }}</CustomButton>
-            </b-col> -->
+            
         </b-row>
         <div
             style="min-height: 500px"
@@ -147,10 +143,10 @@
                 <b-col cols="12" md="9">
                     <h3 class="heading-title">Resultados</h3>
                 </b-col>
-                <!-- <b-col cols="12" md="3" class="d-flex justify-content-start justify-content-md-end align-items-center">
+                <b-col cols="12" md="3" class="d-flex justify-content-start justify-content-md-end align-items-center">
                     <CustomButton @click="exportToPDF" class="btn btn-danger mr-2" text="Exportar a PDF" />
                     <CustomButton @click="exportToExcel" class="btn btn-success" text="Exportar a Excel" />
-                </b-col> -->
+                </b-col>
             </b-row>
             <div class="panel-body">
                 <b-form-group>
@@ -178,6 +174,8 @@
                                 <th>Detalle de Mora</th>
                                 <th>Colpensiones</th>
                                 <th>Fiduprevisora</th>
+                                <th>Fopep</th>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -224,16 +222,17 @@
                                 </td>
                                 <td>{{ result.colpensiones ? 'Sí' : 'No' }}</td>
                                 <td>{{ result.fiducidiaria ? 'Sí' : 'No' }}</td>
+                                <td>{{ result.fopep ? 'Sí' : 'No' }}</td>
+
                             </tr>
-                            <!-- Filas de Detalles: Embargos -->
                             <!-- Fila para mostrar mensaje si no hay resultados -->
                             <tr v-if="filteredResults.length === 0">
                                 <td colspan="15">No hay resultados</td>
                             </tr>
                         </tbody>
                     </table>
-                    <!-- Modal de Cupones -->
-                    <div class="modal fade" id="modalCupones" tabindex="-1" role="dialog" aria-labelledby="modalCuponesLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+                   <!-- Modal de Cupones -->
+                   <div class="modal fade" id="modalCupones" tabindex="-1" role="dialog" aria-labelledby="modalCuponesLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -325,13 +324,13 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                </div>
                                 <div class="modal-footer">
                                     <CustomButton data-dismiss="modal" @click="closeExpandedRows" text="Cerrar"/>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
                 </div>
                 <!-- Paginación -->
                 <div class="pagination">
@@ -350,10 +349,13 @@
 
 <script>
 import axios from 'axios';
+import * as XLSX from 'xlsx';
 import CustomButton from '../../customComponents/CustomButton.vue';
 import Lupa from '../../icons/Lupa.vue';
 import UploadFile from '../../icons/UploadFile.vue';
 import Trash from '../../icons/Trash.vue';
+import jsPDF from 'jspdf'; // Si utilizas exportToPDF
+import 'jspdf-autotable'; // Plugin para tablas en jsPDF
 
 export default {
     name: 'DemographicData',
@@ -373,7 +375,7 @@ export default {
             recentConsultations: [],
             showRecentConsultations: false,
             page: 1,
-            perPage: 1000,
+            perPage: 500,
             total: 0,
             mes: '',
             año: '',
@@ -520,13 +522,86 @@ export default {
         },
         closeExpandedRows(){
             this.expandedRows = [];
-        },
+        }, 
         exportToPDF() {
-            // Implementación de exportación a PDF si es necesario
+            const doc = new jsPDF();
+            const columns = ['Cédula', 'Nombre del Cliente', 'Fecha Nacimiento', 'Edad', 'Tipo de Contrato', 'Cargo', 'Situación Laboral', 'Pagaduría', 'Cupo Libre', 'Colpensiones', 'Fiduprevisora', 'Fopep'];
+            const rows = this.filteredResults.map(item => [
+                item.doc,
+                item.nombre_usuario || 'No disponible',
+                item.fecha_nacimiento || 'No disponible',
+                item.edad || 'No disponible',
+                this.capitalizeFirstLetter(item.tipo_contrato) || 'No disponible',
+                item.cargo || 'No disponible',
+                item.situacion_laboral || 'No disponible',
+                item.pagaduria || 'No disponible',
+                this.formatCurrency(item.cupo_libre),
+                item.colpensiones ? 'Sí' : 'No',
+                item.fiducidiaria ? 'Sí' : 'No',
+                item.fopep ? 'Sí' : 'No'
+
+            ]);
+            doc.autoTable({
+                head: [columns],
+                body: rows,
+                styles: { fontSize: 8 },
+                headStyles: { fillColor: [32, 160, 233] }
+            });
+            doc.save('resultados.pdf');
         },
         exportToExcel() {
-            // Implementación de exportación a Excel si es necesario
-        },
+        const columns = [
+            'Cédula', 'Nombre del Cliente', 'Fecha Nacimiento', 'Edad', 'Tipo de Contrato', 'Cargo',
+            'Situación Laboral', 'Pagaduría', 'Cupo Libre', 'Detalle de Embargos', 'Detalle de Cupones',
+            'Detalle de Descuentos', 'Colpensiones', 'Fiduprevisora', 'Fopep'
+        ];
+        
+        const rows = this.results.map(item => [
+            item.doc || 'No disponible',
+            item.nombre_usuario || 'No disponible',
+            item.fecha_nacimiento || 'No disponible',
+            item.edad || 'No disponible',
+            item.tipo_contrato || 'No disponible',
+            item.cargo || 'No disponible',
+            item.situacion_laboral || 'No disponible',
+            item.pagaduria || 'No disponible',
+            this.formatCurrency(item.cupo_libre) || 'No disponible',
+            this.formatEmbargos(item.embargos),
+            this.formatCupones(item.cupones),
+            this.formatDescuentos(item.descuentos),
+            item.colpensiones ? 'Sí' : 'No',
+            item.fiducidiaria ? 'Sí' : 'No'
+        ]);
+
+        const worksheet = XLSX.utils.aoa_to_sheet([columns, ...rows]);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Datos Demográficos');
+        XLSX.writeFile(workbook, 'datos_demograficos.xlsx');
+    },
+
+    // Helper para formatear embargos
+    formatEmbargos(embargos) {
+        if (!embargos || !embargos.length) return 'No hay embargos';
+        return embargos
+            .map(e => `Documento: ${e.docdeman || 'N/A'}, Entidad: ${e.entidaddeman || 'N/A'}, Valor: ${this.formatCurrency(e.valor || e.netoemb)}`)
+            .join('\n');
+    },
+
+    // Helper para formatear cupones
+    formatCupones(cupones) {
+        if (!cupones || !cupones.length) return 'No hay cupones';
+        return cupones
+            .map(c => `Concepto: ${c.concept || 'N/A'}, Egresos: ${this.formatCurrency(c.egresos)}`)
+            .join('\n');
+    },
+
+    // Helper para formatear descuentos
+    formatDescuentos(descuentos) {
+        if (!descuentos || !descuentos.length) return 'No hay descuentos';
+        return descuentos
+            .map(d => `Mliquid: ${d.mliquid || 'N/A'}, Valor: ${this.formatCurrency(d.valor)}`)
+            .join('\n');
+    },
         async fetchRecentConsultations() {
             try {
                 let response = await axios.get('/demografico/recent-consultations');
@@ -629,5 +704,10 @@ export default {
 }
 th {
     white-space: nowrap; /* Evita el salto de línea */
+}
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
 }
 </style>

@@ -372,6 +372,8 @@ public function processCedulas($cedulas, $mes, $año)
 public function processCedulas_vista($cedulas, $mes, $año)
 {
     try {
+        Log::info("Inicio de processCedulas_vista", ['cedulas' => $cedulas]);
+
         $mes = (int)$mes;
         $año = (int)$año;
 
@@ -388,6 +390,11 @@ public function processCedulas_vista($cedulas, $mes, $año)
         $fiducidiariaDocs = Fiducidiaria::on('pgsql')
             ->whereIn('documento', $cedulas)
             ->pluck('documento')
+            ->toArray();
+
+        $fopepDocs = DatamesFopep::on('pgsql')
+            ->whereIn('doc', $cedulas)
+            ->pluck('doc')
             ->toArray();
 
         $results = collect();
@@ -407,31 +414,37 @@ public function processCedulas_vista($cedulas, $mes, $año)
                 $tipo_contrato = $data->tipo_contrato;
                 $cargo = $data->cargos;
                 $edad = $data->edad;
+
+                // Convert fecha_nacimiento to a readable format
                 $fecha_nacimiento = $data->fecha_nacimiento ?? null;
+                if ($fecha_nacimiento) {
+                    if (is_numeric($fecha_nacimiento)) {
+                        $fecha_nacimiento = Carbon::createFromTimestamp($fecha_nacimiento)->format('Y-m-d');
+                    } elseif (preg_match('/\d{2}\/\d{2}\/\d{4}/', $fecha_nacimiento)) {
+                        $fecha_nacimiento = Carbon::createFromFormat('d/m/Y', $fecha_nacimiento)->format('Y-m-d');
+                    } else {
+                        $fecha_nacimiento = Carbon::parse($fecha_nacimiento)->format('Y-m-d');
+                    }
+                }
+
+                $situacionLaboral=$data->situacion_laboral;
+                Log::info("situacion alboral: ", ['situacion_laboral' => $situacionLaboral]);
+
                 $total_egresos = $data->total_egresos;
                 $ingresosExtras = $data->ingresos_ajustados;
 
-                // Detalle de embargos con log
-                $embargos = collect(explode(', ', $data->embargos_concatenados))->map(function ($embargo) {
-                    $parts = explode(', ', $embargo);
-                    if (count($parts) === 4) {
-                        [$docdeman, $entidaddeman, $fembini, $netoemb] = $parts;
-                        $embargoData = [
-                            'docdeman' => trim($docdeman),
-                            'entidaddeman' => trim($entidaddeman),
-                            'fembini' => trim($fembini),
-                            'valor' => (float)trim($netoemb)
-                        ];
-                        Log::info("Embargo detalle:", $embargoData); // Log del embargo
-                        return $embargoData;
-                    }
-                    return [
-                        'docdeman' => null,
-                        'entidaddeman' => null,
-                        'fembini' => null,
-                        'valor' => null
+                // Procesamiento de embargos
+                $embargos = collect();
+                preg_match_all('/(\d+): ([^,]+), ([\d\/-]+), ([\d,]+)/', $data->embargos_concatenados, $matches, PREG_SET_ORDER);
+                foreach ($matches as $match) {
+                    $embargoData = [
+                        'docdeman' => trim($match[1]),
+                        'entidaddeman' => trim($match[2]),
+                        'fembini' => trim($match[3]),
+                        'valor' => (float)str_replace(',', '', $match[4])
                     ];
-                });
+                    $embargos->push($embargoData);
+                }
                 $embargos = $embargos->isEmpty() ? null : $embargos;
 
                 // Detalle de cupones y descuentos
@@ -462,7 +475,7 @@ public function processCedulas_vista($cedulas, $mes, $año)
                     });
                 $descuentos = $descuentos->isEmpty() ? null : $descuentos;
 
-                // Cálculo usando ingresos ajustados (con extras) para compraCartera y libreInversion
+                // Cálculo de compraCartera y libreInversion
                 $valorIngreso = $ingresosExtras;
                 $descuento = 0.08;
                 if (in_array($pagaduria, ['FOPEP', 'FIDUPREVISORA'])) {
@@ -474,9 +487,8 @@ public function processCedulas_vista($cedulas, $mes, $año)
                         $descuento = 0.12;
                     }
                 }
-                if($valorIngreso>5200000)
-                {
-                    $descuento+=0.01;
+                if ($valorIngreso > 5200000) {
+                    $descuento += 0.01;
                 }
 
                 $valorIngresoConDescuento = $valorIngreso - ($valorIngreso * $descuento);
@@ -489,6 +501,7 @@ public function processCedulas_vista($cedulas, $mes, $año)
 
                 $existsInColpensiones = in_array($cedulaStr, $colpensionesDocs);
                 $existsInFiducidiaria = in_array($cedulaStr, $fiducidiariaDocs);
+                $existsInFopep = in_array($cedulaStr, $fopepDocs);
 
                 $results->push([
                     'doc' => $cedulaStr,
@@ -498,7 +511,7 @@ public function processCedulas_vista($cedulas, $mes, $año)
                     'fecha_nacimiento' => $fecha_nacimiento,
                     'pagaduria' => $pagaduria,
                     'cargo' => $cargo,
-                    'situacion_laboral' => null,
+                    'situacion_laboral' => $situacionLaboral,
                     'compra_cartera' => $compraCartera,
                     'cupo_libre' => $libreInversion,
                     'cupones' => $cupones,
@@ -506,18 +519,19 @@ public function processCedulas_vista($cedulas, $mes, $año)
                     'descuentos' => $descuentos,
                     'colpensiones' => $existsInColpensiones,
                     'fiducidiaria' => $existsInFiducidiaria,
+                    'fopep' => $existsInFopep,
+
                 ]);
             }
         }
 
+        Log::info("Fin de processCedulas_vista");
         return $results;
     } catch (\Exception $e) {
-        Log::error("Error in processCedulas_vista: " . $e->getMessage());
+        Log::error("Error en processCedulas_vista: " . $e->getMessage());
         throw $e;
     }
 }
-
-
 
 
 
