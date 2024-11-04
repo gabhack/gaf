@@ -7,7 +7,7 @@
         <b-row>
             <b-col cols="12" md="9">
                 <h3 class="heading-title">Recuperación de cartera</h3>
-                <p>Obtenga informaciòn relevante para decisiones de compra de cartera usando las cédulas de los empleados/pensionados</p>
+                <p>Obtenga información relevante para decisiones de compra de cartera usando las cédulas de los empleados/pensionados</p>
             </b-col>
             
         </b-row>
@@ -47,7 +47,7 @@
                         <b-col cols="11" class="d-flex justify-content-center align-items-center">
                             <p class="modal-text">
                                 Por favor, asegúrese de que el archivo Excel tiene una columna con el encabezado
-                                <strong>'cedulas'</strong> y que contiene los números de cédula.
+                                <strong>'cédulas'</strong> y que contiene los números de cédula.
                             </p>
                         </b-col>
                     </b-row>
@@ -144,6 +144,7 @@
                     <h3 class="heading-title">Resultados</h3>
                 </b-col>
                 <b-col cols="12" md="3" class="d-flex justify-content-start justify-content-md-end align-items-center">
+                    <CustomButton text="Cargar archivo" @click="$bvModal.show('bv-modal-example')" style="background-color: darkgreen; margin-right: 8px;"/>
                     <CustomButton @click="exportToPDF" class="btn btn-danger mr-2" text="Exportar a PDF" />
                     <CustomButton @click="exportToExcel" class="btn btn-success" text="Exportar a Excel" />
                 </b-col>
@@ -334,9 +335,106 @@
                 </div>
                 <!-- Paginación -->
                 <div class="pagination">
-                    <button @click="fetchPaginatedResults(page - 1)" :disabled="page === 1" class="btn btn-primary">Anterior</button>
+                    <button v-if="page > 1" @click="fetchPaginatedResults(page - 1)" class="btn btn-primary">Anterior</button>
                     <button @click="fetchPaginatedResults(page + 1)" :disabled="page * perPage >= total" class="btn btn-primary">Siguiente</button>
+                </div><br>
+                <b-modal id="bv-modal-example" hide-footer style="min-width: 1000px">
+                <template #modal-title><span class="heading-title">Agregar datos demográficos</span></template>
+                <div class="" style="background-color: #f9fafc; border-left: 4px solid #249fe3; border-radius: 4px">
+                    <b-row style="padding: 16px">
+                        <b-col cols="1" class="d-flex justify-content-center align-items-center">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 16 16"
+                                fill="none"
+                            >
+                                <path
+                                    fill-rule="evenodd"
+                                    clip-rule="evenodd"
+                                    d="M16 8C16 12.4183 12.4183 16 8 16C3.58172 16 0 12.4183 0 8C0 3.58172 3.58172 0 8 0C12.4183 0 16 3.58172 16 8ZM9 4C9 4.55228 8.55228 5 8 5C7.44772 5 7 4.55228 7 4C7 3.44772 7.44772 3 8 3C8.55228 3 9 3.44772 9 4ZM7 7C6.44772 7 6 7.44772 6 8C6 8.55229 6.44772 9 7 9V12C7 12.5523 7.44772 13 8 13H9C9.55228 13 10 12.5523 10 12C10 11.4477 9.55228 11 9 11V8C9 7.44772 8.55228 7 8 7H7Z"
+                                    fill="#20A0E9"
+                                />
+                            </svg>
+                        </b-col>
+                        <b-col cols="11" class="d-flex justify-content-center align-items-center">
+                            <p class="modal-text">
+                                Por favor, asegúrese de que el archivo Excel tiene una columna con el encabezado
+                                <strong>'cédulas'</strong> y que contiene los números de cédula.
+                            </p>
+                        </b-col>
+                    </b-row>
                 </div>
+                <b-row class="py-3">
+                    <div class="col-md-12">
+                        <b-form-group label="Mes (MM):">
+                            <b-form-input
+                                v-model="mes"
+                                placeholder="01"
+                                maxlength="2"
+                                class="input_style_b form-control2"
+                            ></b-form-input>
+                        </b-form-group>
+                    </div>
+
+                    <div class="col-md-12">
+                        <b-form-group label="Año (YYYY):">
+                            <b-form-input
+                                v-model="año"
+                                placeholder="2024"
+                                maxlength="4"
+                                class="input_style_b form-control2"
+                            ></b-form-input>
+                        </b-form-group>
+                    </div>
+                    <b-col
+                        cols="12"
+                        style="
+                            min-height: 150px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            cursor: pointer;
+                        "
+                        @click="triggerFileInput"
+                        @dragover.prevent="handleDragOver"
+                        @dragleave.prevent="handleDragLeave"
+                        @drop.prevent="handleDrop"
+                    >
+                        <div
+                            style="display: flex; flex-direction: column; align-items: center; justify-content: center"
+                        >
+                            <UploadFile class="mb-2" />
+                            <p class="text-center" style="margin-bottom: 0.5rem">
+                                Arrastre o suelte el archivo <br />
+                                o
+                            </p>
+                            <CustomButton text="Seleccionar archivo" :color="'white'" />
+                        </div>
+                        <input type="file" ref="fileInput" @change="handleFileUpload" style="display: none" />
+                    </b-col>
+                </b-row>
+                <div class="d-flex justify-content-center align-item-center mb-5" style="width: 100%" v-if="file">
+                    <div
+                        style="
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                            width: 300px;
+                            border-bottom: 1px solid #babcbe;
+                            padding: 8px;
+                        "
+                    >
+                        <span style="font-size: 12px; font-weight: 400; line-height: 15.62px; color: black">{{
+                            file.name
+                        }}</span>
+                        <button style="padding: 0; margin: 0; border: none; background: none;" @click="deleteFile"><Trash /></button>
+                    </div>
+                </div>
+                <CustomButton @click="uploadFile($bvModal)" text="Subir archivo" v-if="file" />
+                <CustomButton @click="$bvModal.hide('bv-modal-example')" :color="'white'" text="Cerrar" />
+            </b-modal>
             </div>
         </div>
 
