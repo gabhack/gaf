@@ -53,6 +53,7 @@
                 <div class="bg-green-side py-2 collapse-inner">
                     <a class="collapse-item" href="#">Consulta Gold</a>
                     <a class="collapse-item" href="/coupons-form">Consulta Diamante</a>
+                    <a class="collapse-item" href="/demografico">Recolección datos capacidad</a>
                 </div>
             </div>
         </li>
@@ -65,7 +66,7 @@
                 <div class="bg-green-side py-2 collapse-inner">
                     <a class="collapse-item" href="#">Investigación de bienes</a>
                     <a class="collapse-item" href="/certificados">Certificado de nacimiento</a>
-                    <a class="collapse-item" href="/demografico">Datos demograficos</a>
+                    <a class="collapse-item" href="old/demografico">Datos demograficos</a>
                     <a class="collapse-item" href="#">Datos personales</a>
                     <a class="collapse-item" href="#">Información financiera</a>
                 </div>
