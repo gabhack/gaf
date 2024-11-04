@@ -245,7 +245,7 @@ export default {
     },
     data() {
         return {
-            HistoryConsult: null,
+            HistoryConsult: { data: [], per_page: 15, total: 0 },
             detailHistory: {},
             filter: '',
             id_consult: null,
@@ -344,53 +344,24 @@ export default {
         }
     },
     computed: {
-        filteredRows() {
-            if (!this.HistoryConsult) return false;
+        
+    filteredRows() {
+        if (!this.HistoryConsult || !this.HistoryConsult.data) return [];
 
-            return this.HistoryConsult.filter(row => {
-                const name = row.nombre ? row.nombre.toString().toLowerCase() : '';
-                const searchTerm = this.filter.toLowerCase();
-                let data = name.includes(searchTerm);
-                if (data === true) {
-                    return name.includes(searchTerm);
-                } else {
-                    const ced = row.ced.toString().toLowerCase();
-                    const searchTerm = this.filter.toLowerCase();
-
-                    let data1 = ced.includes(searchTerm);
-                    if (data1 === true) {
-                        return ced.includes(searchTerm);
-                    } else {
-                        const pag = row.pagaduria.toString().toLowerCase();
-                        const searchTerm = this.filter.toLowerCase();
-                        let data2 = pag.includes(searchTerm);
-                        if (data2 === true) {
-                            return pag.includes(searchTerm);
-                        } else {
-                            const date = row.created_at.toString().toLowerCase();
-                            const searchTerm = this.filter.toLowerCase();
-                            let data3 = date.includes(searchTerm);
-                            if (data3 === true) {
-                                return date.includes(searchTerm);
-                            } else {
-                                const id = row.id.toString().toLowerCase();
-                                const searchTerm = this.filter.toLowerCase();
-                                let data4 = id.includes(searchTerm);
-                                if (data4 === true) {
-                                    return id.includes(searchTerm);
-                                } else {
-                                    const type_consulta = row.tipo_consulta.toString().toLowerCase();
-                                    const searchTerm = this.filter.toLowerCase();
-                                    let data5 = type_consulta.includes(searchTerm);
-                                    return type_consulta.includes(searchTerm);
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
-    },
+        return this.HistoryConsult.data.filter(row => {
+            const name = row.nombre ? row.nombre.toString().toLowerCase() : '';
+            const searchTerm = this.filter.toLowerCase();
+            return (
+                name.includes(searchTerm) ||
+                row.ced.toString().toLowerCase().includes(searchTerm) ||
+                row.pagaduria.toString().toLowerCase().includes(searchTerm) ||
+                row.created_at.toString().toLowerCase().includes(searchTerm) ||
+                row.id.toString().toLowerCase().includes(searchTerm) ||
+                row.tipo_consulta.toString().toLowerCase().includes(searchTerm)
+            );
+        });
+    }
+},
     methods: {
         getHistoryConsults() {
             this.isBusy = true;
@@ -398,10 +369,15 @@ export default {
 
             axios
                 .get(url)
-                .then(response => {
-                    this.HistoryConsult = response.data.data;
-                    this.perPage = response.data.data.per_page;
-                    this.totalRows = response.data.data.total;
+                .then(response => { 
+                    const data = response.data.data || { data: [], per_page: 15, total: 0 };
+                    this.HistoryConsult = data;
+                    this.perPage = data.per_page || 15;
+                    this.totalRows = data.total || 0;
+                })
+                .catch(error=>{
+                    console.error('Error al obtener consultas:',error);
+                    this.HistoryConsult={data:[],per_page:15,total: 0};
                 })
                 .finally(() => {
                     this.isBusy = false;
