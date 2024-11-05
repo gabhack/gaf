@@ -7,7 +7,8 @@
         <b-row>
             <b-col cols="12" md="9">
                 <h3 class="heading-title">Recuperación de cartera</h3>
-                <p>Obtenga información relevante para decisiones de compra de cartera usando las cédulas de los empleados/pensionados</p>
+                <p>Acceda a información estratégica que facilita la toma de decisiones en la compra de cartera, 
+            permitiendo identificar y priorizar a los pensionados y empleados activos del sector público con potencial de recuperación.</p>
             </b-col>
             
         </b-row>
@@ -141,13 +142,15 @@
         <div v-if="results.length" class="panel mb-3 col-md-12">
             <b-row>
                 <b-col cols="12" md="9">
-                    <h3 class="heading-title">Resultados</h3>
+                    <br><br><h3 class="heading-title">Resultados</h3>
                 </b-col>
                 <b-col cols="12" md="3" class="d-flex justify-content-start justify-content-md-end align-items-center">
-                    <CustomButton text="Cargar archivo" @click="$bvModal.show('bv-modal-example')" style="background-color: darkgreen; margin-right: 8px;"/>
-                    <CustomButton @click="exportToPDF" class="btn btn-danger mr-2" text="Exportar a PDF" />
-                    <CustomButton @click="exportToExcel" class="btn btn-success" text="Exportar a Excel" />
-                </b-col>
+           <CustomButton text="Cargar archivo" @click="$bvModal.show('bv-modal-example')" 
+                style="background-color: darkgreen; margin-right: 8px; white-space: nowrap;"/>
+            <CustomButton @click="exportToPDF" class="btn btn-danger mr-2" text="Exportar a PDF" style="white-space: nowrap;"/>
+            <CustomButton @click="exportToExcel" class="btn btn-success" text="Exportar a Excel" style="white-space: nowrap;"/>
+</b-col>
+
             </b-row>
             <div class="panel-body">
                 <b-form-group>
