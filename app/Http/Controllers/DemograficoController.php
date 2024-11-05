@@ -377,10 +377,12 @@ public function processCedulas_vista($cedulas, $mes, $año)
         $mes = (int)$mes;
         $año = (int)$año;
 
-        $resultsData = DB::connection('pgsql')
-            ->table('fast_aggregate_data')
-            ->whereIn('doc', $cedulas)
-            ->get();
+        $resultsData =   DB::connection('pgsql')
+        ->table('fast_aggregate_data')
+        ->whereIn('doc', $cedulas)
+        ->whereRaw("extract(month from CAST(inicioperiodo AS date)) = ?", [$mes])
+        ->whereRaw("extract(year from CAST(inicioperiodo AS date)) = ?", [$año])
+        ->get();
 
         $colpensionesDocs = Colpensiones::on('pgsql')
             ->whereIn('documento', $cedulas)
@@ -448,15 +450,28 @@ public function processCedulas_vista($cedulas, $mes, $año)
                 $embargos = $embargos->isEmpty() ? null : $embargos;
 
                 // Detalle de cupones y descuentos
-                $cupones = collect(explode(', ', $data->cupones_concatenados))->map(function ($cupon) {
-                    $parts = explode(': ', $cupon);
-                    if (count($parts) === 2) {
-                        [$concept, $egresos] = $parts;
-                        return ['concept' => trim($concept), 'egresos' => (float)trim($egresos)];
-                    }
-                    return ['concept' => null, 'egresos' => null];
-                });
-                $cupones = $cupones->isEmpty() ? null : $cupones;
+                $cupones = collect(explode(', ', $data->cupones_concatenados))
+    ->map(function ($cupon) {
+        $parts = explode(': ', $cupon);
+        if (count($parts) === 2) {
+            [$concept, $egresos] = $parts;
+            $egresos = (float)str_replace(',', '', trim($egresos)); // Eliminar comas y convertir a float
+            return ['concept' => trim($concept), 'egresos' => $egresos];
+        }
+        return null;
+    })
+    ->filter(function ($cupon) {
+        return $cupon && $cupon['egresos'] > 0; // Filtra solo cupones con egresos > 0
+    })
+    ->values() // Re-indexa la colección para que sea secuencial
+    ->toArray(); // Convierte a array para la compatibilidad con la vista
+
+$cupones = empty($cupones) ? null : $cupones;
+
+// Log para verificar cupones después del filtro de egresos > 0
+Log::info("Cupones con egresos mayores a 0:", ['cupones' => $cupones]);
+
+
 
                 $descuentos = collect(explode(', ', $data->descuentos_concatenados))
                     ->filter(function ($descuento) {
