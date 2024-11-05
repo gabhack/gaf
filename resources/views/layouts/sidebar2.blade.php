@@ -51,9 +51,7 @@
             </a>
             <div id="menuRecuperacion" class="collapse" aria-labelledby="menuRecuperacion" data-parent="#accordionSidebar">
                 <div class="bg-green-side py-2 collapse-inner">
-                    <a class="collapse-item" href="#">Consulta Gold</a>
-                    <a class="collapse-item" href="/coupons-form">Consulta Diamante</a>
-                    <a class="collapse-item" href="/recoleccion-datos-capacidad">Recolección datos capacidad</a>
+                    <a class="collapse-item" href="/analisis-de-cartera">Análisis de Cartera</a>
                 </div>
             </div>
         </li>
