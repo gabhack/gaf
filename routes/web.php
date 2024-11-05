@@ -636,7 +636,7 @@ Route::post('/descuentos/by-pagaduria', [DescuentosController::class, 'getDescue
 Route::post('/embargos/by-pagaduria', [EmbargosController::class, 'getEmbargosByPagaduria']);
 
 
-Route::get('/recoleccion-datos-capacidad', [DemograficoController::class, 'show'])->name('demografico.show');
+Route::get('/analisis-de-cartera', [DemograficoController::class, 'show'])->name('demografico.show');
 Route::view('/demografico', 'Demographic.IndexDemografico');
 Route::post('/demografico/upload', [DemograficoController::class, 'upload'])->name('demografico.upload');
 Route::get('/demografico/recent-consultations', [DemograficoController::class, 'getRecentConsultations']);
