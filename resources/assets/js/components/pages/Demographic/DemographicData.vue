@@ -182,13 +182,13 @@
                             <!-- Fila Principal -->
                             <tr v-for="(result, index) in filteredResults" :key="result.doc + '-' + index">
                                 <td>{{ result.doc }}</td>
-                                <td>{{ capitalizeFirstLetter(result.nombre_usuario) || 'No disponible' }}</td>
+                                <td>{{ capitalize(result.nombre_usuario) || 'No disponible' }}</td>
                                 <td>{{ result.fecha_nacimiento || 'No disponible' }}</td>
                                 <td>{{ result.edad || 'No disponible' }}</td>
-                                <td>{{ capitalizeFirstLetter(result.tipo_contrato) || 'No disponible' }}</td>
-                                <td>{{ capitalizeFirstLetter(result.cargo) || 'No disponible' }}</td>
-                                <td>{{ capitalizeFirstLetter(result.situacion_laboral) || 'No disponible' }}</td>
-                                <td>{{ capitalizeFirstLetter(result.pagaduria) || 'No disponible' }}</td>
+                                <td>{{ capitalize(result.tipo_contrato) || 'No disponible' }}</td>
+                                <td>{{ capitalize(result.cargo) || 'No disponible' }}</td>
+                                <td>{{ capitalize(result.situacion_laboral) || 'No disponible' }}</td>
+                                <td>{{ capitalize(result.pagaduria) || 'No disponible' }}</td>
                                 <td>{{ formatCurrency(result.cupo_libre) }}</td>
                                 <td>
                                     <CustomButton
@@ -496,6 +496,10 @@ export default {
         }
     },
     methods: {
+        capitalize(text) {
+        if (!text) return '';
+        return text.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
+    },
         deleteFile() {
             this.file = null;
         },
@@ -712,14 +716,6 @@ export default {
                 return 'No disponible';
             }
             return new Intl.NumberFormat('es-CO').format(value);
-        },
-        capitalizeFirstLetter(string) {
-            if (!string) return '';
-            return string
-            .toLowerCase()
-            .split('')
-            .map(word=>word.charAt(0).toUpperCase()+word.slice(1))
-            .join('');
         }
     }   
 };
