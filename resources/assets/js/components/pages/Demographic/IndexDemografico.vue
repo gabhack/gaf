@@ -19,13 +19,12 @@
                     <div class="custom-file-upload">
                         <input type="file" @change="handleFileUpload" id="file-upload" class="file-input"/>
                         <label for="file-upload">Elegir archivo</label>
-                </div>
-                    <CustomButton @click="toggleRecentConsultations" class="btn btn-info float-right" style="white-space: nowrap; background-color: #2c8c73; margin-left: 500px;">
-                    {{ showRecentConsultations ? 'Ocultar Vista' : 'Ver Recientes'}}
-                    </CustomButton>
+                    </div>
                 </div>
                         <CustomButton 
-                        v-if="file" @click="uploadFile" class="btn btn-primary" style="white-space: nowrap; background-color: #2c8c73;">Subir Archivo
+                        v-if="file" 
+                        @click="uploadFile" class="btn btn-primary" 
+                        style="white-space: nowrap; background-color: #2c8c73;">Subir Archivo
                         </CustomButton>
                 </div>
         </div>
