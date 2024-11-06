@@ -5,8 +5,8 @@
         </div>
 
         <b-row>
-            <b-col cols="12" md="9" style="margin-left: 24px;">
-                <h3 class="heading-title">Recuperación de cartera</h3>
+            <b-col cols="12" md="9" style="margin-left: 28px;">
+                <h3 class="heading-title">Análisis de Cartera</h3>
                 <p>Acceda a información estratégica que facilita la toma de decisiones en la compra de cartera, 
             permitiendo identificar y priorizar a los pensionados y empleados activos del sector público con potencial de recuperación.</p>
             </b-col>
@@ -182,13 +182,13 @@
                             <!-- Fila Principal -->
                             <tr v-for="(result, index) in filteredResults" :key="result.doc + '-' + index">
                                 <td>{{ result.doc }}</td>
-                                <td>{{ result.nombre_usuario || 'No disponible' }}</td>
+                                <td>{{ capitalizeFirstLetter(result.nombre_usuario) || 'No disponible' }}</td>
                                 <td>{{ result.fecha_nacimiento || 'No disponible' }}</td>
                                 <td>{{ result.edad || 'No disponible' }}</td>
                                 <td>{{ capitalizeFirstLetter(result.tipo_contrato) || 'No disponible' }}</td>
-                                <td>{{ result.cargo || 'No disponible' }}</td>
-                                <td>{{ result.situacion_laboral || 'No disponible' }}</td>
-                                <td>{{ result.pagaduria || 'No disponible' }}</td>
+                                <td>{{ capitalizeFirstLetter(result.cargo) || 'No disponible' }}</td>
+                                <td>{{ capitalizeFirstLetter(result.situacion_laboral) || 'No disponible' }}</td>
+                                <td>{{ capitalizeFirstLetter(result.pagaduria) || 'No disponible' }}</td>
                                 <td>{{ formatCurrency(result.cupo_libre) }}</td>
                                 <td>
                                     <CustomButton
@@ -334,8 +334,8 @@
                 </div>
                 <!-- Paginación -->
                 <div class="pagination">
-                    <button v-if="page > 1" @click="fetchPaginatedResults(page - 1)" class="btn btn-primary">Anterior</button>
-                    <button @click="fetchPaginatedResults(page + 1)" :disabled="page * perPage >= total" class="btn btn-primary">Siguiente</button>
+                    <button v-if="page > 1" @click="fetchPaginatedResults(page - 1)" class="btn btn-primary" style="background-color: #2c8c73";>Anterior</button>
+                    <button @click="fetchPaginatedResults(page + 1)" :disabled="page * perPage >= total" class="btn btn-primary" style="background-color: #2c8c73;">Siguiente</button>
                 </div><br>
                 <b-modal id="bv-modal-example" hide-footer style="min-width: 1000px">
                 <template #modal-title><span class="heading-title">Agregar datos demográficos</span></template>
@@ -715,9 +715,13 @@ export default {
         },
         capitalizeFirstLetter(string) {
             if (!string) return '';
-            return string.charAt(0).toUpperCase() + string.slice(1);
+            return string
+            .toLowerCase()
+            .split('')
+            .map(word=>word.charAt(0).toUpperCase()+word.slice(1))
+            .join('');
         }
-    }
+    }   
 };
 </script>
 
