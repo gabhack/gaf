@@ -4,9 +4,9 @@
             <div class="spinner"></div>
         </div>
 
-        <div class="panel mb-3 col-md-12">
+        <div class="panel mb-3 col-md-12" style="margin-left: 20px;">
             <div class="panel-heading" style="background-color: white;">
-                <b style="color: black">Datos Demográficos</b>
+                <b style="color: black;">Datos Demográficos</b>
             </div>
             <div class="panel-body">
                 <div style="background-color: white">
@@ -19,13 +19,15 @@
                     <div class="custom-file-upload">
                         <input type="file" @change="handleFileUpload" id="file-upload" class="file-input"/>
                         <label for="file-upload">Elegir archivo</label>
-                    </div>
-                    <CustomButton @click="uploadFile" class="btn btn-primary" style="white-space: nowrap; background-color: #2c8c73; margin-left: 510px;">Subir Archivo</CustomButton>
-                    <CustomButton @click="toggleRecentConsultations" class="btn btn-info float-right" style="white-space: nowrap; background-color: #2c8c73; margin-left: 20px;">
-                    {{ showRecentConsultations ? 'Ocultar Vista' : 'Ver Recientes'}}
-                </CustomButton>
                 </div>
-            </div>
+                    <CustomButton @click="toggleRecentConsultations" class="btn btn-info float-right" style="white-space: nowrap; background-color: #2c8c73; margin-left: 500px;">
+                    {{ showRecentConsultations ? 'Ocultar Vista' : 'Ver Recientes'}}
+                    </CustomButton>
+                </div>
+                        <CustomButton 
+                        v-if="file" @click="uploadFile" class="btn btn-primary" style="white-space: nowrap; background-color: #2c8c73;">Subir Archivo
+                        </CustomButton>
+                </div>
         </div>
 
         <!-- Card para mostrar las consultas recientes -->
@@ -47,8 +49,11 @@
                 <div class="float-right">
                     <button @click="exportToPDF" class="btn btn-danger mr-2" style="background-color: #2c8c73">Exportar a PDF</button>
                     <button @click="exportToExcel" class="btn btn-success" style="background-color: #2c8c73">Exportar a Excel</button>
+                    <CustomButton @click="toggleRecentConsultations" class="btn btn-info float-right" style="white-space: nowrap; background-color: #2c8c73; margin-left: 20px;">
+                    {{ showRecentConsultations ? 'Ocultar Vista' : 'Ver Recientes'}}
+                </CustomButton>
                 </div><br>
-                <b style="color: black">Resultado:</b>
+                <b style="color: black; margin-left: 20px;">Resultado:</b>
             </div>
             <div class="panel-body">
                 <div class="form-group">
@@ -82,7 +87,7 @@
                                 <td>{{ capitalize(result.nombre_usuario) }}</td>
                                 <td>{{ result.cel }}</td>
                                 <td>{{ result.tel }}</td>
-                                <td>{{ capitalize(result.correo_electronico) }}</td>
+                                <td>{{ result.correo_electronico }}</td>
                                 <td>{{ capitalize(result.ciudad) }}</td>
                                 <td>{{ capitalize(result.direccion_residencial) }}</td>
                                 <td>{{ capitalize(result.centro_costo) }}</td>
@@ -279,7 +284,7 @@ export default {
 
 .custom-file-upload label{
     display:inline-block;
-    padding: 8px 14px;
+    padding: 10px 18px;
     color:white;
     background-color: #2c8c73;
     border-radius: 20px;
