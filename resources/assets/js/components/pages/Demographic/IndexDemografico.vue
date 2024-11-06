@@ -75,15 +75,15 @@
                         </thead>
                         <tbody>
                             <tr v-for="result in filteredResults" :key="result.doc">
-                                <td>{{ result.doc }}</td>
-                                <td>{{ result.nombre_usuario }}</td>
+                                <td>{{ capitalize(result.doc) }}</td>
+                                <td>{{ capitalize(result.nombre_usuario) }}</td>
                                 <td>{{ result.cel }}</td>
                                 <td>{{ result.tel }}</td>
-                                <td>{{ result.correo_electronico }}</td>
-                                <td>{{ result.ciudad }}</td>
-                                <td>{{ result.direccion_residencial }}</td>
-                                <td>{{ result.centro_costo }}</td>
-                                <td>{{ result.tipo_contrato }}</td>
+                                <td>{{ capitalize(result.correo_electronico) }}</td>
+                                <td>{{ capitalize(result.ciudad) }}</td>
+                                <td>{{ capitalize(result.direccion_residencial) }}</td>
+                                <td>{{ capitalize(result.centro_costo) }}</td>
+                                <td>{{ capitalize(result.tipo_contrato) }}</td>
                                 <td>{{ result.edad }}</td>
                                 <td>{{ result.fecha_nacimiento }}</td>
                             </tr>
@@ -134,6 +134,10 @@ export default {
         }
     },
     methods: {
+        capitalize(text) {
+        if (!text) return '';
+        return text.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
+    },
         handleFileUpload(event) {
             this.file = event.target.files[0];
         },
@@ -239,7 +243,7 @@ export default {
             XLSX.utils.book_append_sheet(workbook, worksheet, 'Resultados');
             XLSX.writeFile(workbook, 'resultados.xlsx');
         }
-    }
+    },
 };
 </script>
 
