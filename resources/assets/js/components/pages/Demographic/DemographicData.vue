@@ -5,9 +5,10 @@
         </div>
 
         <b-row>
-            <b-col cols="12" md="9">
-                <h3 class="heading-title">Recuperación de cartera</h3>
-                <p>Obtenga información relevante para decisiones de compra de cartera usando las cédulas de los empleados/pensionados</p>
+            <b-col cols="12" md="9" style="margin-left: 28px;">
+                <h3 class="heading-title">Análisis de Cartera</h3>
+                <p>Acceda a información estratégica que facilita la toma de decisiones en la compra de cartera, 
+            permitiendo identificar y priorizar a los pensionados y empleados activos del sector público con potencial de recuperación.</p>
             </b-col>
             
         </b-row>
@@ -138,18 +139,16 @@
         </div>
 
         <!-- Panel de Resultados -->
-        <div v-if="results.length" class="panel mb-3 col-md-12">
-            <b-row>
-                <b-col cols="12" md="9">
-                    <h3 class="heading-title">Resultados</h3>
-                </b-col>
-                <b-col cols="12" md="3" class="d-flex justify-content-start justify-content-md-end align-items-center">
-                    <CustomButton text="Cargar archivo" @click="$bvModal.show('bv-modal-example')" style="background-color: darkgreen; margin-right: 8px;"/>
-                    <CustomButton @click="exportToPDF" class="btn btn-danger mr-2" text="Exportar a PDF" />
-                    <CustomButton @click="exportToExcel" class="btn btn-success" text="Exportar a Excel" />
-                </b-col>
-            </b-row>
-            <div class="panel-body">
+        <div v-if="results.length" class="panel mb-3 col-md-12">  
+                <b-row style="margin-left: 900px">
+                    <b-col cols="12" md="3" class="d-flex justify-content-start justify-content-md-end align-items-center">
+                        <CustomButton text="Cargar archivo" @click="$bvModal.show('bv-modal-example')" style="white-space: nowrap; margin-right: 8px;" />
+                        <CustomButton @click="exportToPDF" class="btn btn-danger mr-2" text="Exportar a PDF"  style="white-space: nowrap;"/>
+                        <CustomButton @click="exportToExcel" class="btn btn-success" text="Exportar a Excel" style="white-space: nowrap;"/>
+                    </b-col>
+                </b-row>          
+                <hd style="margin-left: 16px" class="heading-title">Resultado:</hd>
+                <div class="panel-body">
                 <b-form-group>
                     <b-form-input
                         v-model="searchQuery"
@@ -183,13 +182,13 @@
                             <!-- Fila Principal -->
                             <tr v-for="(result, index) in filteredResults" :key="result.doc + '-' + index">
                                 <td>{{ result.doc }}</td>
-                                <td>{{ result.nombre_usuario || 'No disponible' }}</td>
+                                <td>{{ capitalizeFirstLetter(result.nombre_usuario) || 'No disponible' }}</td>
                                 <td>{{ result.fecha_nacimiento || 'No disponible' }}</td>
                                 <td>{{ result.edad || 'No disponible' }}</td>
                                 <td>{{ capitalizeFirstLetter(result.tipo_contrato) || 'No disponible' }}</td>
-                                <td>{{ result.cargo || 'No disponible' }}</td>
-                                <td>{{ result.situacion_laboral || 'No disponible' }}</td>
-                                <td>{{ result.pagaduria || 'No disponible' }}</td>
+                                <td>{{ capitalizeFirstLetter(result.cargo) || 'No disponible' }}</td>
+                                <td>{{ capitalizeFirstLetter(result.situacion_laboral) || 'No disponible' }}</td>
+                                <td>{{ capitalizeFirstLetter(result.pagaduria) || 'No disponible' }}</td>
                                 <td>{{ formatCurrency(result.cupo_libre) }}</td>
                                 <td>
                                     <CustomButton
@@ -335,8 +334,8 @@
                 </div>
                 <!-- Paginación -->
                 <div class="pagination">
-                    <button v-if="page > 1" @click="fetchPaginatedResults(page - 1)" class="btn btn-primary">Anterior</button>
-                    <button @click="fetchPaginatedResults(page + 1)" :disabled="page * perPage >= total" class="btn btn-primary">Siguiente</button>
+                    <button v-if="page > 1" @click="fetchPaginatedResults(page - 1)" class="btn btn-primary" style="background-color: #2c8c73";>Anterior</button>
+                    <button @click="fetchPaginatedResults(page + 1)" :disabled="page * perPage >= total" class="btn btn-primary" style="background-color: #2c8c73;">Siguiente</button>
                 </div><br>
                 <b-modal id="bv-modal-example" hide-footer style="min-width: 1000px">
                 <template #modal-title><span class="heading-title">Agregar datos demográficos</span></template>
@@ -716,9 +715,13 @@ export default {
         },
         capitalizeFirstLetter(string) {
             if (!string) return '';
-            return string.charAt(0).toUpperCase() + string.slice(1);
+            return string
+            .toLowerCase()
+            .split('')
+            .map(word=>word.charAt(0).toUpperCase()+word.slice(1))
+            .join('');
         }
-    }
+    }   
 };
 </script>
 

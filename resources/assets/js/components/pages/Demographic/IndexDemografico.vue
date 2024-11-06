@@ -5,22 +5,22 @@
         </div>
 
         <div class="panel mb-3 col-md-12">
-            <div class="panel-heading">
-                <b>Datos Demográficos</b>
-                <button @click="toggleRecentConsultations" class="btn btn-info float-right">
-                    {{ showRecentConsultations ? 'Ocultar Consultas Recientes' : 'Ver Consultas Recientes' }}
-                </button>
+            <div class="panel-heading" style="background-color: white;">
+                <b style="color: black">Datos Demográficos</b>
             </div>
             <div class="panel-body">
-                <div class="alert alert-info">
-                    <p>
+                <div style="background-color: white">
+                    <hd style="color: black">
                         Por favor, asegúrese de que el archivo Excel tiene una columna con el encabezado
-                        <strong>'cedulas'</strong> y que contiene los números de cédula.
-                    </p>
-                </div>
+                        <strong>'cédulas'</strong> y que contiene los números de cédula.
+                    </hd><br><br>
+                </div> 
                 <div class="form-group">
-                    <input type="file" @change="handleFileUpload" class="form-control mb-3" />
-                    <button @click="uploadFile" class="btn btn-primary">Subir</button>
+                    <input type="file" @change="handleFileUpload" class="form-control mb-3" style="background-color: #021b1e"/>
+                    <CustomButton @click="uploadFile" class="btn btn-primary" style="background-color: #021b1e">Subir</CustomButton>
+                    <CustomButton @click="toggleRecentConsultations" class="btn btn-info float-right" style="background-color: #021b1e">
+                    {{ showRecentConsultations ? 'Ocultar Consultas Recientes' : 'Ver Consultas Recientes' }}
+                </CustomButton>
                 </div>
             </div>
         </div>
@@ -40,11 +40,11 @@
         </div>
 
         <div v-if="results.length" class="panel mb-3 col-md-12">
-            <div class="panel-heading">
-                <b>Resultados</b>
+            <div class="panel-heading" style="background-color: white">
+                <b style="color: black">Resultado:</b>
                 <div class="float-right">
-                    <button @click="exportToPDF" class="btn btn-danger mr-2">Exportar a PDF</button>
-                    <button @click="exportToExcel" class="btn btn-success">Exportar a Excel</button>
+                    <button @click="exportToPDF" class="btn btn-danger mr-2" style="background-color: #2c8c73">Exportar a PDF</button>
+                    <button @click="exportToExcel" class="btn btn-success" style="background-color: #2c8c73">Exportar a Excel</button>
                 </div>
             </div>
             <div class="panel-body">
@@ -91,8 +91,8 @@
                     </table>
                 </div>
                 <div class="pagination">
-                    <button @click="fetchPaginatedResults(page - 1)" :disabled="page === 1" class="btn btn-primary">Anterior</button>
-                    <button @click="fetchPaginatedResults(page + 1)" :disabled="page * perPage >= total" class="btn btn-primary">Siguiente</button>
+                    <button v-if="page > 1" @click="fetchPaginatedResults(page - 1)" class="btn btn-primary" style="background-color: #2c8c73">Anterior</button>
+                    <button @click="fetchPaginatedResults(page + 1)" :disabled="page * perPage >= total" class="btn btn-primary" style="background-color: #2c8c73">Siguiente</button>
                 </div>
             </div>
         </div>
@@ -105,6 +105,7 @@
 
 <script>
 import axios from 'axios';
+import CustomButton from '../../customComponents/CustomButton.vue';
 
 export default {
     name: 'DemographicIndex',
