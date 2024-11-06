@@ -14,11 +14,11 @@
                         Por favor, asegúrese de que el archivo Excel tiene una columna con el encabezado
                         <strong>'cédulas'</strong> y que contiene los números de cédula.
                     </hd><br><br>
-                </div> <!--#28a745 #2c8c73-->
+                </div> 
                 <div class="form-group">
-                    <input type="file" @change="handleFileUpload" class="form-control mb-3" style="background-color: #2c8c73"/>
-                    <CustomButton @click="uploadFile" class="btn btn-primary" style="background-color: #2c8c73">Subir</CustomButton>
-                    <CustomButton @click="toggleRecentConsultations" class="btn btn-info float-right" style="background-color: #2c8c73">
+                    <input type="file" @change="handleFileUpload" class="form-control mb-3" style="background-color: #021b1e"/>
+                    <CustomButton @click="uploadFile" class="btn btn-primary" style="background-color: #021b1e">Subir</CustomButton>
+                    <CustomButton @click="toggleRecentConsultations" class="btn btn-info float-right" style="background-color: #021b1e">
                     {{ showRecentConsultations ? 'Ocultar Consultas Recientes' : 'Ver Consultas Recientes' }}
                 </CustomButton>
                 </div>
