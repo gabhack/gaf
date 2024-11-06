@@ -5,15 +5,15 @@
         </div>
 
         <div class="panel mb-3 col-md-12">
-            <div class="panel-heading" style="background-color: #2c8c73;">
-                <b>Datos Demográficos</b>
+            <div class="panel-heading" style="background-color: white;">
+                <b style="color: black">Datos Demográficos</b>
             </div>
             <div class="panel-body">
-                <div class="alert alert-info" style="background-color: #2c8c73">
-                    <p style="color: black">
+                <div style="background-color: white">
+                    <hd style="color: black">
                         Por favor, asegúrese de que el archivo Excel tiene una columna con el encabezado
                         <strong>'cédulas'</strong> y que contiene los números de cédula.
-                    </p>
+                    </hd><br><br>
                 </div> <!--#28a745 #2c8c73-->
                 <div class="form-group">
                     <input type="file" @change="handleFileUpload" class="form-control mb-3" style="background-color: #2c8c73"/>
