@@ -14,12 +14,15 @@
                         Por favor, asegúrese de que el archivo Excel tiene una columna con el encabezado
                         <strong>'cédulas'</strong> y que contiene los números de cédula.
                     </hd><br><br>
-                </div> 
-                <div class="form-group">
-                    <input type="file" @change="handleFileUpload" class="form-control mb-3" style="background-color: #021b1e"/>
-                    <CustomButton @click="uploadFile" class="btn btn-primary" style="background-color: #021b1e">Subir</CustomButton>
-                    <CustomButton @click="toggleRecentConsultations" class="btn btn-info float-right" style="background-color: #021b1e">
-                    {{ showRecentConsultations ? 'Ocultar Consultas Recientes' : 'Ver Consultas Recientes' }}
+                </div > 
+                <div class="form-group d-flex align-items-center">
+                    <div class="custom-file-upload">
+                        <input type="file" @change="handleFileUpload" id="file-upload" class="file-input"/>
+                        <label for="file-upload">Elegir archivo</label>
+                    </div>
+                    <CustomButton @click="uploadFile" class="btn btn-primary" style="white-space: nowrap; background-color: #2c8c73; margin-left: 510px;">Subir Archivo</CustomButton>
+                    <CustomButton @click="toggleRecentConsultations" class="btn btn-info float-right" style="white-space: nowrap; background-color: #2c8c73; margin-left: 20px;">
+                    {{ showRecentConsultations ? 'Ocultar Vista' : 'Ver Recientes'}}
                 </CustomButton>
                 </div>
             </div>
@@ -41,11 +44,11 @@
 
         <div v-if="results.length" class="panel mb-3 col-md-12">
             <div class="panel-heading" style="background-color: white">
-                <b style="color: black">Resultado:</b>
                 <div class="float-right">
                     <button @click="exportToPDF" class="btn btn-danger mr-2" style="background-color: #2c8c73">Exportar a PDF</button>
                     <button @click="exportToExcel" class="btn btn-success" style="background-color: #2c8c73">Exportar a Excel</button>
-                </div>
+                </div><br>
+                <b style="color: black">Resultado:</b>
             </div>
             <div class="panel-body">
                 <div class="form-group">
@@ -268,6 +271,25 @@ export default {
     width: 120px;
     height: 120px;
     animation: spin 2s linear infinite;
+}
+
+.custom-file-upload .file-input{
+    display:none;
+}
+
+.custom-file-upload label{
+    display:inline-block;
+    padding: 8px 14px;
+    color:white;
+    background-color: #2c8c73;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 14px;
+}
+
+.custom-file-upload label:hover{
+    background-color: #2c8c73;
 }
 
 @keyframes spin {
