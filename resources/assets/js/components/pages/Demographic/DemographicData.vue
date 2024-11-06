@@ -5,7 +5,7 @@
         </div>
 
         <b-row>
-            <b-col cols="12" md="9">
+            <b-col cols="12" md="9" style="margin-left: 24px;">
                 <h3 class="heading-title">Recuperación de cartera</h3>
                 <p>Acceda a información estratégica que facilita la toma de decisiones en la compra de cartera, 
             permitiendo identificar y priorizar a los pensionados y empleados activos del sector público con potencial de recuperación.</p>
@@ -139,20 +139,16 @@
         </div>
 
         <!-- Panel de Resultados -->
-        <div v-if="results.length" class="panel mb-3 col-md-12">
-            <b-row>
-                <b-col cols="12" md="9">
-                    <br><br><h3 class="heading-title">Resultados</h3>
-                </b-col>
-                <b-col cols="12" md="3" class="d-flex justify-content-start justify-content-md-end align-items-center">
-           <CustomButton text="Cargar archivo" @click="$bvModal.show('bv-modal-example')" 
-                style="background-color: darkgreen; margin-right: 8px; white-space: nowrap;"/>
-            <CustomButton @click="exportToPDF" class="btn btn-danger mr-2" text="Exportar a PDF" style="white-space: nowrap;"/>
-            <CustomButton @click="exportToExcel" class="btn btn-success" text="Exportar a Excel" style="white-space: nowrap;"/>
-</b-col>
-
-            </b-row>
-            <div class="panel-body">
+        <div v-if="results.length" class="panel mb-3 col-md-12">  
+                <b-row style="margin-left: 900px">
+                    <b-col cols="12" md="3" class="d-flex justify-content-start justify-content-md-end align-items-center">
+                        <CustomButton text="Cargar archivo" @click="$bvModal.show('bv-modal-example')" style="white-space: nowrap; margin-right: 8px;" />
+                        <CustomButton @click="exportToPDF" class="btn btn-danger mr-2" text="Exportar a PDF"  style="white-space: nowrap;"/>
+                        <CustomButton @click="exportToExcel" class="btn btn-success" text="Exportar a Excel" style="white-space: nowrap;"/>
+                    </b-col>
+                </b-row>          
+                <hd style="margin-left: 16px" class="heading-title">Resultado:</hd>
+                <div class="panel-body">
                 <b-form-group>
                     <b-form-input
                         v-model="searchQuery"
