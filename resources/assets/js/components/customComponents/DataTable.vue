@@ -1,0 +1,113 @@
+<template>
+	<div class="table-container">
+		<table class="custom-table">
+			<thead>
+				<tr>
+					<th v-for="(element, index) in columns" v-text="element.label"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr v-for="item in items" :key="item.id">
+					<td v-for="(element, index) in columns">
+						<slot :name="element.key" v-bind:data="item">{{ item[element.key] }}</slot>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div class="pagination">
+			<label for="rowsPerPage">Cantidad de filas:</label>
+			<select id="rowsPerPage" v-model="rowsPerPage" @change="updateRows">
+				<option v-for="option in [5, 10, 15]" :key="option" :value="option">{{ option }}</option>
+			</select>
+		</div>
+	</div>
+</template>
+
+<script>
+export default {
+	props: {
+		columns: {
+			type: Array,
+			required: true,
+		},
+		items: {
+			type: Array,
+			required: true
+		},
+		rowsPerPage: {
+			type: Number,
+			required: false,
+			default: 5,
+		}
+	},
+	methods: {
+		updateRows() {
+			this.$emit('updateRows', 10);
+		}
+	}
+};
+</script>
+
+<style scoped>
+.table-container {
+	max-width: 100%;
+	margin: 0 auto;
+	padding: 1rem;
+}
+
+.custom-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 1rem;
+}
+
+.custom-table thead {
+	background-color: #3a5a58;
+	color: #fff;
+}
+
+.custom-table th,
+.custom-table td {
+	padding: 0.75rem;
+	text-align: left;
+	border-bottom: 1px solid #e0e0e0;
+}
+
+.custom-table th {
+	font-weight: bold;
+}
+
+.custom-table tbody tr:hover {
+	background-color: #f5f5f5;
+}
+
+.actions {
+	display: flex;
+	gap: 0.5rem;
+}
+
+.action-button {
+	background: none;
+	border: none;
+	cursor: pointer;
+	font-size: 1.2rem;
+	color: #3a5a58;
+}
+
+.action-button:hover {
+	color: #0056b3;
+}
+
+.pagination {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.pagination select {
+	padding: 0.25rem;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+</style>
