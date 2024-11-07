@@ -3,12 +3,12 @@
 		<table class="custom-table">
 			<thead>
 				<tr>
-					<th v-for="(element, index) in columns" v-text="element.label"></th>
+					<th v-for="(element, index) in columns" v-text="element.label" v-bind:class="thCustomStyle(index)"></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr v-for="item in items" :key="item.id">
-					<td v-for="(element, index) in columns">
+					<td v-for="(element, index) in columns" v-bind:class="tdCustomStyle(index)">
 						<slot :name="element.key" v-bind:data="item">{{ item[element.key] }}</slot>
 					</td>
 				</tr>
@@ -16,7 +16,7 @@
 		</table>
 
 		<div class="pagination">
-			<label for="rowsPerPage">Cantidad de filas:</label>
+			<label for="rowsPerPage" class="label-per-page">Cantidad de filas:</label>
 			<select id="rowsPerPage" v-model="rowsPerPage" @change="updateRows">
 				<option v-for="option in [5, 10, 15]" :key="option" :value="option">{{ option }}</option>
 			</select>
@@ -44,6 +44,18 @@ export default {
 	methods: {
 		updateRows() {
 			this.$emit('updateRows', 10);
+		},
+		thCustomStyle(index) {
+			return {
+				'rounded-l': index == 0,
+				'rounded-r': index == this.columns.length - 1
+			}
+		},
+		tdCustomStyle(index) {
+			return {
+				'border-l': index == 0,
+				'border-r': index == this.columns.length - 1
+			}
 		}
 	}
 };
@@ -53,13 +65,12 @@ export default {
 .table-container {
 	max-width: 100%;
 	margin: 0 auto;
-	padding: 1rem;
 }
 
 .custom-table {
 	width: 100%;
 	border-collapse: collapse;
-	margin-bottom: 1rem;
+	border: none;
 }
 
 .custom-table thead {
@@ -74,8 +85,24 @@ export default {
 	border-bottom: 1px solid #e0e0e0;
 }
 
+.border-l {
+	border-left: 1px solid #e0e0e0;
+}
+
+.border-r {
+	border-right: 1px solid #e0e0e0;
+}
+
+.rounded-l {
+	border-top-left-radius: 10px;
+}
+
+.rounded-r {
+	border-top-right-radius: 10px;
+}
+
 .custom-table th {
-	font-weight: bold;
+	font-weight: 300;
 }
 
 .custom-table tbody tr:hover {
@@ -102,12 +129,20 @@ export default {
 .pagination {
 	display: flex;
 	align-items: center;
+	align-content: center;
 	gap: 0.5rem;
+	background-color: white;
+	padding: 0.75rem;
 }
 
 .pagination select {
-	padding: 0.25rem;
-	border: 1px solid #ccc;
-	border-radius: 4px;
+	padding: 0.50rem;
+	background-color: white;
+	border-radius: 5px;
+	border: 0.5px solid #B8BEC5;
+}
+
+.label-per-page {
+	font-size: 13px;
 }
 </style>

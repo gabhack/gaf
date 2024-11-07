@@ -82,6 +82,7 @@ Vue.component('CarteraIcon', require('./components/icons/CarteraIcon').default);
 Vue.component('InvestigacionIcon', require('./components/icons/InvestigacionIcon').default);
 Vue.component('LocalizacionIcon', require('./components/icons/LocalizacionIcon').default);
 Vue.component('DownloadIcon', require('./components/icons/DownloadIcon').default);
+Vue.component('UsersIcon', require('./components/icons/UsersIcon').default);
 
 //Intragration Pages
 Vue.component('integration', require('./components/pages/Integrations/index.vue').default);

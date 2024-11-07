@@ -9,7 +9,7 @@
 			</b-col>
 		</b-row>
 		<b-row>
-			<b-col>
+			<b-col class="mt-4">
 				<DataTable :items="items" :columns="fields" @updateRows="updateRows">
 					<template #actions="data">
 						<button class="action-button">

@@ -22,7 +22,7 @@
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#menuEmpresas"
           aria-expanded="false" aria-controls="menuEmpresas">
-          <visado-icon></visado-icon>
+          <users-icon></users-icon>
           <span class="pl-2">Usuarios</span>
         </a>
         <div id="menuEmpresas" class="collapse" aria-labelledby="menuEmpresas" data-parent="#accordionSidebar">
