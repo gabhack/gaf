@@ -5,7 +5,7 @@
 				<h4>Listado de empresas</h4>
 			</b-col>
 			<b-col cols="6" class="text-right">
-				<CustomButton>Crear empresa</CustomButton>
+				<CustomButton @click="crearEmpresa">Crear empresa</CustomButton>
 			</b-col>
 		</b-row>
 		<b-row>
@@ -13,13 +13,13 @@
 				<DataTable :items="items" :columns="fields" @updateRows="updateRows">
 					<template #actions="data">
 						<button class="action-button">
-							📄
+							<DocumentIcon />
 						</button>
 						<button class="action-button">
-							✏️
+							<EditIcon />
 						</button>
 						<button class="action-button">
-							🗑️
+							<TrashIcon />
 						</button>
 					</template>
 				</DataTable>
@@ -30,10 +30,16 @@
 <script>
 import CustomButton from '../../customComponents/CustomButton.vue'
 import DataTable from '../../customComponents/DataTable.vue'
+import DocumentIcon from './../../icons/DocumentIcon.vue'
+import EditIcon from './../../icons/EditIcon.vue'
+import TrashIcon from './../../icons/TrashIcon.vue'
 export default {
 	components: {
 		CustomButton,
-		DataTable
+		DataTable,
+		DocumentIcon,
+		EditIcon,
+		TrashIcon
 	},
 	mounted() {
 		console.log('running..')
@@ -62,17 +68,11 @@ export default {
 	methods: {
 		updateRows(data) {
 			alert(data)
+		},
+		crearEmpresa() {
+			window.location.replace('/empresas/crear');
 		}
 	}
 }
 </script>
-<style scoped>
-.header {
-	background-color: green;
-}
-
-.columns-header {
-	display: flex;
-	gap: 10px;
-}
-</style>
+<style scoped></style>

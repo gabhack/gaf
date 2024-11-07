@@ -10,4 +10,9 @@ class EmpresaController extends Controller
 	{
 		return view('empresas.index');
 	}
+
+	public function crear()
+	{
+		return view('empresas.crear');
+	}
 }

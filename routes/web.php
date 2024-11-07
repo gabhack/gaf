@@ -688,4 +688,5 @@ Route::view('/politicas/autorizacion', 'politicas.autorizacion')->name('politica
 Route::view('/politicas/tratamiento-datos', 'politicas.tratamiento')->name('politicas.tratamiento');
 Route::get('jelou/get-factor/{doc}', [JelouController::class, 'getFactorPerDoc']);
 
-Route::get('/empresas', [EmpresaController::class, 'index']);
+Route::get('/empresas', 			[EmpresaController::class, 'index']);
+Route::get('/empresas/crear', [EmpresaController::class, 'crear']);

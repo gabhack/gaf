@@ -130,6 +130,7 @@ Vue.component('UploadFiducidiaria', UploadFiducidiaria);
 Vue.component('join-pensiones', JoinPensiones);
 
 Vue.component('empresas', require('./components/pages/Empresas/Index.vue').default);
+Vue.component('crear-empresas', require('./components/pages/Empresas/Create.vue').default);
 
 /* Vue Init */
 const app = new Vue({
