@@ -133,6 +133,11 @@ export default {
 	gap: 0.5rem;
 	background-color: white;
 	padding: 0.75rem;
+	border-left: 0.5px solid #B8BEC5;
+	border-bottom: 0.5px solid #B8BEC5;
+	border-right: 0.5px solid #B8BEC5;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
 }
 
 .pagination select {
