@@ -15,6 +15,15 @@ export default {
 	components: {
 		Form,
 		CustomButton
+	},
+	mounted() {
+		this.setBreadcumb();
+	},
+	methods: {
+		setBreadcumb() {
+			let domBreadcumb = document.getElementById('dynamic-breadcumb');
+			domBreadcumb.innerText = "> Area comercial > Crear";
+		}
 	}
 }
 </script>
