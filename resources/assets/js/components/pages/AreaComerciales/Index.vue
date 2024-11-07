@@ -5,7 +5,10 @@
 				<h4>Listado de comerciales</h4>
 			</b-col>
 			<b-col cols="6" class="text-right">
-				<CustomButton @click="crearComercial">Crear comercial</CustomButton>
+				<CustomButton @click="crearComercial">
+					<PlusIcon></PlusIcon>
+					Crear comercial
+				</CustomButton>
 			</b-col>
 		</b-row>
 		<b-row>
@@ -33,13 +36,15 @@ import DataTable from '../../customComponents/DataTable.vue'
 import DocumentIcon from './../../icons/DocumentIcon.vue'
 import EditIcon from './../../icons/EditIcon.vue'
 import TrashIcon from './../../icons/TrashIcon.vue'
+import PlusIcon from '../../icons/PlusIcon.vue'
 export default {
 	components: {
 		CustomButton,
 		DataTable,
 		DocumentIcon,
 		EditIcon,
-		TrashIcon
+		TrashIcon,
+		PlusIcon
 	},
 	data() {
 		return {

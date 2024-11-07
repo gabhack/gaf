@@ -3,7 +3,10 @@
 		<Form></Form>
 		<b-row align-h="end">
 			<b-col cols="4">
-				<CustomButton class="mt-4">Crear empresa</CustomButton>
+				<CustomButton class="mt-4">
+					<PlusIcon></PlusIcon>
+					Crear empresa
+				</CustomButton>
 			</b-col>
 		</b-row>
 	</b-container>
@@ -11,10 +14,12 @@
 <script>
 import Form from './Form.vue';
 import CustomButton from '../../customComponents/CustomButton.vue'
+import PlusIcon from '../../icons/PlusIcon.vue';
 export default {
 	components: {
 		Form,
-		CustomButton
+		CustomButton,
+		PlusIcon
 	},
 	mounted() {
 		this.setBreadcumb();

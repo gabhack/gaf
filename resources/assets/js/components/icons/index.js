@@ -17,7 +17,7 @@ import LocalizacionIcon from './LocalizacionIcon.vue';
 import PlusIcon from './PlusIcon.vue';
 import UsersIcon from './UsersIcon.vue';
 import DashboardIcon from './DashboardIcon.vue';
-
+import InfoCircleIcon from './InfoCircleIcon.vue';
 export {
 	CompaniesIcon,
 	PersonsIcon,
@@ -37,5 +37,6 @@ export {
 	LocalizacionIcon,
 	PlusIcon,
 	UsersIcon,
-	DashboardIcon
+	DashboardIcon,
+	InfoCircleIcon
 };

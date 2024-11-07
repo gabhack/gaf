@@ -89,7 +89,10 @@
 		<b-row class="mt-4">
 			<b-col cols="6">
 				<b-form-group label="Documento de identidad de usuario" label-for="documentacion_autoretenedor">
-					<CustomButton>Documento de identidad</CustomButton>
+					<CustomButton>
+						<PlusIcon></PlusIcon>
+						Documento de identidad
+					</CustomButton>
 				</b-form-group>
 			</b-col>
 		</b-row>
@@ -116,9 +119,11 @@
 </template>
 <script>
 import CustomButton from '../../customComponents/CustomButton.vue';
+import PlusIcon from '../../icons/PlusIcon.vue';
 export default {
 	components: {
-		CustomButton
+		CustomButton,
+		PlusIcon
 	},
 	data() {
 		return {

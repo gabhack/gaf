@@ -163,27 +163,46 @@
 			</b-col>
 			<b-col cols="4">
 				<b-form-group label="Auto retenedor" label-for="documentacion_autoretenedor">
-					<CustomButton>Documento representante legal</CustomButton>
+					<CustomButton @click="showModal">
+						<PlusIcon></PlusIcon>
+						Documento representante legal
+					</CustomButton>
 				</b-form-group>
 			</b-col>
 			<b-col cols="4">
 				<b-form-group label="Auto retenedor" label-for="documentacion_autoretenedor">
-					<CustomButton>Camara de comercio</CustomButton>
+					<CustomButton>
+						<PlusIcon></PlusIcon>
+						Camara de comercio
+					</CustomButton>
 				</b-form-group>
 			</b-col>
 			<b-col cols="4">
 				<b-form-group label="Auto retenedor" label-for="documentacion_autoretenedor">
-					<CustomButton>RUT</CustomButton>
+					<CustomButton>
+						<PlusIcon></PlusIcon>
+						RUT
+					</CustomButton>
 				</b-form-group>
 			</b-col>
 		</b-row>
+		<b-modal id="my-modal" title="RUT" @hide="resetModal" @ok="handleOk" ok-title="Aceptar" cancel-title="Cancelar">
+			<div class="info-message">
+				<InfoCircleIcon></InfoCircleIcon>
+				Por favor, suba un archivo en pdf con el RUT menor a 90 dias.
+			</div>
+		</b-modal>
 	</div>
 </template>
 <script>
 import CustomButton from '../../customComponents/CustomButton.vue';
+import InfoCircleIcon from '../../icons/InfoCircleIcon.vue';
+import PlusIcon from '../../icons/PlusIcon.vue';
 export default {
 	components: {
-		CustomButton
+		CustomButton,
+		InfoCircleIcon,
+		PlusIcon
 	},
 	data() {
 		return {
@@ -237,6 +256,17 @@ export default {
 				}
 			}
 		}
+	},
+	methods: {
+		showModal() {
+			this.$bvModal.show('my-modal');
+		},
+		resetModal() {
+
+		},
+		handleOk() {
+
+		}
 	}
 }
 </script>
@@ -249,5 +279,14 @@ export default {
 
 .custom-input::placeholder {
 	font-weight: 100;
+}
+
+.info-message {
+	background-color: #F9FAFB;
+	padding: 15px 10px 15px 10px;
+	font-size: 13px;
+	border-radius: 5px;
+	border-left-width: 50px;
+	border-left: 4px solid #20A0E9;
 }
 </style>
