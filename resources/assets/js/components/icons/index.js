@@ -16,6 +16,7 @@ import InvestigacionIcon from './InvestigacionIcon.vue';
 import LocalizacionIcon from './LocalizacionIcon.vue';
 import PlusIcon from './PlusIcon.vue';
 import UsersIcon from './UsersIcon.vue';
+import DashboardIcon from './DashboardIcon.vue';
 
 export {
 	CompaniesIcon,
@@ -35,5 +36,6 @@ export {
 	InvestigacionIcon,
 	LocalizacionIcon,
 	PlusIcon,
-	UsersIcon
+	UsersIcon,
+	DashboardIcon
 };

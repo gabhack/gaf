@@ -41,9 +41,6 @@ export default {
 		EditIcon,
 		TrashIcon
 	},
-	mounted() {
-		console.log('running..')
-	},
 	data() {
 		return {
 			items: [
@@ -65,12 +62,19 @@ export default {
 			totalRows: 10
 		}
 	},
+	mounted() {
+		this.setBreadcumb();
+	},
 	methods: {
 		updateRows(data) {
 			alert(data)
 		},
 		crearComercial() {
 			window.location.replace('/area-comerciales/crear');
+		},
+		setBreadcumb() {
+			let domBreadcumb = document.getElementById('dynamic-breadcumb');
+			domBreadcumb.innerText = "> Area comercial";
 		}
 	}
 }

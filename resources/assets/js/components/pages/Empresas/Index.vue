@@ -69,12 +69,19 @@ export default {
 			totalRows: 10
 		}
 	},
+	mounted() {
+		this.setBreadcumb();
+	},
 	methods: {
 		updateRows(data) {
 			alert(data)
 		},
 		crearEmpresa() {
 			window.location.replace('/empresas/crear');
+		},
+		setBreadcumb() {
+			let domBreadcumb = document.getElementById('dynamic-breadcumb');
+			domBreadcumb.innerText = "> Empresas";
 		}
 	}
 }
