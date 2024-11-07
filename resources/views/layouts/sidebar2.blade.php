@@ -28,7 +28,7 @@
         <div id="menuEmpresas" class="collapse" aria-labelledby="menuEmpresas" data-parent="#accordionSidebar">
           <div class="bg-green-side py-2 collapse-inner">
             <a class="collapse-item" href="/empresas">Empresas ></a>
-            <a class="collapse-item" href="{{ url('historyClient') }}">Area comercial ></a>
+            <a class="collapse-item" href="/area-comerciales">Area comercial ></a>
           </div>
         </div>
       </li>

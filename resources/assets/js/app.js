@@ -132,6 +132,9 @@ Vue.component('join-pensiones', JoinPensiones);
 Vue.component('empresas', require('./components/pages/Empresas/Index.vue').default);
 Vue.component('crear-empresas', require('./components/pages/Empresas/Create.vue').default);
 
+Vue.component('area-comerciales', require('./components/pages/AreaComerciales/Index.vue').default);
+Vue.component('crear-area-comerciales', require('./components/pages/AreaComerciales/Create.vue').default);
+
 /* Vue Init */
 const app = new Vue({
 	el: '#app',

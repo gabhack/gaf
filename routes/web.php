@@ -11,6 +11,7 @@
 |
 */
 
+use App\Http\Controllers\AreaComercialController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DescuentosController;
 use App\Http\Controllers\EmbargosController;
@@ -690,3 +691,6 @@ Route::get('jelou/get-factor/{doc}', [JelouController::class, 'getFactorPerDoc']
 
 Route::get('/empresas', 			[EmpresaController::class, 'index']);
 Route::get('/empresas/crear', [EmpresaController::class, 'crear']);
+
+Route::get('/area-comerciales', 			[AreaComercialController::class, 'index']);
+Route::get('/area-comerciales/crear', [AreaComercialController::class, 'crear']);
