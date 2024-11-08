@@ -26,7 +26,11 @@
                         @click="uploadFile" class="btn btn-primary" 
                         style="white-space: nowrap; background-color: #2c8c73;">Subir Archivo
                         </CustomButton>
+                        <CustomButton v-if="!isLoadingResults" @click="toggleRecentConsultations" class="btn btn-info float-right" style="white-space: nowrap; background-color: #2c8c73; margin-left: 20px;">
+                            {{ showRecentConsultations ? 'Ocultar Recientes' : 'Consultas Recientes'}}
+                        </CustomButton>
                 </div>
+               
         </div>
 
         <!-- Card para mostrar las consultas recientes -->
@@ -120,6 +124,7 @@ export default {
         return {
             file: null,
             isLoading: false,
+            isLoadingResults: false,
             results: [],
             searchQuery: '',
             error: null,
@@ -186,6 +191,7 @@ export default {
             }
         },
         async fetchPaginatedResults(page) {
+            this.isLoadingResults = true;
             this.isLoading = true;
             try {
                 let response = await axios.get(`/demografico/fetch-paginated-results-demografico?page=${page}&perPage=${this.perPage}`);
