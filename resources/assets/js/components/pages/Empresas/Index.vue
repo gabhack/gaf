@@ -21,7 +21,7 @@
 						<button class="action-button">
 							<DocumentIcon />
 						</button>
-						<button class="action-button">
+						<button class="action-button" @click="editarEmpresa(data.data.id)">
 							<EditIcon />
 						</button>
 						<button class="action-button">
@@ -83,6 +83,9 @@ export default {
 		setBreadcumb() {
 			let domBreadcumb = document.getElementById('dynamic-breadcumb');
 			domBreadcumb.innerText = "> Empresas";
+		},
+		editarEmpresa(id) {
+			window.location.replace('/empresas/edit/' + id);
 		}
 	}
 }

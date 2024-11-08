@@ -39,9 +39,9 @@
 				</b-form-group>
 			</b-col>
 			<b-col cols="4">
-				<b-form-group label="Tipo de documento" label-for="empresa_tipo_documento">
-					<b-form-select value-field="id" text-field="nombre" id="tipo_empresa_id" v-model="form.empresa.tipo_documento"
-						:options="tiposDocumento"></b-form-select>
+				<b-form-group label="Tipo de documento" label-for="empresa_tipo_documento_id">
+					<b-form-select value-field="id" text-field="nombre" id="empresa_tipo_documento_id"
+						v-model="form.empresa.tipo_documento_id" :options="tiposDocumento"></b-form-select>
 				</b-form-group>
 			</b-col>
 			<b-col cols="4">
@@ -57,10 +57,9 @@
 				</b-form-group>
 			</b-col>
 			<b-col cols="4">
-				<b-form-group label="Correo de usuario plataforma" label-for="empresa_correo_usuario_plataforma">
-					<b-form-input class="custom-input" id="empresa_correo_usuario_plataforma"
-						v-model="form.empresa.correo_usuario_plataforma" type="email" placeholder="usuario1@gmail.com"
-						required></b-form-input>
+				<b-form-group label="Correo de usuario plataforma" label-for="empresa_correo">
+					<b-form-input class="custom-input" id="empresa_correo" v-model="form.empresa.correo" type="email"
+						placeholder="usuario1@gmail.com" required></b-form-input>
 				</b-form-group>
 			</b-col>
 			<b-col cols="4">
@@ -102,9 +101,9 @@
 				</b-form-group>
 			</b-col>
 			<b-col cols="4">
-				<b-form-group label="Tipo de documento" label-for="representante_tipo_documento">
-					<b-form-select value-field="id" text-field="nombre" id="representante_tipo_documento"
-						v-model="form.tipo_empresa_id" :options="tiposDocumento"></b-form-select>
+				<b-form-group label="Tipo de documento" label-for="representante_tipo_documento_id">
+					<b-form-select value-field="id" text-field="nombre" id="representante_tipo_documento_id"
+						v-model="form.representante_legal.tipo_documento_id" :options="tiposDocumento"></b-form-select>
 				</b-form-group>
 			</b-col>
 			<b-col cols="4">
@@ -206,6 +205,12 @@ export default {
 		InfoCircleIcon,
 		PlusIcon
 	},
+	props: {
+		form: {
+			type: Object,
+			required: true
+		}
+	},
 	data() {
 		return {
 			tiposEmpresa: [],
@@ -216,39 +221,7 @@ export default {
 				{ id: '', nombre: 'SI - NO' },
 				{ id: 1, nombre: 'SI' },
 				{ id: 0, nombre: 'NO' },
-			],
-			form: {
-				tipo_empresa_id: '',
-				consultas_diarias: '',
-				empresa: {
-					tipo_sociedad_id: '',
-					nombre: '',
-					tipo_documento: '',
-					numero_documento: '',
-					tipo_empresa: '',
-					correo_usuario_plataforma: '',
-					pagina_web: '',
-					pais: '',
-					ciudad_id: '',
-					direccion: '',
-				},
-				representante_legal: {
-					nombres_completos: '',
-					tipo_documento: '',
-					numero_documento: '',
-					nacionalidad: '',
-					correo_contacto: '',
-					numero_contacto: '',
-				},
-				documentacion: {
-					responsable_iva: '',
-					gran_contribuyente: '',
-					autor_retenedor: '',
-					archivo_representante_legal: '',
-					archivo_camara_comercio: '',
-					archivo_rut: '',
-				}
-			}
+			]
 		}
 	},
 	async mounted() {
@@ -291,6 +264,8 @@ export default {
 	background-color: white;
 	border-radius: 5px;
 	border: 0.5px solid #B8BEC5;
+	color: black;
+	font-weight: 100;
 }
 
 .custom-input::placeholder {

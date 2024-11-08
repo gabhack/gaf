@@ -22,21 +22,27 @@ export default {
 		CustomButton,
 		PlusIcon
 	},
+	props: {
+		empresa: {
+			type: Object,
+			required: true
+		}
+	},
 	data() {
 		return {
 			form: {
-				tipo_empresa_id: '',
-				consultas_diarias: '',
+				tipo_empresa_id: this.empresa.tipo_empresa_id,
+				consultas_diarias: this.empresa.consultas_diarias,
 				empresa: {
-					tipo_sociedad_id: '',
-					nombre: '',
-					tipo_documento_id: '',
-					numero_documento: '',
-					correo: '',
-					pagina_web: '',
-					pais: '',
-					ciudad_id: '',
-					direccion: '',
+					tipo_sociedad_id: this.empresa.tipo_sociedad_id,
+					nombre: this.empresa.nombre,
+					tipo_documento_id: this.empresa.tipo_documento_id,
+					numero_documento: this.empresa.numero_documento,
+					correo: this.empresa.correo,
+					pagina_web: this.empresa.pagina_web,
+					pais: this.empresa.pais,
+					ciudad_id: this.empresa.ciudad_id,
+					direccion: this.empresa.direccion
 				},
 				representante_legal: {
 					nombres_completos: '',
