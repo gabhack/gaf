@@ -19,6 +19,7 @@
                     <div class="custom-file-upload">
                         <input type="file" @change="handleFileUpload" id="file-upload" class="file-input"/>
                         <label for="file-upload">Elegir archivo</label>
+                        <span v-if="fileName" class="file-name">{{ fileName }}</span>
                     </div>
                 </div>
                         <CustomButton 
@@ -123,6 +124,7 @@ export default {
     data() {
         return {
             file: null,
+            fileName:'',
             isLoading: false,
             isLoadingResults: false,
             results: [],
@@ -152,6 +154,7 @@ export default {
     },
         handleFileUpload(event) {
             this.file = event.target.files[0];
+            this.fileName = this.file ? this.file.name: '';
         },
         async uploadFile() {
             if (!this.file) {
@@ -300,6 +303,12 @@ export default {
 
 .custom-file-upload label:hover{
     background-color: #2c8c73;
+}
+
+.file-name{
+    margin-left:10px;
+    font-size: 14px;
+    color:black;
 }
 
 @keyframes spin {
