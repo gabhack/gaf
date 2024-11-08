@@ -16,5 +16,6 @@ class DatabaseSeeder extends Seeder
 		$this->call(TipoDocumentoSeeder::class);
 		$this->call(AmiSeeder::class);
 		$this->call(HegoSeeder::class);
+		$this->call(EmpresaSeeder::class);
 	}
 }
