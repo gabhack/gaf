@@ -28,8 +28,7 @@ use App\Http\Controllers\JoinPensionesController;
 use App\Http\Controllers\FileUploadLogController;
 use App\Http\Controllers\ParametrosComparativaController;
 use App\Http\Controllers\JelouController;
-
-
+use App\Http\Controllers\ListaController;
 
 /* Route::get('/get-test', 'TestController@index');
 Route::get('/get-test/{doc}', 'TestController@search'); */
@@ -694,3 +693,10 @@ Route::get('/empresas/crear', [EmpresaController::class, 'crear']);
 
 Route::get('/area-comerciales', 			[AreaComercialController::class, 'index']);
 Route::get('/area-comerciales/crear', [AreaComercialController::class, 'crear']);
+
+Route::prefix('/listas')->group(function () {
+	Route::get('/tipo-empresas', 				[ListaController::class, 'listarTipoEmpresas']);
+	Route::get('/tipo-sociedades', 			[ListaController::class, 'listarTipoSociedades']);
+	Route::get('/tipo-documentos', 			[ListaController::class, 'listarTipoDocumentos']);
+	Route::get('/ciudades', 						[ListaController::class, 'listarCiudades']);
+});

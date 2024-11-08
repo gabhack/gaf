@@ -8,8 +8,8 @@
 		<b-row class="mt-4">
 			<b-col cols="4">
 				<b-form-group label="Tipo empresa" label-for="tipo_empresa_id">
-					<b-form-select class="custom-input" id="tipo_empresa_id" v-model="form.tipo_empresa_id"
-						:options="tiposEmpresa"></b-form-select>
+					<b-form-select value-field="id" text-field="nombre" class="custom-input" id="tipo_empresa_id"
+						v-model="form.tipo_empresa_id" :options="tiposEmpresa"></b-form-select>
 				</b-form-group>
 			</b-col>
 		</b-row>
@@ -40,8 +40,8 @@
 			</b-col>
 			<b-col cols="4">
 				<b-form-group label="Tipo de documento" label-for="empresa_tipo_documento">
-					<b-form-select id="tipo_empresa_id" v-model="form.empresa.tipo_documento"
-						:options="tipoDocumentos"></b-form-select>
+					<b-form-select value-field="id" text-field="nombre" id="tipo_empresa_id" v-model="form.empresa.tipo_documento"
+						:options="tiposDocumento"></b-form-select>
 				</b-form-group>
 			</b-col>
 			<b-col cols="4">
@@ -52,7 +52,8 @@
 			</b-col>
 			<b-col cols="4">
 				<b-form-group label="Tipo empresa" label-for="tipo_empresa_id">
-					<b-form-select id="tipo_empresa_id" v-model="form.tipo_empresa_id" :options="tiposEmpresa"></b-form-select>
+					<b-form-select value-field="id" text-field="nombre" id="tipo_empresa_id"
+						v-model="form.empresa.tipo_sociedad_id" :options="tiposSociedad"></b-form-select>
 				</b-form-group>
 			</b-col>
 			<b-col cols="4">
@@ -76,8 +77,8 @@
 			</b-col>
 			<b-col cols="4">
 				<b-form-group label="Ciudad" label-for="empresa_ciudad">
-					<b-form-input class="custom-input" id="empresa_ciudad" v-model="form.empresa.ciudad" type="text"
-						placeholder="Bogotá" required></b-form-input>
+					<b-form-select value-field="id" text-field="ciudad" id="empresa_ciudad" v-model="form.empresa.ciudad_id"
+						:options="ciudades"></b-form-select>
 				</b-form-group>
 			</b-col>
 			<b-col cols="4">
@@ -102,8 +103,8 @@
 			</b-col>
 			<b-col cols="4">
 				<b-form-group label="Tipo de documento" label-for="representante_tipo_documento">
-					<b-form-select id="representante_tipo_documento" v-model="form.tipo_empresa_id"
-						:options="tipoDocumentos"></b-form-select>
+					<b-form-select value-field="id" text-field="nombre" id="representante_tipo_documento"
+						v-model="form.tipo_empresa_id" :options="tiposDocumento"></b-form-select>
 				</b-form-group>
 			</b-col>
 			<b-col cols="4">
@@ -142,22 +143,22 @@
 		<b-row class="mt-4">
 			<b-col cols="4">
 				<b-form-group label="Responsable IVA" label-for="documentacion_responsable_iva">
-					<b-form-select id="documentacion_responsable_iva" v-model="form.documentacion.responsable_iva"
-						:options="booleanValores">
+					<b-form-select value-field="id" text-field="nombre" id="documentacion_responsable_iva"
+						v-model="form.documentacion.responsable_iva" :options="booleanValores">
 					</b-form-select>
 				</b-form-group>
 			</b-col>
 			<b-col cols="4">
 				<b-form-group label="Gran contribuyente" label-for="documentacion_gran_contribuyente">
-					<b-form-select id="documentacion_gran_contribuyente" v-model="form.documentacion.gran_contribuyente"
-						:options="booleanValores">
+					<b-form-select value-field="id" text-field="nombre" id="documentacion_gran_contribuyente"
+						v-model="form.documentacion.gran_contribuyente" :options="booleanValores">
 					</b-form-select>
 				</b-form-group>
 			</b-col>
 			<b-col cols="4">
 				<b-form-group label="Auto retenedor" label-for="documentacion_autoretenedor">
-					<b-form-select id="documentacion_autoretenedor" v-model="form.documentacion.autor_retenedor"
-						:options="booleanValores">
+					<b-form-select value-field="id" text-field="nombre" id="documentacion_autoretenedor"
+						v-model="form.documentacion.autor_retenedor" :options="booleanValores">
 					</b-form-select>
 				</b-form-group>
 			</b-col>
@@ -195,6 +196,7 @@
 	</div>
 </template>
 <script>
+import axios from 'axios';
 import CustomButton from '../../customComponents/CustomButton.vue';
 import InfoCircleIcon from '../../icons/InfoCircleIcon.vue';
 import PlusIcon from '../../icons/PlusIcon.vue';
@@ -206,28 +208,20 @@ export default {
 	},
 	data() {
 		return {
-			tiposEmpresa: [
-				{ value: '', text: 'Elija un tipo de empresa' },
-				{ value: 1, text: 'Fondo de inversion' },
-				{ value: 2, text: 'Fiduciaria' },
-				{ value: 3, text: 'Originadores' }
-			],
-			tipoDocumentos: [
-				{ value: '', text: 'Seleccione un tipo' },
-				{ value: 1, text: 'Cédula de ciudadanía' },
-				{ value: 2, text: 'Cédula de extranjería' },
-				{ value: 3, text: 'Pasaporte' },
-				{ value: 4, text: 'NIT' }
-			],
+			tiposEmpresa: [],
+			tiposSociedad: [],
+			tiposDocumento: [],
+			ciudades: [],
 			booleanValores: [
-				{ value: '', text: 'SI - NO' },
-				{ value: 1, text: 'SI' },
-				{ value: 0, text: 'NO' },
+				{ id: '', nombre: 'SI - NO' },
+				{ id: 1, nombre: 'SI' },
+				{ id: 0, nombre: 'NO' },
 			],
 			form: {
 				tipo_empresa_id: '',
 				consultas_diarias: '',
 				empresa: {
+					tipo_sociedad_id: '',
 					nombre: '',
 					tipo_documento: '',
 					numero_documento: '',
@@ -235,7 +229,7 @@ export default {
 					correo_usuario_plataforma: '',
 					pagina_web: '',
 					pais: '',
-					ciudad: '',
+					ciudad_id: '',
 					direccion: '',
 				},
 				representante_legal: {
@@ -257,7 +251,29 @@ export default {
 			}
 		}
 	},
+	async mounted() {
+		await this.listarTipoEmpresas();
+		await this.listarTipoDocumentos();
+		await this.listarTipoSociedades();
+		await this.listarTipoCiudades();
+	},
 	methods: {
+		async listarTipoEmpresas() {
+			let response = await axios.get('/listas/tipo-empresas');
+			this.tiposEmpresa = response.data;
+		},
+		async listarTipoDocumentos() {
+			let response = await axios.get('/listas/tipo-documentos');
+			this.tiposDocumento = response.data;
+		},
+		async listarTipoSociedades() {
+			let response = await axios.get('/listas/tipo-sociedades');
+			this.tiposSociedad = response.data;
+		},
+		async listarTipoCiudades() {
+			let response = await axios.get('/listas/ciudades');
+			this.ciudades = response.data;
+		},
 		showModal() {
 			this.$bvModal.show('my-modal');
 		},
