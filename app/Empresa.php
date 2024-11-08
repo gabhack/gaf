@@ -22,4 +22,24 @@ class Empresa extends Model
 		'pais',
 		'direccion',
 	];
+
+	public function tipo_sociedad()
+	{
+		return $this->belongsTo(TipoSociedad::class)->withDefault();
+	}
+
+	public function tipo_empresa()
+	{
+		return $this->belongsTo(TipoEmpresa::class)->withDefault();
+	}
+
+	public function tipo_documento()
+	{
+		return $this->belongsTo(TipoDocumento::class)->withDefault();
+	}
+
+	public function ciudad()
+	{
+		return $this->belongsTo(Ciudades::class)->withDefault();
+	}
 }

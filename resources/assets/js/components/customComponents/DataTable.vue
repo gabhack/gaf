@@ -7,7 +7,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-for="item in items" :key="item.id">
+				<tr v-for="item in items.data" :key="item.id">
 					<td v-for="(element, index) in columns" v-bind:class="tdCustomStyle(index)">
 						<slot :name="element.key" v-bind:data="item">{{ item[element.key] }}</slot>
 					</td>
@@ -32,18 +32,18 @@ export default {
 			required: true,
 		},
 		items: {
-			type: Array,
+			type: Object,
 			required: true
-		},
-		rowsPerPage: {
-			type: Number,
-			required: false,
-			default: 5,
+		}
+	},
+	data() {
+		return {
+			rowsPerPage: this.items.per_page
 		}
 	},
 	methods: {
 		updateRows() {
-			this.$emit('updateRows', 10);
+			this.$emit('updateRows', this.rowsPerPage);
 		},
 		thCustomStyle(index) {
 			return {

@@ -13,7 +13,7 @@
 		</b-row>
 		<b-row>
 			<b-col class="mt-4">
-				<DataTable :items="items" :columns="fields" @updateRows="updateRows">
+				<DataTable :items="empresas" :columns="fields" @updateRows="updateRows">
 					<template #id="data">
 						<span class="font-bold" v-text="data.data.id"></span>
 					</template>
@@ -49,19 +49,20 @@ export default {
 		TrashIcon,
 		PlusIcon
 	},
+	props: {
+		empresas: {
+			type: Object,
+			required: true
+		},
+	},
 	data() {
 		return {
-			items: [
-				{ id: 1, name: 'Fondo de inversión', nombre_empresa: 'EMPRESA 1 SAS', document: 123456, city: 'Bogota' },
-				{ id: 2, name: 'Fondo de inversión', nombre_empresa: 'EMPRESA 1 SAS', document: 123456, city: 'Bogota' },
-				{ id: 3, name: 'Fondo de inversión', nombre_empresa: 'EMPRESA 2 SAS', document: 123456, city: 'Bogota' }
-			],
 			fields: [
 				{ key: 'id', label: 'ID' },
-				{ key: 'name', label: 'Tipo de empresa' },
-				{ key: 'nombre_empresa', label: 'Nombre empresa' },
-				{ key: 'document', label: 'Documento' },
-				{ key: 'city', label: 'Ciudad' },
+				{ key: 'tipo_empresa', label: 'Tipo de empresa' },
+				{ key: 'nombre', label: 'Nombre empresa' },
+				{ key: 'documento', label: 'Documento' },
+				{ key: 'ciudad', label: 'Ciudad' },
 				{ key: 'actions', label: '' }
 			],
 			currentPage: 1,
@@ -74,7 +75,7 @@ export default {
 	},
 	methods: {
 		updateRows(data) {
-			alert(data)
+			window.location.replace('/empresas?per_page=' + data);
 		},
 		crearEmpresa() {
 			window.location.replace('/empresas/crear');
