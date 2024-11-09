@@ -43,16 +43,16 @@ export default {
 					tipo_documento_id: '',
 					numero_documento: '',
 					nacionalidad: '',
-					correo_contacto: '',
+					correo: '',
 					numero_contacto: '',
 				},
 				documentacion: {
-					responsable_iva: '',
-					gran_contribuyente: '',
-					autor_retenedor: '',
-					archivo_representante_legal: '',
-					archivo_camara_comercio: '',
-					archivo_rut: '',
+					iva: '',
+					contribuyente: '',
+					autoretenedor: '',
+					src_representante_legal: '/doc',
+					src_camara_comercio: '/doc',
+					src_rut: '/doc',
 				}
 			}
 		}

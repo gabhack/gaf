@@ -5,7 +5,7 @@
 			<b-col cols="4">
 				<CustomButton class="mt-4" @click="crearEmpresa">
 					<PlusIcon></PlusIcon>
-					Crear empresa
+					Actualizar empresa
 				</CustomButton>
 			</b-col>
 		</b-row>
@@ -24,6 +24,14 @@ export default {
 	},
 	props: {
 		empresa: {
+			type: Object,
+			required: true
+		},
+		representanteLegal: {
+			type: Object,
+			required: true
+		},
+		documentoEmpresa: {
 			type: Object,
 			required: true
 		}
@@ -45,20 +53,20 @@ export default {
 					direccion: this.empresa.direccion
 				},
 				representante_legal: {
-					nombres_completos: '',
-					tipo_documento_id: '',
-					numero_documento: '',
-					nacionalidad: '',
-					correo_contacto: '',
-					numero_contacto: '',
+					nombres_completos: this.representanteLegal.nombres_completos,
+					tipo_documento_id: this.representanteLegal.tipo_documento_id,
+					numero_documento: this.representanteLegal.numero_documento,
+					nacionalidad: this.representanteLegal.nacionalidad,
+					correo: this.representanteLegal.correo,
+					numero_contacto: this.representanteLegal.numero_contacto,
 				},
 				documentacion: {
-					responsable_iva: '',
-					gran_contribuyente: '',
-					autor_retenedor: '',
-					archivo_representante_legal: '',
-					archivo_camara_comercio: '',
-					archivo_rut: '',
+					iva: this.documentoEmpresa.iva,
+					contribuyente: this.documentoEmpresa.contribuyente,
+					autoretenedor: this.documentoEmpresa.autoretenedor,
+					src_representante_legal: '/doc',
+					src_camara_comercio: '/doc',
+					src_rut: '/doc',
 				}
 			}
 		}

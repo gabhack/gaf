@@ -42,4 +42,14 @@ class Empresa extends Model
 	{
 		return $this->belongsTo(Ciudades::class)->withDefault();
 	}
+
+	public function representante_legal_empresa()
+	{
+		return $this->hasOne(RepresentanteLegalEmpresa::class)->withDefault();
+	}
+
+	public function documento_empresa()
+	{
+		return $this->hasOne(DocumentoEmpresa::class)->withDefault();
+	}
 }

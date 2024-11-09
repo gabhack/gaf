@@ -120,10 +120,9 @@
 				</b-form-group>
 			</b-col>
 			<b-col cols="4">
-				<b-form-group label="Correo de contacto" label-for="representante_lega_correo_contacto">
-					<b-form-input class="custom-input" id="representante_lega_correo_contacto"
-						v-model="form.representante_legal.correo_contacto" type="email" placeholder="representante1@gmail.com"
-						required></b-form-input>
+				<b-form-group label="Correo de contacto" label-for="representante_legal_correo">
+					<b-form-input class="custom-input" id="representante_legal_correo" v-model="form.representante_legal.correo"
+						type="email" placeholder="representante1@gmail.com" required></b-form-input>
 				</b-form-group>
 			</b-col>
 			<b-col cols="4">
@@ -141,23 +140,23 @@
 		</b-row>
 		<b-row class="mt-4">
 			<b-col cols="4">
-				<b-form-group label="Responsable IVA" label-for="documentacion_responsable_iva">
-					<b-form-select value-field="id" text-field="nombre" id="documentacion_responsable_iva"
-						v-model="form.documentacion.responsable_iva" :options="booleanValores">
+				<b-form-group label="Responsable IVA" label-for="documentacion_iva">
+					<b-form-select value-field="id" text-field="nombre" id="documentacion_iva" v-model="form.documentacion.iva"
+						:options="booleanValores">
 					</b-form-select>
 				</b-form-group>
 			</b-col>
 			<b-col cols="4">
-				<b-form-group label="Gran contribuyente" label-for="documentacion_gran_contribuyente">
-					<b-form-select value-field="id" text-field="nombre" id="documentacion_gran_contribuyente"
-						v-model="form.documentacion.gran_contribuyente" :options="booleanValores">
+				<b-form-group label="Gran contribuyente" label-for="documentacion_contribuyente">
+					<b-form-select value-field="id" text-field="nombre" id="documentacion_contribuyente"
+						v-model="form.documentacion.contribuyente" :options="booleanValores">
 					</b-form-select>
 				</b-form-group>
 			</b-col>
 			<b-col cols="4">
 				<b-form-group label="Auto retenedor" label-for="documentacion_autoretenedor">
 					<b-form-select value-field="id" text-field="nombre" id="documentacion_autoretenedor"
-						v-model="form.documentacion.autor_retenedor" :options="booleanValores">
+						v-model="form.documentacion.autoretenedor" :options="booleanValores">
 					</b-form-select>
 				</b-form-group>
 			</b-col>
