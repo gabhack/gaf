@@ -276,12 +276,15 @@ export default {
 		},
 		handleFileRepresentanteLegal(file) {
 			this.form.documentacion.src_representante_legal = file;
+			this.$bvModal.hide('representante-legal-modal');
 		},
 		handleFileCamaraComercio(file) {
 			this.form.documentacion.src_camara_comercio = file;
+			this.$bvModal.hide('camara-comercio-modal');
 		},
 		handleFileRut(file) {
 			this.form.documentacion.src_rut = file;
+			this.$bvModal.hide('rut-modal');
 		},
 	}
 }
