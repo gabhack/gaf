@@ -50,9 +50,9 @@ export default {
 					iva: '',
 					contribuyente: '',
 					autoretenedor: '',
-					src_representante_legal: '/doc',
-					src_camara_comercio: '/doc',
-					src_rut: '/doc',
+					src_representante_legal: '',
+					src_camara_comercio: '',
+					src_rut: '',
 				}
 			}
 		}
@@ -66,15 +66,27 @@ export default {
 			domBreadcumb.innerText = "> Empresas > Crear";
 		},
 		crearEmpresa() {
-			let formData = JSON.parse(JSON.stringify(this.form));
-			formData.representante_legal = JSON.stringify(formData.representante_legal);
-			formData.empresa = JSON.stringify(formData.empresa);
-			formData.documentacion = JSON.stringify(formData.documentacion);
-			axios.post('/empresas', formData).then((response) => {
+			let formData = new FormData();
+			formData.append('tipo_empresa_id', this.form.tipo_empresa_id);
+			formData.append('consultas_diarias', this.form.consultas_diarias);
+			formData.append('empresa', JSON.stringify(this.form.empresa));
+			formData.append('representante_legal', JSON.stringify(this.form.representante_legal));
+			formData.append('documentacion', JSON.stringify(this.buildDocumentacion()));
+			formData.append('src_representante_legal', this.form.documentacion.src_representante_legal);
+			formData.append('src_camara_comercio', this.form.documentacion.src_camara_comercio);
+			formData.append('src_rut', this.form.documentacion.src_rut);
+			axios.post('/empresas', formData, { headers: { 'Content-Type': 'multipart/form-data' } }).then((response) => {
 				window.location.replace('/empresas');
 			}).catch((error) => {
 				console.log(error);
 			});
+		},
+		buildDocumentacion() {
+			return {
+				iva: this.form.documentacion.iva,
+				contribuyente: this.form.documentacion.contribuyente,
+				autoretenedor: this.form.documentacion.autoretenedor,
+			};
 		}
 	}
 }

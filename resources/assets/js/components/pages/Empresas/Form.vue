@@ -162,7 +162,7 @@
 			</b-col>
 			<b-col cols="4">
 				<b-form-group label="Auto retenedor" label-for="documentacion_autoretenedor">
-					<CustomButton @click="showModal">
+					<CustomButton @click="showModal('representante-legal-modal')">
 						<PlusIcon></PlusIcon>
 						Documento representante legal
 					</CustomButton>
@@ -170,7 +170,7 @@
 			</b-col>
 			<b-col cols="4">
 				<b-form-group label="Auto retenedor" label-for="documentacion_autoretenedor">
-					<CustomButton>
+					<CustomButton @click="showModal('camara-comercio-modal')">
 						<PlusIcon></PlusIcon>
 						Camara de comercio
 					</CustomButton>
@@ -178,19 +178,40 @@
 			</b-col>
 			<b-col cols="4">
 				<b-form-group label="Auto retenedor" label-for="documentacion_autoretenedor">
-					<CustomButton>
+					<CustomButton @click="showModal('rut-modal')">
 						<PlusIcon></PlusIcon>
 						RUT
 					</CustomButton>
 				</b-form-group>
 			</b-col>
 		</b-row>
-		<b-modal id="my-modal" title="RUT" @hide="resetModal" @ok="handleOk" ok-title="Aceptar" cancel-title="Cancelar">
-			<div class="info-message">
-				<InfoCircleIcon></InfoCircleIcon>
-				Por favor, suba un archivo en pdf con el RUT menor a 90 dias.
-			</div>
-		</b-modal>
+		<LiteModal id="representante-legal-modal" title="Documento de representante legal ">
+			<template #modal-content>
+				<div class="info-message">
+					<InfoCircleIcon></InfoCircleIcon>
+					Por favor, suba un archivo en pdf con el documento por ambos lados.
+				</div>
+				<FileInput @handleFileInput="handleFileRepresentanteLegal"></FileInput>
+			</template>
+		</LiteModal>
+		<LiteModal id="camara-comercio-modal" title="Camara de comercio">
+			<template #modal-content>
+				<div class="info-message">
+					<InfoCircleIcon></InfoCircleIcon>
+					Por favor, suba un archivo en pdf con la camara de comercio menor a 90 dias.
+				</div>
+				<FileInput @handleFileInput="handleFileCamaraComercio"></FileInput>
+			</template>
+		</LiteModal>
+		<LiteModal id="rut-modal" title="RUT">
+			<template #modal-content>
+				<div class="info-message">
+					<InfoCircleIcon></InfoCircleIcon>
+					Por favor, suba un archivo en pdf con el RUT menor a 90 dias.
+				</div>
+				<FileInput @handleFileInput="handleFileRut"></FileInput>
+			</template>
+		</LiteModal>
 	</div>
 </template>
 <script>
@@ -198,11 +219,15 @@ import axios from 'axios';
 import CustomButton from '../../customComponents/CustomButton.vue';
 import InfoCircleIcon from '../../icons/InfoCircleIcon.vue';
 import PlusIcon from '../../icons/PlusIcon.vue';
+import FileInput from '../../customComponents/FileInput.vue';
+import LiteModal from '../../customComponents/LiteModal.vue';
 export default {
 	components: {
 		CustomButton,
 		InfoCircleIcon,
-		PlusIcon
+		PlusIcon,
+		FileInput,
+		LiteModal
 	},
 	props: {
 		form: {
@@ -246,15 +271,18 @@ export default {
 			let response = await axios.get('/listas/ciudades');
 			this.ciudades = response.data;
 		},
-		showModal() {
-			this.$bvModal.show('my-modal');
+		showModal(id) {
+			this.$bvModal.show(id);
 		},
-		resetModal() {
-
+		handleFileRepresentanteLegal(file) {
+			this.form.documentacion.src_representante_legal = file;
 		},
-		handleOk() {
-
-		}
+		handleFileCamaraComercio(file) {
+			this.form.documentacion.src_camara_comercio = file;
+		},
+		handleFileRut(file) {
+			this.form.documentacion.src_rut = file;
+		},
 	}
 }
 </script>

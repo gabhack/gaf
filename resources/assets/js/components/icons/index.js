@@ -18,6 +18,7 @@ import PlusIcon from './PlusIcon.vue';
 import UsersIcon from './UsersIcon.vue';
 import DashboardIcon from './DashboardIcon.vue';
 import InfoCircleIcon from './InfoCircleIcon.vue';
+import XIcon from './XIcon.vue';
 export {
 	CompaniesIcon,
 	PersonsIcon,
@@ -38,5 +39,6 @@ export {
 	PlusIcon,
 	UsersIcon,
 	DashboardIcon,
-	InfoCircleIcon
+	InfoCircleIcon,
+	XIcon
 };
