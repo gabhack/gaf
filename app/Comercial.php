@@ -9,6 +9,8 @@ class Comercial extends Model
 {
 	use SoftDeletes;
 
+	protected $table = 'comerciales';
+
 	protected $fillable = [
 		'sede_id',
 		'cargo_id',
