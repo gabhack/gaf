@@ -3,7 +3,7 @@
 		<Form :form="form"></Form>
 		<b-row align-h="end">
 			<b-col cols="4">
-				<CustomButton class="mt-4" @click="crearEmpresa">
+				<CustomButton class="mt-4" @click="actualizarEmpresa">
 					<PlusIcon></PlusIcon>
 					Actualizar empresa
 				</CustomButton>
@@ -82,16 +82,28 @@ export default {
 			let domBreadcumb = document.getElementById('dynamic-breadcumb');
 			domBreadcumb.innerText = "> Empresas > Crear";
 		},
-		crearEmpresa() {
-			let formData = JSON.parse(JSON.stringify(this.form));
-			formData.representante_legal = JSON.stringify(formData.representante_legal);
-			formData.empresa = JSON.stringify(formData.empresa);
-			formData.documentacion = JSON.stringify(formData.documentacion);
-			axios.post('/empresas', formData).then((response) => {
+		actualizarEmpresa() {
+			let formData = new FormData();
+			formData.append('tipo_empresa_id', this.form.tipo_empresa_id);
+			formData.append('consultas_diarias', this.form.consultas_diarias);
+			formData.append('empresa', JSON.stringify(this.form.empresa));
+			formData.append('representante_legal', JSON.stringify(this.form.representante_legal));
+			formData.append('documentacion', JSON.stringify(this.buildDocumentacion()));
+			formData.append('src_representante_legal', this.form.documentacion.src_representante_legal);
+			formData.append('src_camara_comercio', this.form.documentacion.src_camara_comercio);
+			formData.append('src_rut', this.form.documentacion.src_rut);
+			axios.post('/empresas/' + this.empresa.id, formData).then((response) => {
 				window.location.replace('/empresas');
 			}).catch((error) => {
 				console.log(error);
 			});
+		},
+		buildDocumentacion() {
+			return {
+				iva: this.form.documentacion.iva,
+				contribuyente: this.form.documentacion.contribuyente,
+				autoretenedor: this.form.documentacion.autoretenedor,
+			};
 		}
 	}
 }

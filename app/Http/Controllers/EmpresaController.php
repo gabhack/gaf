@@ -130,7 +130,90 @@ class EmpresaController extends Controller
 				'documentoEmpresa' => json_encode($empresa->documento_empresa)
 			]);
 		} catch (Throwable $e) {
-			return response()->json(['message' => $e]);
+			return response()->json(['message' => $e], 500);
+		}
+	}
+
+	public function update(Request $request, $id)
+	{
+		$empresaRequest = json_decode($request->empresa);
+		$representanteLegalRequest = json_decode($request->representante_legal);
+		$documentacionRequest = json_decode($request->documentacion);
+		try {
+			DB::beginTransaction();
+			$empresa = Empresa::find($id);
+			if (empty($empresa)) abort(404, 'Empresa no encontrada');
+			$empresa->update([
+				'tipo_sociedad_id' => $empresaRequest->tipo_sociedad_id,
+				'tipo_empresa_id' => $request->tipo_empresa_id,
+				'tipo_documento_id' => $empresaRequest->tipo_documento_id,
+				'ciudad_id' => $empresaRequest->ciudad_id,
+				'consultas_diarias' => $request->consultas_diarias,
+				'nombre' => $empresaRequest->nombre,
+				'numero_documento' => $empresaRequest->numero_documento,
+				'correo' => $empresaRequest->correo,
+				'pagina_web' => $empresaRequest->pagina_web,
+				'pais' => $empresaRequest->pais,
+				'direccion' => $empresaRequest->direccion,
+			]);
+			$representanteLegalEmpresa = RepresentanteLegalEmpresa::where('empresa_id', $empresa->id)->first();
+			if (!empty($representanteLegalEmpresa)) {
+				$representanteLegalEmpresa->update([
+					'tipo_documento_id' => $representanteLegalRequest->tipo_documento_id,
+					'nombres_completos' => $representanteLegalRequest->nombres_completos,
+					'numero_documento' => $representanteLegalRequest->numero_documento,
+					'nacionalidad' => $representanteLegalRequest->nacionalidad,
+					'correo' => $representanteLegalRequest->correo,
+					'numero_contacto' => $representanteLegalRequest->numero_contacto,
+				]);
+			}
+			$documentoEmpresa = DocumentoEmpresa::where('empresa_id', $empresa->id)->first();
+			if (!empty($documentoEmpresa)) {
+				$documentoEmpresa->update([
+					'iva' => $documentacionRequest->iva,
+					'contribuyente' => $documentacionRequest->contribuyente,
+					'autoretenedor' => $documentacionRequest->autoretenedor
+				]);
+				if ($request->hasFile('src_representante_legal')) {
+					$representanteLegalFile = $request->file('src_representante_legal');
+					$extension = $representanteLegalFile->getClientOriginalExtension();
+					$representanteLegalPath = 'empresas/' . $empresa->id . '/';
+					$fileName = 'representante_legal.' . $extension;
+					$representanteLegalDocUpload = Storage::disk('archivos')->put($representanteLegalPath . $fileName, file_get_contents($representanteLegalFile));
+					if ($representanteLegalDocUpload) {
+						$documentoEmpresa->update(['src_representante_legal' => $representanteLegalPath . $fileName]);
+					}
+				}
+
+				if ($request->hasFile('src_camara_comercio')) {
+					$camaraComercioFile = $request->file('src_camara_comercio');
+					$extension = $camaraComercioFile->getClientOriginalExtension();
+					$camaraComercioPath = 'empresas/' . $empresa->id . '/';
+					$fileName = 'camara_comercio.' . $extension;
+					$camaraComercioDocUpload = Storage::disk('archivos')->put($camaraComercioPath . $fileName, file_get_contents($camaraComercioFile));
+					if ($camaraComercioDocUpload) {
+						$documentoEmpresa->update(['src_camara_comercio' => $camaraComercioPath . $fileName]);
+					}
+				}
+
+				if ($request->hasFile('src_rut')) {
+					$rutFile = $request->file('src_rut');
+					$extension = $rutFile->getClientOriginalExtension();
+					$rutDocPath = 'empresas/' . $empresa->id . '/';
+					$fileName = 'rut.' . $extension;
+					$rutDocPathUpload = Storage::disk('archivos')->put($rutDocPath . $fileName, file_get_contents($rutFile));
+					if ($rutDocPathUpload) {
+						$documentoEmpresa->update(['src_rut' => $rutDocPath . $fileName]);
+					}
+				}
+			}
+			DB::commit();
+			return response()->json(['status' => 200]);
+		} catch (Throwable $e) {
+			DB::rollBack();
+			$message = $e->getMessage() . ' in line ' . $e->getLine() . ' in file ' . $e->getFile();
+			logger(['e' => $message]);
+			return response()->json(['message' => $message], 500);
 		}
 	}
 }
