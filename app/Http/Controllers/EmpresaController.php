@@ -102,7 +102,9 @@ class EmpresaController extends Controller
 			return response()->json(['status' => 200]);
 		} catch (Throwable $e) {
 			DB::rollBack();
-			logger(['e' => $e->getMessage() . ' in line ' . $e->getLine() . ' in file ' . $e->getFile()]);
+			$message = $e->getMessage() . ' in line ' . $e->getLine() . ' in file ' . $e->getFile();
+			logger(['e' => $message]);
+			return response()->json(['message' => $message], 500);
 		}
 	}
 

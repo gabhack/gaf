@@ -88,8 +88,8 @@
 		</b-row>
 		<b-row class="mt-4">
 			<b-col cols="6">
-				<b-form-group label="Documento de identidad de usuario" label-for="documentacion_autoretenedor">
-					<CustomButton>
+				<b-form-group label="Documento de identidad de usuario" label-for="documentacion_identidad_file">
+					<CustomButton @click="showModal">
 						<PlusIcon></PlusIcon>
 						Documento de identidad
 					</CustomButton>
@@ -115,15 +115,36 @@
 				</b-form-group>
 			</b-col>
 		</b-row>
+		<LiteModal id="documento-identidad-modal" title="Documento de identidad">
+			<template #modal-content>
+				<div class="info-message">
+					<InfoCircleIcon></InfoCircleIcon>
+					Por favor, suba un archivo en pdf con el documento por ambos lados.
+				</div>
+				<FileInput @handleFileInput="handleFileInput"></FileInput>
+			</template>
+		</LiteModal>
 	</div>
 </template>
 <script>
 import CustomButton from '../../customComponents/CustomButton.vue';
 import PlusIcon from '../../icons/PlusIcon.vue';
+import LiteModal from '../../customComponents/LiteModal.vue'
+import InfoCircleIcon from '../../icons/InfoCircleIcon.vue';
+import FileInput from '../../customComponents/FileInput.vue';
 export default {
 	components: {
 		CustomButton,
-		PlusIcon
+		PlusIcon,
+		LiteModal,
+		InfoCircleIcon,
+		FileInput
+	},
+	props: {
+		form: {
+			type: Object,
+			required: true
+		}
 	},
 	data() {
 		return {
@@ -133,29 +154,6 @@ export default {
 			tipoDocumentos: [],
 			amis: [],
 			hegos: [],
-			form: {
-				empresa: {
-					ciudad_id: '',
-					sede_id: '',
-					cargo_id: '',
-				},
-				personal: {
-					nombre_apellido: '',
-					tipo_documento_id: '',
-					numero_documento: '',
-					nacionalidad: '',
-					correo_contacto: '',
-					numero_contacto: '',
-				},
-				consultas_diarias: '',
-				documentacion: {
-					tipo_documento: '',
-				},
-				plataforma: {
-					ami_id: '',
-					hego_id: '',
-				}
-			}
 		}
 	},
 	async mounted() {
@@ -189,7 +187,14 @@ export default {
 		async listarSedes() {
 			let response = await axios.get('/listas/ciudades/' + this.form.empresa.ciudad_id + '/sedes');
 			this.sedes = response.data;
-		}
+		},
+		handleFileInput(file) {
+			this.form.documentacion.tipo_documento = file;
+			this.$bvModal.hide('documento-identidad-modal');
+		},
+		showModal() {
+			this.$bvModal.show('documento-identidad-modal');
+		},
 	}
 }
 </script>
@@ -202,5 +207,14 @@ export default {
 
 .custom-input::placeholder {
 	font-weight: 100;
+}
+
+.info-message {
+	background-color: #F9FAFB;
+	padding: 15px 10px 15px 10px;
+	font-size: 13px;
+	border-radius: 5px;
+	border-left-width: 50px;
+	border-left: 4px solid #20A0E9;
 }
 </style>

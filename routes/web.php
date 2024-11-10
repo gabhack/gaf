@@ -693,8 +693,10 @@ Route::post('/empresas', 						[EmpresaController::class, 'store']);
 Route::get('/empresas/crear', 			[EmpresaController::class, 'crear']);
 Route::get('/empresas/edit/{id}', 	[EmpresaController::class, 'edit']);
 
-Route::get('/area-comerciales', 			[AreaComercialController::class, 'index']);
-Route::get('/area-comerciales/crear', [AreaComercialController::class, 'crear']);
+Route::get('/area-comerciales', 						[AreaComercialController::class, 'index']);
+Route::get('/area-comerciales/crear', 			[AreaComercialController::class, 'crear']);
+Route::post('/area-comerciales', 						[AreaComercialController::class, 'store']);
+Route::get('/area-comerciales/edit/{id}', 	[AreaComercialController::class, 'edit']);
 
 Route::prefix('/listas')->group(function () {
 	Route::get('/tipo-empresas', 				[ListaController::class, 'listarTipoEmpresas']);
