@@ -24,7 +24,7 @@
 						<button class="action-button" @click="editarEmpresa(data.data.id)">
 							<EditIcon />
 						</button>
-						<button class="action-button">
+						<button class="action-button" @click="eliminarEmpresa(data.data.id)">
 							<TrashIcon />
 						</button>
 					</template>
@@ -40,6 +40,7 @@ import DocumentIcon from './../../icons/DocumentIcon.vue'
 import EditIcon from './../../icons/EditIcon.vue'
 import TrashIcon from './../../icons/TrashIcon.vue'
 import PlusIcon from '../../icons/PlusIcon.vue'
+import axios from 'axios'
 export default {
 	components: {
 		CustomButton,
@@ -83,6 +84,13 @@ export default {
 		},
 		editarEmpresa(id) {
 			window.location.replace('/empresas/edit/' + id);
+		},
+		eliminarEmpresa(id) {
+			axios.delete('/empresas/' + id).then((res) => {
+				window.location.replace('/empresas');
+			}).catch((error) => {
+				console.log(error);
+			})
 		}
 	}
 }

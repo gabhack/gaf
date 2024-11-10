@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DocumentoEmpresa;
 use App\Empresa;
 use App\RepresentanteLegalEmpresa;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -213,6 +214,23 @@ class EmpresaController extends Controller
 			DB::rollBack();
 			$message = $e->getMessage() . ' in line ' . $e->getLine() . ' in file ' . $e->getFile();
 			logger(['e' => $message]);
+			return response()->json(['message' => $message], 500);
+		}
+	}
+
+	public function destroy($id)
+	{
+		try {
+			DB::beginTransaction();
+			$empresa = Empresa::find($id);
+			DocumentoEmpresa::where('empresa_id', $empresa->id)->delete();
+			RepresentanteLegalEmpresa::where('empresa_id', $empresa->id)->delete();
+			$empresa->delete();
+			DB::commit();
+			return response()->json(['status' => 200]);
+		} catch (Throwable $e) {
+			DB::rollBack();
+			$message = $e->getMessage() . ' in line ' . $e->getLine() . ' in file ' . $e->getFile();
 			return response()->json(['message' => $message], 500);
 		}
 	}

@@ -126,4 +126,19 @@ class AreaComercialController extends Controller
 			return response()->json(['message' => $message], 500);
 		}
 	}
+
+	public function destroy($id)
+	{
+		try {
+			DB::beginTransaction();
+			$comercial = Comercial::find($id);
+			$comercial->delete();
+			DB::commit();
+			return response()->json(['status' => 200]);
+		} catch (Throwable $e) {
+			DB::rollBack();
+			$message = $e->getMessage() . ' in line ' . $e->getLine() . ' in file ' . $e->getFile();
+			return response()->json(['message' => $message], 500);
+		}
+	}
 }

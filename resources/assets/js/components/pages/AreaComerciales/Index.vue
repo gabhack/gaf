@@ -21,7 +21,7 @@
 						<button class="action-button" @click="editAreaComercial(data.data.id)">
 							<EditIcon />
 						</button>
-						<button class="action-button">
+						<button class="action-button" @click="eliminarAreaComercial(data.data.id)">
 							<TrashIcon />
 						</button>
 					</template>
@@ -81,6 +81,13 @@ export default {
 		},
 		editAreaComercial(id) {
 			window.location.replace('/area-comerciales/edit/' + id)
+		},
+		eliminarAreaComercial(id) {
+			axios.delete('/area-comerciales/' + id).then((res) => {
+				window.location.replace('/area-comerciales');
+			}).catch((error) => {
+				console.log(error);
+			})
 		}
 	}
 }
