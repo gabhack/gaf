@@ -185,7 +185,8 @@
 				</b-form-group>
 			</b-col>
 		</b-row>
-		<LiteModal id="representante-legal-modal" title="Documento de representante legal ">
+		<LiteModal id="representante-legal-modal" title="Documento de representante legal"
+			:preview-document="form.previewRepresentanteLegal">
 			<template #modal-content>
 				<div class="info-message">
 					<InfoCircleIcon></InfoCircleIcon>
@@ -194,7 +195,7 @@
 				<FileInput @handleFileInput="handleFileRepresentanteLegal"></FileInput>
 			</template>
 		</LiteModal>
-		<LiteModal id="camara-comercio-modal" title="Camara de comercio">
+		<LiteModal id="camara-comercio-modal" title="Camara de comercio" :preview-document="form.previewCamaraComercio">
 			<template #modal-content>
 				<div class="info-message">
 					<InfoCircleIcon></InfoCircleIcon>
@@ -203,7 +204,7 @@
 				<FileInput @handleFileInput="handleFileCamaraComercio"></FileInput>
 			</template>
 		</LiteModal>
-		<LiteModal id="rut-modal" title="RUT">
+		<LiteModal id="rut-modal" title="RUT" :preview-document="form.previewRut">
 			<template #modal-content>
 				<div class="info-message">
 					<InfoCircleIcon></InfoCircleIcon>

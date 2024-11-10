@@ -51,8 +51,9 @@ export default {
 				plataforma: {
 					ami_id: this.comercial.ami_id,
 					hego_id: this.comercial.hego_id,
-				}
-			}
+				},
+				previewDocumentoIdentidad: this.comercial.src_documento_identidad,
+			},
 		}
 	},
 	mounted() {

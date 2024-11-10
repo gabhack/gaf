@@ -64,10 +64,13 @@ export default {
 					iva: this.documentoEmpresa.iva,
 					contribuyente: this.documentoEmpresa.contribuyente,
 					autoretenedor: this.documentoEmpresa.autoretenedor,
-					src_representante_legal: '/doc',
-					src_camara_comercio: '/doc',
-					src_rut: '/doc',
-				}
+					src_representante_legal: '',
+					src_camara_comercio: '',
+					src_rut: '',
+				},
+				previewRepresentanteLegal: this.documentoEmpresa.src_representante_legal,
+				previewCamaraComercio: this.documentoEmpresa.src_camara_comercio,
+				previewRut: this.documentoEmpresa.src_rut,
 			}
 		}
 	},

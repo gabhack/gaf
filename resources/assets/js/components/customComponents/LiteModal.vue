@@ -7,6 +7,7 @@
 			</div>
 		</div>
 		<slot name="modal-content"></slot>
+		<a :href="base64Url" v-if="previewDocument" target="_blank" download="archivo.pdf">Descargar archivo</a>
 	</b-modal>
 </template>
 <script>
@@ -23,7 +24,16 @@ export default {
 		title: {
 			type: String,
 			required: true,
+		},
+		previewDocument: {
+			type: String,
+			required: false,
 		}
+	},
+	computed: {
+		base64Url() {
+			return `data:application/pdf;base64,${this.previewDocument}`;
+		},
 	},
 	methods: {
 		hideModal() {

@@ -79,6 +79,8 @@ class AreaComercialController extends Controller
 		$areaComercial = Comercial::find($id);
 		if (empty($areaComercial)) abort(404, 'Area comercial no encontrada');
 		$areaComercial->ciudad_id = $areaComercial->sede->ciudad_id;
+		$documentoIdentidad = Storage::disk('archivos')->get($areaComercial->src_documento_identidad);
+		$areaComercial->src_documento_identidad = base64_encode($documentoIdentidad);
 		return view('area-comerciales.edit', [
 			'comercial' => json_encode($areaComercial),
 		]);

@@ -110,12 +110,27 @@ class EmpresaController extends Controller
 
 	public function edit($id)
 	{
-		$empresa = Empresa::find($id);
-		if (empty($empresa)) abort(404, 'Empresa no encontrada');
-		return view('empresas.edit', [
-			'empresa' => json_encode($empresa),
-			'representanteLegal' => json_encode($empresa->representante_legal_empresa),
-			'documentoEmpresa' => json_encode($empresa->documento_empresa)
-		]);
+		try {
+			$empresa = Empresa::find($id);
+			if (empty($empresa)) abort(404, 'Empresa no encontrada');
+
+			if (isset($empresa->documento_empresa->src_representante_legal)) {
+				$representanteLegalSrc = Storage::disk('archivos')->get($empresa->documento_empresa->src_representante_legal);
+				$empresa->documento_empresa->src_representante_legal = base64_encode($representanteLegalSrc);
+
+				$camaraComercioSrc = Storage::disk('archivos')->get($empresa->documento_empresa->src_camara_comercio);
+				$empresa->documento_empresa->src_camara_comercio = base64_encode($camaraComercioSrc);
+
+				$rutSrc = Storage::disk('archivos')->get($empresa->documento_empresa->src_rut);
+				$empresa->documento_empresa->src_rut = base64_encode($rutSrc);
+			}
+			return view('empresas.edit', [
+				'empresa' => json_encode($empresa),
+				'representanteLegal' => json_encode($empresa->representante_legal_empresa),
+				'documentoEmpresa' => json_encode($empresa->documento_empresa)
+			]);
+		} catch (Throwable $e) {
+			return response()->json(['message' => $e]);
+		}
 	}
 }

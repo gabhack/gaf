@@ -115,7 +115,8 @@
 				</b-form-group>
 			</b-col>
 		</b-row>
-		<LiteModal id="documento-identidad-modal" title="Documento de identidad">
+		<LiteModal id="documento-identidad-modal" title="Documento de identidad"
+			:preview-document="form.previewDocumentoIdentidad">
 			<template #modal-content>
 				<div class="info-message">
 					<InfoCircleIcon></InfoCircleIcon>
