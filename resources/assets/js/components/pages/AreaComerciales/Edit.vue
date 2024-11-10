@@ -65,12 +65,14 @@ export default {
 			domBreadcumb.innerText = "> Empresas > Editar";
 		},
 		actualizarEmpresa() {
-			let formData = JSON.parse(JSON.stringify(this.form));
-			formData.representante_legal = JSON.stringify(formData.representante_legal);
-			formData.empresa = JSON.stringify(formData.empresa);
-			formData.documentacion = JSON.stringify(formData.documentacion);
-			axios.post('/empresas', formData).then((response) => {
-				window.location.replace('/empresas');
+			let formData = new FormData();
+			formData.append('consultas_diarias', this.form.consultas_diarias);
+			formData.append('empresa', JSON.stringify(this.form.empresa));
+			formData.append('personal', JSON.stringify(this.form.personal));
+			formData.append('plataforma', JSON.stringify(this.form.plataforma));
+			formData.append('src_documento_identidad', this.form.documentacion.tipo_documento);
+			axios.post('/area-comerciales/' + this.comercial.id, formData, { headers: { 'Content-Type': 'multipart/form-data' } }).then((response) => {
+				window.location.replace('/area-comerciales');
 			}).catch((error) => {
 				console.log(error);
 			});

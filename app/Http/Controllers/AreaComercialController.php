@@ -71,7 +71,6 @@ class AreaComercialController extends Controller
 			logger(['e' => $message]);
 			return response()->json(['message' => $message], 500);
 		}
-		return response()->json(200);
 	}
 
 	public function edit($id)
@@ -84,5 +83,47 @@ class AreaComercialController extends Controller
 		return view('area-comerciales.edit', [
 			'comercial' => json_encode($areaComercial),
 		]);
+	}
+
+	public function update(Request $request, $id)
+	{
+		$empresaRequest = json_decode($request->empresa);
+		$personalRequest = json_decode($request->personal);
+		$plataformaRequest = json_decode($request->plataforma);
+		try {
+			DB::beginTransaction();
+			$areaComercial = Comercial::find($id);
+			if (empty($areaComercial)) abort(404, 'Area comercial no encontrada');
+			$areaComercial->update([
+				'sede_id' => $empresaRequest->sede_id,
+				'cargo_id' => $empresaRequest->cargo_id,
+				'tipo_documento_id' => $personalRequest->tipo_documento_id,
+				'ami_id' => $plataformaRequest->ami_id,
+				'hego_id' => $plataformaRequest->hego_id,
+				'consultas_diarias' => $request->consultas_diarias,
+				'nombre_completo' => $personalRequest->nombre_apellido,
+				'numero_documento' => $personalRequest->numero_documento,
+				'nacionalidad' => $personalRequest->nacionalidad,
+				'correo' => $personalRequest->correo_contacto,
+				'numero_contacto' => $personalRequest->numero_contacto,
+			]);
+			if ($request->hasFile('src_documento_identidad')) {
+				$documentoIdentidadFile = $request->file('src_documento_identidad');
+				$extension = $documentoIdentidadFile->getClientOriginalExtension();
+				$documentoIdentidadPath = 'area-comerciales/' . $areaComercial->id . '/';
+				$fileName = 'documento_identidad.' . $extension;
+				$documentoIdentidadUpload = Storage::disk('archivos')->put($documentoIdentidadPath . $fileName, file_get_contents($documentoIdentidadFile));
+				if ($documentoIdentidadUpload) {
+					$areaComercial->update(['src_documento_identidad' => $documentoIdentidadPath . $fileName]);
+				}
+			}
+			DB::commit();
+			return response()->json(['status' => 200]);
+		} catch (Throwable $e) {
+			DB::rollBack();
+			$message = $e->getMessage() . ' in line ' . $e->getLine() . ' in file ' . $e->getFile();
+			logger(['e' => $message]);
+			return response()->json(['message' => $message], 500);
+		}
 	}
 }
