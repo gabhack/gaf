@@ -1,5 +1,5 @@
 @extends('layouts.app2')
 
 @section('content')
-  <area-comerciales></area-comerciales>
+  <area-comerciales :comerciales="{{ $comerciales }}"></area-comerciales>
 @endsection

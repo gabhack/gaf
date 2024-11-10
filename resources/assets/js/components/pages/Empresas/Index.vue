@@ -63,11 +63,8 @@ export default {
 				{ key: 'nombre', label: 'Nombre empresa' },
 				{ key: 'documento', label: 'Documento' },
 				{ key: 'ciudad', label: 'Ciudad' },
-				{ key: 'actions', label: '' }
+				{ key: 'actions', label: 'Acciones' }
 			],
-			currentPage: 1,
-			perPage: 5,
-			totalRows: 10
 		}
 	},
 	mounted() {
