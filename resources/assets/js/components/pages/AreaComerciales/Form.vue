@@ -7,21 +7,21 @@
 		</b-row>
 		<b-row class="mt-4">
 			<b-col cols="4">
-				<b-form-group label="Ciudad" label-for="empresa_ciudad">
-					<b-form-select class="custom-input" id="empresa_ciudad" v-model="form.empresa.ciudad"
-						:options="tiposEmpresa"></b-form-select>
+				<b-form-group label="Ciudad" label-for="empresa_ciudad_id">
+					<b-form-select value-field="id" text-field="ciudad" class="custom-input" id="empresa_ciudad_id"
+						v-model="form.empresa.ciudad_id" :options="ciudades" @change="listarSedes"></b-form-select>
 				</b-form-group>
 			</b-col>
 			<b-col cols="4">
-				<b-form-group label="Sede" label-for="empresa_sede">
-					<b-form-select class="custom-input" id="empresa_sede" v-model="form.empresa.sede"
-						:options="tiposEmpresa"></b-form-select>
+				<b-form-group label="Sede" label-for="empresa_sede_id">
+					<b-form-select value-field="id" text-field="nombre" class="custom-input" id="empresa_sede_id"
+						v-model="form.empresa.sede_id" :options="sedes"></b-form-select>
 				</b-form-group>
 			</b-col>
 			<b-col cols="4">
 				<b-form-group label="Cargo" label-for="empresa_cargo">
-					<b-form-select class="custom-input" id="empresa_cargo" v-model="form.empresa.cargo"
-						:options="tiposEmpresa"></b-form-select>
+					<b-form-select value-field="id" text-field="cargo" class="custom-input" id="empresa_cargo"
+						v-model="form.empresa.cargo_id" :options="cargos"></b-form-select>
 				</b-form-group>
 			</b-col>
 		</b-row>
@@ -51,9 +51,9 @@
 				</b-form-group>
 			</b-col>
 			<b-col cols="4">
-				<b-form-group label="Tipo de documento" label-for="personal_tipo_documento">
-					<b-form-select id="tipo_personal_id" v-model="form.personal.tipo_documento"
-						:options="tipoDocumentos"></b-form-select>
+				<b-form-group label="Tipo de documento" label-for="personal_tipo_documento_id">
+					<b-form-select value-field="id" text-field="nombre" id="tipo_personal_id"
+						v-model="form.personal.tipo_documento_id" :options="tipoDocumentos"></b-form-select>
 				</b-form-group>
 			</b-col>
 			<b-col cols="4">
@@ -104,14 +104,14 @@
 		<b-row class="mt-4">
 			<b-col cols="4">
 				<b-form-group label="AMI(Análisis de mercado inteligente)" label-for="plataforma_ami">
-					<b-form-select class="custom-input" id="plataforma_ami" v-model="form.plataforma.ami"
-						:options="tiposEmpresa"></b-form-select>
+					<b-form-select value-field="id" text-field="nombre" class="custom-input" id="plataforma_ami"
+						v-model="form.plataforma.ami_id" :options="amis"></b-form-select>
 				</b-form-group>
 			</b-col>
 			<b-col cols="4">
 				<b-form-group label="HEGO" label-for="plataforma_hego">
-					<b-form-select class="custom-input" id="plataforma_hego" v-model="form.plataforma.hego"
-						:options="tiposEmpresa"></b-form-select>
+					<b-form-select value-field="id" text-field="nombre" class="custom-input" id="plataforma_hego"
+						v-model="form.plataforma.hego_id" :options="hegos"></b-form-select>
 				</b-form-group>
 			</b-col>
 		</b-row>
@@ -127,33 +127,21 @@ export default {
 	},
 	data() {
 		return {
-			tiposEmpresa: [
-				{ value: '', text: 'Elija un tipo de empresa' },
-				{ value: 1, text: 'Fondo de inversion' },
-				{ value: 2, text: 'Fiduciaria' },
-				{ value: 3, text: 'Originadores' }
-			],
-			tipoDocumentos: [
-				{ value: '', text: 'Seleccione un tipo' },
-				{ value: 1, text: 'Cédula de ciudadanía' },
-				{ value: 2, text: 'Cédula de extranjería' },
-				{ value: 3, text: 'Pasaporte' },
-				{ value: 4, text: 'NIT' }
-			],
-			booleanValores: [
-				{ value: '', text: 'SI - NO' },
-				{ value: 1, text: 'SI' },
-				{ value: 0, text: 'NO' },
-			],
+			ciudades: [],
+			sedes: [],
+			cargos: [],
+			tipoDocumentos: [],
+			amis: [],
+			hegos: [],
 			form: {
 				empresa: {
-					ciudad: '',
-					sede: '',
-					cargo: '',
+					ciudad_id: '',
+					sede_id: '',
+					cargo_id: '',
 				},
 				personal: {
 					nombre_apellido: '',
-					tipo_documento: '',
+					tipo_documento_id: '',
 					numero_documento: '',
 					nacionalidad: '',
 					correo_contacto: '',
@@ -164,10 +152,43 @@ export default {
 					tipo_documento: '',
 				},
 				plataforma: {
-					ami: '',
-					hego: '',
+					ami_id: '',
+					hego_id: '',
 				}
 			}
+		}
+	},
+	async mounted() {
+		await this.listarCiudades();
+		await this.listarCargos();
+		await this.listarTiposDocumento();
+		await this.listarAmis();
+		await this.listarHegos();
+	},
+	methods: {
+		async listarCiudades() {
+			let response = await axios.get('/listas/ciudades');
+			this.ciudades = response.data;
+		},
+		async listarCargos() {
+			let response = await axios.get('/listas/cargos');
+			this.cargos = response.data;
+		},
+		async listarTiposDocumento() {
+			let response = await axios.get('/listas/tipo-documentos');
+			this.tipoDocumentos = response.data;
+		},
+		async listarAmis() {
+			let response = await axios.get('/listas/amis');
+			this.amis = response.data;
+		},
+		async listarHegos() {
+			let response = await axios.get('/listas/hegos');
+			this.hegos = response.data;
+		},
+		async listarSedes() {
+			let response = await axios.get('/listas/ciudades/' + this.form.empresa.ciudad_id + '/sedes');
+			this.sedes = response.data;
 		}
 	}
 }
