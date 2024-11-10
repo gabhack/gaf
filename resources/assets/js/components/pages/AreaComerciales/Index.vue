@@ -18,7 +18,7 @@
 						<button class="action-button">
 							<DocumentIcon />
 						</button>
-						<button class="action-button">
+						<button class="action-button" @click="editAreaComercial(data.data.id)">
 							<EditIcon />
 						</button>
 						<button class="action-button">
@@ -78,6 +78,9 @@ export default {
 		setBreadcumb() {
 			let domBreadcumb = document.getElementById('dynamic-breadcumb');
 			domBreadcumb.innerText = "> Area comercial";
+		},
+		editAreaComercial(id) {
+			window.location.replace('/area-comerciales/edit/' + id)
 		}
 	}
 }

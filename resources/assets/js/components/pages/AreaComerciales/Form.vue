@@ -158,6 +158,7 @@ export default {
 	},
 	async mounted() {
 		await this.listarCiudades();
+		await this.listarSedesEdit();
 		await this.listarCargos();
 		await this.listarTiposDocumento();
 		await this.listarAmis();
@@ -188,6 +189,12 @@ export default {
 			let response = await axios.get('/listas/ciudades/' + this.form.empresa.ciudad_id + '/sedes');
 			this.sedes = response.data;
 		},
+		async listarSedesEdit() {
+			if (this.form.empresa.ciudad_id) {
+				let response = await axios.get('/listas/ciudades/' + this.form.empresa.ciudad_id + '/sedes');
+				this.sedes = response.data;
+			}
+		},
 		handleFileInput(file) {
 			this.form.documentacion.tipo_documento = file;
 			this.$bvModal.hide('documento-identidad-modal');
@@ -203,6 +210,8 @@ export default {
 	background-color: white;
 	border-radius: 5px;
 	border: 0.5px solid #B8BEC5;
+	color: black;
+	font-weight: 100;
 }
 
 .custom-input::placeholder {

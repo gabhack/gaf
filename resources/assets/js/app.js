@@ -137,6 +137,7 @@ Vue.component('editar-empresas', require('./components/pages/Empresas/Edit.vue')
 
 Vue.component('area-comerciales', require('./components/pages/AreaComerciales/Index.vue').default);
 Vue.component('crear-area-comerciales', require('./components/pages/AreaComerciales/Create.vue').default);
+Vue.component('editar-area-comerciales', require('./components/pages/AreaComerciales/Edit.vue').default);
 
 /* Vue Init */
 const app = new Vue({

@@ -74,5 +74,13 @@ class AreaComercialController extends Controller
 		return response()->json(200);
 	}
 
-	public function edit($id) {}
+	public function edit($id)
+	{
+		$areaComercial = Comercial::find($id);
+		if (empty($areaComercial)) abort(404, 'Area comercial no encontrada');
+		$areaComercial->ciudad_id = $areaComercial->sede->ciudad_id;
+		return view('area-comerciales.edit', [
+			'comercial' => json_encode($areaComercial),
+		]);
+	}
 }
