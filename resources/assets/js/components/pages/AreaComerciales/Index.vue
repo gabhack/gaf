@@ -13,7 +13,7 @@
 		</b-row>
 		<b-row>
 			<b-col class="mt-4">
-				<DataTable :items="comerciales" :columns="fields" @updateRows="updateRows">
+				<DataTable :items="comerciales" :columns="fields" @updateRows="updateRows" @pageChanged="pageChanged">
 					<template #actions="data">
 						<button class="action-button">
 							<DocumentIcon />
@@ -71,6 +71,9 @@ export default {
 	methods: {
 		updateRows(data) {
 			window.location.replace('/area-comerciales?per_page=' + data);
+		},
+		pageChanged(path) {
+			window.location.replace(path);
 		},
 		crearComercial() {
 			window.location.replace('/area-comerciales/crear');

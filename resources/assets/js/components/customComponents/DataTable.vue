@@ -21,6 +21,8 @@
 				<option v-for="option in [5, 10, 15]" :key="option" :value="option">{{ option }}</option>
 			</select>
 		</div>
+		<b-pagination v-model="items.current_page" :total-rows="items.total" :per-page="items.per_page"
+			@change="onPageChange" aria-controls="my-table"></b-pagination>
 	</div>
 </template>
 
@@ -44,6 +46,10 @@ export default {
 	methods: {
 		updateRows() {
 			this.$emit('updateRows', this.rowsPerPage);
+		},
+		onPageChange(page) {
+			let path = this.items.path + '?per_page=' + this.items.per_page + '&page=' + page;
+			this.$emit('pageChanged', path);
 		},
 		thCustomStyle(index) {
 			return {

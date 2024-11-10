@@ -13,7 +13,7 @@
 		</b-row>
 		<b-row>
 			<b-col class="mt-4">
-				<DataTable :items="empresas" :columns="fields" @updateRows="updateRows">
+				<DataTable :items="empresas" :columns="fields" @updateRows="updateRows" @pageChanged="pageChanged">
 					<template #id="data">
 						<span class="font-bold" v-text="data.data.id"></span>
 					</template>
@@ -74,6 +74,9 @@ export default {
 	methods: {
 		updateRows(data) {
 			window.location.replace('/empresas?per_page=' + data);
+		},
+		pageChanged(path) {
+			window.location.replace(path);
 		},
 		crearEmpresa() {
 			window.location.replace('/empresas/crear');
