@@ -10,44 +10,20 @@
                         <b class="mr-2 periodo">Período:</b>
                         <select
                             class="form-control2"
-                            @change="setSelectedPeriod($event.target.value)"
-                            :value="selectedPeriod"
+                            v-model="internalSelectedPeriod"
+                            @change="onPeriodChange"
                         >
                             <option :value="period" v-for="period in pagaduriaPeriodos" :key="period">
                                 {{ period }}
                             </option>
                             <option v-if="isLoading" disabled>CARGANDO...</option>
                         </select>
-                        <svg
-                            v-if="isLoading"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 100 100"
-                            preserveAspectRatio="xMidYMid"
-                            width="41"
-                            height="41"
-                            style="shape-rendering: auto; display: block; background: transparent"
-                            xmlns:xlink="http://www.w3.org/1999/xlink"
-                        >
+                        <svg v-if="isLoading" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"
+                             preserveAspectRatio="xMidYMid" width="41" height="41" style="shape-rendering: auto; display: block; background: transparent">
                             <g>
-                                <circle
-                                    stroke-dasharray="169.64600329384882 58.548667764616276"
-                                    r="36"
-                                    stroke-width="10"
-                                    stroke="#000000"
-                                    fill="none"
-                                    cy="50"
-                                    cx="50"
-                                >
-                                    <animateTransform
-                                        keyTimes="0;1"
-                                        values="0 50 50;360 50 50"
-                                        dur="1s"
-                                        repeatCount="indefinite"
-                                        type="rotate"
-                                        attributeName="transform"
-                                    ></animateTransform>
+                                <circle stroke-dasharray="169.64600329384882 58.548667764616276" r="36" stroke-width="10" stroke="#000000" fill="none" cy="50" cx="50">
+                                    <animateTransform keyTimes="0;1" values="0 50 50;360 50 50" dur="1s" repeatCount="indefinite" type="rotate" attributeName="transform"></animateTransform>
                                 </circle>
-                                <g></g>
                             </g>
                         </svg>
                     </div>
@@ -59,20 +35,13 @@
                                 <input
                                     v-model="data.item.check"
                                     type="checkbox"
-                                    :disabled="
-                                        disabledProspect ||
-                                        data.item.code === 'APFPM' ||
-                                        data.item.code === 'APEPEN' ||
-                                        data.item.code === 'APESDN'
-                                    "
+                                    :disabled="disabledProspect || ['APFPM', 'APEPEN', 'APESDN'].includes(data.item.code)"
                                     @change="calcularEgresos"
                                 />
                             </template>
-
                             <template #cell(nomtercero)="data">
                                 <p class="mb-0">{{ data.item.nomtercero || '-' }}</p>
                             </template>
-
                             <template #cell(vaplicado)="data">
                                 <p class="mb-0">{{ Math.abs(data.item.vaplicado) | currency }}</p>
                             </template>
@@ -92,44 +61,20 @@
                         <b class="mr-2 periodo">Período:</b>
                         <select
                             class="form-control2"
-                            @change="setSelectedPeriod($event.target.value)"
-                            :value="selectedPeriod"
+                            v-model="internalSelectedPeriod"
+                            @change="onPeriodChange"
                         >
                             <option :value="period" v-for="period in pagaduriaPeriodos" :key="period">
                                 {{ period }}
                             </option>
                             <option v-if="isLoading" disabled>CARGANDO...</option>
                         </select>
-                        <svg
-                            v-if="isLoading"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 100 100"
-                            preserveAspectRatio="xMidYMid"
-                            width="41"
-                            height="41"
-                            style="shape-rendering: auto; display: block; background: transparent"
-                            xmlns:xlink="http://www.w3.org/1999/xlink"
-                        >
+                        <svg v-if="isLoading" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"
+                             preserveAspectRatio="xMidYMid" width="41" height="41" style="shape-rendering: auto; display: block; background: transparent">
                             <g>
-                                <circle
-                                    stroke-dasharray="169.64600329384882 58.548667764616276"
-                                    r="36"
-                                    stroke-width="10"
-                                    stroke="#000000"
-                                    fill="none"
-                                    cy="50"
-                                    cx="50"
-                                >
-                                    <animateTransform
-                                        keyTimes="0;1"
-                                        values="0 50 50;360 50 50"
-                                        dur="1s"
-                                        repeatCount="indefinite"
-                                        type="rotate"
-                                        attributeName="transform"
-                                    ></animateTransform>
+                                <circle stroke-dasharray="169.64600329384882 58.548667764616276" r="36" stroke-width="10" stroke="#000000" fill="none" cy="50" cx="50">
+                                    <animateTransform keyTimes="0;1" values="0 50 50;360 50 50" dur="1s" repeatCount="indefinite" type="rotate" attributeName="transform"></animateTransform>
                                 </circle>
-                                <g></g>
                             </g>
                         </svg>
                     </div>
@@ -160,65 +105,61 @@ export default {
                 { key: 'nomtercero', label: 'Nombre entidad' },
                 { key: 'vaplicado', label: 'Cuota' }
             ],
-            itemsCheckbox: [],
-            arrayCoupons: []
+            arrayCoupons: [],
+            internalSelectedPeriod: null
         };
     },
     mounted() {
-        console.log('Cupones recibidos en DescapliEmpty:', this.arrayCoupons);
-
-        this.arrayCoupons = [...this.couponsIngresos.items];
-        this.arrayCoupons.map(item => {
-            item.check = false;
-            return item;
-        });
-        console.log('REVISAR ACA' + this.couponsIngresos.items);
+        this.internalSelectedPeriod = this.selectedPeriod;
+        this.updateArrayCoupons();
+    },
+    watch: {
+        selectedPeriod(newVal) {
+            this.internalSelectedPeriod = newVal;
+            this.updateArrayCoupons();
+        },
+        couponsIngresos() {
+            this.updateArrayCoupons();
+        }
     },
     computed: {
         ...mapState('datamesModule', ['cuotadeseada']),
         ...mapState('pagaduriasModule', ['coupons']),
         ...mapGetters('pagaduriasModule', ['couponsIngresos', 'pagaduriaPeriodos']),
         isLoading() {
-            console.log(this.pagaduriaPeriodos);
-            if (this.pagaduriaPeriodos.length < 2) {
-                return true;
-            } else {
-                return false;
-            }
+            return this.pagaduriaPeriodos.length < 2;
         }
     },
     methods: {
         ...mapMutations('datamesModule', ['setConteoEgresos', 'setConteoEgresosPlus']),
         ...mapMutations('pagaduriasModule', ['setSelectedPeriod']),
-        calcularEgresos() {
-            let totalEgresos = 0;
-            let totalEgresosPlus = 0;
-            this.couponsIngresos.items.forEach(item => {
-                if (!item.check && item.code !== 'APFPM') {
-                    totalEgresos += Number(item.vaplicado);
-                }
-                if (item.check && item.code !== 'APFPM') {
-                    totalEgresosPlus += Number(item.vaplicado);
-                }
-            });
-            this.setConteoEgresos(totalEgresos);
-            this.setConteoEgresosPlus(totalEgresosPlus);
-        }
-    },
-    watch: {
-        couponsIngresos() {
-            this.arrayCoupons = [];
-            this.arrayCoupons = [...this.couponsIngresos.items];
-            this.arrayCoupons.map(item => {
-                item.check = false;
-                return item;
-            });
+        updateArrayCoupons() {
+            this.arrayCoupons = this.couponsIngresos.items.map(item => ({ ...item, check: false }));
             this.setConteoEgresos(0);
             this.setConteoEgresosPlus(0);
+        },
+        calcularEgresos() {
+            const { totalEgresos, totalEgresosPlus } = this.arrayCoupons.reduce(
+                (acc, item) => {
+                    if (!item.check && item.code !== 'APFPM') {
+                        acc.totalEgresos += Number(item.vaplicado);
+                    } else if (item.check && item.code !== 'APFPM') {
+                        acc.totalEgresosPlus += Number(item.vaplicado);
+                    }
+                    return acc;
+                },
+                { totalEgresos: 0, totalEgresosPlus: 0 }
+            );
+            this.setConteoEgresos(totalEgresos);
+            this.setConteoEgresosPlus(totalEgresosPlus);
+        },
+        onPeriodChange() {
+            this.setSelectedPeriod(this.internalSelectedPeriod);
         }
     }
 };
 </script>
+
 <style scoped lang="scss">
 ::v-deep .table {
     & thead {
@@ -228,9 +169,6 @@ export default {
         font-size: 14px;
         font-weight: 700;
         line-height: 18.23px;
-        & tr th {
-            min-height: 50px !important;
-        }
     }
     & tbody {
         background-color: #fff;
