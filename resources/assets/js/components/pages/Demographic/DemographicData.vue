@@ -651,58 +651,72 @@ export default {
             doc.save('resultados.pdf');
         },
         exportToExcel() {
-        const columns = [
-            'Cédula', 'Nombre del Cliente', 'Fecha Nacimiento', 'Edad', 'Tipo de Contrato', 'Cargo',
-            'Situación Laboral', 'Pagaduría', 'Cupo Libre', 'Detalle de Embargos', 'Detalle de Cupones',
-            'Detalle de Descuentos', 'Colpensiones', 'Fiduprevisora', 'Fopep'
-        ];
-        
-        const rows = this.results.map(item => [
-            item.doc || 'No disponible',
-            item.nombre_usuario || 'No disponible',
-            item.fecha_nacimiento || 'No disponible',
-            item.edad || 'No disponible',
-            item.tipo_contrato || 'No disponible',
-            item.cargo || 'No disponible',
-            item.situacion_laboral || 'No disponible',
-            item.pagaduria || 'No disponible',
-            this.formatCurrency(item.cupo_libre) || 'No disponible',
-            this.formatEmbargos(item.embargos),
-            this.formatCupones(item.cupones),
-            this.formatDescuentos(item.descuentos),
-            item.colpensiones ? 'Sí' : 'No',
-            item.fiducidiaria ? 'Sí' : 'No'
-        ]);
+            const columns = [
+                'Cédula', 'Nombre del Cliente', 'Fecha Nacimiento', 'Edad', 'Tipo de Contrato', 'Cargo',
+                'Situación Laboral', 'Pagaduría', 'Cupo Libre', 'Detalle de Embargos', 'Detalle de Cupones',
+                'Detalle de Descuentos', 'Colpensiones', 'Fiduprevisora', 'Fopep'
+            ];
+            
+            const rows = this.results.map(item => [
+                item.doc || 'No disponible',
+                item.nombre_usuario || 'No disponible',
+                item.fecha_nacimiento || 'No disponible',
+                item.edad || 'No disponible',
+                item.tipo_contrato || 'No disponible',
+                item.cargo || 'No disponible',
+                item.situacion_laboral || 'No disponible',
+                item.pagaduria || 'No disponible',
+                item.cupo_libre || 'No disponible',
+                this.formatEmbargos(item.embargos),
+                this.formatCupones(item.cupones),
+                this.formatDescuentos(item.descuentos),
+                item.colpensiones ? 'Sí' : 'No',
+                item.fiducidiaria ? 'Sí' : 'No',
+                item.fopep ? 'Sí' : 'No'
+            ]);
 
-        const worksheet = XLSX.utils.aoa_to_sheet([columns, ...rows]);
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'Datos Demográficos');
-        XLSX.writeFile(workbook, 'datos_demograficos.xlsx');
-    },
+            const worksheet = XLSX.utils.aoa_to_sheet([columns, ...rows]);
 
-    // Helper para formatear embargos
-    formatEmbargos(embargos) {
-        if (!embargos || !embargos.length) return 'No hay embargos';
-        return embargos
-            .map(e => `Documento: ${e.docdeman || 'N/A'}, Entidad: ${e.entidaddeman || 'N/A'}, Valor: ${this.formatCurrency(e.valor || e.netoemb)}`)
-            .join('\n');
-    },
+            // Aplicar wrap text a las columnas de detalles
+            const wrapTextColumns = ['J', 'K', 'L']; // Columnas para Embargos, Cupones y Descuentos
+            wrapTextColumns.forEach(col => {
+                for (let row = 2; row <= rows.length + 1; row++) { // +1 por el encabezado
+                    const cellRef = col + row;
+                    if (worksheet[cellRef]) {
+                        if (!worksheet[cellRef].s) worksheet[cellRef].s = {};
+                        worksheet[cellRef].s.alignment = { wrapText: true };
+                    }
+                }
+            });
 
-    // Helper para formatear cupones
-    formatCupones(cupones) {
-        if (!cupones || !cupones.length) return 'No hay cupones';
-        return cupones
-            .map(c => `Concepto: ${c.concept || 'N/A'}, Egresos: ${this.formatCurrency(c.egresos)}`)
-            .join('\n');
-    },
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Datos Demográficos');
+            XLSX.writeFile(workbook, 'datos_demograficos.xlsx');
+        },
 
-    // Helper para formatear descuentos
-    formatDescuentos(descuentos) {
-        if (!descuentos || !descuentos.length) return 'No hay descuentos';
-        return descuentos
-            .map(d => `Mliquid: ${d.mliquid || 'N/A'}, Valor: ${this.formatCurrency(d.valor)}`)
-            .join('\n');
-    },
+        // Helper para formatear embargos
+        formatEmbargos(embargos) {
+            if (!embargos || !embargos.length) return 'No hay embargos';
+            return embargos
+                .map(e => `Documento: ${e.docdeman || 'N/A'}, Entidad: ${e.entidaddeman || 'N/A'}, Valor: ${e.valor || e.netoemb}`)
+                .join('\r\n');
+        },
+
+        // Helper para formatear cupones
+        formatCupones(cupones) {
+            if (!cupones || !cupones.length) return 'No hay cupones';
+            return cupones
+                .map(c => `Concepto: ${c.concept || 'N/A'}, Egresos: ${c.egresos}`)
+                .join('\r\n');
+        },
+
+        // Helper para formatear descuentos
+        formatDescuentos(descuentos) {
+            if (!descuentos || !descuentos.length) return 'No hay descuentos';
+            return descuentos
+                .map(d => `Mliquid: ${d.mliquid || 'N/A'}, Valor: ${d.valor}`)
+                .join('\r\n');
+        },
         async fetchRecentConsultations() {
             try {
                 let response = await axios.get('/demografico/recent-consultations');
