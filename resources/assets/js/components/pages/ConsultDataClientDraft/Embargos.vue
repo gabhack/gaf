@@ -7,7 +7,7 @@
                 </b-col>
                 <b-col cols="2" class="d-none d-md-flex justify-content-end align-items-start">
                     <div>
-                        <b class="mr-2 periodo">Periodo</b>
+                        <b class="mr-2 periodo">Período</b>
                         <select
                             class="form-control2"
                             disabled
@@ -83,7 +83,7 @@
                 </b-col>
                 <b-col cols="12" md="2" class="d-flex d-md-none justify-content-end align-items-start">
                     <div>
-                        <b class="mr-2 periodo">Periodo</b>
+                        <b class="mr-2 periodo">Período</b>
                         <select
                             class="form-control2"
                             disabled

@@ -7,7 +7,7 @@
                 </b-col>
                 <b-col cols="2" class="d-none d-md-flex justify-content-end align-items-start">
                     <div>
-                        <b class="mr-2 periodo">Periodo</b>
+                        <b class="mr-2 periodo">Período</b>
                         <select class="form-control2" v-model="internalSelectedPeriod" @change="onPeriodChange">
                             <option :value="period" v-for="period in descuentosPeriodos" :key="period">
                                 {{ period }}
@@ -70,7 +70,7 @@
                 </b-col>
                 <b-col cols="12" class="d-flex d-md-none justify-content-end align-items-start">
                     <div>
-                        <b class="mr-2 periodo">Periodo</b>
+                        <b class="mr-2 periodo">Período</b>
                         <select class="form-control2" v-model="internalSelectedPeriod" @change="onPeriodChange">
                             <option :value="period" v-for="period in descuentosPeriodos" :key="period">
                                 {{ period }}

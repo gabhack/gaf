@@ -19,6 +19,7 @@
                     <div class="custom-file-upload">
                         <input type="file" @change="handleFileUpload" id="file-upload" class="file-input"/>
                         <label for="file-upload">Elegir archivo</label>
+                        <span v-if="fileName" class="file-name">{{ fileName }}</span>
                     </div>
                 </div>
                         <CustomButton 
@@ -26,7 +27,11 @@
                         @click="uploadFile" class="btn btn-primary" 
                         style="white-space: nowrap; background-color: #2c8c73;">Subir Archivo
                         </CustomButton>
+                        <CustomButton v-if="!isLoadingResults" @click="toggleRecentConsultations" class="btn btn-info float-right" style="white-space: nowrap; background-color: #2c8c73; margin-left: 20px;">
+                            {{ showRecentConsultations ? 'Ocultar Recientes' : 'Consultas Recientes'}}
+                        </CustomButton>
                 </div>
+               
         </div>
 
         <!-- Card para mostrar las consultas recientes -->
@@ -119,7 +124,9 @@ export default {
     data() {
         return {
             file: null,
+            fileName:'',
             isLoading: false,
+            isLoadingResults: false,
             results: [],
             searchQuery: '',
             error: null,
@@ -147,6 +154,7 @@ export default {
     },
         handleFileUpload(event) {
             this.file = event.target.files[0];
+            this.fileName = this.file ? this.file.name: '';
         },
         async uploadFile() {
             if (!this.file) {
@@ -186,6 +194,7 @@ export default {
             }
         },
         async fetchPaginatedResults(page) {
+            this.isLoadingResults = true;
             this.isLoading = true;
             try {
                 let response = await axios.get(`/demografico/fetch-paginated-results-demografico?page=${page}&perPage=${this.perPage}`);
@@ -294,6 +303,12 @@ export default {
 
 .custom-file-upload label:hover{
     background-color: #2c8c73;
+}
+
+.file-name{
+    margin-left:10px;
+    font-size: 14px;
+    color:black;
 }
 
 @keyframes spin {
