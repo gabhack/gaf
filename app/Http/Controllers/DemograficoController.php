@@ -886,6 +886,98 @@ private function parseConcatenatedString($concatenatedString)
     }
     
 
+    //PARA VISADO
+
+    public function calcularCupoPorCedula($cedula, $mes, $año)
+{
+    Log::info('Inicio del cálculo para una sola cédula', ['cedula' => $cedula]);
+
+    try {
+        $startDate = Carbon::createFromFormat('Y-m', $año . '-' . $mes)->startOfMonth()->toDateString();
+        $endDate = Carbon::createFromFormat('Y-m', $año . '-' . $mes)->endOfMonth()->toDateString();
+        
+        $record = DatamesGen::where('doc', $cedula)->orderBy('created_at', 'desc')->first();
+        $colpensiones = Colpensiones::where('documento', $cedula)->exists();
+        $fiducidiaria = Fiducidiaria::where('documento', $cedula)->exists();
+
+        $coupons = CouponsGen::where('doc', $cedula)
+            ->whereBetween('inicioperiodo', [$startDate, $endDate])
+            ->get();
+
+        $embargos = EmbargosGen::where('doc', $cedula)
+            ->whereBetween('nomina', [$startDate, $endDate])
+            ->get();
+
+        $descuentos = DescuentosGen::where('doc', $cedula)
+            ->whereBetween('nomina', [$startDate, $endDate])
+            ->get();
+
+        $salarioMinimo = 1300000;
+        $valorIngreso = $coupons->sum('ingresos'); // Suma de ingresos de cupones
+        $egresos = $coupons->whereNotIn('code', ['APFPM', 'APEPEN', 'APESDN'])->sum('egresos'); // Excluye ciertos códigos de egresos
+
+        // Ajustes por cargo
+        $increase = 0;
+        $cargo = strtolower($record->cargo ?? ''); 
+        if (strpos($cargo, 'rector') !== false) {
+            $increase = $valorIngreso * 0.3;
+        } elseif (strpos($cargo, 'coordinador') !== false) {
+            $increase = $valorIngreso * 0.2;
+        } elseif (strpos($cargo, 'director') !== false) {
+            $increase = $valorIngreso * 0.35;
+        }
+        $valorIngreso += $increase;
+
+        // Aplicar descuentos según pagaduría
+        $descuento = 0.08;
+        if (in_array($record->pagaduria, ['FOPEP', 'FIDUPREVISORA'])) {
+            if ($valorIngreso == $salarioMinimo) {
+                $descuento = 0.04;
+            } elseif ($valorIngreso > $salarioMinimo && $valorIngreso < $salarioMinimo * 2) {
+                $descuento = 0.08;
+            } elseif ($valorIngreso >= $salarioMinimo * 2) {
+                $descuento = 0.12;
+            }
+        }
+
+        // Cálculo de compraCartera y libreInversion
+        $valorIngresoConDescuento = $valorIngreso - ($valorIngreso * $descuento);
+        $compraCartera = ($valorIngresoConDescuento < $salarioMinimo * 2)
+            ? $valorIngresoConDescuento - $salarioMinimo
+            : ($valorIngresoConDescuento / 2);
+
+        $libreInversion = $compraCartera - $egresos;
+
+        Log::info('Fin del cálculo para una sola cédula', [
+            'cedula' => $cedula,
+            'compraCartera' => $compraCartera,
+            'libreInversion' => $libreInversion,
+            'colpensiones' => $colpensiones,
+            'fiducidiaria' => $fiducidiaria
+        ]);
+
+        return [
+            'doc' => $cedula,
+            'nombre_usuario' => $record->nombre_usuario ?? null,
+            'tipo_contrato' => $record->tipo_contrato ?? null,
+            'edad' => $record->edad ?? null,
+            'fecha_nacimiento' => $record->fecha_nacimiento ?? null,
+            'pagaduria' => $record->pagaduria ?? null,
+            'cargo' => $cargo,
+            'compra_cartera' => $compraCartera,
+            'cupo_libre' => $libreInversion,
+            'colpensiones' => $colpensiones,
+            'fiducidiaria' => $fiducidiaria,
+            'cupones' => $coupons,
+            'embargos' => $embargos,
+            'descuentos' => $descuentos,
+        ];
+    } catch (\Exception $e) {
+        Log::error('Error en el cálculo para una sola cédula: ' . $e->getMessage());
+        return response()->json(['error' => 'Error en el cálculo para una sola cédula'], 500);
+    }
+}
+
 
 
 }

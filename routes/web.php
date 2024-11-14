@@ -642,7 +642,7 @@ Route::post('/demografico/upload', [DemograficoController::class, 'upload'])->na
 Route::get('/demografico/recent-consultations', [DemograficoController::class, 'getRecentConsultations']);
 Route::get('/demografico/fetch-paginated-results', [DemograficoController::class, 'fetchPaginatedResults']);
 Route::get('/demografico/fetch-paginated-results-demografico', [DemograficoController::class, 'fetchPaginatedResultsDemografico']);
-
+Route::get('/demografico/calcular-cupo/{cedula}/{mes}/{año}', [DemograficoController::class, 'calcularCupoPorCedula'])->name('demografico.calcularCupo');
 Route::get('/demografico/{doc}', [DemograficoController::class, 'getDemograficoPorDoc'])->name('demografico.get');
 
 Route::middleware(['auth'])->group(function () {
