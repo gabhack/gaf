@@ -1,7 +1,7 @@
 <template>
     <div class="col-6" v-if="datamesSed">
         <div class="panel panel-primary mb-3">
-            <h3 class="heading-title" style="color: darkgreen">Información laboral</h3>
+            <h3 class="heading-title" style="color: #2c8c73">Información laboral</h3>
                         <thead>
                             <tr>
                                 <th style="color:#2c8c73">Fecha ingreso</th>
