@@ -1,13 +1,10 @@
 <template>
-    <div class="col-6">
-        <div class="panel mb-0">
-            <h3 class="heading-title mb-0 pt-5">Información laboral</h3>
-            <b-row class="mt-3"  v-if="datamesSed">
-                <b-col cols="12" sm="6" class="pb-4">
-                    <table>
+    <div class="col-6" v-if="datamesSed">
+        <div class="panel panel-primary mb-3">
+            <h3 class="heading-title" style="color: darkgreen">Información laboral</h3>
                         <thead>
                             <tr>
-                                <th>Fecha ingreso</th>
+                                <th style="color:#2c8c73">Fecha ingreso</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -15,13 +12,9 @@
                                 <td>{{ datamesSed.fecha_ingreso || '--' }}</td>
                             </tr>
                         </tbody>
-                    </table>
-                </b-col>
-                <b-col cols="12" sm="6" class="pb-4">
-                    <table>
                         <thead>
                             <tr>
-                                <th>Fecha ingreso nómina</th>
+                                <th style="color:#2c8c73">Fecha ingreso nómina</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -29,13 +22,9 @@
                                 <td>{{ datamesSed.fecha_ingreso_nomina || '--' }}</td>
                             </tr>
                         </tbody>
-                    </table>
-                </b-col>
-                <b-col cols="12" sm="6" class="pb-4">
-                    <table>
                         <thead>
                             <tr>
-                                <th>Fecha de inicio</th>
+                                <th style="color:#2c8c73">Fecha de inicio</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -43,13 +32,9 @@
                                 <td>{{ datamesSed.fecha_inicio || '--' }}</td>
                             </tr>
                         </tbody>
-                    </table>
-                </b-col>
-                <b-col cols="12" sm="6" class="pb-4">
-                    <table>
                         <thead>
                             <tr>
-                                <th>Antiguedad laboral</th>
+                                <th style="color:#2c8c73">Antiguedad laboral</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -57,13 +42,9 @@
                                 <td>{{ datamesSed.antiguedad ? datamesSed.antiguedad + ' años' : '--' }}</td>
                             </tr>
                         </tbody>
-                    </table>
-                </b-col>
-                <b-col cols="12" sm="6" class="pb-4">
-                    <table>
                         <thead>
                             <tr>
-                                <th>Cargo</th>
+                                <th style="color:#2c8c73">Cargo</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -71,13 +52,9 @@
                                 <td>{{ datamesSed.cargo || '--' }}</td>
                             </tr>
                         </tbody>
-                    </table>
-                </b-col>
-                <b-col cols="12" sm="6" class="pb-4">
-                    <table>
                         <thead>
                             <tr>
-                                <th>Tipo de contrato</th>
+                                <th style="color:#2c8c73">Tipo de contrato</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -85,13 +62,9 @@
                                 <td>{{ datamesSed.tipo_contrato || '--' }}</td>
                             </tr>
                         </tbody>
-                    </table>
-                </b-col>
-                <b-col cols="12" sm="6">
-                    <table>
                         <thead>
                             <tr>
-                                <th>Situación laboral</th>
+                                <th style="color: #2c8c73">Situación laboral</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -99,13 +72,9 @@
                                 <td>{{ datamesSed.situacion_laboral || '--' }}</td>
                             </tr>
                         </tbody>
-                    </table>
-                </b-col>
-                <b-col cols="12" sm="6">
-                    <table>
                         <thead>
                             <tr>
-                                <th>Área de desempeño</th>
+                                <th style="color: #2c8c73">Área de desempeño</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -113,10 +82,7 @@
                                 <td>{{ datamesSed.area_desempeño || '--' }}</td>
                             </tr>
                         </tbody>
-                    </table>
-                </b-col>
-            </b-row>
-            <div class="panel-body pt-0 pb-0">
+                         <div class="panel-body pt-0 pb-0">
                 <div class="row">
                     <!--============================
                             FOPEP
