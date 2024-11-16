@@ -30,6 +30,7 @@
                     <!--============================
                 DATAMES FOPEP -
                 ==============================-->
+                <div class="horizontal-container">
                     <DatamesComponent
                         v-if="pagaduriaType == 'FOPEP' && datamesFopep"
                         :user="user"
@@ -61,13 +62,13 @@
                         v-if="pagaduriaType == 'SEMCALI' && datamessemcali"
                         :user="user"
                         :datamessemcali="datamessemcali"
-                    />
+                    /></div>
 
                     <!--================================
                 DATAMES SECRETARIAS ELimiando por carlos 12/08
                 ===================================-->
                 
-                <div class="row">
+                
     <div class="col-12">
         <label for="periodSelect">Selecciona un período:</label>
         <select
@@ -81,7 +82,7 @@
                 </option>
             </select>
     </div>
-</div>
+
 
                     <!--============================
                 COMPONENTE HISTORIAL LABORAL (ELIMINADO por calros el 12/08)
@@ -711,6 +712,23 @@ export default {
 };
 </script>
 <style>
+.horizontal-container {
+    display: flex;
+    gap: 20px; /* Espaciado entre los elementos */
+}
+.personal-info,
+.labor-info,
+.history-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 30%; /* Ajusta el ancho según sea necesario */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+}
 .table-text {
     font-size: 12px;
 }
