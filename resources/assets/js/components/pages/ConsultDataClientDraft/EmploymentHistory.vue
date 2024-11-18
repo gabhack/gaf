@@ -7,22 +7,22 @@
                 <ul style="list-style-type: none; padding: 0; margin: 0;">
                     <li v-for="(item, index) in datamesSedArray" :key="index">
                         <p>
-                            <b style="color:#2c8c73">Fecha ingreso:</b><br><span>{{ item.fecha_ingreso || '--' }}</span>
+                            <b style="color:#3a5659">Fecha ingreso:</b><br><span>{{ item.fecha_ingreso || '--' }}</span>
                         </p>
                         <p>
-                            <b style="color:#2c8c73">Fecha vinculación:</b><br><span>{{ item.fnombramiento || '--' }}</span>
+                            <b style="color:#3a5659">Fecha vinculación:</b><br><span>{{ item.fnombramiento || '--' }}</span>
                         </p>
                         <p>
-                            <b style="color:#2c8c73">Cargo:</b><br><span>{{ item.cargo || '--' }}</span>
+                            <b style="color:#3a5659">Cargo:</b><br><span>{{ item.cargo || '--' }}</span>
                         </p>
                         <p>
-                            <b style="color:#2c8c73">Grado:</b><br><span>{{ item.grado || '--' }}</span>
+                            <b style="color:#3a5659">Grado:</b><br><span>{{ item.grado || '--' }}</span>
                         </p>
                         <p>
-                            <b style="color:#2c8c73">Principal:</b><br><span>{{ item.depen || '--' }}</span>
+                            <b style="color:#3a5659">Principal:</b><br><span>{{ item.depen || '--' }}</span>
                         </p>
                         <p>
-                            <b style="color:#2c8c73">Ciudad laboral:</b><br><span>{{ item.ciudad || '--' }}</span>
+                            <b style="color:#3a5659">Ciudad laboral:</b><br><span>{{ item.ciudad || '--' }}</span>
                         </p>
                     </li>
                 </ul>
@@ -305,7 +305,7 @@
                                 <div v-if="arrayCoupons.length> 0">
                                 <thead>
                                        <tr>
-                                            <th style="color: #2c8c73; white-space: nowrap;">Valor ingreso</th>
+                                            <th style="color: #3a5659; white-space: nowrap;">Valor ingreso</th>
                                        </tr> 
                                 </thead>
                                     <tbody>
@@ -313,7 +313,7 @@
                                     </tbody> 
                                 <thead>
                                         <tr>   
-                                            <th style="color: #2c8c73;">Total</th>
+                                            <th style="color: #3a5659;">Total</th>
                                         </tr>
                                 </thead>
                                     <tbody>           
@@ -518,7 +518,7 @@ export default {
 </script>
 <style scoped>
 th {
-    color:#2c8c73;
+    color:#3a5659;
     font-size: 14px;
 }
 ul {
