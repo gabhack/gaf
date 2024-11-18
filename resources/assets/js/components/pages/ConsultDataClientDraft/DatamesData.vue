@@ -2,7 +2,7 @@
     <div class="col-4" v-if="datamesSed">
         <div class="panel panel-primary mb-3">
             <h3 class="heading-title" style="border: 5px #2c8c73 solid; background-color: #2c8c73; color: white; padding-left: 3px;">Información personal</h3>
-                        <thead>
+                        <br><thead>
                             <tr>
                                 <th style="color: #2c8c73;">Nombre y apellido</th>
                             </tr>
