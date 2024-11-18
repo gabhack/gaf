@@ -1,28 +1,53 @@
 <template>
-    <div class="col-6">
-        <div class="panel mb-3">
-            <h3 class="heading-title mb-0 pt-5">Historial laboral</h3>
-            <div class="panel-body pa-0" style="padding-left: 5px !important; padding-right: 5px !important;">
+    <div class="col-4">
+        <div class="panel panel-primary mb-3">
+     <h3 class="heading-title" style="border: 5px solid; background-color: #2c8c73; color: white; padding-top: 6px; padding-bottom: 4px; padding-left: 5px;">Historial laboral</h3>
+            
+            <div v-if="datamesSedArray.length > 0" class="general-info">
+                <ul style="list-style-type: none;">
+                    <li v-for="(item, index) in datamesSedArray" :key="index" style="border-bottom: 1px solid #ccc; padding: 10px;">
+                        <p>
+                            <b>Fecha ingreso:</b><br><span>{{ item.fecha_ingreso || '--' }}</span>
+                        </p>
+                        <p>
+                            <b>Fecha vinculación:</b><br><span>{{ item.fnombramiento || '--' }}</span>
+                        </p>
+                        <p>
+                            <b>Cargo:</b><br><span>{{ item.cargo || '--' }}</span>
+                        </p>
+                        <p>
+                            <b>Grado:</b><br><span>{{ item.grado || '--' }}</span>
+                        </p>
+                        <p>
+                            <b>Principal:</b><br><span>{{ item.depen || '--' }}</span>
+                        </p>
+                        <p>
+                            <b>Ciudad laboral:</b><br><span>{{ item.ciudad || '--' }}</span>
+                        </p>
+                    </li>
+                </ul>
+            </div>
+
                     <!--============================
                             FOPEP
                     ==============================-->
                     <template v-if="pagaduriaType === 'FOPEP'">
-                        <div class="col-12">
+                        <div class="col-4">
                             <div class="row">
-                                <div class="col-6">
+                                <div class="col-2">
                                     <b class="panel-label">VALOR INGRESO:</b>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-2">
                                     <div>
                                         <p class="panel-value">{{ valorIngreso | currency }}</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-6">
+                                <div class="col-2">
                                     <b class="panel-label">SUELDO BASICO:</b>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-2">
                                     <div>
                                         <p class="panel-value" v-if="salarioBasico">{{ salarioBasico | currency }}</p>
                                         <p class="panel-value" v-else>{{ datamesSed.pension | currency }}</p>
@@ -31,23 +56,23 @@
                             </div>
                         </div>
 
-                        <div class="col-12" v-if="ingresosExtras.length > 0">
+                        <div class="col-4" v-if="ingresosExtras.length > 0">
                             <b class="panel-label">INGRESOS EXTRAS:</b>
                             <div class="row">
-                                <div class="col-6">
-                                    <b class="panel-label table-text">CONCEPTO:</b>
+                                <div class="col-2">
+                                    <b class="panel-label">CONCEPTO:</b>
                                 </div>
-                                <div class="col-6">
-                                    <b class="panel-label table-text">VALOR:</b>
+                                <div class="col-2">
+                                    <b class="panel-label">VALOR:</b>
                                 </div>
                             </div>
                             <div class="row" v-for="extra in ingresosExtras" :key="extra.code">
-                                <div class="col-6">
+                                <div class="col-2">
                                     <div>
                                         <p class="panel-value">{{ extra.concept }}</p>
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-2">
                                     <div>
                                         <p class="panel-value">{{ extra.ingresos | currency }}</p>
                                     </div>
@@ -55,39 +80,39 @@
                             </div>
                         </div>
 
-                        <div class="col-6">
+                        <div class="col-2">
                             <b class="panel-label">TIPO PENSION:</b>
                             <div>
                                 <p class="panel-value">{{ datamesSed.tp }}</p>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-2">
                             <b class="panel-label">VALOR INGRESO:</b>
                             <div>
                                 <p class="panel-value">{{ datamesSed.vpension | currency }}</p>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-2">
                             <b class="panel-label">VALOR SALUD:</b>
                             <div>
                                 <p class="panel-value">{{ datamesSed.vsalud | currency }}</p>
                             </div>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-2">
                             <b class="panel-label">VALOR DESCUENTOS:</b>
                             <div>
                                 <p class="panel-value">{{ datamesSed.vdesc | currency }}</p>
                             </div>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-2">
                             <b class="panel-label">VALOR CUPO:</b>
                             <div>
                                 <p class="panel-value">{{ datamesSed.cupo | currency }}</p>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-2">
                             <b class="panel-label">VALOR EMBARGOS:</b>
                             <div>
                                 <p class="panel-value">{{ datamesSed.vembargos | currency }}</p>
@@ -99,44 +124,44 @@
                             SED VALLE
                     ==============================-->
 
-                    <template v-if="datamessedvalle">
-                        <div class="col-12">
+                    <div v-if="datamessedvalle">
+                        <div class="col-4">
                             <div class="row">
-                                <div class="col-6">
+                                <div class="col-2">
                                     <b class="panel-label">VALOR INGRESO:</b>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-2">
                                     <p class="panel-value">{{ valorIngreso | currency }}</p>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-6">
+                                <div class="col-2">
                                     <b class="panel-label">SUELDO BASICO:</b>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-2">
                                     <p class="panel-value" v-if="salarioBasico">{{ salarioBasico | currency }}</p>
                                     <p class="panel-value" v-else>{{ datamessedvalle.vpension | currency }}</p>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-12" v-if="ingresosExtras.length > 0">
+                        <div class="col-4" v-if="ingresosExtras.length > 0">
                             <b class="panel-label">INGRESOS EXTRAS:</b>
                             <div class="row">
-                                <div class="col-6">
-                                    <b class="panel-label table-text">CONCEPTO:</b>
+                                <div class="col-2">
+                                    <b class="panel-label">CONCEPTO:</b>
                                 </div>
-                                <div class="col-6">
-                                    <b class="panel-label table-text">VALOR:</b>
+                                <div class="col-2">
+                                    <b class="panel-label">VALOR:</b>
                                 </div>
                             </div>
                             <div class="row" v-for="extra in ingresosExtras" :key="extra.code">
-                                <div class="col-6">
+                                <div class="col-2">
                                     <div>
                                         <p class="panel-value">{{ extra.concept }}</p>
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-2">
                                     <div>
                                         <p class="panel-value">{{ extra.ingresos | currency }}</p>
                                     </div>
@@ -144,49 +169,49 @@
                             </div>
                         </div>
 
-                        <div class="col-6">
+                        <div class="col-2">
                             <b class="panel-label">FECHA INGRESO:</b>
                             <div>
                                 <p class="panel-value">{{ datamessedvalle.fechingr }}</p>
                             </div>
                         </div>
 
-                        <div class="col-6">
+                        <div class="col-2">
                             <b class="panel-label">AREA DE DESEMPEÑO:</b>
                             <div>
                                 <p class="panel-value">{{ datamessedvalle.esquema }}</p>
                             </div>
                         </div>
 
-                        <div class="col-6">
+                        <div class="col-2">
                             <b class="panel-label">CARGO:</b>
                             <div>
                                 <p class="panel-value">{{ datamessedvalle.cargo }}</p>
                             </div>
                         </div>
 
-                        <div class="col-6">
+                        <div class="col-2">
                             <b class="panel-label">FECHA VINCULACIÓN:</b>
                             <div>
                                 <p class="panel-value">{{ datamessedvalle.fecnombr }}</p>
                             </div>
                         </div>
 
-                        <div class="col-6">
+                        <div class="col-2">
                             <b class="panel-label"> TIPO DE CONTRATO:</b>
                             <div>
                                 <p class="panel-value">{{ datamessedvalle.ncontr }}</p>
                             </div>
                         </div>
 
-                        <div class="col-6">
+                        <div class="col-2">
                             <b class="panel-label">GRADO:</b>
                             <div>
                                 <p class="panel-value">{{ datamessedvalle.grado ? datamessedvalle.grado : '-' }}</p>
                             </div>
                         </div>
 
-                        <div class="col-6">
+                        <div class="col-2">
                             <b class="panel-label">PRINCIPAL :</b>
                             <div>
                                 <p class="panel-value">
@@ -195,7 +220,7 @@
                             </div>
                         </div>
 
-                        <div class="col-6">
+                        <div class="col-2">
                             <b class="panel-label">SEDE:</b>
                             <div>
                                 <p class="panel-value">
@@ -204,68 +229,68 @@
                             </div>
                         </div>
 
-                        <div class="col-6">
+                        <div class="col-2">
                             <b class="panel-label">TIPO VINCULACIÓN:</b>
                             <div>
                                 <p class="panel-value">{{ datamessedvalle.nivcontr }}</p>
                             </div>
                         </div>
 
-                        <div class="col-6">
+                        <div class="col-2">
                             <b class="panel-label">ESTADO LABORAL:</b>
                             <div>
                                 <p class="panel-value">{{ datamessedvalle.estlaboral }}</p>
                             </div>
                         </div>
 
-                        <div class="col-6">
+                        <div class="col-2">
                             <b class="panel-label">CENTRO DE EDUCACIÓN:</b>
                             <div>
                                 <p class="panel-value">{{ datamessedvalle.centrocosto }}</p>
                             </div>
                         </div>
 
-                        <div class="col-6">
+                        <div class="col-2">
                             <b class="panel-label">SEDE EN LA QUE PRESTA EL SERVICIO:</b>
                             <div>
                                 <p class="panel-value">{{ datamessedvalle.sedecoleg }}</p>
                             </div>
                         </div>
 
-                        <div class="col-6">
+                        <div class="col-2">
                             <b class="panel-label">CIUDAD LABORAL:</b>
                             <div>
                                 <p class="panel-value">{{ datamessedvalle.ciudad ? datamessedvalle.ciudad : '-' }}</p>
                             </div>
                         </div>
-                    </template>
+                    </div>
 
                     <!--============================
                         FIDUPREVISORA
                     ==============================-->
                     <template v-if="datamesfidu">
-                        <div class="col-6">
+                        <div class="col-2">
                             <b class="panel-label">VALOR INGRESO:</b>
                             <div>
                                 <p class="panel-value">{{ datamesfidu.vpension | currency }}</p>
                             </div>
                         </div>
 
-                        <div class="col-6">
+                        <div class="col-2">
                             <b class="panel-label">VINCULACION:</b>
                             <div>
                                 <p class="panel-value">{{ datamesfidu.vinc }}</p>
                             </div>
                         </div>
 
-                        <div class="col-6">
+                        <div class="col-2">
                             <b class="panel-label">FECHA DE PAGO PENSION:</b>
                             <div>
                                 <p class="panel-value">{{ datamesfidu.fechpago }}</p>
                             </div>
                         </div>
 
-                        <div class="col-6">
+                        <div class="col-2">
                             <b class="panel-label">VALOR DESCUENTO:</b>
                             <div>
                                 <p class="panel-value">{{ datamesfidu.vdescbruto | currency }}</p>
@@ -275,137 +300,58 @@
 
                     <!-- DATAMES SED -->
                     <template v-if="datamesfidu || datamessedvalle || pagaduriaType === 'FOPEP'"> </template>
-                    <template v-else-if="datamesSed">
-                        <b-row>
-                            <b-col cols="12" class="pa-0">
-                                <b-table
-                                    :items="datamesSedArray"
-                                    :fields="fields"
-                                    class="mt-3"
-                                    responsive
-                                    thead-class="table-header-nowrap"
-                                ></b-table>
-                            </b-col>
-                        </b-row>
-                        
-                        <b-row>
-                            <b-col cols="12" md="6">
-                                <table v-if="arrayCoupons.length > 0" style="width: 100%; border-collapse: collapse">
-                                    <thead
-                                        style="height: 78.5px; font-size: 14px; font-weight: 700; line-height: 18.23px"
-                                    >
-                                        <tr style="background-color: #f2f2f2">
-                                            <th
-                                                style="
-                                                    padding: 10px;
-                                                    padding-left: 25px;
-                                                    text-align: left;
-                                                    background-color: #3a5659;
-                                                    color: white;
-                                                "
-                                            >
-                                                Valor ingreso
-                                            </th>
-                                            <th style="padding: 10px; text-align: left; background-color: #3a5659"></th>
+                    <div v-else-if="datamesSed">
+                              
+                                <div v-if="arrayCoupons.length> 0" style="padding-left: 5px;">
+                                <thead>
+                                       <tr>
+                                            <th style="color: #2c8c73; white-space: nowrap;">Valor ingreso</th>
+                                       </tr> 
+                                </thead>
+                                    <tbody>
+                                        <td style="font-size: 14px;">{{ valorIngreso | currency }}</td>
+                                    </tbody> 
+                                <thead>
+                                        <tr>   
+                                            <th style="color: #2c8c73;">Total</th>
                                         </tr>
-                                    </thead>
-                                    <tbody style="font-size: 14px; font-weight: 400; line-height: 18.23px">
-                                        <tr style="background-color: white">
-                                            <td style="padding: 10px; padding-left: 25px">
-                                                {{ valorIngreso | currency }}
-                                            </td>
-                                            <td style="padding: 10px; text-align: center"></td>
-                                        </tr>
-                                        <tr style="background-color: #f2f2f2">
-                                            <td style="padding: 10px; padding-left: 25px"><b>Total</b></td>
-                                            <td style="padding: 10px; text-align: center">
-                                                <b>{{ valorIngreso | currency }}</b>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </b-col>
-                            <b-col cols="12" md="6" style="width: 100%;">
-                                <b-table
-                                    v-if="salarioBasico.length > 0"
-                                    :items="salarioBasico"
-                                    :fields="fieldsSueldo"
-                                    responsive
-                                    striped
-                                    hover
-                                >
-                                    <template #cell(concept)="data">
-                                        <p class="mb-0">
-                                            {{ data.item.concept }}
-                                        </p>
-                                    </template>
-
-                                    <template #cell(ingresos)="data">
-                                        <p class="mb-0">{{ data.item.ingresos | currency }}</p>
-                                    </template>
-                                </b-table>
-                            </b-col>
-                            <b-col cols="12" style="padding-left: 15px !important;">
-                                <b-table
-                                    v-if="ingresosExtras.length > 0"
-                                    :items="ingresosExtras"
-                                    :fields="fieldsExtras"
-                                    responsive
-                                    striped
-                                    hover
-                                    class="pt-2"
-                                >
-                                    <template #cell(concept)="data">
-                                        <p class="mb-0">
-                                            {{ data.item.concept }}
-                                        </p>
-                                    </template>
-
-                                    <template #cell(ingresos)="data">
-                                        <p class="mb-0">{{ data.item.ingresos | currency }}</p>
-                                    </template>
-                                </b-table>
-                            </b-col>
-                            <b-col cols="12">
-                                <table v-if="arrayCoupons.length > 0" style="width: 100%; border-collapse: collapse">
-                                    <thead
-                                        style="height: 78.5px; font-size: 14px; font-weight: 700; line-height: 18.23px"
-                                    >
-                                        <tr style="background-color: #f2f2f2">
-                                            <th
-                                                style="
-                                                    padding: 10px;
-                                                    padding-left: 25px;
-                                                    text-align: left;
-                                                    background-color: #3a5659;
-                                                    color: white;
-                                                "
-                                            >
-                                                Días laborados
-                                            </th>
-                                            <th style="padding: 10px; text-align: left; background-color: #3a5659"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody
-                                        style="
-                                            font-size: 14px;
-                                            font-weight: 400;
-                                            line-height: 18.23px;
-                                            background-color: white;
-                                        "
-                                    >
-                                        <tr>
-                                            <td style="padding: 10px; padding-left: 25px">Total días</td>
-                                            <td style="padding: 10px; text-align: center">
-                                                {{ arrayCoupons.length > 0 ? arrayCoupons[0].dias_laborados : '--' }}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </b-col>
-                        </b-row>
-                    </template>
-
+                                </thead>
+                                    <tbody>           
+                                        <tr> 
+                                            <td>{{ valorIngreso | currency }}</td>
+                                        </tr> 
+                                    </tbody>       
+                                    
+                                </div>                            
+                                <div v-if="salarioBasico.length > 0">
+                                    <div v-for="(item, index) in salarioBasico":key="index">
+                                        <thead>
+                                                <tr>
+                                                  <th style="padding-left: 3px;">{{ item.concept }}</th>
+                                                </tr>        
+                                        </thead>
+                                        <tbody> 
+                                                    <td>{{ item.ingresos | currency }}</td>
+                                        </tbody>
+                                    </div>
+                                </div>
+                                    <div v-if="ingresosExtras.length > 0" style="width: 100%;">
+                                            <div v-for="(item, index) in ingresosExtras":key="index">
+                                                <thead><tr><th>{{ item.concept }}</th></tr></thead>
+                                                <tbody><td>{{ item.ingresos | currency }}</td></tbody>
+                                            </div>
+                                    </div>
+                                <div v-if="arrayCoupons.length > 0" style="width: 100%;">
+                                
+                                        <thead> <tr><th>Días laborados</th></tr></thead>
+                            <tbody><td>
+                                Total días
+                                <b style= "padding-left: 10px; text-align: right;">{{ arrayCoupons.length > 0 ? arrayCoupons[0].dias_laborados : '--' }}</b>
+                                    </td>
+                            </tbody>
+                                  
+                                </div>
+                        </div>
                     <div
                         class="col-6"
                         v-if="
@@ -461,9 +407,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-</template>
+                </div>
+          </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex';
@@ -473,15 +418,15 @@ export default {
     props: ['fechavinc', 'datamessedvalle', 'datamesfidu', 'datamessemcali', 'user'],
     data() {
         return {
-            fieldsSueldo: [
+            Sueldo: [
                 { key: 'concept', label: 'Sueldo básico' },
                 { key: 'ingresos', label: 'Valor' }
             ],
-            fieldsExtras: [
+            Extras: [
                 { key: 'concept', label: 'Ingresos extras' },
                 { key: 'ingresos', label: 'Valor' }
             ],
-            fieldsIngreso: [
+            Ingreso: [
                 { key: 'label', label: 'Valor ingreso' },
                 { key: 'value', label: 'Valor' }
             ],
@@ -571,38 +516,29 @@ export default {
     }
 };
 </script>
-<style lang="scss" scoped>
-::v-deep .table-responsive {
-    margin-left: -3px;
+<style scoped>
+th {
+    color:#2c8c73;
+    font-size: 14px;
 }
-::v-deep .table {
-    & thead {
-        background-color: #3a5659;
-        white-space: nowrap;
-        color: white;
-        font-size: 14px;
-        font-weight: 700;
-        line-height: 18.23px;
-        & tr th {
-            padding: 12px 40px;
-            text-align: center;
-            min-height: 50px !important;
-            & div {
-                min-height: 50px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-        }
-    }
-    & tbody {
-        background-color: #fff;
-        font-size: 14px;
-        font-weight: 400;
-        line-height: 18.23px;
-        & td {
-            text-align: center;
-        }
-    }
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    list-style-type: none;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+p {
+    margin: 0;
+    font-size: 14px;
+}
+
+b {
+    color: #2c8c73;
+    font-size: 14px;
 }
 </style>
