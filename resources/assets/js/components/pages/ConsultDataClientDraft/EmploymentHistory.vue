@@ -1,28 +1,28 @@
 <template>
     <div class="col-4">
         <div class="panel panel-primary mb-3">
-     <h3 class="heading-title" style="border: 5px solid; background-color: #2c8c73; color: white; padding-top: 6px; padding-bottom: 4px; padding-left: 5px;">Historial laboral</h3>
+     <h5 class="heading-title" style="border: 10px; padding-left: 8px; padding-bottom: 4px; background-color: #2c8c73; color: white;">Historial laboral</h5>
             
-            <div v-if="datamesSedArray.length > 0" class="general-info">
-                <ul style="list-style-type: none;">
-                    <li v-for="(item, index) in datamesSedArray" :key="index" style="border-bottom: 1px solid #ccc; padding: 10px;">
+            <div v-if="datamesSedArray.length > 0" class="general-info"><br>
+                <ul style="list-style-type: none; padding: 0; margin: 0;">
+                    <li v-for="(item, index) in datamesSedArray" :key="index">
                         <p>
-                            <b>Fecha ingreso:</b><br><span>{{ item.fecha_ingreso || '--' }}</span>
+                            <b style="color:#2c8c73">Fecha ingreso:</b><br><span>{{ item.fecha_ingreso || '--' }}</span>
                         </p>
                         <p>
-                            <b>Fecha vinculación:</b><br><span>{{ item.fnombramiento || '--' }}</span>
+                            <b style="color:#2c8c73">Fecha vinculación:</b><br><span>{{ item.fnombramiento || '--' }}</span>
                         </p>
                         <p>
-                            <b>Cargo:</b><br><span>{{ item.cargo || '--' }}</span>
+                            <b style="color:#2c8c73">Cargo:</b><br><span>{{ item.cargo || '--' }}</span>
                         </p>
                         <p>
-                            <b>Grado:</b><br><span>{{ item.grado || '--' }}</span>
+                            <b style="color:#2c8c73">Grado:</b><br><span>{{ item.grado || '--' }}</span>
                         </p>
                         <p>
-                            <b>Principal:</b><br><span>{{ item.depen || '--' }}</span>
+                            <b style="color:#2c8c73">Principal:</b><br><span>{{ item.depen || '--' }}</span>
                         </p>
                         <p>
-                            <b>Ciudad laboral:</b><br><span>{{ item.ciudad || '--' }}</span>
+                            <b style="color:#2c8c73">Ciudad laboral:</b><br><span>{{ item.ciudad || '--' }}</span>
                         </p>
                     </li>
                 </ul>
@@ -302,7 +302,7 @@
                     <template v-if="datamesfidu || datamessedvalle || pagaduriaType === 'FOPEP'"> </template>
                     <div v-else-if="datamesSed">
                               
-                                <div v-if="arrayCoupons.length> 0" style="padding-left: 5px;">
+                                <div v-if="arrayCoupons.length> 0">
                                 <thead>
                                        <tr>
                                             <th style="color: #2c8c73; white-space: nowrap;">Valor ingreso</th>
@@ -327,7 +327,7 @@
                                     <div v-for="(item, index) in salarioBasico":key="index">
                                         <thead>
                                                 <tr>
-                                                  <th style="padding-left: 3px;">{{ item.concept }}</th>
+                                                  <th>{{ item.concept }}</th>
                                                 </tr>        
                                         </thead>
                                         <tbody> 
@@ -346,7 +346,7 @@
                                         <thead> <tr><th>Días laborados</th></tr></thead>
                             <tbody><td>
                                 Total días
-                                <b style= "padding-left: 10px; text-align: right;">{{ arrayCoupons.length > 0 ? arrayCoupons[0].dias_laborados : '--' }}</b>
+                                <b style="font-weight: normal; color: inherit; padding-left: 10px; text-align: right;">{{ arrayCoupons.length > 0 ? arrayCoupons[0].dias_laborados : '--' }}</b>
                                     </td>
                             </tbody>
                                   
@@ -525,20 +525,17 @@ ul {
     margin: 0;
     padding: 0;
 }
-
 li {
     list-style-type: none;
     margin-bottom: 10px;
-    border-bottom: 1px solid #ccc;
+    padding: 0;
+    border-bottom: none;
 }
-
 p {
     margin: 0;
     font-size: 14px;
 }
-
 b {
-    color: #2c8c73;
     font-size: 14px;
 }
 </style>
