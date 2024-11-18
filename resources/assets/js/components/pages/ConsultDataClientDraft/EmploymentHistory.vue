@@ -1,7 +1,7 @@
 <template>
     <div class="col-4">
         <div class="panel panel-primary mb-3">
-     <h5 class="heading-title" style="border: 10px; padding-left: 8px; padding-bottom: 4px; background-color: #2c8c73; color: white;">Historial laboral</h5>
+     <h5 class="heading-title" style="border: 10px; padding-left: 8px; padding-bottom: 4px; background-color: #3a5659; color: white;">Historial laboral</h5>
             
             <div v-if="datamesSedArray.length > 0" class="general-info"><br>
                 <ul style="list-style-type: none; padding: 0; margin: 0;">
