@@ -4,7 +4,7 @@
             <h3 class="heading-title" style="border: 3px #3a5659 solid; background-color: #3a5659; color: white; padding-left: 3px;">Información laboral</h3>
                         <br><thead>
                             <tr>
-                                <th style="color:#2c8c73">Fecha ingreso</th>
+                                <th style="color:#3a5659">Fecha ingreso</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -14,7 +14,7 @@
                         </tbody>
                         <thead>
                             <tr>
-                                <th style="color:#2c8c73">Fecha ingreso nómina</th>
+                                <th style="color:#3a5659">Fecha ingreso nómina</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -24,7 +24,7 @@
                         </tbody>
                         <thead>
                             <tr>
-                                <th style="color:#2c8c73">Fecha de inicio</th>
+                                <th style="color:#3a5659">Fecha de inicio</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -34,7 +34,7 @@
                         </tbody>
                         <thead>
                             <tr>
-                                <th style="color:#2c8c73">Antiguedad laboral</th>
+                                <th style="color:#3a5659">Antiguedad laboral</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -44,7 +44,7 @@
                         </tbody>
                         <thead>
                             <tr>
-                                <th style="color:#2c8c73">Cargo</th>
+                                <th style="color:#3a5659">Cargo</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -54,7 +54,7 @@
                         </tbody>
                         <thead>
                             <tr>
-                                <th style="color:#2c8c73">Tipo de contrato</th>
+                                <th style="color:#3a5659">Tipo de contrato</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -64,7 +64,7 @@
                         </tbody>
                         <thead>
                             <tr>
-                                <th style="color: #2c8c73">Situación laboral</th>
+                                <th style="color:#3a5659">Situación laboral</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -74,7 +74,7 @@
                         </tbody>
                         <thead>
                             <tr>
-                                <th style="color: #2c8c73">Área de desempeño</th>
+                                <th style="color:#3a5659">Área de desempeño</th>
                             </tr>
                         </thead>
                         <tbody>
