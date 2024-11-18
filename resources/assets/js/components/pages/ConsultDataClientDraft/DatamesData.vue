@@ -4,7 +4,7 @@
             <h3 class="heading-title" style="border: 3px #3a5659 solid; background-color: #3a5659; color: white; padding-left: 3px;">Información personal</h3>
                         <br><thead>
                             <tr>
-                                <th style="color: #2c8c73;">Nombre y apellido</th>
+                                <th style="color: #3a5659;">Nombre y apellido</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -14,7 +14,7 @@
                         </tbody>
                         <thead>
                             <tr>
-                                <th style="color: #2c8c73;">Tipo de documento</th>
+                                <th style="color: #3a5659;">Tipo de documento</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -24,7 +24,7 @@
                         </tbody>
                         <thead>
                             <tr>
-                                <th style="color: #2c8c73;">Número de documento</th>
+                                <th style="color: #3a5659;">Número de documento</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -34,7 +34,7 @@
                         </tbody>
                         <thead>
                             <tr>
-                                <th style="color: #2c8c73;">Fecha de nacimiento</th>
+                                <th style="color: #3a5659;">Fecha de nacimiento</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -44,7 +44,7 @@
                         </tbody>
                         <thead>
                             <tr>
-                                <th style="color: #2c8c73;">Edad</th>
+                                <th style="color: #3a5659;">Edad</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -54,7 +54,7 @@
                         </tbody>
                         <thead>
                             <tr>
-                                <th style="color: #2c8c73;">Teléfono / celular</th>
+                                <th style="color: #3a5659;">Teléfono / celular</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -64,7 +64,7 @@
                         </tbody>
                         <thead>
                             <tr>
-                                <th style="color: #2c8c73;">Dirección</th>
+                                <th style="color: #3a5659;">Dirección</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -74,7 +74,7 @@
                         </tbody>
                         <thead>
                             <tr>
-                                <th style="color: #2c8c73;">Ciudad / municipio</th>
+                                <th style="color: #3a5659;">Ciudad / municipio</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -86,7 +86,7 @@
                
                         <thead>
                             <tr>
-                                <th style="color: #2c8c73;">Email</th>
+                                <th style="color: #3a5659;">Email</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -97,7 +97,7 @@
                         </tbody>
                         <thead>
                             <tr>
-                                <th style="color: #2c8c73;">Pagaduría</th>
+                                <th style="color: #3a5659;">Pagaduría</th>
                                 <th></th>
                             </tr>
                         </thead>
