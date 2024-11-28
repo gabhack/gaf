@@ -1,13 +1,10 @@
 <template>
-    <div class="col-6" v-if="datamesSed">
+    <div class="col-4" v-if="datamesSed">
         <div class="panel panel-primary mb-3">
-            <h3 class="heading-title">Información personal</h3>
-            <b-row class="mt-3">
-                <b-col cols="12" sm="6" class="pb-4">
-                    <table>
-                        <thead>
+            <h3 class="heading-title" style="border: 3px #3a5659 solid; background-color: #3a5659; color: white; padding-left: 3px;">Información personal</h3>
+                        <br><thead>
                             <tr>
-                                <th>Nombre y apellido</th>
+                                <th style="color: #3a5659;">Nombre y apellido</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -15,13 +12,9 @@
                                 <td>{{ datamesSed.nombre_usuario || '--' }}</td>
                             </tr>
                         </tbody>
-                    </table>
-                </b-col>
-                <b-col cols="12" sm="6" class="pb-4">
-                    <table>
                         <thead>
                             <tr>
-                                <th>Tipo de documento</th>
+                                <th style="color: #3a5659;">Tipo de documento</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -29,13 +22,9 @@
                                 <td>{{ datamesSed.documentType || '--' }}</td>
                             </tr>
                         </tbody>
-                    </table>
-                </b-col>
-                <b-col cols="12" sm="6" class="pb-4">
-                    <table>
                         <thead>
                             <tr>
-                                <th>Número de documento</th>
+                                <th style="color: #3a5659;">Número de documento</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -43,13 +32,9 @@
                                 <td>{{ datamesSed.doc || '--' }}</td>
                             </tr>
                         </tbody>
-                    </table>
-                </b-col>
-                <b-col cols="12" sm="6" class="pb-4">
-                    <table>
                         <thead>
                             <tr>
-                                <th>Fecha de nacimiento</th>
+                                <th style="color: #3a5659;">Fecha de nacimiento</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -57,13 +42,9 @@
                                 <td>{{ datamesSed.fecha_nacimiento || '--' }}</td>
                             </tr>
                         </tbody>
-                    </table>
-                </b-col>
-                <b-col cols="12" sm="6" class="pb-4">
-                    <table>
                         <thead>
                             <tr>
-                                <th>Edad</th>
+                                <th style="color: #3a5659;">Edad</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -71,13 +52,9 @@
                                 <td>{{ edad || '--' }}</td>
                             </tr>
                         </tbody>
-                    </table>
-                </b-col>
-                <b-col cols="12" sm="6" class="pb-4">
-                    <table>
                         <thead>
                             <tr>
-                                <th>Teléfono / celular</th>
+                                <th style="color: #3a5659;">Teléfono / celular</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -85,13 +62,9 @@
                                 <td>{{ datamesSed.telefono || '--' }}</td>
                             </tr>
                         </tbody>
-                    </table>
-                </b-col>
-                <b-col cols="12" sm="6" class="pb-4">
-                    <table>
                         <thead>
                             <tr>
-                                <th>Dirección</th>
+                                <th style="color: #3a5659;">Dirección</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -99,13 +72,9 @@
                                 <td>{{ datamesSed.direccion_residencial || '--' }}</td>
                             </tr>
                         </tbody>
-                    </table>
-                </b-col>
-                <b-col cols="12" sm="6" class="pb-4">
-                    <table>
                         <thead>
                             <tr>
-                                <th>Ciudad / municipio</th>
+                                <th style="color: #3a5659;">Ciudad / municipio</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -114,13 +83,10 @@
                                 <td>{{ datamesSed.ciudad || '--' }}</td>
                             </tr>
                         </tbody>
-                    </table>
-                </b-col>
-                <b-col cols="12" sm="6">
-                    <table>
+               
                         <thead>
                             <tr>
-                                <th>Email</th>
+                                <th style="color: #3a5659;">Email</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -129,13 +95,9 @@
                                 <td>{{ datamesSed.correo_electronico || '--' }}</td>
                             </tr>
                         </tbody>
-                    </table>
-                </b-col>
-                <b-col cols="12" sm="6">
-                    <table>
                         <thead>
                             <tr>
-                                <th>Pagaduria</th>
+                                <th style="color: #3a5659;">Pagaduría</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -144,9 +106,6 @@
                                 <td>{{ datamesSed.pagaduria || '--' }}</td>
                             </tr>
                         </tbody>
-                    </table>
-                </b-col>
-            </b-row>
         </div>
     </div>
 </template>
@@ -182,3 +141,8 @@ export default {
     }
 };
 </script>
+<style scoped>
+th{
+    font-size: 14px;
+}
+</style>

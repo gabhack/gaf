@@ -31,6 +31,7 @@
                 <!--============================
                 DATAMES FOPEP -
                 ==============================-->
+                <div class="info-container">
                 <DatamesComponent
                     v-if="pagaduriaType == 'FOPEP' && datamesFopep"
                     :user="user"
@@ -172,7 +173,7 @@
                         pagaduriaType == 'SEDGUAVIARE' ||
                         pagaduriaType == 'SEDNARINO'
                     "
-                />
+                /></div>
 
                 <!-- <DatamesSedChoco v-if="pagaduriaType == 'SEDCHOCO'" /> -->
                 <!-- <DatamesSedMagdalena v-if="pagaduriaType == 'SEDMAGDALENA'" /> -->
@@ -181,20 +182,21 @@
                 <!--============================
                 COMPONENTE HISTORIAL LABORAL
                 ==============================-->
-                <template v-if="fechavinc">
+                <template v-if="fechavinc"><div class="info-container">
                     <EmploymentHistory2
                         class="col-12"
                         :fechavinc="fechavinc"
                         :datamesFidu="datamesFidu"
                         :user="user"
-                    />
+                    /></div>
+                    <div class="info-container">
                     <EmploymentHistory
                         class="col-12"
                         :fechavinc="fechavinc"
                         :datamesFidu="datamesFidu"
                         :datamessemcali="datamessemcali"
                         :user="user"
-                    />
+                    /></div>
                     <Detallecliente :totales="totales" />
                 </template>
                 
@@ -823,6 +825,24 @@ export default {
 };
 </script>
 <style>
+.info-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px; /* Espaciado entre los bloques */
+    margin-top: 20px;
+}
+
+.info-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: #fff;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 30%; /* Ajustar el ancho para un diseño responsivo */
+}
 .table-text {
     font-size: 12px;
 }
