@@ -961,18 +961,23 @@ private function parseConcatenatedString($concatenatedString)
                                 ->values()
                 ->toArray();
     
-            // Procesar descuentos
-            $descuentos = collect(explode(', ', $resultData->descuentos_concatenados))
-                ->filter(fn($descuento) => !str_contains($descuento, 'ALERTA'))
-                ->map(function ($descuento) {
-                    $parts = explode(': ', $descuento);
-                    if (count($parts) === 2) {
-                        [$mliquid, $valor] = $parts;
-                        return ['mliquid' => trim($mliquid), 'valor' => (float)$valor];
-                    }
-                    return null;
-                })
-                ->filter(fn($descuento) => $descuento && $descuento['valor'] > 0);
+       // Procesar descuentos
+$descuentos = collect(explode(', ', $resultData->descuentos_concatenados))
+->filter(function ($descuento) {
+    return !str_contains($descuento, 'ALERTA');
+})
+->map(function ($descuento) {
+    $parts = explode(': ', $descuento);
+    if (count($parts) === 2) {
+        [$mliquid, $valor] = $parts;
+        return ['mliquid' => trim($mliquid), 'valor' => (float)$valor];
+    }
+    return null;
+})
+->filter(function ($descuento) {
+    return $descuento && $descuento['valor'] > 0;
+});
+
     
             // Cálculos financieros
             $salarioMinimo = 1300000;
