@@ -955,8 +955,10 @@ private function parseConcatenatedString($concatenatedString)
                     }
                     return null;
                 })
-                ->filter(fn($cupon) => $cupon && $cupon['egresos'] > 0)
-                ->values()
+                ->filter(function ($cupon) {
+                    return $cupon && $cupon['egresos'] > 0;
+                })
+                                ->values()
                 ->toArray();
     
             // Procesar descuentos
