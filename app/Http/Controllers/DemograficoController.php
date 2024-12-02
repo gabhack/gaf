@@ -817,7 +817,9 @@ private function parseConcatenatedString($concatenatedString)
 
     return $results;
 }
-    public function calculoLibreInversionCompraCartera(Request $request){
+
+
+    /*public function calculoLibreInversionCompraCartera(Request $request){
         //Variable $minimo es temporal, pendiente saber de donde se puede obtener de forma dinamica
         $minimo = 1300000;
         $solidaridad = 0.01;
@@ -883,7 +885,7 @@ private function parseConcatenatedString($concatenatedString)
         });
 
 
-    }
+    }*/
     
 
     //PARA VISADO
