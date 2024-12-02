@@ -31,7 +31,7 @@
                 <!--============================
                 DATAMES FOPEP -
                 ==============================-->
-                <div class="info-container">
+                <div class="info-container col-4">
                 <DatamesComponent
                     v-if="pagaduriaType == 'FOPEP' && datamesFopep"
                     :user="user"
@@ -182,14 +182,15 @@
                 <!--============================
                 COMPONENTE HISTORIAL LABORAL
                 ==============================-->
-                <template v-if="fechavinc"><div class="info-container">
+                <template v-if="fechavinc">
+                    <div class="info-container col-4">
                     <EmploymentHistory2
                         class="col-12"
                         :fechavinc="fechavinc"
                         :datamesFidu="datamesFidu"
                         :user="user"
                     /></div>
-                    <div class="info-container">
+                    <div class="info-container col-4">
                     <EmploymentHistory
                         class="col-12"
                         :fechavinc="fechavinc"
@@ -197,7 +198,7 @@
                         :datamessemcali="datamessemcali"
                         :user="user"
                     /></div>
-                    <Detallecliente :totales="totales" />
+                    <Detallecliente class="detallecliente-top-margin" :totales="totalesData" />
                 </template>
                 
                 <template v-if="showOthers">
@@ -452,6 +453,14 @@ export default {
         };
     },
     watch: {
+        couponsIngresos: {
+       handler() {
+           this.calcularTotales();
+       },
+       deep: true,
+       immediate: true
+   },
+
         ingresosExtras(val) {
             let totalIncapacidad = 0;
 
@@ -481,7 +490,13 @@ export default {
                 this.alertIncapacidad(data);
             }
         }
-    },
+    }, 
+    mounted() {
+   if (this.couponsIngresos) {
+       this.calcularTotales();
+   }
+},
+
     computed: {
         ...mapState('pagaduriasModule', ['coupons', 'couponsType', 'pagaduriaType', 'pagaduriaLabel']),
         ...mapGetters('pagaduriasModule', [
@@ -821,6 +836,69 @@ export default {
                     console.log(error);
                 });
         },
+        async calcularTotales() {
+   console.log("Entrando a calcularTotales");
+   const firstItem = this.couponsIngresos?.items?.[0];
+   if (!firstItem) {
+       console.error('No se encontró ningún elemento en couponsIngresos.items');
+       return;
+   }
+
+
+   const { finperiodo, doc } = firstItem;
+   if (!finperiodo || isNaN(new Date(finperiodo).getTime())) {
+       console.error('El campo finperiodo no es válido:', finperiodo);
+       return;
+   }
+
+
+   const finPeriodDate = new Date(finperiodo);
+   const mes = finPeriodDate.getMonth() + 1;
+   const año = finPeriodDate.getFullYear();
+
+
+   try {
+       this.isLoading = true;
+       const response = await fetch(`/demografico/calcular-cupo/${doc}/${mes}/${año}`);
+       if (!response.ok) {
+           throw new Error(`Error al obtener datos: ${response.status}`);
+       }
+
+
+       const data = await response.json();
+
+
+       console.log("Respuesta del servidor:", data);
+
+
+       // Asegúrate de que data es un array y accede al primer elemento
+       const result = data;
+
+
+       if (!result) {
+           console.error("El array de respuesta está vacío");
+           return;
+       }
+
+
+       this.totalesData = {
+           libreInversion: result.cupo_libre || 0,
+           libreInversionSuma: result.libreInversionSuma || 0,
+           compraCartera: result.compra_cartera || 0,
+           cuotaMaxima: result.cuotaMaxima || 0,
+       };
+
+
+       console.log("Totales actualizados y reflejados en el DOM:", this.totalesData);
+
+
+   } catch (error) {
+       console.error('Error en calcularTotales:', error);
+   } finally {
+       this.isLoading = false;
+   }
+}
+
     }
 };
 </script>
@@ -857,5 +935,9 @@ export default {
     background-color: #70777f;   
     border: none;           
     margin: 20px 12px;        
+}
+
+.detallecliente-top-margin {
+    margin-top: 20px;
 }
 </style>

@@ -888,95 +888,147 @@ private function parseConcatenatedString($concatenatedString)
 
     //PARA VISADO
 
+
+  
+
     public function calcularCupoPorCedula($cedula, $mes, $año)
-{
-    Log::info('Inicio del cálculo para una sola cédula', ['cedula' => $cedula]);
-
-    try {
-        $startDate = Carbon::createFromFormat('Y-m', $año . '-' . $mes)->startOfMonth()->toDateString();
-        $endDate = Carbon::createFromFormat('Y-m', $año . '-' . $mes)->endOfMonth()->toDateString();
-        
-        $record = DatamesGen::where('doc', $cedula)->orderBy('created_at', 'desc')->first();
-        $colpensiones = Colpensiones::where('documento', $cedula)->exists();
-        $fiducidiaria = Fiducidiaria::where('documento', $cedula)->exists();
-
-        $coupons = CouponsGen::where('doc', $cedula)
-            ->whereBetween('inicioperiodo', [$startDate, $endDate])
-            ->get();
-
-        $embargos = EmbargosGen::where('doc', $cedula)
-            ->whereBetween('nomina', [$startDate, $endDate])
-            ->get();
-
-        $descuentos = DescuentosGen::where('doc', $cedula)
-            ->whereBetween('nomina', [$startDate, $endDate])
-            ->get();
-
-        $salarioMinimo = 1300000;
-        $valorIngreso = $coupons->sum('ingresos'); // Suma de ingresos de cupones
-        $egresos = $coupons->whereNotIn('code', ['APFPM', 'APEPEN', 'APESDN'])->sum('egresos'); // Excluye ciertos códigos de egresos
-
-        // Ajustes por cargo
-        $increase = 0;
-        $cargo = strtolower($record->cargo ?? ''); 
-        if (strpos($cargo, 'rector') !== false) {
-            $increase = $valorIngreso * 0.3;
-        } elseif (strpos($cargo, 'coordinador') !== false) {
-            $increase = $valorIngreso * 0.2;
-        } elseif (strpos($cargo, 'director') !== false) {
-            $increase = $valorIngreso * 0.35;
-        }
-        $valorIngreso += $increase;
-
-        // Aplicar descuentos según pagaduría
-        $descuento = 0.08;
-        if (in_array($record->pagaduria, ['FOPEP', 'FIDUPREVISORA'])) {
-            if ($valorIngreso == $salarioMinimo) {
-                $descuento = 0.04;
-            } elseif ($valorIngreso > $salarioMinimo && $valorIngreso < $salarioMinimo * 2) {
-                $descuento = 0.08;
-            } elseif ($valorIngreso >= $salarioMinimo * 2) {
-                $descuento = 0.12;
+    {
+        Log::info("Inicio del cálculo para una sola cédula", ['cedula' => $cedula, 'mes' => $mes, 'año' => $año]);
+    
+        try {
+            $mes = (int)$mes;
+            $año = (int)$año;
+    
+            // Obtener datos relevantes para la cédula
+            $resultData = DB::connection('pgsql')
+                ->table('fast_aggregate_data')
+                ->where('doc', $cedula)
+                ->whereRaw("extract(month from CAST(inicioperiodo AS date)) = ?", [$mes])
+                ->whereRaw("extract(year from CAST(inicioperiodo AS date)) = ?", [$año])
+                ->first();
+    
+            if (!$resultData) {
+                Log::info("No se encontró información para la cédula", ['cedula' => $cedula]);
+                return null;
             }
+    
+            // Verificar presencia en Colpensiones, Fiducidiaria y Fopep
+            $existsInColpensiones = Colpensiones::on('pgsql')->where('documento', $cedula)->exists();
+            $existsInFiducidiaria = Fiducidiaria::on('pgsql')->where('documento', $cedula)->exists();
+            $existsInFopep = DatamesFopep::on('pgsql')->where('doc', $cedula)->exists();
+    
+            // Formatear fecha de nacimiento
+            $fechaNacimiento = $resultData->fecha_nacimiento ?? null;
+            if ($fechaNacimiento) {
+                if (is_numeric($fechaNacimiento)) {
+                    $fechaNacimiento = Carbon::createFromTimestamp($fechaNacimiento)->format('Y-m-d');
+                } elseif (preg_match('/\d{2}\/\d{2}\/\d{4}/', $fechaNacimiento)) {
+                    $fechaNacimiento = Carbon::createFromFormat('d/m/Y', $fechaNacimiento)->format('Y-m-d');
+                } else {
+                    $fechaNacimiento = Carbon::parse($fechaNacimiento)->format('Y-m-d');
+                }
+            }
+    
+            // Procesar embargos
+            $embargos = collect();
+            if ($resultData->embargos_concatenados) {
+                preg_match_all('/(\d+): ([^,]+), ([\d\/-]+), ([\d,]+)/', $resultData->embargos_concatenados, $matches, PREG_SET_ORDER);
+                foreach ($matches as $match) {
+                    $embargos->push([
+                        'docdeman' => trim($match[1]),
+                        'entidaddeman' => trim($match[2]),
+                        'fembini' => trim($match[3]),
+                        'valor' => (float)str_replace(',', '', $match[4]),
+                    ]);
+                }
+            }
+    
+            // Procesar cupones
+            $cupones = collect(explode(', ', $resultData->cupones_concatenados))
+                ->map(function ($cupon) {
+                    $parts = explode(': ', $cupon);
+                    if (count($parts) === 2) {
+                        [$concept, $egresos] = $parts;
+                        return ['concept' => trim($concept), 'egresos' => (float)str_replace(',', '', $egresos)];
+                    }
+                    return null;
+                })
+                ->filter(fn($cupon) => $cupon && $cupon['egresos'] > 0)
+                ->values()
+                ->toArray();
+    
+            // Procesar descuentos
+            $descuentos = collect(explode(', ', $resultData->descuentos_concatenados))
+                ->filter(fn($descuento) => !str_contains($descuento, 'ALERTA'))
+                ->map(function ($descuento) {
+                    $parts = explode(': ', $descuento);
+                    if (count($parts) === 2) {
+                        [$mliquid, $valor] = $parts;
+                        return ['mliquid' => trim($mliquid), 'valor' => (float)$valor];
+                    }
+                    return null;
+                })
+                ->filter(fn($descuento) => $descuento && $descuento['valor'] > 0);
+    
+            // Cálculos financieros
+            $salarioMinimo = 1300000;
+            $valorIngreso = $resultData->ingresos_ajustados;
+            $totalEgresos = $resultData->total_egresos;
+            $descuento = 0.08;
+    
+            if (in_array($resultData->pagaduria, ['FOPEP', 'FIDUPREVISORA'])) {
+                if ($valorIngreso == $salarioMinimo) {
+                    $descuento = 0.04;
+                } elseif ($valorIngreso > $salarioMinimo && $valorIngreso < $salarioMinimo * 2) {
+                    $descuento = 0.08;
+                } elseif ($valorIngreso >= $salarioMinimo * 2) {
+                    $descuento = 0.12;
+                }
+            }
+            if ($valorIngreso > 5200000) {
+                $descuento += 0.01;
+            }
+    
+            $valorIngresoConDescuento = $valorIngreso - ($valorIngreso * $descuento);
+    
+            $compraCartera = ($valorIngresoConDescuento < $salarioMinimo * 2)
+                ? $valorIngresoConDescuento - $salarioMinimo
+                : ($valorIngresoConDescuento / 2);
+    
+            $libreInversion = $compraCartera - $totalEgresos;
+    
+            // Resultado final
+            $resultado = [
+                'doc' => $cedula,
+                'nombre_usuario' => $resultData->nombre_usuario,
+                'tipo_contrato' => $resultData->tipo_contrato,
+                'edad' => $resultData->edad,
+                'fecha_nacimiento' => $fechaNacimiento,
+                'pagaduria' => $resultData->pagaduria,
+                'cargo' => $resultData->cargos,
+                'situacion_laboral' => $resultData->situacion_laboral,
+                'compra_cartera' => $compraCartera,
+                'cupo_libre' => $libreInversion,
+                'cupones' => $cupones,
+                'embargos' => $embargos->values()->toArray(),
+                'descuentos' => $descuentos->values()->toArray(),
+                'colpensiones' => $existsInColpensiones,
+                'fiducidiaria' => $existsInFiducidiaria,
+                'fopep' => $existsInFopep,
+            ];
+    
+            Log::info("Resultado del cálculo para cédula", ['resultado' => $resultado]);
+    
+            return $resultado;
+        } catch (\Exception $e) {
+            Log::error("Error en calcularCupoPorCedula: " . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+            ]);
+            return null;
         }
-
-        // Cálculo de compraCartera y libreInversion
-        $valorIngresoConDescuento = $valorIngreso - ($valorIngreso * $descuento);
-        $compraCartera = ($valorIngresoConDescuento < $salarioMinimo * 2)
-            ? $valorIngresoConDescuento - $salarioMinimo
-            : ($valorIngresoConDescuento / 2);
-
-        $libreInversion = $compraCartera - $egresos;
-
-        Log::info('Fin del cálculo para una sola cédula', [
-            'cedula' => $cedula,
-            'compraCartera' => $compraCartera,
-            'libreInversion' => $libreInversion,
-            'colpensiones' => $colpensiones,
-            'fiducidiaria' => $fiducidiaria
-        ]);
-
-        return [
-            'doc' => $cedula,
-            'nombre_usuario' => $record->nombre_usuario ?? null,
-            'tipo_contrato' => $record->tipo_contrato ?? null,
-            'edad' => $record->edad ?? null,
-            'fecha_nacimiento' => $record->fecha_nacimiento ?? null,
-            'pagaduria' => $record->pagaduria ?? null,
-            'cargo' => $cargo,
-            'compra_cartera' => $compraCartera,
-            'cupo_libre' => $libreInversion,
-            'colpensiones' => $colpensiones,
-            'fiducidiaria' => $fiducidiaria,
-            'cupones' => $coupons,
-            'embargos' => $embargos,
-            'descuentos' => $descuentos,
-        ];
-    } catch (\Exception $e) {
-        Log::error('Error en el cálculo para una sola cédula: ' . $e->getMessage());
-        return response()->json(['error' => 'Error en el cálculo para una sola cédula'], 500);
     }
-}
+    
+
 
 
 
