@@ -58,14 +58,14 @@ export default {
                     isActive: false,
                     Obligaciones: 'Obligaciones vigentes en mora',
                     Cantidad_obligaciones: 0,
-                    Cupo_aproximado: 'Compra Cartera',
+                    Cupo_aproximado: 'Cuota Máxima',
                     Valor: '$0'
                 },
                 {
                     isActive: false,
                     Obligaciones: 'Embargos',
                     Cantidad_obligaciones: 0,
-                    Cupo_aproximado: 'Cuota Máxima',
+                    Cupo_aproximado: 'Compra Cartera',
                     Valor: '$0'
                 }
             ]
