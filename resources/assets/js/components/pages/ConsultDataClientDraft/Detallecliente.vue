@@ -91,6 +91,9 @@ export default {
         'totales.libreInversion'() {
             this.updateValor();
         },
+        'totales.compraCartera'() {
+            this.updateValor();
+        },
         conteoEgresosPlus() {
             this.updateValor();
         }
@@ -100,7 +103,8 @@ export default {
         updateValor() {
             const libreInversion = this.totales?.libreInversion || 0;
 
-            // Asignar libreInversion directamente a compraCartera
+            // Asegurar que tanto cuotaMáxima como compraCartera tengan el valor de libreInversion
+            const cuotaMaxima = libreInversion;
             const compraCartera = libreInversion;
 
             let egresosplus = 0;
@@ -109,12 +113,15 @@ export default {
             } else {
                 egresosplus = this.totales.libreInversionSuma;
             }
-            this.items[0].Valor = this.formatCurrency(libreInversion);
-            this.items[1].Valor = this.formatCurrency(compraCartera);
-            this.items[2].Valor = this.formatCurrency(egresosplus);
 
-            // Asegurarse de sincronizar el valor de compraCartera
-            this.$emit('update-compra-cartera', compraCartera);
+            this.items[0].Valor = this.formatCurrency(libreInversion);
+            this.items[1].Valor = this.formatCurrency(cuotaMaxima);
+            this.items[2].Valor = this.formatCurrency(compraCartera);
+
+            // Actualizar los valores en el estado global si es necesario
+            if (!this.totales.compraCartera) {
+                this.$emit('update-compra-cartera', libreInversion);
+            }
         },
         formatCurrency(value) {
             return `$${new Intl.NumberFormat('es-ES', {
@@ -127,9 +134,6 @@ export default {
                 .replace('COP', '')
                 .trim()}`;
         }
-    },
-    mounted() {
-        this.updateValor();
     }
 };
 </script>
