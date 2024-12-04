@@ -58,14 +58,14 @@ export default {
                     isActive: false,
                     Obligaciones: 'Obligaciones vigentes en mora',
                     Cantidad_obligaciones: 0,
-                    Cupo_aproximado: 'Cuota Máxima',
+                    Cupo_aproximado: 'Compra Cartera',
                     Valor: '$0'
                 },
                 {
                     isActive: false,
                     Obligaciones: 'Embargos',
                     Cantidad_obligaciones: 0,
-                    Cupo_aproximado: 'Compra Cartera',
+                    Cupo_aproximado: 'Cuota Máxima',
                     Valor: '$0'
                 }
             ]
@@ -90,30 +90,25 @@ export default {
         },
         'totales.libreInversion'() {
             this.updateValores();
-        },
-        'totales.compraCartera'() {
-            this.updateValores();
-        },
-        conteoEgresosPlus() {
-            this.updateValores();
         }
+    },
+    mounted() {
+        this.setInitialValues();
     },
     methods: {
         ...mapMutations('datamesModule', ['setCuotaDeseada']),
+        setInitialValues() {
+            const libreInversion = this.totales?.libreInversion || 0;
+            this.items[0].Valor = this.formatCurrency(libreInversion);
+            this.items[2].Valor = this.formatCurrency(libreInversion); // Cuota Máxima inicial
+        },
         updateValores() {
             const libreInversion = this.totales?.libreInversion || 0;
             const compraCartera = this.totales?.compraCartera || 0;
-            let egresosplus = 0;
-
-            if (this.conteoEgresosPlus) {
-                egresosplus = this.conteoEgresosPlus + this.totales.libreInversionSuma;
-            } else {
-                egresosplus = this.totales.libreInversionSuma;
-            }
 
             this.items[0].Valor = this.formatCurrency(libreInversion);
-            this.items[1].Valor = this.formatCurrency(libreInversion); // Cuota Máxima usa el valor inicial de Libre Inversión
-            this.items[2].Valor = this.formatCurrency(egresosplus);
+            this.items[1].Valor = this.formatCurrency(compraCartera);
+            this.items[2].Valor = this.formatCurrency(libreInversion); // Actualizamos Cuota Máxima
         },
         formatCurrency(value) {
             return `$${new Intl.NumberFormat('es-ES', {
@@ -126,10 +121,6 @@ export default {
                 .replace('COP', '')
                 .trim()}`;
         }
-    },
-    mounted() {
-        // Inicializar Cuota Máxima con el valor de Libre Inversión al cargar el componente
-        this.updateValores();
     }
 };
 </script>
