@@ -91,9 +91,6 @@ export default {
         'totales.libreInversion'() {
             this.updateValor();
         },
-        'totales.compraCartera'() {
-            this.updateValor();
-        },
         conteoEgresosPlus() {
             this.updateValor();
         }
@@ -102,7 +99,10 @@ export default {
         ...mapMutations('datamesModule', ['setCuotaDeseada']),
         updateValor() {
             const libreInversion = this.totales?.libreInversion || 0;
-            const compraCartera = this.totales?.compraCartera || 0;
+
+            // Asignar libreInversion directamente a compraCartera
+            const compraCartera = libreInversion;
+
             let egresosplus = 0;
             if (this.conteoEgresosPlus) {
                 egresosplus = this.conteoEgresosPlus + this.totales.libreInversionSuma;
@@ -112,6 +112,9 @@ export default {
             this.items[0].Valor = this.formatCurrency(libreInversion);
             this.items[1].Valor = this.formatCurrency(compraCartera);
             this.items[2].Valor = this.formatCurrency(egresosplus);
+
+            // Asegurarse de sincronizar el valor de compraCartera
+            this.$emit('update-compra-cartera', compraCartera);
         },
         formatCurrency(value) {
             return `$${new Intl.NumberFormat('es-ES', {
@@ -124,9 +127,13 @@ export default {
                 .replace('COP', '')
                 .trim()}`;
         }
+    },
+    mounted() {
+        this.updateValor();
     }
 };
 </script>
+
 <style lang="scss" scoped>
 ::v-deep .table {
     & thead {
