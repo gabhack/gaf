@@ -89,25 +89,22 @@ export default {
             this.items[2].Cantidad_obligaciones = newVal?.total || 0;
         },
         'totales.libreInversion'() {
-            this.updateValor();
+            this.updateValores();
         },
         'totales.compraCartera'() {
-            this.updateValor();
+            this.updateValores();
         },
         conteoEgresosPlus() {
-            this.updateValor();
+            this.updateValores();
         }
     },
     methods: {
         ...mapMutations('datamesModule', ['setCuotaDeseada']),
-        updateValor() {
+        updateValores() {
             const libreInversion = this.totales?.libreInversion || 0;
-
-            // Asegurar que tanto cuotaMáxima como compraCartera tengan el valor de libreInversion
-            const cuotaMaxima = libreInversion;
-            const compraCartera = libreInversion;
-
+            const compraCartera = this.totales?.compraCartera || 0;
             let egresosplus = 0;
+
             if (this.conteoEgresosPlus) {
                 egresosplus = this.conteoEgresosPlus + this.totales.libreInversionSuma;
             } else {
@@ -115,13 +112,8 @@ export default {
             }
 
             this.items[0].Valor = this.formatCurrency(libreInversion);
-            this.items[1].Valor = this.formatCurrency(compraCartera);
-            this.items[2].Valor = this.formatCurrency(cuotaMaxima);
-
-            // Actualizar los valores en el estado global si es necesario
-            if (!this.totales.compraCartera) {
-                this.$emit('update-compra-cartera', libreInversion);
-            }
+            this.items[1].Valor = this.formatCurrency(libreInversion); // Cuota Máxima usa el valor inicial de Libre Inversión
+            this.items[2].Valor = this.formatCurrency(egresosplus);
         },
         formatCurrency(value) {
             return `$${new Intl.NumberFormat('es-ES', {
@@ -134,6 +126,10 @@ export default {
                 .replace('COP', '')
                 .trim()}`;
         }
+    },
+    mounted() {
+        // Inicializar Cuota Máxima con el valor de Libre Inversión al cargar el componente
+        this.updateValores();
     }
 };
 </script>
