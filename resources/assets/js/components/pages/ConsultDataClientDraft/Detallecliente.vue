@@ -90,25 +90,35 @@ export default {
         },
         'totales.libreInversion'() {
             this.updateValores();
+        },
+        'totales.compraCartera'() {
+            this.updateValores();
+        },
+        conteoEgresosPlus() {
+            this.updateValores();
         }
     },
     mounted() {
-        this.setInitialValues();
+        this.updateValores();
     },
     methods: {
         ...mapMutations('datamesModule', ['setCuotaDeseada']),
-        setInitialValues() {
-            const libreInversion = this.totales?.libreInversion || 0;
-            this.items[0].Valor = this.formatCurrency(libreInversion);
-            this.items[2].Valor = this.formatCurrency(libreInversion); // Cuota Máxima inicial
-        },
         updateValores() {
             const libreInversion = this.totales?.libreInversion || 0;
             const compraCartera = this.totales?.compraCartera || 0;
 
-            this.items[0].Valor = this.formatCurrency(libreInversion);
-            this.items[1].Valor = this.formatCurrency(compraCartera);
-            this.items[2].Valor = this.formatCurrency(libreInversion); // Actualizamos Cuota Máxima
+            // Cuota Máxima = suma de valores que afectan "libre inversión"
+            let cuotaMaxima = libreInversion;
+
+            if (this.conteoEgresosPlus) {
+                cuotaMaxima += this.conteoEgresosPlus + this.totales.libreInversionSuma;
+            } else {
+                cuotaMaxima += this.totales.libreInversionSuma;
+            }
+
+            this.items[0].Valor = this.formatCurrency(libreInversion); // Libre Inversión
+            this.items[1].Valor = this.formatCurrency(compraCartera); // Compra Cartera
+            this.items[2].Valor = this.formatCurrency(cuotaMaxima);  // Cuota Máxima
         },
         formatCurrency(value) {
             return `$${new Intl.NumberFormat('es-ES', {
