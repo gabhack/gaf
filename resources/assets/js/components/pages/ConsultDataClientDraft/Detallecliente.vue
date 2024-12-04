@@ -115,8 +115,8 @@ export default {
             }
 
             this.items[0].Valor = this.formatCurrency(libreInversion);
-            this.items[1].Valor = this.formatCurrency(cuotaMaxima);
-            this.items[2].Valor = this.formatCurrency(compraCartera);
+            this.items[1].Valor = this.formatCurrency(compraCartera);
+            this.items[2].Valor = this.formatCurrency(cuotaMaxima);
 
             // Actualizar los valores en el estado global si es necesario
             if (!this.totales.compraCartera) {
