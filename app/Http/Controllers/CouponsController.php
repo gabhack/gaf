@@ -160,19 +160,15 @@ class CouponsController extends Controller
     $results = [];
 
     try {
-        // Normalización
+        // Normalizar
         $couponTypeNorm = trim(strtolower($couponType));
         $pagaduriaLabelNorm = trim(strtolower($pagaduriaLabel));
+
+        // Separamos acrónimo y nombre
         $parts = explode(' ', $couponTypeNorm, 2);
         if (count($parts) < 2) {
             $parts = explode(' ', $pagaduriaLabelNorm, 2);
         }
-
-        Log::debug('Después de normalizar pagaduría', [
-            'couponTypeNorm' => $couponTypeNorm,
-            'pagaduriaLabelNorm' => $pagaduriaLabelNorm,
-            'parts' => $parts
-        ]);
 
         if (count($parts) < 2) {
             Log::warning('Formato de pagaduría no válido.', [
@@ -184,48 +180,30 @@ class CouponsController extends Controller
 
         [$tipo, $nombrePagaduria] = $parts;
 
-        $key = $tipo . ' ' . $nombrePagaduria;
-
-        Log::debug('Clave generada para buscar en el mapa', [
-            'key' => $key
-        ]);
-
-        $idPagaduria = self::$pagaduriasMap[$key] ?? null;
-
-        Log::debug('ID Pagaduría encontrado', [
-            'idPagaduria' => $idPagaduria
-        ]);
+        // Consulta usando la columna 'acronimo' para el tipo (sed/sem) y 'nombre' para el departamento/entidad
+        $idPagaduria = \DB::connection('pgsql')
+            ->table('public.panel_pagaduria')
+            ->whereRaw('LOWER(TRIM(nombre)) = ?', [$nombrePagaduria])
+            ->whereRaw('LOWER(TRIM(acronimo)) = ?', [$tipo])
+            ->value('id');
 
         if (!$idPagaduria) {
-            Log::warning('Pagaduría no encontrada en el mapa estático.', [
+            Log::warning('Pagaduría no encontrada.', [
                 'couponType' => $couponType,
                 'pagaduriaLabel' => $pagaduriaLabel,
                 'tipo' => $tipo,
-                'nombre' => $nombrePagaduria,
-                'key' => $key
+                'nombre' => $nombrePagaduria
             ]);
             return response()->json(['error' => 'Pagaduría no encontrada.'], 404);
         }
 
-        // Construimos la query antes de ejecutarla para loggear
-        $query = \DB::connection('pgsql')
-            ->table('fast_couponsgen_visado')
-            ->where('doc', $doc)
-            ->where('idpagaduria', $idPagaduria);
+        // Consulta en CouponsGen con el idpagaduria
+        $dataGen = CouponsGen::where('doc', $doc)
+            ->where('idpagaduria', $idPagaduria)
+            ->get()
+            ->toArray();
 
-        $sql = $query->toSql();
-        $bindings = $query->getBindings();
-
-        Log::info('Ejecutando consulta SQL en fast_couponsgen_visado', [
-            'sql' => $sql,
-            'bindings' => $bindings,
-            'doc' => $doc,
-            'idpagaduria' => $idPagaduria
-        ]);
-
-        $dataGen = $query->get()->toArray();
-
-        Log::info('Consulta fast_couponsgen finalizada.', [
+        Log::info('Consulta CouponsGen finalizada.', [
             'time' => now(),
             'total_records' => count($dataGen)
         ]);
@@ -233,19 +211,14 @@ class CouponsController extends Controller
         $results = array_merge($results, $dataGen);
 
     } catch (\Exception $e) {
-        Log::error('Error en la consulta para fast_couponsgen.', [
+        Log::error('Error en la consulta para CouponsGen.', [
             'message' => $e->getMessage(),
-            'time' => now(),
-            'trace' => $e->getTraceAsString()
+            'time' => now()
         ]);
         return response()->json(['error' => 'Error al ejecutar la consulta.'], 500);
     }
 
-    Log::info('Consulta completada y datos devueltos.', [
-        'total_records' => count($results),
-        'time' => now()
-    ]);
-
+    Log::info('Consulta completada y datos devueltos.', ['time' => now()]);
     return response()->json($results, 200);
 }
 
