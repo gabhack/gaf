@@ -27,96 +27,198 @@ use Illuminate\Support\Str;
 class CouponsController extends Controller
 {
 
+     /**
+     * Mapa estático de pagadurías a IDs.
+     * 
+     * Este mapa asocia la combinación "tipo nombre" en minúsculas
+     * a una idpagaduria. Por ejemplo, "sed huila" => 17.
+     * 
+     * CONSECUENCIAS DEL MAPA:
+     * - Acelera la consulta al no tener que consultar la base de datos
+     *   para obtener idpagaduria.
+     * - Requiere mantenimiento manual: si se agrega, elimina o cambia una
+     *   pagaduría en la BD, este mapa debe actualizarse.
+     * - No es escalable a largo plazo. Es una medida temporal de optimización.
+     */
+    private static $pagaduriasMap = [
+        'sed amazonas' => 1,
+        'sed antioquia' => 2,
+        'sed arauca' => 3,
+        'sed atlantico' => 4,
+        'sed bolivar' => 5,
+        'sed boyaca' => 6,
+        'sed caldas' => 7,
+        'sed caqueta' => 8,
+        'sed casanare' => 9,
+        'sed cauca' => 10,
+        'sed cesar' => 11,
+        'sed choco' => 12,
+        'sed cordoba' => 13,
+        'sed cundinamarca' => 14,
+        'sed guajira' => 15,
+        'sed guaviare' => 16,
+        'sed huila' => 17,   // Aquí está la pagaduría Huila
+        'sed magdalena' => 18,
+        'sed meta' => 19,
+        'sed narino' => 20,
+        'sed norte de santander' => 22,
+        'sed putumayo' => 23,
+        'sed quindio' => 24,
+        'sed risaralda' => 25,
+        'sed santander' => 26,
+        'sem sincelejo' => 27, // Ejemplo SEM
+        'sed sucre' => 28,
+        'sed tolima' => 29,
+        'sed valle' => 30,
+        'sed vaupes' => 31,
+        'sed vichada' => 32,
+        'sem apartado' => 33,
+        'sem armenia' => 34,
+        'sem barrancabermeja' => 36,
+        'sem barranquilla' => 37,
+        'sem bello' => 38,
+        'sem bucaramanga' => 39,
+        'sem buenaventura' => 40,
+        'sem buga' => 41,
+        'sem cali' => 42,
+        'sem cartagena' => 43,
+        'sem cartago' => 44,
+        'sem chia' => 45,
+        'sem cienaga' => 46,
+        'sem cucuta' => 47,
+        'sem dosquebradas' => 48,
+        'sem duitama' => 49,
+        'sem envigado' => 52,
+        'sem estrella' => 53,
+        'sem facatativa' => 54,
+        'sem florencia' => 55,
+        'sem floridablanca' => 56,
+        'sem funza' => 57,
+        'sem fusagasuga' => 58,
+        'sem girardot' => 60,
+        'sem giron' => 61,
+        'sem guainia' => 62,
+        'sem ibague' => 63,
+        'sem ipiales' => 64,
+        'sem itagui' => 65,
+        'sem jamundi' => 66,
+        'sem lorica' => 67,
+        'sem magangue' => 68,
+        'sem maicao' => 69,
+        'sem malambo' => 70,
+        'sem manizales' => 71,
+        'sem medellin' => 72,
+        'sem monteria' => 73,
+        'sem mosquera' => 74,
+        'sem neiva' => 75,
+        'sem palmira' => 76,
+        'sem pasto' => 77,
+        'sem pereira' => 78,
+        'sem piedecuesta' => 79,
+        'sem pitalito' => 80,
+        'sem popayan' => 81,
+        'sem quibdo' => 82,
+        'sem riohacha' => 83,
+        'sem rionegro' => 84,
+        'sem sabaneta' => 85,
+        'sem sahagun' => 86,
+        'sem san andres' => 87,
+        'sem santa marta' => 88,
+        'sem soacha' => 89,
+        'sem sogamoso' => 90,
+        'sem soledad' => 91,
+        'sem tulua' => 92,
+        'sem tumaco' => 93,
+        'sem tunja' => 94,
+        'sem turbo' => 95,
+        'sem tutlua' => 96,
+        'sem uribia' => 97,
+        'sem valledupar' => 98,
+        'sem villavicencio' => 99,
+        'sem yopal' => 100,
+        'sem yumbo' => 101,
+        'sem zipaquira' => 102,
+        // Agregar más si es necesario...
+    ];
+
     public function showCouponsForm()
     {
         return view('Coupons.CouponsConsult');
     }
 
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
-{
-    $doc = $request->doc;
-    $couponType = $request->pagaduria;     // Ejemplo: "SED HUILA"
-    $pagaduriaLabel = $request->pagaduriaLabel; // Ejemplo: "SED HUILA"
+    {
+        $doc = $request->doc;
+        $couponType = $request->pagaduria;     // Ejemplo: "SED HUILA"
+        $pagaduriaLabel = $request->pagaduriaLabel; // Ejemplo: "SED HUILA"
 
-    Log::info('Inicio de la consulta para CouponsGen.', [
-        'doc' => $doc,
-        'couponType' => $couponType,
-        'pagaduriaLabel' => $pagaduriaLabel,
-        'time' => now()
-    ]);
-
-    $results = [];
-
-    try {
-        // Normalizar
-        $couponTypeNorm = trim(strtolower($couponType));
-        $pagaduriaLabelNorm = trim(strtolower($pagaduriaLabel));
-
-        // Separamos acrónimo y nombre
-        $parts = explode(' ', $couponTypeNorm, 2);
-        if (count($parts) < 2) {
-            $parts = explode(' ', $pagaduriaLabelNorm, 2);
-        }
-
-        if (count($parts) < 2) {
-            Log::warning('Formato de pagaduría no válido.', [
-                'couponType' => $couponType,
-                'pagaduriaLabel' => $pagaduriaLabel
-            ]);
-            return response()->json(['error' => 'Formato de pagaduría no válido.'], 400);
-        }
-
-        [$tipo, $nombrePagaduria] = $parts;
-
-        // Consulta usando la columna 'acronimo' para el tipo (sed/sem) y 'nombre' para el departamento/entidad
-        $idPagaduria = \DB::connection('pgsql')
-            ->table('public.panel_pagaduria')
-            ->whereRaw('LOWER(TRIM(nombre)) = ?', [$nombrePagaduria])
-            ->whereRaw('LOWER(TRIM(acronimo)) = ?', [$tipo])
-            ->value('id');
-
-        if (!$idPagaduria) {
-            Log::warning('Pagaduría no encontrada.', [
-                'couponType' => $couponType,
-                'pagaduriaLabel' => $pagaduriaLabel,
-                'tipo' => $tipo,
-                'nombre' => $nombrePagaduria
-            ]);
-            return response()->json(['error' => 'Pagaduría no encontrada.'], 404);
-        }
-
-        // Consulta en CouponsGen con el idpagaduria
-        $dataGen = CouponsGen::where('doc', $doc)
-            ->where('idpagaduria', $idPagaduria)
-            ->get()
-            ->toArray();
-
-        Log::info('Consulta CouponsGen finalizada.', [
-            'time' => now(),
-            'total_records' => count($dataGen)
-        ]);
-
-        $results = array_merge($results, $dataGen);
-
-    } catch (\Exception $e) {
-        Log::error('Error en la consulta para CouponsGen.', [
-            'message' => $e->getMessage(),
+        Log::info('Inicio de la consulta para CouponsGen.', [
+            'doc' => $doc,
+            'couponType' => $couponType,
+            'pagaduriaLabel' => $pagaduriaLabel,
             'time' => now()
         ]);
-        return response()->json(['error' => 'Error al ejecutar la consulta.'], 500);
+
+        $results = [];
+
+        try {
+            // Normalizar
+            $couponTypeNorm = trim(strtolower($couponType));
+            $pagaduriaLabelNorm = trim(strtolower($pagaduriaLabel));
+
+            // Separamos acrónimo y nombre
+            $parts = explode(' ', $couponTypeNorm, 2);
+            if (count($parts) < 2) {
+                $parts = explode(' ', $pagaduriaLabelNorm, 2);
+            }
+
+            if (count($parts) < 2) {
+                Log::warning('Formato de pagaduría no válido.', [
+                    'couponType' => $couponType,
+                    'pagaduriaLabel' => $pagaduriaLabel
+                ]);
+                return response()->json(['error' => 'Formato de pagaduría no válido.'], 400);
+            }
+
+            [$tipo, $nombrePagaduria] = $parts;
+
+            $key = $tipo . ' ' . $nombrePagaduria;
+            $idPagaduria = self::$pagaduriasMap[$key] ?? null;
+
+            if (!$idPagaduria) {
+                Log::warning('Pagaduría no encontrada en el mapa estático.', [
+                    'couponType' => $couponType,
+                    'pagaduriaLabel' => $pagaduriaLabel,
+                    'tipo' => $tipo,
+                    'nombre' => $nombrePagaduria
+                ]);
+                return response()->json(['error' => 'Pagaduría no encontrada.'], 404);
+            }
+
+            // Consulta en CouponsGen con el idpagaduria
+            $dataGen = CouponsGen::where('doc', $doc)
+                ->where('idpagaduria', $idPagaduria)
+                ->get()
+                ->toArray();
+
+            Log::info('Consulta CouponsGen finalizada.', [
+                'time' => now(),
+                'total_records' => count($dataGen)
+            ]);
+
+            $results = array_merge($results, $dataGen);
+
+        } catch (\Exception $e) {
+            Log::error('Error en la consulta para CouponsGen.', [
+                'message' => $e->getMessage(),
+                'time' => now()
+            ]);
+            return response()->json(['error' => 'Error al ejecutar la consulta.'], 500);
+        }
+
+        Log::info('Consulta completada y datos devueltos.', ['time' => now()]);
+        return response()->json($results, 200);
     }
-
-    Log::info('Consulta completada y datos devueltos.', ['time' => now()]);
-    return response()->json($results, 200);
-}
-
-
 
 
 
