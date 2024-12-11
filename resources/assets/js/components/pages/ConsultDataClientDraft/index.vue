@@ -637,24 +637,15 @@ export default {
 
             this.monto = payload.monto;
 
-            if (payload.pagaduria == 'FOPEP') {
-                this.getDatames(payload);
-            } else if (payload.pagaduria == 'SEDVALLE') {
-                this.getDatamesSedValle(payload);
-            } else if (payload.pagaduria == 'FIDUPREVISORA') {
-                this.getDatamesFidu(payload);
-            } else if (payload.pagaduria == 'SEMCALI') {
-                this.getDatamesSemCali(payload);
-            }
-
-            this.getDescuentossemsahagun(payload);
-            this.getDescapli(payload);
-            this.getDescnoap(payload);
             this.getCoupons({
                 doc: payload.doc,
                 pagaduria: this.couponsType,
                 pagaduriaLabel: this.pagaduriaLabel
             });
+           
+            this.getDescapli(payload);
+            this.getDescnoap(payload);
+            
             this.getEmbargos({
                 doc: payload.doc,
                 pagaduria: this.embargosType,
@@ -665,6 +656,17 @@ export default {
                 pagaduria: this.descuentosType,
                 pagaduriaLabel: this.pagaduriaLabel
             });
+
+            if (payload.pagaduria == 'FOPEP') {
+                this.getDatames(payload);
+            } else if (payload.pagaduria == 'SEDVALLE') {
+                this.getDatamesSedValle(payload);
+            } else if (payload.pagaduria == 'FIDUPREVISORA') {
+                this.getDatamesFidu(payload);
+            } else if (payload.pagaduria == 'SEMCALI') {
+                this.getDatamesSemCali(payload);
+            }
+
             this.getFechaVinc(payload).then(response => {
                 this.showOthers = true;
                 this.isLoading = false;
