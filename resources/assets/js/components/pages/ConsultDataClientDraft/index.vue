@@ -645,10 +645,10 @@ export default {
                 pagaduria: this.couponsType,
                 pagaduriaLabel: this.pagaduriaLabel
             });
-
+           
             this.getDescapli(payload);
             this.getDescnoap(payload);
-
+            
             this.getEmbargos({
                 doc: payload.doc,
                 pagaduria: this.embargosType,
