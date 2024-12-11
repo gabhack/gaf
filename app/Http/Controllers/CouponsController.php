@@ -39,50 +39,87 @@ class CouponsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {
-        $doc = $request->doc;
-        $couponType = $request->pagaduria;
-        $pagaduriaLabel = $request->pagaduriaLabel;
+{
+    $doc = $request->doc;
+    $couponType = $request->pagaduria;     // Ejemplo: "SED HUILA"
+    $pagaduriaLabel = $request->pagaduriaLabel; // Ejemplo: "SED HUILA"
 
-        $models = [
-            CouponsSedAtlantico::class => 'doc',
-            CouponsSedBolivar::class => 'doc',
-            CouponsSedCauca::class => 'doc',
-            CouponsSedChoco::class => 'doc',
-            CouponsSedCaldas::class => 'doc',
-            CouponsSedCordoba::class => 'doc',
-            CouponsSedFopep::class => 'doc',
-            CouponsSedMagdalena::class => 'doc',
-            CouponsSedValle::class => 'doc',
-            CouponsSemBarranquilla::class => 'doc',
-            CouponsSemPopayan::class => 'doc',
-            CouponsSemMonteria::class => 'doc',
-            CouponsSemQuibdo::class => 'doc',
-            CouponsSemSahagun::class => 'doc',
-            CouponsSemCali::class => 'doc',
-        ];
+    Log::info('Inicio de la consulta para CouponsGen.', [
+        'doc' => $doc,
+        'couponType' => $couponType,
+        'pagaduriaLabel' => $pagaduriaLabel,
+        'time' => now()
+    ]);
 
-        $results = [];
+    $results = [];
 
-        foreach ($models as $model => $column) {
-            $className = class_basename($model);
+    try {
+        // Normalizar
+        $couponTypeNorm = trim(strtolower($couponType));
+        $pagaduriaLabelNorm = trim(strtolower($pagaduriaLabel));
 
-            if ($className == $couponType) {
-                $results = array_merge($results, $model::where($column, 'LIKE', '%' . $doc . '%')->get()->toArray());
-            }
+        // Separamos acrónimo y nombre
+        $parts = explode(' ', $couponTypeNorm, 2);
+        if (count($parts) < 2) {
+            $parts = explode(' ', $pagaduriaLabelNorm, 2);
         }
 
-        // General coupons
-        $dataGen = CouponsGen::where('doc', 'LIKE', '%' . $doc . '%')
-            ->where(function ($query) use ($couponType, $pagaduriaLabel) {
-                $query->where('pagaduria', $couponType)
-                    ->orWhere('pagaduria', $pagaduriaLabel);
-            })->get()->toArray();
+        if (count($parts) < 2) {
+            Log::warning('Formato de pagaduría no válido.', [
+                'couponType' => $couponType,
+                'pagaduriaLabel' => $pagaduriaLabel
+            ]);
+            return response()->json(['error' => 'Formato de pagaduría no válido.'], 400);
+        }
+
+        [$tipo, $nombrePagaduria] = $parts;
+
+        // Consulta usando la columna 'acronimo' para el tipo (sed/sem) y 'nombre' para el departamento/entidad
+        $idPagaduria = \DB::connection('pgsql')
+            ->table('public.panel_pagaduria')
+            ->whereRaw('LOWER(TRIM(nombre)) = ?', [$nombrePagaduria])
+            ->whereRaw('LOWER(TRIM(acronimo)) = ?', [$tipo])
+            ->value('id');
+
+        if (!$idPagaduria) {
+            Log::warning('Pagaduría no encontrada.', [
+                'couponType' => $couponType,
+                'pagaduriaLabel' => $pagaduriaLabel,
+                'tipo' => $tipo,
+                'nombre' => $nombrePagaduria
+            ]);
+            return response()->json(['error' => 'Pagaduría no encontrada.'], 404);
+        }
+
+        // Consulta en CouponsGen con el idpagaduria
+        $dataGen = CouponsGen::where('doc', $doc)
+            ->where('idpagaduria', $idPagaduria)
+            ->get()
+            ->toArray();
+
+        Log::info('Consulta CouponsGen finalizada.', [
+            'time' => now(),
+            'total_records' => count($dataGen)
+        ]);
 
         $results = array_merge($results, $dataGen);
 
-        return response()->json($results, 200);
+    } catch (\Exception $e) {
+        Log::error('Error en la consulta para CouponsGen.', [
+            'message' => $e->getMessage(),
+            'time' => now()
+        ]);
+        return response()->json(['error' => 'Error al ejecutar la consulta.'], 500);
     }
+
+    Log::info('Consulta completada y datos devueltos.', ['time' => now()]);
+    return response()->json($results, 200);
+}
+
+
+
+
+
 
 
     public function getCouponsByPagaduria(Request $request)
