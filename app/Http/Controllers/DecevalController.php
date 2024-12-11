@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use DOMDocument;
 
+
 class DecevalController extends Controller
 {
    public $ambiente = 0; // 0 = pruebas, 1 = produccion
@@ -227,7 +228,7 @@ class DecevalController extends Controller
    public function consultar(Request $request)
    {
       if (!$request->decevalProcess) {
-         \Log::info("decevalProcess is false. Redirecting to hego.estudios.");
+         \Log::info("decevalProcess is false. Redirecting to hego.estudios.", $request->all());
          return redirect()->route('hego.estudios');
      }
    
@@ -542,6 +543,15 @@ class DecevalController extends Controller
       $doc->save('giradorResponse_' . $xml_name);
 
       $array = XmlaPhp::createArray($response);
+
+      if (!isset($array['soap:Envelope']['soap:Body']['ns2:creacionGiradoresCodificadosResponse'])) {
+         \Log::error("La respuesta no contiene el índice esperado (ns2:creacionGiradoresCodificadosResponse)", ['response' => $array]);
+         // Aquí puedes manejar el error, redirigir, retornar un json de error, etc.
+         return [
+             'codigoError' => 'SIN_RESPUESTA',
+             'mensajeRespuesta' => 'No se obtuvo la respuesta esperada del servicio Deceval'
+         ];
+     }
       $resultado = $array['soap:Envelope']['soap:Body']['ns2:creacionGiradoresCodificadosResponse']['return'];
 
       return $resultado;
@@ -958,4 +968,45 @@ class DecevalController extends Controller
                      <ExecutionMode>" . $executionMode . "</ExecutionMode>
                </RequestInfo>";
    }
+
+
+
+   //metodo de prueba:
+
+   public function testService()
+{
+    $idDocumentoPagare = "TEST";
+    $otorganteTipoId = "1";
+    $otorganteNumId = "12345678";
+    $numPagareEntidad = "12345";
+    $codigoDepositante = env('DECEVEL_CODIGO_DEPOSITANTE');
+    $usuario = env('DECEVAL_USUARIO');
+    $hoy = date("Y-m-d");
+    $hora = date("H:i:s");
+    $fecha = $hoy . 'T' . $hora;
+
+    try {
+        $response = $this->consultarPagares(
+            $idDocumentoPagare,
+            $otorganteTipoId,
+            $otorganteNumId,
+            $numPagareEntidad,
+            $codigoDepositante,
+            $fecha,
+            $hora,
+            $usuario
+        );
+
+        // Si el servicio responde, deberías poder obtener algunos nodos. Por ejemplo, intenta obtener 'codigoError'
+        $codigoError = $response->getElementsByTagName('codigoError')->item(0);
+        if ($codigoError) {
+            return "Servicio Deceval responde: Código de error encontrado: " . $codigoError->nodeValue;
+        } else {
+            return "Servicio Deceval responde, pero no se encontró código de error, posiblemente está OK.";
+        }
+    } catch (\Exception $e) {
+        return "Error al conectar con Deceval: " . $e->getMessage();
+    }
+}
+
 }

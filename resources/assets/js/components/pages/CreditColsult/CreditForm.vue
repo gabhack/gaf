@@ -964,14 +964,17 @@ export default {
             const params = this.form;
 
             axios
-                .post('/cotizer-data', { creditInfo: this.creditInfo, cotizerData: params })
-                .then(response => {
-                    const cotizerId = response.data.id;
-                    window.location.href = `/cifin/consultar?cotizerId=${cotizerId}`;
-                })
-                .catch(error => {
-                    console.log(error);
-                });
+  .post('/cotizer-data', { creditInfo: this.creditInfo, cotizerData: params })
+  .then(response => {
+      const cotizerId = response.data.cotizador.id; 
+      const decevalProcess = response.data.decevalProcess; 
+
+      window.location.href = `/cifin/consultar?cotizerId=${cotizerId}&decevalProcess=${decevalProcess}`;
+  })
+  .catch(error => {
+      console.log(error);
+  });
+
         },
         approveValue() {
             if (this.creditInfo.total.value <= 250000) {

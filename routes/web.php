@@ -26,6 +26,7 @@ use App\Http\Controllers\JoinPensionesController;
 use App\Http\Controllers\FileUploadLogController;
 use App\Http\Controllers\ParametrosComparativaController;
 use App\Http\Controllers\JelouController;
+use App\Http\Controllers\dataCotizerController;
 
 
 
@@ -190,6 +191,8 @@ Route::group(['prefix' => 'deceval'], function () {
     Route::get('/consultar', 'DecevalController@consultar')->name('deceval.consultar');
     Route::post('/firmar', 'DecevalController@firmar');
     Route::get('/consulta', 'DecevalController@consulta');
+    Route::get('/test', [\App\Http\Controllers\DecevalController::class, 'testService']);
+
 
     Route::post('/pagarpse', 'PagosController@pagarpse');
     Route::post('/pay', 'PagosController@pay');
@@ -592,7 +595,7 @@ Route::post('/datamesfidu/consultaUnitaria', 'DatamesfiduController@consultaUnit
 Route::post('/datamessedvalle/consultaUnitaria', 'DatamesSedValleController@consultaUnitaria');
 Route::resource('/datamessedvalle', 'DatamesSedValleController');
 
-Route::resource('/cotizer-data', dataCotizerController::class)->only(['store', 'index', 'show', 'update']);
+Route::resource('/cotizer-data', 'dataCotizerController')->only(['store', 'index', 'show', 'update']);
 Route::get('/cotizer-data/borrar/{id}', 'dataCotizerController@destroy');
 Route::view('/solicitud', 'creditCalculator')->middleware('auth');
 Route::view('/RegisterCredit', 'registerCredit')->name('register.credit');

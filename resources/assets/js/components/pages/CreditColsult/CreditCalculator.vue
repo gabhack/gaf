@@ -337,6 +337,7 @@ export default {
       tasa:null,
       form: {
         requestAmount: 1000000,
+        due: 12, 
         payDate: '',
         due: null,
         client: null,
@@ -585,34 +586,67 @@ export default {
       // document.querySelector('#text-fancy').style.display = this.collapsed ? 'flex' : 'none';
     },
     submitData() {
-      const params = {
-        valor_solicitado: this.amount,
-        nro_cuotas: this.dues,
-        aval: this.aval,
-        iva_aval: this.ivaAval,
-        comision: this.comision,
-        valor1: this.val1TR,
-        valor2: this.val2t,
-        iva_ck: this.ivaCK,
-        total_pagar: this.totalCredit,
-        interes_inicial: this.interesInicial,
-        gmf: this.gmf,
-        credito_total: this.totalCredit2,
-        seguro: this.seguro,
-        cuota: this.cuota,
-        tasa_interes: this.tasa,
-        pagaduria: this.form.entidad,
-      }; 
+  // Validar que el monto solicitado no sea nulo o menor que el mínimo permitido.
+  if (!this.form.requestAmount || this.form.requestAmount < this.valuesRange.min) {
+    this.$swal({
+      icon: 'error',
+      title: 'Por favor ingresa un monto válido.',
+      text: `El monto debe ser mayor o igual a ${this.valuesRange.min | this.$options.filters.currency}`,
+    });
+    return;
+  }
 
-      window.localStorage.setItem('creditInfo', JSON.stringify(params));
+  // Validar que el número de cuotas esté seleccionado y no sea nulo.
+  if (!this.form.due) {
+    this.$swal({
+      icon: 'error',
+      title: 'Por favor selecciona el número de cuotas.',
+    });
+    return;
+  }
 
-      this.$swal({
-        icon: 'success',
-        title: '¡ Vamos bien !'
-      }).then(() => {
-        window.location.href = 'RegisterCredit';
-      });
-    },
+  // Validar que se haya seleccionado una entidad si el tipo de cliente lo requiere.
+  if (!this.form.entidad) {
+    this.$swal({
+      icon: 'error',
+      title: 'Por favor selecciona una entidad.',
+    });
+    return;
+  }
+
+  // Parámetros para enviar al backend
+  const params = {
+    valor_solicitado: this.form.requestAmount,
+    nro_cuotas: this.form.due,
+    aval: this.aval,
+    iva_aval: this.ivaAval,
+    comision: this.comision,
+    valor1: this.val1TR,
+    valor2: this.val2t,
+    iva_ck: this.ivaCK,
+    total_pagar: this.totalCredit,
+    interes_inicial: this.interesInicial,
+    gmf: this.gmf,
+    credito_total: this.totalCredit2,
+    seguro: this.seguro,
+    cuota: this.cuota,
+    tasa_interes: this.tasa,
+    pagaduria: this.form.entidad,
+  };
+
+  // Guardar datos en localStorage como respaldo.
+  window.localStorage.setItem('creditInfo', JSON.stringify(params));
+
+  // Confirmación y redirección.
+  this.$swal({
+    icon: 'success',
+    title: '¡Solicitud enviada con éxito!',
+    text: 'Redirigiendo al registro de crédito...',
+  }).then(() => {
+    window.location.href = 'RegisterCredit';
+  });
+}
+,
     minusDue() {
       const dueValue = this.form.due;
       this.form.due = dueValue > 1 ? dueValue - 1 : dueValue;
