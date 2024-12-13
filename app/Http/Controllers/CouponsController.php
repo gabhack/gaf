@@ -147,77 +147,72 @@ class CouponsController extends Controller
     }
 
     public function index(Request $request)
-    {
-        $doc = $request->doc;
-        $couponType = $request->pagaduria;     // Ejemplo: "SED HUILA"
-        $pagaduriaLabel = $request->pagaduriaLabel; // Ejemplo: "SED HUILA"
+{
+    $doc = $request->doc;
+    $couponType = $request->pagaduria;
+    $pagaduriaLabel = $request->pagaduriaLabel;
 
-        Log::info('Inicio de la consulta para CouponsGen.', [
-            'doc' => $doc,
-            'couponType' => $couponType,
-            'pagaduriaLabel' => $pagaduriaLabel,
-            'time' => now()
-        ]);
+    Log::info('Inicio de la consulta para fast_couponsgen.', [
+        'doc' => $doc,
+        'couponType' => $couponType,
+        'pagaduriaLabel' => $pagaduriaLabel,
+        'time' => now()
+    ]);
 
-        $results = [];
+    $results = [];
 
-        try {
-            // Normalizar
-            $couponTypeNorm = trim(strtolower($couponType));
-            $pagaduriaLabelNorm = trim(strtolower($pagaduriaLabel));
-
-            // Separamos acrónimo y nombre
-            $parts = explode(' ', $couponTypeNorm, 2);
-            if (count($parts) < 2) {
-                $parts = explode(' ', $pagaduriaLabelNorm, 2);
-            }
-
-            if (count($parts) < 2) {
-                Log::warning('Formato de pagaduría no válido.', [
-                    'couponType' => $couponType,
-                    'pagaduriaLabel' => $pagaduriaLabel
-                ]);
-                return response()->json(['error' => 'Formato de pagaduría no válido.'], 400);
-            }
-
-            [$tipo, $nombrePagaduria] = $parts;
-
-            $key = $tipo . ' ' . $nombrePagaduria;
-            $idPagaduria = self::$pagaduriasMap[$key] ?? null;
-
-            if (!$idPagaduria) {
-                Log::warning('Pagaduría no encontrada en el mapa estático.', [
-                    'couponType' => $couponType,
-                    'pagaduriaLabel' => $pagaduriaLabel,
-                    'tipo' => $tipo,
-                    'nombre' => $nombrePagaduria
-                ]);
-                return response()->json(['error' => 'Pagaduría no encontrada.'], 404);
-            }
-
-            // Consulta en CouponsGen con el idpagaduria
-            $dataGen = CouponsGen::where('doc', $doc)
-                ->where('idpagaduria', $idPagaduria)
-                ->get()
-                ->toArray();
-
-            Log::info('Consulta CouponsGen finalizada.', [
-                'time' => now(),
-                'total_records' => count($dataGen)
+    try {
+        // Normalización
+        $couponTypeNorm = trim(strtolower($couponType));
+        $pagaduriaLabelNorm = trim(strtolower($pagaduriaLabel));
+        $parts = explode(' ', $couponTypeNorm, 2);
+        if (count($parts) < 2) {
+            $parts = explode(' ', $pagaduriaLabelNorm, 2);
+        }
+        if (count($parts) < 2) {
+            Log::warning('Formato de pagaduría no válido.', [
+                'couponType' => $couponType,
+                'pagaduriaLabel' => $pagaduriaLabel
             ]);
-
-            $results = array_merge($results, $dataGen);
-
-        } catch (\Exception $e) {
-            Log::error('Error en la consulta para CouponsGen.', [
-                'message' => $e->getMessage(),
-                'time' => now()
-            ]);
-            return response()->json(['error' => 'Error al ejecutar la consulta.'], 500);
+            return response()->json(['error' => 'Formato de pagaduría no válido.'], 400);
         }
 
-        Log::info('Consulta completada y datos devueltos.', ['time' => now()]);
-        return response()->json($results, 200);
+        [$tipo, $nombrePagaduria] = $parts;
+
+        $key = $tipo . ' ' . $nombrePagaduria;
+        $idPagaduria = self::$pagaduriasMap[$key] ?? null;
+
+        if (!$idPagaduria) {
+            Log::warning('Pagaduría no encontrada en el mapa estático.', [
+                'couponType' => $couponType,
+                'pagaduriaLabel' => $pagaduriaLabel,
+                'tipo' => $tipo,
+                'nombre' => $nombrePagaduria
+            ]);
+            return response()->json(['error' => 'Pagaduría no encontrada.'], 404);
+        }
+
+        // Consulta en fast_couponsgen
+        $dataGen = \DB::connection('pgsql')
+            ->table('fast_couponsgen_visado')
+            ->where('doc', $doc)
+            ->where('idpagaduria', $idPagaduria)
+            ->get()
+            ->toArray();
+
+        Log::info('Consulta fast_couponsgen finalizada.', [
+            'time' => now(),
+            'total_records' => count($dataGen)
+        ]);
+
+        $results = array_merge($results, $dataGen);
+
+    } catch (\Exception $e) {
+        Log::error('Error en la consulta para fast_couponsgen.', [
+            'message' => $e->getMessage(),
+            'time' => now()
+        ]);
+        return response()->json(['error' => 'Error al ejecutar la consulta.'], 500);
     }
 
 
