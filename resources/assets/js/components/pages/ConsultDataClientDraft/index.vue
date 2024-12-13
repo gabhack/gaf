@@ -711,8 +711,11 @@ export default {
                 pagaduriaLabel: payload.pagaduriaLabel
             };
 
-            const response = await axios.post('/get-coupons', data);
-            this.fetchCoupons(response.data);
+            const response = await axios.post('/get-coupons', payload);
+            const couponData = response.data.items || response.data; // Ajusta según el formato del backend
+            console.log('Datos enviados a fetchCoupons:', couponData);
+            this.fetchCoupons(couponData);
+
 
             setTimeout(() => {
                 // Valida si el tiene incapacidades
