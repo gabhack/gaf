@@ -14,59 +14,76 @@
         <div class="panel-body px-0">
             <loading :active.sync="isLoading" color="#0CEDB0" :can-cancel="true" :is-full-page="true" />
             <b-row>
-                <b-col cols="12" md="4" class="mb-md-4">
-                    <b class="panel-label mb-2">Cédula (*)</b>
+                <b-col cols="12" md="4" class="mb-md-4 mb-2">
+                    <b class="panel-label mb-2"><span class="text-danger"> *</span> Cédula</b>
                     <input
                         required
                         class="form-control2"
                         placeholder="N° de documento"
                         type="number"
                         v-model="dataclient.doc"
+                        ref="dataclientDoc"
                     />
                 </b-col>
-                <b-col cols="12" md="4">
-                    <b class="panel-label mb-2">Nombres y apellidos (*)</b>
+                <b-col cols="12" md="4" class="mb-2">
+                    <b class="panel-label mb-2"><span class="text-danger"> *</span> Nombres y apellidos</b>
                     <input
                         required
                         class="form-control2"
                         placeholder="Ingrese nombre completo"
                         type="text"
                         v-model="dataclient.name"
+                        ref="dataclientName"
                     />
                 </b-col>
-                <b-col cols="12" md="4">
-                    <b class="panel-label mb-2">Monto (*)</b>
+                <b-col cols="12" md="4" class="mb-2">
+                    <b class="panel-label mb-2"><span class="text-danger"> *</span> Monto</b>
+
+                    <b-input-group size="md" prepend="$">
+                        <b-form-input
+                            class="style-form-control text-right col-md-8"
+                            placeholder="Ingrese un monto"
+                            type="number"
+                            step="0.01"
+                            v-model.number="dataclient.monto"
+                            ref="dataclientMonto"
+                        ></b-form-input>
+                    </b-input-group>
+                </b-col>
+                <b-col cols="12" md="4" class="mb-2 mb-md-4">
+                    <b class="panel-label mb-2"><span class="text-danger"> *</span> Cuota deseada</b>
+
+                    <b-input-group size="md" prepend="$">
+                        <b-form-input
+                            class="style-form-control text-right col-md-8"
+                            placeholder="Cantidad de cuotas"
+                            type="number"
+                            step="0.01"
+                            v-model.number="dataclient.cuotadeseada"
+                            ref="dataclientCuotaDeseada"
+                        ></b-form-input>
+                    </b-input-group>
+                </b-col>
+                <b-col cols="12" md="4" class="mb-3 mb-md-0">
+                    <b class="panel-label mb-2"><span class="text-danger"> *</span> Plazo </b>
                     <input
                         required
                         class="form-control2"
-                        placeholder="Ingrese un monto"
                         type="text"
-                        v-model.number="dataclient.monto"
+                        v-model.number="dataclient.plazo"
+                        placeholder="Ingrese el plazo"
+                        ref="dataclientPlazo"
                     />
-                </b-col>
-                <b-col cols="12" md="4" class="mb-md-4">
-                    <b class="panel-label mb-2">Cuota deseada (*)</b>
-                    <input
-                        required
-                        class="form-control2"
-                        placeholder="Cantidad de cuotas"
-                        type="number"
-                        v-model.number="dataclient.cuotadeseada"
-                    />
-                </b-col>
-                <b-col cols="12" md="4">
-                    <b class="panel-label mb-2">Plazo (*)</b>
-                    <input required class="form-control2" type="text" placeholder="Ingrese el plazo" />
                 </b-col>
             </b-row>
             <b-row>
                 <b-col cols="12" md="4" v-if="!dataclient.pagadurias && !flag">
-                    <CustomButton text="Consultar Pagadurias" @click="getAllPagadurias" />
+                    <CustomButton text="Consultar Pagadurias" @click="validationForm" />
                 </b-col>
 
                 <b-col cols="12" md="4" v-else>
                     <div v-if="!flag">
-                        <h3 style="padding-bottom: 24px;" class="heading-title">Consultar pagadurias</h3>
+                        <h3 style="padding-bottom: 24px" class="heading-title">Consultar pagadurias</h3>
                         <b class="panel-label mb-2">Pagadurias</b>
                         <b-form-select
                             v-if="dataclient.pagadurias"
@@ -121,6 +138,7 @@ export default {
                 name: '',
                 cuotadeseada: 0,
                 monto: 0,
+                plazo: null,
                 pagaduria: null,
                 pagadurias: null,
                 pagaduriaKey: null,
@@ -146,7 +164,7 @@ export default {
         ]),
         ...mapMutations('embargosModule', ['setEmbargosType']),
         ...mapMutations('descuentosModule', ['setDescuentosType']),
-        pdfEmit(){
+        pdfEmit() {
             this.$emit('downloadPdf');
         },
         selectedPagaduria() {
@@ -173,6 +191,52 @@ export default {
         },
         emitInfo() {
             this.getAllPagadurias();
+        },
+
+        async validationForm() {
+            if (!this.dataclient.doc) {
+                this.$bvToast.toast(`Debes llenar el campo de la cédula, es obligatorio`, {
+                    title: '¡Error!',
+                    autoHideDelay: 5000,
+                    solid: true,
+                    variant: 'danger'
+                }),
+                    this.$refs.dataclientDoc.focus();
+            } else if (!this.dataclient.name) {
+                this.$bvToast.toast(`Debes llenar el campo del nombre, es obligatorio`, {
+                    title: '¡Error!',
+                    autoHideDelay: 5000,
+                    solid: true,
+                    variant: 'danger'
+                }),
+                    this.$refs.dataclientName.focus();
+            } else if (!this.dataclient.monto) {
+                this.$bvToast.toast(`Debes colocar el campo del monto, es obligatorio`, {
+                    title: '¡Error!',
+                    autoHideDelay: 5000,
+                    solid: true,
+                    variant: 'danger'
+                }),
+                    this.$refs.dataclientMonto.focus();
+            } else if (!this.dataclient.cuotadeseada) {
+                this.$bvToast.toast(`Debes colocar el campo de la cuota deseada es obligatorio`, {
+                    title: '¡Error!',
+                    autoHideDelay: 5000,
+                    solid: true,
+                    variant: 'danger'
+                }),
+                    this.$refs.dataclientCuotaDeseada.focus();
+            } else if (!this.dataclient.plazo) {
+                this.$bvToast.toast(`Debes colocar el campo del plazo deseada es obligatorio`, {
+                    title: '¡Error!',
+                    autoHideDelay: 5000,
+                    solid: true,
+                    variant: 'danger'
+                }),
+                    this.$refs.dataclientPlazo.focus();
+            } else {
+                this.getAllPagadurias();
+            }
         },
         async getAllPagadurias() {
             if (this.dataclient.doc && this.dataclient.name) {
@@ -228,7 +292,6 @@ export default {
                         this.flag = true;
                     });
                 });
-                
         },
         async saveVisados() {
             try {
