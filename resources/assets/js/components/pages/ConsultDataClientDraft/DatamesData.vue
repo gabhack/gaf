@@ -1,111 +1,85 @@
 <template>
-    <div class="col-4" v-if="datamesSed">
+    <div class="col-12" v-if="datamesSed">
         <div class="panel panel-primary mb-3">
-            <h3 class="heading-title" style="border: 3px #3a5659 solid; background-color: #3a5659; color: white; padding-left: 3px;">Información personal</h3>
-                        <br><thead>
-                            <tr>
-                                <th style="color: #3a5659;">Nombre y apellido</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>{{ datamesSed.nombre_usuario || '--' }}</td>
-                            </tr>
-                        </tbody>
-                        <thead>
-                            <tr>
-                                <th style="color: #3a5659;">Tipo de documento</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>{{ datamesSed.documentType || '--' }}</td>
-                            </tr>
-                        </tbody>
-                        <thead>
-                            <tr>
-                                <th style="color: #3a5659;">Número de documento</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>{{ datamesSed.doc || '--' }}</td>
-                            </tr>
-                        </tbody>
-                        <thead>
-                            <tr>
-                                <th style="color: #3a5659;">Fecha de nacimiento</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>{{ datamesSed.fecha_nacimiento || '--' }}</td>
-                            </tr>
-                        </tbody>
-                        <thead>
-                            <tr>
-                                <th style="color: #3a5659;">Edad</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>{{ edad || '--' }}</td>
-                            </tr>
-                        </tbody>
-                        <thead>
-                            <tr>
-                                <th style="color: #3a5659;">Teléfono / celular</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>{{ datamesSed.telefono || '--' }}</td>
-                            </tr>
-                        </tbody>
-                        <thead>
-                            <tr>
-                                <th style="color: #3a5659;">Dirección</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>{{ datamesSed.direccion_residencial || '--' }}</td>
-                            </tr>
-                        </tbody>
-                        <thead>
-                            <tr>
-                                <th style="color: #3a5659;">Ciudad / municipio</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>{{ datamesSed.ciudad || '--' }}</td>
-                            </tr>
-                        </tbody>
-               
-                        <thead>
-                            <tr>
-                                <th style="color: #3a5659;">Email</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>{{ datamesSed.correo_electronico || '--' }}</td>
-                            </tr>
-                        </tbody>
-                        <thead>
-                            <tr>
-                                <th style="color: #3a5659;">Pagaduría</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>{{ datamesSed.pagaduria || '--' }}</td>
-                            </tr>
-                        </tbody>
+            <h3 class="heading-title">Información personal</h3>
+
+            <div class="mt-3 table-responsive">
+                <table role="table" aria-colcount="5" class="table b-table table-striped table-hover">
+                    <!----><!---->
+                    <thead role="rowgroup" class="table-header-nowrap">
+                        <!---->
+                        <tr role="row">
+                            <th class="text-center" role="columnheader" scope="col" aria-colindex="1">
+                                Nombre y apellido
+                            </th>
+                            <th class="text-center" role="columnheader" scope="col" aria-colindex="2">
+                                Tipo de documento
+                            </th>
+                            <th class="text-center" role="columnheader" scope="col" aria-colindex="3">
+                                N<sup>a</sup> documento
+                            </th>
+                            <th class="text-center" role="columnheader" scope="col" aria-colindex="4">
+                                Fecha de nacimiento
+                            </th>
+                            <th class="text-center" role="columnheader" scope="col" aria-colindex="5">Edad</th>
+                        </tr>
+                    </thead>
+                    <tbody role="rowgroup">
+                        <!---->
+                        <tr role="row">
+                            <td aria-colindex="1" role="cell">{{ datamesSed.nombre_usuario || '--' }}</td>
+                            <td class="text-center" aria-colindex="2" role="cell">
+                                {{ datamesSed.documentType || '--' }}
+                            </td>
+                            <td class="text-center" aria-colindex="3" role="cell">{{ datamesSed.doc || '--' }}</td>
+                            <td class="text-center" aria-colindex="4" role="cell">
+                                {{ datamesSed.fecha_nacimiento || '--' }}
+                            </td>
+                            <td class="text-center" aria-colindex="5" role="cell">{{ edad || '--' }}</td>
+                        </tr>
+
+                        <!----><!---->
+                    </tbody>
+                    <!---->
+                </table>
+            </div>
+
+            <div class="mt-3 table-responsive">
+                <table role="table" aria-colcount="5" class="table b-table table-striped table-hover">
+                    <!----><!---->
+                    <thead role="rowgroup" class="table-header-nowrap">
+                        <!---->
+                        <tr role="row">
+                            <th class="text-center" role="columnheader" scope="col" aria-colindex="1">
+                                Teléfono / celular
+                            </th>
+                            <th class="text-center" role="columnheader" scope="col" aria-colindex="2">Dirección</th>
+                            <th class="text-center" role="columnheader" scope="col" aria-colindex="3">
+                                Ciudad / municipio
+                            </th>
+                            <th class="text-center" role="columnheader" scope="col" aria-colindex="4">Email</th>
+                            <th class="text-center" role="columnheader" scope="col" aria-colindex="5">Pagaduría</th>
+                        </tr>
+                    </thead>
+                    <tbody role="rowgroup">
+                        <!---->
+                        <tr role="row">
+                            <td class="text-center" aria-colindex="1" role="cell">{{ datamesSed.telefono || '--' }}</td>
+                            <td class="text-center" aria-colindex="2" role="cell">
+                                {{ datamesSed.direccion_residencial || '--' }}
+                            </td>
+                            <td class="text-center" aria-colindex="3" role="cell">{{ datamesSed.ciudad || '--' }}</td>
+                            <td class="text-center" aria-colindex="4" role="cell">
+                                {{ datamesSed.correo_electronico || '--' }}
+                            </td>
+                            <td aria-colindex="5" role="cell">{{ datamesSed.pagaduria || '--' }}</td>
+                        </tr>
+
+                        <!----><!---->
+                    </tbody>
+                    <!---->
+                </table>
+            </div>
         </div>
     </div>
 </template>
@@ -142,7 +116,19 @@ export default {
 };
 </script>
 <style scoped>
-th{
+th {
     font-size: 14px;
+}
+.table th {
+    text-align: center;
+}
+
+.table th,
+.table td {
+    width: 200px;
+}
+.table thead th {
+    text-align: center;
+    font-weight: 500;
 }
 </style>

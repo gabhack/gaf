@@ -19,6 +19,8 @@
                     <input
                         required
                         class="form-control2"
+                        :class="{ errorValid: activeId == 'dataclientDoc' }"
+                        @change="activeId = ''"
                         placeholder="N° de documento"
                         type="number"
                         v-model="dataclient.doc"
@@ -34,34 +36,42 @@
                         type="text"
                         v-model="dataclient.name"
                         ref="dataclientName"
+                        :class="{ errorValid: activeId == 'dataclientName' }"
+                        @change="activeId = ''"
                     />
                 </b-col>
                 <b-col cols="12" md="4" class="mb-2">
                     <b class="panel-label mb-2"><span class="text-danger"> *</span> Monto</b>
 
                     <b-input-group size="md" prepend="$">
-                        <b-form-input
-                            class="style-form-control text-right col-md-8"
+                        <input
+                            type="text"
+                            class="style-form-control col-md-8"
                             placeholder="Ingrese un monto"
-                            type="number"
-                            step="0.01"
-                            v-model.number="dataclient.monto"
                             ref="dataclientMonto"
-                        ></b-form-input>
+                            v-model.number="dataclient.monto"
+                            v-model="montoValueCurrency"
+                            @input="formatMontoValueCurrency"
+                            :class="{ errorValid: activeId == 'dataclientMonto' }"
+                            @change="activeId = ''"
+                        />
                     </b-input-group>
                 </b-col>
                 <b-col cols="12" md="4" class="mb-2 mb-md-4">
                     <b class="panel-label mb-2"><span class="text-danger"> *</span> Cuota deseada</b>
 
                     <b-input-group size="md" prepend="$">
-                        <b-form-input
-                            class="style-form-control text-right col-md-8"
+                        <input
+                            type="text"
+                            class="style-form-control col-md-8"
                             placeholder="Cantidad de cuotas"
-                            type="number"
-                            step="0.01"
                             v-model.number="dataclient.cuotadeseada"
                             ref="dataclientCuotaDeseada"
-                        ></b-form-input>
+                            v-model="couteValueCurrency"
+                            @input="formatCouteValueCurrency"
+                            :class="{ errorValid: activeId == 'dataclientCuotaDeseada' }"
+                            @change="activeId = ''"
+                        />
                     </b-input-group>
                 </b-col>
                 <b-col cols="12" md="4" class="mb-3 mb-md-0">
@@ -73,6 +83,8 @@
                         v-model.number="dataclient.plazo"
                         placeholder="Ingrese el plazo"
                         ref="dataclientPlazo"
+                        :class="{ errorValid: activeId == 'dataclientPlazo' }"
+                        @change="activeId = ''"
                     />
                 </b-col>
             </b-row>
@@ -144,6 +156,9 @@ export default {
                 pagaduriaKey: null,
                 visado: null
             },
+            montoValueCurrency: '',
+            couteValueCurrency: '',
+            activeId: null,
             isLoading: false
         };
     },
@@ -202,6 +217,7 @@ export default {
                     variant: 'danger'
                 }),
                     this.$refs.dataclientDoc.focus();
+                this.activeId = 'dataclientDoc';
             } else if (!this.dataclient.name) {
                 this.$bvToast.toast(`Debes llenar el campo del nombre, es obligatorio`, {
                     title: '¡Error!',
@@ -210,6 +226,7 @@ export default {
                     variant: 'danger'
                 }),
                     this.$refs.dataclientName.focus();
+                this.activeId = 'dataclientName';
             } else if (!this.dataclient.monto) {
                 this.$bvToast.toast(`Debes colocar el campo del monto, es obligatorio`, {
                     title: '¡Error!',
@@ -218,6 +235,7 @@ export default {
                     variant: 'danger'
                 }),
                     this.$refs.dataclientMonto.focus();
+                this.activeId = 'dataclientMonto';
             } else if (!this.dataclient.cuotadeseada) {
                 this.$bvToast.toast(`Debes colocar el campo de la cuota deseada es obligatorio`, {
                     title: '¡Error!',
@@ -226,6 +244,7 @@ export default {
                     variant: 'danger'
                 }),
                     this.$refs.dataclientCuotaDeseada.focus();
+                this.activeId = 'dataclientCuotaDeseada';
             } else if (!this.dataclient.plazo) {
                 this.$bvToast.toast(`Debes colocar el campo del plazo deseada es obligatorio`, {
                     title: '¡Error!',
@@ -234,6 +253,7 @@ export default {
                     variant: 'danger'
                 }),
                     this.$refs.dataclientPlazo.focus();
+                this.activeId = 'dataclientPlazo';
             } else {
                 this.getAllPagadurias();
             }
@@ -328,6 +348,39 @@ export default {
             } finally {
                 this.isLoading = false;
             }
+        },
+
+        formatCurrency(value) {
+            if (!value) return '';
+            // remove any non-numeric characters except decimal point
+            let numericValue = value.replace(/[^\d.]/g, '');
+            // split into integer and decimal parts
+            let parts = numericValue.split('.');
+            // add comma separators for thousands to integer part
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            // join integer and decimal parts with a period
+            return '$' + parts.join('.');
+        },
+        formatMontoValueCurrency(event) {
+            // remove non-numeric characters except decimal point
+            let input = event.target.value.replace(/[^\d.]/g, '');
+            // add dollar sign to input
+            event.target.value = input;
+            // format input with comma separators for thousands
+            event.target.value = event.target.value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            // update data property with formatted input
+            this.montoValueCurrency = event.target.value;
+        },
+
+        formatCouteValueCurrency(event) {
+            // remove non-numeric characters except decimal point
+            let input = event.target.value.replace(/[^\d.]/g, '');
+            // add dollar sign to input
+            event.target.value = input;
+            // format input with comma separators for thousands
+            event.target.value = event.target.value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            // update data property with formatted input
+            this.couteValueCurrency = event.target.value;
         }
     }
 };
