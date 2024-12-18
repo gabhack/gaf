@@ -3,11 +3,53 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\CouponsGen;
+use App\Jelou;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Services\JelouService;
 
 class JelouController extends Controller
 {
+    protected $jelouService;
+
+    public function __construct(JelouService $jelouService)
+    {
+        $this->jelouService = $jelouService;
+    }
+
+    /**
+     * Registrar datos en la tabla base_reporte_biometria.
+     *
+     * @param  Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function createBaseReporteBiometria(Request $request){
+        $this->jelouService->createBaseReporteBiometria($request);
+        return response()->json(['message' => 'Los datos fueron registrados correctamente.'], 200);
+    }
+
+    /**
+     * Registrar datos en la tabla reporte_de_biometria.
+     *
+     * @param  Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function createReporteBiometria(Request $request){
+        $this->jelouService->createReporteBiometria($request);
+        return response()->json(['message' => 'Los datos fueron registrados correctamente.'], 200);
+    }
+
+    /**
+     * Registrar datos en la tabla informacion_usuario.
+     *
+     * @param  Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function createInformacionUsuario(Request $request){
+        $this->jelouService->createInformacionUsuario($request);
+        return response()->json(['message' => 'Los datos fueron registrados correctamente.'], 200);
+    }
+
     public function getFactorPerDoc(Request $request, $doc)
     {
         $user = $request->header('php-auth-user');

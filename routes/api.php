@@ -88,3 +88,10 @@ Route::group(['prefix' => 'clientes'], function(){
 Route::group(['prefix' => 'ami'], function(){
     Route::post('/getDesprendiblesXDocumento', 'JsonConsultasController@getDesprendiblesXDocumento');
 });
+
+// JELOU
+Route::group(['prefix' => 'jelou'], function(){
+    Route::post('/createBaseReporteBiometria', 'JelouController@createBaseReporteBiometria');
+    Route::post('/createReporteBiometria', 'JelouController@createReporteBiometria');
+    Route::post('/createInformacionUsuario', 'JelouController@createInformacionUsuario');
+});
