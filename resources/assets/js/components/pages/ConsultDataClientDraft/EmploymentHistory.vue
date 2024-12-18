@@ -1,7 +1,39 @@
 <template>
     <div class="col-12">
         <div class="panel panel-primary mb-3">
-            <h3 class="heading-title">Historial laboral</h3>
+            <h3
+                class="heading-title w-100 d-flex align-items-center justify-content-start"
+                :class="visible ? null : 'collapsed'"
+                :aria-expanded="visible ? 'true' : 'false'"
+                aria-controls="info-historial"
+                @click="visible = !visible"
+                style="cursor: pointer; gap: 10px"
+            >
+                <!-- SVG -->
+                <svg
+                    version="1.1"
+                    :class="{ rotate180: visible }"
+                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                    xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+                    x="0px"
+                    y="0px"
+                    width="15px"
+                    height="9px"
+                    viewBox="0 0 15 9"
+                    style="enable-background: new 0 0 15 9"
+                    xml:space="preserve"
+                >
+                    <defs></defs>
+                    <path
+                        fill="#3a5659"
+                        d="M6.4,8.6C7,9.1,8,9.1,8.6,8.6l6-6c0.4-0.4,0.6-1.1,0.3-1.6C14.6,0.4,14.1,0,13.5,0l-12,0C0.9,0,0.3,0.4,0.1,0.9
+	S0,2.1,0.4,2.6L6.4,8.6L6.4,8.6z"
+                    />
+                </svg>
+
+                Historial laboral
+            </h3>
             <!--
             <div v-if="datamesSedArray.length > 0" class="general-info">
                 <br />
@@ -33,108 +65,112 @@
                 </ul>
             </div>
 -->
-            <div v-if="datamesSedArray.length > 0" class="general-info col-12 px-0">
-                <div class="col-12 px-0 d-flex align-items-start justify-content-between flex-column flex-sm-row">
-                    <!-------------fecha de ingreso---------------->
-                    <div class="col-12 col-48 px-0">
-                        <div class="mt-3 table-responsive">
-                            <table role="table" aria-colcount="1" class="table b-table table-striped table-hover">
-                                <!----><!---->
-                                <thead role="rowgroup" class="table-header-nowrap">
-                                    <!---->
-                                    <tr role="row">
-                                        <th role="columnheader" scope="col" aria-colindex="1">Fecha ingreso</th>
-                                    </tr>
-                                </thead>
-                                <tbody role="rowgroup">
-                                    <!---->
-                                    <tr role="row" v-for="(item, index) in datamesSedArray" :key="index">
-                                        <td aria-colindex="1" role="cell">{{ item.fecha_ingreso || '--' }}</td>
-                                    </tr>
 
+            <b-collapse id="info-historial" v-model="visible" class="mt-2">
+                <div v-if="datamesSedArray.length > 0" class="general-info col-12 px-0">
+                    <div class="col-12 px-0 d-flex align-items-start justify-content-between flex-column flex-sm-row">
+                        <!-------------fecha de ingreso---------------->
+                        <div class="col-12 col-48 px-0">
+                            <div class="mt-3 table-responsive">
+                                <table role="table" aria-colcount="1" class="table b-table table-striped table-hover">
                                     <!----><!---->
-                                </tbody>
-                                <!---->
-                            </table>
+                                    <thead role="rowgroup" class="table-header-nowrap">
+                                        <!---->
+                                        <tr role="row">
+                                            <th role="columnheader" scope="col" aria-colindex="1">Fecha ingreso</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody role="rowgroup">
+                                        <!---->
+                                        <tr role="row" v-for="(item, index) in datamesSedArray" :key="index">
+                                            <td aria-colindex="1" role="cell">{{ item.fecha_ingreso || '--' }}</td>
+                                        </tr>
+
+                                        <!----><!---->
+                                    </tbody>
+                                    <!---->
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-------------Cargo---------------->
+                        <div class="col-12 col-48 px-0">
+                            <div class="mt-3 table-responsive">
+                                <table role="table" aria-colcount="1" class="table b-table table-striped table-hover">
+                                    <!----><!---->
+                                    <thead role="rowgroup" class="table-header-nowrap">
+                                        <!---->
+                                        <tr role="row">
+                                            <th role="columnheader" scope="col" aria-colindex="1">Cargo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody role="rowgroup">
+                                        <!---->
+                                        <tr role="row" v-for="(item, index) in datamesSedArray" :key="index">
+                                            <td aria-colindex="1" role="cell">{{ item.cargo || '--' }}</td>
+                                        </tr>
+
+                                        <!----><!---->
+                                    </tbody>
+                                    <!---->
+                                </table>
+                            </div>
                         </div>
                     </div>
 
-                    <!-------------Cargo---------------->
-                    <div class="col-12 col-48 px-0">
-                        <div class="mt-3 table-responsive">
-                            <table role="table" aria-colcount="1" class="table b-table table-striped table-hover">
-                                <!----><!---->
-                                <thead role="rowgroup" class="table-header-nowrap">
-                                    <!---->
-                                    <tr role="row">
-                                        <th role="columnheader" scope="col" aria-colindex="1">Cargo</th>
-                                    </tr>
-                                </thead>
-                                <tbody role="rowgroup">
-                                    <!---->
-                                    <tr role="row" v-for="(item, index) in datamesSedArray" :key="index">
-                                        <td aria-colindex="1" role="cell">{{ item.cargo || '--' }}</td>
-                                    </tr>
-
+                    <div class="col-12 px-0 d-flex align-items-start justify-content-between flex-column flex-sm-row">
+                        <!-------------principal---------------->
+                        <div class="col-12 col-48 px-0">
+                            <div class="mt-3 table-responsive">
+                                <table role="table" aria-colcount="1" class="table b-table table-striped table-hover">
                                     <!----><!---->
-                                </tbody>
-                                <!---->
-                            </table>
+                                    <thead role="rowgroup" class="table-header-nowrap">
+                                        <!---->
+                                        <tr role="row">
+                                            <th role="columnheader" scope="col" aria-colindex="1">Principal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody role="rowgroup">
+                                        <!---->
+                                        <tr role="row" v-for="(item, index) in datamesSedArray" :key="index">
+                                            <td aria-colindex="1" role="cell">{{ item.depen || '--' }}</td>
+                                        </tr>
+
+                                        <!----><!---->
+                                    </tbody>
+                                    <!---->
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-------------Fecha vinculación---------------->
+                        <div class="col-12 col-48 px-0">
+                            <div class="mt-3 table-responsive">
+                                <table role="table" aria-colcount="1" class="table b-table table-striped table-hover">
+                                    <!----><!---->
+                                    <thead role="rowgroup" class="table-header-nowrap">
+                                        <!---->
+                                        <tr role="row">
+                                            <th role="columnheader" scope="col" aria-colindex="1">
+                                                Fecha de vinculación
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody role="rowgroup">
+                                        <!---->
+                                        <tr role="row" v-for="(item, index) in datamesSedArray" :key="index">
+                                            <td aria-colindex="1" role="cell">{{ item.fnombramiento || '--' }}</td>
+                                        </tr>
+
+                                        <!----><!---->
+                                    </tbody>
+                                    <!---->
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="col-12 px-0 d-flex align-items-start justify-content-between flex-column flex-sm-row">
-                    <!-------------principal---------------->
-                    <div class="col-12 col-48 px-0">
-                        <div class="mt-3 table-responsive">
-                            <table role="table" aria-colcount="1" class="table b-table table-striped table-hover">
-                                <!----><!---->
-                                <thead role="rowgroup" class="table-header-nowrap">
-                                    <!---->
-                                    <tr role="row">
-                                        <th role="columnheader" scope="col" aria-colindex="1">Principal</th>
-                                    </tr>
-                                </thead>
-                                <tbody role="rowgroup">
-                                    <!---->
-                                    <tr role="row" v-for="(item, index) in datamesSedArray" :key="index">
-                                        <td aria-colindex="1" role="cell">{{ item.depen || '--' }}</td>
-                                    </tr>
-
-                                    <!----><!---->
-                                </tbody>
-                                <!---->
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-------------Fecha vinculación---------------->
-                    <div class="col-12 col-48 px-0">
-                        <div class="mt-3 table-responsive">
-                            <table role="table" aria-colcount="1" class="table b-table table-striped table-hover">
-                                <!----><!---->
-                                <thead role="rowgroup" class="table-header-nowrap">
-                                    <!---->
-                                    <tr role="row">
-                                        <th role="columnheader" scope="col" aria-colindex="1">Fecha de vinculación</th>
-                                    </tr>
-                                </thead>
-                                <tbody role="rowgroup">
-                                    <!---->
-                                    <tr role="row" v-for="(item, index) in datamesSedArray" :key="index">
-                                        <td aria-colindex="1" role="cell">{{ item.fnombramiento || '--' }}</td>
-                                    </tr>
-
-                                    <!----><!---->
-                                </tbody>
-                                <!---->
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+            </b-collapse>
             <!--============================
                             FOPEP
                     ==============================-->
@@ -596,7 +632,8 @@ export default {
                     }
                 }
             ],
-            arrayCoupons: []
+            arrayCoupons: [],
+            visible: true
         };
     },
     computed: {

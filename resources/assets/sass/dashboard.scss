@@ -281,6 +281,10 @@
     line-height: 18.23px !important;
 }
 
+.rotate180 {
+    transform: rotate(-180deg);
+}
+
 .form-control2.errorValid,
 .form-control2.errorValid:focus,
 .style-form-control.errorValid,
