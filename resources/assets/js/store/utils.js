@@ -1,13 +1,18 @@
 // Normaliza una fecha al formato YYYY-MM-DD
 const normalizeDate = date => {
-    if (!date) return null; // Manejar valores nulos o indefinidos
+    if (!date) return null;
     const d = new Date(date);
-    if (isNaN(d.getTime())) return null; // Validar si la fecha es inválida
+    if (isNaN(d.getTime())) return null;
+
     const year = d.getFullYear();
-    const month = (d.getMonth() + 1).toString().padStart(2, '0');
-    const day = d.getDate().toString().padStart(2, '0');
-    return `${year}-${month}-${day}`;
+    const month = d.getMonth() + 1; // Mes (1-12)
+    const day = new Date(year, month, 0).getDate(); // Último día del mes
+    const normalizedDate = `${year}-${month < 10 ? '0' + month : month}-${day}`;
+    
+    console.log(`[normalizeDate] Fecha original: ${date}, Fecha normalizada: ${normalizedDate}`);
+    return normalizedDate;
 };
+
 
 // Verifica si una fecha es válida
 const isValidDate = date => {
@@ -18,21 +23,26 @@ const isValidDate = date => {
 export const setCurrentPeriod = data => {
     const date = new Date();
     const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = new Date(year, month, 0).getDate();
+    const month = date.getMonth() + 1; // Mes actual (1 a 12)
+    const day = new Date(year, month, 0).getDate(); // Último día del mes actual
     const currentPeriod = `${year}-${month < 10 ? '0' + month : month}-${day}`;
 
-    // Filtrar y normalizar los datos existentes
+    console.log(`[setCurrentPeriod] Año: ${year}, Mes: ${month}, Día final: ${day}`);
+    console.log(`[setCurrentPeriod] currentPeriod generado: ${currentPeriod}`);
+
     const normalizedData = data.filter(isValidDate).map(normalizeDate);
 
-    // Agregar el periodo actual si no existe
     if (!normalizedData.includes(currentPeriod)) {
         normalizedData.push(currentPeriod);
     }
 
-    // Ordenar periodos de forma descendente
-    return normalizedData.sort((a, b) => new Date(b) - new Date(a));
+    const sortedPeriods = normalizedData.sort((a, b) => new Date(b) - new Date(a));
+    console.log(`[setCurrentPeriod] sortedPeriods: ${sortedPeriods}`);
+
+    return sortedPeriods;
 };
+
+
 
 // Convierte un valor de cadena flotante a entero
 export const floatToInt = value => {

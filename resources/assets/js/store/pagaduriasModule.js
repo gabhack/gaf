@@ -117,49 +117,65 @@ const pagaduriasModule = {
     },
     getters: {
         couponsPerPeriod: state => {
-            return state.coupons.filter(item => {
-                const periodToMatch = new Date(state.selectedPeriod).toISOString().slice(0, 10);
-                const inicioPeriodo = new Date(item.inicioperiodo).toISOString().slice(0, 10);
-                const finPeriodo = new Date(item.finperiodo).toISOString().slice(0, 10);
+            console.log("[couponsPerPeriod] selectedPeriod del store:", state.selectedPeriod);
+        
+            if (!state.selectedPeriod || state.coupons.length === 0) {
+                console.warn("[couponsPerPeriod] selectedPeriod vacío o no hay cupones disponibles.");
+                return { items: [] };
+            }
+        
+            const filtered = state.coupons.filter(item => {
+                const periodToMatch = state.selectedPeriod.trim(); // Usamos directamente el string de selectedPeriod
+                const inicioPeriodo = item.inicioperiodo.slice(0, 10).trim(); // Limpiamos espacios
+                const finPeriodo = item.finperiodo.slice(0, 10).trim();
+        
+                console.log("[couponsPerPeriod] Comparando periodo:",
+                    "inicioPeriodo:", inicioPeriodo,
+                    "finPeriodo:", finPeriodo,
+                    "periodToMatch:", periodToMatch
+                );
         
                 return inicioPeriodo === periodToMatch || finPeriodo === periodToMatch;
             });
+        
+            console.log("[couponsPerPeriod] filtered:", filtered);
+            return { items: filtered };
         },
+        
         couponsIngresos: (state, getters) => {
+            if (!getters.couponsPerPeriod.items || getters.couponsPerPeriod.items.length === 0) {
+                console.warn("[couponsIngresos] No hay elementos en couponsPerPeriod.items");
+                return { items: [], total: 0, amount: 0 };
+            }
+        
             const items = getters.couponsPerPeriod.items.filter(
                 item => Number(item.egresos) > 0
             );
-
+        
+            console.log("[couponsIngresos] Items filtrados:", items);
+        
             return {
-                items: items,
+                items,
                 total: items.length,
-                // amount: items.reduce((egresos, item) => egresos + Number(item.egresos), 0)
-                amount: items.reduce((egresos, item) => {
-                    const valorEgresos = Number(item.egresos);
-                    return valorEgresos >= 0 ? egresos + valorEgresos : egresos;
-                }, 0)
+                amount: items.reduce((sum, item) => sum + Number(item.egresos), 0)
             };
         },
+        
+
         ingresosExtras: (state, getters) => {
-            const items = getters.couponsPerPeriod.items.filter(
+            if (!getters.couponsPerPeriod.items) return [];
+            return getters.couponsPerPeriod.items.filter(
                 item => item.code !== 'SUEBA' && item.code !== 'INGCUP' && Number(item.ingresos) > 0
             );
-
-            return items;
         },
+
         valorIngreso: (state, getters) => {
-            return getters.couponsPerPeriod.items.find(coupon => coupon.code === 'INGCUP')?.ingresos || 0;
+            const item = getters.couponsPerPeriod.items?.find(coupon => coupon.code === 'INGCUP');
+            return item?.ingresos || 0;
         },
-        // salarioBasico: (state, getters) => {
-        //     return getters.couponsPerPeriod.items.find(coupon => coupon.code === 'SUEBA')?.ingresos || 0;
-        // },
 
-
-        // salarioBasico: (state, getters) => {
-        //     return getters.couponsPerPeriod.items.filter(coupon => coupon.code === 'SUEBA').map(coupon => coupon.ingresos);
-        // },
-        
         salarioBasico: (state, getters) => {
+            if (!getters.couponsPerPeriod.items) return [];
             return getters.couponsPerPeriod.items
                 .filter(coupon => coupon.code === 'SUEBA')
                 .map(coupon => ({
@@ -168,31 +184,31 @@ const pagaduriasModule = {
                 }));
         },
 
-
         pagaduriaPeriodos: state => {
-            console.log('Cupones en pagaduriaPeriodos:', state.coupons);
+            console.log('[pagaduriaPeriodos] Cupones en pagaduriaPeriodos:', state.coupons);
+        
             let periodos = state.coupons.reduce((acc, coupon) => {
                 const cleanFinPeriodo = coupon.finperiodo?.trim();
                 if (!cleanFinPeriodo || isNaN(new Date(cleanFinPeriodo).getTime())) {
-                    console.warn('Periodo inválido encontrado:', coupon);
+                    console.warn('[pagaduriaPeriodos] Periodo inválido encontrado:', coupon);
                     return acc;
                 }
-            
+        
                 if (!acc.includes(cleanFinPeriodo)) {
                     acc.push(cleanFinPeriodo);
                 }
                 return acc;
             }, []);
-            
         
-            console.log('Periodos únicos antes de agregar el actual:', periodos);
+            console.log('[pagaduriaPeriodos] Periodos antes de setCurrentPeriod:', periodos);
         
             periodos = setCurrentPeriod(periodos);
         
-            console.log('Periodos después de setCurrentPeriod:', periodos);
+            console.log('[pagaduriaPeriodos] Periodos después de setCurrentPeriod:', periodos);
         
             return periodos.sort((a, b) => new Date(b) - new Date(a));
-        },
+        },                     
+
         ingresosIncapacidad: state => {
             const items = state.coupons.filter(
                 item => (item.code === 'PGINC' || item.code === 'PGINC100') && Number(item.ingresos) > 0
@@ -201,12 +217,17 @@ const pagaduriasModule = {
             const amount = items.reduce((ingresos, item) => ingresos + Number(item.ingresos), 0);
 
             return {
-                items: items,
+                items,
                 total: items.length,
-                amount: amount
+                amount
             };
         },
+
         ingresosIncapacidadPerPeriod: (state, getters) => {
+            if (!getters.couponsPerPeriod.items) {
+                return { items: [], total: 0, amount: 0 };
+            }
+
             const items = getters.couponsPerPeriod.items.filter(
                 item => (item.code === 'PGINC' || item.code === 'PGINC100') && Number(item.ingresos) > 0
             );
@@ -214,19 +235,22 @@ const pagaduriasModule = {
             const amount = items.reduce((ingresos, item) => ingresos + Number(item.ingresos), 0);
 
             return {
-                items: items,
+                items,
                 total: items.length,
-                amount: amount
+                amount
             };
         },
+
         incapacidadValida: (state, getters) => {
             const monthsNumber = 2;
 
             const actualYear = new Date().getFullYear();
-            const actualMonth = 10; // new Date().getMonth() + 1;
+            const actualMonth = 10; // Ajustar según mes actual si es necesario
 
-            // Se obtienen los valores de año y mes por separado
-            const newItems = getters.ingresosIncapacidad.items.map(item => {
+            const ingresosIncap = getters.ingresosIncapacidad;
+            if (!ingresosIncap || !Array.isArray(ingresosIncap.items)) return true;
+
+            const newItems = ingresosIncap.items.map(item => {
                 const year = item.finperiodo.toString().substring(0, 4);
                 const month = item.finperiodo.toString().substring(5, 7);
 
@@ -237,21 +261,17 @@ const pagaduriasModule = {
                 };
             });
 
-            // Se buscan los cupones que esten 3 meses antes o del mes actual
             const periodsByYear = newItems.filter(item => {
                 return item.year === actualYear && item.month > actualMonth - monthsNumber;
             });
 
-            // Agrupar los periodos por meses
             const periodsGroupByMonth = periodsByYear.reduce((group, item) => {
                 const { month } = item;
-
                 group[month] = group[month] || [];
                 group[month].push(item);
                 return group;
             }, {});
 
-            // Si existen cupones en los 3 meses anteriores no se puede aplicar la incapacidad
             return Object.keys(periodsGroupByMonth).length < monthsNumber ? true : false;
         }
     },
@@ -277,23 +297,20 @@ const pagaduriasModule = {
             try {
                 console.log('Datos recibidos en fetchCoupons:', data);
     
-                // Mapea los datos entrantes para asegurarte de que sean consistentes
                 const items = data.map(item => {
                     return {
                         ...item,
                         nomtercero: item.concept,
                         ingresos: floatToInt(item.ingresos),
                         egresos: floatToInt(item.egresos),
-                        vaplicado: floatToInt(item.egresos) // Asegúrate de convertir esto a un número
+                        vaplicado: floatToInt(item.egresos)
                     };
                 });
     
                 console.log('Datos mapeados en fetchCoupons:', items);
     
-                // Commit a la mutación para guardar los datos
                 ctx.commit('setCoupons', items);
     
-                // Seleccionar el primer período por defecto si existe
                 const periods = ctx.getters.pagaduriaPeriodos;
                 if (periods.length > 0) {
                     console.log('Períodos disponibles:', periods);
