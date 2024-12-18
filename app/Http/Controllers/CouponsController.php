@@ -42,104 +42,102 @@ class CouponsController extends Controller
      */
     private static $pagaduriasMap = [
         'sed amazonas' => 1,
-        'sed antioquia' => 2,
-        'sed arauca' => 3,
-        'sed atlantico' => 4,
+        'sed antioquia' => 130,
+        'sed arauca' => 109,
+        'sed atlantico' => 121,
         'sed bolivar' => 5,
-        'sed boyaca' => 6,
-        'sed caldas' => 7,
-        'sed caqueta' => 8,
-        'sed casanare' => 9,
-        'sed cauca' => 10,
+        'sed boyaca' => 110,
+        'sed caldas' => 139,
+        'sed caqueta' => 140,
+        'sed casanare' => 104,
+        'sed cauca' => 177,
         'sed cesar' => 11,
         'sed choco' => 12,
-        'sed cordoba' => 13,
-        'sed cundinamarca' => 14,
-        'sed guajira' => 15,
-        'sed guaviare' => 16,
-        'sed huila' => 17,   // Aquí está la pagaduría Huila
-        'sed magdalena' => 18,
-        'sed meta' => 19,
-        'sed narino' => 20,
-        'sed norte de santander' => 22,
-        'sed putumayo' => 23,
-        'sed quindio' => 24,
-        'sed risaralda' => 25,
+        'sed cordoba' => 182,
+        'sed cundinamarca' => 163,
+        'sed guajira' => 192,
+        'sed guaviare' => 173,
+        'sed huila' => 178,
+        'sed magdalena' => 145,
+        'sed meta' => 113,
+        'sed narino' => 143,
+        'sed norte de santander' => 154,
+        'sed putumayo' => 184,
+        'sed quindio' => 166,
+        'sed risaralda' => 114,
         'sed santander' => 26,
-        'sem sincelejo' => 27, // Ejemplo SEM
-        'sed sucre' => 28,
-        'sed tolima' => 29,
-        'sed valle' => 30,
-        'sed vaupes' => 31,
+        'sed sucre' => 175,
+        'sed tolima' => 122,
+        'sed valle' => 165,
+        'sed vaupes' => 132,
         'sed vichada' => 32,
-        'sem apartado' => 33,
+        'sem sincelejo' => 27,
         'sem armenia' => 34,
-        'sem barrancabermeja' => 36,
-        'sem barranquilla' => 37,
-        'sem bello' => 38,
+        'sem barrancabermeja' => 160,
+        'sem barranquilla' => 106,
+        'sem bello' => 111,
         'sem bucaramanga' => 39,
         'sem buenaventura' => 40,
-        'sem buga' => 41,
+        'sem buga' => 157,
         'sem cali' => 42,
         'sem cartagena' => 43,
-        'sem cartago' => 44,
+        'sem cartago' => 136,
         'sem chia' => 45,
-        'sem cienaga' => 46,
+        'sem cienaga' => 103,
         'sem cucuta' => 47,
-        'sem dosquebradas' => 48,
+        'sem dosquebradas' => 112,
         'sem duitama' => 49,
-        'sem envigado' => 52,
-        'sem estrella' => 53,
-        'sem facatativa' => 54,
+        'sem envigado' => 115,
+        'sem estrella' => 168,
+        'sem facatativa' => 164,
         'sem florencia' => 55,
-        'sem floridablanca' => 56,
-        'sem funza' => 57,
-        'sem fusagasuga' => 58,
-        'sem girardot' => 60,
+        'sem floridablanca' => 170,
+        'sem funza' => 117,
+        'sem fusagasuga' => 151,
+        'sem girardot' => 179,
         'sem giron' => 61,
-        'sem guainia' => 62,
-        'sem ibague' => 63,
-        'sem ipiales' => 64,
-        'sem itagui' => 65,
-        'sem jamundi' => 66,
+        'sem guainia' => 116,
+        'sem ibague' => 147,
+        'sem ipiales' => 134,
+        'sem itagui' => 135,
+        'sem jamundi' => 146,
         'sem lorica' => 67,
-        'sem magangue' => 68,
+        'sem magangue' => 133,
         'sem maicao' => 69,
-        'sem malambo' => 70,
-        'sem manizales' => 71,
-        'sem medellin' => 72,
-        'sem monteria' => 73,
-        'sem mosquera' => 74,
-        'sem neiva' => 75,
-        'sem palmira' => 76,
-        'sem pasto' => 77,
+        'sem malambo' => 161,
+        'sem manizales' => 174,
+        'sem medellin' => 180,
+        'sem monteria' => 176,
+        'sem mosquera' => 153,
+        'sem neiva' => 105,
+        'sem palmira' => 152,
+        'sem pasto' => 125,
         'sem pereira' => 78,
         'sem piedecuesta' => 79,
-        'sem pitalito' => 80,
-        'sem popayan' => 81,
-        'sem quibdo' => 82,
-        'sem riohacha' => 83,
-        'sem rionegro' => 84,
-        'sem sabaneta' => 85,
-        'sem sahagun' => 86,
-        'sem san andres' => 87,
-        'sem santa marta' => 88,
-        'sem soacha' => 89,
-        'sem sogamoso' => 90,
-        'sem soledad' => 91,
-        'sem tulua' => 92,
+        'sem pitalito' => 138,
+        'sem popayan' => 159,
+        'sem quibdo' => 162,
+        'sem riohacha' => 150,
+        'sem rionegro' => 129,
+        'sem sabaneta' => 108,
+        'sem sahagun' => 142,
+        'sem san andres' => 158,
+        'sem santa marta' => 126,
+        'sem soacha' => 119,
+        'sem sogamoso' => 172,
+        'sem soledad' => 123,
+        'sem tulua' => 120,
         'sem tumaco' => 93,
-        'sem tunja' => 94,
-        'sem turbo' => 95,
-        'sem tutlua' => 96,
-        'sem uribia' => 97,
-        'sem valledupar' => 98,
-        'sem villavicencio' => 99,
+        'sem tunja' => 141,
+        'sem turbo' => 137,
+        'sem uribia' => 144,
+        'sem valledupar' => 171,
+        'sem villavicencio' => 124,
         'sem yopal' => 100,
-        'sem yumbo' => 101,
-        'sem zipaquira' => 102,
-        // Agregar más si es necesario...
+        'sem yumbo' => 169,
+        'sem zipaquira' => 156
     ];
+    
 
     public function showCouponsForm()
     {
@@ -169,6 +167,13 @@ class CouponsController extends Controller
         if (count($parts) < 2) {
             $parts = explode(' ', $pagaduriaLabelNorm, 2);
         }
+
+        Log::debug('Después de normalizar pagaduría', [
+            'couponTypeNorm' => $couponTypeNorm,
+            'pagaduriaLabelNorm' => $pagaduriaLabelNorm,
+            'parts' => $parts
+        ]);
+
         if (count($parts) < 2) {
             Log::warning('Formato de pagaduría no válido.', [
                 'couponType' => $couponType,
@@ -180,25 +185,45 @@ class CouponsController extends Controller
         [$tipo, $nombrePagaduria] = $parts;
 
         $key = $tipo . ' ' . $nombrePagaduria;
+
+        Log::debug('Clave generada para buscar en el mapa', [
+            'key' => $key
+        ]);
+
         $idPagaduria = self::$pagaduriasMap[$key] ?? null;
+
+        Log::debug('ID Pagaduría encontrado', [
+            'idPagaduria' => $idPagaduria
+        ]);
 
         if (!$idPagaduria) {
             Log::warning('Pagaduría no encontrada en el mapa estático.', [
                 'couponType' => $couponType,
                 'pagaduriaLabel' => $pagaduriaLabel,
                 'tipo' => $tipo,
-                'nombre' => $nombrePagaduria
+                'nombre' => $nombrePagaduria,
+                'key' => $key
             ]);
             return response()->json(['error' => 'Pagaduría no encontrada.'], 404);
         }
 
-        // Consulta en fast_couponsgen
-        $dataGen = \DB::connection('pgsql')
+        // Construimos la query antes de ejecutarla para loggear
+        $query = \DB::connection('pgsql')
             ->table('fast_couponsgen_visado')
             ->where('doc', $doc)
-            ->where('idpagaduria', $idPagaduria)
-            ->get()
-            ->toArray();
+            ->where('idpagaduria', $idPagaduria);
+
+        $sql = $query->toSql();
+        $bindings = $query->getBindings();
+
+        Log::info('Ejecutando consulta SQL en fast_couponsgen_visado', [
+            'sql' => $sql,
+            'bindings' => $bindings,
+            'doc' => $doc,
+            'idpagaduria' => $idPagaduria
+        ]);
+
+        $dataGen = $query->get()->toArray();
 
         Log::info('Consulta fast_couponsgen finalizada.', [
             'time' => now(),
@@ -210,7 +235,8 @@ class CouponsController extends Controller
     } catch (\Exception $e) {
         Log::error('Error en la consulta para fast_couponsgen.', [
             'message' => $e->getMessage(),
-            'time' => now()
+            'time' => now(),
+            'trace' => $e->getTraceAsString()
         ]);
         return response()->json(['error' => 'Error al ejecutar la consulta.'], 500);
     }
@@ -222,6 +248,8 @@ class CouponsController extends Controller
 
     return response()->json($results, 200);
 }
+
+
 
 
 
