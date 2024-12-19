@@ -1,5 +1,5 @@
 <template>
-    <div class="col-md-12">
+    <div class="col-md-12 px-0">
         <div class="panel panel-primary mb-3">
             <h3
                 class="heading-title w-100 d-flex align-items-center justify-content-start"
@@ -32,7 +32,7 @@
                     />
                 </svg>
 
-                Detalle del cliente
+                Detalle del Cliente
             </h3>
             <b-row>
                 <b-collapse id="info-laboral" v-model="visible" class="mt-2 w-100">
@@ -49,7 +49,7 @@
                         <b-row class="pt-2">
                             <b-col cols="12" class="d-flex justify-content-end align-items-center">
                                 <div class="d-flex flex-column justify-content-center align-items-center">
-                                    <p>Cuota deseada</p>
+                                    <p>Cuota Deseada</p>
                                     <input
                                         type="number"
                                         class="form-control2"
@@ -76,8 +76,8 @@ export default {
         return {
             fields: [
                 { key: 'Obligaciones', label: 'Obligaciones' },
-                { key: 'Cantidad_obligaciones', label: 'Cantidad de obligaciones' },
-                { key: 'Cupo_aproximado', label: 'Cupo aproximado' },
+                { key: 'Cantidad_obligaciones', label: 'Cantidad de Obligaciones' },
+                { key: 'Cupo_aproximado', label: 'Cupo Aproximado' },
                 { key: 'Valor', label: 'Valor' }
             ],
             items: [
@@ -206,5 +206,10 @@ p {
     font-weight: 400;
     line-height: 18.23px;
     margin-bottom: 14px;
+}
+
+.table thead th {
+    font-weight: 600;
+    vertical-align: middle;
 }
 </style>

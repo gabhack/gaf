@@ -1,5 +1,5 @@
 <template>
-    <div class="col-12">
+    <div class="col-12 px-0">
         <div class="panel panel-primary mb-3">
             <h3
                 class="heading-title w-100 d-flex align-items-center justify-content-start"
@@ -32,7 +32,7 @@
                     />
                 </svg>
 
-                Historial laboral
+                Historial Laboral
             </h3>
             <!--
             <div v-if="datamesSedArray.length > 0" class="general-info">
@@ -77,7 +77,7 @@
                                     <thead role="rowgroup" class="table-header-nowrap">
                                         <!---->
                                         <tr role="row">
-                                            <th role="columnheader" scope="col" aria-colindex="1">Fecha ingreso</th>
+                                            <th role="columnheader" scope="col" aria-colindex="1">Fecha de Ingreso</th>
                                         </tr>
                                     </thead>
                                     <tbody role="rowgroup">
@@ -152,7 +152,7 @@
                                         <!---->
                                         <tr role="row">
                                             <th role="columnheader" scope="col" aria-colindex="1">
-                                                Fecha de vinculación
+                                                Fecha de Vinculación
                                             </th>
                                         </tr>
                                     </thead>
@@ -228,30 +228,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!--     <div class="col-4">
-                    <div class="row">
-                        <div class="col-2">
-                            <b class="panel-label">VALOR INGRESO:</b>
-                        </div>
-                        <div class="col-2">
-                            <div>
-                                <p class="panel-value">{{ valorIngreso | currency }}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-2">
-                            <b class="panel-label">SUELDO BASICO:</b>
-                        </div>
-                        <div class="col-2">
-                            <div>
-                                <p class="panel-value" v-if="salarioBasico">{{ salarioBasico | currency }}</p>
-                                <p class="panel-value" v-else>{{ datamesSed.pension | currency }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>-->
 
                     <div class="col-4" v-if="ingresosExtras.length > 0">
                         <b class="panel-label">INGRESOS EXTRAS:</b>
@@ -527,7 +503,7 @@
                                         <!---->
                                         <tr role="row">
                                             <th role="columnheader" scope="col" aria-colindex="1" colspan="1">
-                                                Valor ingreso
+                                                Valor de Ingreso
                                             </th>
                                         </tr>
                                     </thead>
@@ -571,12 +547,10 @@
                             </div>
                         </div>
                     </div>
-                    <div v-if="salarioBasico.length > 0">
+                    <!--<div v-if="salarioBasico.length > 0">
                         <div class="mt-3 table-responsive">
                             <table role="table" aria-colcount="2" class="table b-table table-striped table-hover">
-                                <!----><!---->
                                 <thead role="rowgroup" class="table-header-nowrap">
-                                    <!---->
                                     <tr role="row">
                                         <th role="columnheader" scope="col" aria-colindex="2" colspan="2">
                                             Salario Básico
@@ -584,7 +558,6 @@
                                     </tr>
                                 </thead>
                                 <tbody role="rowgroup">
-                                    <!---->
                                     <tr role="row" v-for="(item, index) in salarioBasico" :key="index">
                                         <td aria-colindex="2" role="cell" colspan="1">
                                             {{ item.concept }}
@@ -593,13 +566,10 @@
                                             {{ item.ingresos | currency }}
                                         </td>
                                     </tr>
-
-                                    <!----><!---->
                                 </tbody>
-                                <!---->
                             </table>
                         </div>
-                    </div>
+                    </div>-->
                     <div v-if="ingresosExtras.length > 0" style="width: 100%">
                         <div class="mt-3 table-responsive">
                             <table role="table" aria-colcount="2" class="table b-table table-striped table-hover">
@@ -622,10 +592,6 @@
                                             {{ item.ingresos | currency }}
                                         </td>
                                     </tr>
-                                    <tr role="row">
-                                        <td colspan="1"><strong>Total</strong></td>
-                                        <td colspan="1">{{ $total }}</td>
-                                    </tr>
                                     <!----><!---->
                                 </tbody>
                                 <!---->
@@ -646,7 +612,7 @@
                                             aria-colindex="2"
                                             colspan="2"
                                         >
-                                            Días laborados
+                                            Días Laborados
                                         </th>
                                     </tr>
                                 </thead>
@@ -862,6 +828,10 @@ p {
 }
 b {
     font-size: 14px;
+}
+.table thead th {
+    font-weight: 600;
+    vertical-align: middle;
 }
 @media (min-width: 770px) {
     .col-48 {

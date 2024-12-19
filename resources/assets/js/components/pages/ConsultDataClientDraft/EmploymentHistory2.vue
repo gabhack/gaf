@@ -32,7 +32,7 @@
                     />
                 </svg>
 
-                Información laboral
+                Información Laboral
             </h3>
             <b-collapse id="info-laboral" v-model="visible" class="mt-2">
                 <div class="mt-3 table-responsive">
@@ -42,16 +42,16 @@
                             <!---->
                             <tr role="row">
                                 <th class="text-center" role="columnheader" scope="col" aria-colindex="1">
-                                    Fecha ingreso
+                                    Fecha de Ingreso
                                 </th>
                                 <th class="text-center" role="columnheader" scope="col" aria-colindex="2">
-                                    Fecha ingreso nómina
+                                    Fecha Ingreso Nómina
                                 </th>
                                 <th class="text-center" role="columnheader" scope="col" aria-colindex="3">
-                                    Fecha de inicio
+                                    Fecha de Inicio
                                 </th>
                                 <th class="text-center" role="columnheader" scope="col" aria-colindex="4">
-                                    Antiguedad laboral
+                                    Antiguedad Laboral
                                 </th>
                             </tr>
                         </thead>
@@ -83,9 +83,9 @@
                             <!---->
                             <tr role="row">
                                 <th role="columnheader" scope="col" aria-colindex="1">Cargo</th>
-                                <th role="columnheader" scope="col" aria-colindex="2">Tipo de contrato</th>
-                                <th role="columnheader" scope="col" aria-colindex="3">Situación laboral</th>
-                                <th role="columnheader" scope="col" aria-colindex="4">Área de desempeño</th>
+                                <th role="columnheader" scope="col" aria-colindex="2">Tipo de Contrato</th>
+                                <th role="columnheader" scope="col" aria-colindex="3">Situación Laboral</th>
+                                <th role="columnheader" scope="col" aria-colindex="4">Área de Desempeño</th>
                             </tr>
                         </thead>
                         <tbody role="rowgroup">
@@ -156,5 +156,9 @@ export default {
 <style scoped>
 th {
     font-size: 14px;
+}
+.table thead th {
+    font-weight: 600;
+    vertical-align: middle;
 }
 </style>

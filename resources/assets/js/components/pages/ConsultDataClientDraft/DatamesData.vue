@@ -32,7 +32,7 @@
                     />
                 </svg>
 
-                Información personal
+                Información Personal y Demográfica
             </h3>
             <b-collapse id="info-personal" v-model="visible" class="mt-2">
                 <div class="mt-3 table-responsive">
@@ -42,16 +42,16 @@
                             <!---->
                             <tr role="row">
                                 <th class="text-center" role="columnheader" scope="col" aria-colindex="1">
-                                    Nombre y apellido
+                                    Nombre y Apellido
                                 </th>
                                 <th class="text-center" role="columnheader" scope="col" aria-colindex="2">
-                                    Tipo de documento
+                                    Tipo de Documento
                                 </th>
                                 <th class="text-center" role="columnheader" scope="col" aria-colindex="3">
-                                    N<sup>a</sup> documento
+                                    N<sup>a</sup> Documento
                                 </th>
                                 <th class="text-center" role="columnheader" scope="col" aria-colindex="4">
-                                    Fecha de nacimiento
+                                    Fecha de Nacimiento
                                 </th>
                                 <th class="text-center" role="columnheader" scope="col" aria-colindex="5">Edad</th>
                             </tr>
@@ -61,9 +61,12 @@
                             <tr role="row">
                                 <td aria-colindex="1" role="cell">{{ datamesSed.nombre_usuario || '--' }}</td>
                                 <td class="text-center" aria-colindex="2" role="cell">
-                                    {{ datamesSed.documentType || '--' }}
+                                    <!--  {{ datamesSed.documentType || '--' }}-->
+                                    Cédula de Ciudadanía
                                 </td>
-                                <td class="text-center" aria-colindex="3" role="cell">{{ datamesSed.doc || '--' }}</td>
+                                <td class="text-center" aria-colindex="3" role="cell">
+                                    {{ datamesSed.doc || '--' }}
+                                </td>
                                 <td class="text-center" aria-colindex="4" role="cell">
                                     {{ datamesSed.fecha_nacimiento || '--' }}
                                 </td>
@@ -77,20 +80,24 @@
                 </div>
 
                 <div class="mt-3 table-responsive">
-                    <table role="table" aria-colcount="5" class="table b-table table-striped table-hover">
+                    <table role="table" aria-colcount="7" class="table b-table table-striped table-hover">
                         <!----><!---->
                         <thead role="rowgroup" class="table-header-nowrap">
                             <!---->
                             <tr role="row">
                                 <th class="text-center" role="columnheader" scope="col" aria-colindex="1">
-                                    Teléfono / celular
+                                    Teléfono / Celular
                                 </th>
                                 <th class="text-center" role="columnheader" scope="col" aria-colindex="2">Dirección</th>
                                 <th class="text-center" role="columnheader" scope="col" aria-colindex="3">
-                                    Ciudad / municipio
+                                    Ciudad / Municipio
                                 </th>
                                 <th class="text-center" role="columnheader" scope="col" aria-colindex="4">Email</th>
                                 <th class="text-center" role="columnheader" scope="col" aria-colindex="5">Pagaduría</th>
+                                <th class="text-center" role="columnheader" scope="col" aria-colindex="6">Profesión</th>
+                                <th class="text-center" role="columnheader" scope="col" aria-colindex="7">
+                                    Nivel Educativo
+                                </th>
                             </tr>
                         </thead>
                         <tbody role="rowgroup">
@@ -108,7 +115,15 @@
                                 <td class="text-center" aria-colindex="4" role="cell">
                                     {{ datamesSed.correo_electronico || '--' }}
                                 </td>
-                                <td aria-colindex="5" role="cell">{{ datamesSed.pagaduria || '--' }}</td>
+                                <td class="text-center" aria-colindex="5" role="cell">
+                                    {{ datamesSed.pagaduria || '--' }}
+                                </td>
+                                <td class="text-center" aria-colindex="6" role="cell">
+                                    {{ datamesSed.profesion || '--' }}
+                                </td>
+                                <td class="text-center" aria-colindex="7" role="cell">
+                                    {{ datamesSed.niveleducac || '--' }}
+                                </td>
                             </tr>
 
                             <!----><!---->
@@ -171,6 +186,7 @@ th {
 }
 .table thead th {
     text-align: center;
-    font-weight: 500;
+    font-weight: 600;
+    vertical-align: middle;
 }
 </style>
