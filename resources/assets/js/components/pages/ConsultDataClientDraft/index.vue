@@ -328,7 +328,7 @@
                     <DescuentosEmpty v-if="pagaduriaType == 'SED'" :descuentosempty="descuentosempty" />
                     <Descuentos v-else />
                     <hr class="divider" />
-                    <div class="col-12">
+                    <div class="col-12 text-right">
                         <CustomButton text="Visar" style="width: 164px" @click="visadoFunction" />
                         <!-- <b-button class="mb-3" variant="black-pearl" @click="visadoFunction">Visar</b-button> -->
                     </div>
@@ -719,7 +719,6 @@ export default {
             console.log('Datos enviados a fetchCoupons:', couponData);
             this.fetchCoupons(couponData);
 
-
             setTimeout(() => {
                 // Valida si el tiene incapacidades
                 if (this.incapacidadValida === false) {
@@ -830,7 +829,7 @@ export default {
                 estado: this.visadoValido,
                 cuotacredito: this.cuotadeseada,
                 monto: this.monto,
-                causal: causal
+                causal: this.causal
             };
 
             axios

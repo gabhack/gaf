@@ -54,6 +54,9 @@
                                     Fecha de Nacimiento
                                 </th>
                                 <th class="text-center" role="columnheader" scope="col" aria-colindex="5">Edad</th>
+                                <th class="text-center" role="columnheader" scope="col" aria-colindex="1">
+                                    Teléfono / Celular
+                                </th>
                             </tr>
                         </thead>
                         <tbody role="rowgroup">
@@ -71,6 +74,9 @@
                                     {{ datamesSed.fecha_nacimiento || '--' }}
                                 </td>
                                 <td class="text-center" aria-colindex="5" role="cell">{{ edad || '--' }}</td>
+                                <td class="text-center" aria-colindex="1" role="cell">
+                                    {{ datamesSed.telefono || '--' }}
+                                </td>
                             </tr>
 
                             <!----><!---->
@@ -85,9 +91,6 @@
                         <thead role="rowgroup" class="table-header-nowrap">
                             <!---->
                             <tr role="row">
-                                <th class="text-center" role="columnheader" scope="col" aria-colindex="1">
-                                    Teléfono / Celular
-                                </th>
                                 <th class="text-center" role="columnheader" scope="col" aria-colindex="2">Dirección</th>
                                 <th class="text-center" role="columnheader" scope="col" aria-colindex="3">
                                     Ciudad / Municipio
@@ -103,9 +106,6 @@
                         <tbody role="rowgroup">
                             <!---->
                             <tr role="row">
-                                <td class="text-center" aria-colindex="1" role="cell">
-                                    {{ datamesSed.telefono || '--' }}
-                                </td>
                                 <td class="text-center" aria-colindex="2" role="cell">
                                     {{ datamesSed.direccion_residencial || '--' }}
                                 </td>

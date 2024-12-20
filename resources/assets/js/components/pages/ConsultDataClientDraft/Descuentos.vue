@@ -79,7 +79,7 @@
                         </svg>
                     </div>
                 </b-col>
-                <b-collapse id="info-laboral" v-model="visible" class="mt-2">
+                <b-collapse id="info-laboral" v-model="visible" class="mt-2 w-100">
                     <b-col cols="12">
                         <template v-if="descuentosPerPeriod.items.length > 0">
                             <b-table

@@ -70,28 +70,26 @@
                 <div v-if="datamesSedArray.length > 0" class="general-info col-12 px-0">
                     <div class="col-12 px-0 d-flex align-items-start justify-content-between flex-column flex-sm-row">
                         <!-------------fecha de ingreso---------------->
-                        <div class="col-12 col-48 px-0">
+                        <!--<div class="col-12 col-48 px-0">
                             <div class="mt-3 table-responsive">
                                 <table role="table" aria-colcount="1" class="table b-table table-striped table-hover">
-                                    <!----><!---->
+
                                     <thead role="rowgroup" class="table-header-nowrap">
-                                        <!---->
+              
                                         <tr role="row">
                                             <th role="columnheader" scope="col" aria-colindex="1">Fecha de Ingreso</th>
                                         </tr>
                                     </thead>
                                     <tbody role="rowgroup">
-                                        <!---->
+                                       
                                         <tr role="row" v-for="(item, index) in datamesSedArray" :key="index">
                                             <td aria-colindex="1" role="cell">{{ item.fecha_ingreso || '--' }}</td>
                                         </tr>
-
-                                        <!----><!---->
                                     </tbody>
-                                    <!---->
+
                                 </table>
                             </div>
-                        </div>
+                        </div>-->
 
                         <!-------------Cargo---------------->
                         <div class="col-12 col-48 px-0">

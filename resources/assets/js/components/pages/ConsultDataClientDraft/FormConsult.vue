@@ -43,36 +43,56 @@
                 <b-col cols="12" md="4" class="mb-2">
                     <b class="panel-label mb-2"><span class="text-danger"> *</span> Monto</b>
 
-                    <b-input-group size="md" prepend="$">
+                    <InputCurrency
+                        v-model="dataclient.monto"
+                        ref="dataclientMonto"
+                        @change="activeId = ''"
+                        label=""
+                        id=""
+                        name=""
+                        placeholder="Ingrese un monto"
+                        rules="required"
+                        :validateClass="activeId == 'dataclientMonto' ? true : false"
+                    />
+
+                    <!--<b-input-group size="md" prepend="$">
                         <input
                             type="text"
                             class="style-form-control col-md-8"
                             placeholder="Ingrese un monto"
                             ref="dataclientMonto"
-                            v-model.number="dataclient.monto"
-                            v-model="montoValueCurrency"
-                            @input="formatMontoValueCurrency"
+                            v-model="dataclient.monto"
                             :class="{ errorValid: activeId == 'dataclientMonto' }"
                             @change="activeId = ''"
                         />
-                    </b-input-group>
+                       
+                    </b-input-group>-->
                 </b-col>
                 <b-col cols="12" md="4" class="mb-2 mb-md-4">
                     <b class="panel-label mb-2"><span class="text-danger"> *</span> Cuota deseada</b>
 
-                    <b-input-group size="md" prepend="$">
+                    <InputCurrency
+                        v-model="dataclient.cuotadeseada"
+                        ref="dataclientCuotaDeseada"
+                        @change="activeId = ''"
+                        label=""
+                        id=""
+                        name=""
+                        placeholder="Cantidad de cuotas"
+                        rules="required"
+                        validateClass="errorValid"
+                    />
+                    <!--<b-input-group size="md" prepend="$">
                         <input
                             type="text"
                             class="style-form-control col-md-8"
                             placeholder="Cantidad de cuotas"
-                            v-model.number="dataclient.cuotadeseada"
+                            v-model="dataclient.cuotadeseada"
                             ref="dataclientCuotaDeseada"
-                            v-model="couteValueCurrency"
-                            @input="formatCouteValueCurrency"
                             :class="{ errorValid: activeId == 'dataclientCuotaDeseada' }"
                             @change="activeId = ''"
                         />
-                    </b-input-group>
+                    </b-input-group>-->
                 </b-col>
                 <b-col cols="12" md="4" class="mb-3 mb-md-0">
                     <b class="panel-label mb-2"><span class="text-danger"> *</span> Plazo </b>
@@ -136,11 +156,13 @@
 import { mapState, mapMutations } from 'vuex';
 import CustomButton from '../../customComponents/CustomButton.vue';
 import Download from '../../icons/Download.vue';
+import InputCurrency from '../../customComponents/InputCurrency.vue';
 export default {
     name: 'FormConsult',
     components: {
         CustomButton,
-        Download
+        Download,
+        InputCurrency
     },
     data() {
         return {
@@ -156,8 +178,6 @@ export default {
                 pagaduriaKey: null,
                 visado: null
             },
-            montoValueCurrency: '',
-            couteValueCurrency: '',
             activeId: null,
             isLoading: false
         };
@@ -334,7 +354,8 @@ export default {
                 const data = {
                     pagaduria: this.dataclient.pagaduria,
                     nombre: demograficoData.nombre_usuario,
-                    doc: this.dataclient.doc
+                    doc: this.dataclient.doc,
+                    plazo: this.dataclient.plazo
                 };
 
                 const response = await axios.post('/visados', data);
@@ -348,39 +369,6 @@ export default {
             } finally {
                 this.isLoading = false;
             }
-        },
-
-        formatCurrency(value) {
-            if (!value) return '';
-            // remove any non-numeric characters except decimal point
-            let numericValue = value.replace(/[^\d.]/g, '');
-            // split into integer and decimal parts
-            let parts = numericValue.split('.');
-            // add comma separators for thousands to integer part
-            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            // join integer and decimal parts with a period
-            return '$' + parts.join('.');
-        },
-        formatMontoValueCurrency(event) {
-            // remove non-numeric characters except decimal point
-            let input = event.target.value.replace(/[^\d.]/g, '');
-            // add dollar sign to input
-            event.target.value = input;
-            // format input with comma separators for thousands
-            event.target.value = event.target.value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            // update data property with formatted input
-            this.montoValueCurrency = event.target.value;
-        },
-
-        formatCouteValueCurrency(event) {
-            // remove non-numeric characters except decimal point
-            let input = event.target.value.replace(/[^\d.]/g, '');
-            // add dollar sign to input
-            event.target.value = input;
-            // format input with comma separators for thousands
-            event.target.value = event.target.value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            // update data property with formatted input
-            this.couteValueCurrency = event.target.value;
         }
     }
 };

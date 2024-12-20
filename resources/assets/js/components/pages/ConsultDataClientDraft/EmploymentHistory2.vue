@@ -47,9 +47,7 @@
                                 <th class="text-center" role="columnheader" scope="col" aria-colindex="2">
                                     Fecha Ingreso Nómina
                                 </th>
-                                <th class="text-center" role="columnheader" scope="col" aria-colindex="3">
-                                    Fecha de Inicio
-                                </th>
+
                                 <th class="text-center" role="columnheader" scope="col" aria-colindex="4">
                                     Antiguedad Laboral
                                 </th>
@@ -62,9 +60,7 @@
                                 <td class="text-center" aria-colindex="2" role="cell">
                                     {{ datamesSed.fecha_ingreso_nomina || '--' }}
                                 </td>
-                                <td class="text-center" aria-colindex="3" role="cell">
-                                    {{ datamesSed.fecha_inicio || '--' }}
-                                </td>
+
                                 <td class="text-center" aria-colindex="4" role="cell">
                                     {{ datamesSed.antiguedad ? datamesSed.antiguedad + ' años' : '--' }}
                                 </td>
