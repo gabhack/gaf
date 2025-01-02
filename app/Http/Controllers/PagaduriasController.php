@@ -167,9 +167,9 @@ class PagaduriasController extends Controller
 
         try {
             $models = [
-                DatamesFidu::class => 'doc',
-                DatamesFopep::class => 'doc',
-                DatamesSedAntioquia::class => 'doc',
+                DatamesFidu::class => 'doc', //necesario
+                DatamesFopep::class => 'doc', //necesario
+                /*DatamesSedAntioquia::class => 'doc',
                 DatamesSedArauca::class => 'doc',
                 DatamesSedAtlantico::class => 'doc',
                 DatamesSedBolivar::class => 'doc',
@@ -217,7 +217,7 @@ class PagaduriasController extends Controller
                 DatamesSemValledupar::class => 'doc',
                 DatamesSemYopal::class => 'doc',
                 DatamesSemYumbo::class => 'doc',
-                DatamesSemZipaquira::class => 'doc',
+                DatamesSemZipaquira::class => 'doc',*/
             ];
 
             $results = [];
@@ -233,8 +233,13 @@ class PagaduriasController extends Controller
                 }
             }
 
+            //esta información obetenr de la vista materializa
             // $dataGen = DatamesGen::where('doc', 'like', '%' . $doc . '%')->get();
-            $dataGen = DatamesGen::where('doc', '=', $doc )->get();
+            $dataGen = DatamesGen::select("doc", "pagaduria")
+                                    ->where('doc', '=', $doc)
+                                    ->groupBy("pagaduria", "doc")
+                                    ->get();
+
             if ($dataGen) {
                 foreach ($dataGen as $item) {
                     // Verifica si la pagaduría ya existe en $results
