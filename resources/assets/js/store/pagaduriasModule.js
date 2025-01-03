@@ -117,29 +117,13 @@ const pagaduriasModule = {
     },
     getters: {
         couponsPerPeriod: state => {
-            console.log("[couponsPerPeriod] selectedPeriod del store:", state.selectedPeriod);
-        
-            if (!state.selectedPeriod || state.coupons.length === 0) {
-                console.warn("[couponsPerPeriod] selectedPeriod vacío o no hay cupones disponibles.");
-                return { items: [] };
-            }
-        
-            const filtered = state.coupons.filter(item => {
-                const periodToMatch = state.selectedPeriod.trim(); // Usamos directamente el string de selectedPeriod
-                const inicioPeriodo = item.inicioperiodo.slice(0, 10).trim(); // Limpiamos espacios
-                const finPeriodo = item.finperiodo.slice(0, 10).trim();
-        
-                console.log("[couponsPerPeriod] Comparando periodo:",
-                    "inicioPeriodo:", inicioPeriodo,
-                    "finPeriodo:", finPeriodo,
-                    "periodToMatch:", periodToMatch
-                );
+            return state.coupons.filter(item => {
+                const periodToMatch = new Date(state.selectedPeriod).toISOString().slice(0, 10);
+                const inicioPeriodo = new Date(item.inicioperiodo).toISOString().slice(0, 10);
+                const finPeriodo = new Date(item.finperiodo).toISOString().slice(0, 10);
         
                 return inicioPeriodo === periodToMatch || finPeriodo === periodToMatch;
             });
-        
-            console.log("[couponsPerPeriod] filtered:", filtered);
-            return { items: filtered };
         },
         
         couponsIngresos: (state, getters) => {
@@ -185,26 +169,26 @@ const pagaduriasModule = {
         },
 
         pagaduriaPeriodos: state => {
-            console.log('[pagaduriaPeriodos] Cupones en pagaduriaPeriodos:', state.coupons);
-        
+            console.log('Cupones en pagaduriaPeriodos:', state.coupons);
             let periodos = state.coupons.reduce((acc, coupon) => {
                 const cleanFinPeriodo = coupon.finperiodo?.trim();
                 if (!cleanFinPeriodo || isNaN(new Date(cleanFinPeriodo).getTime())) {
-                    console.warn('[pagaduriaPeriodos] Periodo inválido encontrado:', coupon);
+                    console.warn('Periodo inválido encontrado:', coupon);
                     return acc;
                 }
-        
+            
                 if (!acc.includes(cleanFinPeriodo)) {
                     acc.push(cleanFinPeriodo);
                 }
                 return acc;
             }, []);
+            
         
-            console.log('[pagaduriaPeriodos] Periodos antes de setCurrentPeriod:', periodos);
+            console.log('Periodos únicos antes de agregar el actual:', periodos);
         
             periodos = setCurrentPeriod(periodos);
         
-            console.log('[pagaduriaPeriodos] Periodos después de setCurrentPeriod:', periodos);
+            console.log('Periodos después de setCurrentPeriod:', periodos);
         
             return periodos.sort((a, b) => new Date(b) - new Date(a));
         },                     
@@ -297,20 +281,23 @@ const pagaduriasModule = {
             try {
                 console.log('Datos recibidos en fetchCoupons:', data);
     
+                // Mapea los datos entrantes para asegurarte de que sean consistentes
                 const items = data.map(item => {
                     return {
                         ...item,
                         nomtercero: item.concept,
                         ingresos: floatToInt(item.ingresos),
                         egresos: floatToInt(item.egresos),
-                        vaplicado: floatToInt(item.egresos)
+                        vaplicado: floatToInt(item.egresos) // Asegúrate de convertir esto a un número
                     };
                 });
     
                 console.log('Datos mapeados en fetchCoupons:', items);
     
+                // Commit a la mutación para guardar los datos
                 ctx.commit('setCoupons', items);
     
+                // Seleccionar el primer período por defecto si existe
                 const periods = ctx.getters.pagaduriaPeriodos;
                 if (periods.length > 0) {
                     console.log('Períodos disponibles:', periods);

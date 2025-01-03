@@ -215,6 +215,17 @@ class CouponsController extends Controller
         return response()->json(['error' => 'Error al ejecutar la consulta.'], 500);
     }
 
+    Log::info('Consulta completada y datos devueltos.', [
+        'total_records' => count($results),
+        'time' => now()
+    ]);
+
+    return response()->json($results, 200);
+}
+
+
+
+
 
 
 
