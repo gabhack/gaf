@@ -235,9 +235,9 @@ class PagaduriasController extends Controller
 
             //esta información obetenr de la vista materializa
             // $dataGen = DatamesGen::where('doc', 'like', '%' . $doc . '%')->get();
-            $dataGen = DatamesGen::select("doc", "pagaduria")
-                                    ->where('doc', '=', $doc)
-                                    ->groupBy("pagaduria", "doc")
+            $dataGen = DatamesGen::where('doc', '=', $doc)
+                                    ->orderBy("id", "desc")
+                                    ->take(1)
                                     ->get();
 
             if ($dataGen) {
