@@ -235,9 +235,22 @@ class PagaduriasController extends Controller
 
             //esta información obetenr de la vista materializa
             // $dataGen = DatamesGen::where('doc', 'like', '%' . $doc . '%')->get();
+            $dataGenPagadurias = \DB::connection('pgsql')
+                            ->table('fast_datamesgen_pagaduria')
+                            ->where('doc', $doc)
+                            ->get()
+                            ->toArray();
+
+            $pagadurias = [];
+
+            foreach($dataGenPagadurias as $dataGen){
+                array_push($pagadurias, $dataGen->pagaduria);
+            }
+
             $dataGen = DatamesGen::where('doc', '=', $doc)
+                                    ->whereIn("pagaduria", $pagadurias)
                                     ->orderBy("id", "desc")
-                                    ->take(1)
+                                    ->take(count($pagadurias))
                                     ->get();
 
             if ($dataGen) {
