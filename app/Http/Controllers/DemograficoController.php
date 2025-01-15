@@ -174,7 +174,7 @@ public function processCedulas($cedulas, $mes, $año)
             ->keyBy('doc');
 
         $results = collect();
-        $salarioMinimo = 1300000;
+        $salarioMinimo = 1423000;
 
         foreach ($cedulas as $cedula) {
             $cedulaStr = (string)$cedula;
@@ -400,7 +400,7 @@ public function processCedulas_vista($cedulas, $mes, $año)
             ->toArray();
 
         $results = collect();
-        $salarioMinimo = 1300000;
+        $salarioMinimo = 1423000;
 
         foreach ($cedulas as $cedula) {
             $cedulaStr = (string)$cedula;
@@ -980,7 +980,7 @@ $descuentos = collect(explode(', ', $resultData->descuentos_concatenados))
 
     
             // Cálculos financieros
-            $salarioMinimo = 1300000;
+            $salarioMinimo = 1423000;
             $valorIngreso = $resultData->ingresos_ajustados;
             $totalEgresos = $resultData->total_egresos;
             $descuento = 0.08;

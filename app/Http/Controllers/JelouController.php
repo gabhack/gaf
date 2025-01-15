@@ -130,7 +130,7 @@ class JelouController extends Controller
     private function calcularCompraCartera($ingreso)
     {
         try {
-            $salarioMinimo = 1300000;
+            $salarioMinimo = 1423000;
 
             if ($ingreso > 2 * $salarioMinimo * 0.92) {
                 $compraCartera = ($ingreso * 0.92) / 2;

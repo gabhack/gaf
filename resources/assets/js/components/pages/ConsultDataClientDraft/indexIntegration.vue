@@ -403,7 +403,6 @@ export default {
                     totalWithoutHealthPension += Number(item.vaplicado);
                 }
             });
-
             let valorIngreso = 0;
             if (this.pagaduriaType === 'FOPEP') {
                 valorIngreso = Number(this.datamesFopep.vpension.replace(/[^0-9]/g, '').slice(0, -2));
