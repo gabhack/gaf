@@ -395,7 +395,7 @@ export default {
         ...mapState('datamesModule', ['cuotadeseada', 'conteoEgresosPlus']),
         ...mapGetters('descuentosModule', ['descuentosPerPeriod']),
         totales() {
-            const valrSM = 1423000;
+            const valrSM = 1423500;
 
             let totalWithoutHealthPension = 0;
             this.couponsIngresos.items.forEach(item => {

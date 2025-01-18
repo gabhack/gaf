@@ -254,51 +254,136 @@ class CouponsController extends Controller
 
 
 
-    public function getCouponsByPagaduria(Request $request)
+public function getCouponsByPagaduria(Request $request)
+{
+    try {
+        if (!$request->has('month') || !$request->has('year') || !$request->has('pagaduria')) {
+            return response()->json(['error' => 'Month, year, and pagaduria are required.'], 400);
+        }
+
+        $pagaduria = $request->pagaduria;
+        $concept = $request->concept;
+        $code = $request->code;
+        $month = str_pad($request->month, 2, '0', STR_PAD_LEFT);
+        $year = $request->year;
+
+        $startDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)->startOfMonth()->toDateString();
+        $endDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)->endOfMonth()->toDateString();
+
+        $query = \DB::connection('pgsql')
+            ->table('fast_couponsgen_visado');
+
+        if ($concept) {
+            $query->where('concept', 'ILIKE', '%' . $concept . '%');
+        }
+
+        if ($code) {
+            $query->where('code', 'ILIKE', '%' . $code . '%');
+        }
+
+        $query->where('pagaduria', 'ILIKE', '%' . $pagaduria . '%');
+        $query->where('inicioperiodo', '<=', $endDate);
+        $query->where('finperiodo', '>=', $startDate);
+
+        $sql = $query->toSql();
+        $bindings = $query->getBindings();
+
+        Log::info('Ejecutando consulta SQL: ' . $sql, $bindings);
+
+        $results = $query->get()->toArray();
+
+        return response()->json($results, 200);
+    } catch (\Exception $e) {
+        Log::error('Error in getCouponsByPagaduria:', [
+            'message' => $e->getMessage(),
+            'trace' => $e->getTrace()
+        ]);
+
+        return response()->json(['error' => 'Internal Server Error'], 500);
+    }
+}
+
+
+    public function getFastCouponsByPagaduria(Request $request)
     {
         try {
+            // Validar parámetros obligatorios
             if (!$request->has('month') || !$request->has('year') || !$request->has('pagaduria')) {
                 return response()->json(['error' => 'Month, year, and pagaduria are required.'], 400);
             }
     
-            $pagaduria = $request->pagaduria;
-            $concept = $request->concept;
-            $code = $request->code;
-            $month = str_pad($request->month, 2, '0', STR_PAD_LEFT);
-            $year = $request->year;
+            $month         = str_pad($request->month, 2, '0', STR_PAD_LEFT);
+            $year          = $request->year;
+            $concept       = $request->concept;
+            $code          = $request->code;
+            $pagaduriaName = trim($request->pagaduria);
     
-            $startDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)->startOfMonth()->toDateString();
-            $endDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)->endOfMonth()->toDateString();
+            // 1) Buscamos el ID en panel_pagaduria
+            $panelPagaduria = \DB::connection('pgsql')
+                ->table('panel_pagaduria')
+                ->where('nombre', 'ILIKE', $pagaduriaName)
+                ->first();
     
-            $query = CouponsGen::query();
-    
-            if ($concept) {
-                $query->where('concept', 'ILIKE', '%' . $concept . '%');
+            if (!$panelPagaduria) {
+                return response()->json([
+                    'error' => "No se encontró una pagaduría con el nombre '{$pagaduriaName}'."
+                ], 404);
             }
     
-            if ($code) {
+            $idPagaduria = $panelPagaduria->id;
+    
+            // 2) Definimos las fechas de inicio y fin (rango mensual)
+            $startDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)
+                ->startOfMonth()
+                ->toDateString();
+    
+            $endDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)
+                ->endOfMonth()
+                ->toDateString();
+    
+            // 3) Construimos la consulta a la tabla fast_couponsgen_visado
+            $query = \DB::connection('pgsql')
+                ->table('fast_couponsgen_visado')
+                ->where('idpagaduria', $idPagaduria)
+                ->where('inicioperiodo', '<=', $endDate)
+                ->where('finperiodo', '>=', $startDate);
+    
+            // Agregamos filtros opcionales
+            if (!empty($concept)) {
+                $query->where('concept', 'ILIKE', '%' . $concept . '%');
+            }
+            if (!empty($code)) {
                 $query->where('code', 'ILIKE', '%' . $code . '%');
             }
     
-            $query->where('pagaduria', 'ILIKE', '%' . $pagaduria . '%');
-    
-            $query->where('inicioperiodo', '<=', $endDate);
-            $query->where('finperiodo', '>=', $startDate);
-    
-            $sql = $query->toSql();
+            // Log para depuración (opcional)
+            $sql      = $query->toSql();
             $bindings = $query->getBindings();
+            \Log::info('Consulta generada para fast_couponsgen_visado:', [
+                'sql'      => $sql,
+                'bindings' => $bindings,
+                'month'    => $month,
+                'year'     => $year,
+                'pagaduria'=> $pagaduriaName,
+                'id'       => $idPagaduria
+            ]);
     
-            Log::info('Ejecutando consulta SQL: ' . $sql, $bindings);
-    
-            $results = $query->get()->toArray();
+            // 4) Obtenemos los resultados
+            $results = $query->get();
     
             return response()->json($results, 200);
+    
         } catch (\Exception $e) {
-            Log::error('Error in getCouponsByPagaduria:', ['message' => $e->getMessage(), 'trace' => $e->getTrace()]);
+            \Log::error('Error en getFastCouponsByPagaduria:', [
+                'message' => $e->getMessage(),
+                'trace'   => $e->getTraceAsString()
+            ]);
     
             return response()->json(['error' => 'Internal Server Error'], 500);
         }
     }
+    
+
     
     
              
