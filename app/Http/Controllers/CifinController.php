@@ -126,9 +126,13 @@ class CifinController extends Controller
     }
 
     //CONSULTAR CIFIN se llama en el registro de crédito
+    //PARA no borrar los comments hice otro metodo y este lo deje de base. Gabriel
     public function consultar(Request $request)
     {
-        $cotizer = DataCotizer::find($request->cotizerId);
+        $cotizerId = $request->query('cotizerId');
+        $decevalProcess = $request->query('decevalProcess');
+
+        $cotizer = DataCotizer::find($cotizerId);
 
         $cedula = $cotizer->idNumber;
         $apellido = strtoupper($cotizer->firstLastname);
@@ -176,7 +180,7 @@ class CifinController extends Controller
         //al día 5 de marzo, deceval aun no ha respondido sobre la falla
 
         ////////////
-       /* $doc = new DOMDocument();
+        /* $doc = new DOMDocument();
         $doc->loadXML($xml_post_string);
         $doc->save('cifinRequest_' . $xml_name);
 
@@ -243,8 +247,13 @@ class CifinController extends Controller
             ],
         ];
 
-            return redirect()->route('deceval.consultar', $data);
+        \Log::info('Data para Deceval Consultar:', $data);
 
+        if ($decevalProcess) {
+            return redirect()->route('deceval.consultar', $data);
+        }
+
+        return;
     }
 
     public function consulta()

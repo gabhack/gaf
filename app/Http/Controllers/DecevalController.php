@@ -227,183 +227,159 @@ class DecevalController extends Controller
    public function consultar(Request $request)
    {
       if (!$request->decevalProcess) {
-         \Log::info("decevalProcess is false. Redirecting to hego.estudios.");
+         \Log::info("decevalProcess is false. Redirecting to hego.estudios.", $request->all());
          return redirect()->route('hego.estudios');
-     }
-   
-       try {
-           \Log::info("Starting decevalProcess", ['request' => $request->all()]);
-   
-           $nitEmisor = $request->nitEmisor;
-           $idClaseDefinicionDocumento = $request->idClaseDefinicionDocumento;
-           $fechaGrabacionPagare = $request->fechaGrabacionPagare;
-           $numPagareEntidad = $request->numPagareEntidad;
-           $fechaDesembolso = $request->fechaDesembolso;
-   
-           \Log::info("Extracted main parameters", compact('nitEmisor', 'idClaseDefinicionDocumento', 'fechaGrabacionPagare', 'numPagareEntidad', 'fechaDesembolso'));
-   
-           //datos header
-           $hoy = date("Y-m-d");
-           $hora = date("H:i:s");
-           $codigoDepositante = env('DECEVEL_CODIGO_DEPOSITANTE');
-           $fecha = $hoy . 'T' . $hora;
-           $usuario = env('DECEVAL_USUARIO');
-   
-           \Log::info("Generated header data", compact('hoy', 'hora', 'codigoDepositante', 'fecha', 'usuario'));
-   
-           $header = (object) [
-               "hoy" => $hoy,
-               "hora" => $hora,
-               "codigoDepositante" => $codigoDepositante,
-               "fecha" => $fecha,
-               "usuario" => $usuario
-           ];
-   
-           // crear otorgante
-           $datosGirador = (object) $request->girador;
-           \Log::info("Datos girador", ['datosGirador' => $datosGirador]);
-   
-           $otorganteResponse = $this->crearOtorgante($header, $datosGirador, $nitEmisor);
-           $otorganteData = (object) $otorganteResponse['respuesta'];
-   
-           \Log::info("Otorgante data response", ['otorganteData' => $otorganteData]);
-   
-           //Datos girador
-           $otorganteTipoId = $otorganteData->fkIdTipoDocumento;
-           $otorganteNumId = $otorganteData->numeroDocumento;
-           $otorganteCuenta = $otorganteData->cuentaGirador;
-   
-           $url = "http://34.171.55.31:8080/DecevalProxy/services/ProxyServicesImplPort?wsdl";
-           $xml_post_string = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://services.proxy.deceval.com/">
+      }
+
+      try {
+         \Log::info("Starting decevalProcess", ['request' => $request->all()]);
+
+         $nitEmisor = $request->nitEmisor;
+         $idClaseDefinicionDocumento = $request->idClaseDefinicionDocumento;
+         $fechaGrabacionPagare = $request->fechaGrabacionPagare;
+         $numPagareEntidad = $request->numPagareEntidad;
+         $fechaDesembolso = $request->fechaDesembolso;
+
+         \Log::info("Extracted main parameters", compact('nitEmisor', 'idClaseDefinicionDocumento', 'fechaGrabacionPagare', 'numPagareEntidad', 'fechaDesembolso'));
+
+         //datos header
+         $hoy = date("Y-m-d");
+         $hora = date("H:i:s");
+         $codigoDepositante = env('DECEVEL_CODIGO_DEPOSITANTE');
+         $fecha = $hoy . 'T' . $hora;
+         $usuario = env('DECEVAL_USUARIO');
+
+         \Log::info("Generated header data", compact('hoy', 'hora', 'codigoDepositante', 'fecha', 'usuario'));
+
+         $header = (object) [
+            "hoy" => $hoy,
+            "hora" => $hora,
+            "codigoDepositante" => $codigoDepositante,
+            "fecha" => $fecha,
+            "usuario" => $usuario
+         ];
+
+         // crear otorgante
+         $datosGirador = (object) $request->girador;
+         \Log::info("Datos girador", ['datosGirador' => $datosGirador]);
+
+         $otorganteResponse = $this->crearOtorgante($header, $datosGirador, $nitEmisor);
+         $otorganteData = (object) $otorganteResponse['respuesta'];
+
+         \Log::info("Otorgante data response", ['otorganteData' => $otorganteData]);
+
+         //Datos girador
+         $otorganteTipoId = $otorganteData->fkIdTipoDocumento;
+         $otorganteNumId = $otorganteData->numeroDocumento;
+         $otorganteCuenta = $otorganteData->cuentaGirador;
+
+         $url = "http://34.171.55.31:8080/DecevalProxy/services/ProxyServicesImplPort?wsdl";
+         $xml_post_string = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://services.proxy.deceval.com/">
            ...
            </soapenv:Envelope>';
-   
-           \Log::info("XML request string", ['xml_post_string' => $xml_post_string]);
-   
-           $headers = array(
-               "Content-type: text/xml; charset=\"utf-8\"",
-               "Accept: text/xml",
-               "Cache-Control: no-cache",
-               "Pragma: no-cache",
-               "SOAPAction: \"\"",
-               "Content-length: " . strlen($xml_post_string)
-           );
-   
-           $ch = curl_init();
-           curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
-           curl_setopt($ch, CURLOPT_URL, $url);
-           curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-           curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
-           curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-           curl_setopt($ch, CURLOPT_POST, true);
-           curl_setopt($ch, CURLOPT_POSTFIELDS, $xml_post_string); // the SOAP request
-           curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-   
-           $response = curl_exec($ch);
-           curl_close($ch);
-   
-           \Log::info("SOAP response", ['response' => $response]);
-   
-           $xml_name = $otorganteData->numeroDocumento . '_' . Carbon::parse($fecha)->format('d-m-Y') . '.xml';
-   
-           $doc = new DOMDocument();
-           $doc->loadXML($response);
-           $doc->save('pagareRequest_' . $xml_name);
-   
-           $arrayResponse = XmlaPhp::createArray($response);
-   
-           \Log::info("Parsed response array", ['arrayResponse' => $arrayResponse]);
-   
-           $codigoError = $arrayResponse['soap:Envelope']['soap:Body']['ns2:creacionPagaresCodificadoResponse']['return']['codigoError'];
-           $msgRespuesta = $arrayResponse['soap:Envelope']['soap:Body']['ns2:creacionPagaresCodificadoResponse']['return']['respuesta']['mensajeRespuesta'];
-   
-           \Log::info("Parsed response codes", compact('codigoError', 'msgRespuesta'));
-   
-           if ($codigoError == 'SDL.SE.0098') {
-               \Log::warning("Invalid response code", ['codigoError' => $codigoError]);
-               return redirect()->route('register.credit', ['status' => 'invalid']);
-           } else {
-               $idDocumentoPagare = $doc->getElementsByTagName('idDocumentoPagare')->item(0)->nodeValue;
-               $numPagareEntidad = $doc->getElementsByTagName('numPagareEntidad')->item(0)->nodeValue;
-   
-               \Log::info("Extracted document info", compact('idDocumentoPagare', 'numPagareEntidad'));
-           }
-   
-           $response2 = $this->consultarPagares(
-               $idDocumentoPagare,
-               $otorganteTipoId,
-               $otorganteNumId,
-               $numPagareEntidad,
-               $codigoDepositante,
-               $fecha,
-               $hora,
-               $usuario
-           );
-   
-           $response2->save('pagareResponse_' . $xml_name);
-   
-           \Log::info("Consultar Pagares response saved", ['xml_name' => $xml_name]);
-   
-           $contenido = $response2->getElementsByTagName('contenido')->item(0)->nodeValue;
-           $nombreArchivo = $response2->getElementsByTagName('nombreArchivo')->item(0)->nodeValue;
-   
-           $step = "initial";
-           $errorFirma = "";
-   
-           try {
-               if ($this->ambiente === 0) {
-                   $originalDate = $request->expeditionDate;
-                   $expeditionDate = date("d/m/Y", strtotime($originalDate));
-                   $datosGirador = (object) $request->girador;
-   
-                   $recentPhone = $datosGirador->telefono;
-                   $cedula = $datosGirador->numeroDocumento;
-                   $lastName = $datosGirador->primerApellido;
-   
-                   \Log::info("Environment is test", compact('expeditionDate', 'recentPhone', 'cedula', 'lastName'));
-               } else {
-                   $expeditionDate = $request->expeditionDate;
-                   $recentPhone = $request->phone;
-                   $cedula = "1216713792";
-                   $lastName = explode(" ", $response2->getElementsByTagName('nombreOtorgante'))[2];
-   
-                   \Log::info("Environment is production", compact('expeditionDate', 'recentPhone', 'cedula', 'lastName'));
-               }
-   
-               $inicioFlujoFirma = $this->iniciarFlujoFirma($cedula, $expeditionDate, $recentPhone, $lastName);
-               \Log::info("Inicio flujo firma", ['inicioFlujoFirma' => $inicioFlujoFirma]);
-           } catch (\Exception $ex) {
-               \Log::error("Error during iniciarFlujoFirma", ['exception' => $ex]);
-               $link = asset($nombreArchivo);
-               $resul = [$link];
-               $errorFirma = "Ocurrio un error al solicitar el numero de aplicación, para continuar el proceso puede hacer click en el boton 'Regenerar Flujo'";
-               $step = "failCreateFlow";
-   
-               return view("deceval/consulta")->with([
-                   "resultado" => $resul,
-                   "errorFirma" => $errorFirma,
-                   "idDocumentoPagare" => $idDocumentoPagare,
-                   "otorganteTipoId" => $otorganteTipoId,
-                   "otorganteNumId" => $otorganteNumId,
-                   "numPagareEntidad" => $numPagareEntidad,
-                   "codigoDepositante" => $codigoDepositante,
-                   "fecha" => $fecha,
-                   "hora" => $hora,
-                   "application" => null,
-                   "phoneList" => null,
-                   "phoneListStr" => null,
-                   "step" => $step,
-                   "confirmCode" => "",
-                   "ambiente" => $this->ambiente
-               ]);
-           }
-   
-           $this->generatePdf($contenido, $nombreArchivo);
-   
-           $link = asset($nombreArchivo);
-           $resul = [$link];
-   
-           return view("deceval/consulta")->with([
+
+         \Log::info("XML request string", ['xml_post_string' => $xml_post_string]);
+
+         $headers = array(
+            "Content-type: text/xml; charset=\"utf-8\"",
+            "Accept: text/xml",
+            "Cache-Control: no-cache",
+            "Pragma: no-cache",
+            "SOAPAction: \"\"",
+            "Content-length: " . strlen($xml_post_string)
+         );
+
+         $ch = curl_init();
+         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
+         curl_setopt($ch, CURLOPT_URL, $url);
+         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+         curl_setopt($ch, CURLOPT_POST, true);
+         curl_setopt($ch, CURLOPT_POSTFIELDS, $xml_post_string); // the SOAP request
+         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+         $response = curl_exec($ch);
+         curl_close($ch);
+
+         \Log::info("SOAP response", ['response' => $response]);
+
+         $xml_name = $otorganteData->numeroDocumento . '_' . Carbon::parse($fecha)->format('d-m-Y') . '.xml';
+
+         $doc = new DOMDocument();
+         $doc->loadXML($response);
+         $doc->save('pagareRequest_' . $xml_name);
+
+         $arrayResponse = XmlaPhp::createArray($response);
+
+         \Log::info("Parsed response array", ['arrayResponse' => $arrayResponse]);
+
+         $codigoError = $arrayResponse['soap:Envelope']['soap:Body']['ns2:creacionPagaresCodificadoResponse']['return']['codigoError'];
+         $msgRespuesta = $arrayResponse['soap:Envelope']['soap:Body']['ns2:creacionPagaresCodificadoResponse']['return']['respuesta']['mensajeRespuesta'];
+
+         \Log::info("Parsed response codes", compact('codigoError', 'msgRespuesta'));
+
+         if ($codigoError == 'SDL.SE.0098') {
+            \Log::warning("Invalid response code", ['codigoError' => $codigoError]);
+            return redirect()->route('register.credit', ['status' => 'invalid']);
+         } else {
+            $idDocumentoPagare = $doc->getElementsByTagName('idDocumentoPagare')->item(0)->nodeValue;
+            $numPagareEntidad = $doc->getElementsByTagName('numPagareEntidad')->item(0)->nodeValue;
+
+            \Log::info("Extracted document info", compact('idDocumentoPagare', 'numPagareEntidad'));
+         }
+
+         $response2 = $this->consultarPagares(
+            $idDocumentoPagare,
+            $otorganteTipoId,
+            $otorganteNumId,
+            $numPagareEntidad,
+            $codigoDepositante,
+            $fecha,
+            $hora,
+            $usuario
+         );
+
+         $response2->save('pagareResponse_' . $xml_name);
+
+         \Log::info("Consultar Pagares response saved", ['xml_name' => $xml_name]);
+
+         $contenido = $response2->getElementsByTagName('contenido')->item(0)->nodeValue;
+         $nombreArchivo = $response2->getElementsByTagName('nombreArchivo')->item(0)->nodeValue;
+
+         $step = "initial";
+         $errorFirma = "";
+
+         try {
+            if ($this->ambiente === 0) {
+               $originalDate = $request->expeditionDate;
+               $expeditionDate = date("d/m/Y", strtotime($originalDate));
+               $datosGirador = (object) $request->girador;
+
+               $recentPhone = $datosGirador->telefono;
+               $cedula = $datosGirador->numeroDocumento;
+               $lastName = $datosGirador->primerApellido;
+
+               \Log::info("Environment is test", compact('expeditionDate', 'recentPhone', 'cedula', 'lastName'));
+            } else {
+               $expeditionDate = $request->expeditionDate;
+               $recentPhone = $request->phone;
+               $cedula = "1216713792";
+               $lastName = explode(" ", $response2->getElementsByTagName('nombreOtorgante'))[2];
+
+               \Log::info("Environment is production", compact('expeditionDate', 'recentPhone', 'cedula', 'lastName'));
+            }
+
+            $inicioFlujoFirma = $this->iniciarFlujoFirma($cedula, $expeditionDate, $recentPhone, $lastName);
+            \Log::info("Inicio flujo firma", ['inicioFlujoFirma' => $inicioFlujoFirma]);
+         } catch (\Exception $ex) {
+            \Log::error("Error during iniciarFlujoFirma", ['exception' => $ex]);
+            $link = asset($nombreArchivo);
+            $resul = [$link];
+            $errorFirma = "Ocurrio un error al solicitar el numero de aplicación, para continuar el proceso puede hacer click en el boton 'Regenerar Flujo'";
+            $step = "failCreateFlow";
+
+            return view("deceval/consulta")->with([
                "resultado" => $resul,
                "errorFirma" => $errorFirma,
                "idDocumentoPagare" => $idDocumentoPagare,
@@ -413,30 +389,54 @@ class DecevalController extends Controller
                "codigoDepositante" => $codigoDepositante,
                "fecha" => $fecha,
                "hora" => $hora,
-               "application" => $inicioFlujoFirma['application'],
-               "phoneList" => $inicioFlujoFirma['phoneList'],
-               "phoneListStr" => implode(",", $inicioFlujoFirma['phoneList']),
+               "application" => null,
+               "phoneList" => null,
+               "phoneListStr" => null,
                "step" => $step,
                "confirmCode" => "",
                "ambiente" => $this->ambiente
-           ]);
-       } catch (\Exception $e) {
-           \Log::error("Error during consultar process", ['exception' => $e]);
-   
-           return view("deceval/consulta")->with([
-               "resultado" => null,
-               "errorFirma" => "",
-               "application" => $inicioFlujoFirma['application'] ?? null,
-               "phoneList" => $inicioFlujoFirma['phoneList'] ?? null,
-               "phoneListStr" => isset($inicioFlujoFirma['phoneList']) ? implode(",", $inicioFlujoFirma['phoneList']) : null,
-               "error" => $e->getMessage(),
-               "step" => "initial",
-               "confirmCode" => "",
-               "ambiente" => $this->ambiente
-           ]);
-       }
+            ]);
+         }
+
+         $this->generatePdf($contenido, $nombreArchivo);
+
+         $link = asset($nombreArchivo);
+         $resul = [$link];
+
+         return view("deceval/consulta")->with([
+            "resultado" => $resul,
+            "errorFirma" => $errorFirma,
+            "idDocumentoPagare" => $idDocumentoPagare,
+            "otorganteTipoId" => $otorganteTipoId,
+            "otorganteNumId" => $otorganteNumId,
+            "numPagareEntidad" => $numPagareEntidad,
+            "codigoDepositante" => $codigoDepositante,
+            "fecha" => $fecha,
+            "hora" => $hora,
+            "application" => $inicioFlujoFirma['application'],
+            "phoneList" => $inicioFlujoFirma['phoneList'],
+            "phoneListStr" => implode(",", $inicioFlujoFirma['phoneList']),
+            "step" => $step,
+            "confirmCode" => "",
+            "ambiente" => $this->ambiente
+         ]);
+      } catch (\Exception $e) {
+         \Log::error("Error during consultar process", ['exception' => $e]);
+
+         return view("deceval/consulta")->with([
+            "resultado" => null,
+            "errorFirma" => "",
+            "application" => $inicioFlujoFirma['application'] ?? null,
+            "phoneList" => $inicioFlujoFirma['phoneList'] ?? null,
+            "phoneListStr" => isset($inicioFlujoFirma['phoneList']) ? implode(",", $inicioFlujoFirma['phoneList']) : null,
+            "error" => $e->getMessage(),
+            "step" => "initial",
+            "confirmCode" => "",
+            "ambiente" => $this->ambiente
+         ]);
+      }
    }
-   
+
 
    private function generatePdf($contenido, $nombreArchivo)
    {
@@ -542,6 +542,16 @@ class DecevalController extends Controller
       $doc->save('giradorResponse_' . $xml_name);
 
       $array = XmlaPhp::createArray($response);
+
+      if (!isset($array['soap:Envelope']['soap:Body']['ns2:creacionGiradoresCodificadosResponse'])) {
+         \Log::error("La respuesta no contiene el índice esperado (ns2:creacionGiradoresCodificadosResponse)", ['response' => $array]);
+         // Aquí puedes manejar el error, redirigir, retornar un json de error, etc.
+         return [
+            'codigoError' => 'SIN_RESPUESTA',
+            'mensajeRespuesta' => 'No se obtuvo la respuesta esperada del servicio Deceval'
+         ];
+      }
+
       $resultado = $array['soap:Envelope']['soap:Body']['ns2:creacionGiradoresCodificadosResponse']['return'];
 
       return $resultado;
@@ -957,5 +967,42 @@ class DecevalController extends Controller
                      <ExecuteLatestVersion>true</ExecuteLatestVersion>
                      <ExecutionMode>" . $executionMode . "</ExecutionMode>
                </RequestInfo>";
+   }
+
+   //metodo de prueba:
+   public function testService()
+   {
+      $idDocumentoPagare = "TEST";
+      $otorganteTipoId = "1";
+      $otorganteNumId = "12345678";
+      $numPagareEntidad = "12345";
+      $codigoDepositante = env('DECEVEL_CODIGO_DEPOSITANTE');
+      $usuario = env('DECEVAL_USUARIO');
+      $hoy = date("Y-m-d");
+      $hora = date("H:i:s");
+      $fecha = $hoy . 'T' . $hora;
+
+      try {
+         $response = $this->consultarPagares(
+            $idDocumentoPagare,
+            $otorganteTipoId,
+            $otorganteNumId,
+            $numPagareEntidad,
+            $codigoDepositante,
+            $fecha,
+            $hora,
+            $usuario
+         );
+
+         // Si el servicio responde, deberías poder obtener algunos nodos. Por ejemplo, intenta obtener 'codigoError'
+         $codigoError = $response->getElementsByTagName('codigoError')->item(0);
+         if ($codigoError) {
+            return "Servicio Deceval responde: Código de error encontrado: " . $codigoError->nodeValue;
+         } else {
+            return "Servicio Deceval responde, pero no se encontró código de error, posiblemente está OK.";
+         }
+      } catch (\Exception $e) {
+         return "Error al conectar con Deceval: " . $e->getMessage();
+      }
    }
 }

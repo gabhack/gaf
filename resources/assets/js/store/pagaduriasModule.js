@@ -12,23 +12,23 @@ const pagaduriasModule = {
             { label: 'FOPEP', value: 'FOPEP', key: 'datamesFopep' },
             { label: 'SED ANTIOQUIA', value: 'SEDANTIOQUIA', key: 'SED ANTIOQUIA' },
             { label: 'SED ARAUCA', value: 'SEDARAUCA', key: 'SED ARAUCA' },
-            { label: 'SED ATLANTICO', value: 'SEDATLANTICO', key: 'SED ATLANTICO'},
+            { label: 'SED ATLANTICO', value: 'SEDATLANTICO', key: 'SED ATLANTICO' },
             { label: 'SED BOLIVAR', value: 'SEDBOLIVAR', key: 'SED BOLIVAR' },
             { label: 'SED BOYACA', value: 'SEDBOYACA', key: 'SED BOYACA' },
             { label: 'SED CALDAS', value: 'SEDCALDAS', key: 'SED CALDAS' },
             { label: 'SED CASANARE', value: 'SEDCASANARE', key: 'SED CASANARE' },
-            { label: 'SED CAUCA', value: 'SEDCAUCA', key: 'SED CAUCA'},
-            { label: 'SED CHOCO', value: 'SEDCHOCO', key: 'SED CHOCO'},
+            { label: 'SED CAUCA', value: 'SEDCAUCA', key: 'SED CAUCA' },
+            { label: 'SED CHOCO', value: 'SEDCHOCO', key: 'SED CHOCO' },
             { label: 'SED CORDOBA', value: 'SEDCORDOBA', key: 'SED CORDOBA' },
-            { label: 'SED CUNDINAMARCA', value: 'SEDCUNDINAMARCA', key: 'SED CUNDINAMARCA'},
+            { label: 'SED CUNDINAMARCA', value: 'SEDCUNDINAMARCA', key: 'SED CUNDINAMARCA' },
             { label: 'SED GUAJIRA', value: 'SEDGUAJIRA', key: 'SED GUAJIRA' },
             { label: 'SED GUAVIARE', value: 'SEDGUAVIARE', key: 'SED GUAVIARE' },
-            { label: 'SED MAGDALENA', value: 'SEDMAGDALENA', key: 'SED MAGDALENA'},
+            { label: 'SED MAGDALENA', value: 'SEDMAGDALENA', key: 'SED MAGDALENA' },
             { label: 'SED META', value: 'SEDMETA', key: 'meta' && 'SED META' },
-            { label: 'SED NARINO', value: 'SEDNARINO', key: 'SED NARINO'},
+            { label: 'SED NARINO', value: 'SEDNARINO', key: 'SED NARINO' },
             { label: 'SED NORTE SANTANDER', value: 'SEDNORTEDESANTANDER', key: 'SED NORTE DE SANTANDER' },
             { label: 'SED SANTANDER', value: 'SEDSANTANDER', key: 'SED SANTANDER' },
-            { label: 'SED RISARALDA', value: 'SEDRISARALDA', key: 'SED RISARALDA'},
+            { label: 'SED RISARALDA', value: 'SEDRISARALDA', key: 'SED RISARALDA' },
             { label: 'SED SUCRE', value: 'SEDSUCRE', key: 'SED SUCRE' },
             { label: 'SED TOLIMA', value: 'SEDTOLIMA', key: 'SED TOLIMA' },
             { label: 'SED VALLE', value: 'SEDVALLE', key: 'SED VALLE' },
@@ -39,11 +39,7 @@ const pagaduriasModule = {
             { label: 'SED AMAZONAS', value: 'SEDAMAZONAS', key: 'SED AMAZONAS' },
             { label: 'SED VAUPES', value: 'SEDVAUPES', key: 'SED VAUPES' },
             { label: 'SED VICHADA', value: 'SEDVICHADA', key: 'SED VICHADA' },
-            {
-                label: 'SEM BARRANQUILLA',
-                value: 'SEMBARRANQUILLA',
-                key: 'SEM BARRANQUILLA'
-            },
+            { label: 'SEM BARRANQUILLA', value: 'SEMBARRANQUILLA', key: 'SEM BARRANQUILLA' },
             { label: 'SEM APARTADO', value: 'SEMAPARTADO', key: 'SEM APARTADO' },
             { label: 'SEM ESTRELLA', value: 'SEMESTRELLA', key: 'SEM ESTRELLA' },
             { label: 'SEM SANTA MARTA', value: 'SEMSANTAMARTA', key: 'SEM SANTA MARTA' },
@@ -60,7 +56,7 @@ const pagaduriasModule = {
             { label: 'SEM TULUA', value: 'SEMTULUA', key: 'SEM TULUA' },
             { label: 'SEM TUMACO', value: 'SEMTUMACO', key: 'SEM TUMACO' },
             { label: 'SEM CIENAGA', value: 'SEMCIENAGA', key: 'SEM CIENAGA' },
-            { label: 'SEM CALI', value: 'SEMCALI', key: 'SEM CALI'},
+            { label: 'SEM CALI', value: 'SEMCALI', key: 'SEM CALI' },
             { label: 'SEM DOSQUEBRADAS', value: 'SEMDOSQUEBRADAS', key: 'SEM DOSQUEBRADAS' },
             { label: 'SEM CARTAGENA', value: 'SEMCARTAGENA', key: 'SEM CARTAGENA' },
             { label: 'SEM ENVIGADO', value: 'SEMENVIGADO', key: 'SEM ENVIGADO' },
@@ -73,9 +69,9 @@ const pagaduriasModule = {
             { label: 'SEM IPIALES', value: 'SEMIPIALES', key: 'SEM IPIALES' },
             { label: 'SEM JAMUNDI', value: 'SEMJAMUNDI', key: 'SEM JAMUNDI' },
             { label: 'SEM MAGANGUE', value: 'SEMMAGANGUE', key: 'SEM MAGANGUE' },
-            { label: 'SEM MONTERIA', value: 'SEMMONTERIA', key: 'SEM MONTERIA'},
+            { label: 'SEM MONTERIA', value: 'SEMMONTERIA', key: 'SEM MONTERIA' },
             { label: 'SED HUILA', value: 'SEDHUILA', key: 'SED HUILA' },
-            { label: 'SEM NEIVA', value: 'SEMNEIVA', key: 'SEM NEIVA'},
+            { label: 'SEM NEIVA', value: 'SEMNEIVA', key: 'SEM NEIVA' },
             { label: 'SEM PALMIRA', value: 'SEMPALMIRA', key: 'SEM PALMIRA' },
             { label: 'SEM GUAINIA', value: 'SEMGUAINIA', key: 'SEM GUAINIA' },
             { label: 'SEM ITAGUI', value: 'SEMITAGUI', key: 'SEM ITAGUI' },
@@ -83,12 +79,12 @@ const pagaduriasModule = {
             { label: 'SEM PEREIRA', value: 'SEMPEREIRA', key: 'SEM PEREIRA' },
             { label: 'SEM MEDELLIN', value: 'SEMMEDELLIN', key: 'SEM MEDELLIN' },
             { label: 'SEM MANIZALES', value: 'SEMMANIZALES', key: 'SEM MANIZALES' },
-            { label: 'SEM PASTO', value: 'SEMPASTO', key: 'SEM PASTO'},
+            { label: 'SEM PASTO', value: 'SEMPASTO', key: 'SEM PASTO' },
             { label: 'SEM MAICAO', value: 'SEMMAICAO', key: 'SEM MAICAO' },
             { label: 'SEM MALAMBO', value: 'SEMMALAMBO', key: 'SEM MALAMBO' },
             { label: 'SEM POPAYAN', value: 'SEMPOPAYAN', key: 'SEM POPAYAN' },
             { label: 'SEM QUIBDO', value: 'SEMQUIBDO', key: 'SEM QUIBDO' },
-            { label: 'SEM RIONEGRO', value: 'SEMRIONEGRO', key: 'SEM RIONEGRO'},
+            { label: 'SEM RIONEGRO', value: 'SEMRIONEGRO', key: 'SEM RIONEGRO' },
             { label: 'SEM SABANETA', value: 'SEMSABANETA', key: 'SEM SABANETA' },
             { label: 'SEM SAHAGUN', value: 'SEMSAHAGUN', key: 'SEM SAHAGUN' },
             { label: 'SED SINCELEJO', value: 'SEDSINCELEJO', key: 'SED SINCELEJO' },
@@ -97,7 +93,7 @@ const pagaduriasModule = {
             { label: 'SEM YOPAL', value: 'SEMYOPAL', key: 'SEM YOPAL' },
             { label: 'SEM YUMBO', value: 'SEMYUMBO', key: 'SEM YUMBO' },
             { label: 'SEM ZIPAQUIRA', value: 'SEMZIPAQUIRA', key: 'SEM ZIPAQUIRA' },
-            { label: 'SEM MOSQUERA', value: 'SEMMOSQUERA', key: 'SEM MOSQUERA'},
+            { label: 'SEM MOSQUERA', value: 'SEMMOSQUERA', key: 'SEM MOSQUERA' },
             { label: 'SEM URIBIA', value: 'SEMURIBIA', key: 'SEM URIBIA' },
             { label: 'SEM TURBO', value: 'SEMTURBO', key: 'SEM TURBO' },
             { label: 'SEM TUNJA', value: 'SEMTUNJA', key: 'SEM TUNJA' },
@@ -117,50 +113,62 @@ const pagaduriasModule = {
     },
     getters: {
         couponsPerPeriod: state => {
-            const items = state.coupons.filter(
-                item => item.inicioperiodo === state.selectedPeriod || item.finperiodo === state.selectedPeriod
-            );
+            console.log('[couponsPerPeriod] selectedPeriod del store:', state.selectedPeriod);
 
-            return {
-                items: items,
-                total: items.length
-            };
+            if (!state.selectedPeriod || state.coupons.length === 0) {
+                console.warn('[couponsPerPeriod] selectedPeriod vacío o no hay cupones disponibles.');
+                return { items: [] };
+            }
+
+            const filtered = state.coupons.filter(item => {
+                const periodToMatch = state.selectedPeriod.trim(); // Usamos directamente el string de selectedPeriod
+                const inicioPeriodo = item.inicioperiodo.slice(0, 10).trim(); // Limpiamos espacios
+                const finPeriodo = item.finperiodo.slice(0, 10).trim();
+
+                console.log(
+                    '[couponsPerPeriod] Comparando periodo:',
+                    'inicioPeriodo:',
+                    inicioPeriodo,
+                    'finPeriodo:',
+                    finPeriodo,
+                    'periodToMatch:',
+                    periodToMatch
+                );
+
+                return inicioPeriodo === periodToMatch || finPeriodo === periodToMatch;
+            });
+
+            console.log('[couponsPerPeriod] filtered:', filtered);
+            return { items: filtered };
         },
         couponsIngresos: (state, getters) => {
-            const items = getters.couponsPerPeriod.items.filter(
-                item => Number(item.egresos) > 0
-            );
+            if (!getters.couponsPerPeriod.items || getters.couponsPerPeriod.items.length === 0) {
+                console.warn('[couponsIngresos] No hay elementos en couponsPerPeriod.items');
+                return { items: [], total: 0, amount: 0 };
+            }
+
+            const items = getters.couponsPerPeriod.items.filter(item => Number(item.egresos) > 0);
+
+            console.log('[couponsIngresos] Items filtrados:', items);
 
             return {
-                items: items,
+                items,
                 total: items.length,
-                // amount: items.reduce((egresos, item) => egresos + Number(item.egresos), 0)
-                amount: items.reduce((egresos, item) => {
-                    const valorEgresos = Number(item.egresos);
-                    return valorEgresos >= 0 ? egresos + valorEgresos : egresos;
-                }, 0)
+                amount: items.reduce((sum, item) => sum + Number(item.egresos), 0)
             };
         },
         ingresosExtras: (state, getters) => {
-            const items = getters.couponsPerPeriod.items.filter(
+            if (!getters.couponsPerPeriod.items) return [];
+            return getters.couponsPerPeriod.items.filter(
                 item => item.code !== 'SUEBA' && item.code !== 'INGCUP' && Number(item.ingresos) > 0
             );
-
-            return items;
         },
         valorIngreso: (state, getters) => {
-            return getters.couponsPerPeriod.items.find(coupon => coupon.code === 'INGCUP')?.ingresos || 0;
+            const item = getters.couponsPerPeriod.items?.find(coupon => coupon.code === 'INGCUP');
+            return item?.ingresos || 0;
         },
-        // salarioBasico: (state, getters) => {
-        //     return getters.couponsPerPeriod.items.find(coupon => coupon.code === 'SUEBA')?.ingresos || 0;
-        // },
-
-
-        // salarioBasico: (state, getters) => {
-        //     return getters.couponsPerPeriod.items.filter(coupon => coupon.code === 'SUEBA').map(coupon => coupon.ingresos);
-        // },
-        
         salarioBasico: (state, getters) => {
+            if (!getters.couponsPerPeriod.items) return [];
             return getters.couponsPerPeriod.items
                 .filter(coupon => coupon.code === 'SUEBA')
                 .map(coupon => ({
@@ -168,20 +176,28 @@ const pagaduriasModule = {
                     ingresos: coupon.ingresos
                 }));
         },
-
-
         pagaduriaPeriodos: state => {
+            console.log('[pagaduriaPeriodos] Cupones en pagaduriaPeriodos:', state.coupons);
+
             let periodos = state.coupons.reduce((acc, coupon) => {
-                if (acc.indexOf(coupon.finperiodo) === -1) {
-                    acc.push(coupon.finperiodo);
+                const cleanFinPeriodo = coupon.finperiodo?.trim();
+                if (!cleanFinPeriodo || isNaN(new Date(cleanFinPeriodo).getTime())) {
+                    console.warn('[pagaduriaPeriodos] Periodo inválido encontrado:', coupon);
+                    return acc;
+                }
+
+                if (!acc.includes(cleanFinPeriodo)) {
+                    acc.push(cleanFinPeriodo);
                 }
                 return acc;
             }, []);
 
-            // Agregar el periodo actual si no existe
+            console.log('[pagaduriaPeriodos] Periodos antes de setCurrentPeriod:', periodos);
+
             periodos = setCurrentPeriod(periodos);
 
-            // Ordenar periodos de forma descendente, se convierte a fecha para poder ordenar
+            console.log('[pagaduriaPeriodos] Periodos después de setCurrentPeriod:', periodos);
+
             return periodos.sort((a, b) => new Date(b) - new Date(a));
         },
         ingresosIncapacidad: state => {
@@ -192,12 +208,16 @@ const pagaduriasModule = {
             const amount = items.reduce((ingresos, item) => ingresos + Number(item.ingresos), 0);
 
             return {
-                items: items,
+                items,
                 total: items.length,
-                amount: amount
+                amount
             };
         },
         ingresosIncapacidadPerPeriod: (state, getters) => {
+            if (!getters.couponsPerPeriod.items) {
+                return { items: [], total: 0, amount: 0 };
+            }
+
             const items = getters.couponsPerPeriod.items.filter(
                 item => (item.code === 'PGINC' || item.code === 'PGINC100') && Number(item.ingresos) > 0
             );
@@ -205,19 +225,21 @@ const pagaduriasModule = {
             const amount = items.reduce((ingresos, item) => ingresos + Number(item.ingresos), 0);
 
             return {
-                items: items,
+                items,
                 total: items.length,
-                amount: amount
+                amount
             };
         },
         incapacidadValida: (state, getters) => {
             const monthsNumber = 2;
 
             const actualYear = new Date().getFullYear();
-            const actualMonth = 10; // new Date().getMonth() + 1;
+            const actualMonth = 10; // Ajustar según mes actual si es necesario
 
-            // Se obtienen los valores de año y mes por separado
-            const newItems = getters.ingresosIncapacidad.items.map(item => {
+            const ingresosIncap = getters.ingresosIncapacidad;
+            if (!ingresosIncap || !Array.isArray(ingresosIncap.items)) return true;
+
+            const newItems = ingresosIncap.items.map(item => {
                 const year = item.finperiodo.toString().substring(0, 4);
                 const month = item.finperiodo.toString().substring(5, 7);
 
@@ -228,21 +250,17 @@ const pagaduriasModule = {
                 };
             });
 
-            // Se buscan los cupones que esten 3 meses antes o del mes actual
             const periodsByYear = newItems.filter(item => {
                 return item.year === actualYear && item.month > actualMonth - monthsNumber;
             });
 
-            // Agrupar los periodos por meses
             const periodsGroupByMonth = periodsByYear.reduce((group, item) => {
                 const { month } = item;
-
                 group[month] = group[month] || [];
                 group[month].push(item);
                 return group;
             }, {});
 
-            // Si existen cupones en los 3 meses anteriores no se puede aplicar la incapacidad
             return Object.keys(periodsGroupByMonth).length < monthsNumber ? true : false;
         }
     },
@@ -265,21 +283,32 @@ const pagaduriasModule = {
     },
     actions: {
         fetchCoupons: (ctx, data) => {
-            const items = data.map(item => {
-                return {
-                    ...item,
-                    nomtercero: item.concept,
-                    ingresos: floatToInt(item.ingresos),
-                    egresos: floatToInt(item.egresos),
-                    vaplicado: item.egresos
-                };
-            });
+            try {
+                console.log('Datos recibidos en fetchCoupons:', data);
 
-            ctx.commit('setCoupons', items);
+                const items = data.map(item => {
+                    return {
+                        ...item,
+                        nomtercero: item.concept,
+                        ingresos: floatToInt(item.ingresos),
+                        egresos: floatToInt(item.egresos),
+                        vaplicado: floatToInt(item.egresos)
+                    };
+                });
 
-            // Seleccionar el primer periodo por defecto
-            if (ctx.getters.pagaduriaPeriodos.length > 0) {
-                ctx.commit('setSelectedPeriod', ctx.getters.pagaduriaPeriodos[0]);
+                console.log('Datos mapeados en fetchCoupons:', items);
+
+                ctx.commit('setCoupons', items);
+
+                const periods = ctx.getters.pagaduriaPeriodos;
+                if (periods.length > 0) {
+                    console.log('Períodos disponibles:', periods);
+                    ctx.commit('setSelectedPeriod', periods[0]);
+                } else {
+                    console.warn('No se encontraron períodos disponibles en los datos de cupones.');
+                }
+            } catch (error) {
+                console.error('Error en fetchCoupons:', error);
             }
         }
     }

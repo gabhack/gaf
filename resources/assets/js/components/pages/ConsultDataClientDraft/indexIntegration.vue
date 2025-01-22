@@ -30,63 +30,62 @@
                     <!--============================
                 DATAMES FOPEP -
                 ==============================-->
-                    <DatamesComponent
-                        v-if="pagaduriaType == 'FOPEP' && datamesFopep"
-                        :user="user"
-                        :datamesFopep="datamesFopep"
-                    />
+                    <div class="horizontal-container">
+                        <DatamesComponent
+                            v-if="pagaduriaType == 'FOPEP' && datamesFopep"
+                            :user="user"
+                            :datamesFopep="datamesFopep"
+                        />
 
-                    <!--============================
+                        <!--============================
                     FIDUPREVISORA datamesFidu
                 ==============================-->
-                    <DatamesFidu
-                        v-if="pagaduriaType == 'FIDUPREVISORA' && datamesFidu"
-                        :user="user"
-                        :datamesFidu="datamesFidu"
-                    />
+                        <DatamesFidu
+                            v-if="pagaduriaType == 'FIDUPREVISORA' && datamesFidu"
+                            :user="user"
+                            :datamesFidu="datamesFidu"
+                        />
 
-                    <!--============================
+                        <!--============================
                     DATAMESSEDUC SED VALLE
                 ==============================-->
-                    <DatamesSedValle
-                        v-if="pagaduriaType == 'SEDVALLE' && datamessedvalle"
-                        :user="user"
-                        :datamessedvalle="datamessedvalle"
-                    />
+                        <DatamesSedValle
+                            v-if="pagaduriaType == 'SEDVALLE' && datamessedvalle"
+                            :user="user"
+                            :datamessedvalle="datamessedvalle"
+                        />
 
-                    <!--================================
+                        <!--================================
                 SEMCALI datamessemcali
                 ===================================-->
-                    <DatamesSemCali
-                        v-if="pagaduriaType == 'SEMCALI' && datamessemcali"
-                        :user="user"
-                        :datamessemcali="datamessemcali"
-                    />
+                        <DatamesSemCali
+                            v-if="pagaduriaType == 'SEMCALI' && datamessemcali"
+                            :user="user"
+                            :datamessemcali="datamessemcali"
+                        />
+                    </div>
 
                     <!--================================
                 DATAMES SECRETARIAS ELimiando por carlos 12/08
                 ===================================-->
-                
-                <div class="row">
-    <div class="col-12">
-        <label for="periodSelect">Selecciona un período:</label>
-        <select
-                id="periodSelect"
-                class="form-control"
-                v-model="selectedPeriod"
-                @change="updatePeriodForAll"
-            >
-                <option v-for="period in pagaduriaPeriodos" :key="period" :value="period">
-                    {{ period }}
-                </option>
-            </select>
-    </div>
-</div>
+
+                    <div class="col-12">
+                        <label for="periodSelect">Selecciona un período:</label>
+                        <select
+                            id="periodSelect"
+                            class="form-control"
+                            v-model="selectedPeriod"
+                            @change="updatePeriodForAll"
+                        >
+                            <option v-for="period in pagaduriaPeriodos" :key="period" :value="period">
+                                {{ period }}
+                            </option>
+                        </select>
+                    </div>
 
                     <!--============================
                 COMPONENTE HISTORIAL LABORAL (ELIMINADO por calros el 12/08)
                 ==============================-->
-                  
 
                     <template v-if="showOthers">
                         <DescapliEmpty
@@ -198,10 +197,12 @@
                         <DescnoapEmpty v-if="pagaduriaType == 'FIDUPREVISORA'" />
                         <Descnoap v-if="pagaduriaType == 'FOPEP'" :descnoap="descnoap" />
 
-                        <EmbargosEmpty v-if="pagaduriaType == 'SED'" :embargosempty="embargosempty"  
-                                                   :selectedPeriod="selectedPeriod"
+                        <EmbargosEmpty
+                            v-if="pagaduriaType == 'SED'"
+                            :embargosempty="embargosempty"
+                            :selectedPeriod="selectedPeriod"
                         />
-                        <Embargos v-else :selectedPeriod="selectedPeriod"/>
+                        <Embargos v-else :selectedPeriod="selectedPeriod" />
 
                         <!--===================================
                             LIQUIDACIONES
@@ -210,11 +211,12 @@
                         v-if="pagaduriaType == 'SEMSAHAGUN'"
                         :descuentossemsahagun="descuentossemsahagun"
                     /> -->
-                        <DescuentosEmpty v-if="pagaduriaType == 'SED'" :descuentosempty="descuentosempty"                     
-                        :selectedPeriod="selectedPeriod"
-
+                        <DescuentosEmpty
+                            v-if="pagaduriaType == 'SED'"
+                            :descuentosempty="descuentosempty"
+                            :selectedPeriod="selectedPeriod"
                         />
-                        <Descuentos v-else :selectedPeriod="selectedPeriod"/>
+                        <Descuentos v-else :selectedPeriod="selectedPeriod" />
 
                         <div class="col-12">
                             <b-button class="mb-3" variant="black-pearl" @click="visadoFunction">Visar</b-button>
@@ -381,20 +383,20 @@ export default {
             'ingresosExtras'
         ]),
         ...mapGetters('pagaduriasModule', ['pagaduriaPeriodos']),
-    selectedPeriod: {
-        get() {
-            return this.$store.state.pagaduriasModule.selectedPeriod;
+        selectedPeriod: {
+            get() {
+                return this.$store.state.pagaduriasModule.selectedPeriod;
+            },
+            set(value) {
+                this.$store.commit('pagaduriasModule/setSelectedPeriod', value);
+            }
         },
-        set(value) {
-            this.$store.commit('pagaduriasModule/setSelectedPeriod', value);
-        }
-    },
         ...mapState('embargosModule', ['embargosType']),
         ...mapState('descuentosModule', ['descuentosType']),
         ...mapState('datamesModule', ['cuotadeseada', 'conteoEgresosPlus']),
         ...mapGetters('descuentosModule', ['descuentosPerPeriod']),
         totales() {
-            const valrSM = 1300000;
+            const valrSM = 1423500;
 
             let totalWithoutHealthPension = 0;
             this.couponsIngresos.items.forEach(item => {
@@ -540,9 +542,9 @@ export default {
             });
         },
         updatePeriodForAll() {
-        // Aquí debemos actualizar el select de periodo de los 3 componentes
-        console.log(`Periodo seleccionado: ${this.selectedPeriod}`);
-    },
+            // Aquí debemos actualizar el select de periodo de los 3 componentes
+            console.log(`Periodo seleccionado: ${this.selectedPeriod}`);
+        },
         async getDatames(payload) {
             const response = await axios.get(`/datamesfopep/${payload.doc}`);
             this.datamesFopep = response.data;
@@ -710,7 +712,27 @@ export default {
     }
 };
 </script>
+
 <style>
+.horizontal-container {
+    display: flex;
+    gap: 20px; /* Espaciado entre los elementos */
+}
+
+.personal-info,
+.labor-info,
+.history-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 30%; /* Ajusta el ancho según sea necesario */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+}
+
 .table-text {
     font-size: 12px;
 }

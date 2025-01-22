@@ -58,46 +58,46 @@ class dataCotizerController extends Controller
      */
     public function store(Request $request)
     {
-        // Registro inicial de la recepción de la solicitud
+        // Registro inicial del proceso
         Log::info('Inicio del proceso de almacenamiento de la solicitud.');
+        Log::info('Valor de decevalProcess recibido:', ['decevalProcess' => $request->input('cotizerData.decevalProcess')]);
 
-        // Extracción de datos de cotizador y crédito del request
+        // Extracción de datos de cotizador y crédito
         $input = $request['cotizerData'];
         $pagaduriaCode = $request['cotizerData']['pagaduria'];
-        unset($input['pagaduria']); // Eliminación de pagaduria del array para evitar conflictos en la creación del modelo
-        Log::info('Datos de cotizador y crédito extraídos.', ['cotizerData' => $input, 'pagaduriaCode' => $pagaduriaCode]);
+        unset($input['pagaduria']); // Eliminar pagaduria para evitar conflictos
+        Log::info('Datos de cotizador extraídos.', ['cotizerData' => $input, 'pagaduriaCode' => $pagaduriaCode]);
 
-        // Creación y guardado del cotizador
+        // Creación del cotizador
         $cotizador = new dataCotizer($input);
         $cotizador->save();
         Log::info('Cotizador creado y guardado con éxito.', ['cotizadorId' => $cotizador->id]);
 
-        // Obtención del ID de la pagaduría seleccionada
+        // Obtención de la pagaduría
         $pagaduria = Pagadurias::where('codigo', $pagaduriaCode)->first();
         if ($pagaduria === null) {
-            // Manejar el caso en el que no se encuentra la pagaduría
             Log::error('No se encontró la pagaduría con el código proporcionado.', ['codigo' => $pagaduriaCode]);
             return response()->json(['error' => 'Pagaduría no encontrada.'], 404);
         }
 
-        // Creación y guardado del estudio
+        // Creación del estudio
         $estudio = new Estudiostr();
         $estudio->user_id = auth()->user()->id;
         $estudio->pagaduria_id = $pagaduria->id;
-        $estudio->clientes_id = 200;
+        $estudio->clientes_id = 200; // ID ficticio, ajustar según lógica
         $estudio->fecha = Carbon::now()->toDateString();
         $estudio->decision = 'PROS';
         $estudio->data_cotizer_id = $cotizador->id;
         $estudio->save();
         Log::info('Estudio creado y guardado.', ['estudioId' => $estudio->id]);
 
-        // Creación y guardado de la solicitud de crédito
+        // Creación de la solicitud de crédito
         $credit = new SolicitudCredito($request['creditInfo']);
         $credit->estudio_id = $estudio->id;
         $credit->save();
         Log::info('Solicitud de crédito creada y guardada.', ['solicitudCreditoId' => $credit->id]);
 
-        // Cálculo de la cuota mensual y creación del plan de pagos
+        // Cálculo del plan de pagos
         $tasaInteresMensual = $credit->tasa_interes / 100;
         $saldoCapital = $credit->valor_solicitado;
         $costoSeguro = $credit->seguro;
@@ -124,10 +124,15 @@ class dataCotizerController extends Controller
         }
         Log::info('Plan de pagos calculado y guardado.', ['solicitudCreditoId' => $credit->id, 'numCuotas' => $numCuotas]);
 
-        // Final del proceso de almacenamiento
+        // Respuesta final si no se redirige
         Log::info('Proceso de almacenamiento completado con éxito.');
 
-        return $cotizador;
+        return response()->json([
+            'cotizador' => $cotizador,
+            'estudio' => $estudio,
+            'credit' => $credit,
+            'decevalProcess' => $request->input('cotizerData.decevalProcess')
+        ]);
     }
 
     /**

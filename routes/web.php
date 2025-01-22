@@ -12,23 +12,24 @@
 */
 
 use App\Http\Controllers\AreaComercialController;
-use App\Http\Controllers\ContactController;
-use App\Http\Controllers\DescuentosController;
-use App\Http\Controllers\EmbargosController;
-use App\Http\Controllers\VisadoController;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DocumentController;
-use App\Http\Controllers\DemograficoController;
 use App\Http\Controllers\ColpensionesController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\DecevalController;
+use App\Http\Controllers\DemograficoController;
+use App\Http\Controllers\DescuentosController;
+use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\EmbargosController;
 use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\FiducidiariaController;
-use App\Http\Controllers\UploadController;
-use App\Http\Controllers\JoinPensionesController;
 use App\Http\Controllers\FileUploadLogController;
-use App\Http\Controllers\ParametrosComparativaController;
 use App\Http\Controllers\JelouController;
+use App\Http\Controllers\JoinPensionesController;
 use App\Http\Controllers\ListaController;
+use App\Http\Controllers\UploadController;
+use App\Http\Controllers\VisadoController;
+use App\Http\Controllers\dataCotizerController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 /* Route::get('/get-test', 'TestController@index');
 Route::get('/get-test/{doc}', 'TestController@search'); */
@@ -190,6 +191,7 @@ Route::group(['prefix' => 'deceval'], function () {
 	Route::get('/consultar', 'DecevalController@consultar')->name('deceval.consultar');
 	Route::post('/firmar', 'DecevalController@firmar');
 	Route::get('/consulta', 'DecevalController@consulta');
+	Route::get('/test', [DecevalController::class, 'testService']);
 
 	Route::post('/pagarpse', 'PagosController@pagarpse');
 	Route::post('/pay', 'PagosController@pay');
@@ -624,7 +626,7 @@ Route::get('/contact', [ContactController::class, 'index'])->name('contact.index
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 //cupones Gabriel Nuevos metodos
-Route::post('/coupons/by-pagaduria', 'CouponsController@getCouponsByPagaduria');
+Route::post('/coupons/by-pagaduria', 'CouponsController@getFastCouponsByPagaduria');
 Route::get('/coupons-form', 'CouponsController@showCouponsForm')->name('coupons.form');
 Route::get('/pagadurias/names', 'PagaduriasController@getPagaduriasNames');
 Route::get('/pagadurias/namesAmi', 'PagaduriasController@getPagaduriasNamesAmi');
@@ -635,14 +637,13 @@ Route::post('/api/situacion-laboral-batch', 'PagaduriasController@getSituacionLa
 Route::post('/descuentos/by-pagaduria', [DescuentosController::class, 'getDescuentosByPagaduria']);
 Route::post('/embargos/by-pagaduria', [EmbargosController::class, 'getEmbargosByPagaduria']);
 
-
-Route::get('/demografico', [DemograficoController::class, 'show'])->name('demografico.show');
-Route::view('/old/demografico', 'Demographic.IndexDemografico');
+Route::get('/analisis-de-cartera', [DemograficoController::class, 'show'])->name('demografico.show');
+Route::view('/demografico', 'Demographic.IndexDemografico');
 Route::post('/demografico/upload', [DemograficoController::class, 'upload'])->name('demografico.upload');
 Route::get('/demografico/recent-consultations', [DemograficoController::class, 'getRecentConsultations']);
 Route::get('/demografico/fetch-paginated-results', [DemograficoController::class, 'fetchPaginatedResults']);
 Route::get('/demografico/fetch-paginated-results-demografico', [DemograficoController::class, 'fetchPaginatedResultsDemografico']);
-
+Route::get('/demografico/calcular-cupo/{cedula}/{mes}/{ano}', [DemograficoController::class, 'calcularCupoPorCedula'])->name('demografico.calcularCupo');
 Route::get('/demografico/{doc}', [DemograficoController::class, 'getDemograficoPorDoc'])->name('demografico.get');
 
 Route::middleware(['auth'])->group(function () {
@@ -657,7 +658,6 @@ Route::middleware(['auth'])->group(function () {
 	Route::get('/documents/template', [DocumentController::class, 'downloadTemplate']);
 	Route::post('/documents/upload-bulk', [DocumentController::class, 'uploadBulk']);
 });
-
 
 Route::get('/colpensiones', [UploadController::class, 'index']);
 Route::post('/colpensiones/upload', [ColpensionesController::class, 'upload']);

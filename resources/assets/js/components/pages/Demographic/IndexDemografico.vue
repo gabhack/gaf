@@ -4,24 +4,39 @@
             <div class="spinner"></div>
         </div>
 
-        <div class="panel mb-3 col-md-12">
-            <div class="panel-heading">
-                <b>Datos Demográficos</b>
-                <button @click="toggleRecentConsultations" class="btn btn-info float-right">
-                    {{ showRecentConsultations ? 'Ocultar Consultas Recientes' : 'Ver Consultas Recientes' }}
-                </button>
+        <div class="panel mb-3 col-md-12" style="margin-left: 20px">
+            <div class="panel-heading" style="background-color: white">
+                <b style="color: black">Datos Demográficos</b>
             </div>
             <div class="panel-body">
-                <div class="alert alert-info">
-                    <p>
+                <div style="background-color: white">
+                    <hd style="color: black">
                         Por favor, asegúrese de que el archivo Excel tiene una columna con el encabezado
-                        <strong>'cedulas'</strong> y que contiene los números de cédula.
-                    </p>
+                        <strong>'cédulas'</strong> y que contiene los números de cédula. </hd
+                    ><br /><br />
                 </div>
-                <div class="form-group">
-                    <input type="file" @change="handleFileUpload" class="form-control mb-3" />
-                    <button @click="uploadFile" class="btn btn-primary">Subir</button>
+                <div class="form-group d-flex align-items-center">
+                    <div class="custom-file-upload">
+                        <input type="file" @change="handleFileUpload" id="file-upload" class="file-input" />
+                        <label for="file-upload">Elegir archivo</label>
+                        <span v-if="fileName" class="file-name">{{ fileName }}</span>
+                    </div>
                 </div>
+                <CustomButton
+                    v-if="file"
+                    @click="uploadFile"
+                    class="btn btn-primary"
+                    style="white-space: nowrap; background-color: #2c8c73"
+                    >Subir Archivo
+                </CustomButton>
+                <CustomButton
+                    v-if="!isLoadingResults"
+                    @click="toggleRecentConsultations"
+                    class="btn btn-info float-right"
+                    style="white-space: nowrap; background-color: #2c8c73; margin-left: 20px"
+                >
+                    {{ showRecentConsultations ? 'Ocultar Recientes' : 'Consultas Recientes' }}
+                </CustomButton>
             </div>
         </div>
 
@@ -40,12 +55,24 @@
         </div>
 
         <div v-if="results.length" class="panel mb-3 col-md-12">
-            <div class="panel-heading">
-                <b>Resultados</b>
+            <div class="panel-heading" style="background-color: white">
                 <div class="float-right">
-                    <button @click="exportToPDF" class="btn btn-danger mr-2">Exportar a PDF</button>
-                    <button @click="exportToExcel" class="btn btn-success">Exportar a Excel</button>
+                    <button @click="exportToPDF" class="btn btn-danger mr-2" style="background-color: #2c8c73">
+                        Exportar a PDF
+                    </button>
+                    <button @click="exportToExcel" class="btn btn-success" style="background-color: #2c8c73">
+                        Exportar a Excel
+                    </button>
+                    <CustomButton
+                        @click="toggleRecentConsultations"
+                        class="btn btn-info float-right"
+                        style="white-space: nowrap; background-color: #2c8c73; margin-left: 20px"
+                    >
+                        {{ showRecentConsultations ? 'Ocultar Vista' : 'Ver Recientes' }}
+                    </CustomButton>
                 </div>
+                <br />
+                <b style="color: black; margin-left: 20px">Resultado:</b>
             </div>
             <div class="panel-body">
                 <div class="form-group">
@@ -75,15 +102,15 @@
                         </thead>
                         <tbody>
                             <tr v-for="result in filteredResults" :key="result.doc">
-                                <td>{{ result.doc }}</td>
-                                <td>{{ result.nombre_usuario }}</td>
+                                <td>{{ capitalize(result.doc) }}</td>
+                                <td>{{ capitalize(result.nombre_usuario) }}</td>
                                 <td>{{ result.cel }}</td>
                                 <td>{{ result.tel }}</td>
                                 <td>{{ result.correo_electronico }}</td>
-                                <td>{{ result.ciudad }}</td>
-                                <td>{{ result.direccion_residencial }}</td>
-                                <td>{{ result.centro_costo }}</td>
-                                <td>{{ result.tipo_contrato }}</td>
+                                <td>{{ capitalize(result.ciudad) }}</td>
+                                <td>{{ capitalize(result.direccion_residencial) }}</td>
+                                <td>{{ capitalize(result.centro_costo) }}</td>
+                                <td>{{ capitalize(result.tipo_contrato) }}</td>
                                 <td>{{ result.edad }}</td>
                                 <td>{{ result.fecha_nacimiento }}</td>
                             </tr>
@@ -91,8 +118,22 @@
                     </table>
                 </div>
                 <div class="pagination">
-                    <button @click="fetchPaginatedResults(page - 1)" :disabled="page === 1" class="btn btn-primary">Anterior</button>
-                    <button @click="fetchPaginatedResults(page + 1)" :disabled="page * perPage >= total" class="btn btn-primary">Siguiente</button>
+                    <button
+                        v-if="page > 1"
+                        @click="fetchPaginatedResults(page - 1)"
+                        class="btn btn-primary"
+                        style="background-color: #2c8c73"
+                    >
+                        Anterior
+                    </button>
+                    <button
+                        @click="fetchPaginatedResults(page + 1)"
+                        :disabled="page * perPage >= total"
+                        class="btn btn-primary"
+                        style="background-color: #2c8c73"
+                    >
+                        Siguiente
+                    </button>
                 </div>
             </div>
         </div>
@@ -105,13 +146,16 @@
 
 <script>
 import axios from 'axios';
+import CustomButton from '../../customComponents/CustomButton.vue';
 
 export default {
     name: 'DemographicIndex',
     data() {
         return {
             file: null,
+            fileName: '',
             isLoading: false,
+            isLoadingResults: false,
             results: [],
             searchQuery: '',
             error: null,
@@ -121,6 +165,9 @@ export default {
             perPage: 30,
             total: 0
         };
+    },
+    components: {
+        CustomButton
     },
     computed: {
         filteredResults() {
@@ -133,8 +180,13 @@ export default {
         }
     },
     methods: {
+        capitalize(text) {
+            if (!text) return '';
+            return text.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
+        },
         handleFileUpload(event) {
             this.file = event.target.files[0];
+            this.fileName = this.file ? this.file.name : '';
         },
         async uploadFile() {
             if (!this.file) {
@@ -174,9 +226,12 @@ export default {
             }
         },
         async fetchPaginatedResults(page) {
+            this.isLoadingResults = true;
             this.isLoading = true;
             try {
-                let response = await axios.get(`/demografico/fetch-paginated-results-demografico?page=${page}&perPage=${this.perPage}`);
+                let response = await axios.get(
+                    `/demografico/fetch-paginated-results-demografico?page=${page}&perPage=${this.perPage}`
+                );
                 this.results = response.data.data;
                 this.total = response.data.total;
                 this.page = response.data.page;
@@ -199,7 +254,19 @@ export default {
         },
         exportToPDF() {
             const doc = new jsPDF();
-            const columns = ['Documento', 'Nombre', 'Celular', 'Teléfono Fijo', 'Email', 'Ciudad', 'Dirección', 'Centro de Costo', 'Tipo de Contrato', 'Edad', 'Fecha de Nacimiento'];
+            const columns = [
+                'Documento',
+                'Nombre',
+                'Celular',
+                'Teléfono Fijo',
+                'Email',
+                'Ciudad',
+                'Dirección',
+                'Centro de Costo',
+                'Tipo de Contrato',
+                'Edad',
+                'Fecha de Nacimiento'
+            ];
             const rows = this.results.map(item => [
                 item.doc,
                 item.nombre_usuario,
@@ -217,7 +284,19 @@ export default {
             doc.save('resultados.pdf');
         },
         exportToExcel() {
-            const columns = ['Documento', 'Nombre', 'Celular', 'Teléfono Fijo', 'Email', 'Ciudad', 'Dirección', 'Centro de Costo', 'Tipo de Contrato', 'Edad', 'Fecha de Nacimiento'];
+            const columns = [
+                'Documento',
+                'Nombre',
+                'Celular',
+                'Teléfono Fijo',
+                'Email',
+                'Ciudad',
+                'Dirección',
+                'Centro de Costo',
+                'Tipo de Contrato',
+                'Edad',
+                'Fecha de Nacimiento'
+            ];
             const rows = this.results.map(item => [
                 item.doc,
                 item.nombre_usuario,
@@ -265,9 +344,38 @@ export default {
     animation: spin 2s linear infinite;
 }
 
+.custom-file-upload .file-input {
+    display: none;
+}
+
+.custom-file-upload label {
+    display: inline-block;
+    padding: 10px 18px;
+    color: white;
+    background-color: #2c8c73;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 14px;
+}
+
+.custom-file-upload label:hover {
+    background-color: #2c8c73;
+}
+
+.file-name {
+    margin-left: 10px;
+    font-size: 14px;
+    color: black;
+}
+
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .panel-heading {

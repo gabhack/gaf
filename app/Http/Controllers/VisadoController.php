@@ -164,6 +164,7 @@ class VisadoController extends Controller
             'nombre' => $request->nombre,
             'pagaduria' => $request->pagaduria,
             'entidad' => $request->pagaduria,
+            'plazo' => $request->plazo,
             'tipo_consulta' => 'Diamond',
             'consultant_email' => $user->email,
             'consultant_name' => $user->name,

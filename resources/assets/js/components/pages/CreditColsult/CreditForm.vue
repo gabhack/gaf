@@ -345,7 +345,7 @@
                     </b-row>
 
                     <b-row>
-                        <b-col  cols="12" md="6">
+                        <b-col cols="12" md="6">
                             <b-form-group label-for="workCity" label-class="mb-3" valid-feedback="Thank you!">
                                 <p class="labelForm">Ciudad</p>
                                 <b-form-input
@@ -358,7 +358,7 @@
                                 <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                             </b-form-group>
                         </b-col>
-                        <b-col  cols="12" md="6">
+                        <b-col cols="12" md="6">
                             <b-form-group label-for="addressWork" label-class="mb-3" valid-feedback="Thank you!">
                                 <p class="labelForm">Dirección laboral</p>
                                 <b-form-input
@@ -374,7 +374,7 @@
                     </b-row>
 
                     <b-row>
-                        <b-col  cols="12" md="6">
+                        <b-col cols="12" md="6">
                             <b-form-group label-for="phoneWork" label-class="mb-3" valid-feedback="Thank you!">
                                 <p class="labelForm">Teléfono laboral</p>
                                 <b-form-input
@@ -393,14 +393,14 @@
                     <p class="detailsSub">Información financiera</p>
 
                     <b-row>
-                        <b-col  cols="12" md="6">
+                        <b-col cols="12" md="6">
                             <b-form-group label-for="ingreso" label-class="mb-3" valid-feedback="Thank you!">
                                 <p class="labelForm">Total devengado</p>
                                 <b-form-input id="ingreso" class="form-control2" v-model="form.ingreso" trim required />
                                 <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                             </b-form-group>
                         </b-col>
-                        <b-col  cols="12" md="6">
+                        <b-col cols="12" md="6">
                             <b-form-group label-for="gasto" label-class="mb-3" valid-feedback="Thank you!">
                                 <p class="labelForm">Total Descuentos</p>
                                 <b-form-input id="gasto" class="form-control2" v-model="form.gasto" trim required />
@@ -410,7 +410,7 @@
                     </b-row>
 
                     <b-row>
-                        <b-col  cols="12" md="6">
+                        <b-col cols="12" md="6">
                             <b-form-group label-for="neto" label-class="mb-3" valid-feedback="Thank you!">
                                 <p class="labelForm">Neto a pagar</p>
                                 <b-form-input id="neto" class="form-control2" v-model="form.neto" trim required />
@@ -420,7 +420,7 @@
                     </b-row>
 
                     <b-row>
-                        <b-col  cols="12" md="6">
+                        <b-col cols="12" md="6">
                             <b-form-group>
                                 <p class="labelForm">Tipo de cuenta</p>
                                 <b-form-select
@@ -432,7 +432,7 @@
                                 <b-form-invalid-feedback> Este campo es requerido. </b-form-invalid-feedback>
                             </b-form-group>
                         </b-col>
-                        <b-col  cols="12" md="6">
+                        <b-col cols="12" md="6">
                             <b-form-group>
                                 <p class="labelForm">Número de cuenta</p>
                                 <b-form-input
@@ -966,8 +966,10 @@ export default {
             axios
                 .post('/cotizer-data', { creditInfo: this.creditInfo, cotizerData: params })
                 .then(response => {
-                    const cotizerId = response.data.id;
-                    window.location.href = `/cifin/consultar?cotizerId=${cotizerId}`;
+                    const cotizerId = response.data.cotizador.id;
+                    const decevalProcess = response.data.decevalProcess;
+
+                    window.location.href = `/cifin/consultar?cotizerId=${cotizerId}&decevalProcess=${decevalProcess}`;
                 })
                 .catch(error => {
                     console.log(error);

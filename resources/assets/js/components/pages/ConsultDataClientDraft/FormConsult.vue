@@ -14,59 +14,107 @@
         <div class="panel-body px-0">
             <loading :active.sync="isLoading" color="#0CEDB0" :can-cancel="true" :is-full-page="true" />
             <b-row>
-                <b-col cols="12" md="4" class="mb-md-4">
-                    <b class="panel-label mb-2">Cédula (*)</b>
+                <b-col cols="12" md="4" class="mb-md-4 mb-2">
+                    <b class="panel-label mb-2"><span class="text-danger"> *</span> Cédula</b>
                     <input
                         required
                         class="form-control2"
+                        :class="{ errorValid: activeId == 'dataclientDoc' }"
+                        @change="activeId = ''"
                         placeholder="N° de documento"
                         type="number"
                         v-model="dataclient.doc"
+                        ref="dataclientDoc"
                     />
                 </b-col>
-                <b-col cols="12" md="4">
-                    <b class="panel-label mb-2">Nombres y apellidos (*)</b>
+                <b-col cols="12" md="4" class="mb-2">
+                    <b class="panel-label mb-2"><span class="text-danger"> *</span> Nombres y apellidos</b>
                     <input
                         required
                         class="form-control2"
                         placeholder="Ingrese nombre completo"
                         type="text"
                         v-model="dataclient.name"
+                        ref="dataclientName"
+                        :class="{ errorValid: activeId == 'dataclientName' }"
+                        @change="activeId = ''"
                     />
                 </b-col>
-                <b-col cols="12" md="4">
-                    <b class="panel-label mb-2">Monto (*)</b>
-                    <input
-                        required
-                        class="form-control2"
+                <b-col cols="12" md="4" class="mb-2">
+                    <b class="panel-label mb-2"><span class="text-danger"> *</span> Monto</b>
+
+                    <InputCurrency
+                        v-model="dataclient.monto"
+                        ref="dataclientMonto"
+                        @change="activeId = ''"
+                        label=""
+                        id=""
+                        name=""
                         placeholder="Ingrese un monto"
-                        type="text"
-                        v-model.number="dataclient.monto"
+                        rules="required"
+                        :validateClass="activeId == 'dataclientMonto' ? true : false"
                     />
+
+                    <!-- <b-input-group size="md" prepend="$">
+                        <input
+                            type="text"
+                            class="style-form-control col-md-8"
+                            placeholder="Ingrese un monto"
+                            ref="dataclientMonto"
+                            v-model="dataclient.monto"
+                            :class="{ errorValid: activeId == 'dataclientMonto' }"
+                            @change="activeId = ''"
+                        />
+                    </b-input-group> -->
                 </b-col>
-                <b-col cols="12" md="4" class="mb-md-4">
-                    <b class="panel-label mb-2">Cuota deseada (*)</b>
+                <b-col cols="12" md="4" class="mb-2 mb-md-4">
+                    <b class="panel-label mb-2"><span class="text-danger"> *</span> Cuota deseada</b>
+
+                    <InputCurrency
+                        v-model="dataclient.cuotadeseada"
+                        ref="dataclientCuotaDeseada"
+                        @change="activeId = ''"
+                        label=""
+                        id=""
+                        name=""
+                        placeholder="Cantidad de cuotas"
+                        rules="required"
+                        validateClass="errorValid"
+                    />
+                    <!--<b-input-group size="md" prepend="$">
+                        <input
+                            type="text"
+                            class="style-form-control col-md-8"
+                            placeholder="Cantidad de cuotas"
+                            v-model="dataclient.cuotadeseada"
+                            ref="dataclientCuotaDeseada"
+                            :class="{ errorValid: activeId == 'dataclientCuotaDeseada' }"
+                            @change="activeId = ''"
+                        />
+                    </b-input-group>-->
+                </b-col>
+                <b-col cols="12" md="4" class="mb-3 mb-md-0">
+                    <b class="panel-label mb-2"><span class="text-danger"> *</span> Plazo </b>
                     <input
                         required
                         class="form-control2"
-                        placeholder="Cantidad de cuotas"
-                        type="number"
-                        v-model.number="dataclient.cuotadeseada"
+                        type="text"
+                        v-model.number="dataclient.plazo"
+                        placeholder="Ingrese el plazo"
+                        ref="dataclientPlazo"
+                        :class="{ errorValid: activeId == 'dataclientPlazo' }"
+                        @change="activeId = ''"
                     />
-                </b-col>
-                <b-col cols="12" md="4">
-                    <b class="panel-label mb-2">Plazo (*)</b>
-                    <input required class="form-control2" type="text" placeholder="Ingrese el plazo" />
                 </b-col>
             </b-row>
             <b-row>
                 <b-col cols="12" md="4" v-if="!dataclient.pagadurias && !flag">
-                    <CustomButton text="Consultar Pagadurias" @click="getAllPagadurias" />
+                    <CustomButton text="Consultar Pagadurias" @click="validationForm" />
                 </b-col>
 
                 <b-col cols="12" md="4" v-else>
                     <div v-if="!flag">
-                        <h3 style="padding-bottom: 24px;" class="heading-title">Consultar pagadurias</h3>
+                        <h3 style="padding-bottom: 24px" class="heading-title">Consultar pagadurias</h3>
                         <b class="panel-label mb-2">Pagadurias</b>
                         <b-form-select
                             v-if="dataclient.pagadurias"
@@ -94,24 +142,28 @@
         </div>
     </div>
 </template>
+
 <!-- <b-button
-                        type="button"
-                        variant="black-pearl"
-                        v-if="dataclient.doc && dataclient.name"
-                        class="px-4"
-                        @click="getAllPagadurias"
-   >
+        type="button"
+        variant="black-pearl"
+        v-if="dataclient.doc && dataclient.name"
+        class="px-4"
+        @click="getAllPagadurias"
+    >
     CONSULTAR PAGADURIAS
 </b-button> -->
 <script>
 import { mapState, mapMutations } from 'vuex';
 import CustomButton from '../../customComponents/CustomButton.vue';
 import Download from '../../icons/Download.vue';
+import InputCurrency from '../../customComponents/InputCurrency.vue';
+
 export default {
     name: 'FormConsult',
     components: {
         CustomButton,
-        Download
+        Download,
+        InputCurrency
     },
     data() {
         return {
@@ -121,11 +173,13 @@ export default {
                 name: '',
                 cuotadeseada: 0,
                 monto: 0,
+                plazo: null,
                 pagaduria: null,
                 pagadurias: null,
                 pagaduriaKey: null,
                 visado: null
             },
+            activeId: null,
             isLoading: false
         };
     },
@@ -146,7 +200,7 @@ export default {
         ]),
         ...mapMutations('embargosModule', ['setEmbargosType']),
         ...mapMutations('descuentosModule', ['setDescuentosType']),
-        pdfEmit(){
+        pdfEmit() {
             this.$emit('downloadPdf');
         },
         selectedPagaduria() {
@@ -173,6 +227,56 @@ export default {
         },
         emitInfo() {
             this.getAllPagadurias();
+        },
+        async validationForm() {
+            if (!this.dataclient.doc) {
+                this.$bvToast.toast(`Debes llenar el campo de la cédula, es obligatorio`, {
+                    title: '¡Error!',
+                    autoHideDelay: 5000,
+                    solid: true,
+                    variant: 'danger'
+                }),
+                    this.$refs.dataclientDoc.focus();
+                this.activeId = 'dataclientDoc';
+            } else if (!this.dataclient.name) {
+                this.$bvToast.toast(`Debes llenar el campo del nombre, es obligatorio`, {
+                    title: '¡Error!',
+                    autoHideDelay: 5000,
+                    solid: true,
+                    variant: 'danger'
+                }),
+                    this.$refs.dataclientName.focus();
+                this.activeId = 'dataclientName';
+            } else if (!this.dataclient.monto) {
+                this.$bvToast.toast(`Debes colocar el campo del monto, es obligatorio`, {
+                    title: '¡Error!',
+                    autoHideDelay: 5000,
+                    solid: true,
+                    variant: 'danger'
+                }),
+                    this.$refs.dataclientMonto.focus();
+                this.activeId = 'dataclientMonto';
+            } else if (!this.dataclient.cuotadeseada) {
+                this.$bvToast.toast(`Debes colocar el campo de la cuota deseada es obligatorio`, {
+                    title: '¡Error!',
+                    autoHideDelay: 5000,
+                    solid: true,
+                    variant: 'danger'
+                }),
+                    this.$refs.dataclientCuotaDeseada.focus();
+                this.activeId = 'dataclientCuotaDeseada';
+            } else if (!this.dataclient.plazo) {
+                this.$bvToast.toast(`Debes colocar el campo del plazo deseada es obligatorio`, {
+                    title: '¡Error!',
+                    autoHideDelay: 5000,
+                    solid: true,
+                    variant: 'danger'
+                }),
+                    this.$refs.dataclientPlazo.focus();
+                this.activeId = 'dataclientPlazo';
+            } else {
+                this.getAllPagadurias();
+            }
         },
         async getAllPagadurias() {
             if (this.dataclient.doc && this.dataclient.name) {
@@ -228,7 +332,6 @@ export default {
                         this.flag = true;
                     });
                 });
-                
         },
         async saveVisados() {
             try {
@@ -251,7 +354,8 @@ export default {
                 const data = {
                     pagaduria: this.dataclient.pagaduria,
                     nombre: demograficoData.nombre_usuario,
-                    doc: this.dataclient.doc
+                    doc: this.dataclient.doc,
+                    plazo: this.dataclient.plazo
                 };
 
                 const response = await axios.post('/visados', data);
@@ -269,6 +373,7 @@ export default {
     }
 };
 </script>
+
 <style scoped lang="scss">
 .panel-label {
     font-size: 14px;
