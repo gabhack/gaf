@@ -206,6 +206,7 @@ export default {
 .small-input {
     width: 100px;
 }
+
 .form-control2 {
     border: 1px solid #b9bdc3;
     background-color: white;

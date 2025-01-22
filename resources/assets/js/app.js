@@ -82,6 +82,8 @@ Vue.component('CarteraIcon', require('./components/icons/CarteraIcon').default);
 Vue.component('InvestigacionIcon', require('./components/icons/InvestigacionIcon').default);
 Vue.component('LocalizacionIcon', require('./components/icons/LocalizacionIcon').default);
 Vue.component('DownloadIcon', require('./components/icons/DownloadIcon').default);
+Vue.component('UsersIcon', require('./components/icons/UsersIcon').default);
+Vue.component('DashboardIcon', require('./components/icons/DashboardIcon').default);
 
 //Intragration Pages
 Vue.component('integration', require('./components/pages/Integrations/index.vue').default);
@@ -95,8 +97,8 @@ Vue.component('certificados', require('./components/pages/ConsultDataClient/cert
 Vue.component('history-component', require('./components/pages/ConsultDataClient/history.vue').default);
 Vue.component('detail-history-component', require('./components/pages/ConsultDataClient/detailhistory.vue').default);
 Vue.component(
-    'detail-history-component-draft',
-    require('./components/pages/ConsultDataClient/detailhistoryBorrador.vue').default
+	'detail-history-component-draft',
+	require('./components/pages/ConsultDataClient/detailhistoryBorrador.vue').default
 );
 Vue.component('credit-calculator', require('./components/pages/CreditColsult/CreditCalculator.vue').default);
 Vue.component('register-credit', require('./components/pages/CreditColsult/CreditForm.vue').default);
@@ -104,16 +106,16 @@ Vue.component('FormConsult', require('./components/pages/ConsultDataClientDraft/
 //AMI Integración en solicitud credito
 
 Vue.component(
-    'form-consult-integration',
-    require('./components/pages/ConsultDataClientDraft/FormConsultIntegration.vue').default
+	'form-consult-integration',
+	require('./components/pages/ConsultDataClientDraft/FormConsultIntegration.vue').default
 );
 Vue.component(
-    'consulta-pagadurias-form-consult',
-    require('./components/pages/ConsultDataClientDraft/ConsultaPagaduriasFormConsult.vue').default
+	'consulta-pagadurias-form-consult',
+	require('./components/pages/ConsultDataClientDraft/ConsultaPagaduriasFormConsult.vue').default
 );
 Vue.component(
-    'client-data-component-draft-integration',
-    require('./components/pages/ConsultDataClientDraft/indexIntegration.vue').default
+	'client-data-component-draft-integration',
+	require('./components/pages/ConsultDataClientDraft/indexIntegration.vue').default
 );
 
 //CUPONES
@@ -129,8 +131,16 @@ Vue.component('UploadPensiones', UploadPensiones);
 Vue.component('UploadFiducidiaria', UploadFiducidiaria);
 Vue.component('join-pensiones', JoinPensiones);
 
+Vue.component('empresas', require('./components/pages/Empresas/Index.vue').default);
+Vue.component('crear-empresas', require('./components/pages/Empresas/Create.vue').default);
+Vue.component('editar-empresas', require('./components/pages/Empresas/Edit.vue').default);
+
+Vue.component('area-comerciales', require('./components/pages/AreaComerciales/Index.vue').default);
+Vue.component('crear-area-comerciales', require('./components/pages/AreaComerciales/Create.vue').default);
+Vue.component('editar-area-comerciales', require('./components/pages/AreaComerciales/Edit.vue').default);
+
 /* Vue Init */
 const app = new Vue({
-    el: '#app',
-    store
+	el: '#app',
+	store
 });

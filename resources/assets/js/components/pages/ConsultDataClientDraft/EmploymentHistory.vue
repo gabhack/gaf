@@ -75,13 +75,11 @@
                                 <table role="table" aria-colcount="1" class="table b-table table-striped table-hover">
 
                                     <thead role="rowgroup" class="table-header-nowrap">
-              
                                         <tr role="row">
                                             <th role="columnheader" scope="col" aria-colindex="1">Fecha de Ingreso</th>
                                         </tr>
                                     </thead>
                                     <tbody role="rowgroup">
-                                       
                                         <tr role="row" v-for="(item, index) in datamesSedArray" :key="index">
                                             <td aria-colindex="1" role="cell">{{ item.fecha_ingreso || '--' }}</td>
                                         </tr>
@@ -806,31 +804,38 @@ export default {
     }
 };
 </script>
+
 <style scoped>
 th {
     font-size: 14px;
 }
+
 ul {
     margin: 0;
     padding: 0;
 }
+
 li {
     list-style-type: none;
     margin-bottom: 10px;
     padding: 0;
     border-bottom: none;
 }
+
 p {
     margin: 0;
     font-size: 14px;
 }
+
 b {
     font-size: 14px;
 }
+
 .table thead th {
     font-weight: 600;
     vertical-align: middle;
 }
+
 @media (min-width: 770px) {
     .col-48 {
         max-width: 48%;

@@ -109,7 +109,6 @@ import { mapState, mapGetters } from 'vuex';
 export default {
     name: 'EmploymentHistory',
     props: ['fechavinc', 'datamessedvalle', 'datamesfidu', 'datamessemcali', 'user'],
-
     data() {
         return {
             visible: true
@@ -149,10 +148,12 @@ export default {
     }
 };
 </script>
+
 <style scoped>
 th {
     font-size: 14px;
 }
+
 .table thead th {
     font-weight: 600;
     vertical-align: middle;

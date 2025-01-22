@@ -55,7 +55,7 @@
                         :validateClass="activeId == 'dataclientMonto' ? true : false"
                     />
 
-                    <!--<b-input-group size="md" prepend="$">
+                    <!-- <b-input-group size="md" prepend="$">
                         <input
                             type="text"
                             class="style-form-control col-md-8"
@@ -65,8 +65,7 @@
                             :class="{ errorValid: activeId == 'dataclientMonto' }"
                             @change="activeId = ''"
                         />
-                       
-                    </b-input-group>-->
+                    </b-input-group> -->
                 </b-col>
                 <b-col cols="12" md="4" class="mb-2 mb-md-4">
                     <b class="panel-label mb-2"><span class="text-danger"> *</span> Cuota deseada</b>
@@ -143,13 +142,14 @@
         </div>
     </div>
 </template>
+
 <!-- <b-button
-                        type="button"
-                        variant="black-pearl"
-                        v-if="dataclient.doc && dataclient.name"
-                        class="px-4"
-                        @click="getAllPagadurias"
-   >
+        type="button"
+        variant="black-pearl"
+        v-if="dataclient.doc && dataclient.name"
+        class="px-4"
+        @click="getAllPagadurias"
+    >
     CONSULTAR PAGADURIAS
 </b-button> -->
 <script>
@@ -157,6 +157,7 @@ import { mapState, mapMutations } from 'vuex';
 import CustomButton from '../../customComponents/CustomButton.vue';
 import Download from '../../icons/Download.vue';
 import InputCurrency from '../../customComponents/InputCurrency.vue';
+
 export default {
     name: 'FormConsult',
     components: {
@@ -227,7 +228,6 @@ export default {
         emitInfo() {
             this.getAllPagadurias();
         },
-
         async validationForm() {
             if (!this.dataclient.doc) {
                 this.$bvToast.toast(`Debes llenar el campo de la cédula, es obligatorio`, {
@@ -373,6 +373,7 @@ export default {
     }
 };
 </script>
+
 <style scoped lang="scss">
 .panel-label {
     font-size: 14px;
