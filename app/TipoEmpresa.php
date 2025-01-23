@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TipoEmpresa extends Model
 {
-	use SoftDeletes;
+    use SoftDeletes;
 
-	protected $fillable = [
-		'name'
-	];
+    protected $fillable = [
+        'name'
+    ];
 }

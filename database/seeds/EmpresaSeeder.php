@@ -5,13 +5,13 @@ use Illuminate\Database\Seeder;
 
 class EmpresaSeeder extends Seeder
 {
-	/**
-	 * Run the database seeds.
-	 *
-	 * @return void
-	 */
-	public function run()
-	{
-		factory(Empresa::class, 100)->create();
-	}
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        factory(Empresa::class, 100)->create();
+    }
 }
