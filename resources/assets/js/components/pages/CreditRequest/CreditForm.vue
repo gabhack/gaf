@@ -1,0 +1,400 @@
+<template>
+    <form id="credit-form" @submit.prevent="submitForm" :class="collapsed ? 'collapsed' : null">
+      <b-row style="width: 100%; padding: 5rem;">
+        <b-col cols="12" md="6" class="pr-0">
+          <b-card no-body class="card-main mt-5 mb-5 ml-5" style="border-top-right-radius: 0px !important; border-bottom-right-radius: 0px !important; margin: 0 !important;">
+            <b-card-body style="padding-top: 3rem;">
+              <h3 class="heading-title mb-3">Solicitud de Crédito</h3>
+  
+              <!-- Cédula -->
+              <b-form-row>
+                <b-col cols="12">
+                  <b-form-group label="Cédula" label-for="doc">
+                    <b-form-input
+                      id="doc"
+                      class="form-control2"
+                      v-model="form.doc"
+                      type="text"
+                      required
+                    />
+                  </b-form-group>
+                </b-col>
+              </b-form-row>
+  
+              <!-- Nombre -->
+              <b-form-row>
+                <b-col cols="12">
+                  <b-form-group label="Nombre" label-for="name">
+                    <b-form-input
+                      id="name"
+                      class="form-control2"
+                      v-model="form.name"
+                      type="text"
+                      required
+                    />
+                  </b-form-group>
+                </b-col>
+              </b-form-row>
+  
+              <!-- Tipo de cliente -->
+              <b-form-row>
+                <b-col cols="12">
+                  <b-form-group label="Tipo de Cliente" label-for="client_type">
+                    <b-form-select
+                      id="client_type"
+                      class="form-control2"
+                      v-model="form.client_type"
+                      :options="[{value:'',text:'Seleccione'},{value:'docente',text:'Docente'},{value:'pensionado',text:'Pensionado'}]"
+                      required
+                      @change="onChangeClientType"
+                    />
+                  </b-form-group>
+                </b-col>
+              </b-form-row>
+  
+              <!-- Pagaduría -->
+              <b-form-row v-if="showDocenteOptions">
+                <b-col cols="12">
+                  <b-form-group label="Pagaduría (Docente)">
+                    <b-form-select
+                      class="form-control"
+                      v-model.number="form.pagaduria_id"
+                      required
+                    >
+                      <option disabled value="">Seleccione</option>
+                      <option
+                        v-for="(code, name) in docentePagaduriasMap"
+                        :key="name"
+                        :value="code"
+                      >
+                        {{ name }}
+                      </option>
+                    </b-form-select>
+                  </b-form-group>
+                </b-col>
+              </b-form-row>
+  
+              <b-form-row v-else-if="showPensionadoOptions">
+                <b-col cols="12">
+                  <b-form-group label="Pagaduría (Pensionado)">
+                    <b-form-select
+                      class="form-control"
+                      v-model.number="form.pagaduria_id"
+                      required
+                    >
+                      <option disabled value="">Seleccione</option>
+                      <option :value="200">COLPENSIONES</option>
+                      <option :value="201">FOPEP</option>
+                      <option :value="202">FIDUPREVISORA</option>
+                    </b-form-select>
+                  </b-form-group>
+                </b-col>
+              </b-form-row>
+  
+              <!-- Cuota -->
+              <b-form-row>
+                <b-col cols="12">
+                  <b-form-group label="Cuota" label-for="cuota">
+                    <b-form-input
+                      id="cuota"
+                      class="form-control2"
+                      v-model.number="form.cuota"
+                      type="number"
+                      required
+                    />
+                  </b-form-group>
+                </b-col>
+              </b-form-row>
+  
+              <!-- Monto -->
+              <b-form-row>
+                <b-col cols="12">
+                  <b-form-group label="Monto" label-for="monto">
+                    <b-form-input
+                      id="monto"
+                      class="form-control2"
+                      v-model.number="form.monto"
+                      type="number"
+                      required
+                    />
+                  </b-form-group>
+                </b-col>
+              </b-form-row>
+  
+              <!-- Tasa -->
+              <b-form-row>
+                <b-col cols="12">
+                  <b-form-group label="Tasa" label-for="tasa">
+                    <b-form-input
+                      id="tasa"
+                      class="form-control2"
+                      v-model.number="form.tasa"
+                      type="number"
+                      step="0.01"
+                      required
+                    />
+                  </b-form-group>
+                </b-col>
+              </b-form-row>
+  
+              <!-- Plazo -->
+              <b-form-row>
+                <b-col cols="12">
+                  <b-form-group label="Plazo (meses)" label-for="plazo">
+                    <b-form-input
+                      id="plazo"
+                      class="form-control2"
+                      v-model.number="form.plazo"
+                      type="number"
+                      required
+                      min="1"
+                    />
+                  </b-form-group>
+                </b-col>
+              </b-form-row>
+  
+              <hr/>
+              <h4>Carteras a comprar</h4>
+              <div
+                v-for="(cart, index) in form.carteras"
+                :key="index"
+                class="border p-3 mb-3"
+              >
+                <b-form-row>
+                  <b-col cols="12">
+                    <b-form-group label="Valor cuota cartera">
+                      <b-form-input
+                        class="form-control2"
+                        v-model.number="cart.valor_cuota"
+                        type="number"
+                      />
+                    </b-form-group>
+                  </b-col>
+                </b-form-row>
+  
+                <b-form-row>
+                  <b-col cols="12">
+                    <b-form-group label="Saldo cartera">
+                      <b-form-input
+                        class="form-control2"
+                        v-model.number="cart.saldo"
+                        type="number"
+                      />
+                    </b-form-group>
+                  </b-col>
+                </b-form-row>
+  
+                <b-button class="btn-credit" @click="removeCartera(index)">Quitar</b-button>
+              </div>
+  
+              <b-button class="btn-credit mb-3" @click="addCartera">Agregar otra cartera</b-button>
+  
+              <hr />
+  
+              <b-button class="btn-credit" type="submit">Guardar</b-button>
+            </b-card-body>
+          </b-card>
+        </b-col>
+      </b-row>
+    </form>
+  </template>
+  
+  <script>
+  import axios from "axios";
+  import { BRow, BCol, BCard, BCardBody, BFormRow, BFormGroup, BFormSelect, BFormInput, BButton } from 'bootstrap-vue';
+  
+  export default {
+    name: "CreditRequest",
+    components: {
+      BRow,
+      BCol,
+      BCard,
+      BCardBody,
+      BFormRow,
+      BFormGroup,
+      BFormSelect,
+      BFormInput,
+      BButton
+    },
+    data() {
+      return {
+        collapsed: false,
+        form: {
+          doc: "",
+          name: "",
+          client_type: "",
+          pagaduria_id: "",
+          cuota: 0,
+          monto: 0,
+          tasa: 0,
+          plazo: 1,
+          carteras: []
+        },
+        docentePagaduriasMap: {
+          "sed amazonas": 1,
+          "sed antioquia": 130,
+          "sed arauca": 109,
+          "sed atlantico": 121,
+          "sed bolivar": 5,
+          "sed boyaca": 110,
+          "sed caldas": 139,
+          "sed caqueta": 140,
+          "sed casanare": 104,
+          "sed cauca": 177,
+          "sed cesar": 11,
+          "sed choco": 12,
+          "sed cordoba": 182,
+          "sed cundinamarca": 163,
+          "sed guajira": 192,
+          "sed guaviare": 173,
+          "sed huila": 178,
+          "sed magdalena": 145,
+          "sed meta": 113,
+          "sed narino": 143,
+          "sed norte de santander": 154,
+          "sed putumayo": 184,
+          "sed quindio": 166,
+          "sed risaralda": 114,
+          "sed santander": 26,
+          "sed sucre": 175,
+          "sed tolima": 122,
+          "sed valle": 165,
+          "sed vaupes": 132,
+          "sed vichada": 32,
+          "sem sincelejo": 27,
+          "sem armenia": 34,
+          "sem barrancabermeja": 160,
+          "sem barranquilla": 106,
+          "sem bello": 111,
+          "sem bucaramanga": 39,
+          "sem buenaventura": 40,
+          "sem buga": 157,
+          "sem cali": 42,
+          "sem cartagena": 43,
+          "sem cartago": 136,
+          "sem chia": 45,
+          "sem cienaga": 103,
+          "sem cucuta": 47,
+          "sem dosquebradas": 112,
+          "sem duitama": 49,
+          "sem envigado": 115,
+          "sem estrella": 168,
+          "sem facatativa": 164,
+          "sem florencia": 55,
+          "sem floridablanca": 170,
+          "sem funza": 117,
+          "sem fusagasuga": 151,
+          "sem girardot": 179,
+          "sem giron": 61,
+          "sem guainia": 116,
+          "sem ibague": 147,
+          "sem ipiales": 134,
+          "sem itagui": 135,
+          "sem jamundi": 146,
+          "sem lorica": 67,
+          "sem magangue": 133,
+          "sem maicao": 69,
+          "sem malambo": 161,
+          "sem manizales": 174,
+          "sem medellin": 180,
+          "sem monteria": 176,
+          "sem mosquera": 153,
+          "sem neiva": 105,
+          "sem palmira": 152,
+          "sem pasto": 125,
+          "sem pereira": 78,
+          "sem piedecuesta": 79,
+          "sem pitalito": 138,
+          "sem popayan": 159,
+          "sem quibdo": 162,
+          "sem riohacha": 150,
+          "sem rionegro": 129,
+          "sem sabaneta": 108,
+          "sem sahagun": 142,
+          "sem san andres": 158,
+          "sem santa marta": 126,
+          "sem soacha": 119,
+          "sem sogamoso": 172,
+          "sem soledad": 123,
+          "sem tulua": 120,
+          "sem tumaco": 93,
+          "sem tunja": 141,
+          "sem turbo": 137,
+          "sem uribia": 144,
+          "sem valledupar": 171,
+          "sem villavicencio": 124,
+          "sem yopal": 100,
+          "sem yumbo": 169,
+          "sem zipaquira": 156
+        },
+        showDocenteOptions: false,
+        showPensionadoOptions: false
+      };
+    },
+    methods: {
+      onChangeClientType() {
+        this.showDocenteOptions = this.form.client_type === 'docente';
+        this.showPensionadoOptions = this.form.client_type === 'pensionado';
+        this.form.pagaduria_id = '';
+      },
+      addCartera() {
+        this.form.carteras.push({ valor_cuota: 0, saldo: 0 });
+      },
+      removeCartera(index) {
+        this.form.carteras.splice(index, 1);
+      },
+      async submitForm() {
+  try {
+    await axios.post('/credit-requests', this.form);
+    alert('Crédito guardado con éxito.');
+    window.location.href = '/credit-requests'; // Redirige al listado
+  } catch (error) {
+    console.error(error);
+    alert('Error al guardar el crédito');
+  }
+}
+
+    }
+  }
+  </script>
+  
+  <style lang="scss" scoped>
+  @import '../../../../../scss/_colors.scss';
+  
+  #credit-form {
+    &.collapsed {
+      #credit-detail {
+        transform: translateX(0);
+      }
+    }
+  }
+  
+  .card-main {
+    border-radius: 1rem;
+    border: none;
+    box-shadow: 7px 7px 18px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .btn-credit {
+  color: white;
+  background-color: #28a745 !important; /* Cambia este color al verde específico que deseas */
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: #218838 !important; /* Color más oscuro para el hover */
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.5);
+  }
+}
+
+  
+  </style>
+  
