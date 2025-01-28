@@ -85,27 +85,30 @@ class CreditRequestController extends Controller
         return view('CreditRequest.index');
     }
 
-    /**
-     * Retorna la lista de créditos en formato JSON (para Vue)
-     */
-    public function getAll(Request $request)
-    {
-        $credits = CreditRequest::orderBy('id', 'desc')->get();
-        return response()->json($credits);
-    }
+    // Obtiene todos los créditos (metodo getAll)
+public function getAll()
+{
+    $credits = CreditRequest::all(); // O 'with(...)' si necesitas relaciones
+    return response()->json($credits);
+}
 
-    /**
-     * Actualiza el estado de un crédito a 'aprobado'
-     */
-    public function updateStatus($id, Request $request)
-    {
+// Actualiza el estado a 'aprobado' (metodo updateStatus)
+public function updateStatus($id)
+{
+    try {
         $credit = CreditRequest::findOrFail($id);
         $credit->status = 'aprobado';
         $credit->save();
 
         return response()->json([
-            'message' => 'Estado actualizado a aprobado.',
-            'data'    => $credit
-        ]);
+            'message' => 'Solicitud aprobada exitosamente'
+        ], 200);
+    } catch (\Exception $e) {
+        return response()->json([
+            'message' => 'Error al aprobar la solicitud',
+            'error'   => $e->getMessage()
+        ], 500);
     }
+}
+
 }
