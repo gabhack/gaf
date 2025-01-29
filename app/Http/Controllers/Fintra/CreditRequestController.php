@@ -86,11 +86,15 @@ class CreditRequestController extends Controller
     }
 
     // Obtiene todos los créditos (metodo getAll)
-public function getAll()
-{
-    $credits = CreditRequest::all(); // O 'with(...)' si necesitas relaciones
-    return response()->json($credits);
-}
+    public function getAll()
+    {
+        $credits = CreditRequest::with('carteras') // Cargar relación con CreditCartera
+            ->orderBy('updated_at', 'DESC') // Ordenar por última modificación
+            ->get();
+    
+        return response()->json($credits);
+    }
+    
 
 // Actualiza el estado a 'aprobado' (metodo updateStatus)
 public function updateStatus($id)

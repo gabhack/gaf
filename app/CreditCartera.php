@@ -16,8 +16,11 @@ class CreditCartera extends Model
     protected $fillable = [
         'credit_request_id',
         'valor_cuota',
-        'saldo'
+        'saldo',
+        'tipo_cartera',
+        'nombre_entidad'
     ];
+    
 
     public function creditRequest()
     {
