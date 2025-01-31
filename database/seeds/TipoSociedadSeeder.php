@@ -12,7 +12,16 @@ class TipoSociedadSeeder extends Seeder
      */
     public function run()
     {
-        collect(['SAS', 'LTDA'])->map(function ($tipoSociedad) {
+        collect([
+            'Sociedad por Acciones Simplificada: S.A.S.',
+            'Sociedad Limitada: Ltda',
+            'Empresa Unipersonal: E.U.',
+            'Sociedad Anónima: S.A.',
+            'Sociedad Colectiva: S.C.',
+            'Sociedad en Comandita Simple: S. en C.',
+            'Sociedad en Comandita por Acciones: S.C.A.',
+            'Empresa Asociativa de Trabajo: E.A.T.',
+        ])->map(function ($tipoSociedad) {
             TipoSociedad::updateOrCreate(['nombre' => $tipoSociedad]);
         });
     }

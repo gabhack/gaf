@@ -708,6 +708,7 @@ Route::prefix('/listas')->group(function () {
 	Route::get('/tipo-documentos', 			[ListaController::class, 'listarTipoDocumentos']);
 	Route::get('/ciudades', 						[ListaController::class, 'listarCiudades']);
 	Route::get('/ciudades/{id}/sedes', 	[ListaController::class, 'listarSedesPorCiudad']);
+	Route::get('/ubicaciones', 				  [ListaController::class, 'listarUbicaciones']);
 	Route::get('/cargos', 							[ListaController::class, 'listarCargos']);
 	Route::get('/amis', 								[ListaController::class, 'listarAmis']);
 	Route::get('/hegos', 								[ListaController::class, 'listarHegos']);
