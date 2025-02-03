@@ -110,7 +110,7 @@ Vue.component(
 );
 Vue.component(
     'consulta-pagadurias-form-consult',
-    require('./components/pages/CreditRequest/ConsultaPagaduriasFormConsult.vue').default
+    require('./components/pages/ConsultDataClientDraft/ConsultaPagaduriasFormConsult.vue').default
 );
 Vue.component(
     'client-data-component-draft-integration',
