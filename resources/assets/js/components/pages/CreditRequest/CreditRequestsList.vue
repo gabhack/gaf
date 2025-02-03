@@ -1,7 +1,5 @@
 <template>
   <div class="table-container">
-
-    <!-- Tabla de Créditos -->
     <div class="table-responsive">
       <table class="table table-bordered table-hover">
         <thead>
@@ -16,7 +14,7 @@
             <th>Tasa (Mensual)</th>
             <th>Plazo</th>
             <th>Estado</th>
-            <th>Score</th> <!-- Nueva columna vacía -->
+            <th>Score</th>
             <th>Acción</th>
           </tr>
         </thead>
@@ -32,12 +30,9 @@
             <td>{{ formatPercentage(credit.tasa) }}</td>
             <td>{{ credit.plazo }}</td>
             <td>{{ credit.status }}</td>
-            
-            <!-- Columna "Score" (vacía por ahora) -->
             <td></td>
-
             <td>
-              <!-- Botón de Aprobar (si NO está aprobado) -->
+              <!-- Botón para aprobar (si aún no está aprobado) -->
               <button
                 v-if="credit.status !== 'aprobado'"
                 class="btn-credit"
@@ -45,16 +40,16 @@
               >
                 Aprobar
               </button>
-              <!-- Texto si está aprobado -->
               <span v-else class="text-success">Aprobado</span>
 
-              <!-- Botón para ver Carteras -->
-              <button
-                class="btn-credit ml-2"
-                @click="showCarteras(credit)"
-              >
-                <!-- Ícono de ojo (font-awesome) -->
+              <!-- Botón para ver carteras -->
+              <button class="btn-credit ml-2" @click="showCarteras(credit)">
                 <i class="fas fa-eye"></i>
+              </button>
+
+              <!-- Nuevo botón para llamar al componente client-data-component-draft -->
+              <button class="btn-credit ml-2" @click="openClientData(credit)">
+                Visar
               </button>
             </td>
           </tr>
@@ -62,113 +57,84 @@
       </table>
     </div>
 
-    <!-- Modal para ver las Carteras -->
+    <!-- Modal que carga el componente client-data-component-draft -->
     <b-modal
-      id="modal-carteras"
-      v-model="showCarterasModal"
-      title="Detalle de Carteras"
+      id="client-data-modal"
+      v-model="showClientDataModal"
+      title="Visado de Crédito"
       hide-footer
       centered
     >
-      <div v-if="selectedCredit && selectedCredit.carteras && selectedCredit.carteras.length">
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th>Tipo de Cartera</th>
-              <th>Nombre de la Entidad</th>
-              <th>Valor Cuota</th>
-              <th>Saldo</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(cart, index) in selectedCredit.carteras" :key="index">
-              <td>{{ cart.tipo_cartera }}</td>
-              <td>{{ cart.nombre_entidad }}</td>
-              <td>{{ formatCurrency(cart.valor_cuota) }}</td>
-              <td>{{ formatCurrency(cart.saldo) }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div v-else>
-        <p>No hay carteras registradas.</p>
-      </div>
+      <!-- Se le pasa la data del crédito seleccionado mediante la prop "clientData" -->
+      <client-data-component-draft
+        :client-data="selectedCredit"
+        @close="closeClientData"
+      />
     </b-modal>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
-// Importa los componentes de BootstrapVue si no los globalizaste
-import { BModal, BButton } from 'bootstrap-vue'
+// Nota: Se asume que el componente 'client-data-component-draft' está registrado globalmente, 
+// como indicas: Vue.component('client-data-component-draft', require('./components/pages/ConsultDataClientDraft/index.vue').default);
+import axios from 'axios';
 
 export default {
-  name: 'CreditRequestsList',
-  components: { BModal, BButton },
+  name: 'CreditRequestsListWithVisado',
   data() {
     return {
       credits: [],
-      // Manejo del modal de carteras
-      showCarterasModal: false,
+      showClientDataModal: false,
       selectedCredit: null
-    }
+    };
   },
   mounted() {
-    this.fetchCredits()
+    this.fetchCredits();
   },
   methods: {
-    // Carga los créditos y sus carteras
     async fetchCredits() {
       try {
-        // Asegúrate de que tu endpoint devuelva la relación con 'carteras' ->with('carteras')
-        const response = await axios.get('/credit-requests/all')
-        this.credits = response.data
+        // Se asume que este endpoint devuelve la lista de créditos (y, opcionalmente, la información que requiere el componente)
+        const response = await axios.get('/credit-requests/all');
+        this.credits = response.data;
       } catch (error) {
-        console.error('Error al obtener la lista de créditos', error)
+        console.error('Error al obtener la lista de créditos', error);
       }
     },
-    // Aprobar solicitud
-    async approveRequest(creditId) {
-      try {
-        const response = await axios.patch(`/credit-requests/${creditId}/status`)
-        const index = this.credits.findIndex(c => c.id === creditId)
-        if (index !== -1) {
-          this.credits[index].status = 'aprobado'
-        }
-        alert(response.data.message || 'Solicitud aprobada exitosamente')
-      } catch (error) {
-        console.error('Error al aprobar el crédito', error)
-        alert('Ocurrió un error al aprobar la solicitud')
-      }
-    },
-    // Abre el modal con las carteras del crédito seleccionado
-    showCarteras(credit) {
-      this.selectedCredit = credit
-      this.showCarterasModal = true
-    },
-    /**
-     * Formatea valores numéricos como moneda: 100000 => "$100.000"
-     * Puedes ajustarlo a solo puntos si no quieres símbolo.
-     */
     formatCurrency(value) {
-      const num = parseFloat(value)
-      if (!num || isNaN(num)) return '$0'
+      const num = parseFloat(value);
+      if (!num || isNaN(num)) return '$0';
       return new Intl.NumberFormat('es-CO', {
         style: 'currency',
         currency: 'COP',
         minimumFractionDigits: 0
-      }).format(num)
+      }).format(num);
     },
-    /**
-     * Formatea valores numéricos como porcentaje: 1.5 => "1.50%"
-     */
     formatPercentage(value) {
-      const num = parseFloat(value)
-      if (!num || isNaN(num)) return '0%'
-      return `${num.toFixed(2)}%`
+      const num = parseFloat(value);
+      if (!num || isNaN(num)) return '0%';
+      return `${num.toFixed(2)}%`;
+    },
+    approveRequest(creditId) {
+      // Aquí colocar la lógica para aprobar el crédito
+      console.log('Aprobando crédito con ID:', creditId);
+    },
+    showCarteras(credit) {
+      // Aquí colocar la lógica para mostrar las carteras (por ejemplo, abriendo otro modal)
+      console.log('Mostrando carteras para crédito:', credit);
+    },
+    openClientData(credit) {
+      // Asigna la información de la fila seleccionada
+      this.selectedCredit = credit;
+      // Abre el modal para cargar el componente client-data-component-draft
+      this.showClientDataModal = true;
+    },
+    closeClientData() {
+      this.showClientDataModal = false;
+      this.selectedCredit = null;
     }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -194,7 +160,7 @@ td {
   vertical-align: middle;
 }
 
-/* Botón verde degradado */
+/* Estilos para el botón */
 .btn-credit {
   color: white;
   background-image: linear-gradient(
@@ -215,5 +181,9 @@ td {
 
 .btn-credit:hover {
   background-position: right center;
+}
+
+.ml-2 {
+  margin-left: 0.5rem;
 }
 </style>
