@@ -1,5 +1,5 @@
 <template>
-  <div class="table-container">
+  <div class="table-container" v-if="showTable">
     <div class="table-responsive">
       <table class="table table-bordered table-hover">
         <thead>
@@ -8,7 +8,7 @@
             <th>Cédula</th>
             <th>Nombre</th>
             <th>Tipo Cliente</th>
-            <th>Pagaduría ID</th>
+            <th>Pagaduría</th>
             <th>Cuota</th>
             <th>Monto</th>
             <th>Tasa (Mensual)</th>
@@ -24,7 +24,8 @@
             <td>{{ credit.doc }}</td>
             <td>{{ credit.name }}</td>
             <td>{{ credit.client_type }}</td>
-            <td>{{ credit.pagaduria_id }}</td>
+            <!-- Se muestra el nombre de la pagaduria en mayúsculas -->
+            <td>{{ getPagaduriaNameById(credit.pagaduria_id) }}</td>
             <td>{{ formatCurrency(credit.cuota) }}</td>
             <td>{{ formatCurrency(credit.monto) }}</td>
             <td>{{ formatPercentage(credit.tasa) }}</td>
@@ -47,8 +48,8 @@
                 <i class="fas fa-eye"></i>
               </button>
 
-              <!-- Nuevo botón para llamar al componente client-data-component-draft -->
-              <button class="btn-credit ml-2" @click="openClientData(credit)">
+              <!-- Botón para emitir la información (Visar) y ocultar la tabla -->
+              <button class="btn-credit ml-2" @click="emitClientData(credit)">
                 Visar
               </button>
             </td>
@@ -56,36 +57,117 @@
         </tbody>
       </table>
     </div>
-
-    <!-- Modal que carga el componente client-data-component-draft -->
-    <b-modal
-      id="client-data-modal"
-      v-model="showClientDataModal"
-      title="Visado de Crédito"
-      hide-footer
-      centered
-    >
-      <!-- Se le pasa la data del crédito seleccionado mediante la prop "clientData" -->
-      <client-data-component-draft
-        :client-data="selectedCredit"
-        @close="closeClientData"
-      />
-    </b-modal>
   </div>
 </template>
 
 <script>
-// Nota: Se asume que el componente 'client-data-component-draft' está registrado globalmente, 
-// como indicas: Vue.component('client-data-component-draft', require('./components/pages/ConsultDataClientDraft/index.vue').default);
 import axios from 'axios';
+
+// Definimos el mapeo de pagadurías (los nombres en minúscula se asocian a un id)
+const pagaduriasMap = {
+  'sed amazonas': 1,
+  'sed antioquia': 130,
+  'sed arauca': 109,
+  'sed atlantico': 121,
+  'sed bolivar': 5,
+  'sed boyaca': 110,
+  'sed caldas': 139,
+  'sed caqueta': 140,
+  'sed casanare': 104,
+  'sed cauca': 177,
+  'sed cesar': 11,
+  'sed choco': 12,
+  'sed cordoba': 182,
+  'sed cundinamarca': 163,
+  'sed guajira': 192,
+  'sed guaviare': 173,
+  'sed huila': 178,
+  'sed magdalena': 145,
+  'sed meta': 113,
+  'sed narino': 143,
+  'sed norte de santander': 154,
+  'sed putumayo': 184,
+  'sed quindio': 166,
+  'sed risaralda': 114,
+  'sed santander': 26,
+  'sed sucre': 175,
+  'sed tolima': 122,
+  'sed valle': 165,
+  'sed vaupes': 132,
+  'sed vichada': 32,
+  'sem sincelejo': 27,
+  'sem armenia': 34,
+  'sem barrancabermeja': 160,
+  'sem barranquilla': 106,
+  'sem bello': 111,
+  'sem bucaramanga': 39,
+  'sem buenaventura': 40,
+  'sem buga': 157,
+  'sem cali': 42,
+  'sem cartagena': 43,
+  'sem cartago': 136,
+  'sem chia': 45,
+  'sem cienaga': 103,
+  'sem cucuta': 47,
+  'sem dosquebradas': 112,
+  'sem duitama': 49,
+  'sem envigado': 115,
+  'sem estrella': 168,
+  'sem facatativa': 164,
+  'sem florencia': 55,
+  'sem floridablanca': 170,
+  'sem funza': 117,
+  'sem fusagasuga': 151,
+  'sem girardot': 179,
+  'sem giron': 61,
+  'sem guainia': 116,
+  'sem ibague': 147,
+  'sem ipiales': 134,
+  'sem itagui': 135,
+  'sem jamundi': 146,
+  'sem lorica': 67,
+  'sem magangue': 133,
+  'sem maicao': 69,
+  'sem malambo': 161,
+  'sem manizales': 174,
+  'sem medellin': 180,
+  'sem monteria': 176,
+  'sem mosquera': 153,
+  'sem neiva': 105,
+  'sem palmira': 152,
+  'sem pasto': 125,
+  'sem pereira': 78,
+  'sem piedecuesta': 79,
+  'sem pitalito': 138,
+  'sem popayan': 159,
+  'sem quibdo': 162,
+  'sem riohacha': 150,
+  'sem rionegro': 129,
+  'sem sabaneta': 108,
+  'sem sahagun': 142,
+  'sem san andres': 158,
+  'sem santa marta': 126,
+  'sem soacha': 119,
+  'sem sogamoso': 172,
+  'sem soledad': 123,
+  'sem tulua': 120,
+  'sem tumaco': 93,
+  'sem tunja': 141,
+  'sem turbo': 137,
+  'sem uribia': 144,
+  'sem valledupar': 171,
+  'sem villavicencio': 124,
+  'sem yopal': 100,
+  'sem yumbo': 169,
+  'sem zipaquira': 156
+};
 
 export default {
   name: 'CreditRequestsListWithVisado',
   data() {
     return {
       credits: [],
-      showClientDataModal: false,
-      selectedCredit: null
+      showTable: true // controla la visualización de la tabla
     };
   },
   mounted() {
@@ -94,7 +176,7 @@ export default {
   methods: {
     async fetchCredits() {
       try {
-        // Se asume que este endpoint devuelve la lista de créditos (y, opcionalmente, la información que requiere el componente)
+        // Se asume que este endpoint devuelve la lista de créditos
         const response = await axios.get('/credit-requests/all');
         this.credits = response.data;
       } catch (error) {
@@ -116,22 +198,41 @@ export default {
       return `${num.toFixed(2)}%`;
     },
     approveRequest(creditId) {
-      // Aquí colocar la lógica para aprobar el crédito
       console.log('Aprobando crédito con ID:', creditId);
     },
     showCarteras(credit) {
-      // Aquí colocar la lógica para mostrar las carteras (por ejemplo, abriendo otro modal)
       console.log('Mostrando carteras para crédito:', credit);
     },
-    openClientData(credit) {
-      // Asigna la información de la fila seleccionada
-      this.selectedCredit = credit;
-      // Abre el modal para cargar el componente client-data-component-draft
-      this.showClientDataModal = true;
+    // Función para obtener el nombre de la pagaduría en mayúsculas a partir de su id
+    getPagaduriaNameById(id) {
+      for (const [name, mappedId] of Object.entries(pagaduriasMap)) {
+        if (parseInt(mappedId) === parseInt(id)) {
+          return name.toUpperCase();
+        }
+      }
+      // Si no se encuentra, se retorna el id o un valor por defecto
+      return id;
     },
-    closeClientData() {
-      this.showClientDataModal = false;
-      this.selectedCredit = null;
+    emitClientData(credit) {
+      // Se arma el objeto dataclient similar al que se usaba en FormConsult,
+      // pero se asigna la pagaduría con su nombre en mayúsculas
+      const dataclient = {
+        doc: credit.doc,
+        name: credit.name,
+        cuotadeseada: credit.cuota, // ajustar según lógica de negocio
+        monto: credit.monto,
+        plazo: credit.plazo,
+        pagaduria: this.getPagaduriaNameById(credit.pagaduria_id),
+        // Otros campos opcionales:
+        pagadurias: credit.pagadurias || null,
+        pagaduriaKey: credit.pagaduriaKey || null,
+        visado: credit.visado || null
+      };
+
+      // Emitimos la información al componente padre
+      this.$emit('emitInfo', dataclient);
+      // Ocultamos la tabla
+      this.showTable = false;
     }
   }
 };
@@ -160,7 +261,6 @@ td {
   vertical-align: middle;
 }
 
-/* Estilos para el botón */
 .btn-credit {
   color: white;
   background-image: linear-gradient(

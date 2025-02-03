@@ -101,6 +101,7 @@ Vue.component(
 Vue.component('credit-calculator', require('./components/pages/CreditColsult/CreditCalculator.vue').default);
 Vue.component('register-credit', require('./components/pages/CreditColsult/CreditForm.vue').default);
 Vue.component('FormConsult', require('./components/pages/ConsultDataClientDraft/FormConsult.vue').default);
+Vue.component('CreditRequestList', require('./components/pages/CreditRequest/CreditRequestList.vue').default);
 //AMI Integración en solicitud credito
 
 Vue.component(
@@ -109,7 +110,7 @@ Vue.component(
 );
 Vue.component(
     'consulta-pagadurias-form-consult',
-    require('./components/pages/ConsultDataClientDraft/ConsultaPagaduriasFormConsult.vue').default
+    require('./components/pages/CrediRequest/ConsultaPagaduriasFormConsult.vue').default
 );
 Vue.component(
     'client-data-component-draft-integration',
