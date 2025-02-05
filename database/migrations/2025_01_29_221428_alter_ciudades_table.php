@@ -15,10 +15,13 @@ class AlterCiudadesTable extends Migration
     public function up()
     {
         Schema::table('ciudades', function (Blueprint $table) {
-            $table->dropForeign('fk_departamentos_ciudades');
             $table->renameColumn('departamentos_id', 'departamento_id');
+        });
+
+        Schema::table('ciudades', function (Blueprint $table) {
+            $table->unsignedInteger('departamento_id')->change();
             $table->foreign('departamento_id')->references('id')->on('departamentos');
-            $table->string('codigo', 5)->nullable()->change();
+
             $table->renameColumn('ciudad', 'nombre');
         });
     }
@@ -31,12 +34,15 @@ class AlterCiudadesTable extends Migration
     public function down()
     {
         Schema::table('ciudades', function (Blueprint $table) {
-            $table->dropForeign('ciudades_departamento_id_foreign');
+            $table->dropForeign(['departamento_id']);
+            $table->dropIndex('ciudades_departamento_id_foreign');
+
             $table->renameColumn('departamento_id', 'departamentos_id');
-            $table->foreign('departamentos_id', 'fk_departamentos_ciudades')->references('id')->on('departamentos');
-            $table->renameColumn('nombre', 'ciudad');
         });
 
-        DB::statement('ALTER TABLE ciudades MODIFY codigo INT NULL');
+        Schema::table('ciudades', function (Blueprint $table) {
+            $table->integer('departamentos_id')->change();
+            $table->renameColumn('nombre', 'ciudad');
+        });
     }
 }

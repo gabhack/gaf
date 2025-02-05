@@ -20,51 +20,51 @@ class UbicacionesSeeder extends Seeder
         ];
 
         $departamentosCo = [
-            ['codigo' => 'AMA', 'nombre' => 'Amazonas'],
-            ['codigo' => 'ANT', 'nombre' => 'Antioquia'],
-            ['codigo' => 'ARA', 'nombre' => 'Arauca'],
-            ['codigo' => 'ATL', 'nombre' => 'Atlántico'],
-            ['codigo' => 'BOG', 'nombre' => 'Bogotá, D.C'],
-            ['codigo' => 'BOL', 'nombre' => 'Bolívar'],
-            ['codigo' => 'BOY', 'nombre' => 'Boyacá'],
-            ['codigo' => 'CAL', 'nombre' => 'Caldas'],
-            ['codigo' => 'CAQ', 'nombre' => 'Caquetá'],
-            ['codigo' => 'CAS', 'nombre' => 'Casanare'],
-            ['codigo' => 'CAU', 'nombre' => 'Cauca'],
-            ['codigo' => 'CES', 'nombre' => 'Cesar'],
-            ['codigo' => 'CHO', 'nombre' => 'Chocó'],
-            ['codigo' => 'COR', 'nombre' => 'Córdoba'],
-            ['codigo' => 'CUN', 'nombre' => 'Cundinamarca'],
-            ['codigo' => 'GUA', 'nombre' => 'Guainía'],
-            ['codigo' => 'GUV', 'nombre' => 'Guaviare'],
-            ['codigo' => 'HUI', 'nombre' => 'Huila'],
-            ['codigo' => 'LAG', 'nombre' => 'La Guajira'],
-            ['codigo' => 'MAG', 'nombre' => 'Magdalena'],
-            ['codigo' => 'MET', 'nombre' => 'Meta'],
-            ['codigo' => 'NAR', 'nombre' => 'Nariño'],
-            ['codigo' => 'NSA', 'nombre' => 'Norte de Santander'],
-            ['codigo' => 'PUT', 'nombre' => 'Putumayo'],
-            ['codigo' => 'QUI', 'nombre' => 'Quindío'],
-            ['codigo' => 'RIS', 'nombre' => 'Risaralda'],
-            ['codigo' => 'SAP', 'nombre' => 'San Andrés y Providencia'],
-            ['codigo' => 'SAN', 'nombre' => 'Santander'],
-            ['codigo' => 'SUC', 'nombre' => 'Sucre'],
-            ['codigo' => 'TOL', 'nombre' => 'Tolima'],
-            ['codigo' => 'VAC', 'nombre' => 'Valle del Cauca'],
-            ['codigo' => 'VAU', 'nombre' => 'Vaupés'],
-            ['codigo' => 'VID', 'nombre' => 'Vichada']
+            ['codigo' => null, 'nombre' => 'Amazonas'],
+            ['codigo' => null, 'nombre' => 'Antioquia'],
+            ['codigo' => null, 'nombre' => 'Arauca'],
+            ['codigo' => null, 'nombre' => 'Atlántico'],
+            ['codigo' => null, 'nombre' => 'Bogotá, D.C'],
+            ['codigo' => null, 'nombre' => 'Bolívar'],
+            ['codigo' => null, 'nombre' => 'Boyacá'],
+            ['codigo' => null, 'nombre' => 'Caldas'],
+            ['codigo' => null, 'nombre' => 'Caquetá'],
+            ['codigo' => null, 'nombre' => 'Casanare'],
+            ['codigo' => null, 'nombre' => 'Cauca'],
+            ['codigo' => null, 'nombre' => 'Cesar'],
+            ['codigo' => null, 'nombre' => 'Chocó'],
+            ['codigo' => null, 'nombre' => 'Córdoba'],
+            ['codigo' => null, 'nombre' => 'Cundinamarca'],
+            ['codigo' => null, 'nombre' => 'Guainía'],
+            ['codigo' => null, 'nombre' => 'Guaviare'],
+            ['codigo' => null, 'nombre' => 'Huila'],
+            ['codigo' => null, 'nombre' => 'La Guajira'],
+            ['codigo' => null, 'nombre' => 'Magdalena'],
+            ['codigo' => null, 'nombre' => 'Meta'],
+            ['codigo' => null, 'nombre' => 'Nariño'],
+            ['codigo' => null, 'nombre' => 'Norte de Santander'],
+            ['codigo' => null, 'nombre' => 'Putumayo'],
+            ['codigo' => null, 'nombre' => 'Quindío'],
+            ['codigo' => null, 'nombre' => 'Risaralda'],
+            ['codigo' => null, 'nombre' => 'San Andrés y Providencia'],
+            ['codigo' => null, 'nombre' => 'Santander'],
+            ['codigo' => null, 'nombre' => 'Sucre'],
+            ['codigo' => null, 'nombre' => 'Tolima'],
+            ['codigo' => null, 'nombre' => 'Valle del Cauca'],
+            ['codigo' => null, 'nombre' => 'Vaupés'],
+            ['codigo' => null, 'nombre' => 'Vichada']
         ];
 
         $ciudadesVAC = [
-            ['codigo' => 'CAL', 'nombre' => 'Cali'],
-            ['codigo' => 'PAL', 'nombre' => 'Yumbo'],
-            ['codigo' => 'JAM', 'nombre' => 'Jamundí']
+            ['codigo' => null, 'nombre' => 'Cali'],
+            ['codigo' => null, 'nombre' => 'Yumbo'],
+            ['codigo' => null, 'nombre' => 'Jamundí']
         ];
 
         $ciudadesBOG = [
-            ['codigo' => 'BOG', 'nombre' => 'Bogotá'],
-            ['codigo' => 'SOA', 'nombre' => 'Soacha'],
-            ['codigo' => 'CHI', 'nombre' => 'Chía']
+            ['codigo' => null, 'nombre' => 'Bogotá'],
+            ['codigo' => null, 'nombre' => 'Soacha'],
+            ['codigo' => null, 'nombre' => 'Chía']
         ];
 
         foreach ($paises as $pais) {

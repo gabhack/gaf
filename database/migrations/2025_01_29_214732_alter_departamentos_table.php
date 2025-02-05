@@ -15,10 +15,16 @@ class AlterDepartamentosTable extends Migration
      */
     public function up()
     {
+        Schema::table('ciudades', function (Blueprint $table) {
+            $table->dropForeign('fk_departamentos_ciudades');
+            $table->dropIndex('fk_departamentos_ciudades');
+        });
+
         Schema::table('departamentos', function (Blueprint $table) {
-            $table->integer('pais_id')->unsigned()->after('id');
+            $table->unsignedInteger('id')->autoIncrement()->change();
+            $table->unsignedInteger('pais_id')->nullable()->after('id');
             $table->foreign('pais_id')->references('id')->on('paises');
-            $table->string('codigo', 5)->nullable()->change();
+            $table->integer('codigo')->nullable()->change();
             $table->renameColumn('departamento', 'nombre');
         });
     }
@@ -31,11 +37,19 @@ class AlterDepartamentosTable extends Migration
     public function down()
     {
         Schema::table('departamentos', function (Blueprint $table) {
-            $table->dropForeign('departamentos_pais_id_foreign');
-            $table->dropColumn('pais_id');
-            $table->renameColumn('nombre', 'departamento');
+            $table->integer('id')->change();
         });
 
-        DB::statement('ALTER TABLE departamentos MODIFY codigo INT NULL');
+        Schema::table('ciudades', function (Blueprint $table) {
+            $table->foreign('departamentos_id', 'fk_departamentos_ciudades')
+                ->references('id')->on('departamentos');
+        });
+
+        Schema::table('departamentos', function (Blueprint $table) {
+            $table->dropForeign(['pais_id']);
+            $table->dropColumn('pais_id');
+            $table->integer('codigo')->nullable()->change();
+            $table->renameColumn('nombre', 'departamento');
+        });
     }
 }

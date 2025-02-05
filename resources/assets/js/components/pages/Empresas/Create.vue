@@ -27,12 +27,12 @@ export default {
     data() {
         return {
             form: {
-                tipo_empresa_id: '',
+                tipo_empresa_id: null,
                 consultas_diarias: '',
                 empresa: {
-                    tipo_sociedad_id: '',
+                    tipo_sociedad_id: null,
                     nombre: '',
-                    tipo_documento_id: '',
+                    tipo_documento_id: null,
                     numero_documento: '',
                     correo: '',
                     pagina_web: '',
@@ -43,7 +43,7 @@ export default {
                 },
                 representante_legal: {
                     nombres_completos: '',
-                    tipo_documento_id: '',
+                    tipo_documento_id: null,
                     numero_documento: '',
                     nacionalidad: '',
                     correo: '',

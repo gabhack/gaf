@@ -2,6 +2,11 @@
     <div>
         <b-row>
             <b-col cols="6">
+                <h2 class="mb-5">Panel de Creación Empresas</h2>
+            </b-col>
+        </b-row>
+        <b-row>
+            <b-col cols="6">
                 <h4>Tipo de Empresa</h4>
             </b-col>
         </b-row>
@@ -68,7 +73,7 @@
                 </b-form-group>
             </b-col>
             <b-col cols="4">
-                <b-form-group label="Número de documento" label-for="empresa_numero_documento">
+                <b-form-group label="Número de Documento" label-for="empresa_numero_documento">
                     <b-form-input
                         class="custom-input"
                         id="empresa_numero_documento"

@@ -13,13 +13,14 @@ class Empresa extends Model
 		'tipo_sociedad_id',
 		'tipo_empresa_id',
 		'tipo_documento_id',
-		'ciudad_id',
 		'consultas_diarias',
 		'nombre',
 		'numero_documento',
 		'correo',
 		'pagina_web',
-		'pais',
+		'pais_id',
+		'departamento_id',
+		'ciudad_id',
 		'direccion',
 	];
 
@@ -36,6 +37,16 @@ class Empresa extends Model
 	public function tipo_documento()
 	{
 		return $this->belongsTo(TipoDocumento::class)->withDefault();
+	}
+
+	public function pais()
+	{
+		return $this->belongsTo(Pais::class)->withDefault();
+	}
+
+	public function departamento()
+	{
+		return $this->belongsTo(Departamentos::class)->withDefault();
 	}
 
 	public function ciudad()

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\DocumentoEmpresa;
 use App\Empresa;
 use App\RepresentanteLegalEmpresa;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -46,13 +45,14 @@ class EmpresaController extends Controller
 				'tipo_sociedad_id' => $empresaRequest->tipo_sociedad_id,
 				'tipo_empresa_id' => $request->tipo_empresa_id,
 				'tipo_documento_id' => $empresaRequest->tipo_documento_id,
-				'ciudad_id' => $empresaRequest->ciudad_id ?? 1,
 				'consultas_diarias' => $request->consultas_diarias,
 				'nombre' => $empresaRequest->nombre,
 				'numero_documento' => $empresaRequest->numero_documento,
 				'correo' => $empresaRequest->correo,
 				'pagina_web' => $empresaRequest->pagina_web,
-				'pais' => $empresaRequest->pais,
+				'pais_id' => $empresaRequest->pais_id,
+				'departamento_id' => $empresaRequest->departamento_id,
+				'ciudad_id' => $empresaRequest->ciudad_id,
 				'direccion' => $empresaRequest->direccion,
 			]);
 			RepresentanteLegalEmpresa::create([

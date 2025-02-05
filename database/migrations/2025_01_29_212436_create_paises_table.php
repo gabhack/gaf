@@ -15,7 +15,7 @@ class CreatePaisesTable extends Migration
     {
         Schema::create('paises', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('codigo', 5);
+            $table->string('codigo', 5)->unique();
             $table->string('nombre');
             $table->timestamps();
             $table->softDeletes();
