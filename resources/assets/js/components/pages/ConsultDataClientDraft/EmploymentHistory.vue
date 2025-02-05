@@ -93,6 +93,7 @@
 
                         <!-------------Cargo---------------->
                         <div class="col-12 col-48 px-0">
+                            <div v-if="datamesSed">
                             <div class="mt-3 table-responsive">
                                 <table role="table" aria-colcount="1" class="table b-table table-striped table-hover">
                                     <!----><!---->
@@ -114,12 +115,16 @@
                                 </table>
                             </div>
                         </div>
+
+                        </div>
                     </div>
 
                     <div class="col-12 px-0 d-flex align-items-start justify-content-between flex-column flex-sm-row">
                         <!-------------principal---------------->
                         <div class="col-12 col-48 px-0">
                             <div class="mt-3 table-responsive">
+                                <div v-if="datamesSed">
+
                                 <table role="table" aria-colcount="1" class="table b-table table-striped table-hover">
                                     <!----><!---->
                                     <thead role="rowgroup" class="table-header-nowrap">
@@ -140,6 +145,7 @@
                                 </table>
                             </div>
                         </div>
+                    </div>
 
                         <!-------------Fecha vinculación---------------->
                         <div class="col-12 col-48 px-0">

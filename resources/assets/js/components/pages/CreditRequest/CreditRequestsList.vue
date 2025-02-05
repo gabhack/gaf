@@ -1,6 +1,12 @@
 <template>
-  <div class="table-container" v-if="showTable">
-    <div class="table-responsive">
+  <div class="table-container">
+    <loading
+      :active.sync="isLoading"
+      :is-full-page="true"
+      color="#0CEDB0"
+      :can-cancel="false"
+    />
+    <div v-if="showTable" class="table-responsive">
       <table class="table table-bordered table-hover">
         <thead>
           <tr>
@@ -24,7 +30,6 @@
             <td>{{ credit.doc }}</td>
             <td>{{ credit.name }}</td>
             <td>{{ credit.client_type }}</td>
-            <!-- Se muestra el nombre de la pagaduria en mayúsculas -->
             <td>{{ getPagaduriaNameById(credit.pagaduria_id) }}</td>
             <td>{{ formatCurrency(credit.cuota) }}</td>
             <td>{{ formatCurrency(credit.monto) }}</td>
@@ -33,7 +38,6 @@
             <td>{{ credit.status }}</td>
             <td></td>
             <td>
-              <!-- Botón para aprobar (si aún no está aprobado) -->
               <button
                 v-if="credit.status !== 'aprobado'"
                 class="btn-credit"
@@ -42,13 +46,9 @@
                 Aprobar
               </button>
               <span v-else class="text-success">Aprobado</span>
-
-              <!-- Botón para ver carteras -->
               <button class="btn-credit ml-2" @click="showCarteras(credit)">
                 <i class="fas fa-eye"></i>
               </button>
-
-              <!-- Botón para emitir la información (Visar) y ocultar la tabla -->
               <button class="btn-credit ml-2" @click="emitClientData(credit)">
                 Visar
               </button>
@@ -57,13 +57,46 @@
         </tbody>
       </table>
     </div>
+    <b-modal
+      id="modal-carteras"
+      v-model="showCarterasModal"
+      title="Detalle de Carteras"
+      hide-footer
+      centered
+    >
+      <div v-if="selectedCredit && selectedCredit.carteras && selectedCredit.carteras.length">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Tipo de Cartera</th>
+              <th>Nombre de la Entidad</th>
+              <th>Valor Cuota</th>
+              <th>Saldo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(cart, index) in selectedCredit.carteras" :key="index">
+              <td>{{ cart.tipo_cartera }}</td>
+              <td>{{ cart.nombre_entidad }}</td>
+              <td>{{ formatCurrency(cart.valor_cuota) }}</td>
+              <td>{{ formatCurrency(cart.saldo) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div v-else>
+        <p>No hay carteras registradas.</p>
+      </div>
+    </b-modal>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'
+import Loading from 'vue-loading-overlay'
+import { BModal } from 'bootstrap-vue'
+import { mapMutations, mapState } from 'vuex'
 
-// Definimos el mapeo de pagadurías (los nombres en minúscula se asocian a un id)
 const pagaduriasMap = {
   'sed amazonas': 1,
   'sed antioquia': 130,
@@ -160,82 +193,143 @@ const pagaduriasMap = {
   'sem yopal': 100,
   'sem yumbo': 169,
   'sem zipaquira': 156
-};
+}
 
 export default {
   name: 'CreditRequestsListWithVisado',
+  components: { Loading, BModal },
   data() {
     return {
       credits: [],
-      showTable: true // controla la visualización de la tabla
-    };
+      showTable: true,
+      isLoading: false,
+      showCarterasModal: false,
+      selectedCredit: null,
+      carteras: null
+    }
+  },
+  computed: {
+    ...mapState('pagaduriasModule', ['pagaduriasTypes'])
   },
   mounted() {
-    this.fetchCredits();
+    this.fetchCredits()
   },
   methods: {
+    ...mapMutations('pagaduriasModule', [
+      'setPagaduriaType',
+      'setPagaduriaLabel',
+      'setCouponsType',
+      'setSelectedPeriod'
+    ]),
+    ...mapMutations('embargosModule', ['setEmbargosType']),
+    ...mapMutations('descuentosModule', ['setDescuentosType']),
+    ...mapMutations('datamesModule', ['setDatamesSed']),
+
     async fetchCredits() {
       try {
-        // Se asume que este endpoint devuelve la lista de créditos
-        const response = await axios.get('/credit-requests/all');
-        this.credits = response.data;
+        const response = await axios.get('/credit-requests/all')
+        this.credits = response.data
       } catch (error) {
-        console.error('Error al obtener la lista de créditos', error);
+        console.error('Error al obtener la lista de créditos', error)
       }
     },
     formatCurrency(value) {
-      const num = parseFloat(value);
-      if (!num || isNaN(num)) return '$0';
+      const num = parseFloat(value)
+      if (!num || isNaN(num)) return '$0'
       return new Intl.NumberFormat('es-CO', {
         style: 'currency',
         currency: 'COP',
         minimumFractionDigits: 0
-      }).format(num);
+      }).format(num)
     },
     formatPercentage(value) {
-      const num = parseFloat(value);
-      if (!num || isNaN(num)) return '0%';
-      return `${num.toFixed(2)}%`;
+      const num = parseFloat(value)
+      if (!num || isNaN(num)) return '0%'
+      return `${num.toFixed(2)}%`
     },
-    approveRequest(creditId) {
-      console.log('Aprobando crédito con ID:', creditId);
+    async approveRequest(creditId) {
+      try {
+        const response = await axios.patch(`/credit-requests/${creditId}/status`)
+        const index = this.credits.findIndex(c => c.id === creditId)
+        if (index !== -1) {
+          this.credits[index].status = 'aprobado'
+        }
+        alert(response.data.message || 'Solicitud aprobada exitosamente')
+      } catch (error) {
+        console.error('Error al aprobar el crédito', error)
+        alert('Ocurrió un error al aprobar la solicitud')
+      }
     },
     showCarteras(credit) {
-      console.log('Mostrando carteras para crédito:', credit);
+      this.selectedCredit = credit
+      this.showCarterasModal = true
     },
-    // Función para obtener el nombre de la pagaduría en mayúsculas a partir de su id
     getPagaduriaNameById(id) {
       for (const [name, mappedId] of Object.entries(pagaduriasMap)) {
         if (parseInt(mappedId) === parseInt(id)) {
-          return name.toUpperCase();
+          return name.toUpperCase()
         }
       }
-      // Si no se encuentra, se retorna el id o un valor por defecto
-      return id;
+      return id
     },
-    emitClientData(credit) {
-      // Se arma el objeto dataclient similar al que se usaba en FormConsult,
-      // pero se asigna la pagaduría con su nombre en mayúsculas
+    async emitClientData(credit) {
       const dataclient = {
         doc: credit.doc,
         name: credit.name,
-        cuotadeseada: credit.cuota, // ajustar según lógica de negocio
+        cuotadeseada: credit.cuota,
         monto: credit.monto,
         plazo: credit.plazo,
         pagaduria: this.getPagaduriaNameById(credit.pagaduria_id),
-        // Otros campos opcionales:
         pagadurias: credit.pagadurias || null,
         pagaduriaKey: credit.pagaduriaKey || null,
-        visado: credit.visado || null
-      };
+        visado: null,
+        carteras: credit.carteras || []
+      }
+      this.isLoading = true
+      try {
+        this.setDatamesSed(null)
+        this.setPagaduriaType('')
+        this.setSelectedPeriod('')
+        const found = this.pagaduriasTypes.find(
+          item => item.label && item.label.toUpperCase() === dataclient.pagaduria
+        )
+        if (found) {
+          this.setPagaduriaType(found.value)
+          this.setPagaduriaLabel(found.label)
+          if (found.key && found.key.includes('datames')) {
+            this.setCouponsType(`Coupons${found.key.slice(7)}`)
+            this.setEmbargosType(`Embargos${found.key.slice(7)}`)
+            this.setDescuentosType(`Descuentos${found.key.slice(7)}`)
+          } else if (found.key) {
+            this.setCouponsType(found.key)
+            this.setEmbargosType(found.key)
+            this.setDescuentosType(found.key)
+          }
+          const dummyPagaduria = {
+            cargo: credit.client_type || 'Cargo no especificado',
+            doc: credit.doc
+          }
+          this.setDatamesSed(dummyPagaduria)
+        }
+        const visadoResponse = await axios.post('/visados', {
+          pagaduria: dataclient.pagaduria,
+          nombre: dataclient.name,
+          doc: dataclient.doc,
+          plazo: dataclient.plazo
+        })
+        dataclient.visado = visadoResponse.data
+        console.log('Dataclient que se va a emitir:', dataclient)
 
-      // Emitimos la información al componente padre
-      this.$emit('emitInfo', dataclient);
-      // Ocultamos la tabla
-      this.showTable = false;
+        this.$emit('emitInfo', dataclient)
+        this.showTable = false
+      } catch (error) {
+        console.error('Error en emitir/visar:', error)
+      } finally {
+        this.isLoading = false
+      }
     }
   }
-};
+}
 </script>
 
 <style scoped>
@@ -243,32 +337,23 @@ export default {
   width: 100%;
   padding: 20px;
 }
-
 .table-responsive {
   overflow-x: auto;
   width: 100%;
 }
-
 .table {
   width: 100%;
   margin-top: 20px;
   border-collapse: collapse;
 }
-
 th,
 td {
   text-align: center;
   vertical-align: middle;
 }
-
 .btn-credit {
   color: white;
-  background-image: linear-gradient(
-    to right,
-    #0cedb0 0%,
-    #0cedb0 55%,
-    #0cedb0 100%
-  );
+  background-image: linear-gradient(to right, #0cedb0 0%, #0cedb0 55%, #0cedb0 100%);
   transition: 0.5s;
   background-size: 200% auto;
   border: none;
@@ -278,11 +363,9 @@ td {
   cursor: pointer;
   margin: 2px;
 }
-
 .btn-credit:hover {
   background-position: right center;
 }
-
 .ml-2 {
   margin-left: 0.5rem;
 }

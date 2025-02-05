@@ -326,6 +326,8 @@ export default {
                     if (!value) return;
                     this.saveVisados(val).then(status => {
                         if (status != 200) return;
+                        console.log("Datos enviados en emitInfo:", this.dataclient);
+
                         this.$emit('emitInfo', this.dataclient);
                         console.log(this.dataclient);
                         this.dataclient.pagadurias = null;

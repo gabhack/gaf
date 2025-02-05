@@ -78,10 +78,7 @@ class CreditRequestController extends Controller
 
     public function index()
     {
-        // Simplemente retorna la vista Blade que contendrá
-        // el componente Vue. El componente se encargará
-        // de obtener la información vía AJAX o la misma vista
-        // puede inyectar datos.
+      
         return view('CreditRequest.index');
     }
 
