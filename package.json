@@ -39,6 +39,7 @@
     "vue-currency-filter": "^5.2.0",
     "vue-iframes": "0.0.19",
     "vue-loading-overlay": "^3.0.1",
+    "vue-multiselect": "2.1.6",
     "vue-swal": "^1.0.0",
     "vuelidate": "^0.7.6",
     "vuex": "^3.6.1",

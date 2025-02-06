@@ -63,4 +63,9 @@ class Empresa extends Model
 	{
 		return $this->hasOne(DocumentoEmpresa::class)->withDefault();
 	}
+
+	public function permisos()
+	{
+		return $this->belongsToMany(Permiso::class, 'empresas_permisos');
+	}
 }

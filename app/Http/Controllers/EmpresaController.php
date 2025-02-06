@@ -14,18 +14,24 @@ class EmpresaController extends Controller
 {
 	public function index()
 	{
-		$empresas = Empresa::orderBy('id', 'DESC')->paginate(request()->query('per_page') ?? 5)->appends(request()->query());
+		$empresas = Empresa::orderBy('id', 'DESC')
+			->paginate(request()->query('per_page') ?? 5)
+			->appends(request()->query());
+
 		$data = [];
+
 		foreach ($empresas as $empresa) {
 			array_push($data, [
 				'id' => $empresa->id,
 				'tipo_empresa' => $empresa->tipo_empresa->nombre,
 				'nombre' => $empresa->nombre,
 				'documento' => $empresa->numero_documento,
-				'ciudad' => $empresa->ciudad->ciudad
+				'ciudad' => $empresa->ciudad->nombre
 			]);
 		}
+
 		$empresas->setCollection(collect($data));
+
 		return view('empresas.index', ['empresas' => json_encode($empresas)]);
 	}
 

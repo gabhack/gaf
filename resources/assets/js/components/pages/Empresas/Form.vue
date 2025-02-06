@@ -31,16 +31,23 @@
         </b-row>
         <b-row class="mt-4">
             <b-col cols="4">
-                <b-form-group label="Consultas Diarias" label-for="consultas_diarias">
-                    <b-form-input
-                        class="custom-input"
+                <div class="mb-3">
+                    <label for="consultas_diarias">Consultas Diarias</label>
+                    <multiselect
                         id="consultas_diarias"
                         v-model="form.consultas_diarias"
-                        type="text"
-                        placeholder="50"
-                        required
-                    ></b-form-input>
-                </b-form-group>
+                        :options="permisos"
+                        :multiple="true"
+                        :close-on-select="false"
+                        :clear-on-select="false"
+                        :preserve-search="true"
+                        placeholder="Busca y selecciona"
+                        label="name"
+                        track-by="id"
+                        :taggable="true"
+                        :searchable="false"
+                    ></multiselect>
+                </div>
             </b-col>
         </b-row>
         <b-row>
@@ -351,6 +358,7 @@ import InfoCircleIcon from '../../icons/InfoCircleIcon.vue';
 import PlusIcon from '../../icons/PlusIcon.vue';
 import FileInput from '../../customComponents/FileInput.vue';
 import LiteModal from '../../customComponents/LiteModal.vue';
+import Multiselect from 'vue-multiselect';
 
 export default {
     components: {
@@ -358,7 +366,8 @@ export default {
         InfoCircleIcon,
         PlusIcon,
         FileInput,
-        LiteModal
+        LiteModal,
+        Multiselect
     },
     props: {
         form: {
@@ -368,6 +377,7 @@ export default {
     },
     data() {
         return {
+            permisos: [],
             tiposEmpresa: [],
             tiposSociedad: [],
             tiposDocumento: [],
@@ -379,22 +389,27 @@ export default {
         };
     },
     async mounted() {
+        await this.listarPermisos();
         await this.listarTipoEmpresas();
         await this.listarTipoDocumentos();
         await this.listarTipoSociedades();
         await this.listarUbicaciones();
     },
     watch: {
-        'form.empresa.pais_id': async function() {
+        'form.empresa.pais_id': async function () {
             this.form.empresa.departamento_id = null;
             await this.listarUbicaciones();
         },
-        'form.empresa.departamento_id': async function() {
+        'form.empresa.departamento_id': async function () {
             this.form.empresa.ciudad_id = null;
             await this.listarUbicaciones();
         }
     },
     methods: {
+        async listarPermisos() {
+            let response = await axios.get('/listas/permisos');
+            this.permisos = response.data;
+        },
         async listarTipoEmpresas() {
             let response = await axios.get('/listas/tipo-empresas');
             this.tiposEmpresa = response.data;

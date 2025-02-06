@@ -8,6 +8,7 @@ use App\Ciudades;
 use App\Departamentos;
 use App\Hego;
 use App\Pais;
+use App\Permiso;
 use App\Sede;
 use App\TipoDocumento;
 use App\TipoEmpresa;
@@ -86,5 +87,11 @@ class ListaController extends Controller
 	{
 		$hegos = Hego::all();
 		return response()->json($hegos);
+	}
+
+	public function listarPermisos()
+	{
+		$permisos = Permiso::all();
+		return response()->json($permisos);
 	}
 }

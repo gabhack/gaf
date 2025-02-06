@@ -712,4 +712,5 @@ Route::prefix('/listas')->group(function () {
 	Route::get('/cargos', 							[ListaController::class, 'listarCargos']);
 	Route::get('/amis', 								[ListaController::class, 'listarAmis']);
 	Route::get('/hegos', 								[ListaController::class, 'listarHegos']);
+	Route::get('/permisos', 						[ListaController::class, 'listarPermisos']);
 });
