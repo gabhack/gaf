@@ -71,7 +71,7 @@ export default {
         crearEmpresa() {
             let formData = new FormData();
             formData.append('tipo_empresa_id', this.form.tipo_empresa_id);
-            formData.append('consultas_diarias', this.form.consultas_diarias);
+            formData.append('consultas_diarias', JSON.stringify(this.form.consultas_diarias));
             formData.append('empresa', JSON.stringify(this.form.empresa));
             formData.append('representante_legal', JSON.stringify(this.form.representante_legal));
             formData.append('documentacion', JSON.stringify(this.buildDocumentacion()));
