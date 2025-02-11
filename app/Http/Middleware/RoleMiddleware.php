@@ -15,26 +15,28 @@ class RoleMiddleware
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next, ... $roles)
+    public function handle($request, Closure $next, ...$roles)
     {
         $user = Auth::user();
         $auth = false;
-        foreach($roles as $role) {
+
+        foreach ($roles as $role) {
             // Check if user has the role This check will depend on how your roles are set up
             if ($role == 'COMPANY') {
-                if(IsCompany()) {
+                if (IsCompany()) {
                     $auth = true;
                 }
             } elseif ($role == 'CREAUSUARIOS') {
-                if($user->creausuarios) {
+                if ($user->creausuarios) {
                     $auth = true;
                 }
             } else {
-                if($user->hasRole($role)) {
+                if ($user->hasRole($role)) {
                     $auth = true;
                 }
             }
         }
+
         if ($auth) {
             return $next($request);
         } else {

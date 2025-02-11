@@ -1,6 +1,6 @@
 <template>
     <b-container fluid class="my-3">
-        <Form :form="form"></Form>
+        <Form ref="formComponent" />
         <b-row align-h="end">
             <b-col cols="4">
                 <CustomButton class="mt-4" @click="crearEmpresa">
@@ -24,42 +24,6 @@ export default {
         CustomButton,
         PlusIcon
     },
-    data() {
-        return {
-            form: {
-                tipo_empresa_id: null,
-                consultas_diarias: '',
-                empresa: {
-                    tipo_sociedad_id: null,
-                    nombre: '',
-                    tipo_documento_id: null,
-                    numero_documento: '',
-                    correo: '',
-                    pagina_web: '',
-                    pais_id: 1,
-                    departamento_id: null,
-                    ciudad_id: null,
-                    direccion: ''
-                },
-                representante_legal: {
-                    nombres_completos: '',
-                    tipo_documento_id: null,
-                    numero_documento: '',
-                    nacionalidad: '',
-                    correo: '',
-                    numero_contacto: ''
-                },
-                documentacion: {
-                    iva: '',
-                    contribuyente: '',
-                    autoretenedor: '',
-                    src_representante_legal: '',
-                    src_camara_comercio: '',
-                    src_rut: ''
-                }
-            }
-        };
-    },
     mounted() {
         this.setBreadcumb();
     },
@@ -69,30 +33,49 @@ export default {
             domBreadcumb.innerText = '> Empresas > Crear';
         },
         crearEmpresa() {
-            let formData = new FormData();
-            formData.append('tipo_empresa_id', this.form.tipo_empresa_id);
-            formData.append('consultas_diarias', JSON.stringify(this.form.consultas_diarias));
-            formData.append('empresa', JSON.stringify(this.form.empresa));
-            formData.append('representante_legal', JSON.stringify(this.form.representante_legal));
-            formData.append('documentacion', JSON.stringify(this.buildDocumentacion()));
-            formData.append('src_representante_legal', this.form.documentacion.src_representante_legal);
-            formData.append('src_camara_comercio', this.form.documentacion.src_camara_comercio);
-            formData.append('src_rut', this.form.documentacion.src_rut);
+            const formComponent = this.$refs.formComponent;
+            if (!formComponent) {
+                console.error('No se encontró el componente de formulario.');
+                return;
+            }
 
-            axios
-                .post('/empresas', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
-                .then(response => {
-                    window.location.replace('/empresas');
-                })
-                .catch(error => {
-                    console.log(error);
-                });
+            const form = formComponent.submitForm();
+            if (!form) {
+                alert('Errores en el formulario. Revísalo antes de continuar.');
+                return;
+            }
+
+            try {
+                let formData = new FormData();
+                formData.append('tipo_empresa_id', form.tipo_empresa_id);
+                formData.append('consultas_diarias', JSON.stringify(form.consultas_diarias));
+                formData.append('empresa', JSON.stringify(form.empresa));
+                formData.append('representante_legal', JSON.stringify(form.representante_legal));
+                formData.append('documentacion', JSON.stringify(this.buildDocumentacion(form)));
+                formData.append('usuario', JSON.stringify(form.usuario));
+                formData.append('src_representante_legal', form.documentacion.src_representante_legal);
+                formData.append('src_camara_comercio', form.documentacion.src_camara_comercio);
+                formData.append('src_rut', form.documentacion.src_rut);
+
+                axios
+                    .post('/empresas', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+                    .then(response => {
+                        console.log("Empresa creada con éxito:", response.data);
+                        window.location.replace('/empresas');
+                    })
+                    .catch(error => {
+                        console.error("Error al crear empresa:", error);
+                        alert("Hubo un error al crear la empresa. Revisa la consola para más detalles.");
+                    });
+            } catch (error) {
+                console.error(error);
+            }
         },
-        buildDocumentacion() {
+        buildDocumentacion(form) {
             return {
-                iva: this.form.documentacion.iva,
-                contribuyente: this.form.documentacion.contribuyente,
-                autoretenedor: this.form.documentacion.autoretenedor
+                iva: form.documentacion.iva,
+                contribuyente: form.documentacion.contribuyente,
+                autoretenedor: form.documentacion.autoretenedor
             };
         }
     }

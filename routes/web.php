@@ -47,7 +47,6 @@ Route::get('/test-descuentos/{ciudad}/{documento}', 'TestController@testDescuent
 Route::get('/test-cupones/{ciudad}', 'TestController@testCupon');
 Route::get('/test-cupones/{ciudad}/{documento}', 'TestController@testCuponIndividual'); */
 
-
 Auth::routes(['register' => true]);
 
 Route::get('/home', 'HomeController@index')->name('home');

@@ -15,7 +15,12 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'roles_id', 'id_company', 'id_padre', 'name', 'email', 'password',
+        'roles_id',
+        'id_company',
+        'id_padre',
+        'name',
+        'email',
+        'password',
     ];
 
     /**
@@ -26,24 +31,29 @@ class User extends Authenticatable
     protected $hidden = [
         'remember_token',
     ];
-	
-	
-	public function rol()
-	{
-		return $this->hasOne('\App\Roles', 'id', 'roles_id');
-	}
-	
-	public function padre()
-	{
-		return $this->hasOne('\App\User', 'id', 'users_id');
-	}
-	
-	public function company()
-	{
-		return $this->hasOne('\App\User', 'id', 'id_company');
-	}
 
-    public function hasRole($rol) {
+    public function rol()
+    {
+        return $this->hasOne('\App\Roles', 'id', 'roles_id');
+    }
+
+    public function empresa()
+    {
+        return $this->hasOne('\App\Empresas', 'id', 'id_company');
+    }
+
+    public function padre()
+    {
+        return $this->hasOne('\App\User', 'id', 'users_id');
+    }
+
+    public function company()
+    {
+        return $this->hasOne('\App\User', 'id', 'id_company');
+    }
+
+    public function hasRole($rol)
+    {
         if ($this->rol->rol == $rol) {
             return true;
         } else {

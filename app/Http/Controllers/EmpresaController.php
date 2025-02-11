@@ -5,8 +5,12 @@ namespace App\Http\Controllers;
 use App\DocumentoEmpresa;
 use App\Empresa;
 use App\RepresentanteLegalEmpresa;
+use App\Roles;
+use App\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
 
@@ -45,9 +49,15 @@ class EmpresaController extends Controller
 		$empresaRequest = json_decode($request->empresa);
 		$representanteLegalRequest = json_decode($request->representante_legal);
 		$documentacionRequest = json_decode($request->documentacion);
+		$empresaUsuario = json_decode($request->usuario);
 
 		$permisos = json_decode($request->consultas_diarias);
 		$permisosIds = collect($permisos)->pluck('id');
+
+		$rolEmpresa = Roles::where('rol', 'EMPRESA')->first();
+		if (!$rolEmpresa) {
+			throw new Exception("El rol 'EMPRESA' no existe.");
+		}
 
 		try {
 			DB::beginTransaction();
@@ -68,6 +78,14 @@ class EmpresaController extends Controller
 
 			$empresa->permisos()->attach($permisosIds);
 
+			$usuario = User::create([
+				'roles_id' => $rolEmpresa->id,
+				'empresa_id' => $empresa->id,
+				'name' => $empresaUsuario->nombre,
+				'email' => $empresaUsuario->correo,
+				'password' => Hash::make($empresaUsuario->contrasena),
+			]);
+
 			RepresentanteLegalEmpresa::create([
 				'empresa_id' => $empresa->id,
 				'tipo_documento_id' => $representanteLegalRequest->tipo_documento_id,
@@ -77,6 +95,7 @@ class EmpresaController extends Controller
 				'correo' => $representanteLegalRequest->correo,
 				'numero_contacto' => $representanteLegalRequest->numero_contacto,
 			]);
+
 			$documentoEmpresa = DocumentoEmpresa::create([
 				'empresa_id' => $empresa->id,
 				'iva' => $documentacionRequest->iva,
