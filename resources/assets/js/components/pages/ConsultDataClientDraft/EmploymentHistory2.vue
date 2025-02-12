@@ -32,7 +32,7 @@
                     />
                 </svg>
 
-                Información Laboral
+                Información LaboralN2
             </h3>
             <b-collapse id="info-laboral" v-model="visible" class="mt-2">
                 <div class="mt-3 table-responsive">
