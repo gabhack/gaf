@@ -29,240 +29,240 @@
         </a>
     </li>
     <div class="borders-space">
-        @if (IsCompany())
-            <div class="pl-4 mb-4">
-                <span class="sidebar-titles1">AMI®</span></br>
-                <span class="sidebar-titles2">Análisis de mercado inteligente</span>
-            </div>
-            <li class="nav-item">
-                <a
-                    class="nav-link collapsed"
-                    data-toggle="collapse"
-                    data-target="#menuEmpresas"
-                    href="#"
-                    aria-expanded="false"
-                    aria-controls="menuEmpresas"
-                >
-                    <users-icon></users-icon>
-                    <span class="pl-2">Usuarios</span>
-                </a>
-                <div
-                    class="collapse"
-                    id="menuEmpresas"
-                    data-parent="#accordionSidebar"
-                    aria-labelledby="menuEmpresas"
-                >
-                    <div class="bg-green-side py-2 collapse-inner">
-                        <a
-                            class="collapse-item"
-                            href="/empresas"
-                        >
-                            Empresas
-                        </a>
+        <div class="pl-4 mb-4">
+            <span class="sidebar-titles1">AMI®</span></br>
+            <span class="sidebar-titles2">Análisis de mercado inteligente</span>
+        </div>
+        <li class="nav-item">
+            <a
+                class="nav-link collapsed"
+                data-toggle="collapse"
+                data-target="#menuEmpresas"
+                href="#"
+                aria-expanded="false"
+                aria-controls="menuEmpresas"
+            >
+                <users-icon></users-icon>
+                <span class="pl-2">Usuarios</span>
+            </a>
+            <div
+                class="collapse"
+                id="menuEmpresas"
+                data-parent="#accordionSidebar"
+                aria-labelledby="menuEmpresas"
+            >
+                <div class="bg-green-side py-2 collapse-inner">
+                    <a
+                        class="collapse-item"
+                        href="/empresas"
+                    >
+                        Empresas
+                    </a>
+                    @can('permission', 'crear usuario comercial')
                         <a
                             class="collapse-item"
                             href="/area-comerciales"
                         >
                             Area comercial
                         </a>
-                    </div>
+                    @endcan
                 </div>
-            </li>
-            <li class="nav-item">
-                <a
-                    class="nav-link collapsed"
-                    data-toggle="collapse"
-                    data-target="#menuVisados"
-                    href="#"
-                    aria-expanded="false"
-                    aria-controls="menuVisados"
-                >
-                    <visado-icon></visado-icon>
-                    <span class="pl-2">Visado</span>
-                </a>
-                <div
-                    class="collapse"
-                    id="menuVisados"
-                    data-parent="#accordionSidebar"
-                    aria-labelledby="menuVisados"
-                >
-                    <div class="bg-green-side py-2 collapse-inner">
-                        <a
-                            class="collapse-item"
-                            href="{{ url('dataClientDraft') }}"
-                        >
-                            Nueva consulta >
-                        </a>
-                        <a
-                            class="collapse-item"
-                            href="{{ url('historyClient') }}"
-                        >
-                            Listado de consultas >
-                        </a>
-                    </div>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a
+                class="nav-link collapsed"
+                data-toggle="collapse"
+                data-target="#menuVisados"
+                href="#"
+                aria-expanded="false"
+                aria-controls="menuVisados"
+            >
+                <visado-icon></visado-icon>
+                <span class="pl-2">Visado</span>
+            </a>
+            <div
+                class="collapse"
+                id="menuVisados"
+                data-parent="#accordionSidebar"
+                aria-labelledby="menuVisados"
+            >
+                <div class="bg-green-side py-2 collapse-inner">
+                    <a
+                        class="collapse-item"
+                        href="{{ url('dataClientDraft') }}"
+                    >
+                        Nueva consulta >
+                    </a>
+                    <a
+                        class="collapse-item"
+                        href="{{ url('historyClient') }}"
+                    >
+                        Listado de consultas >
+                    </a>
                 </div>
-            </li>
-            <li class="nav-item">
-                <a
-                    class="nav-link collapsed"
-                    data-toggle="collapse"
-                    data-target="#menuProspeccion"
-                    href="#"
-                    aria-expanded="false"
-                    aria-controls="menuProspeccion"
-                >
-                    <mercado-icon></mercado-icon>
-                    <span class="pl-2">Prospección de mercado</span>
-                </a>
-                <div
-                    class="collapse"
-                    id="menuProspeccion"
-                    data-parent="#accordionSidebar"
-                    aria-labelledby="menuProspeccion"
-                >
-                    <div class="bg-green-side py-2 collapse-inner">
-                        <a
-                            class="collapse-item"
-                            href="/parametros-comparativa"
-                        >
-                            Parámetros de control
-                        </a>
-                        <a
-                            class="collapse-item"
-                            href="/coupons-form"
-                        >
-                            Prospección de cartera
-                        </a>
-                        <a
-                            class="collapse-item"
-                            href="/parametros-comparativa/comparativa"
-                        >
-                            Comparativas
-                        </a>
-                    </div>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a
+                class="nav-link collapsed"
+                data-toggle="collapse"
+                data-target="#menuProspeccion"
+                href="#"
+                aria-expanded="false"
+                aria-controls="menuProspeccion"
+            >
+                <mercado-icon></mercado-icon>
+                <span class="pl-2">Prospección de mercado</span>
+            </a>
+            <div
+                class="collapse"
+                id="menuProspeccion"
+                data-parent="#accordionSidebar"
+                aria-labelledby="menuProspeccion"
+            >
+                <div class="bg-green-side py-2 collapse-inner">
+                    <a
+                        class="collapse-item"
+                        href="/parametros-comparativa"
+                    >
+                        Parámetros de control
+                    </a>
+                    <a
+                        class="collapse-item"
+                        href="/coupons-form"
+                    >
+                        Prospección de cartera
+                    </a>
+                    <a
+                        class="collapse-item"
+                        href="/parametros-comparativa/comparativa"
+                    >
+                        Comparativas
+                    </a>
                 </div>
-            </li>
-            <li class="nav-item">
-                <a
-                    class="nav-link collapsed"
-                    data-toggle="collapse"
-                    data-target="#menuRecuperacion"
-                    href="#"
-                    aria-expanded="false"
-                    aria-controls="menuRecuperacion"
-                >
-                    <cartera-icon></cartera-icon>
-                    <span class="pl-2">Recuperación de cartera</span>
-                </a>
-                <div
-                    class="collapse"
-                    id="menuRecuperacion"
-                    data-parent="#accordionSidebar"
-                    aria-labelledby="menuRecuperacion"
-                >
-                    <div class="bg-green-side py-2 collapse-inner">
-                        <a
-                            class="collapse-item"
-                            href="/analisis-de-cartera"
-                        >
-                            Análisis de Cartera
-                        </a>
-                    </div>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a
+                class="nav-link collapsed"
+                data-toggle="collapse"
+                data-target="#menuRecuperacion"
+                href="#"
+                aria-expanded="false"
+                aria-controls="menuRecuperacion"
+            >
+                <cartera-icon></cartera-icon>
+                <span class="pl-2">Recuperación de cartera</span>
+            </a>
+            <div
+                class="collapse"
+                id="menuRecuperacion"
+                data-parent="#accordionSidebar"
+                aria-labelledby="menuRecuperacion"
+            >
+                <div class="bg-green-side py-2 collapse-inner">
+                    <a
+                        class="collapse-item"
+                        href="/analisis-de-cartera"
+                    >
+                        Análisis de Cartera
+                    </a>
                 </div>
-            </li>
-            <li class="nav-item">
-                <a
-                    class="nav-link collapsed"
-                    data-toggle="collapse"
-                    data-target="#menuInvestigacion"
-                    href="#"
-                    aria-expanded="false"
-                    aria-controls="menuInvestigacion"
-                >
-                    <investigacion-icon></investigacion-icon>
-                    <span class="pl-2">Investigación</span>
-                </a>
-                <div
-                    class="collapse"
-                    id="menuInvestigacion"
-                    data-parent="#accordionSidebar"
-                    aria-labelledby="menuInvestigacion"
-                >
-                    <div class="bg-green-side py-2 collapse-inner">
-                        <a
-                            class="collapse-item"
-                            href="#"
-                        >
-                            Investigación de bienes
-                        </a>
-                        <a
-                            class="collapse-item"
-                            href="/certificados"
-                        >
-                            Certificado de nacimiento
-                        </a>
-                        <a
-                            class="collapse-item"
-                            href="/old/demografico"
-                        >
-                            Datos demograficos
-                        </a>
-                        <a
-                            class="collapse-item"
-                            href="#"
-                        >
-                            Datos personales
-                        </a>
-                        <a
-                            class="collapse-item"
-                            href="#"
-                        >
-                            Información financiera
-                        </a>
-                    </div>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a
+                class="nav-link collapsed"
+                data-toggle="collapse"
+                data-target="#menuInvestigacion"
+                href="#"
+                aria-expanded="false"
+                aria-controls="menuInvestigacion"
+            >
+                <investigacion-icon></investigacion-icon>
+                <span class="pl-2">Investigación</span>
+            </a>
+            <div
+                class="collapse"
+                id="menuInvestigacion"
+                data-parent="#accordionSidebar"
+                aria-labelledby="menuInvestigacion"
+            >
+                <div class="bg-green-side py-2 collapse-inner">
+                    <a
+                        class="collapse-item"
+                        href="#"
+                    >
+                        Investigación de bienes
+                    </a>
+                    <a
+                        class="collapse-item"
+                        href="/certificados"
+                    >
+                        Certificado de nacimiento
+                    </a>
+                    <a
+                        class="collapse-item"
+                        href="/old/demografico"
+                    >
+                        Datos demograficos
+                    </a>
+                    <a
+                        class="collapse-item"
+                        href="#"
+                    >
+                        Datos personales
+                    </a>
+                    <a
+                        class="collapse-item"
+                        href="#"
+                    >
+                        Información financiera
+                    </a>
                 </div>
-            </li>
-            <li class="nav-item">
-                <a
-                    class="nav-link collapsed"
-                    data-toggle="collapse"
-                    data-target="#menuLocalizacion"
-                    href="#"
-                    aria-expanded="false"
-                    aria-controls="menuLocalizacion"
-                >
-                    <localizacion-icon></localizacion-icon>
-                    <span class="pl-2">Localización de usuarios</span>
-                </a>
-                <div
-                    class="collapse"
-                    id="menuLocalizacion"
-                    data-parent="#accordionSidebar"
-                    aria-labelledby="menuLocalizacion"
-                >
-                    <div class="bg-green-side py-2 collapse-inner">
-                        <a
-                            class="collapse-item"
-                            href="/colpensiones"
-                        >
-                            Colpensiones
-                        </a>
-                        <a
-                            class="collapse-item"
-                            href="/fiduprevisora"
-                        >
-                            Fiduprevisora
-                        </a>
-                        <a
-                            class="collapse-item"
-                            href="/joinpensiones"
-                        >
-                            Localizar cédulas
-                        </a>
-                    </div>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a
+                class="nav-link collapsed"
+                data-toggle="collapse"
+                data-target="#menuLocalizacion"
+                href="#"
+                aria-expanded="false"
+                aria-controls="menuLocalizacion"
+            >
+                <localizacion-icon></localizacion-icon>
+                <span class="pl-2">Localización de usuarios</span>
+            </a>
+            <div
+                class="collapse"
+                id="menuLocalizacion"
+                data-parent="#accordionSidebar"
+                aria-labelledby="menuLocalizacion"
+            >
+                <div class="bg-green-side py-2 collapse-inner">
+                    <a
+                        class="collapse-item"
+                        href="/colpensiones"
+                    >
+                        Colpensiones
+                    </a>
+                    <a
+                        class="collapse-item"
+                        href="/fiduprevisora"
+                    >
+                        Fiduprevisora
+                    </a>
+                    <a
+                        class="collapse-item"
+                        href="/joinpensiones"
+                    >
+                        Localizar cédulas
+                    </a>
                 </div>
-            </li>
-        @endif
+            </div>
+        </li>
     </div>
 
     @if (HEGOAccess())

@@ -27,7 +27,7 @@ class AddEmpresaIdToUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            // $table->dropForeign(['empresa_id']);
+            $table->dropForeign(['empresa_id']);
             $table->dropColumn('empresa_id');
         });
     }

@@ -16,6 +16,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'roles_id',
+        'empresa_id',
         'id_company',
         'id_padre',
         'name',
@@ -34,7 +35,67 @@ class User extends Authenticatable
 
     public function rol()
     {
-        return $this->hasOne('\App\Roles', 'id', 'roles_id');
+        return $this->hasOne(Roles::class, 'id', 'roles_id');
+    }
+
+    public function rolePermissions()
+    {
+        return $this->rol ? $this->rol->permissions : collect();
+    }
+
+    public function directPermissions()
+    {
+        return $this->morphToMany(Permiso::class, 'model', 'model_has_permissions', 'model_id', 'permission_id');
+    }
+
+    public function givePermission($permission)
+    {
+        if (is_string($permission)) {
+            $permission = Permiso::where('name', $permission)->first();
+        }
+
+        if (is_numeric($permission)) {
+            $permission = Permiso::find($permission);
+        }
+
+        if (!$permission) {
+            throw new \Exception("El permiso no existe.");
+        }
+
+        $hasPermission = $this->directPermissions->contains($permission->id);
+        if (!$hasPermission) {
+            $this->directPermissions()->attach($permission->id);
+        }
+    }
+
+    public function revokePermission($permission)
+    {
+        if (is_string($permission)) {
+            $permission = Permiso::where('name', $permission)->first();
+        }
+
+        if (is_numeric($permission)) {
+            $permission = Permiso::find($permission);
+        }
+
+        if (!$permission) {
+            return;
+        }
+
+        $this->directPermissions()->detach($permission->id);
+    }
+
+    public function hasPermission($permission)
+    {
+        if ($this->rolePermissions()->contains('name', $permission)) {
+            return true;
+        }
+
+        if ($this->directPermissions->contains('name', $permission)) {
+            return true;
+        }
+
+        return false;
     }
 
     public function empresa()

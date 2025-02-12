@@ -76,8 +76,6 @@ class EmpresaController extends Controller
 				'direccion' => $empresaRequest->direccion,
 			]);
 
-			$empresa->permisos()->attach($permisosIds);
-
 			$usuario = User::create([
 				'roles_id' => $rolEmpresa->id,
 				'empresa_id' => $empresa->id,
@@ -85,6 +83,11 @@ class EmpresaController extends Controller
 				'email' => $empresaUsuario->correo,
 				'password' => Hash::make($empresaUsuario->contrasena),
 			]);
+
+			// Asignar permisos
+			foreach ($permisosIds as $permisoId) {
+				$usuario->givePermission($permisoId);
+			}
 
 			RepresentanteLegalEmpresa::create([
 				'empresa_id' => $empresa->id,

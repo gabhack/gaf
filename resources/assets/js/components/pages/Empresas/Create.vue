@@ -40,8 +40,15 @@ export default {
             }
 
             const form = formComponent.submitForm();
+
+            // Invalid form
             if (!form) {
-                alert('Errores en el formulario. Revísalo antes de continuar.');
+                this.$bvToast.toast('Corrige los campos marcados para continuar.', {
+                    title: 'Formulario con errores',
+                    variant: 'danger',
+                    solid: true,
+                });
+
                 return;
             }
 
@@ -60,12 +67,16 @@ export default {
                 axios
                     .post('/empresas', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
                     .then(response => {
-                        console.log("Empresa creada con éxito:", response.data);
+                        console.log('Empresa creada con éxito:', response.data);
                         window.location.replace('/empresas');
                     })
                     .catch(error => {
-                        console.error("Error al crear empresa:", error);
-                        alert("Hubo un error al crear la empresa. Revisa la consola para más detalles.");
+                        console.error('Error al crear empresa:', error);
+                        this.$bvToast.toast('Revisa la consola para más detalles.', {
+                            title: 'Oops, algo salió mal',
+                            variant: 'danger',
+                            solid: true
+                        });
                     });
             } catch (error) {
                 console.error(error);
