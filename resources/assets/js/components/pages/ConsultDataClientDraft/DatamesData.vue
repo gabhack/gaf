@@ -157,6 +157,7 @@ export default {
     },
     methods: {
         calcularEdad(fechaNacimiento) {
+            if(fechaNacimiento==null) return;
             var partes = fechaNacimiento.split('/');
             var fechaNacimientoFormatoCorrecto = partes[1] + '/' + partes[0] + '/' + partes[2];
             var hoy = new Date();
