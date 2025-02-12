@@ -689,10 +689,10 @@ export default {
     this.carterasCargadas = true;
   }
 
-            this.getCoupons({
+  this.getCoupons({
                 doc: payload.doc,
-                pagaduria: this.visado.pagaduria,
-                pagaduriaLabel: this.visado.pagaduria
+                pagaduria: this.couponsType,
+                pagaduriaLabel: this.pagaduriaLabel
             });
 
             this.getDescapli(payload);
@@ -759,8 +759,8 @@ export default {
         async getCoupons(payload) {
             const data = {
                 doc: payload.doc,
-                pagaduria: payload.pagaduria,
-                pagaduriaLabel: payload.pagaduriaLabel
+                pagaduria: this.couponsType,
+                pagaduriaLabel: this.pagaduriaLabel
             };
 
             console.log('Datos enviados a get-coupons (antes d efetch):', payload);
