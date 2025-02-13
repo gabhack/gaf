@@ -5,38 +5,20 @@
         <b-card no-body class="card-main mt-5 mb-5 ml-5">
           <b-card-body style="padding-top: 3rem;">
             <h3 class="heading-title mb-3">Panel de Solicitudes de Consulta para Crédito</h3>
-
-            <!-- Cédula -->
             <b-form-row>
               <b-col cols="12">
                 <b-form-group label="Cédula" label-for="doc">
-                  <b-form-input
-                    id="doc"
-                    class="form-control2"
-                    v-model="form.doc"
-                    type="text"
-                    required
-                  />
+                  <b-form-input id="doc" class="form-control2" v-model="form.doc" type="text" required />
                 </b-form-group>
               </b-col>
             </b-form-row>
-
-            <!-- Nombre -->
             <b-form-row>
               <b-col cols="12">
                 <b-form-group label="Nombre" label-for="name">
-                  <b-form-input
-                    id="name"
-                    class="form-control2"
-                    v-model="form.name"
-                    type="text"
-                    required
-                  />
+                  <b-form-input id="name" class="form-control2" v-model="form.name" type="text" required />
                 </b-form-group>
               </b-col>
             </b-form-row>
-
-            <!-- Tipo de Cliente -->
             <b-form-row>
               <b-col cols="12">
                 <b-form-group label="Tipo de Cliente" label-for="client_type">
@@ -55,16 +37,10 @@
                 </b-form-group>
               </b-col>
             </b-form-row>
-
-            <!-- Pagaduría (Docente) -->
             <b-form-row v-if="showDocenteOptions">
               <b-col cols="12">
                 <b-form-group label="Pagaduría (Docente)">
-                  <b-form-select
-                    class="form-control2"
-                    v-model.number="form.pagaduria_id"
-                    required
-                  >
+                  <b-form-select class="form-control2" v-model.number="form.pagaduria_id" required>
                     <option disabled value="">Seleccione</option>
                     <option
                       v-for="(code, name) in docentePagaduriasMap"
@@ -77,16 +53,10 @@
                 </b-form-group>
               </b-col>
             </b-form-row>
-
-            <!-- Pagaduría (Pensionado) -->
             <b-form-row v-else-if="showPensionadoOptions">
               <b-col cols="12">
                 <b-form-group label="Pagaduría (Pensionado)">
-                  <b-form-select
-                    class="form-control2"
-                    v-model.number="form.pagaduria_id"
-                    required
-                  >
+                  <b-form-select class="form-control2" v-model.number="form.pagaduria_id" required>
                     <option disabled value="">Seleccione</option>
                     <option :value="200">COLPENSIONES</option>
                     <option :value="201">FOPEP</option>
@@ -95,8 +65,6 @@
                 </b-form-group>
               </b-col>
             </b-form-row>
-
-            <!-- Cuota -->
             <b-form-row>
               <b-col cols="12">
                 <b-form-group label="Cuota" label-for="cuota">
@@ -112,8 +80,6 @@
                 </b-form-group>
               </b-col>
             </b-form-row>
-
-            <!-- Monto -->
             <b-form-row>
               <b-col cols="12">
                 <b-form-group label="Monto" label-for="monto">
@@ -129,8 +95,6 @@
                 </b-form-group>
               </b-col>
             </b-form-row>
-
-            <!-- Tasa (Mensual) -->
             <b-form-row>
               <b-col cols="12">
                 <b-form-group label="Tasa (Mensual)" label-for="tasa">
@@ -146,8 +110,6 @@
                 </b-form-group>
               </b-col>
             </b-form-row>
-
-            <!-- Plazo -->
             <b-form-row>
               <b-col cols="12">
                 <b-form-group label="Plazo (meses)" label-for="plazo">
@@ -162,10 +124,7 @@
                 </b-form-group>
               </b-col>
             </b-form-row>
-
             <hr />
-
-            <!-- Carteras a comprar -->
             <h4>Carteras a comprar</h4>
             <div class="table-responsive">
               <table class="table table-bordered">
@@ -221,13 +180,10 @@
                 </tbody>
               </table>
             </div>
-
             <b-button class="btn-credit mb-3" @click="addCartera">
               Agregar otra cartera
             </b-button>
-
             <hr />
-
             <b-button class="btn-credit" type="submit">
               Guardar
             </b-button>
@@ -279,111 +235,105 @@ export default {
         plazo: 1,
         carteras: []
       },
-
-      // Para mostrar selects de pagaduría
       showDocenteOptions: false,
       showPensionadoOptions: false,
-
       docentePagaduriasMap: {
-  "sed amazonas": 1,
-  "sed antioquia": 130,
-  "sed arauca": 109,
-  "sed atlantico": 121,
-  "sed bolivar": 5,
-  "sed boyaca": 110,
-  "sed caldas": 139,
-  "sed caqueta": 140,
-  "sed casanare": 104,
-  "sed cauca": 177,
-  "sed cesar": 11,
-  "sed choco": 12,
-  "sed cordoba": 182,
-  "sed cundinamarca": 163,
-  "sed guajira": 192,
-  "sed guaviare": 173,
-  "sed huila": 178,
-  "sed magdalena": 145,
-  "sed meta": 113,
-  "sed narino": 143,
-  "sed norte de santander": 154,
-  "sed putumayo": 184,
-  "sed quindio": 166,
-  "sed risaralda": 114,
-  "sed santander": 26,
-  "sed sucre": 175,
-  "sed tolima": 122,
-  "sed valle": 165,
-  "sed vaupes": 132,
-  "sed vichada": 32,
-  "sem sincelejo": 27,
-  "sem armenia": 34,
-  "sem barrancabermeja": 160,
-  "sem barranquilla": 106,
-  "sem bello": 111,
-  "sem bucaramanga": 39,
-  "sem buenaventura": 40,
-  "sem buga": 157,
-  "sem cali": 42,
-  "sem cartagena": 43,
-  "sem cartago": 136,
-  "sem chia": 45,
-  "sem cienaga": 103,
-  "sem cucuta": 47,
-  "sem dosquebradas": 112,
-  "sem duitama": 49,
-  "sem envigado": 115,
-  "sem estrella": 168,
-  "sem facatativa": 164,
-  "sem florencia": 55,
-  "sem floridablanca": 170,
-  "sem funza": 117,
-  "sem fusagasuga": 151,
-  "sem girardot": 179,
-  "sem giron": 61,
-  "sem guainia": 116,
-  "sem ibague": 147,
-  "sem ipiales": 134,
-  "sem itagui": 135,
-  "sem jamundi": 146,
-  "sem lorica": 67,
-  "sem magangue": 133,
-  "sem maicao": 69,
-  "sem malambo": 161,
-  "sem manizales": 174,
-  "sem medellin": 180,
-  "sem monteria": 176,
-  "sem mosquera": 153,
-  "sem neiva": 105,
-  "sem palmira": 152,
-  "sem pasto": 125,
-  "sem pereira": 78,
-  "sem piedecuesta": 79,
-  "sem pitalito": 138,
-  "sem popayan": 159,
-  "sem quibdo": 162,
-  "sem riohacha": 150,
-  "sem rionegro": 129,
-  "sem sabaneta": 108,
-  "sem sahagun": 142,
-  "sem san andres": 158,
-  "sem santa marta": 126,
-  "sem soacha": 119,
-  "sem sogamoso": 172,
-  "sem soledad": 123,
-  "sem tulua": 120,
-  "sem tumaco": 93,
-  "sem tunja": 141,
-  "sem turbo": 137,
-  "sem uribia": 144,
-  "sem valledupar": 171,
-  "sem villavicencio": 124,
-  "sem yopal": 100,
-  "sem yumbo": 169,
-  "sem zipaquira": 156
-},
-
-
-      // Opciones para tipo de Cartera
+        "sed amazonas": 1,
+        "sed antioquia": 130,
+        "sed arauca": 109,
+        "sed atlantico": 121,
+        "sed bolivar": 5,
+        "sed boyaca": 110,
+        "sed caldas": 139,
+        "sed caqueta": 140,
+        "sed casanare": 104,
+        "sed cauca": 177,
+        "sed cesar": 11,
+        "sed choco": 12,
+        "sed cordoba": 182,
+        "sed cundinamarca": 163,
+        "sed guajira": 192,
+        "sed guaviare": 173,
+        "sed huila": 178,
+        "sed magdalena": 145,
+        "sed meta": 113,
+        "sed narino": 143,
+        "sed norte de santander": 154,
+        "sed putumayo": 184,
+        "sed quindio": 166,
+        "sed risaralda": 114,
+        "sed santander": 26,
+        "sed sucre": 175,
+        "sed tolima": 122,
+        "sed valle": 165,
+        "sed vaupes": 132,
+        "sed vichada": 32,
+        "sem sincelejo": 27,
+        "sem armenia": 34,
+        "sem barrancabermeja": 160,
+        "sem barranquilla": 106,
+        "sem bello": 111,
+        "sem bucaramanga": 39,
+        "sem buenaventura": 40,
+        "sem buga": 157,
+        "sem cali": 42,
+        "sem cartagena": 43,
+        "sem cartago": 136,
+        "sem chia": 45,
+        "sem cienaga": 103,
+        "sem cucuta": 47,
+        "sem dosquebradas": 112,
+        "sem duitama": 49,
+        "sem envigado": 115,
+        "sem estrella": 168,
+        "sem facatativa": 164,
+        "sem florencia": 55,
+        "sem floridablanca": 170,
+        "sem funza": 117,
+        "sem fusagasuga": 151,
+        "sem girardot": 179,
+        "sem giron": 61,
+        "sem guainia": 116,
+        "sem ibague": 147,
+        "sem ipiales": 134,
+        "sem itagui": 135,
+        "sem jamundi": 146,
+        "sem lorica": 67,
+        "sem magangue": 133,
+        "sem maicao": 69,
+        "sem malambo": 161,
+        "sem manizales": 174,
+        "sem medellin": 180,
+        "sem monteria": 176,
+        "sem mosquera": 153,
+        "sem neiva": 105,
+        "sem palmira": 152,
+        "sem pasto": 125,
+        "sem pereira": 78,
+        "sem piedecuesta": 79,
+        "sem pitalito": 138,
+        "sem popayan": 159,
+        "sem quibdo": 162,
+        "sem riohacha": 150,
+        "sem rionegro": 129,
+        "sem sabaneta": 108,
+        "sem sahagun": 142,
+        "sem san andres": 158,
+        "sem santa marta": 126,
+        "sem soacha": 119,
+        "sem sogamoso": 172,
+        "sem soledad": 123,
+        "sem tulua": 120,
+        "sem tumaco": 93,
+        "sem tunja": 141,
+        "sem turbo": 137,
+        "sem uribia": 144,
+        "sem valledupar": 171,
+        "sem villavicencio": 124,
+        "sem yopal": 100,
+        "sem yumbo": 169,
+        "sem zipaquira": 156
+      },
       tipoCarteraOptions: [
         { value: "Banco", text: "Banco" },
         { value: "Cooperativa", text: "Cooperativa" },
@@ -394,31 +344,19 @@ export default {
     };
   },
   methods: {
-    // Cambio de tipo de cliente => pagaduría
     onChangeClientType() {
       this.showDocenteOptions = this.form.client_type === "docente";
       this.showPensionadoOptions = this.form.client_type === "pensionado";
       this.form.pagaduria_id = "";
     },
-
-    /**
-     * Inserta PUNTOS de miles a medida que se escribe (sin símbolo $).
-     * Por ejemplo, si se digita "1234", se convierte en "1.234".
-     *
-     * Al final, "onInputCurrency(field)" => form[field] = "1.234"
-     */
     onInputCurrency(field) {
-      // Quitar todo lo que no sean dígitos
       let raw = this.form[field].replace(/\D/g, "");
       if (!raw) {
         this.form[field] = "";
         return;
       }
-      // Insertar puntos cada 3 dígitos (empezando desde la derecha)
       this.form[field] = this.addThousandDots(raw);
     },
-
-    // Misma lógica para la columna en carteras (índice + campo)
     onInputCurrencyCartera(index, field) {
       let raw = this.form.carteras[index][field].replace(/\D/g, "");
       if (!raw) {
@@ -427,37 +365,23 @@ export default {
       }
       this.form.carteras[index][field] = this.addThousandDots(raw);
     },
-
-    /**
-     * Función auxiliar para insertar puntos de miles en un string numérico:
-     * "1234" => "1.234"
-     * "1234567" => "1.234.567"
-     */
     addThousandDots(value) {
-      // Convertir a string normal (por si se usó parseInt)
       let str = value.toString();
-      // Usar regex para colocar un '.' cada 3 dígitos desde el final
       return str.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     },
-
-    /**
-     * Formatea la Tasa con 2 decimales y "%" mientras se escribe.
-     */
-     onInputPercentage(field) {
-  let raw = this.form[field].replace(/[^\d.]/g, ""); // Solo permite números y punto
-  if (!raw) {
-    this.form[field] = "";
-    return;
-  }
-  const num = parseFloat(raw);
-  if (isNaN(num)) {
-    this.form[field] = "";
-    return;
-  }
-  this.form[field] = num + "%"; // Mantiene el número tal cual, sin forzar decimales
-},
-
-    // Agregar fila de cartera
+    onInputPercentage(field) {
+      let raw = this.form[field].replace(/[^\d.]/g, "");
+      if (!raw) {
+        this.form[field] = "";
+        return;
+      }
+      const num = parseFloat(raw);
+      if (isNaN(num)) {
+        this.form[field] = "";
+        return;
+      }
+      this.form[field] = num + "%";
+    },
     addCartera() {
       this.form.carteras.push({
         tipoCartera: "",
@@ -466,39 +390,28 @@ export default {
         saldo: ""
       });
     },
-    // Quitar fila de cartera
     removeCartera(index) {
       this.form.carteras.splice(index, 1);
     },
-
-    /**
-     * Al enviar, convertimos:
-     * "1.234" => "1234" => número 1234
-     * "1.234.567" => "1234567"
-     */
     async submitForm() {
       try {
         const payload = {
-          ...this.form,
-
-          // Quitar puntos y parsear a int
+          doc: this.form.doc,
+          name: this.form.name,
+          client_type: this.form.client_type,
+          pagaduria_id: this.form.pagaduria_id,
           cuota: parseInt(this.form.cuota.replace(/\./g, ""), 10) || 0,
           monto: parseInt(this.form.monto.replace(/\./g, ""), 10) || 0,
-          // Tasa: "1.50%" => "1.50" => 1.5
           tasa: parseFloat(this.form.tasa.replace(/[^\d.]/g, "")) || 0,
-
-          // Carteras: limpiar los puntos
+          plazo: this.form.plazo,
           carteras: this.form.carteras.map((c) => ({
-            tipoCartera: c.tipoCartera,
-            nombreEntidad: c.nombreEntidad,
-            valorCuota: parseInt(c.valorCuota.replace(/\./g, ""), 10) || 0,
+            tipo_cartera: c.tipoCartera,
+            nombre_entidad: c.nombreEntidad,
+            valor_cuota: parseInt(c.valorCuota.replace(/\./g, ""), 10) || 0,
             saldo: parseInt(c.saldo.replace(/\./g, ""), 10) || 0
           }))
         };
-
-        // Envía a tu endpoint real
         await axios.post("/credit-requests", payload);
-
         alert("Crédito guardado con éxito.");
         window.location.href = "/credit-requests";
       } catch (error) {
@@ -510,13 +423,12 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .card-main {
   border-radius: 1rem;
   border: none;
   box-shadow: 7px 7px 18px 3px rgba(0, 0, 0, 0.1);
 }
-
 .btn-credit {
   color: white;
   background-color: #28a745 !important;
@@ -526,11 +438,9 @@ export default {
   font-size: 16px;
   cursor: pointer;
   transition: all 0.3s ease;
-
   &:hover {
     background-color: #218838 !important;
   }
-
   &:focus {
     outline: none;
     box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.5);

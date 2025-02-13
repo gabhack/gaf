@@ -47,12 +47,10 @@
               </button>
               <span v-else class="text-success">Aprobado</span>
 
-              <!-- Botón para ver Cartera -->
               <button class="btn-credit ml-2" @click="showCarteras(credit)">
                 <i class="fas fa-eye"></i>
               </button>
 
-              <!-- Botón para "Visar" -->
               <button class="btn-credit ml-2" @click="emitClientData(credit)">
                 Visar
               </button>
@@ -102,9 +100,6 @@ import Loading from 'vue-loading-overlay'
 import { BModal } from 'bootstrap-vue'
 import { mapMutations, mapState } from 'vuex'
 
-/**
- * Relación de pagadurías en un objeto para "mapear" su ID numérico -> Nombre
- */
 const pagaduriasMap = {
   'sed amazonas': 1,
   'sed antioquia': 130,
@@ -212,8 +207,7 @@ export default {
       showTable: true,
       isLoading: false,
       showCarterasModal: false,
-      selectedCredit: null,
-      carteras: null
+      selectedCredit: null
     }
   },
   computed: {
@@ -223,7 +217,6 @@ export default {
     this.fetchCredits()
   },
   methods: {
-    // Mutaciones de Vuex que permiten setear store.pagaduriaType, store.pagaduriaLabel, etc.
     ...mapMutations('pagaduriasModule', [
       'setPagaduriaType',
       'setPagaduriaLabel',
@@ -234,21 +227,14 @@ export default {
     ...mapMutations('descuentosModule', ['setDescuentosType']),
     ...mapMutations('datamesModule', ['setDatamesSed']),
 
-    /**
-     * Al montar, traemos la lista de créditos
-     */
     async fetchCredits() {
       try {
         const response = await axios.get('/credit-requests/all')
         this.credits = response.data
       } catch (error) {
-        console.error('Error al obtener la lista de créditos', error)
+        console.error('Error al obtener lista de créditos', error)
       }
     },
-
-    /**
-     * Formatear moneda
-     */
     formatCurrency(value) {
       const num = parseFloat(value)
       if (!num || isNaN(num)) return '$0'
@@ -258,44 +244,28 @@ export default {
         minimumFractionDigits: 0
       }).format(num)
     },
-
-    /**
-     * Formatear porcentaje
-     */
     formatPercentage(value) {
       const num = parseFloat(value)
       if (!num || isNaN(num)) return '0%'
       return `${num.toFixed(2)}%`
     },
-
-    /**
-     * Aprobar Solicitud
-     */
     async approveRequest(creditId) {
       try {
         const response = await axios.patch(`/credit-requests/${creditId}/status`)
         const index = this.credits.findIndex(c => c.id === creditId)
-        if (index !== -1) {
-          this.credits[index].status = 'aprobado'
-        }
+        if (index !== -1) this.credits[index].status = 'aprobado'
         alert(response.data.message || 'Solicitud aprobada exitosamente')
       } catch (error) {
         console.error('Error al aprobar el crédito', error)
-        alert('Ocurrió un error al aprobar la solicitud')
+        alert('Error al aprobar la solicitud')
       }
     },
-
-    /**
-     * Ver la "tabla" de cartera en modal
-     */
     showCarteras(credit) {
+      // Único console.log para ver la info de carteras
+      console.log('Carteras del crédito:', credit.carteras)
       this.selectedCredit = credit
       this.showCarterasModal = true
     },
-
-    /**
-     * Tomar el ID de la pagaduría y convertirlo al nombre en minúsculas que usa el "map"
-     */
     getPagaduriaNameById(id) {
       for (const [name, mappedId] of Object.entries(pagaduriasMap)) {
         if (parseInt(mappedId) === parseInt(id)) {
@@ -304,12 +274,7 @@ export default {
       }
       return id
     },
-
-    /**
-     * Lógica para "Visar" la solicitud (similar a selectedPagaduria + saveVisados)
-     */
     async emitClientData(credit) {
-      // Preparamos la data base
       const dataclient = {
         doc: credit.doc,
         name: credit.name,
@@ -317,83 +282,55 @@ export default {
         monto: credit.monto,
         plazo: credit.plazo,
         pagaduria: this.getPagaduriaNameById(credit.pagaduria_id),
-        pagadurias: credit.pagadurias || null,
-        pagaduriaKey: credit.pagaduriaKey || null,
+        pagadurias: null,
+        pagaduriaKey: null,
         visado: null,
         carteras: credit.carteras || []
       }
-
       this.isLoading = true
       try {
-        // 1. Llamar a demográfico (opcional) para "actualizar" el nombre real
-        const demograficoResponse = await axios.get(`/demografico/${dataclient.doc}`)
-        const demograficoData = demograficoResponse.data
-        if (!demograficoData.nombre_usuario) {
-          // si no se encontró el nombre, puede continuar o abortar
-          console.warn('No se encontró nombre del usuario en demografico')
-        } else {
-          // Actualizamos
-          dataclient.name = demograficoData.nombre_usuario
-        }
+        const demografico = await axios.get(`/demografico/${dataclient.doc}`)
+        if (demografico.data.nombre_usuario) dataclient.name = demografico.data.nombre_usuario
 
-        // 2. (Opcional) Llamada para cargar las pagadurías del doc, por si no las tenemos
-        const pagRes = await axios.get(`/pagadurias/per-doc/${dataclient.doc}`)
-        if (Object.keys(pagRes.data).length > 0) {
-          dataclient.pagadurias = pagRes.data
-        }
-
-        // 3. Resetear store
         this.setDatamesSed(null)
         this.setPagaduriaType('')
         this.setSelectedPeriod('')
 
-        // 4. Buscar en "pagaduriasTypes" la pagaduría actual para setear store
-        const found = this.pagaduriasTypes.find(
-          item => item.label && item.label.toUpperCase() === dataclient.pagaduria
-        )
-        if (found) {
-          // Actualizamos store
-          this.setPagaduriaType(found.value)
-          this.setPagaduriaLabel(found.label)
-
-          // setCouponsType, setEmbargosType, setDescuentosType
-          if (found.key && found.key.includes('datames')) {
-            // p.ej. "datamesFopep" => "CouponsFopep", etc.
-            this.setCouponsType(`Coupons${found.key.slice(7)}`)
-            this.setEmbargosType(`Embargos${found.key.slice(7)}`)
-            this.setDescuentosType(`Descuentos${found.key.slice(7)}`)
-          } else if (found.key) {
-            // p.ej. si la key no contiene "datames"
-            this.setCouponsType(found.key)
-            this.setEmbargosType(found.key)
-            this.setDescuentosType(found.key)
+        const pagResponse = await axios.get(`/pagadurias/per-doc/${dataclient.doc}`)
+        if (Object.keys(pagResponse.data).length !== 0) {
+          dataclient.pagadurias = pagResponse.data
+          const found = this.pagaduriasTypes.find(
+            t => t.label && t.label.toUpperCase() === dataclient.pagaduria
+          )
+          if (found && dataclient.pagadurias[found.key]) {
+            dataclient.pagaduriaKey = found.key
+            this.setPagaduriaType(found.value)
+            this.setPagaduriaLabel(found.label)
+            if (found.key.includes('datames')) {
+              this.setCouponsType(`Coupons${found.key.slice(7)}`)
+              this.setEmbargosType(`Embargos${found.key.slice(7)}`)
+              this.setDescuentosType(`Descuentos${found.key.slice(7)}`)
+            } else {
+              this.setCouponsType(found.key)
+              this.setEmbargosType(found.key)
+              this.setDescuentosType(found.key)
+            }
+            this.setDatamesSed(dataclient.pagadurias[found.key])
           }
-
-          // Enviamos algo a setDatamesSed
-          const dummyPagaduria = {
-            cargo: credit.client_type || 'Cargo no especificado',
-            doc: credit.doc
-          }
-          this.setDatamesSed(dummyPagaduria)
         }
 
-        // 5. Creamos el visado (similar a saveVisados)
-        const visadoResponse = await axios.post('/visados', {
+        const visado = await axios.post('/visados', {
           pagaduria: dataclient.pagaduria,
           nombre: dataclient.name,
           doc: dataclient.doc,
           plazo: dataclient.plazo
         })
-        dataclient.visado = visadoResponse.data
+        dataclient.visado = visado.data
 
-        // 6. Emitimos la data final al padre (ej. index.vue) con la info para getCoupons etc.
-        console.log('Dataclient que se va a emitir:', dataclient)
         this.$emit('emitInfo', dataclient)
-
-        // 7. ocultamos la tabla actual
         this.showTable = false
       } catch (error) {
-        console.error('Error en emitir/visar:', error)
+        console.error('Error:', error)
       } finally {
         this.isLoading = false
       }

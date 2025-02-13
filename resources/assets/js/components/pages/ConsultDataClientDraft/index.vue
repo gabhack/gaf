@@ -713,6 +713,7 @@ export default {
                 pagaduria: payload.pagaduria,
                 pagaduriaLabel: payload.pagaduriaLabel
             };
+            console.log('Datos enviados a get-coupons (antes d efetch):', payload);
 
             const response = await axios.post('/get-coupons', payload);
             const couponData = response.data.items || response.data; // Ajusta según el formato del backend
