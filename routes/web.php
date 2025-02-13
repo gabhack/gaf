@@ -687,19 +687,23 @@ Route::view('/politicas/autorizacion', 'politicas.autorizacion')->name('politica
 Route::view('/politicas/tratamiento-datos', 'politicas.tratamiento')->name('politicas.tratamiento');
 Route::get('jelou/get-factor/{doc}', [JelouController::class, 'getFactorPerDoc']);
 
-Route::get('/empresas', 						[EmpresaController::class, 'index']);
-Route::post('/empresas', 						[EmpresaController::class, 'store']);
-Route::get('/empresas/crear', 			[EmpresaController::class, 'crear']);
-Route::get('/empresas/edit/{id}', 	[EmpresaController::class, 'edit']);
-Route::post('/empresas/{id}', 			[EmpresaController::class, 'update']);
-Route::delete('/empresas/{id}', 		[EmpresaController::class, 'destroy']);
+Route::prefix('/empresas')->middleware('permission:ver empresas')->group(function () {
+	Route::get('/', [EmpresaController::class, 'index']);
+	Route::post('/', [EmpresaController::class, 'store']);
+	Route::get('/crear', [EmpresaController::class, 'crear']);
+	Route::get('/edit/{id}', [EmpresaController::class, 'edit']);
+	Route::post('/{id}', [EmpresaController::class, 'update']);
+	Route::delete('/{id}', [EmpresaController::class, 'destroy']);
+});
 
-Route::get('/area-comerciales', 						[AreaComercialController::class, 'index']);
-Route::get('/area-comerciales/crear', 			[AreaComercialController::class, 'crear']);
-Route::post('/area-comerciales', 						[AreaComercialController::class, 'store']);
-Route::get('/area-comerciales/edit/{id}', 	[AreaComercialController::class, 'edit']);
-Route::post('/area-comerciales/{id}', 			[AreaComercialController::class, 'update']);
-Route::delete('/area-comerciales/{id}', 		[AreaComercialController::class, 'destroy']);
+Route::prefix('/area-comerciales')->middleware('permission:ver area comercial')->group(function () {
+	Route::get('/', [AreaComercialController::class, 'index']);
+	Route::post('/', [AreaComercialController::class, 'store']);
+	Route::get('/crear', [AreaComercialController::class, 'crear']);
+	Route::get('/edit/{id}', [AreaComercialController::class, 'edit']);
+	Route::post('/{id}', [AreaComercialController::class, 'update']);
+	Route::delete('/{id}', [AreaComercialController::class, 'destroy']);
+});
 
 Route::prefix('/listas')->group(function () {
 	Route::get('/tipo-empresas', 				[ListaController::class, 'listarTipoEmpresas']);
