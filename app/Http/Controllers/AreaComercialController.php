@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Comercial;
+use App\Roles;
+use App\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
 
@@ -21,7 +24,7 @@ class AreaComercialController extends Controller
 				'nombre_completo' => $comercial->nombre_completo,
 				'cargo' => $comercial->cargo->cargo,
 				'sede' => $comercial->sede->nombre,
-				'ciudad' => $comercial->sede->ciudad->ciudad,
+				'ciudad' => $comercial->sede->ciudad->nombre,
 				'telefono' => $comercial->numero_contacto
 			]);
 		}
@@ -39,6 +42,15 @@ class AreaComercialController extends Controller
 		$empresaRequest = json_decode($request->empresa);
 		$personalRequest = json_decode($request->personal);
 		$plataformaRequest = json_decode($request->plataforma);
+
+		$permisos = json_decode($request->consultas_diarias);
+		$permisosIds = collect($permisos)->pluck('id');
+
+		$rolComercial = Roles::where('rol', 'COMERCIAL')->first();
+		if (!$rolComercial) {
+			throw new Exception("El rol 'COMERCIAL' no existe.");
+		}
+
 		try {
 			DB::beginTransaction();
 			$areaComercial = Comercial::create([
@@ -47,7 +59,7 @@ class AreaComercialController extends Controller
 				'tipo_documento_id' => $personalRequest->tipo_documento_id,
 				'ami_id' => $plataformaRequest->ami_id,
 				'hego_id' => $plataformaRequest->hego_id,
-				'consultas_diarias' => $request->consultas_diarias,
+				'consultas_diarias' => 0,
 				'nombre_completo' => $personalRequest->nombre_apellido,
 				'numero_documento' => $personalRequest->numero_documento,
 				'nacionalidad' => $personalRequest->nacionalidad,
@@ -55,14 +67,31 @@ class AreaComercialController extends Controller
 				'numero_contacto' => $personalRequest->numero_contacto,
 				'src_documento_identidad' => '404',
 			]);
-			$documentoIdentidadFile = $request->file('src_documento_identidad');
-			$extension = $documentoIdentidadFile->getClientOriginalExtension();
-			$documentoIdentidadPath = 'area-comerciales/' . $areaComercial->id . '/';
-			$fileName = 'documento_identidad.' . $extension;
-			$documentoIdentidadUpload = Storage::disk('archivos')->put($documentoIdentidadPath . $fileName, file_get_contents($documentoIdentidadFile));
-			if ($documentoIdentidadUpload) {
-				$areaComercial->update(['src_documento_identidad' => $documentoIdentidadPath . $fileName]);
+
+			$usuario = User::create([
+				'roles_id' => $rolComercial->id,
+				'name' => $personalRequest->nombre_apellido,
+				'email' => $personalRequest->correo_contacto,
+				'password' => Hash::make($personalRequest->contrasena),
+			]);
+
+			// Asignar permisos
+			foreach ($permisosIds as $permisoId) {
+				$usuario->givePermission($permisoId);
 			}
+
+			if ($request->hasFile('src_representante_legal')) {
+				$documentoIdentidadFile = $request->file('src_documento_identidad');
+				$extension = $documentoIdentidadFile->getClientOriginalExtension();
+				$documentoIdentidadPath = 'area-comerciales/' . $areaComercial->id . '/';
+				$fileName = 'documento_identidad.' . $extension;
+				$documentoIdentidadUpload = Storage::disk('archivos')->put($documentoIdentidadPath . $fileName, file_get_contents($documentoIdentidadFile));
+
+				if ($documentoIdentidadUpload) {
+					$areaComercial->update(['src_documento_identidad' => $documentoIdentidadPath . $fileName]);
+				}
+			}
+
 			DB::commit();
 			return response()->json(['status' => 200]);
 		} catch (Throwable $e) {

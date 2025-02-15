@@ -559,7 +559,7 @@ export default {
 };
 </script>
 
-<style land="scss" scoped>
+<style lang="scss" scoped>
 .form-control {
     background-color: white;
     border-radius: 5px;

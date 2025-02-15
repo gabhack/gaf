@@ -37,7 +37,7 @@ class ListaController extends Controller
 
 	public function listarCiudades()
 	{
-		$ciudades = Ciudades::orderBy('ciudad', 'ASC')->get();
+		$ciudades = Ciudades::orderBy('nombre', 'ASC')->get();
 		return response()->json($ciudades);
 	}
 
