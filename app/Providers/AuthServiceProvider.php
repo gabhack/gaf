@@ -27,6 +27,5 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('permission', function (User $user, $permission) {
             return IsSuperAdmin() || $user->hasPermission($permission);
         });
-
     }
 }

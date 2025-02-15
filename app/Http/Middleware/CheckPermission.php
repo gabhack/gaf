@@ -17,6 +17,10 @@ class CheckPermission
     public function handle($request, Closure $next, $permission){
         $user = Auth::user();
 
+        if(IsSuperAdmin()){
+            return $next($request);
+        }
+
         if (!$user || !$user->hasPermission($permission)) {
             abort(403, 'Unauthorized action.');
         }
