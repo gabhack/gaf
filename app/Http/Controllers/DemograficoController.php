@@ -15,102 +15,102 @@ use App\DemographicConsultLog;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
-
 use Carbon\Carbon;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use Illuminate\Support\Facades\Cache;
+
+
 class DemograficoController extends Controller
 {
-    public function upload(Request $request)
-    {
-        ini_set('memory_limit', '2048M');
-        ini_set('max_execution_time', '600');
 
-        Log::info('Inicio del proceso de carga de archivo');
+public function upload(Request $request)
+{
+    ini_set('memory_limit', '2048M');
+    ini_set('max_execution_time', '600');
 
-        try {
-            $file = $request->file('file');
-            if (!$file || !$file->isValid()) {
-                throw new \Exception('Error uploading file');
-            }
+    Log::info('Inicio del proceso de carga de archivo');
 
-            Log::info('Archivo cargado correctamente');
-
-            $filePath = $file->getRealPath();
-            Log::info('Inicio de la carga del archivo Excel');
-            $reader = IOFactory::createReader('Xlsx');
-            $reader->setReadDataOnly(true);
-            $spreadsheet = $reader->load($filePath);
-            Log::info('Archivo Excel cargado correctamente');
-
-            $worksheet = $spreadsheet->getActiveSheet();
-            Log::info('Inicio de la lectura del encabezado');
-            $highestColumn = $worksheet->getHighestColumn();
-            $headerRange = 'A1:' . $highestColumn . '1';
-            $header = $worksheet->rangeToArray($headerRange)[0];
-            Log::info('Excel header:', ['header' => $header]);
-
-            $cedulasColumn = array_search('cedulas', array_map('strtolower', $header));
-            if ($cedulasColumn === false) {
-                throw new \Exception('No se encontró la columna "cedulas"');
-            }
-
-            Log::info('Cedulas column index:', ['cedulasColumn' => $cedulasColumn]);
-
-            $cedulas = [];
-            foreach ($worksheet->getRowIterator(2) as $row) {
-                $cell = $worksheet->getCellByColumnAndRow($cedulasColumn + 1, $row->getRowIndex());
-                $cedulas[] = $cell->getValue();
-            }
-
-            Log::info('Cedulas extraídas:', ['cedulas' => $cedulas]);
-
-            $request->session()->put('cedulas', $cedulas);
-
-            Log::info('Fin del proceso de carga de archivo');
-            return response()->json(['message' => 'Cédulas cargadas correctamente']);
-        } catch (\Exception $e) {
-            Log::error('Error processing file upload: ' . $e->getMessage(), [
-                'trace' => $e->getTraceAsString(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine()
-            ]);
-            return response()->json(['error' => 'Error procesando el archivo: ' . $e->getMessage()], 500);
+    try {
+        $file = $request->file('file');
+        if (!$file || !$file->isValid()) {
+            throw new \Exception('Error uploading file');
         }
-    }
 
-    public function fetchPaginatedResults(Request $request)
+        Log::info('Archivo cargado correctamente');
+
+        $filePath = $file->getRealPath();
+        Log::info('Inicio de la carga del archivo Excel');
+        $reader = IOFactory::createReader('Xlsx');
+        $reader->setReadDataOnly(true);
+        $spreadsheet = $reader->load($filePath);
+        Log::info('Archivo Excel cargado correctamente');
+
+        $worksheet = $spreadsheet->getActiveSheet();
+        Log::info('Inicio de la lectura del encabezado');
+        $highestColumn = $worksheet->getHighestColumn();
+        $headerRange = 'A1:' . $highestColumn . '1';
+        $header = $worksheet->rangeToArray($headerRange)[0];
+        Log::info('Excel header:', ['header' => $header]);
+
+        $cedulasColumn = array_search('cedulas', array_map('strtolower', $header));
+        if ($cedulasColumn === false) {
+            throw new \Exception('No se encontró la columna "cedulas"');
+        }
+
+        Log::info('Cedulas column index:', ['cedulasColumn' => $cedulasColumn]);
+
+        $cedulas = [];
+        foreach ($worksheet->getRowIterator(2) as $row) {
+            $cell = $worksheet->getCellByColumnAndRow($cedulasColumn + 1, $row->getRowIndex());
+            $cedulas[] = trim($cell->getValue());
+        }
+
+        Log::info('Cedulas extraídas:', ['cedulas' => $cedulas]);
+
+        // Guardar en caché por 1 hora
+        $cacheKey = 'cedulas_' . Auth::id();
+        Cache::put($cacheKey, $cedulas, 3600);
+
+        Log::info('Fin del proceso de carga de archivo');
+        return response()->json(['message' => 'Cédulas cargadas correctamente']);
+    } catch (\Exception $e) {
+        Log::error('Error processing file upload: ' . $e->getMessage(), [
+            'trace' => $e->getTraceAsString(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine()
+        ]);
+        return response()->json(['error' => 'Error procesando el archivo: ' . $e->getMessage()], 500);
+    }
+}
+
+
+public function fetchPaginatedResults(Request $request)
 {
     Log::info('Inicio del proceso de fetchPaginatedResults');
 
     try {
-        $page = $request->query('page', 1);
-        $perPage = $request->query('perPage', 30);
+        $page = (int) $request->query('page', 1);
+        $perPage = (int) $request->query('perPage', 2000); // Tamaño de página fijo en 2000 registros
         
-        $mes = $request->query('mes');
-        $año = $request->query('año');
-        
-        if (!$mes || !$año) {
-            return response()->json(['error' => 'Mes y año son requeridos'], 400);
-        }
-
         $cedulas = $request->session()->get('cedulas', []);
+        $total = count($cedulas);
         $offset = ($page - 1) * $perPage;
         $cedulasChunk = array_slice($cedulas, $offset, $perPage);
 
         if (empty($cedulasChunk)) {
             Log::info('No se encontraron cédulas para esta página');
-            return response()->json(['data' => [], 'total' => count($cedulas)], 200);
+            return response()->json(['data' => [], 'total' => $total, 'page' => $page, 'perPage' => $perPage]);
         }
 
-        // Aquí es donde se puede lanzar una excepción
-        $results = $this->processCedulas_vista($cedulasChunk, $mes, $año);
+        $results = $this->processCedulas_vista($cedulasChunk, $request->query('mes'), $request->query('año'));
 
         Log::info('Fin del proceso de fetchPaginatedResults');
         return response()->json([
             'data' => $results,
-            'total' => count($cedulas),
+            'total' => $total,
             'page' => $page,
-            'perPage' => $perPage
+            'perPage' => $perPage,
+            'hasMore' => ($offset + $perPage) < $total // Si hay más páginas
         ]);
     } catch (\Exception $e) {
         Log::error('Error en fetchPaginatedResults: ' . $e->getMessage(), [
@@ -121,6 +121,8 @@ class DemograficoController extends Controller
         return response()->json(['error' => 'Error en la obtención de resultados paginados'], 500);
     }
 }
+
+
 
 public function processCedulas($cedulas, $mes, $año)
 {
@@ -377,13 +379,16 @@ public function processCedulas_vista($cedulas, $mes, $año)
         $mes = (int)$mes;
         $año = (int)$año;
 
-        $resultsData =   DB::connection('pgsql')
-        ->table('fast_aggregate_data')
-        ->whereIn('doc', $cedulas)
-        ->whereRaw("extract(month from CAST(inicioperiodo AS date)) = ?", [$mes])
-        ->whereRaw("extract(year from CAST(inicioperiodo AS date)) = ?", [$año])
-        ->get();
+        // 1. Se obtienen SOLO los registros que aparezcan en fast_aggregate_data con el mes/año indicados.
+        $resultsData = DB::connection('pgsql')
+            ->table('fast_aggregate_data')
+            ->whereIn('doc', $cedulas)
+            ->whereRaw("extract(month from CAST(inicioperiodo AS date)) = ?", [$mes])
+            ->whereRaw("extract(year from CAST(inicioperiodo AS date)) = ?", [$año])
+            ->get();
 
+        // 2. Se obtienen las cédulas que estén en Colpensiones, Fiducidiaria y Fopep 
+        //    para luego revisar si la cédula aparece en alguno de estos (aunque no salga en fast_aggregate_data).
         $colpensionesDocs = Colpensiones::on('pgsql')
             ->whereIn('documento', $cedulas)
             ->pluck('documento')
@@ -399,101 +404,146 @@ public function processCedulas_vista($cedulas, $mes, $año)
             ->pluck('doc')
             ->toArray();
 
+        // 3. Colección final de resultados
         $results = collect();
         $salarioMinimo = 1423000;
 
+        // 4. Recorremos cada cédula solicitada
         foreach ($cedulas as $cedula) {
             $cedulaStr = (string)$cedula;
+
+            // ¿Está la cédula en Colpensiones, Fiducidiaria o Fopep?
+            $existsInColpensiones = in_array($cedulaStr, $colpensionesDocs);
+            $existsInFiducidiaria = in_array($cedulaStr, $fiducidiariaDocs);
+            $existsInFopep        = in_array($cedulaStr, $fopepDocs);
+
+            // 4.1. Traemos todos los registros en fast_aggregate_data que coincidan
             $dataForCedula = $resultsData->where('doc', $cedulaStr);
 
+            // 4.2. Si NO hay información en la vista fast_aggregate_data,
+            //      pero sí está en Colpensiones / Fiducidiaria / Fopep, devolvemos un registro vacío
+            //      con esos boolean en true.
             if ($dataForCedula->isEmpty()) {
+                // Solo devolveremos un "registro vacío" si está en al menos una de las 3.
+                if ($existsInColpensiones || $existsInFiducidiaria || $existsInFopep) {
+                    $results->push([
+                        'doc'               => $cedulaStr,
+                        'nombre_usuario'    => null,
+                        'tipo_contrato'     => null,
+                        'edad'              => null,
+                        'fecha_nacimiento'  => null,
+                        'pagaduria'         => null,
+                        'cargo'             => null,
+                        'situacion_laboral' => null,
+                        'compra_cartera'    => 0,
+                        'cupo_libre'        => 0,
+                        'cupones'           => null,
+                        'embargos'          => null,
+                        'descuentos'        => null,
+                        'colpensiones'      => $existsInColpensiones,
+                        'fiducidiaria'      => $existsInFiducidiaria,
+                        'fopep'             => $existsInFopep,
+                    ]);
+                }
+                // Si tampoco está en esas 3 tablas, simplemente no se agrega nada
+                // y se sigue con la siguiente cédula.
                 continue;
             }
 
+            // 4.3. Si hay data en fast_aggregate_data, la procesamos con la lógica existente:
             foreach ($dataForCedula as $data) {
-                $pagaduria = $data->pagaduria;
-                $nombre_usuario = $data->nombre_usuario;
-                $tipo_contrato = $data->tipo_contrato;
-                $cargo = $data->cargos;
-                $edad = $data->edad;
+                $pagaduria       = $data->pagaduria;
+                $nombre_usuario  = $data->nombre_usuario;
+                $tipo_contrato   = $data->tipo_contrato;
+                $cargo           = $data->cargos;
+                $edad            = $data->edad;
+                $situacionLaboral= $data->situacion_laboral;
 
-                // Convert fecha_nacimiento to a readable format
+                // Convert fecha_nacimiento a un formato legible (si aplica)
                 $fecha_nacimiento = $data->fecha_nacimiento ?? null;
                 if ($fecha_nacimiento) {
-                    if (is_numeric($fecha_nacimiento)) {
-                        $fecha_nacimiento = Carbon::createFromTimestamp($fecha_nacimiento)->format('Y-m-d');
-                    } elseif (preg_match('/\d{2}\/\d{2}\/\d{4}/', $fecha_nacimiento)) {
-                        $fecha_nacimiento = Carbon::createFromFormat('d/m/Y', $fecha_nacimiento)->format('Y-m-d');
-                    } else {
-                        $fecha_nacimiento = Carbon::parse($fecha_nacimiento)->format('Y-m-d');
+                    try {
+                        if (is_numeric($fecha_nacimiento)) {
+                            // A veces vienen timestamps numéricos
+                            $fecha_nacimiento = Carbon::createFromTimestamp($fecha_nacimiento)->format('Y-m-d');
+                        } elseif (preg_match('/\d{2}\/\d{2}\/\d{4}/', $fecha_nacimiento)) {
+                            $fecha_nacimiento = Carbon::createFromFormat('d/m/Y', $fecha_nacimiento)->format('Y-m-d');
+                        } else {
+                            // Manejo genérico de fecha
+                            $fecha_nacimiento = Carbon::parse($fecha_nacimiento)->format('Y-m-d');
+                        }
+                    } catch (\Exception $e) {
+                        Log::error("Error parseando fecha_nacimiento para $cedulaStr: ".$e->getMessage());
+                        $fecha_nacimiento = null;
                     }
                 }
 
-                $situacionLaboral=$data->situacion_laboral;
-                Log::info("situacion alboral: ", ['situacion_laboral' => $situacionLaboral]);
+                // Total de egresos (ya lo trae la vista)
+                $total_egresos    = $data->total_egresos;
+                // Ingresos ajustados (ya incluye incrementos según cargo y resta RTFSA)
+                $valorIngreso     = $data->ingresos_ajustados;
 
-                $total_egresos = $data->total_egresos;
-                $ingresosExtras = $data->ingresos_ajustados;
-
-                // Procesamiento de embargos
+                // Embargos (parse embargos_concatenados)
                 $embargos = collect();
-                preg_match_all('/(\d+): ([^,]+), ([\d\/-]+), ([\d,]+)/', $data->embargos_concatenados, $matches, PREG_SET_ORDER);
-                foreach ($matches as $match) {
-                    $embargoData = [
-                        'docdeman' => trim($match[1]),
-                        'entidaddeman' => trim($match[2]),
-                        'fembini' => trim($match[3]),
-                        'valor' => (float)str_replace(',', '', $match[4])
-                    ];
-                    $embargos->push($embargoData);
+                if (!empty($data->embargos_concatenados)) {
+                    preg_match_all(
+                        '/(\d+): ([^,]+), ([\d\/-]+), ([\d,]+)/',
+                        $data->embargos_concatenados,
+                        $matches,
+                        PREG_SET_ORDER
+                    );
+                    foreach ($matches as $match) {
+                        $embargoData = [
+                            'docdeman'       => trim($match[1]),
+                            'entidaddeman'   => trim($match[2]),
+                            'fembini'        => trim($match[3]),
+                            'valor'          => (float)str_replace(',', '', $match[4])
+                        ];
+                        $embargos->push($embargoData);
+                    }
                 }
                 $embargos = $embargos->isEmpty() ? null : $embargos;
 
-                // Detalle de cupones y descuentos
+                // Cupones
                 $cupones = collect(explode(', ', $data->cupones_concatenados))
-    ->map(function ($cupon) {
-        $parts = explode(': ', $cupon);
-        if (count($parts) === 2) {
-            [$concept, $egresos] = $parts;
-            $egresos = (float)str_replace(',', '', trim($egresos)); // Eliminar comas y convertir a float
-            return ['concept' => trim($concept), 'egresos' => $egresos];
-        }
-        return null;
-    })
-    ->filter(function ($cupon) {
-        return $cupon && $cupon['egresos'] > 0; // Filtra solo cupones con egresos > 0
-    })
-    ->values() // Re-indexa la colección para que sea secuencial
-    ->toArray(); // Convierte a array para la compatibilidad con la vista
+                    ->map(function ($cupon) {
+                        $parts = explode(': ', $cupon);
+                        if (count($parts) === 2) {
+                            [$concept, $egresos] = $parts;
+                            $egresos = (float)str_replace(',', '', trim($egresos));
+                            return ['concept' => trim($concept), 'egresos' => $egresos];
+                        }
+                        return null;
+                    })
+                    ->filter(function ($cupon) {
+                        return $cupon && $cupon['egresos'] > 0; // egresos > 0
+                    })
+                    ->values()
+                    ->toArray();
 
-$cupones = empty($cupones) ? null : $cupones;
-
-// Log para verificar cupones después del filtro de egresos > 0
-Log::info("Cupones con egresos mayores a 0:", ['cupones' => $cupones]);
-
-
-
+                // Descuentos
                 $descuentos = collect(explode(', ', $data->descuentos_concatenados))
                     ->filter(function ($descuento) {
+                        // Excluir 'ALERTA'
                         return !str_contains($descuento, 'ALERTA');
                     })
                     ->map(function ($descuento) {
                         $parts = explode(': ', $descuento);
                         if (count($parts) === 2) {
                             [$mliquid, $valor] = $parts;
-                            return ['mliquid' => trim($mliquid), 'valor' => (float)trim($valor)];
+                            return ['mliquid' => trim($mliquid), 'valor' => (float)$valor];
                         }
-                        return ['mliquid' => null, 'valor' => null];
+                        return null;
                     })
-                    ->filter(function ($descuento) {
-                        return $descuento['valor'] > 0;
+                    ->filter(function ($item) {
+                        // Eliminar nulos y valores <= 0
+                        return $item && $item['valor'] > 0;
                     });
                 $descuentos = $descuentos->isEmpty() ? null : $descuentos;
 
-                // Cálculo de compraCartera y libreInversion
-                $valorIngreso = $ingresosExtras;
+                // Aplicar descuento "base" según pagaduría y salario
                 $descuento = 0.08;
-                if (in_array($pagaduria, ['FOPEP', 'FIDUPREVISORA'])) {
+                if (in_array($pagaduria, ['FOPEP','FIDUPREVISORA'])) {
                     if ($valorIngreso == $salarioMinimo) {
                         $descuento = 0.04;
                     } elseif ($valorIngreso > $salarioMinimo && $valorIngreso < $salarioMinimo * 2) {
@@ -502,40 +552,42 @@ Log::info("Cupones con egresos mayores a 0:", ['cupones' => $cupones]);
                         $descuento = 0.12;
                     }
                 }
+                // Si gana más de 5.2 millones, aumenta 1% adicional
                 if ($valorIngreso > 5200000) {
                     $descuento += 0.01;
                 }
-
+                
                 $valorIngresoConDescuento = $valorIngreso - ($valorIngreso * $descuento);
 
-                $compraCartera = ($valorIngresoConDescuento < $salarioMinimo * 2)
-                    ? $valorIngresoConDescuento - $salarioMinimo 
-                    : ($valorIngresoConDescuento / 2);
+                // Cálculo de compraCartera
+                $compraCartera = 0;
+                if ($valorIngresoConDescuento < $salarioMinimo * 2) {
+                    $compraCartera = $valorIngresoConDescuento - $salarioMinimo;
+                } else {
+                    $compraCartera = $valorIngresoConDescuento / 2;
+                }
 
+                // Cupo de libre inversión
                 $libreInversion = $compraCartera - $total_egresos;
 
-                $existsInColpensiones = in_array($cedulaStr, $colpensionesDocs);
-                $existsInFiducidiaria = in_array($cedulaStr, $fiducidiariaDocs);
-                $existsInFopep = in_array($cedulaStr, $fopepDocs);
-
+                // Se construye el registro final
                 $results->push([
-                    'doc' => $cedulaStr,
-                    'nombre_usuario' => $nombre_usuario,
-                    'tipo_contrato' => $tipo_contrato,
-                    'edad' => $edad,
-                    'fecha_nacimiento' => $fecha_nacimiento,
-                    'pagaduria' => $pagaduria,
-                    'cargo' => $cargo,
+                    'doc'               => $cedulaStr,
+                    'nombre_usuario'    => $nombre_usuario,
+                    'tipo_contrato'     => $tipo_contrato,
+                    'edad'              => $edad,
+                    'fecha_nacimiento'  => $fecha_nacimiento,
+                    'pagaduria'         => $pagaduria,
+                    'cargo'             => $cargo,
                     'situacion_laboral' => $situacionLaboral,
-                    'compra_cartera' => $compraCartera,
-                    'cupo_libre' => $libreInversion,
-                    'cupones' => $cupones,
-                    'embargos' => $embargos,
-                    'descuentos' => $descuentos,
-                    'colpensiones' => $existsInColpensiones,
-                    'fiducidiaria' => $existsInFiducidiaria,
-                    'fopep' => $existsInFopep,
-
+                    'compra_cartera'    => $compraCartera,
+                    'cupo_libre'        => $libreInversion,
+                    'cupones'           => empty($cupones) ? null : $cupones,
+                    'embargos'          => $embargos,
+                    'descuentos'        => $descuentos,
+                    'colpensiones'      => $existsInColpensiones,
+                    'fiducidiaria'      => $existsInFiducidiaria,
+                    'fopep'             => $existsInFopep,
                 ]);
             }
         }
@@ -547,6 +599,7 @@ Log::info("Cupones con egresos mayores a 0:", ['cupones' => $cupones]);
         throw $e;
     }
 }
+
 
 
 
@@ -961,22 +1014,22 @@ private function parseConcatenatedString($concatenatedString)
                                 ->values()
                 ->toArray();
     
-       // Procesar descuentos
-$descuentos = collect(explode(', ', $resultData->descuentos_concatenados))
-->filter(function ($descuento) {
-    return !str_contains($descuento, 'ALERTA');
-})
-->map(function ($descuento) {
-    $parts = explode(': ', $descuento);
-    if (count($parts) === 2) {
-        [$mliquid, $valor] = $parts;
-        return ['mliquid' => trim($mliquid), 'valor' => (float)$valor];
-    }
-    return null;
-})
-->filter(function ($descuento) {
-    return $descuento && $descuento['valor'] > 0;
-});
+                // Procesar descuentos
+            $descuentos = collect(explode(', ', $resultData->descuentos_concatenados))
+            ->filter(function ($descuento) {
+                return !str_contains($descuento, 'ALERTA');
+            })
+            ->map(function ($descuento) {
+                $parts = explode(': ', $descuento);
+                if (count($parts) === 2) {
+                    [$mliquid, $valor] = $parts;
+                    return ['mliquid' => trim($mliquid), 'valor' => (float)$valor];
+                }
+                return null;
+            })
+            ->filter(function ($descuento) {
+                return $descuento && $descuento['valor'] > 0;
+            });
 
     
             // Cálculos financieros

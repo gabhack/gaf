@@ -333,9 +333,14 @@
                 </div>
                 </div>
                 <!-- Paginación -->
+                <!-- Botones de paginación -->
                 <div class="pagination">
-                    <button v-if="page > 1" @click="fetchPaginatedResults(page - 1)" class="btn btn-primary" style="background-color: #2c8c73";>Anterior</button>
-                    <button @click="fetchPaginatedResults(page + 1)" :disabled="page * perPage >= total" class="btn btn-primary" style="background-color: #2c8c73;">Siguiente</button>
+                    <button v-if="page > 1" @click="fetchPaginatedResults(page - 1)" class="btn btn-primary" style="background-color: #2c8c73;">
+                        Anterior
+                    </button>
+                    <button v-if="hasMore" @click="fetchPaginatedResults(page + 1)" class="btn btn-primary" style="background-color: #2c8c73;">
+                        Siguiente
+                    </button>
                 </div><br>
                 <b-modal id="bv-modal-example" hide-footer style="min-width: 1000px">
                 <template #modal-title><span class="heading-title">Agregar datos demográficos</span></template>
@@ -548,7 +553,9 @@ export default {
                 });
                 modal.hide('bv-modal-example');
                 this.error = null;
-                await this.fetchPaginatedResults(1); // Obtener la primera página de resultados
+
+                // Ahora obtener datos de la primera página sin subir archivo nuevamente
+                await this.fetchPaginatedResults(1);
             } catch (error) {
                 this.error = error.response ? error.response.data.error : 'Error subiendo el archivo';
             } finally {
@@ -556,36 +563,29 @@ export default {
             }
         },
         async fetchPaginatedResults(page) {
-            this.isLoading = true;
-            try {
-                let response = await axios.get('/demografico/fetch-paginated-results', {
-                    params: {
-                        page: page,
-                        perPage: this.perPage,
-                        mes: this.mes,
-                        año: this.año
-                    }
-                });
+                this.isLoading = true;
+                try {
+                    let response = await axios.get('/demografico/fetch-paginated-results', {
+                        params: {
+                            page: page,
+                            perPage: this.perPage,
+                            mes: this.mes,
+                            año: this.año
+                        }
+                    });
 
-                console.log('Datos recibidos:', response.data.data); // Depuración
-
-                // Mapear los resultados para agregar propiedades para mostrar detalles
-                this.results = response.data.data.filter(item => item && typeof item === 'object').map(item => ({
-                    ...item,
-                    showCupones: false,
-                    showEmbargos: false,
-                    showDescuentos: false
-                }));
-                this.total = response.data.total;
-                this.page = response.data.page;
-                this.perPage = response.data.perPage;
-                this.error = null; // Limpiar errores si la solicitud fue exitosa
-            } catch (error) {
-                this.error = error.response ? error.response.data.error : 'Error al buscar los resultados paginados';
-            } finally {
-                this.isLoading = false;
-            }
-        },
+                    this.results = response.data.data.filter(item => item && typeof item === 'object');
+                    this.total = response.data.total;
+                    this.page = response.data.page;
+                    this.perPage = response.data.perPage;
+                    this.hasMore = response.data.hasMore; // Actualiza si hay más páginas disponibles
+                    this.error = null;
+                } catch (error) {
+                    this.error = error.response ? error.response.data.error : 'Error al buscar los resultados paginados';
+                } finally {
+                    this.isLoading = false;
+                }
+            },
         isValidMonthYear() {
             const mesRegex = /^(0[1-9]|1[0-2])$/;
             const añoRegex = /^[0-9]{4}$/;

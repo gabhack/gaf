@@ -735,3 +735,7 @@ Route::get('/credit-requests/all', [CreditRequestController::class, 'getAll'])->
 // Endpoint para cambiar el estado a 'aprobado'
 Route::patch('/credit-requests/{id}/status', [CreditRequestController::class, 'updateStatus'])
      ->name('credit-request.updateStatus');
+
+     Route::post('credit-requests/{id}/documents', [CreditRequestController::class, 'uploadDocument']);
+Route::get('credit-requests/{id}/documents', [CreditRequestController::class, 'getDocuments']);
+

@@ -30,4 +30,10 @@ class CreditRequest extends Model
     {
         return $this->hasMany(CreditCartera::class, 'credit_request_id');
     }
+
+    public function documents()
+{
+    return $this->hasMany(CreditDocument::class);
+}
+
 }

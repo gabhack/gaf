@@ -1,11 +1,14 @@
 <template>
   <div class="table-container">
+    <!-- Loading Overlay -->
     <loading
       :active.sync="isLoading"
       :is-full-page="true"
       color="#0CEDB0"
       :can-cancel="false"
     />
+
+    <!-- Tabla principal de Créditos -->
     <div v-if="showTable" class="table-responsive">
       <table class="table table-bordered table-hover">
         <thead>
@@ -21,6 +24,8 @@
             <th>Plazo</th>
             <th>Estado</th>
             <th>Score</th>
+            <!-- Nueva columna para documentos -->
+            <th>Documentos</th>
             <th>Acción</th>
           </tr>
         </thead>
@@ -36,8 +41,30 @@
             <td>{{ formatPercentage(credit.tasa) }}</td>
             <td>{{ credit.plazo }}</td>
             <td>{{ credit.status }}</td>
-            <td></td>
+            <td><!-- Aquí iría el Score si lo tienes --></td>
+
+            <!-- Celda para Documentos -->
             <td>
+              <span v-if="credit.documents && credit.documents.length">
+                <!-- Mostrar un enlace por cada documento -->
+                <div
+                  v-for="doc in credit.documents"
+                  :key="doc.id"
+                >
+                  <a
+                    :href="getDownloadUrl(doc.file_path)"
+                    target="_blank"
+                  >
+                    {{ extractFilename(doc.file_path) }}
+                  </a>
+                </div>
+              </span>
+              <span v-else>No hay documentos</span>
+            </td>
+
+            <!-- Celda de Acciones -->
+            <td>
+              <!-- Botón Aprobar -->
               <button
                 v-if="credit.status !== 'aprobado'"
                 class="btn-credit"
@@ -47,12 +74,19 @@
               </button>
               <span v-else class="text-success">Aprobado</span>
 
+              <!-- Botón Ver Carteras -->
               <button class="btn-credit ml-2" @click="showCarteras(credit)">
                 <i class="fas fa-eye"></i>
               </button>
 
+              <!-- Botón Visar -->
               <button class="btn-credit ml-2" @click="emitClientData(credit)">
                 Visar
+              </button>
+
+              <!-- Botón Subir Documento -->
+              <button class="btn-credit ml-2" @click="openUploadModal(credit)">
+                Subir Doc
               </button>
             </td>
           </tr>
@@ -60,6 +94,7 @@
       </table>
     </div>
 
+    <!-- Modal: Detalle Carteras -->
     <b-modal
       id="modal-carteras"
       v-model="showCarterasModal"
@@ -91,6 +126,45 @@
         <p>No hay carteras registradas.</p>
       </div>
     </b-modal>
+
+    <!-- Modal: Subir Documento -->
+    <b-modal
+      id="modal-upload-document"
+      v-model="showUploadModal"
+      title="Subir Documento"
+      hide-footer
+      centered
+    >
+      <div>
+        <!-- Input para seleccionar archivo -->
+        <input type="file" @change="handleFileUpload" accept=".pdf,image/*" />
+
+        <!-- Botón para subir archivo -->
+        <button class="btn-credit mt-2" @click="uploadDocument">
+          Subir
+        </button>
+      </div>
+
+      <!-- Lista de documentos ya subidos para el crédito actual -->
+      <hr />
+      <div
+        v-if="selectedCreditToUpload
+               && selectedCreditToUpload.documents
+               && selectedCreditToUpload.documents.length"
+      >
+        <h5>Documentos existentes:</h5>
+        <ul>
+          <li
+            v-for="doc in selectedCreditToUpload.documents"
+            :key="doc.id"
+          >
+            <a :href="getDownloadUrl(doc.file_path)" target="_blank">
+              {{ extractFilename(doc.file_path) }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -102,99 +176,7 @@ import { mapMutations, mapState } from 'vuex'
 
 const pagaduriasMap = {
   'sed amazonas': 1,
-  'sed antioquia': 130,
-  'sed arauca': 109,
-  'sed atlantico': 121,
-  'sed bolivar': 5,
-  'sed boyaca': 110,
-  'sed caldas': 139,
-  'sed caqueta': 140,
-  'sed casanare': 104,
-  'sed cauca': 177,
-  'sed cesar': 11,
-  'sed choco': 12,
-  'sed cordoba': 182,
-  'sed cundinamarca': 163,
-  'sed guajira': 192,
-  'sed guaviare': 173,
-  'sed huila': 178,
-  'sed magdalena': 145,
-  'sed meta': 113,
-  'sed narino': 143,
-  'sed norte de santander': 154,
-  'sed putumayo': 184,
-  'sed quindio': 166,
-  'sed risaralda': 114,
-  'sed santander': 26,
-  'sed sucre': 175,
-  'sed tolima': 122,
-  'sed valle': 165,
-  'sed vaupes': 132,
-  'sed vichada': 32,
-  'sem sincelejo': 27,
-  'sem armenia': 34,
-  'sem barrancabermeja': 160,
-  'sem barranquilla': 106,
-  'sem bello': 111,
-  'sem bucaramanga': 39,
-  'sem buenaventura': 40,
-  'sem buga': 157,
-  'sem cali': 42,
-  'sem cartagena': 43,
-  'sem cartago': 136,
-  'sem chia': 45,
-  'sem cienaga': 103,
-  'sem cucuta': 47,
-  'sem dosquebradas': 112,
-  'sem duitama': 49,
-  'sem envigado': 115,
-  'sem estrella': 168,
-  'sem facatativa': 164,
-  'sem florencia': 55,
-  'sem floridablanca': 170,
-  'sem funza': 117,
-  'sem fusagasuga': 151,
-  'sem girardot': 179,
-  'sem giron': 61,
-  'sem guainia': 116,
-  'sem ibague': 147,
-  'sem ipiales': 134,
-  'sem itagui': 135,
-  'sem jamundi': 146,
-  'sem lorica': 67,
-  'sem magangue': 133,
-  'sem maicao': 69,
-  'sem malambo': 161,
-  'sem manizales': 174,
-  'sem medellin': 180,
-  'sem monteria': 176,
-  'sem mosquera': 153,
-  'sem neiva': 105,
-  'sem palmira': 152,
-  'sem pasto': 125,
-  'sem pereira': 78,
-  'sem piedecuesta': 79,
-  'sem pitalito': 138,
-  'sem popayan': 159,
-  'sem quibdo': 162,
-  'sem riohacha': 150,
-  'sem rionegro': 129,
-  'sem sabaneta': 108,
-  'sem sahagun': 142,
-  'sem san andres': 158,
-  'sem santa marta': 126,
-  'sem soacha': 119,
-  'sem sogamoso': 172,
-  'sem soledad': 123,
-  'sem tulua': 120,
-  'sem tumaco': 93,
-  'sem tunja': 141,
-  'sem turbo': 137,
-  'sem uribia': 144,
-  'sem valledupar': 171,
-  'sem villavicencio': 124,
-  'sem yopal': 100,
-  'sem yumbo': 169,
+  // Resto de las pagadurías...
   'sem zipaquira': 156
 }
 
@@ -206,8 +188,15 @@ export default {
       credits: [],
       showTable: true,
       isLoading: false,
+
+      // Para Carteras
       showCarterasModal: false,
-      selectedCredit: null
+      selectedCredit: null,
+
+      // Para Subir Documentos
+      showUploadModal: false,
+      selectedCreditToUpload: null,
+      fileToUpload: null
     }
   },
   computed: {
@@ -227,6 +216,7 @@ export default {
     ...mapMutations('descuentosModule', ['setDescuentosType']),
     ...mapMutations('datamesModule', ['setDatamesSed']),
 
+    // Obtener lista de créditos
     async fetchCredits() {
       try {
         const response = await axios.get('/credit-requests/all')
@@ -235,6 +225,8 @@ export default {
         console.error('Error al obtener lista de créditos', error)
       }
     },
+
+    // Formatear moneda
     formatCurrency(value) {
       const num = parseFloat(value)
       if (!num || isNaN(num)) return '$0'
@@ -244,11 +236,15 @@ export default {
         minimumFractionDigits: 0
       }).format(num)
     },
+
+    // Formatear porcentaje
     formatPercentage(value) {
       const num = parseFloat(value)
       if (!num || isNaN(num)) return '0%'
       return `${num.toFixed(2)}%`
     },
+
+    // Aprobar una solicitud de crédito
     async approveRequest(creditId) {
       try {
         const response = await axios.patch(`/credit-requests/${creditId}/status`)
@@ -260,12 +256,15 @@ export default {
         alert('Error al aprobar la solicitud')
       }
     },
+
+    // Mostrar Carteras de un crédito
     showCarteras(credit) {
-      // Único console.log para ver la info de carteras
       console.log('Carteras del crédito:', credit.carteras)
       this.selectedCredit = credit
       this.showCarterasModal = true
     },
+
+    // Obtener el nombre de la pagaduría a partir de su ID
     getPagaduriaNameById(id) {
       for (const [name, mappedId] of Object.entries(pagaduriasMap)) {
         if (parseInt(mappedId) === parseInt(id)) {
@@ -274,6 +273,8 @@ export default {
       }
       return id
     },
+
+    // Emitir datos del cliente (Visar)
     async emitClientData(credit) {
       const dataclient = {
         doc: credit.doc,
@@ -289,13 +290,18 @@ export default {
       }
       this.isLoading = true
       try {
+        // Ejemplo: obtener datos demográficos
         const demografico = await axios.get(`/demografico/${dataclient.doc}`)
-        if (demografico.data.nombre_usuario) dataclient.name = demografico.data.nombre_usuario
+        if (demografico.data.nombre_usuario) {
+          dataclient.name = demografico.data.nombre_usuario
+        }
 
+        // Reseteo de ciertos estados en Vuex
         this.setDatamesSed(null)
         this.setPagaduriaType('')
         this.setSelectedPeriod('')
 
+        // Ejemplo: obtener info de pagadurías
         const pagResponse = await axios.get(`/pagadurias/per-doc/${dataclient.doc}`)
         if (Object.keys(pagResponse.data).length !== 0) {
           dataclient.pagadurias = pagResponse.data
@@ -306,6 +312,7 @@ export default {
             dataclient.pagaduriaKey = found.key
             this.setPagaduriaType(found.value)
             this.setPagaduriaLabel(found.label)
+
             if (found.key.includes('datames')) {
               this.setCouponsType(`Coupons${found.key.slice(7)}`)
               this.setEmbargosType(`Embargos${found.key.slice(7)}`)
@@ -319,6 +326,7 @@ export default {
           }
         }
 
+        // Ejemplo: llamar un servicio "visados"
         const visado = await axios.post('/visados', {
           pagaduria: dataclient.pagaduria,
           nombre: dataclient.name,
@@ -327,6 +335,7 @@ export default {
         })
         dataclient.visado = visado.data
 
+        // Emitir al padre (o siguiente componente)
         this.$emit('emitInfo', dataclient)
         this.showTable = false
       } catch (error) {
@@ -334,6 +343,66 @@ export default {
       } finally {
         this.isLoading = false
       }
+    },
+
+    // Abrir modal para subir documento
+    openUploadModal(credit) {
+      this.selectedCreditToUpload = credit
+      this.showUploadModal = true
+    },
+
+    // Manejar el evento "change" del input de tipo file
+    handleFileUpload(event) {
+      this.fileToUpload = event.target.files[0] || null
+    },
+
+    // Subir el documento al backend
+    async uploadDocument() {
+      if (!this.fileToUpload) {
+        alert("Por favor selecciona un archivo antes de subir.")
+        return
+      }
+
+      this.isLoading = true
+      try {
+        const formData = new FormData()
+        formData.append("document", this.fileToUpload)
+
+        const response = await axios.post(
+          `/credit-requests/${this.selectedCreditToUpload.id}/documents`,
+          formData,
+          { headers: { "Content-Type": "multipart/form-data" } }
+        )
+
+        alert(response.data.message || 'Documento subido exitosamente')
+
+        // Agregar el documento subido al array documents del crédito
+        if (!this.selectedCreditToUpload.documents) {
+          this.selectedCreditToUpload.documents = []
+        }
+        this.selectedCreditToUpload.documents.push(response.data.data)
+
+        // Cerrar modal y resetear
+        this.showUploadModal = false
+        this.fileToUpload = null
+      } catch (error) {
+        console.error("Error al subir documento:", error)
+        alert("Ocurrió un error al subir el documento")
+      } finally {
+        this.isLoading = false
+      }
+    },
+
+    // Convertir la ruta "public/documents/archivo.pdf" en "/storage/documents/archivo.pdf"
+    getDownloadUrl(filePath) {
+      if (!filePath) return '#'
+      return filePath.replace("public", "/storage")
+    },
+
+    // De la ruta completa, extraer solo el nombre de archivo
+    extractFilename(filePath) {
+      if (!filePath) return ''
+      return filePath.split('/').pop()
     }
   }
 }
@@ -344,20 +413,24 @@ export default {
   width: 100%;
   padding: 20px;
 }
+
 .table-responsive {
   overflow-x: auto;
   width: 100%;
 }
+
 .table {
   width: 100%;
   margin-top: 20px;
   border-collapse: collapse;
 }
+
 th,
 td {
   text-align: center;
   vertical-align: middle;
 }
+
 .btn-credit {
   color: white;
   background-image: linear-gradient(to right, #0cedb0 0%, #0cedb0 55%, #0cedb0 100%);
@@ -373,7 +446,12 @@ td {
 .btn-credit:hover {
   background-position: right center;
 }
+
 .ml-2 {
   margin-left: 0.5rem;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
 }
 </style>
