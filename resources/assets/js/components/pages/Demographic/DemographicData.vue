@@ -563,29 +563,39 @@ export default {
             }
         },
         async fetchPaginatedResults(page) {
-                this.isLoading = true;
-                try {
-                    let response = await axios.get('/demografico/fetch-paginated-results', {
-                        params: {
-                            page: page,
-                            perPage: this.perPage,
-                            mes: this.mes,
-                            año: this.año
-                        }
-                    });
+    this.isLoading = true;
+    try {
+        let response = await axios.get('/demografico/fetch-paginated-results', {
+            params: {
+                page: page,
+                perPage: this.perPage,
+                mes: this.mes,
+                año: this.año
+            }
+        });
 
-                    this.results = response.data.data.filter(item => item && typeof item === 'object');
-                    this.total = response.data.total;
-                    this.page = response.data.page;
-                    this.perPage = response.data.perPage;
-                    this.hasMore = response.data.hasMore; // Actualiza si hay más páginas disponibles
-                    this.error = null;
-                } catch (error) {
-                    this.error = error.response ? error.response.data.error : 'Error al buscar los resultados paginados';
-                } finally {
-                    this.isLoading = false;
-                }
-            },
+        // Asegurar que hay datos
+        if (response.data.total === 0) {
+            this.results = [];
+            this.hasMore = false;
+            this.isLoading = false;
+            return;
+        }
+
+        this.results = response.data.data.filter(item => item && typeof item === 'object');
+        this.total = response.data.total;
+        this.page = response.data.page;
+        this.perPage = response.data.perPage;
+        this.hasMore = response.data.hasMore; // Asegurar si hay más páginas
+
+        this.error = null;
+    } catch (error) {
+        this.error = error.response ? error.response.data.error : 'Error al buscar los resultados paginados';
+    } finally {
+        this.isLoading = false;
+    }
+}
+,
         isValidMonthYear() {
             const mesRegex = /^(0[1-9]|1[0-2])$/;
             const añoRegex = /^[0-9]{4}$/;
