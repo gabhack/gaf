@@ -50,23 +50,15 @@
             </b-row>
             <b-row class="mt-4">
                 <b-col cols="4">
-                    <div class="mb-3">
-                        <label for="consultas_diarias">Consultas Diarias</label>
-                        <multiselect
+                    <b-form-group label="Consultas Diarias" label-for="consultas_diarias">
+                        <b-form-input
                             id="consultas_diarias"
                             v-model="form.consultas_diarias"
-                            :options="permisos"
-                            :multiple="true"
-                            :close-on-select="false"
-                            :clear-on-select="false"
-                            :preserve-search="true"
-                            placeholder="Busca y selecciona"
-                            label="name"
-                            track-by="id"
-                            :taggable="true"
-                            :searchable="false"
-                        ></multiselect>
-                    </div>
+                            type="number"
+                            placeholder="50"
+                            required
+                        ></b-form-input>
+                    </b-form-group>
                 </b-col>
             </b-row>
             <b-row>
@@ -165,6 +157,25 @@
                         ></b-form-input>
                     </b-form-group>
                 </b-col>
+                <b-col cols="4">
+                    <div class="mb-3">
+                        <label for="personal_permisos">Permisos Adicionales</label>
+                        <multiselect
+                            id="personal_permisos"
+                            v-model="form.personal.permisos"
+                            :options="permisos"
+                            :multiple="true"
+                            :close-on-select="false"
+                            :clear-on-select="false"
+                            :preserve-search="true"
+                            placeholder="Busca y selecciona"
+                            label="name"
+                            track-by="id"
+                            :taggable="true"
+                            :searchable="false"
+                        ></multiselect>
+                    </div>
+                </b-col>
             </b-row>
             <b-row>
                 <b-col cols="6">
@@ -262,9 +273,10 @@ export default {
                     correo_contacto: '',
                     numero_contacto: '',
                     contrasena: null,
-                    confirmarContrasena: null
+                    confirmarContrasena: null,
+                    permisos: []
                 },
-                consultas_diarias: '',
+                consultas_diarias: 0,
                 documentacion: {
                     tipo_documento: ''
                 },

@@ -43,7 +43,7 @@ class AreaComercialController extends Controller
 		$personalRequest = json_decode($request->personal);
 		$plataformaRequest = json_decode($request->plataforma);
 
-		$permisos = json_decode($request->consultas_diarias);
+		$permisos = $personalRequest->permisos;
 		$permisosIds = collect($permisos)->pluck('id');
 
 		$rolComercial = Roles::where('rol', 'COMERCIAL')->first();
@@ -59,7 +59,7 @@ class AreaComercialController extends Controller
 				'tipo_documento_id' => $personalRequest->tipo_documento_id,
 				'ami_id' => $plataformaRequest->ami_id,
 				'hego_id' => $plataformaRequest->hego_id,
-				'consultas_diarias' => 0,
+				'consultas_diarias' => $request->consultas_diarias,
 				'nombre_completo' => $personalRequest->nombre_apellido,
 				'numero_documento' => $personalRequest->numero_documento,
 				'nacionalidad' => $personalRequest->nacionalidad,

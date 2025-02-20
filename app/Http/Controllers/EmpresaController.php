@@ -51,7 +51,7 @@ class EmpresaController extends Controller
 		$documentacionRequest = json_decode($request->documentacion);
 		$empresaUsuario = json_decode($request->usuario);
 
-		$permisos = json_decode($request->consultas_diarias);
+		$permisos = $empresaUsuario->permisos;
 		$permisosIds = collect($permisos)->pluck('id');
 
 		$rolEmpresa = Roles::where('rol', 'EMPRESA')->first();
@@ -65,7 +65,7 @@ class EmpresaController extends Controller
 				'tipo_sociedad_id' => $empresaRequest->tipo_sociedad_id,
 				'tipo_empresa_id' => $request->tipo_empresa_id,
 				'tipo_documento_id' => $empresaRequest->tipo_documento_id,
-				'consultas_diarias' => 0,
+				'consultas_diarias' => $request->consultas_diarias,
 				'nombre' => $empresaRequest->nombre,
 				'numero_documento' => $empresaRequest->numero_documento,
 				'correo' => $empresaRequest->correo,

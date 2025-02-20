@@ -55,7 +55,7 @@ export default {
             try {
                 let formData = new FormData();
                 formData.append('tipo_empresa_id', form.tipo_empresa_id);
-                formData.append('consultas_diarias', JSON.stringify(form.consultas_diarias));
+                formData.append('consultas_diarias', form.consultas_diarias);
                 formData.append('empresa', JSON.stringify(form.empresa));
                 formData.append('representante_legal', JSON.stringify(form.representante_legal));
                 formData.append('documentacion', JSON.stringify(this.buildDocumentacion(form)));

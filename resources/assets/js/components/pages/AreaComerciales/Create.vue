@@ -53,7 +53,7 @@ export default {
 
             try {
                 let formData = new FormData();
-                formData.append('consultas_diarias', JSON.stringify(form.consultas_diarias));
+                formData.append('consultas_diarias', form.consultas_diarias);
                 formData.append('empresa', JSON.stringify(form.empresa));
                 formData.append('personal', JSON.stringify(form.personal));
                 formData.append('plataforma', JSON.stringify(form.plataforma));
