@@ -33,6 +33,8 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    protected $appends = ['consultas_diarias'];
+
     public function rol()
     {
         return $this->hasOne(Roles::class, 'id', 'roles_id');
@@ -46,6 +48,12 @@ class User extends Authenticatable
     public function directPermissions()
     {
         return $this->morphToMany(Permiso::class, 'model', 'model_has_permissions', 'model_id', 'permission_id');
+    }
+
+    public function getConsultasDiariasAttribute()
+    {
+        $empresa = $this->empresa;
+        return $empresa ? $empresa->consultas_diarias : null;
     }
 
     public function givePermission($permission)
@@ -100,7 +108,7 @@ class User extends Authenticatable
 
     public function empresa()
     {
-        return $this->hasOne('\App\Empresas', 'id', 'id_company');
+        return $this->hasOne(Empresa::class, 'id', 'empresa_id');
     }
 
     public function padre()

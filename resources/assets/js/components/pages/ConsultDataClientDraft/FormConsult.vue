@@ -110,6 +110,7 @@
             <b-row>
                 <b-col cols="12" md="4" v-if="!dataclient.pagadurias && !flag">
                     <CustomButton text="Consultar Pagadurias" @click="validationForm" />
+                    <small class="d-block mt-2">Consultas disponibles: {{ user.consultas_diarias  }}</small>
                 </b-col>
 
                 <b-col cols="12" md="4" v-else>
@@ -159,6 +160,7 @@ import Download from '../../icons/Download.vue';
 import InputCurrency from '../../customComponents/InputCurrency.vue';
 
 export default {
+    props: ['user'],
     name: 'FormConsult',
     components: {
         CustomButton,
@@ -379,5 +381,10 @@ export default {
     font-size: 14px;
     font-weight: 400;
     line-height: 18.23px;
+}
+
+small {
+    font-size: 12px;
+    color: #6c757d;
 }
 </style>
