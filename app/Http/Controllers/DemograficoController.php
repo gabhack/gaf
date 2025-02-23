@@ -411,91 +411,124 @@ public function processCedulas($cedulas, $mes, $año)
 public function processCedulas_vista($cedulas, $mes, $año)
 {
     try {
-        Log::info("Inicio de processCedulas_vista", ['cedulas' => $cedulas]);
+        Log::info("Valor de cedulas", [$cedulas]);
+        Log::info("Valor de mes", [$mes]);
+        Log::info("Valor de año", [$año]);
 
         $mes = (int)$mes;
         $año = (int)$año;
 
-        // 1. Se obtienen SOLO los registros que aparezcan en fast_aggregate_data con el mes/año indicados.
+        Log::info("mes (int)", [$mes]);
+        Log::info("año (int)", [$año]);
+
         $resultsData = DB::connection('pgsql')
             ->table('fast_aggregate_data')
             ->whereIn('doc', $cedulas)
             ->whereRaw("extract(month from CAST(inicioperiodo AS date)) = ?", [$mes])
             ->whereRaw("extract(year from CAST(inicioperiodo AS date)) = ?", [$año])
             ->get();
+        Log::info("resultsData count", [$resultsData->count()]);
 
-        // ================================
-        // Cargar los REGISTROS (no solo docs) de las 3 fuentes
-        // ================================
         $colpensionesAll = Colpensiones::on('pgsql')
             ->whereIn('documento', $cedulas)
             ->get()
-            ->keyBy('documento'); // Clave: campo "documento"
+            ->keyBy('documento');
+        Log::info("colpensionesAll count", [$colpensionesAll->count()]);
 
         $fiducidiariaAll = Fiducidiaria::on('pgsql')
             ->whereIn('documento', $cedulas)
             ->get()
-            ->keyBy('documento'); // Clave: campo "DOCUMENTO"
+            ->keyBy('documento');
+        Log::info("fiducidiariaAll count", [$fiducidiariaAll->count()]);
 
         $fopepAll = DatamesFopep::on('pgsql')
             ->whereIn('doc', $cedulas)
             ->get()
-            ->keyBy('doc'); // Clave: campo "doc"
+            ->keyBy('doc');
+        Log::info("fopepAll count", [$fopepAll->count()]);
 
-        // Colecciones de solo los docs (para marcar booleanos colpensiones/fiducidiaria/fopep):
         $colpensionesDocs = $colpensionesAll->keys()->all();
+        Log::info("colpensionesDocs", [$colpensionesDocs]);
+
         $fiducidiariaDocs = $fiducidiariaAll->keys()->all();
-        $fopepDocs        = $fopepAll->keys()->all();
+        Log::info("fiducidiariaDocs", [$fiducidiariaDocs]);
+
+        $fopepDocs = $fopepAll->keys()->all();
+        Log::info("fopepDocs", [$fopepDocs]);
 
         $results = collect();
+        Log::info("results (inicial)", [$results]);
+
         $salarioMinimo = 1423000;
+        Log::info("salarioMinimo", [$salarioMinimo]);
 
-        // 2. Recorremos cada cédula solicitada
         foreach ($cedulas as $cedula) {
+            Log::info("Cedula actual", [$cedula]);
+
             $cedulaStr = (string)$cedula;
+            Log::info("cedulaStr", [$cedulaStr]);
 
-            // ¿Está la cédula en Colpensiones, Fiducidiaria o Fopep?
             $existsInColpensiones = in_array($cedulaStr, $colpensionesDocs);
+            Log::info("existsInColpensiones", [$existsInColpensiones]);
+
             $existsInFiducidiaria = in_array($cedulaStr, $fiducidiariaDocs);
-            $existsInFopep        = in_array($cedulaStr, $fopepDocs);
+            Log::info("existsInFiducidiaria", [$existsInFiducidiaria]);
 
-            // 3. Traemos todos los registros en fast_aggregate_data que coincidan
+            $existsInFopep = in_array($cedulaStr, $fopepDocs);
+            Log::info("existsInFopep", [$existsInFopep]);
+
             $dataForCedula = $resultsData->where('doc', $cedulaStr);
+            Log::info("dataForCedula count", [$dataForCedula->count()]);
 
-            // ==================================
-            // CONSTRUIR el nombre desde Colpensiones / Fidu / Fopep, si existe
-            // ==================================
             $nombrePensionado = null;
+            Log::info("nombrePensionado (initial)", [$nombrePensionado]);
 
             if ($existsInColpensiones) {
                 $c = $colpensionesAll->get($cedulaStr);
-                // Construimos el nombre
+                if ($c) {
+                    Log::info("Colpensiones (documento, primer_nombre)", [
+                        'documento' => $c->documento,
+                        'primer_nombre' => $c->primer_nombre
+                    ]);
+                }
                 $nombrePensionado = trim(
                     ($c->primer_nombre ?? '') . ' ' .
                     ($c->segundo_nombre ?? '') . ' ' .
                     ($c->primer_apellido ?? '') . ' ' .
                     ($c->segundo_apellido ?? '')
                 );
+                Log::info("nombrePensionado (Colpensiones)", [$nombrePensionado]);
             } elseif ($existsInFiducidiaria) {
                 $f = $fiducidiariaAll->get($cedulaStr);
+                if ($f) {
+                    Log::info("Fiducidiaria (documento, nombres)", [
+                        'documento' => $f->documento,
+                        'NOMBRES' => $f->NOMBRES
+                    ]);
+                }
                 $nombrePensionado = trim(
                     ($f->NOMBRES ?? '') . ' ' .
                     ($f->APELLIDOS ?? '')
                 );
+                Log::info("nombrePensionado (Fiducidiaria)", [$nombrePensionado]);
             } elseif ($existsInFopep) {
                 $p = $fopepAll->get($cedulaStr);
+                if ($p) {
+                    Log::info("Fopep (doc, nomp)", [
+                        'doc' => $p->doc,
+                        'nomp' => $p->nomp
+                    ]);
+                }
                 $nombrePensionado = trim($p->nomp ?? '');
+                Log::info("nombrePensionado (Fopep)", [$nombrePensionado]);
             }
 
-            // 4. Si NO hay información en fast_aggregate_data
             if ($dataForCedula->isEmpty()) {
-                // pero sí está en Colpensiones / Fiducidiaria / Fopep, devolvemos un registro
-                // con la info de "nombre" (si existe)
+                Log::info("dataForCedula->isEmpty() true", [$cedulaStr]);
                 if ($existsInColpensiones || $existsInFiducidiaria || $existsInFopep) {
                     $results->push([
                         'doc'               => $cedulaStr,
-                        // Si encontramos un nombre desde esas fuentes, úsalo. Sino null
-                        'nombre_usuario'    => $nombrePensionado ?: null, 
+                        'nombre_usuario'    => $nombrePensionado ?: null,
                         'tipo_contrato'     => null,
                         'edad'              => null,
                         'fecha_nacimiento'  => null,
@@ -512,35 +545,48 @@ public function processCedulas_vista($cedulas, $mes, $año)
                         'fopep'             => $existsInFopep,
                     ]);
                 }
-                continue; // pasa a la siguiente cédula
+                continue;
             }
 
-            // 5. Si SÍ hay data en fast_aggregate_data,
-            //    la procesamos con la lógica existente:
             foreach ($dataForCedula as $data) {
-                $pagaduria       = $data->pagaduria;
-                $nombre_usuario  = $data->nombre_usuario;
-                $tipo_contrato   = $data->tipo_contrato;
-                $cargo           = $data->cargos;
-                $edad            = $data->edad;
-                $situacionLaboral= $data->situacion_laboral;
+                Log::info("Registro en dataForCedula", [
+                    'doc' => $data->doc,
+                    'pagaduria' => $data->pagaduria,
+                    'inicioperiodo' => $data->inicioperiodo
+                ]);
 
-                // Si el fast_aggregate_data no trae nombre, pero sí lo tenemos en Colpensiones/Fidu/Fopep, usarlo:
+                $pagaduria = $data->pagaduria;
+                Log::info("pagaduria", [$pagaduria]);
+
+                $nombre_usuario = $data->nombre_usuario;
+                Log::info("nombre_usuario (raw)", [$nombre_usuario]);
+
+                $tipo_contrato = $data->tipo_contrato;
+                Log::info("tipo_contrato", [$tipo_contrato]);
+
+                $cargo = $data->cargos;
+                Log::info("cargo", [$cargo]);
+
+                $edad = $data->edad;
+                Log::info("edad", [$edad]);
+
+                $situacionLaboral = $data->situacion_laboral;
+                Log::info("situacionLaboral", [$situacionLaboral]);
+
                 if (empty($nombre_usuario) && $nombrePensionado) {
                     $nombre_usuario = $nombrePensionado;
                 }
 
-                // Convert fecha_nacimiento a un formato legible (si aplica)
                 $fecha_nacimiento = $data->fecha_nacimiento ?? null;
+                Log::info("fecha_nacimiento (raw)", [$fecha_nacimiento]);
+
                 if ($fecha_nacimiento) {
                     try {
                         if (is_numeric($fecha_nacimiento)) {
-                            // A veces vienen timestamps numéricos
                             $fecha_nacimiento = Carbon::createFromTimestamp($fecha_nacimiento)->format('Y-m-d');
                         } elseif (preg_match('/\d{2}\/\d{2}\/\d{4}/', $fecha_nacimiento)) {
                             $fecha_nacimiento = Carbon::createFromFormat('d/m/Y', $fecha_nacimiento)->format('Y-m-d');
                         } else {
-                            // Manejo genérico de fecha
                             $fecha_nacimiento = Carbon::parse($fecha_nacimiento)->format('Y-m-d');
                         }
                     } catch (\Exception $e) {
@@ -548,13 +594,14 @@ public function processCedulas_vista($cedulas, $mes, $año)
                         $fecha_nacimiento = null;
                     }
                 }
+                Log::info("fecha_nacimiento (parseado)", [$fecha_nacimiento]);
 
-                // Total de egresos (ya lo trae la vista)
-                $total_egresos    = $data->total_egresos;
-                // Ingresos ajustados (ya incluye incrementos según cargo y desc. RTFSA)
-                $valorIngreso     = $data->ingresos_ajustados;
+                $total_egresos = $data->total_egresos;
+                Log::info("total_egresos", [$total_egresos]);
 
-                // Embargos (parse embargos_concatenados)
+                $valorIngreso = $data->ingresos_ajustados;
+                Log::info("valorIngreso (ingresos_ajustados)", [$valorIngreso]);
+
                 $embargos = collect();
                 if (!empty($data->embargos_concatenados)) {
                     preg_match_all(
@@ -565,17 +612,17 @@ public function processCedulas_vista($cedulas, $mes, $año)
                     );
                     foreach ($matches as $match) {
                         $embargoData = [
-                            'docdeman'       => trim($match[1]),
-                            'entidaddeman'   => trim($match[2]),
-                            'fembini'        => trim($match[3]),
-                            'valor'          => (float)str_replace(',', '', $match[4]),
+                            'docdeman'     => trim($match[1]),
+                            'entidaddeman' => trim($match[2]),
+                            'fembini'      => trim($match[3]),
+                            'valor'        => (float)str_replace(',', '', $match[4]),
                         ];
                         $embargos->push($embargoData);
                     }
                 }
+                Log::info("embargos count", [$embargos->count()]);
                 $embargos = $embargos->isEmpty() ? null : $embargos;
 
-                // Cupones
                 $cupones = collect(explode(', ', $data->cupones_concatenados))
                     ->map(function ($cupon) {
                         $parts = explode(': ', $cupon);
@@ -590,15 +637,14 @@ public function processCedulas_vista($cedulas, $mes, $año)
                         return null;
                     })
                     ->filter(function ($cupon) {
-                        return $cupon && $cupon['egresos'] > 0; 
+                        return $cupon && $cupon['egresos'] > 0;
                     })
                     ->values()
                     ->toArray();
+                Log::info("cupones count", [count($cupones)]);
 
-                // Descuentos
                 $descuentos = collect(explode(', ', $data->descuentos_concatenados))
                     ->filter(function ($descuento) {
-                        // Excluir 'ALERTA'
                         return !str_contains($descuento, 'ALERTA');
                     })
                     ->map(function ($descuento) {
@@ -610,13 +656,14 @@ public function processCedulas_vista($cedulas, $mes, $año)
                         return null;
                     })
                     ->filter(function ($item) {
-                        // Eliminar nulos y valores <= 0
                         return $item && $item['valor'] > 0;
                     });
+                Log::info("descuentos count", [$descuentos->count()]);
                 $descuentos = $descuentos->isEmpty() ? null : $descuentos;
 
-                // Aplicar descuento "base" según pagaduría y salario
                 $descuento = 0.08;
+                Log::info("descuento inicial (base)", [$descuento]);
+
                 if (in_array($pagaduria, ['FOPEP','FIDUPREVISORA'])) {
                     if ($valorIngreso == $salarioMinimo) {
                         $descuento = 0.04;
@@ -626,28 +673,29 @@ public function processCedulas_vista($cedulas, $mes, $año)
                         $descuento = 0.12;
                     }
                 }
-                // Si gana más de 5.2 millones, aumenta 1% adicional
-                if ($valorIngreso > 5200000) {
+                Log::info("descuento tras pagaduria", [$descuento]);
+
+                if ($valorIngreso > $salarioMinimo * 4) {
                     $descuento += 0.01;
                 }
-                
-                $valorIngresoConDescuento = $valorIngreso - ($valorIngreso * $descuento);
+                Log::info("descuento final", [$descuento]);
 
-                // Cálculo de compraCartera
+                $valorIngresoConDescuento = $valorIngreso - ($valorIngreso * $descuento);
+                Log::info("valorIngresoConDescuento", [$valorIngresoConDescuento]);
+
                 $compraCartera = 0;
                 if ($valorIngresoConDescuento < $salarioMinimo * 2) {
                     $compraCartera = $valorIngresoConDescuento - $salarioMinimo;
                 } else {
                     $compraCartera = $valorIngresoConDescuento / 2;
                 }
+                Log::info("compraCartera", [$compraCartera]);
 
-                // Cupo de libre inversión
                 $libreInversion = $compraCartera - $total_egresos;
+                Log::info("libreInversion", [$libreInversion]);
 
-                // Construimos el registro final
                 $results->push([
                     'doc'               => $cedulaStr,
-                    // Nombre final, ya sea el que viene del fast_aggregate_data o el que trajimos de las otras fuentes
                     'nombre_usuario'    => $nombre_usuario,
                     'tipo_contrato'     => $tipo_contrato,
                     'edad'              => $edad,
