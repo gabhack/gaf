@@ -1106,14 +1106,13 @@ if (!function_exists('roles_label')) {
 if (!function_exists('IsSuperAdmin')) {
 	function IsSuperAdmin()
 	{
-		switch (Auth::user()->rol->rol) {
-			case 'ADMIN_SISTEMA':
-				return true;
-				break;
-			default:
-				return false;
-				break;
+		$user = Auth::user();
+
+		if (!$user || !isset($user->rol)) {
+			return false;
 		}
+
+		return $user->rol->rol == 'ADMIN_SISTEMA';
 	}
 }
 

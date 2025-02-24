@@ -42,7 +42,7 @@ class User extends Authenticatable
 
     public function rolePermissions()
     {
-        return $this->rol ? $this->rol->permissions : collect();
+        return $this->rol ? $this->rol->permissions : collect([]);
     }
 
     public function directPermissions()
@@ -108,7 +108,7 @@ class User extends Authenticatable
 
     public function empresa()
     {
-        return $this->hasOne(Empresa::class, 'id', 'empresa_id');
+        return $this->belongsTo(Empresa::class, 'empresa_id', 'id');
     }
 
     public function padre()

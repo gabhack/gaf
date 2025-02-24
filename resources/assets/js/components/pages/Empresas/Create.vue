@@ -1,28 +1,16 @@
 <template>
     <b-container fluid class="my-3">
-        <Form ref="formComponent" />
-        <b-row align-h="end">
-            <b-col cols="4">
-                <CustomButton class="mt-4" @click="crearEmpresa">
-                    <PlusIcon></PlusIcon>
-                    Crear empresa
-                </CustomButton>
-            </b-col>
-        </b-row>
+        <Form @submit="crearEmpresa" />
     </b-container>
 </template>
 
 <script>
-import Form from './Form.vue';
-import CustomButton from '../../customComponents/CustomButton.vue';
-import PlusIcon from '../../icons/PlusIcon.vue';
 import axios from 'axios';
+import Form from './Form.vue';
 
 export default {
     components: {
-        Form,
-        CustomButton,
-        PlusIcon
+        Form
     },
     mounted() {
         this.setBreadcumb();
@@ -32,21 +20,13 @@ export default {
             let domBreadcumb = document.getElementById('dynamic-breadcumb');
             domBreadcumb.innerText = '> Empresas > Crear';
         },
-        crearEmpresa() {
-            const formComponent = this.$refs.formComponent;
-            if (!formComponent) {
-                console.error('No se encontró el componente de formulario.');
-                return;
-            }
-
-            const form = formComponent.submitForm();
-
+        crearEmpresa(form) {
             // Invalid form
             if (!form) {
                 this.$bvToast.toast('Corrige los campos marcados para continuar.', {
                     title: 'Formulario con errores',
                     variant: 'danger',
-                    solid: true,
+                    solid: true
                 });
 
                 return;

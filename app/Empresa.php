@@ -73,6 +73,6 @@ class Empresa extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class)->withDefault();
+        return $this->hasOne(User::class, 'empresa_id', 'id')->withDefault();
     }
 }

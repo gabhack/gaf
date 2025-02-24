@@ -104,9 +104,9 @@ class EmpresaController extends Controller
 				'iva' => $documentacionRequest->iva,
 				'contribuyente' => $documentacionRequest->contribuyente,
 				'autoretenedor' => $documentacionRequest->autoretenedor,
-				'src_representante_legal' => '404',
-				'src_camara_comercio' => '404',
-				'src_rut' => '404',
+				'src_representante_legal' => '',
+				'src_camara_comercio' => '',
+				'src_rut' => '',
 			]);
 
 			if ($request->hasFile('src_representante_legal')) {
@@ -158,8 +158,11 @@ class EmpresaController extends Controller
 	public function edit($id)
 	{
 		try {
-			$empresa = Empresa::find($id);
-			if (empty($empresa)) abort(404, 'Empresa no encontrada');
+			$empresa = Empresa::with([
+				'documento_empresa',
+				'representante_legal_empresa',
+				'user.directPermissions'
+			])->findOrFail($id);
 
 			if (isset($empresa->documento_empresa->src_representante_legal)) {
 				$representanteLegalSrc = Storage::disk('archivos')->get($empresa->documento_empresa->src_representante_legal);
@@ -171,13 +174,15 @@ class EmpresaController extends Controller
 				$rutSrc = Storage::disk('archivos')->get($empresa->documento_empresa->src_rut);
 				$empresa->documento_empresa->src_rut = base64_encode($rutSrc);
 			}
+
 			return view('empresas.edit', [
 				'empresa' => json_encode($empresa),
 				'representanteLegal' => json_encode($empresa->representante_legal_empresa),
-				'documentoEmpresa' => json_encode($empresa->documento_empresa)
+				'documentoEmpresa' => json_encode($empresa->documento_empresa),
+				'usuarioEmpresa' => json_encode($empresa->user)
 			]);
 		} catch (Throwable $e) {
-			return response()->json(['message' => $e], 500);
+			return response()->json(['message' => $e->getMessage()], 500);
 		}
 	}
 

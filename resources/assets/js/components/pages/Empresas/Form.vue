@@ -1,16 +1,13 @@
 <template>
     <div>
-        <h2 class="mb-5">Panel de Creación Empresas</h2>
+        <h2 class="mb-5">Panel de {{ !onUpdate ? 'Creación' : 'Edición' }} Empresas</h2>
         <BForm @submit.prevent="submitForm">
             <b-row>
-                <b-col cols="6">
-                    <h4>Tipo de Empresa</h4>
-                </b-col>
-            </b-row>
-            <b-row class="mt-4">
                 <b-col cols="4">
+                    <h4>Tipo de Empresa</h4>
                     <b-form-group label="Tipo Empresa" label-for="tipo_empresa_id">
                         <b-form-select
+                            :state="validateState('form.tipo_empresa_id')"
                             value-field="id"
                             text-field="nombre"
                             id="tipo_empresa_id"
@@ -19,21 +16,15 @@
                         ></b-form-select>
                     </b-form-group>
                 </b-col>
-            </b-row>
-            <b-row>
-                <b-col cols="6">
-                    <h4>Límite de Consultas</h4>
-                </b-col>
-            </b-row>
-            <b-row class="mt-4">
                 <b-col cols="4">
+                    <h4>Límite de Consultas</h4>
                     <b-form-group label="Consultas Diarias" label-for="consultas_diarias">
                         <b-form-input
+                            :state="validateState('form.consultas_diarias')"
                             id="consultas_diarias"
                             v-model="form.consultas_diarias"
                             type="number"
                             placeholder="50"
-                            required
                         ></b-form-input>
                     </b-form-group>
                 </b-col>
@@ -47,17 +38,18 @@
                 <b-col cols="4">
                     <b-form-group label="Nombre Empresa" label-for="empresa_nombre">
                         <b-form-input
+                            :state="validateState('form.empresa.nombre')"
                             id="empresa_nombre"
                             v-model="form.empresa.nombre"
                             type="text"
                             placeholder="Empresa 1 SAS"
-                            required
                         ></b-form-input>
                     </b-form-group>
                 </b-col>
                 <b-col cols="4">
                     <b-form-group label="Tipo de Documento" label-for="empresa_tipo_documento_id">
                         <b-form-select
+                            :state="validateState('form.empresa.tipo_documento_id')"
                             value-field="id"
                             text-field="nombre"
                             id="empresa_tipo_documento_id"
@@ -69,17 +61,18 @@
                 <b-col cols="4">
                     <b-form-group label="Número de Documento" label-for="empresa_numero_documento">
                         <b-form-input
+                            :state="validateState('form.empresa.numero_documento')"
                             id="empresa_numero_documento"
                             v-model="form.empresa.numero_documento"
                             type="number"
                             placeholder="10253658596"
-                            required
                         ></b-form-input>
                     </b-form-group>
                 </b-col>
                 <b-col cols="4">
                     <b-form-group label="Tipo Sociedad" label-for="tipo_sociedad_id">
                         <b-form-select
+                            :state="validateState('form.empresa.tipo_sociedad_id')"
                             value-field="id"
                             text-field="nombre"
                             id="tipo_sociedad_id"
@@ -91,50 +84,55 @@
                 <b-col cols="4">
                     <b-form-group label="E-mail Registrado por la Compañía" label-for="empresa_correo">
                         <b-form-input
+                            :state="validateState('form.empresa.correo')"
                             id="empresa_correo"
                             v-model="form.empresa.correo"
                             type="email"
                             placeholder="usuario1@gmail.com"
-                            required
                         ></b-form-input>
                     </b-form-group>
                 </b-col>
                 <b-col cols="4">
                     <b-form-group label="Página Web" label-for="empresa_pagina_web">
                         <b-form-input
+                            :state="validateState('form.empresa.pagina_web')"
                             id="empresa_pagina_web"
                             v-model="form.empresa.pagina_web"
                             type="text"
                             placeholder="empresa1.com"
-                            required
                         ></b-form-input>
                     </b-form-group>
                 </b-col>
                 <b-col cols="4">
                     <b-form-group label="País" label-for="empresa_pais">
                         <b-form-select
+                            :state="validateState('form.empresa.pais_id')"
                             value-field="id"
                             text-field="nombre"
                             id="empresa_pais"
                             v-model="form.empresa.pais_id"
                             :options="ubicaciones.paises"
+                            @change="listarUbicaciones"
                         ></b-form-select>
                     </b-form-group>
                 </b-col>
                 <b-col cols="4">
                     <b-form-group label="Departamento" label-for="empresa_departamento">
                         <b-form-select
+                            :state="validateState('form.empresa.departamento_id')"
                             value-field="id"
                             text-field="nombre"
                             id="empresa_departamento"
                             v-model="form.empresa.departamento_id"
                             :options="ubicaciones.departamentos"
+                            @change="listarUbicaciones"
                         ></b-form-select>
                     </b-form-group>
                 </b-col>
                 <b-col cols="4">
                     <b-form-group label="Ciudad" label-for="empresa_ciudad">
                         <b-form-select
+                            :state="validateState('form.empresa.ciudad_id')"
                             value-field="id"
                             text-field="nombre"
                             id="empresa_ciudad"
@@ -146,11 +144,11 @@
                 <b-col cols="4">
                     <b-form-group label="Dirección" label-for="empresa_direccion">
                         <b-form-input
+                            :state="validateState('form.empresa.direccion')"
                             id="empresa_direccion"
                             v-model="form.empresa.direccion"
                             type="text"
                             placeholder="CL 8 BIS A #76-09"
-                            required
                         ></b-form-input>
                     </b-form-group>
                 </b-col>
@@ -164,17 +162,18 @@
                 <b-col cols="4">
                     <b-form-group label="Nombre y Apellido" label-for="representante_nombres_completos">
                         <b-form-input
+                            :state="validateState('form.representante_legal.nombres_completos')"
                             id="representante_nombres_completos"
                             v-model="form.representante_legal.nombres_completos"
                             type="text"
                             placeholder="Danilo Perez"
-                            required
                         ></b-form-input>
                     </b-form-group>
                 </b-col>
                 <b-col cols="4">
                     <b-form-group label="Tipo de Documento" label-for="representante_tipo_documento_id">
                         <b-form-select
+                            :state="validateState('form.representante_legal.tipo_documento_id')"
                             value-field="id"
                             text-field="nombre"
                             id="representante_tipo_documento_id"
@@ -186,44 +185,44 @@
                 <b-col cols="4">
                     <b-form-group label="Número de Documento" label-for="representante_legal_numero_documento">
                         <b-form-input
+                            :state="validateState('form.representante_legal.numero_documento')"
                             id="representante_legal_numero_documento"
                             v-model="form.representante_legal.numero_documento"
                             type="number"
                             placeholder="10253658596"
-                            required
                         ></b-form-input>
                     </b-form-group>
                 </b-col>
                 <b-col cols="4">
                     <b-form-group label="Nacionalidad" label-for="representante_legal_nacionalidad">
                         <b-form-input
+                            :state="validateState('form.representante_legal.nacionalidad')"
                             id="representante_legal_nacionalidad"
                             v-model="form.representante_legal.nacionalidad"
                             type="text"
                             placeholder="Colombia"
-                            required
                         ></b-form-input>
                     </b-form-group>
                 </b-col>
                 <b-col cols="4">
                     <b-form-group label="Correo de Contacto" label-for="representante_legal_correo">
                         <b-form-input
+                            :state="validateState('form.representante_legal.correo')"
                             id="representante_legal_correo"
                             v-model="form.representante_legal.correo"
                             type="email"
                             placeholder="representante1@gmail.com"
-                            required
                         ></b-form-input>
                     </b-form-group>
                 </b-col>
                 <b-col cols="4">
                     <b-form-group label="Número de Contacto" label-for="representante_legal_numero_contacto">
                         <b-form-input
+                            :state="validateState('form.representante_legal.numero_contacto')"
                             id="representante_legal_numero_contacto"
                             v-model="form.representante_legal.numero_contacto"
                             type="number"
                             placeholder="3214567865"
-                            required
                         ></b-form-input>
                     </b-form-group>
                 </b-col>
@@ -237,6 +236,7 @@
                 <b-col cols="4">
                     <b-form-group label="Responsable IVA" label-for="documentacion_iva">
                         <b-form-select
+                            :state="validateState('form.documentacion.iva')"
                             value-field="id"
                             text-field="nombre"
                             id="documentacion_iva"
@@ -249,29 +249,32 @@
                 <b-col cols="4">
                     <b-form-group label="Gran Contribuyente" label-for="documentacion_contribuyente">
                         <b-form-select
+                            :state="validateState('form.documentacion.contribuyente')"
                             value-field="id"
                             text-field="nombre"
                             id="documentacion_contribuyente"
                             v-model="form.documentacion.contribuyente"
                             :options="booleanValores"
-                        >
-                        </b-form-select>
+                        ></b-form-select>
                     </b-form-group>
                 </b-col>
                 <b-col cols="4">
                     <b-form-group label="Auto Retenedor" label-for="documentacion_autoretenedor">
                         <b-form-select
+                            :state="validateState('form.documentacion.autoretenedor')"
                             value-field="id"
                             text-field="nombre"
                             id="documentacion_autoretenedor"
                             v-model="form.documentacion.autoretenedor"
                             :options="booleanValores"
-                        >
-                        </b-form-select>
+                        ></b-form-select>
                     </b-form-group>
                 </b-col>
                 <b-col cols="4">
-                    <b-form-group label="Auto Retenedor" label-for="documentacion_autoretenedor">
+                    <b-form-group
+                        :state="validateState('form.documentacion.src_representante_legal')"
+                        invalid-feedback="Debes añadir un archivo"
+                    >
                         <CustomButton @click="showModal('representante-legal-modal')">
                             <PlusIcon></PlusIcon>
                             Documento representante legal
@@ -279,7 +282,10 @@
                     </b-form-group>
                 </b-col>
                 <b-col cols="4">
-                    <b-form-group label="Auto Retenedor" label-for="documentacion_autoretenedor">
+                    <b-form-group
+                        :state="validateState('form.documentacion.src_camara_comercio')"
+                        invalid-feedback="Debes añadir un archivo"
+                    >
                         <CustomButton @click="showModal('camara-comercio-modal')">
                             <PlusIcon></PlusIcon>
                             Camara de comercio
@@ -287,7 +293,12 @@
                     </b-form-group>
                 </b-col>
                 <b-col cols="4">
-                    <b-form-group label="Auto Retenedor" label-for="documentacion_autoretenedor">
+                    <b-form-group
+                        label="RUT"
+                        class="h5"
+                        :state="validateState('form.documentacion.src_rut')"
+                        invalid-feedback="Debes añadir un archivo"
+                    >
                         <CustomButton @click="showModal('rut-modal')">
                             <PlusIcon></PlusIcon>
                             RUT
@@ -324,8 +335,7 @@
                     </b-form-group>
                 </b-col>
                 <b-col cols="4">
-                    <div class="mb-3">
-                        <label for="usuario_permisos">Permisos Adicionales</label>
+                    <b-form-group label="Permisos Adicionales" label-for="usuario_permisos">
                         <multiselect
                             id="usuario_permisos"
                             v-model="form.usuario.permisos"
@@ -340,7 +350,7 @@
                             :taggable="true"
                             :searchable="false"
                         ></multiselect>
-                    </div>
+                    </b-form-group>
                 </b-col>
             </b-row>
             <b-row class="mt-4">
@@ -353,6 +363,11 @@
                             type="password"
                             placeholder="********"
                         ></b-form-input>
+                        <!-- <b-form-invalid-feedback>
+                            <template v-if="!$v.form.usuario.contrasena.minLength">
+                                La contraseña debe tener al menos 6 caracteres
+                            </template>
+                        </b-form-invalid-feedback> -->
                     </b-form-group>
                 </b-col>
                 <b-col cols="4">
@@ -365,6 +380,15 @@
                             placeholder="********"
                         ></b-form-input>
                     </b-form-group>
+                </b-col>
+                <b-col cols="4" align-self="end">
+                    <CustomButton class="mb-3" type="submit">
+                        <template v-if="!onUpdate">
+                            <PlusIcon></PlusIcon>
+                            Crear Empresa
+                        </template>
+                        <template v-else> Guardar Cambios </template>
+                    </CustomButton>
                 </b-col>
             </b-row>
         </BForm>
@@ -403,7 +427,7 @@
 </template>
 
 <script>
-import { email, required, sameAs, minLength } from 'vuelidate/lib/validators';
+import { email, required, sameAs, minLength, numeric } from 'vuelidate/lib/validators';
 
 import axios from 'axios';
 import CustomButton from '../../customComponents/CustomButton.vue';
@@ -414,6 +438,7 @@ import LiteModal from '../../customComponents/LiteModal.vue';
 import Multiselect from 'vue-multiselect';
 
 export default {
+    props: ['initialData'],
     components: {
         CustomButton,
         InfoCircleIcon,
@@ -426,7 +451,7 @@ export default {
         return {
             form: {
                 tipo_empresa_id: null,
-                consultas_diarias: 0,
+                consultas_diarias: null,
                 empresa: {
                     tipo_sociedad_id: null,
                     nombre: '',
@@ -448,9 +473,9 @@ export default {
                     numero_contacto: ''
                 },
                 documentacion: {
-                    iva: '',
-                    contribuyente: '',
-                    autoretenedor: '',
+                    iva: 0,
+                    contribuyente: 0,
+                    autoretenedor: 0,
                     src_representante_legal: '',
                     src_camara_comercio: '',
                     src_rut: ''
@@ -474,12 +499,64 @@ export default {
             ]
         };
     },
+    computed: {
+        onUpdate() {
+            // return !!this.initialData;
+            return true;
+        }
+    },
     validations: {
         form: {
-            usuario: {
-                nombre: {
-                    required
+            tipo_empresa_id: { required },
+            consultas_diarias: {
+                required,
+                numeric
+            },
+            empresa: {
+                tipo_sociedad_id: { required },
+                nombre: { required },
+                tipo_documento_id: { required },
+                numero_documento: {
+                    required,
+                    numeric
                 },
+                correo: {
+                    required,
+                    email
+                },
+                pagina_web: { required },
+                pais_id: { required },
+                departamento_id: { required },
+                ciudad_id: { required },
+                direccion: { required }
+            },
+            representante_legal: {
+                nombres_completos: { required },
+                tipo_documento_id: { required },
+                numero_documento: {
+                    required,
+                    numeric
+                },
+                nacionalidad: { required },
+                correo: {
+                    required,
+                    email
+                },
+                numero_contacto: {
+                    required,
+                    numeric
+                }
+            },
+            documentacion: {
+                iva: { required },
+                contribuyente: { required },
+                autoretenedor: { required },
+                src_representante_legal: { required },
+                src_camara_comercio: { required },
+                src_rut: { required }
+            },
+            usuario: {
+                nombre: { required },
                 correo: {
                     required,
                     email
@@ -503,13 +580,13 @@ export default {
         await this.listarUbicaciones();
     },
     watch: {
-        'form.empresa.pais_id': async function () {
-            this.form.empresa.departamento_id = null;
-            await this.listarUbicaciones();
-        },
-        'form.empresa.departamento_id': async function () {
-            this.form.empresa.ciudad_id = null;
-            await this.listarUbicaciones();
+        initialData: {
+            immediate: true,
+            handler(newData) {
+                if (newData) {
+                    Object.assign(this.form, newData);
+                }
+            }
         }
     },
     methods: {
@@ -564,7 +641,10 @@ export default {
         },
         submitForm() {
             this.$v.$touch();
-            return !this.$v.$invalid ? this.form : null;
+
+            if (!this.$v.$invalid) {
+                this.$emit('submit', this.form);
+            }
         }
     }
 };
@@ -584,6 +664,10 @@ export default {
     &:placeholder {
         font-weight: 100;
     }
+}
+
+.form-group legend {
+    font-size: 1rem;
 }
 
 .info-message {

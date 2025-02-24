@@ -14,14 +14,19 @@ class CheckPermission
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next, $permission){
+    public function handle($request, Closure $next, $permission)
+    {
         $user = Auth::user();
 
-        if(IsSuperAdmin()){
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        if (IsSuperAdmin()) {
             return $next($request);
         }
 
-        if (!$user || !$user->hasPermission($permission)) {
+        if (!$user->hasPermission($permission)) {
             abort(403, 'Unauthorized action.');
         }
 

@@ -19,26 +19,27 @@ import UsersIcon from './UsersIcon.vue';
 import DashboardIcon from './DashboardIcon.vue';
 import InfoCircleIcon from './InfoCircleIcon.vue';
 import XIcon from './XIcon.vue';
+
 export {
-	CompaniesIcon,
-	PersonsIcon,
-	ListIcon,
-	FacebookIcon,
-	InstagramIcon,
-	YoutubeIcon,
-	TwitterIcon,
-	AdminSettingsIcon,
-	AmiIcon,
-	HegoIcon,
-	DashIcon,
-	VisadoIcon,
-	MercadoIcon,
-	CarteraIcon,
-	InvestigacionIcon,
-	LocalizacionIcon,
-	PlusIcon,
-	UsersIcon,
-	DashboardIcon,
-	InfoCircleIcon,
-	XIcon
+    CompaniesIcon,
+    PersonsIcon,
+    ListIcon,
+    FacebookIcon,
+    InstagramIcon,
+    YoutubeIcon,
+    TwitterIcon,
+    AdminSettingsIcon,
+    AmiIcon,
+    HegoIcon,
+    DashIcon,
+    VisadoIcon,
+    MercadoIcon,
+    CarteraIcon,
+    InvestigacionIcon,
+    LocalizacionIcon,
+    PlusIcon,
+    UsersIcon,
+    DashboardIcon,
+    InfoCircleIcon,
+    XIcon
 };
