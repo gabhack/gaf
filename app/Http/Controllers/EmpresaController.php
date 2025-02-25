@@ -208,7 +208,7 @@ class EmpresaController extends Controller
 		$documentacionRequest = json_decode($request->documentacion);
 		$empresaUsuario = json_decode($request->usuario);
 
-		$permisos = $empresaUsuario->permisos;
+		$permisos = $empresaUsuario->permisos ?? [];
 		$permisosIds = collect($permisos)->pluck('id');
 
 		try {
@@ -231,13 +231,16 @@ class EmpresaController extends Controller
 			]);
 
 			$usuario = User::where('empresa_id', $empresa->id)->first();
-			$usuario->update([
-				'name' => $empresaUsuario->nombre,
-				'email' => $empresaUsuario->correo,
-			]);
 
-			// Asignar permisos
-			$usuario->syncPermissions($permisosIds);
+			if ($usuario) {
+				$usuario->update([
+					'name' => $empresaUsuario->nombre,
+					'email' => $empresaUsuario->correo,
+				]);
+
+				// Asignar permisos
+				$usuario->syncPermissions($permisosIds);
+			}
 
 			RepresentanteLegalEmpresa::updateOrCreate(
 				['empresa_id' => $empresa->id],
@@ -257,6 +260,9 @@ class EmpresaController extends Controller
 					'iva' => $documentacionRequest->iva,
 					'contribuyente' => $documentacionRequest->contribuyente,
 					'autoretenedor' => $documentacionRequest->autoretenedor,
+					'src_representante_legal' => '',
+					'src_camara_comercio' => '',
+					'src_rut' => '',
 				]
 			);
 
@@ -297,17 +303,7 @@ class EmpresaController extends Controller
 
 			$empresa = Empresa::findOrFail($id);
 
-			// Eliminar archivos
-			$documentos = DocumentoEmpresa::where('empresa_id', $empresa->id)->first();
-			if ($documentos) {
-				Storage::disk('archivos')->delete([
-					$documentos->src_representante_legal,
-					$documentos->src_camara_comercio,
-					$documentos->src_rut
-				]);
-				$documentos->delete();
-			}
-
+			DocumentoEmpresa::where('empresa_id', $empresa->id)->delete();
 			RepresentanteLegalEmpresa::where('empresa_id', $empresa->id)->delete();
 			User::where('empresa_id', $empresa->id)->delete();
 
