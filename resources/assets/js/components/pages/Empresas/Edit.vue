@@ -1,6 +1,6 @@
 <template>
     <b-container fluid class="my-3">
-        <Form :initialData="form" @submit="actualizarEmpresa" />
+        <Form :initialData="form" @update="actualizarEmpresa" />
     </b-container>
 </template>
 
@@ -105,6 +105,7 @@ export default {
                 formData.append('empresa', JSON.stringify(form.empresa));
                 formData.append('representante_legal', JSON.stringify(form.representante_legal));
                 formData.append('documentacion', JSON.stringify(this.buildDocumentacion(form)));
+                formData.append('usuario', JSON.stringify(form.usuario));
                 formData.append('src_representante_legal', form.documentacion.src_representante_legal);
                 formData.append('src_camara_comercio', form.documentacion.src_camara_comercio);
                 formData.append('src_rut', form.documentacion.src_rut);

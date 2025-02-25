@@ -271,38 +271,51 @@
                     </b-form-group>
                 </b-col>
                 <b-col cols="4">
-                    <b-form-group
-                        :state="validateState('form.documentacion.src_representante_legal')"
-                        invalid-feedback="Debes añadir un archivo"
-                    >
+                    <b-form-group>
                         <CustomButton @click="showModal('representante-legal-modal')">
                             <PlusIcon></PlusIcon>
                             Documento representante legal
                         </CustomButton>
+                        <b-form-invalid-feedback :state="validateState('form.documentacion.src_representante_legal')">
+                            <template v-if="!$v.form.documentacion.src_representante_legal.required">
+                                Debes añadir un archivo
+                            </template>
+                            <template v-else-if="!$v.form.documentacion.src_representante_legal.isPDF">
+                                Debes añadir un archivo en formato PDF
+                            </template>
+                        </b-form-invalid-feedback>
                     </b-form-group>
                 </b-col>
                 <b-col cols="4">
-                    <b-form-group
-                        :state="validateState('form.documentacion.src_camara_comercio')"
-                        invalid-feedback="Debes añadir un archivo"
-                    >
+                    <b-form-group>
                         <CustomButton @click="showModal('camara-comercio-modal')">
                             <PlusIcon></PlusIcon>
                             Camara de comercio
                         </CustomButton>
+                        <b-form-invalid-feedback :state="validateState('form.documentacion.src_camara_comercio')">
+                            <template v-if="!$v.form.documentacion.src_camara_comercio.required">
+                                Debes añadir un archivo
+                            </template>
+                            <template v-else-if="!$v.form.documentacion.src_camara_comercio.isPDF">
+                                Debes añadir un archivo en formato PDF
+                            </template>
+                        </b-form-invalid-feedback>
                     </b-form-group>
                 </b-col>
                 <b-col cols="4">
-                    <b-form-group
-                        label="RUT"
-                        class="h5"
-                        :state="validateState('form.documentacion.src_rut')"
-                        invalid-feedback="Debes añadir un archivo"
-                    >
+                    <b-form-group>
                         <CustomButton @click="showModal('rut-modal')">
                             <PlusIcon></PlusIcon>
                             RUT
                         </CustomButton>
+                        <b-form-invalid-feedback :state="validateState('form.documentacion.src_rut')">
+                            <template v-if="!$v.form.documentacion.src_rut.required">
+                                Debes añadir un archivo
+                            </template>
+                            <template v-else-if="!$v.form.documentacion.src_rut.isPDF">
+                                Debes añadir un archivo en formato PDF
+                            </template>
+                        </b-form-invalid-feedback>
                     </b-form-group>
                 </b-col>
             </b-row>
@@ -354,7 +367,7 @@
                 </b-col>
             </b-row>
             <b-row class="mt-4">
-                <b-col cols="4">
+                <b-col cols="4" v-if="!onUpdate">
                     <b-form-group label="Contraseña" label-for="usuario_contrasena">
                         <b-form-input
                             :state="validateState('form.usuario.contrasena')"
@@ -370,7 +383,7 @@
                         </b-form-invalid-feedback> -->
                     </b-form-group>
                 </b-col>
-                <b-col cols="4">
+                <b-col cols="4" v-if="!onUpdate">
                     <b-form-group label="Confirmar Contraseña" label-for="usuario_confirmar_contrasena">
                         <b-form-input
                             :state="validateState('form.usuario.confirmarContrasena')"
@@ -427,7 +440,7 @@
 </template>
 
 <script>
-import { email, required, sameAs, minLength, numeric } from 'vuelidate/lib/validators';
+import { email, required, requiredIf, sameAs, minLength, numeric } from 'vuelidate/lib/validators';
 
 import axios from 'axios';
 import CustomButton from '../../customComponents/CustomButton.vue';
@@ -436,6 +449,11 @@ import PlusIcon from '../../icons/PlusIcon.vue';
 import FileInput from '../../customComponents/FileInput.vue';
 import LiteModal from '../../customComponents/LiteModal.vue';
 import Multiselect from 'vue-multiselect';
+
+const isPDF = value => {
+    if (!value) return true;
+    return value.type === 'application/pdf';
+};
 
 export default {
     props: ['initialData'],
@@ -480,6 +498,9 @@ export default {
                     src_camara_comercio: '',
                     src_rut: ''
                 },
+                previewRepresentanteLegal: '',
+                previewCamaraComercio: '',
+                previewRut: '',
                 usuario: {
                     nombre: '',
                     correo: '',
@@ -501,76 +522,96 @@ export default {
     },
     computed: {
         onUpdate() {
-            // return !!this.initialData;
-            return true;
+            return !!this.initialData;
         }
     },
-    validations: {
-        form: {
-            tipo_empresa_id: { required },
-            consultas_diarias: {
-                required,
-                numeric
-            },
-            empresa: {
-                tipo_sociedad_id: { required },
-                nombre: { required },
-                tipo_documento_id: { required },
-                numero_documento: {
+    validations() {
+        return {
+            form: {
+                tipo_empresa_id: { required },
+                consultas_diarias: {
                     required,
                     numeric
                 },
-                correo: {
-                    required,
-                    email
+                empresa: {
+                    tipo_sociedad_id: { required },
+                    nombre: { required },
+                    tipo_documento_id: { required },
+                    numero_documento: {
+                        required,
+                        numeric
+                    },
+                    correo: {
+                        required,
+                        email
+                    },
+                    pagina_web: { required },
+                    pais_id: { required },
+                    departamento_id: { required },
+                    ciudad_id: { required },
+                    direccion: { required }
                 },
-                pagina_web: { required },
-                pais_id: { required },
-                departamento_id: { required },
-                ciudad_id: { required },
-                direccion: { required }
-            },
-            representante_legal: {
-                nombres_completos: { required },
-                tipo_documento_id: { required },
-                numero_documento: {
-                    required,
-                    numeric
+                representante_legal: {
+                    nombres_completos: { required },
+                    tipo_documento_id: { required },
+                    numero_documento: {
+                        required,
+                        numeric
+                    },
+                    nacionalidad: { required },
+                    correo: {
+                        required,
+                        email
+                    },
+                    numero_contacto: {
+                        required,
+                        numeric
+                    }
                 },
-                nacionalidad: { required },
-                correo: {
-                    required,
-                    email
+                documentacion: {
+                    iva: { required },
+                    contribuyente: { required },
+                    autoretenedor: { required },
+                    src_representante_legal: {
+                        required: requiredIf(() => {
+                            return !this.form.previewRepresentanteLegal;
+                        }),
+                        isPDF
+                    },
+                    src_camara_comercio: {
+                        required: requiredIf(() => {
+                            return !this.form.previewCamaraComercio;
+                        }),
+                        isPDF
+                    },
+                    src_rut: {
+                        required: requiredIf(() => {
+                            return !this.form.previewRut;
+                        }),
+                        isPDF
+                    }
                 },
-                numero_contacto: {
-                    required,
-                    numeric
-                }
-            },
-            documentacion: {
-                iva: { required },
-                contribuyente: { required },
-                autoretenedor: { required },
-                src_representante_legal: { required },
-                src_camara_comercio: { required },
-                src_rut: { required }
-            },
-            usuario: {
-                nombre: { required },
-                correo: {
-                    required,
-                    email
-                },
-                contrasena: {
-                    required,
-                    minLength: minLength(6)
-                },
-                confirmarContrasena: {
-                    required,
-                    sameAsContrasena: sameAs('contrasena')
+                usuario: {
+                    nombre: { required },
+                    correo: {
+                        required,
+                        email
+                    },
+                    contrasena: {
+                        required: requiredIf(() => {
+                            return !this.onUpdate;
+                        }),
+                        minLength: minLength(6)
+                    },
+                    confirmarContrasena: {
+                        required: requiredIf(() => {
+                            return !this.onUpdate;
+                        }),
+                        sameAsContrasena: sameAs('contrasena')
+                    }
                 }
             }
-        }
+        };
     },
     async mounted() {
         await this.listarPermisos();
@@ -643,7 +684,7 @@ export default {
             this.$v.$touch();
 
             if (!this.$v.$invalid) {
-                this.$emit('submit', this.form);
+                this.$emit(!this.onUpdate ? 'create' : 'update', this.form);
             }
         }
     }

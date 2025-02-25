@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
 
@@ -155,6 +156,23 @@ class EmpresaController extends Controller
 		}
 	}
 
+	public function getFilePreview($src)
+	{
+		try {
+			$storage = Storage::disk('archivos');
+
+			if (!$storage->exists($src)) {
+				return null;
+			}
+
+			$file = $storage->get($src);
+			return base64_encode($file);
+		} catch (\Exception $e) {
+			Log::error("Error al obtener el archivo: {$src}", ['exception' => $e->getMessage()]);
+			return null;
+		}
+	}
+
 	public function edit($id)
 	{
 		try {
@@ -164,15 +182,12 @@ class EmpresaController extends Controller
 				'user.directPermissions'
 			])->findOrFail($id);
 
-			if (isset($empresa->documento_empresa->src_representante_legal)) {
-				$representanteLegalSrc = Storage::disk('archivos')->get($empresa->documento_empresa->src_representante_legal);
-				$empresa->documento_empresa->src_representante_legal = base64_encode($representanteLegalSrc);
+			if ($empresa->documento_empresa) {
+				$documento = $empresa->documento_empresa;
 
-				$camaraComercioSrc = Storage::disk('archivos')->get($empresa->documento_empresa->src_camara_comercio);
-				$empresa->documento_empresa->src_camara_comercio = base64_encode($camaraComercioSrc);
-
-				$rutSrc = Storage::disk('archivos')->get($empresa->documento_empresa->src_rut);
-				$empresa->documento_empresa->src_rut = base64_encode($rutSrc);
+				$documento->src_representante_legal = $this->getFilePreview($documento->src_representante_legal);
+				$documento->src_camara_comercio = $this->getFilePreview($documento->src_camara_comercio);
+				$documento->src_rut = $this->getFilePreview($documento->src_rut);
 			}
 
 			return view('empresas.edit', [
@@ -191,81 +206,80 @@ class EmpresaController extends Controller
 		$empresaRequest = json_decode($request->empresa);
 		$representanteLegalRequest = json_decode($request->representante_legal);
 		$documentacionRequest = json_decode($request->documentacion);
+		$empresaUsuario = json_decode($request->usuario);
 
-		$permisos = json_decode($request->consultas_diarias);
+		$permisos = $empresaUsuario->permisos;
 		$permisosIds = collect($permisos)->pluck('id');
 
 		try {
 			DB::beginTransaction();
-			$empresa = Empresa::find($id);
-			if (empty($empresa)) abort(404, 'Empresa no encontrada');
+
+			$empresa = Empresa::findOrFail($id);
 			$empresa->update([
 				'tipo_sociedad_id' => $empresaRequest->tipo_sociedad_id,
 				'tipo_empresa_id' => $request->tipo_empresa_id,
 				'tipo_documento_id' => $empresaRequest->tipo_documento_id,
-				'ciudad_id' => $empresaRequest->ciudad_id,
-				'consultas_diarias' => 0,
+				'consultas_diarias' => $request->consultas_diarias ?? 0,
 				'nombre' => $empresaRequest->nombre,
 				'numero_documento' => $empresaRequest->numero_documento,
 				'correo' => $empresaRequest->correo,
 				'pagina_web' => $empresaRequest->pagina_web,
-				'pais' => $empresaRequest->pais,
+				'pais_id' => $empresaRequest->pais_id,
+				'departamento_id' => $empresaRequest->departamento_id,
+				'ciudad_id' => $empresaRequest->ciudad_id,
 				'direccion' => $empresaRequest->direccion,
 			]);
 
-			$empresa->permisos()->sync($permisosIds);
+			$usuario = User::where('empresa_id', $empresa->id)->first();
+			$usuario->update([
+				'name' => $empresaUsuario->nombre,
+				'email' => $empresaUsuario->correo,
+			]);
 
-			$representanteLegalEmpresa = RepresentanteLegalEmpresa::where('empresa_id', $empresa->id)->first();
-			if (!empty($representanteLegalEmpresa)) {
-				$representanteLegalEmpresa->update([
+			// Asignar permisos
+			$usuario->syncPermissions($permisosIds);
+
+			RepresentanteLegalEmpresa::updateOrCreate(
+				['empresa_id' => $empresa->id],
+				[
 					'tipo_documento_id' => $representanteLegalRequest->tipo_documento_id,
 					'nombres_completos' => $representanteLegalRequest->nombres_completos,
 					'numero_documento' => $representanteLegalRequest->numero_documento,
 					'nacionalidad' => $representanteLegalRequest->nacionalidad,
 					'correo' => $representanteLegalRequest->correo,
 					'numero_contacto' => $representanteLegalRequest->numero_contacto,
-				]);
-			}
-			$documentoEmpresa = DocumentoEmpresa::where('empresa_id', $empresa->id)->first();
-			if (!empty($documentoEmpresa)) {
-				$documentoEmpresa->update([
+				]
+			);
+
+			$documentoEmpresa = DocumentoEmpresa::updateOrCreate(
+				['empresa_id' => $empresa->id],
+				[
 					'iva' => $documentacionRequest->iva,
 					'contribuyente' => $documentacionRequest->contribuyente,
-					'autoretenedor' => $documentacionRequest->autoretenedor
-				]);
-				if ($request->hasFile('src_representante_legal')) {
-					$representanteLegalFile = $request->file('src_representante_legal');
-					$extension = $representanteLegalFile->getClientOriginalExtension();
-					$representanteLegalPath = 'empresas/' . $empresa->id . '/';
-					$fileName = 'representante_legal.' . $extension;
-					$representanteLegalDocUpload = Storage::disk('archivos')->put($representanteLegalPath . $fileName, file_get_contents($representanteLegalFile));
-					if ($representanteLegalDocUpload) {
-						$documentoEmpresa->update(['src_representante_legal' => $representanteLegalPath . $fileName]);
-					}
-				}
+					'autoretenedor' => $documentacionRequest->autoretenedor,
+				]
+			);
 
-				if ($request->hasFile('src_camara_comercio')) {
-					$camaraComercioFile = $request->file('src_camara_comercio');
-					$extension = $camaraComercioFile->getClientOriginalExtension();
-					$camaraComercioPath = 'empresas/' . $empresa->id . '/';
-					$fileName = 'camara_comercio.' . $extension;
-					$camaraComercioDocUpload = Storage::disk('archivos')->put($camaraComercioPath . $fileName, file_get_contents($camaraComercioFile));
-					if ($camaraComercioDocUpload) {
-						$documentoEmpresa->update(['src_camara_comercio' => $camaraComercioPath . $fileName]);
-					}
-				}
+			$documentos = [
+				'src_representante_legal' => 'representante_legal',
+				'src_camara_comercio' => 'camara_comercio',
+				'src_rut' => 'rut',
+			];
 
-				if ($request->hasFile('src_rut')) {
-					$rutFile = $request->file('src_rut');
-					$extension = $rutFile->getClientOriginalExtension();
-					$rutDocPath = 'empresas/' . $empresa->id . '/';
-					$fileName = 'rut.' . $extension;
-					$rutDocPathUpload = Storage::disk('archivos')->put($rutDocPath . $fileName, file_get_contents($rutFile));
-					if ($rutDocPathUpload) {
-						$documentoEmpresa->update(['src_rut' => $rutDocPath . $fileName]);
+			foreach ($documentos as $campo => $nombreArchivo) {
+				if ($request->hasFile($campo)) {
+					$file = $request->file($campo);
+					$extension = $file->getClientOriginalExtension();
+					$path = 'empresas/' . $empresa->id . '/';
+					$fileName = $nombreArchivo . '.' . $extension;
+					$uploadSuccess = Storage::disk('archivos')->put($path . $fileName, file_get_contents($file));
+
+					if ($uploadSuccess) {
+						$documentoEmpresa->update([$campo => $path . $fileName]);
 					}
 				}
 			}
+
 			DB::commit();
 			return response()->json(['status' => 200]);
 		} catch (Throwable $e) {
@@ -280,10 +294,25 @@ class EmpresaController extends Controller
 	{
 		try {
 			DB::beginTransaction();
-			$empresa = Empresa::find($id);
-			DocumentoEmpresa::where('empresa_id', $empresa->id)->delete();
+
+			$empresa = Empresa::findOrFail($id);
+
+			// Eliminar archivos
+			$documentos = DocumentoEmpresa::where('empresa_id', $empresa->id)->first();
+			if ($documentos) {
+				Storage::disk('archivos')->delete([
+					$documentos->src_representante_legal,
+					$documentos->src_camara_comercio,
+					$documentos->src_rut
+				]);
+				$documentos->delete();
+			}
+
 			RepresentanteLegalEmpresa::where('empresa_id', $empresa->id)->delete();
+			User::where('empresa_id', $empresa->id)->delete();
+
 			$empresa->delete();
+
 			DB::commit();
 			return response()->json(['status' => 200]);
 		} catch (Throwable $e) {

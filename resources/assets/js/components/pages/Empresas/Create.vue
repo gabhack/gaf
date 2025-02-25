@@ -1,6 +1,6 @@
 <template>
     <b-container fluid class="my-3">
-        <Form @submit="crearEmpresa" />
+        <Form @create="crearEmpresa" />
     </b-container>
 </template>
 

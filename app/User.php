@@ -93,6 +93,25 @@ class User extends Authenticatable
         $this->directPermissions()->detach($permission->id);
     }
 
+    public function syncPermissions($permissions)
+    {
+        $permissions = collect($permissions)->map(function ($permission) {
+            if (is_string($permission)) {
+                return Permiso::where('name', $permission)->first();
+            }
+
+            if (is_numeric($permission)) {
+                return Permiso::find($permission);
+            }
+
+            return $permission;
+        });
+
+        $permissions = $permissions->filter();
+
+        $this->directPermissions()->sync($permissions->pluck('id'));
+    }
+
     public function hasPermission($permission)
     {
         if ($this->rolePermissions()->contains('name', $permission)) {
