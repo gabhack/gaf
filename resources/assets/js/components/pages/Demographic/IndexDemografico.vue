@@ -1,46 +1,68 @@
 <template>
     <div>
+        <!-- Overlay de carga -->
         <div v-if="isLoading" class="loading-overlay">
             <div class="spinner"></div>
         </div>
 
-        <div class="panel mb-3 col-md-12" style="margin-left: 20px;">
-            <div class="panel-heading" style="background-color: white;">
-                <b style="color: black;">Datos Demográficos</b>
+        <!-- Panel principal -->
+        <div class="panel mb-3 col-md-12" style="margin-left: 20px">
+            <div class="panel-heading" style="background-color: white">
+                <b style="color: black">Datos Demográficos</b>
             </div>
             <div class="panel-body">
                 <div style="background-color: white">
                     <hd style="color: black">
                         Por favor, asegúrese de que el archivo Excel tiene una columna con el encabezado
                         <strong>'cédulas'</strong> y que contiene los números de cédula.
-                    </hd><br><br>
-                </div > 
+                    </hd>
+                    <br /><br />
+                </div>
+
+                <!-- Subir archivo -->
                 <div class="form-group d-flex align-items-center">
                     <div class="custom-file-upload">
-                        <input type="file" @change="handleFileUpload" id="file-upload" class="file-input"/>
+                        <input
+                            type="file"
+                            @change="handleFileUpload"
+                            id="file-upload"
+                            class="file-input"
+                        />
                         <label for="file-upload">Elegir archivo</label>
                         <span v-if="fileName" class="file-name">{{ fileName }}</span>
                     </div>
                 </div>
-                        <CustomButton 
-                        v-if="file" 
-                        @click="uploadFile" class="btn btn-primary" 
-                        style="white-space: nowrap; background-color: #2c8c73;">Subir Archivo
-                        </CustomButton>
-                        <CustomButton v-if="!isLoadingResults" @click="toggleRecentConsultations" class="btn btn-info float-right" style="white-space: nowrap; background-color: #2c8c73; margin-left: 20px;">
-                            {{ showRecentConsultations ? 'Ocultar Recientes' : 'Consultas Recientes'}}
-                        </CustomButton>
-                </div>
-               
+                <CustomButton
+                    v-if="file"
+                    @click="uploadFile"
+                    class="btn btn-primary"
+                    style="white-space: nowrap; background-color: #2c8c73"
+                >
+                    Subir Archivo
+                </CustomButton>
+
+                <!-- Botón para mostrar/ocultar consultas recientes -->
+                <CustomButton
+                    @click="toggleRecentConsultations"
+                    class="btn btn-info float-right"
+                    style="white-space: nowrap; background-color: #2c8c73; margin-left: 20px"
+                >
+                    {{ showRecentConsultations ? 'Ocultar Recientes' : 'Consultas Recientes' }}
+                </CustomButton>
+            </div>
         </div>
 
-        <!-- Card para mostrar las consultas recientes -->
+        <!-- Sección para mostrar las consultas recientes -->
         <div v-if="showRecentConsultations && recentConsultations.length" class="card recent-consultations">
             <div class="card-header">
                 <b>Consultas Recientes</b>
             </div>
             <ul class="list-group list-group-flush">
-                <li v-for="consultation in recentConsultations" :key="consultation.id" class="list-group-item">
+                <li
+                    v-for="consultation in recentConsultations"
+                    :key="consultation.id"
+                    class="list-group-item"
+                >
                     <a href="#" @click.prevent="loadConsultationData(consultation.consulta_data)">
                         {{ consultation.created_at }}
                     </a>
@@ -48,18 +70,40 @@
             </ul>
         </div>
 
+        <!-- Tabla de resultados -->
         <div v-if="results.length" class="panel mb-3 col-md-12">
             <div class="panel-heading" style="background-color: white">
                 <div class="float-right">
-                    <button @click="exportToPDF" class="btn btn-danger mr-2" style="background-color: #2c8c73">Exportar a PDF</button>
-                    <button @click="exportToExcel" class="btn btn-success" style="background-color: #2c8c73">Exportar a Excel</button>
-                    <CustomButton @click="toggleRecentConsultations" class="btn btn-info float-right" style="white-space: nowrap; background-color: #2c8c73; margin-left: 20px;">
-                    {{ showRecentConsultations ? 'Ocultar Vista' : 'Ver Recientes'}}
-                </CustomButton>
-                </div><br>
-                <b style="color: black; margin-left: 20px;">Resultado:</b>
+                    <!-- Botón Exportar PDF -->
+                    <button
+                        @click="exportToPDF"
+                        class="btn btn-danger mr-2"
+                        style="background-color: #2c8c73"
+                    >
+                        Exportar a PDF
+                    </button>
+                    <!-- Botón Exportar Excel -->
+                    <button
+                        @click="exportToExcel"
+                        class="btn btn-success"
+                        style="background-color: #2c8c73"
+                    >
+                        Exportar a Excel
+                    </button>
+                    <!-- Botón para mostrar/ocultar consultas recientes (también aquí) -->
+                    <CustomButton
+                        @click="toggleRecentConsultations"
+                        class="btn btn-info float-right"
+                        style="white-space: nowrap; background-color: #2c8c73; margin-left: 20px"
+                    >
+                        {{ showRecentConsultations ? 'Ocultar Vista' : 'Ver Recientes' }}
+                    </CustomButton>
+                </div>
+                <br />
+                <b style="color: black; margin-left: 20px">Resultado:</b>
             </div>
             <div class="panel-body">
+                <!-- Buscador simple (opcional) -->
                 <div class="form-group">
                     <input
                         type="text"
@@ -68,6 +112,7 @@
                         class="form-control mb-3"
                     />
                 </div>
+                <!-- Tabla de datos -->
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
@@ -102,13 +147,10 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="pagination">
-                    <button v-if="page > 1" @click="fetchPaginatedResults(page - 1)" class="btn btn-primary" style="background-color: #2c8c73">Anterior</button>
-                    <button @click="fetchPaginatedResults(page + 1)" :disabled="page * perPage >= total" class="btn btn-primary" style="background-color: #2c8c73">Siguiente</button>
-                </div>
             </div>
         </div>
 
+        <!-- Mensaje de error (si ocurre) -->
         <div v-if="error" class="alert alert-danger mt-3">
             {{ error }}
         </div>
@@ -118,95 +160,88 @@
 <script>
 import axios from 'axios';
 import CustomButton from '../../customComponents/CustomButton.vue';
+// Importaciones para PDF y Excel
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 export default {
     name: 'DemographicIndex',
+    components: {
+        CustomButton
+    },
     data() {
         return {
             file: null,
-            fileName:'',
+            fileName: '',
             isLoading: false,
-            isLoadingResults: false,
             results: [],
             searchQuery: '',
             error: null,
             recentConsultations: [],
-            showRecentConsultations: false,
-            page: 1,
-            perPage: 30,
-            total: 0
+            showRecentConsultations: false
         };
     },
     computed: {
+        // Filtro básico: si la cadena de búsqueda tiene más de 2 caracteres,
+        // filtra por doc. Si no, muestra todo.
         filteredResults() {
             if (this.searchQuery.length < 3) {
                 return this.results;
             }
-            return this.results.filter(result => {
-                return result.doc.toString().includes(this.searchQuery);
-            });
+            return this.results.filter(result =>
+                result.doc.toString().includes(this.searchQuery)
+            );
         }
     },
     methods: {
         capitalize(text) {
-        if (!text) return '';
-        return text.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
-    },
+            if (!text) return '';
+            return text
+                .toLowerCase()
+                .replace(/\b\w/g, char => char.toUpperCase());
+        },
         handleFileUpload(event) {
             this.file = event.target.files[0];
-            this.fileName = this.file ? this.file.name: '';
+            this.fileName = this.file ? this.file.name : '';
         },
         async uploadFile() {
-            if (!this.file) {
-                alert('Seleccione un archivo primero');
-                return;
-            }
-            let formData = new FormData();
-            formData.append('file', this.file);
+  if (!this.file) {
+    alert('Seleccione un archivo primero');
+    return;
+  }
+  let formData = new FormData();
+  formData.append('file', this.file);
 
-            try {
-                this.isLoading = true;
-                let response = await axios.post('/demografico/upload', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                });
+  try {
+    this.isLoading = true;
+    let response = await axios.post('/demografico/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    // La respuesta son TODOS los resultados sin paginación
+    console.log('Resultados:', response.data);
+    this.results = response.data;
+    this.error = null;
+  } catch (error) {
+    if (error.response && error.response.data) {
+      this.error = error.response.data.error;
+    } else {
+      this.error = 'Error subiendo el archivo';
+    }
+  } finally {
+    this.isLoading = false;
+  }
+},
 
-                console.log('Resultados:', response.data); // Log para ver los resultados
-                this.results = response.data;
-                this.error = null;
-                await this.fetchPaginatedResults(1); // Fetch the first page of results
-            } catch (error) {
-                if (error.response && error.response.data) {
-                    this.error = error.response.data.error;
-                } else {
-                    this.error = 'Error subiendo el archivo';
-                }
-                this.isLoading = false; // Stop loading if there is an error
-            }
-        },
+        // Consultar las consultas recientes
         async fetchRecentConsultations() {
             try {
                 let response = await axios.get('/demografico/recent-consultations');
                 this.recentConsultations = response.data;
             } catch (error) {
                 console.error('Error fetching recent consultations:', error);
-            }
-        },
-        async fetchPaginatedResults(page) {
-            this.isLoadingResults = true;
-            this.isLoading = true;
-            try {
-                let response = await axios.get(`/demografico/fetch-paginated-results-demografico?page=${page}&perPage=${this.perPage}`);
-                this.results = response.data.data;
-                this.total = response.data.total;
-                this.page = response.data.page;
-                this.perPage = response.data.perPage;
-            } catch (error) {
-                console.error('Error fetching paginated results:', error);
-                this.error = 'Error al buscar los resultados paginados';
-            } finally {
-                this.isLoading = false; // Stop loading after results are fetched
             }
         },
         loadConsultationData(data) {
@@ -218,9 +253,24 @@ export default {
             }
             this.showRecentConsultations = !this.showRecentConsultations;
         },
+        // Exportar a PDF
         exportToPDF() {
             const doc = new jsPDF();
-            const columns = ['Documento', 'Nombre', 'Celular', 'Teléfono Fijo', 'Email', 'Ciudad', 'Dirección', 'Centro de Costo', 'Tipo de Contrato', 'Edad', 'Fecha de Nacimiento'];
+            // Encabezados
+            const columns = [
+                'Documento',
+                'Nombre',
+                'Celular',
+                'Teléfono Fijo',
+                'Email',
+                'Ciudad',
+                'Dirección',
+                'Centro de Costo',
+                'Tipo de Contrato',
+                'Edad',
+                'Fecha de Nacimiento'
+            ];
+            // Datos
             const rows = this.results.map(item => [
                 item.doc,
                 item.nombre_usuario,
@@ -237,8 +287,23 @@ export default {
             doc.autoTable(columns, rows);
             doc.save('resultados.pdf');
         },
+        // Exportar a Excel
         exportToExcel() {
-            const columns = ['Documento', 'Nombre', 'Celular', 'Teléfono Fijo', 'Email', 'Ciudad', 'Dirección', 'Centro de Costo', 'Tipo de Contrato', 'Edad', 'Fecha de Nacimiento'];
+            // Encabezados
+            const columns = [
+                'Documento',
+                'Nombre',
+                'Celular',
+                'Teléfono Fijo',
+                'Email',
+                'Ciudad',
+                'Dirección',
+                'Centro de Costo',
+                'Tipo de Contrato',
+                'Edad',
+                'Fecha de Nacimiento'
+            ];
+            // Datos
             const rows = this.results.map(item => [
                 item.doc,
                 item.nombre_usuario,
@@ -253,13 +318,13 @@ export default {
                 item.fecha_nacimiento
             ]);
 
-            // Convertir las filas a una hoja de trabajo de Excel
+            // Crear hoja de cálculo
             const worksheet = XLSX.utils.aoa_to_sheet([columns, ...rows]);
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, 'Resultados');
             XLSX.writeFile(workbook, 'resultados.xlsx');
         }
-    },
+    }
 };
 </script>
 
@@ -286,14 +351,14 @@ export default {
     animation: spin 2s linear infinite;
 }
 
-.custom-file-upload .file-input{
-    display:none;
+.custom-file-upload .file-input {
+    display: none;
 }
 
-.custom-file-upload label{
-    display:inline-block;
+.custom-file-upload label {
+    display: inline-block;
     padding: 10px 18px;
-    color:white;
+    color: white;
     background-color: #2c8c73;
     border-radius: 20px;
     cursor: pointer;
@@ -301,19 +366,23 @@ export default {
     font-size: 14px;
 }
 
-.custom-file-upload label:hover{
+.custom-file-upload label:hover {
     background-color: #2c8c73;
 }
 
-.file-name{
-    margin-left:10px;
+.file-name {
+    margin-left: 10px;
     font-size: 14px;
-    color:black;
+    color: black;
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .panel-heading {

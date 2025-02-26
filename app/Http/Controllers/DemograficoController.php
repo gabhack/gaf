@@ -23,65 +23,73 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 class DemograficoController extends Controller
 {
 
-public function upload(Request $request)
-{
-    ini_set('memory_limit', '2048M');
-    ini_set('max_execution_time', '600');
-
-    Log::info('Inicio del proceso de carga de archivo');
-
-    try {
-        $file = $request->file('file');
-        if (!$file || !$file->isValid()) {
-            throw new \Exception('Error uploading file');
+    public function upload(Request $request)
+    {
+        ini_set('memory_limit', '2048M');
+        ini_set('max_execution_time', '600');
+    
+        Log::info('Inicio del proceso de carga de archivo');
+    
+        try {
+            $file = $request->file('file');
+            if (!$file || !$file->isValid()) {
+                throw new \Exception('Error uploading file');
+            }
+    
+            Log::info('Archivo cargado correctamente');
+    
+            $filePath = $file->getRealPath();
+            Log::info('Inicio de la carga del archivo Excel');
+            $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader('Xlsx');
+            $reader->setReadDataOnly(true);
+            $spreadsheet = $reader->load($filePath);
+            Log::info('Archivo Excel cargado correctamente');
+    
+            $worksheet = $spreadsheet->getActiveSheet();
+            Log::info('Inicio de la lectura del encabezado');
+            $highestColumn = $worksheet->getHighestColumn();
+            $headerRange = 'A1:' . $highestColumn . '1';
+            $header = $worksheet->rangeToArray($headerRange)[0];
+            Log::info('Excel header:', ['header' => $header]);
+    
+            // Buscamos la columna "cedulas"
+            $cedulasColumn = array_search('cedulas', array_map('strtolower', $header));
+            if ($cedulasColumn === false) {
+                throw new \Exception('No se encontró la columna "cedulas" en el Excel');
+            }
+    
+            Log::info('Cedulas column index:', ['cedulasColumn' => $cedulasColumn]);
+    
+            // Recorremos todas las filas a partir de la 2, extrayendo el valor de la columna "cedulas"
+            $cedulas = [];
+            foreach ($worksheet->getRowIterator(2) as $row) {
+                $cell = $worksheet->getCellByColumnAndRow($cedulasColumn + 1, $row->getRowIndex());
+                // Convertimos a string y limpiamos espacios
+                $valor = trim($cell->getValue());
+                if ($valor !== '') {
+                    $cedulas[] = $valor;
+                }
+            }
+    
+            Log::info('Cedulas extraídas:', ['cedulas' => $cedulas]);
+    
+            // Omitimos caché/paginación: directamente procesamos las cédulas
+            $results = $this->processCedulasDemografico($cedulas);
+    
+            Log::info('Fin del proceso de carga de archivo');
+            // Retornamos TODOS los resultados en un solo JSON
+            return response()->json($results);
+    
+        } catch (\Exception $e) {
+            Log::error('Error processing file upload: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
+            ]);
+            return response()->json(['error' => 'Error procesando el archivo: ' . $e->getMessage()], 500);
         }
-
-        Log::info('Archivo cargado correctamente');
-
-        $filePath = $file->getRealPath();
-        Log::info('Inicio de la carga del archivo Excel');
-        $reader = IOFactory::createReader('Xlsx');
-        $reader->setReadDataOnly(true);
-        $spreadsheet = $reader->load($filePath);
-        Log::info('Archivo Excel cargado correctamente');
-
-        $worksheet = $spreadsheet->getActiveSheet();
-        Log::info('Inicio de la lectura del encabezado');
-        $highestColumn = $worksheet->getHighestColumn();
-        $headerRange = 'A1:' . $highestColumn . '1';
-        $header = $worksheet->rangeToArray($headerRange)[0];
-        Log::info('Excel header:', ['header' => $header]);
-
-        $cedulasColumn = array_search('cedulas', array_map('strtolower', $header));
-        if ($cedulasColumn === false) {
-            throw new \Exception('No se encontró la columna "cedulas"');
-        }
-
-        Log::info('Cedulas column index:', ['cedulasColumn' => $cedulasColumn]);
-
-        $cedulas = [];
-        foreach ($worksheet->getRowIterator(2) as $row) {
-            $cell = $worksheet->getCellByColumnAndRow($cedulasColumn + 1, $row->getRowIndex());
-            $cedulas[] = trim($cell->getValue());
-        }
-
-        Log::info('Cedulas extraídas:', ['cedulas' => $cedulas]);
-
-        // Guardar en caché por 1 hora
-        $cacheKey = 'cedulas_' . Auth::id();
-        Cache::put($cacheKey, $cedulas, 3600);
-
-        Log::info('Fin del proceso de carga de archivo');
-        return response()->json(['message' => 'Cédulas cargadas correctamente']);
-    } catch (\Exception $e) {
-        Log::error('Error processing file upload: ' . $e->getMessage(), [
-            'trace' => $e->getTraceAsString(),
-            'file' => $e->getFile(),
-            'line' => $e->getLine()
-        ]);
-        return response()->json(['error' => 'Error procesando el archivo: ' . $e->getMessage()], 500);
     }
-}
+    
 
 
 public function fetchPaginatedResults(Request $request)
