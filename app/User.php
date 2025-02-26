@@ -15,8 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'roles_id',
-        'empresa_id',
+        'role_id',
         'id_company',
         'id_padre',
         'name',
@@ -31,23 +30,24 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'remember_token',
+        'password',
     ];
 
     protected $appends = ['consultas_diarias'];
 
-    public function rol()
+    public function role()
     {
-        return $this->hasOne(Roles::class, 'id', 'roles_id');
+        return $this->belongsTo(Role::class);
     }
 
     public function rolePermissions()
     {
-        return $this->rol ? $this->rol->permissions : collect([]);
+        return $this->role ? $this->role->permissions : collect([]);
     }
 
     public function directPermissions()
     {
-        return $this->morphToMany(Permiso::class, 'model', 'model_has_permissions', 'model_id', 'permission_id');
+        return $this->morphToMany(Permission::class, 'model', 'model_has_permissions', 'model_id', 'permission_id');
     }
 
     public function getConsultasDiariasAttribute()
@@ -59,11 +59,11 @@ class User extends Authenticatable
     public function givePermission($permission)
     {
         if (is_string($permission)) {
-            $permission = Permiso::where('name', $permission)->first();
+            $permission = Permission::where('name', $permission)->first();
         }
 
         if (is_numeric($permission)) {
-            $permission = Permiso::find($permission);
+            $permission = Permission::find($permission);
         }
 
         if (!$permission) {
@@ -79,11 +79,11 @@ class User extends Authenticatable
     public function revokePermission($permission)
     {
         if (is_string($permission)) {
-            $permission = Permiso::where('name', $permission)->first();
+            $permission = Permission::where('name', $permission)->first();
         }
 
         if (is_numeric($permission)) {
-            $permission = Permiso::find($permission);
+            $permission = Permission::find($permission);
         }
 
         if (!$permission) {
@@ -97,11 +97,11 @@ class User extends Authenticatable
     {
         $permissions = collect($permissions)->map(function ($permission) {
             if (is_string($permission)) {
-                return Permiso::where('name', $permission)->first();
+                return Permission::where('name', $permission)->first();
             }
 
             if (is_numeric($permission)) {
-                return Permiso::find($permission);
+                return Permission::find($permission);
             }
 
             return $permission;
@@ -127,7 +127,12 @@ class User extends Authenticatable
 
     public function empresa()
     {
-        return $this->belongsTo(Empresa::class, 'empresa_id', 'id');
+        return $this->hasOne(Empresa::class);
+    }
+
+    public function comercial()
+    {
+        return $this->hasOne(Comercial::class);
     }
 
     public function padre()
@@ -138,15 +143,6 @@ class User extends Authenticatable
     public function company()
     {
         return $this->hasOne('\App\User', 'id', 'id_company');
-    }
-
-    public function hasRole($rol)
-    {
-        if ($this->rol->rol == $rol) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public function consultas()

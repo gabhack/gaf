@@ -3,27 +3,34 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Roles extends Model
+class Role extends Model
 {
-    use SoftDeletes;
+    protected $fillable = ['name'];
 
-    protected $table = 'roles';
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 
     public function permissions()
     {
-        return $this->belongsToMany(Permiso::class, 'role_has_permissions', 'role_id', 'permission_id');
+        return $this->belongsToMany(Permission::class, 'role_has_permissions');
+    }
+
+    public function hasPermission($permission)
+    {
+        return $this->permissions->contains('name', $permission);
     }
 
     public function givePermission($permission)
     {
         if (is_string($permission)) {
-            $permission = Permiso::where('name', $permission)->first();
+            $permission = Permission::where('name', $permission)->first();
         }
 
         if (is_numeric($permission)) {
-            $permission = Permiso::find($permission);
+            $permission = Permission::find($permission);
         }
 
         if (!$permission) {
@@ -39,11 +46,11 @@ class Roles extends Model
     public function revokePermission($permission)
     {
         if (is_string($permission)) {
-            $permission = Permiso::where('name', $permission)->first();
+            $permission = Permission::where('name', $permission)->first();
         }
 
         if (is_numeric($permission)) {
-            $permission = Permiso::find($permission);
+            $permission = Permission::find($permission);
         }
 
         if (!$permission) {

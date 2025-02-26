@@ -1,7 +1,7 @@
 <?php
 
-use App\Permiso;
-use App\Roles;
+use App\Permission;
+use App\Role;
 use Illuminate\Database\Seeder;
 
 class PermissionsTableSeeder extends Seeder
@@ -25,11 +25,17 @@ class PermissionsTableSeeder extends Seeder
         ];
 
         foreach ($permissions as $permission) {
-            Permiso::updateOrCreate(['name' => $permission]);
+            Permission::updateOrCreate([
+                'name' => $permission,
+                'guard_name' => 'web'
+            ]);
         }
 
-        // Asignar permisos al rol EMPRESA
-        $rolEmpresa = Roles::firstOrCreate(['rol' => 'EMPRESA']);
+        // Assign permissions to EMPRESA role
+        $rolEmpresa = Role::firstOrCreate([
+            'name' => 'EMPRESA',
+            'guard_name' => 'web'
+        ]);
         $rolEmpresa->givePermission('ver usuarios');
         $rolEmpresa->givePermission('ver area comercial');
     }

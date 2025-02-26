@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ Auth::user()->rol->rol == 'ADMIN_HEGO' ? 'HEGO' : 'AMI' }} - @yield('title')</title>
+    <title>{{ Auth::user()->role->name == 'ADMIN_HEGO' ? 'HEGO' : 'AMI' }} - @yield('title')</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">

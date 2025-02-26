@@ -62,12 +62,12 @@
                                 <div
                                     class="col-6"
                                     v-if="
-                                        user.roles_id === 1 ||
-                                        user.roles_id === '1' ||
-                                        user.roles_id === 4 ||
-                                        user.roles_id === '4' ||
-                                        user.roles_id === 5 ||
-                                        user.roles_id === '5'
+                                        user.rol_id === 1 ||
+                                        user.rol_id === '1' ||
+                                        user.rol_id === 4 ||
+                                        user.rol_id === '4' ||
+                                        user.rol_id === 5 ||
+                                        user.rol_id === '5'
                                     "
                                 >
                                     <b class="panel-label">FONDO:</b>
@@ -126,12 +126,12 @@
                                 <div
                                     class="col-md-6"
                                     v-if="
-                                        user.roles_id === 1 ||
-                                        user.roles_id === '1' ||
-                                        user.roles_id === 4 ||
-                                        user.roles_id === '4' ||
-                                        user.roles_id === 5 ||
-                                        user.roles_id === '5'
+                                        user.role_id === 1 ||
+                                        user.role_id === '1' ||
+                                        user.role_id === 4 ||
+                                        user.role_id === '4' ||
+                                        user.role_id === 5 ||
+                                        user.role_id === '5'
                                     "
                                 >
                                     <b class="panel-label">NOMBRE DEL BANCO DONDE LE CONSIGNAN:</b>
@@ -142,12 +142,12 @@
                                 <div
                                     class="col-md-6"
                                     v-if="
-                                        user.roles_id === 1 ||
-                                        user.roles_id === '1' ||
-                                        user.roles_id === 4 ||
-                                        user.roles_id === '4' ||
-                                        user.roles_id === 5 ||
-                                        user.roles_id === '5'
+                                        user.role_id === 1 ||
+                                        user.role_id === '1' ||
+                                        user.role_id === 4 ||
+                                        user.role_id === '4' ||
+                                        user.role_id === 5 ||
+                                        user.role_id === '5'
                                     "
                                 >
                                     <b class="panel-label">SUCURSAL BANCO:</b>
@@ -235,12 +235,12 @@
                                 <div
                                     class="col-6"
                                     v-if="
-                                        user.roles_id === 1 ||
-                                        user.roles_id === '1' ||
-                                        user.roles_id === 4 ||
-                                        user.roles_id === '4' ||
-                                        user.roles_id === 5 ||
-                                        user.roles_id === '5'
+                                        user.role_id === 1 ||
+                                        user.role_id === '1' ||
+                                        user.role_id === 4 ||
+                                        user.role_id === '4' ||
+                                        user.role_id === 5 ||
+                                        user.role_id === '5'
                                     "
                                 >
                                     <b class="panel-label">FECHA CARGA DATA:</b>
@@ -251,12 +251,12 @@
                                 <div
                                     class="col-6"
                                     v-if="
-                                        user.roles_id === 1 ||
-                                        user.roles_id === '1' ||
-                                        user.roles_id === 4 ||
-                                        user.roles_id === '4' ||
-                                        user.roles_id === 5 ||
-                                        user.roles_id === '5'
+                                        user.role_id === 1 ||
+                                        user.role_id === '1' ||
+                                        user.role_id === 4 ||
+                                        user.role_id === '4' ||
+                                        user.role_id === 5 ||
+                                        user.role_id === '5'
                                     "
                                 >
                                     <b class="panel-label">MES CARGA DATA:</b>
@@ -267,12 +267,12 @@
                                 <div
                                     class="col-6"
                                     v-if="
-                                        user.roles_id === 1 ||
-                                        user.roles_id === '1' ||
-                                        user.roles_id === 4 ||
-                                        user.roles_id === '4' ||
-                                        user.roles_id === 5 ||
-                                        user.roles_id === '5'
+                                        user.role_id === 1 ||
+                                        user.role_id === '1' ||
+                                        user.role_id === 4 ||
+                                        user.role_id === '4' ||
+                                        user.role_id === 5 ||
+                                        user.role_id === '5'
                                     "
                                 >
                                     <b class="panel-label">AÃ‘O CARGA DATA:</b>
@@ -290,7 +290,7 @@
                         <div class="panel-heading"><b>OBLIGACIONES VIGENTES AL DIA</b></div>
                         <div class="panel-body">
                             <div class="row">
-                                <!-- <div class="col-md-2" v-if="user.roles_id === 1 || user.roles_id === '1' || user.roles_id === 4 || user.roles_id === '4' || user.roles_id === 5 || user.roles_id === '5'">
+                                <!-- <div class="col-md-2" v-if="user.role_id === 1 || user.role_id === '1' || user.role_id === 4 || user.role_id === '4' || user.role_id === 5 || user.role_id === '5'">
                     <b class="panel-label table-text">SELECCIONE PERIODO DE DATA:</b>
                     <div>
                         <input type="checkbox" class="mr-2" v-on:click="(e)=>vAplicado(e.target.checked, obligacionSelected && obligacionSelected, obligacionSelected && obligacionSelected.pagare, obligacionSelected && obligacionSelected.nomtercero)"/><p class="panel-value">{{obligacionSelected && obligacionSelected.periodo}}</p>
@@ -370,12 +370,12 @@
                                 <div
                                     class="col-md-3"
                                     v-if="
-                                        user.roles_id === 1 ||
-                                        user.roles_id === '1' ||
-                                        user.roles_id === 4 ||
-                                        user.roles_id === '4' ||
-                                        user.roles_id === 5 ||
-                                        user.roles_id === '5'
+                                        user.role_id === 1 ||
+                                        user.role_id === '1' ||
+                                        user.role_id === 4 ||
+                                        user.role_id === '4' ||
+                                        user.role_id === 5 ||
+                                        user.role_id === '5'
                                     "
                                 >
                                     <b class="panel-label table-text">VALOR TOTAL DEUDA:</b>
@@ -387,12 +387,12 @@
                                 <div
                                     class="col-md-3"
                                     v-if="
-                                        user.roles_id === 1 ||
-                                        user.roles_id === '1' ||
-                                        user.roles_id === 4 ||
-                                        user.roles_id === '4' ||
-                                        user.roles_id === 5 ||
-                                        user.roles_id === '5'
+                                        user.role_id === 1 ||
+                                        user.role_id === '1' ||
+                                        user.role_id === 4 ||
+                                        user.role_id === '4' ||
+                                        user.role_id === 5 ||
+                                        user.role_id === '5'
                                     "
                                 >
                                     <b class="panel-label table-text">VALOR PAGADO DEUDA:</b>
@@ -406,12 +406,12 @@
                                 <div
                                     class="col-md-3"
                                     v-if="
-                                        user.roles_id === 1 ||
-                                        user.roles_id === '1' ||
-                                        user.roles_id === 4 ||
-                                        user.roles_id === '4' ||
-                                        user.roles_id === 5 ||
-                                        user.roles_id === '5'
+                                        user.role_id === 1 ||
+                                        user.role_id === '1' ||
+                                        user.role_id === 4 ||
+                                        user.role_id === '4' ||
+                                        user.role_id === 5 ||
+                                        user.role_id === '5'
                                     "
                                 >
                                     <b class="panel-label table-text">FECHA INICIO DEUDA:</b>
@@ -590,12 +590,12 @@
                                 <div
                                     class="col-6"
                                     v-if="
-                                        user.roles_id === 1 ||
-                                        user.roles_id === '1' ||
-                                        user.roles_id === 4 ||
-                                        user.roles_id === '4' ||
-                                        user.roles_id === 5 ||
-                                        user.roles_id === '5'
+                                        user.role_id === 1 ||
+                                        user.role_id === '1' ||
+                                        user.role_id === 4 ||
+                                        user.role_id === '4' ||
+                                        user.role_id === 5 ||
+                                        user.role_id === '5'
                                     "
                                 >
                                     <b class="panel-label">DESCRIPCION:</b>
@@ -614,12 +614,12 @@
                                 <div
                                     class="col-6"
                                     v-if="
-                                        user.roles_id === 1 ||
-                                        user.roles_id === '1' ||
-                                        user.roles_id === 4 ||
-                                        user.roles_id === '4' ||
-                                        user.roles_id === 5 ||
-                                        user.roles_id === '5'
+                                        user.role_id === 1 ||
+                                        user.role_id === '1' ||
+                                        user.role_id === 4 ||
+                                        user.role_id === '4' ||
+                                        user.role_id === 5 ||
+                                        user.role_id === '5'
                                     "
                                 >
                                     <b class="panel-label">RECURSOS:</b>
@@ -768,12 +768,12 @@
                 <div
                     class="col-md-6"
                     v-if="
-                        user.roles_id === 1 ||
-                        user.roles_id === '1' ||
-                        user.roles_id === 4 ||
-                        user.roles_id === '4' ||
-                        user.roles_id === 5 ||
-                        user.roles_id === '5'
+                        user.role_id === 1 ||
+                        user.role_id === '1' ||
+                        user.role_id === 4 ||
+                        user.role_id === '4' ||
+                        user.role_id === 5 ||
+                        user.role_id === '5'
                     "
                 >
                     <div class="panel panel-primary mb-3">

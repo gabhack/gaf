@@ -12,7 +12,11 @@ class TipoEmpresaSeeder extends Seeder
      */
     public function run()
     {
-        collect(['Fondo de inversión', 'Fiduciaria', 'Originadores'])->map(function ($tipoEmpresa) {
+        collect([
+            'Fondo de inversión',
+            'Fiduciaria',
+            'Originadores'
+        ])->map(function ($tipoEmpresa) {
             TipoEmpresa::updateOrCreate(['nombre' => $tipoEmpresa]);
         });
     }

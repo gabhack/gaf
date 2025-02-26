@@ -12,6 +12,6 @@ class ComercialSeeder extends Seeder
      */
     public function run()
     {
-        factory(Comercial::class, 100)->create();
+        factory(Comercial::class, 50)->create();
     }
 }

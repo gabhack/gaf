@@ -38,19 +38,23 @@ class AlterTableUsersAddColumns extends Migration
     public function down()
     {
         Schema::enableForeignKeyConstraints();
-        
+
         Schema::table('users', function (Blueprint $table) {
             $table->dropForeign('users_id_padre_foreign');
             $table->dropForeign('users_id_company_foreign');
+
             if (Schema::hasColumn('users', 'id_padre')) {
                 $table->dropColumn('id_padre');
             }
+
             if (Schema::hasColumn('users', 'id_company')) {
                 $table->dropColumn('id_company');
             }
+
             if (Schema::hasColumn('users', 'creausuarios')) {
                 $table->dropColumn('creausuarios');
             }
+
             if (Schema::hasColumn('users', 'hego')) {
                 $table->dropColumn('hego');
             }

@@ -18,10 +18,9 @@ class AddPaisToEmpresasTable extends Migration
             $table->unsignedInteger('pais_id')->after('pagina_web');
             $table->foreign('pais_id')->references('id')->on('paises');
 
-            $table->integer('departamento_id')->unsigned()->after('pais_id');
+            $table->unsignedBigInteger('departamento_id')->after('pais_id');
             $table->foreign('departamento_id')->references('id')->on('departamentos');
 
-            // $table->unsignedInteger('ciudad_id')->change();
             $table->dropColumn('pais');
         });
 

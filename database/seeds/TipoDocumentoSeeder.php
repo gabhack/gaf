@@ -12,7 +12,13 @@ class TipoDocumentoSeeder extends Seeder
      */
     public function run()
     {
-        collect(['Tarjeta de identidad', 'Cédula de ciudadanía', 'Cédula de extranjería', 'NIT', 'Pasaporte'])->map(function ($tipoDocumento) {
+        collect([
+            'Tarjeta de identidad',
+            'Cédula de ciudadanía',
+            'Cédula de extranjería',
+            'NIT',
+            'Pasaporte'
+        ])->map(function ($tipoDocumento) {
             TipoDocumento::updateOrCreate(['nombre' => $tipoDocumento]);
         });
     }

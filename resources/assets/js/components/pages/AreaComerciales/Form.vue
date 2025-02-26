@@ -1,16 +1,31 @@
 <template>
     <div>
-        <h2 class="mb-5">Panel de Creación Usuarios</h2>
+        <h2 class="mb-5">Panel de {{ !onUpdate ? 'Creación' : 'Edición' }} Usuarios</h2>
         <BForm @submit.prevent="submitForm">
             <b-row>
-                <b-col cols="6">
+                <b-col cols="4">
                     <h4>Datos de Empresa</h4>
+                </b-col>
+            </b-row>
+            <b-row class="mt-4">
+                <b-col cols="4" v-if="!isCompany">
+                    <b-form-group label="Empresa" label-for="empresa_id">
+                        <b-form-select
+                            :state="validateState('form.empresa_id')"
+                            value-field="id"
+                            text-field="nombre"
+                            id="empresa_id"
+                            v-model="form.empresa_id"
+                            :options="empresas"
+                        ></b-form-select>
+                    </b-form-group>
                 </b-col>
             </b-row>
             <b-row class="mt-4">
                 <b-col cols="4">
                     <b-form-group label="Ciudad" label-for="empresa_ciudad_id">
                         <b-form-select
+                            :state="validateState('form.empresa.ciudad_id')"
                             value-field="id"
                             text-field="nombre"
                             id="empresa_ciudad_id"
@@ -23,6 +38,7 @@
                 <b-col cols="4">
                     <b-form-group label="Sede" label-for="empresa_sede_id">
                         <b-form-select
+                            :state="validateState('form.empresa.sede_id')"
                             value-field="id"
                             text-field="nombre"
                             id="empresa_sede_id"
@@ -34,6 +50,7 @@
                 <b-col cols="4">
                     <b-form-group label="Cargo" label-for="empresa_cargo">
                         <b-form-select
+                            :state="validateState('form.empresa.cargo_id')"
                             value-field="id"
                             text-field="cargo"
                             id="empresa_cargo"
@@ -52,11 +69,11 @@
                 <b-col cols="4">
                     <b-form-group label="Consultas Diarias" label-for="consultas_diarias">
                         <b-form-input
+                            :state="validateState('form.consultas_diarias')"
                             id="consultas_diarias"
                             v-model="form.consultas_diarias"
                             type="number"
                             placeholder="50"
-                            required
                         ></b-form-input>
                     </b-form-group>
                 </b-col>
@@ -75,40 +92,40 @@
                             v-model="form.personal.nombre_apellido"
                             type="text"
                             placeholder="Danilo perez"
-                            required
                         ></b-form-input>
                     </b-form-group>
                 </b-col>
                 <b-col cols="4">
                     <b-form-group label="Tipo de Documento" label-for="personal_tipo_documento_id">
                         <b-form-select
+                            :state="validateState('form.personal.tipo_documento_id')"
                             value-field="id"
                             text-field="nombre"
                             id="tipo_personal_id"
                             v-model="form.personal.tipo_documento_id"
-                            :options="tipoDocumentos"
+                            :options="tiposDocumento"
                         ></b-form-select>
                     </b-form-group>
                 </b-col>
                 <b-col cols="4">
                     <b-form-group label="Número Documento" label-for="personal_numero_documento">
                         <b-form-input
+                            :state="validateState('form.personal.numero_documento')"
                             id="personal_numero_documento"
                             v-model="form.personal.numero_documento"
                             type="number"
                             placeholder="10253658596"
-                            required
                         ></b-form-input>
                     </b-form-group>
                 </b-col>
                 <b-col cols="4">
                     <b-form-group label="Nacionalidad" label-for="personal_nacionalidad">
                         <b-form-input
+                            :state="validateState('form.personal.nacionalidad')"
                             id="personal_nacionalidad"
                             v-model="form.personal.nacionalidad"
                             type="text"
                             placeholder="Colombia"
-                            required
                         ></b-form-input>
                     </b-form-group>
                 </b-col>
@@ -120,22 +137,21 @@
                             v-model="form.personal.correo_contacto"
                             type="email"
                             placeholder="usuario1@gmail.com"
-                            required
                         ></b-form-input>
                     </b-form-group>
                 </b-col>
                 <b-col cols="4">
                     <b-form-group label="Número de Contacto" label-for="personal_numero_contacto">
                         <b-form-input
+                            :state="validateState('form.personal.numero_contacto')"
                             id="personal_numero_contacto"
                             v-model="form.personal.numero_contacto"
                             type="number"
                             placeholder="3214556756"
-                            required
                         ></b-form-input>
                     </b-form-group>
                 </b-col>
-                <b-col cols="4">
+                <b-col cols="4" v-if="!onUpdate">
                     <b-form-group label="Contraseña" label-for="personal_contrasena">
                         <b-form-input
                             :state="validateState('form.personal.contrasena')"
@@ -146,7 +162,7 @@
                         ></b-form-input>
                     </b-form-group>
                 </b-col>
-                <b-col cols="4">
+                <b-col cols="4" v-if="!onUpdate">
                     <b-form-group label="Confirmar Contraseña" label-for="personal_confirmar_contrasena">
                         <b-form-input
                             :state="validateState('form.personal.confirmarContrasena')"
@@ -184,11 +200,19 @@
             </b-row>
             <b-row class="mt-4">
                 <b-col cols="6">
-                    <b-form-group label="Documento de Identidad de Usuario" label-for="documentacion_identidad_file">
+                    <b-form-group>
                         <CustomButton @click="showModal">
                             <PlusIcon></PlusIcon>
                             Documento de Identidad
                         </CustomButton>
+                        <b-form-invalid-feedback :state="validateState('form.documentacion.src_documento_identidad')">
+                            <template v-if="!$v.form.documentacion.src_documento_identidad.required">
+                                Debes añadir un archivo
+                            </template>
+                            <template v-else-if="!$v.form.documentacion.src_documento_identidad.isPDF">
+                                Debes añadir un archivo en formato PDF
+                            </template>
+                        </b-form-invalid-feedback>
                     </b-form-group>
                 </b-col>
             </b-row>
@@ -201,6 +225,7 @@
                 <b-col cols="4">
                     <b-form-group label="AMI (Análisis de mercado inteligente)" label-for="plataforma_ami">
                         <b-form-select
+                            :state="validateState('form.plataforma.ami_id')"
                             value-field="id"
                             text-field="nombre"
                             id="plataforma_ami"
@@ -212,6 +237,7 @@
                 <b-col cols="4">
                     <b-form-group label="HEGO" label-for="plataforma_hego">
                         <b-form-select
+                            :state="validateState('form.plataforma.hego_id')"
                             value-field="id"
                             text-field="nombre"
                             id="plataforma_hego"
@@ -219,6 +245,15 @@
                             :options="hegos"
                         ></b-form-select>
                     </b-form-group>
+                </b-col>
+                <b-col cols="4" align-self="end">
+                    <CustomButton class="mb-3" type="submit">
+                        <template v-if="!onUpdate">
+                            <PlusIcon></PlusIcon>
+                            Crear Usuario
+                        </template>
+                        <template v-else> Guardar Cambios </template>
+                    </CustomButton>
                 </b-col>
             </b-row>
         </BForm>
@@ -239,7 +274,7 @@
 </template>
 
 <script>
-import { email, required, sameAs, minLength } from 'vuelidate/lib/validators';
+import { email, required, requiredIf, sameAs, minLength, numeric } from 'vuelidate/lib/validators';
 
 import CustomButton from '../../customComponents/CustomButton.vue';
 import PlusIcon from '../../icons/PlusIcon.vue';
@@ -248,7 +283,13 @@ import InfoCircleIcon from '../../icons/InfoCircleIcon.vue';
 import FileInput from '../../customComponents/FileInput.vue';
 import Multiselect from 'vue-multiselect';
 
+const isPDF = value => {
+    if (!value) return true;
+    return value.type === 'application/pdf';
+};
+
 export default {
+    props: ['initialData', 'user'],
     components: {
         CustomButton,
         PlusIcon,
@@ -260,14 +301,16 @@ export default {
     data() {
         return {
             form: {
+                empresa_id: null,
                 empresa: {
-                    ciudad_id: '',
-                    sede_id: '',
-                    cargo_id: ''
+                    ciudad_id: null,
+                    sede_id: null,
+                    cargo_id: null
                 },
+                consultas_diarias: null,
                 personal: {
                     nombre_apellido: '',
-                    tipo_documento_id: '',
+                    tipo_documento_id: null,
                     numero_documento: '',
                     nacionalidad: '',
                     correo_contacto: '',
@@ -276,44 +319,77 @@ export default {
                     confirmarContrasena: null,
                     permisos: []
                 },
-                consultas_diarias: 0,
                 documentacion: {
-                    tipo_documento: ''
+                    src_documento_identidad: ''
                 },
+                previewDocumentoIdentidad: '',
                 plataforma: {
-                    ami_id: '',
-                    hego_id: ''
+                    ami_id: null,
+                    hego_id: null
                 }
             },
             permisos: [],
             ciudades: [],
             sedes: [],
             cargos: [],
-            tipoDocumentos: [],
+            tiposDocumento: [],
             amis: [],
-            hegos: []
+            hegos: [],
+            empresas: []
         };
     },
-    validations: {
-        form: {
-            personal: {
-                nombre_apellido: {
-                    required
+    computed: {
+        onUpdate() {
+            return !!this.initialData;
+        },
+        isCompany() {
+            return this.user.role.name === "EMPRESA";
+        }
+    },
+    validations() {
+        return {
+            form: {
+                empresa_id: { required },
+                empresa: {
+                    ciudad_id: { required },
+                    sede_id: { required },
+                    cargo_id: { required }
                 },
-                correo_contacto: {
-                    required,
-                    email
+                consultas_diarias: { required, numeric },
+                personal: {
+                    nombre_apellido: { required },
+                    tipo_documento_id: { required },
+                    numero_documento: { required, numeric },
+                    nacionalidad: { required },
+                    correo_contacto: { required, email },
+                    numero_contacto: { required, numeric },
+                    contrasena: {
+                        required: requiredIf(() => {
+                            return !this.onUpdate;
+                        }),
+                        minLength: minLength(6)
+                    },
+                    confirmarContrasena: {
+                        required: requiredIf(() => {
+                            return !this.onUpdate;
+                        }),
+                        sameAsContrasena: sameAs('contrasena')
+                    }
                 },
-                contrasena: {
-                    required,
-                    minLength: minLength(6)
+                documentacion: {
+                    src_documento_identidad: {
+                        required: requiredIf(() => {
+                            return !this.form.previewDocumentoIdentidad;
+                        }),
+                        isPDF
+                    }
                 },
-                confirmarContrasena: {
-                    required,
-                    sameAsContrasena: sameAs('contrasena')
+                plataforma: {
+                    ami_id: { required },
+                    hego_id: { required }
                 }
             }
-        }
+        };
     },
     async mounted() {
         await this.listarPermisos();
@@ -323,6 +399,21 @@ export default {
         await this.listarTiposDocumento();
         await this.listarAmis();
         await this.listarHegos();
+        await this.listarEmpresas();
+
+        if (this.isCompany) {
+            this.form.empresa_id = this.user.empresa.id;
+        }
+    },
+    watch: {
+        initialData: {
+            immediate: true,
+            handler(newData) {
+                if (newData) {
+                    Object.assign(this.form, newData);
+                }
+            }
+        },
     },
     methods: {
         validateState(name) {
@@ -347,7 +438,7 @@ export default {
         },
         async listarTiposDocumento() {
             let response = await axios.get('/listas/tipo-documentos');
-            this.tipoDocumentos = response.data;
+            this.tiposDocumento = response.data;
         },
         async listarAmis() {
             let response = await axios.get('/listas/amis');
@@ -367,8 +458,12 @@ export default {
                 this.sedes = response.data;
             }
         },
+        async listarEmpresas() {
+            let response = await axios.get('/listas/empresas');
+            this.empresas = response.data;
+        },
         handleFileInput(file) {
-            this.form.documentacion.tipo_documento = file;
+            this.form.documentacion.src_documento_identidad = file;
             this.$bvModal.hide('documento-identidad-modal');
         },
         showModal() {
@@ -376,7 +471,10 @@ export default {
         },
         submitForm() {
             this.$v.$touch();
-            return !this.$v.$invalid ? this.form : null;
+
+            if (!this.$v.$invalid) {
+                this.$emit(!this.onUpdate ? 'create' : 'update', this.form);
+            }
         }
     }
 };
@@ -396,6 +494,10 @@ export default {
     &:placeholder {
         font-weight: 100;
     }
+}
+
+.form-group legend {
+    font-size: 1rem;
 }
 
 .info-message {

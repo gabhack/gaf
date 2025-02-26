@@ -9,9 +9,8 @@ class Empresa extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'empresas';
-
     protected $fillable = [
+        'user_id',
         'tipo_sociedad_id',
         'tipo_empresa_id',
         'tipo_documento_id',
@@ -66,13 +65,13 @@ class Empresa extends Model
         return $this->hasOne(DocumentoEmpresa::class)->withDefault();
     }
 
-    public function permisos()
-    {
-        return $this->belongsToMany(Permiso::class, 'empresas_permisos');
-    }
-
     public function user()
     {
-        return $this->hasOne(User::class, 'empresa_id', 'id')->withDefault();
+        return $this->belongsTo(User::class);
+    }
+
+    public function comerciales()
+    {
+        return $this->hasMany(Comercial::class);
     }
 }

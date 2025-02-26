@@ -23,7 +23,7 @@
           <img src="/img/avatar-img.svg" alt="" class="img-fluid w-75 mb-3">
           <span class="user-name d-block text-uppercase text-black-pearl mb-1">{{ Auth::user()->name }}</span>
           <span
-            class="user-position d-block text-uppercase">{{ IsCompany() ? 'Compañía' : roles_label(Auth::user()->rol->rol) }}</span>
+            class="user-position d-block text-uppercase">{{ IsCompany() ? 'Compañía' : roles_label(Auth::user()->role->name) }}</span>
           <small class="user-company d-block text-uppercase text-black-pearl">Ingeniería & Construcciones SAS</small>
           <div class="text-center mt-3">
             <a class="btn btn-black-pearl btn-sm btn-profile px-3 mr-3" href="{{ url('profile') }}">

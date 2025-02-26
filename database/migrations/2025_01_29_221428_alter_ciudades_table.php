@@ -19,7 +19,7 @@ class AlterCiudadesTable extends Migration
         });
 
         Schema::table('ciudades', function (Blueprint $table) {
-            $table->unsignedInteger('departamento_id')->change();
+            $table->unsignedBigInteger('departamento_id')->change();
             $table->foreign('departamento_id')->references('id')->on('departamentos');
 
             $table->renameColumn('ciudad', 'nombre');

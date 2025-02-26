@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 import Form from './Form.vue';
 
 export default {

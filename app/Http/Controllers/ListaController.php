@@ -6,9 +6,10 @@ use App\Ami;
 use App\Cargos;
 use App\Ciudades;
 use App\Departamentos;
+use App\Empresa;
 use App\Hego;
 use App\Pais;
-use App\Permiso;
+use App\Permission;
 use App\Sede;
 use App\TipoDocumento;
 use App\TipoEmpresa;
@@ -17,81 +18,87 @@ use Illuminate\Http\Request;
 
 class ListaController extends Controller
 {
-	public function listarTipoEmpresas()
-	{
-		$tipoEmpresas = TipoEmpresa::all();
-		return response()->json($tipoEmpresas);
-	}
+    public function listarTipoEmpresas()
+    {
+        $tipoEmpresas = TipoEmpresa::all();
+        return response()->json($tipoEmpresas);
+    }
 
-	public function listarTipoSociedades()
-	{
-		$tipoSociedades = TipoSociedad::all();
-		return response()->json($tipoSociedades);
-	}
+    public function listarTipoSociedades()
+    {
+        $tipoSociedades = TipoSociedad::all();
+        return response()->json($tipoSociedades);
+    }
 
-	public function listarTipoDocumentos()
-	{
-		$tipoDocumentos = TipoDocumento::all();
-		return response()->json($tipoDocumentos);
-	}
+    public function listarTipoDocumentos()
+    {
+        $tipoDocumentos = TipoDocumento::all();
+        return response()->json($tipoDocumentos);
+    }
 
-	public function listarCiudades()
-	{
-		$ciudades = Ciudades::orderBy('nombre', 'ASC')->get();
-		return response()->json($ciudades);
-	}
+    public function listarCiudades()
+    {
+        $ciudades = Ciudades::orderBy('nombre', 'ASC')->get();
+        return response()->json($ciudades);
+    }
 
-	public function listarSedesPorCiudad($ciudadId)
-	{
-		$sedes = Sede::where('ciudad_id', $ciudadId)->orderBy('nombre', 'ASC')->get();
-		return response()->json($sedes);
-	}
+    public function listarSedesPorCiudad($ciudadId)
+    {
+        $sedes = Sede::where('ciudad_id', $ciudadId)->orderBy('nombre', 'ASC')->get();
+        return response()->json($sedes);
+    }
 
-	public function listarUbicaciones(Request $request)
-	{
-		$paisId = $request->query('pais');
-		$departamentoId = $request->query('departamento');
+    public function listarUbicaciones(Request $request)
+    {
+        $paisId = $request->query('pais');
+        $departamentoId = $request->query('departamento');
 
-		$paises = Pais::orderBy('nombre', 'ASC')->get();
+        $paises = Pais::orderBy('nombre', 'ASC')->get();
 
-		$response = [
-			'paises' => $paises,
-			'departamentos' => [],
-			'ciudades' => []
-		];
+        $response = [
+            'paises' => $paises,
+            'departamentos' => [],
+            'ciudades' => []
+        ];
 
-		if ($paisId) {
-			$response['departamentos'] = Departamentos::where('pais_id', $paisId)->orderBy('nombre', 'ASC')->get();
-		}
+        if ($paisId) {
+            $response['departamentos'] = Departamentos::where('pais_id', $paisId)->orderBy('nombre', 'ASC')->get();
+        }
 
-		if ($departamentoId) {
-			$response['ciudades'] = Ciudades::where('departamento_id', $departamentoId)->orderBy('nombre', 'ASC')->get();
-		}
+        if ($departamentoId) {
+            $response['ciudades'] = Ciudades::where('departamento_id', $departamentoId)->orderBy('nombre', 'ASC')->get();
+        }
 
-		return response()->json($response);
-	}
+        return response()->json($response);
+    }
 
-	public function listarCargos()
-	{
-		$cargos = Cargos::orderBy('cargo', 'ASC')->get();
-		return response()->json($cargos);
-	}
+    public function listarCargos()
+    {
+        $cargos = Cargos::orderBy('cargo', 'ASC')->get();
+        return response()->json($cargos);
+    }
 
-	public function listarAmis()
-	{
-		$amis = Ami::all();
-		return response()->json($amis);
-	}
+    public function listarAmis()
+    {
+        $amis = Ami::all();
+        return response()->json($amis);
+    }
 
-	public function listarHegos()
-	{
-		$hegos = Hego::all();
-		return response()->json($hegos);
-	}
+    public function listarHegos()
+    {
+        $hegos = Hego::all();
+        return response()->json($hegos);
+    }
 
-	public function listarPermisos()
-	{
-		$permisos = Permiso::all();
-		return response()->json($permisos);
-	}
+    public function listarPermisos()
+    {
+        $permissions = Permission::all();
+        return response()->json($permissions);
+    }
+
+    public function listarEmpresas()
+    {
+        $empresas = Empresa::all();
+        return response()->json($empresas);
+    }
 }

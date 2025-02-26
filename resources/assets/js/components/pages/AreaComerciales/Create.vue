@@ -1,27 +1,16 @@
 <template>
     <b-container fluid class="my-3">
-        <Form ref="formComponent"></Form>
-        <b-row align-h="end">
-            <b-col cols="4">
-                <CustomButton class="mt-4" @click="crearAreaComercial">
-                    <PlusIcon></PlusIcon>
-                    Crear usuario
-                </CustomButton>
-            </b-col>
-        </b-row>
+        <Form :user="user" @create="crearAreaComercial" />
     </b-container>
 </template>
 
 <script>
 import Form from './Form.vue';
-import CustomButton from '../../customComponents/CustomButton.vue';
-import PlusIcon from '../../icons/PlusIcon.vue';
 
 export default {
+    props: ['user'],
     components: {
         Form,
-        CustomButton,
-        PlusIcon
     },
     mounted() {
         this.setBreadcumb();
@@ -31,15 +20,7 @@ export default {
             let domBreadcumb = document.getElementById('dynamic-breadcumb');
             domBreadcumb.innerText = '> Area comercial > Crear';
         },
-        crearAreaComercial() {
-            const formComponent = this.$refs.formComponent;
-            if (!formComponent) {
-                console.error('No se encontró el componente de formulario.');
-                return;
-            }
-
-            const form = formComponent.submitForm();
-
+        crearAreaComercial(form) {
             // Invalid form
             if (!form) {
                 this.$bvToast.toast('Corrige los campos marcados para continuar.', {
@@ -53,11 +34,12 @@ export default {
 
             try {
                 let formData = new FormData();
+                formData.append('empresa_id', form.empresa_id);
                 formData.append('consultas_diarias', form.consultas_diarias);
                 formData.append('empresa', JSON.stringify(form.empresa));
                 formData.append('personal', JSON.stringify(form.personal));
                 formData.append('plataforma', JSON.stringify(form.plataforma));
-                formData.append('src_documento_identidad', form.documentacion.tipo_documento);
+                formData.append('src_documento_identidad', form.documentacion.src_documento_identidad);
 
                 axios
                     .post('/area-comerciales', formData, { headers: { 'Content-Type': 'multipart/form-data' } })

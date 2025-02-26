@@ -442,7 +442,6 @@
 <script>
 import { email, required, requiredIf, sameAs, minLength, numeric } from 'vuelidate/lib/validators';
 
-import axios from 'axios';
 import CustomButton from '../../customComponents/CustomButton.vue';
 import InfoCircleIcon from '../../icons/InfoCircleIcon.vue';
 import PlusIcon from '../../icons/PlusIcon.vue';
@@ -529,22 +528,13 @@ export default {
         return {
             form: {
                 tipo_empresa_id: { required },
-                consultas_diarias: {
-                    required,
-                    numeric
-                },
+                consultas_diarias: { required, numeric },
                 empresa: {
                     tipo_sociedad_id: { required },
                     nombre: { required },
                     tipo_documento_id: { required },
-                    numero_documento: {
-                        required,
-                        numeric
-                    },
-                    correo: {
-                        required,
-                        email
-                    },
+                    numero_documento: { required, numeric },
+                    correo: { required, email },
                     pagina_web: { required },
                     pais_id: { required },
                     departamento_id: { required },
@@ -554,19 +544,10 @@ export default {
                 representante_legal: {
                     nombres_completos: { required },
                     tipo_documento_id: { required },
-                    numero_documento: {
-                        required,
-                        numeric
-                    },
+                    numero_documento: { required, numeric },
                     nacionalidad: { required },
-                    correo: {
-                        required,
-                        email
-                    },
-                    numero_contacto: {
-                        required,
-                        numeric
-                    }
+                    correo: { required, email },
+                    numero_contacto: { required, numeric }
                 },
                 documentacion: {
                     iva: { required },
@@ -593,10 +574,7 @@ export default {
                 },
                 usuario: {
                     nombre: { required },
-                    correo: {
-                        required,
-                        email
-                    },
+                    correo: { required, email },
                     contrasena: {
                         required: requiredIf(() => {
                             return !this.onUpdate;

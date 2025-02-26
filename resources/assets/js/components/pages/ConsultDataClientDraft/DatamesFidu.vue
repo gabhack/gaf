@@ -74,12 +74,12 @@
           <div
             class="col-6"
             v-if="
-              user.roles_id === 1 ||
-              user.roles_id === '1' ||
-              user.roles_id === 4 ||
-              user.roles_id === '4' ||
-              user.roles_id === 5 ||
-              user.roles_id === '5'
+              user.role_id === 1 ||
+              user.role_id === '1' ||
+              user.role_id === 4 ||
+              user.role_id === '4' ||
+              user.role_id === 5 ||
+              user.role_id === '5'
             "
           >
             <b class="panel-label">DESCRIPCIÓN:</b>
@@ -91,12 +91,12 @@
           <div
             class="col-6"
             v-if="
-              user.roles_id === 1 ||
-              user.roles_id === '1' ||
-              user.roles_id === 4 ||
-              user.roles_id === '4' ||
-              user.roles_id === 5 ||
-              user.roles_id === '5'
+              user.role_id === 1 ||
+              user.role_id === '1' ||
+              user.role_id === 4 ||
+              user.role_id === '4' ||
+              user.role_id === 5 ||
+              user.role_id === '5'
             "
           >
             <b class="panel-label">RECURSOS:</b>
@@ -108,12 +108,12 @@
           <div
             class="col-6"
             v-if="
-              user.roles_id === 1 ||
-              user.roles_id === '1' ||
-              user.roles_id === 4 ||
-              user.roles_id === '4' ||
-              user.roles_id === 5 ||
-              user.roles_id === '5'
+              user.role_id === 1 ||
+              user.role_id === '1' ||
+              user.role_id === 4 ||
+              user.role_id === '4' ||
+              user.role_id === 5 ||
+              user.role_id === '5'
             "
           >
             <b class="panel-label">FECHA DE CARGA DATA:</b>
@@ -125,12 +125,12 @@
           <div
             class="col-6"
             v-if="
-              user.roles_id === 1 ||
-              user.roles_id === '1' ||
-              user.roles_id === 4 ||
-              user.roles_id === '4' ||
-              user.roles_id === 5 ||
-              user.roles_id === '5'
+              user.role_id === 1 ||
+              user.role_id === '1' ||
+              user.role_id === 4 ||
+              user.role_id === '4' ||
+              user.role_id === 5 ||
+              user.role_id === '5'
             "
           >
             <b class="panel-label">MES DE CARGA DATA:</b>
@@ -142,12 +142,12 @@
           <div
             class="col-6"
             v-if="
-              user.roles_id === 1 ||
-              user.roles_id === '1' ||
-              user.roles_id === 4 ||
-              user.roles_id === '4' ||
-              user.roles_id === 5 ||
-              user.roles_id === '5'
+              user.role_id === 1 ||
+              user.role_id === '1' ||
+              user.role_id === 4 ||
+              user.role_id === '4' ||
+              user.role_id === 5 ||
+              user.role_id === '5'
             "
           >
             <b class="panel-label">AÑO DE CARGA DATA:</b>

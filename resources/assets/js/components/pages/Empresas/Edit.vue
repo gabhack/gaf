@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 import Form from './Form.vue';
 
 export default {
@@ -111,7 +110,9 @@ export default {
                 formData.append('src_rut', form.documentacion.src_rut);
 
                 axios
-                    .post(`/empresas/${this.empresa.id}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+                    .post(`/empresas/${this.empresa.id}`, formData, {
+                        headers: { 'Content-Type': 'multipart/form-data' }
+                    })
                     .then(response => {
                         console.log('Empresa actualizada con éxito:', response.data);
                         window.location.replace('/empresas');

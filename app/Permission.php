@@ -4,17 +4,13 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Permiso extends Model
+class Permission extends Model
 {
-    protected $table = 'permisos';
-
-    protected $fillable = [
-        'name',
-    ];
+    protected $fillable = ['name'];
 
     public function roles()
     {
-        return $this->belongsToMany(Roles::class, 'role_has_permissions', 'permission_id', 'role_id');
+        return $this->belongsToMany(Role::class, 'role_has_permissions');
     }
 
     public function users()

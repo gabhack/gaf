@@ -15,7 +15,7 @@ class CreateModelHasPermissionsTable extends Migration
     {
         Schema::create('model_has_permissions', function (Blueprint $table) {
             $table->unsignedBigInteger('permission_id');
-            $table->foreign('permission_id')->references('id')->on('permisos')->onDelete('cascade');
+            $table->foreign('permission_id')->references('id')->on('permissions')->onDelete('cascade');
 
             $table->string('model_type');
             $table->unsignedBigInteger('model_id');

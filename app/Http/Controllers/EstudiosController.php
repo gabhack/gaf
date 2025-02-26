@@ -475,7 +475,7 @@ class EstudiosController extends Controller
                 $newcondicionAF2->save();
             }
 
-            if (Auth::user()->rol->id == 1 || Auth::user()->rol->id == 5) {
+            if (Auth::user()->role->id == 1 || Auth::user()->role->id == 5) {
                 $lista = Estudios::orderBy('id', 'desc')->paginate(20);
             } else {
                 $lista = Estudios::orderBy('id', 'desc')->where('user_id', Auth::user()->id)->paginate(20);
@@ -492,7 +492,7 @@ class EstudiosController extends Controller
             );
             return view("estudios/index")->with($options);
         } catch (\Exception $e) {
-            if (Auth::user()->rol->id == 1 || Auth::user()->rol->id == 5) {
+            if (Auth::user()->role->id == 1 || Auth::user()->role->id == 5) {
                 $lista = Estudios::orderBy('id', 'desc')->paginate(20);
             } else {
                 $lista = Estudios::orderBy('id', 'desc')->where('user_id', Auth::user()->id)->paginate(20);
@@ -523,7 +523,7 @@ class EstudiosController extends Controller
             $dataCotizer = dataCotizer::find($id);
             $cedula = $dataCotizer->idNumber;
             $apellido = $dataCotizer->firstLastname;
-    
+
             $sectores = $this->realizarConsultaSOAP($cedula, $apellido);
 
             $pagadurias = array(app(PagaduriasController::class)->perDoc($cedula));
@@ -533,23 +533,23 @@ class EstudiosController extends Controller
                     $pagaduria = str_replace("datames", "Embargos", $key);
                 }
             }
-    
+
             $embargos = array(app(EmbargosController::class)->buscar($cedula, $pagaduria));
             if (!isset($embargos[0])) {
                 $embargos = [];
             }
-    
+
             if (isset($dataCotizer->estudio->id)) {
                 $carteras = \App\Carteras::where('estudios_id', $dataCotizer->estudio->id)->get();
             } else {
                 $carteras = [];
             }
             return view("estudios/editar")->with([
-                "id"=>$id,
+                "id" => $id,
                 "dataCotizer" => $dataCotizer,
-                "obligaciones" => $sectores,                
-            "embargos" => $embargos,
-            "carteras" => $carteras,
+                "obligaciones" => $sectores,
+                "embargos" => $embargos,
+                "carteras" => $carteras,
                 "sectores" => \App\Sectores::all(),
                 "estadoscartera" => \App\Estadoscartera::all(),
             ]);
@@ -568,7 +568,7 @@ class EstudiosController extends Controller
             $dataCotizer = dataCotizer::find($id);
             $cedula = $dataCotizer->idNumber;
             $apellido = $dataCotizer->firstLastname;
-    
+
             $sectores = [];
 
             $pagadurias = array(app(PagaduriasController::class)->perDoc($cedula));
@@ -578,23 +578,23 @@ class EstudiosController extends Controller
                     $pagaduria = str_replace("datames", "Embargos", $key);
                 }
             }
-    
+
             $embargos = array(app(EmbargosController::class)->buscar($cedula, $pagaduria));
             if (!isset($embargos[0])) {
                 $embargos = [];
             }
-    
+
             if (isset($dataCotizer->estudio->id)) {
                 $carteras = \App\Carteras::where('estudios_id', $dataCotizer->estudio->id)->get();
             } else {
                 $carteras = [];
             }
             return view("estudios/editar")->with([
-                "id"=>$id,
+                "id" => $id,
                 "dataCotizer" => $dataCotizer,
-                "obligaciones" => $sectores,                
-            "embargos" => $embargos,
-            "carteras" => $carteras,
+                "obligaciones" => $sectores,
+                "embargos" => $embargos,
+                "carteras" => $carteras,
                 "sectores" => \App\Sectores::all(),
                 "estadoscartera" => \App\Estadoscartera::all(),
             ]);
@@ -606,14 +606,14 @@ class EstudiosController extends Controller
             return view('error')->with('error', $e->getMessage());
         }
     }
-    
+
     private function realizarConsultaSOAP($cedula, $apellido)
     {
         $soapUser = env('CIFIN_USER');
         $soapPassword = env('CIFIN_PASSWORD');
         $url = env('CIFIN_URL') . '?wsdl';
-    
-        $xml_post_string = 
+
+        $xml_post_string =
             "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws/\">
                 <soapenv:Header/>
                 <soapenv:Body>
@@ -631,7 +631,7 @@ class EstudiosController extends Controller
                     </ws:consultaXml>
                 </soapenv:Body>
             </soapenv:Envelope>";
-    
+
         $headers = [
             "Content-type: text/xml;charset=\"utf-8\"",
             'Accept: text/xml',
@@ -640,7 +640,7 @@ class EstudiosController extends Controller
             'SOAPAction: ' . $url,
             'Content-length: ' . strlen($xml_post_string),
         ];
-    
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -651,18 +651,18 @@ class EstudiosController extends Controller
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $xml_post_string);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    
+
         $response = curl_exec($ch);
         curl_close($ch);
-    
+
         $sectores = [];
         if ($response != false) {
             $array = XmlaPhp::createArray($response);
-    
+
             $demo = $array['S:Envelope']['S:Body']['ns2:consultaXmlResponse']['return'];
             if ($demo != 'error' && is_string($demo) && strpos($demo, '<?xml') === 0) {
                 $resultado = XmlaPhp::createArray($demo);
-    
+
                 foreach ($resultado['CIFIN']['Tercero'] as $key => $value) {
                     if (strpos($key, 'Sector') !== false) {
                         foreach ($value as $subKey => $subValue) {
@@ -680,10 +680,10 @@ class EstudiosController extends Controller
         } else {
             Log::error("SOAP request failed");
         }
-    
+
         return $sectores;
     }
-    
+
 
     /**
      * Update the specified resource in storage.
@@ -834,7 +834,7 @@ class EstudiosController extends Controller
                 }
             }
 
-            if (Auth::user()->rol->id == 1 || Auth::user()->rol->id == 5) {
+            if (Auth::user()->role->id == 1 || Auth::user()->role->id == 5) {
                 $lista = Estudios::orderBy('id', 'desc')->paginate(20);
             } else {
                 $lista = Estudios::orderBy('id', 'desc')->where('user_id', Auth::user()->id)->paginate(20);
@@ -851,7 +851,7 @@ class EstudiosController extends Controller
             );
             return view("estudios/index")->with($options);
         } catch (\Exception $e) {
-            if (Auth::user()->rol->id == 1 || Auth::user()->rol->id == 5) {
+            if (Auth::user()->role->id == 1 || Auth::user()->role->id == 5) {
                 $lista = Estudios::orderBy('id', 'desc')->paginate(20);
             } else {
                 $lista = Estudios::orderBy('id', 'desc')->where('user_id', Auth::user()->id)->paginate(20);
