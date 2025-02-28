@@ -18,7 +18,7 @@
 						<span class="font-bold" v-text="data.data.id"></span>
 					</template>
 					<template #actions="data">
-						<button class="action-button">
+						<button class="action-button" @click="verEmpresa(data.data.id)">
 							<DocumentIcon />
 						</button>
 						<button class="action-button" @click="editarEmpresa(data.data.id)">
@@ -87,6 +87,9 @@ export default {
 		},
 		editarEmpresa(id) {
 			window.location.replace('/empresas/edit/' + id);
+		},
+		verEmpresa(id) {
+			window.location.replace('/empresas/ver/' + id);
 		},
 		eliminarEmpresa(id) {
 			axios.delete('/empresas/' + id).then((res) => {

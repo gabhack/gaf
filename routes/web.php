@@ -692,6 +692,7 @@ Route::prefix('/empresas')->middleware('permission:ver empresas')->group(functio
 	Route::post('/', [EmpresaController::class, 'store']);
 	Route::get('/crear', [EmpresaController::class, 'crear']);
 	Route::get('/edit/{id}', [EmpresaController::class, 'edit']);
+	Route::get('/ver/{id}', [EmpresaController::class, 'show']);
 	Route::post('/{id}', [EmpresaController::class, 'update']);
 	Route::delete('/{id}', [EmpresaController::class, 'destroy']);
 });
@@ -701,6 +702,7 @@ Route::prefix('/area-comerciales')->middleware('permission:ver area comercial')-
 	Route::post('/', [AreaComercialController::class, 'store']);
 	Route::get('/crear', [AreaComercialController::class, 'crear']);
 	Route::get('/edit/{id}', [AreaComercialController::class, 'edit']);
+	Route::get('/ver/{id}', [AreaComercialController::class, 'show']);
 	Route::post('/{id}', [AreaComercialController::class, 'update']);
 	Route::delete('/{id}', [AreaComercialController::class, 'destroy']);
 });

@@ -174,6 +174,33 @@ class EmpresaController extends Controller
         }
     }
 
+    public function show($id) {
+        try {
+            $empresa = Empresa::with([
+                'documento_empresa',
+                'representante_legal_empresa',
+                'user.directPermissions'
+            ])->findOrFail($id);
+
+            if ($empresa->documento_empresa) {
+                $documento = $empresa->documento_empresa;
+
+                $documento->src_representante_legal = $this->getFilePreview($documento->src_representante_legal);
+                $documento->src_camara_comercio = $this->getFilePreview($documento->src_camara_comercio);
+                $documento->src_rut = $this->getFilePreview($documento->src_rut);
+            }
+
+            return view('empresas.show', [
+                'empresa' => json_encode($empresa),
+                'representanteLegal' => json_encode($empresa->representante_legal_empresa),
+                'documentoEmpresa' => json_encode($empresa->documento_empresa),
+                'usuarioEmpresa' => json_encode($empresa->user)
+            ]);
+        } catch (Throwable $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
     public function edit($id)
     {
         try {

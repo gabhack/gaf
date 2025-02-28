@@ -1,14 +1,14 @@
 <template>
     <b-container fluid class="my-3">
-        <Form :initialData="form" :user="usuarioComercial" @update="actualizarAreaComercial" />
+        <FormVer :initialData="form" :user="usuarioComercial" @update="actualizarAreaComercial" />
     </b-container>
 </template>
 <script>
-import Form from './Form.vue';
+import FormVer from './FormVer.vue';
 
 export default {
     components: {
-        Form
+        FormVer
     },
     props: {
         comercial: {

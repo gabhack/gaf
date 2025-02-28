@@ -129,11 +129,31 @@ class AreaComercialController extends Controller
         }
     }
 
+    public function show($id) {
+        try {
+            $areaComercial = Comercial::with([
+                'user.directPermissions',
+                'user.role'
+            ])->findOrfail($id);
+
+            $areaComercial->ciudad_id = $areaComercial->sede->ciudad_id;
+            $areaComercial->src_documento_identidad = $this->getFilePreview($areaComercial->src_documento_identidad);
+
+            return view('area-comerciales.show', [
+                'comercial' => json_encode($areaComercial),
+                'usuarioComercial' => json_encode($areaComercial->user)
+            ]);
+        } catch (Throwable $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
     public function edit($id)
     {
         try {
             $areaComercial = Comercial::with([
-                'user.directPermissions'
+                'user.directPermissions',
+                'user.role'
             ])->findOrfail($id);
 
             $areaComercial->ciudad_id = $areaComercial->sede->ciudad_id;

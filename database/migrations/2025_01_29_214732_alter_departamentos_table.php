@@ -17,6 +17,10 @@ class AlterDepartamentosTable extends Migration
     {
         Schema::disableForeignKeyConstraints();
 
+        Schema::table('ciudades', function (Blueprint $table) {
+            $table->dropForeign('fk_departamentos_ciudades');
+        });
+
         DB::table('departamentos')->truncate();
 
         Schema::table('departamentos', function (Blueprint $table) {

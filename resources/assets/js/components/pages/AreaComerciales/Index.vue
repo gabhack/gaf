@@ -15,7 +15,7 @@
 			<b-col class="mt-4">
 				<DataTable :items="comerciales" :columns="fields" @updateRows="updateRows" @pageChanged="pageChanged">
 					<template #actions="data">
-						<button class="action-button">
+						<button class="action-button" @click="verAreaComercial(data.data.id)">
 							<DocumentIcon />
 						</button>
 						<button class="action-button" @click="editAreaComercial(data.data.id)">
@@ -84,6 +84,9 @@ export default {
 		},
 		editAreaComercial(id) {
 			window.location.replace('/area-comerciales/edit/' + id)
+		},
+		verAreaComercial(id) {
+			window.location.replace('/area-comerciales/ver/' + id)
 		},
 		eliminarAreaComercial(id) {
 			axios.delete('/area-comerciales/' + id).then((res) => {

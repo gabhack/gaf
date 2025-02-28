@@ -134,10 +134,12 @@ Vue.component('join-pensiones', JoinPensiones);
 Vue.component('empresas', require('./components/pages/Empresas/Index.vue').default);
 Vue.component('crear-empresas', require('./components/pages/Empresas/Create.vue').default);
 Vue.component('editar-empresas', require('./components/pages/Empresas/Edit.vue').default);
+Vue.component('ver-empresas', require('./components/pages/Empresas/Ver.vue').default);
 
 Vue.component('area-comerciales', require('./components/pages/AreaComerciales/Index.vue').default);
 Vue.component('crear-area-comerciales', require('./components/pages/AreaComerciales/Create.vue').default);
 Vue.component('editar-area-comerciales', require('./components/pages/AreaComerciales/Edit.vue').default);
+Vue.component('ver-area-comerciales', require('./components/pages/AreaComerciales/Ver.vue').default);
 
 /* Vue Init */
 const app = new Vue({
