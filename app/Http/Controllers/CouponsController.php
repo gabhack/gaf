@@ -98,6 +98,7 @@ class CouponsController extends Controller
         'sem giron' => 61,
         'sem guainia' => 116,
         'sem ibague' => 147,
+        'sem apartado' => 148,
         'sem ipiales' => 134,
         'sem itagui' => 135,
         'sem jamundi' => 146,
