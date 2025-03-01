@@ -1176,11 +1176,26 @@ if (!function_exists('IsUserCreator')) {
 if (!function_exists('IsCompany')) {
 	function IsCompany()
 	{
-		if (!Auth::user()->id_company) {
-			return true;
-		} else {
+		$user = Auth::user();
+
+		if (!$user || !isset($user->role)) {
 			return false;
 		}
+
+		return $user->role->name == 'EMPRESA';
+	}
+}
+
+if (!function_exists('IsComercial')) {
+	function IsComercial()
+	{
+		$user = Auth::user();
+
+		if (!$user || !isset($user->role)) {
+			return false;
+		}
+
+		return $user->role->name == 'COMERCIAL';
 	}
 }
 

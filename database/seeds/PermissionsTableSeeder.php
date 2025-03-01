@@ -21,7 +21,8 @@ class PermissionsTableSeeder extends Seeder
             'ver prospeccion mercado',
             'ver recuperacion cartera',
             'ver investigacion',
-            'ver localizacion usuarios'
+            'ver localizacion usuarios',
+            'hacer consultas',
         ];
 
         foreach ($permissions as $permission) {
@@ -38,5 +39,15 @@ class PermissionsTableSeeder extends Seeder
         ]);
         $rolEmpresa->givePermission('ver usuarios');
         $rolEmpresa->givePermission('ver area comercial');
+        $rolEmpresa->givePermission('ver visado');
+        $rolEmpresa->givePermission('hacer consultas');
+
+        // Assign permissions to COMERCIAL role
+        $rolComercial = Role::firstOrCreate([
+            'name' => 'COMERCIAL',
+            'guard_name' => 'web'
+        ]);
+        $rolComercial->givePermission('ver visado');
+        $rolComercial->givePermission('hacer consultas');
     }
 }

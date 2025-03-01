@@ -577,12 +577,15 @@ Route::resource('descnoap', 'DescnoapController');
 Route::post('detalleConsulta', 'VisadoController@detalleConsulta');
 Route::post('pdfDetalle', 'VisadoController@pdfDetalle');
 
+Route::prefix('/visados')->middleware('permission:ver visados')->group(function () {
+	Route::post('/', [VisadoController::class, 'store']);
+	Route::post('/{id}', [VisadoController::class, 'update']);
+});
+
 Route::get('getHistoryConsults', 'VisadoController@historialConsultas');
-Route::post('visados', [VisadoController::class, 'store']);
-Route::post('visados/{id}', [VisadoController::class, 'update']);
 Route::view('/historyClient', 'historyClient')->middleware('auth');
 Route::view('/dataClient', 'dataClient');
-Route::view('/dataClientDraft', 'dataClientDraft')->middleware('auth');
+Route::view('/dataClientDraft', 'dataClientDraft')->middleware(['auth', 'permission:hacer consultas']);
 Route::view('/refundCartera', 'refundCartera');
 Route::view('/certificados', 'certificados');
 Route::view('/massiveCharge', 'massive');
