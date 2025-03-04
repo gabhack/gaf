@@ -160,14 +160,6 @@ class VisadoController extends Controller
     {
         $user = auth()->user();
 
-        if (IsCompany() || IsComercial()) {
-            if ($user->empresa->consultas_diarias <= 0) {
-                return response()->json([
-                    'message' => 'No tienes consultas disponibles',
-                ], 400);
-            }
-        }
-
         DB::beginTransaction();
 
         try {
@@ -181,10 +173,6 @@ class VisadoController extends Controller
                 'consultant_email' => $user->email,
                 'consultant_name' => $user->name,
             ]);
-
-            if (IsCompany() || IsComercial()) {
-                $user->empresa->decrement('consultas_diarias', 1);
-            }
 
             DB::commit();
 
