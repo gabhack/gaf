@@ -31,7 +31,7 @@ class EmpresaController extends Controller
                 'tipo_empresa' => $empresa->tipo_empresa->nombre,
                 'nombre' => $empresa->nombre,
                 'documento' => $empresa->numero_documento,
-                'ciudad' => $empresa->ciudad->nombre
+                'ciudad_id' => $empresa->ciudad_id
             ]);
         }
 
