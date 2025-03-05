@@ -19,20 +19,36 @@ class AreaComercialController extends Controller
 {
     public function index()
     {
-        $comerciales = Comercial::orderBy('id', 'DESC')->paginate(request()->query('per_page') ?? 5)->appends(request()->query());
-        $data = [];
-        foreach ($comerciales as $comercial) {
-            array_push($data, [
+        $user = Auth::user();
+
+        // Set query
+        $query = Comercial::orderBy('id', 'DESC');
+
+        // Filter by company
+        if (IsCompany()) {
+            $query->where('empresa_id', $user->empresa->id);
+        }
+
+        // Pagination
+        $comerciales = $query->paginate(request()->query('per_page') ?? 5)->appends(request()->query());
+
+        // Map data
+        $data = $comerciales->map(function ($comercial) {
+            return [
                 'id' => $comercial->id,
                 'nombre_completo' => $comercial->nombre_completo,
                 'cargo' => $comercial->cargo->cargo,
                 'sede' => $comercial->sede->nombre,
                 'ciudad' => $comercial->sede->ciudad->nombre,
                 'telefono' => $comercial->numero_contacto
-            ]);
-        }
-        $comerciales->setCollection(collect($data));
-        return view('area-comerciales.index', ['comerciales' => json_encode($comerciales)]);
+            ];
+        });
+
+        $comerciales->setCollection($data);
+
+        return view('area-comerciales.index', [
+            'comerciales' => json_encode($comerciales)
+        ]);
     }
 
     public function crear()
@@ -129,7 +145,8 @@ class AreaComercialController extends Controller
         }
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         try {
             $areaComercial = Comercial::with([
                 'user.directPermissions',
