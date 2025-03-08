@@ -17,6 +17,7 @@ class PermissionsTableSeeder extends Seeder
             'ver usuarios',
             'ver empresas',
             'ver area comercial',
+            'ver sedes',
             'ver visado',
             'ver prospeccion mercado',
             'ver recuperacion cartera',
@@ -41,6 +42,7 @@ class PermissionsTableSeeder extends Seeder
         $rolEmpresa->givePermission('ver area comercial');
         $rolEmpresa->givePermission('ver visado');
         $rolEmpresa->givePermission('hacer consultas');
+        $rolEmpresa->givePermission('ver sedes');
 
         // Assign permissions to COMERCIAL role
         $rolComercial = Role::firstOrCreate([

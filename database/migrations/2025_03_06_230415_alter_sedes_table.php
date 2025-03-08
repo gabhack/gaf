@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AlterEmpresasTable extends Migration
+class AlterSedesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,10 +15,11 @@ class AlterEmpresasTable extends Migration
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::table('empresas', function (Blueprint $table) {
+        Schema::table('sedes', function (Blueprint $table) {
             $table->dropForeign(['ciudad_id']);
-            $table->dropForeign(['departamento_id']);
-            $table->dropForeign(['pais_id']);
+            $table->unsignedInteger('empresa_id')->after('id');
+            $table->foreign('empresa_id')->references('id')->on('empresas');
+            $table->unsignedBigInteger('departamento_id')->after('empresa_id');
         });
 
         Schema::enableForeignKeyConstraints();
@@ -33,10 +34,11 @@ class AlterEmpresasTable extends Migration
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::table('empresas', function (Blueprint $table) {
+        Schema::table('sedes', function (Blueprint $table) {
+            $table->dropForeign(['empresa_id']);
+            $table->dropColumn('empresa_id');
+            $table->dropColumn('departamento_id');
             $table->foreign('ciudad_id')->references('id')->on('ciudades');
-            $table->foreign('departamento_id')->references('id')->on('departamentos');
-            $table->foreign('pais_id')->references('id')->on('paises');
         });
 
         Schema::enableForeignKeyConstraints();

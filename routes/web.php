@@ -25,6 +25,7 @@ use App\Http\Controllers\FileUploadLogController;
 use App\Http\Controllers\JelouController;
 use App\Http\Controllers\JoinPensionesController;
 use App\Http\Controllers\ListaController;
+use App\Http\Controllers\SedeController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\VisadoController;
 use App\Http\Controllers\dataCotizerController;
@@ -698,6 +699,17 @@ Route::prefix('/empresas')->middleware('permission:ver empresas')->group(functio
 	Route::get('/ver/{id}', [EmpresaController::class, 'show']);
 	Route::post('/{id}', [EmpresaController::class, 'update']);
 	Route::delete('/{id}', [EmpresaController::class, 'destroy']);
+
+	Route::get('/{id}/sedes', [EmpresaController::class, 'sedes']);
+});
+
+Route::prefix('/sedes')->middleware('permission:ver sedes')->group(function () {
+	Route::get('/', [SedeController::class, 'index']);
+	Route::post('/', [SedeController::class, 'store']);
+	Route::get('/crear', [SedeController::class, 'create']);
+	Route::get('/editar/{sede}', [SedeController::class, 'edit']);
+	Route::put('/{sede}', [SedeController::class, 'update']);
+	Route::delete('/{sede}', [SedeController::class, 'destroy']);
 });
 
 Route::prefix('/area-comerciales')->middleware('permission:ver area comercial')->group(function () {

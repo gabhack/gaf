@@ -8,9 +8,6 @@
 import Form from './Form.vue';
 
 export default {
-    components: {
-        Form
-    },
     props: {
         empresa: {
             type: Object,
@@ -33,6 +30,9 @@ export default {
         return {
             form: {}
         };
+    },
+    components: {
+        Form
     },
     mounted() {
         this.setBreadcumb();

@@ -70,6 +70,14 @@
                                 Area comercial
                             </a>
                         @endcan
+                        @can('permission', 'ver sedes')
+                            <a
+                                class="collapse-item"
+                                href="/sedes"
+                            >
+                                Sedes
+                            </a>
+                        @endcan
                     </div>
                 </div>
             </li>

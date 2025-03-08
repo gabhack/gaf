@@ -1,5 +1,5 @@
 <template>
-    <b-button :size="size" :disabled="disabled" :block="block" :class="color" :type="type" @click="$emit('click')">
+    <b-button :size="size" :disabled="disabled" :block="block" :class="color" :href="href" :type="type" @click="$emit('click')">
         <slot>{{ text }}</slot>
     </b-button>
 </template>
@@ -28,6 +28,10 @@ export default {
             type: String,
             default: ''
         },
+        href: {
+            type: String,
+            default: ''
+        },
         type: {
             type: String,
             default: 'button',
@@ -38,7 +42,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-button {
+button, a {
     padding: 8px 16px;
     border-radius: 8px;
     border-color: none;

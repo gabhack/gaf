@@ -141,6 +141,10 @@ Vue.component('crear-area-comerciales', require('./components/pages/AreaComercia
 Vue.component('editar-area-comerciales', require('./components/pages/AreaComerciales/Edit.vue').default);
 Vue.component('ver-area-comerciales', require('./components/pages/AreaComerciales/Ver.vue').default);
 
+Vue.component('sedes', require('./components/pages/Sedes/Index.vue').default);
+Vue.component('crear-sedes', require('./components/pages/Sedes/Create.vue').default);
+Vue.component('editar-sedes', require('./components/pages/Sedes/Edit.vue').default);
+
 /* Vue Init */
 const app = new Vue({
 	el: '#app',
