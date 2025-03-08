@@ -568,13 +568,16 @@ export default {
 
 <style lang="scss" scoped>
 .form-control {
-    background-color: white;
     border-radius: 5px;
     color: black;
     font-weight: 100;
 
     &:not(.is-valid, .is-invalid) {
         border-color: #b8bec5;
+    }
+
+    &:not(:disabled) {
+        background-color: white;
     }
 
     &:placeholder {

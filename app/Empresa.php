@@ -74,4 +74,9 @@ class Empresa extends Model
     {
         return $this->hasMany(Comercial::class);
     }
+
+    public function sedes()
+    {
+        return $this->hasMany(Sede::class);
+    }
 }

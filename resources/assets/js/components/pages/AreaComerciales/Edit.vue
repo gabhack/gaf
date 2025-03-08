@@ -3,6 +3,7 @@
         <Form :initialData="form" :user="usuarioComercial" @update="actualizarAreaComercial" />
     </b-container>
 </template>
+
 <script>
 import Form from './Form.vue';
 
@@ -38,7 +39,8 @@ export default {
             this.form = {
                 empresa_id: this.comercial.empresa_id,
                 empresa: {
-                    ciudad_id: this.comercial.ciudad_id,
+                    departamento_id: this.comercial.sede.departamento_id,
+                    ciudad_id: this.comercial.sede.ciudad_id,
                     sede_id: this.comercial.sede_id,
                     cargo_id: this.comercial.cargo_id,
                 },

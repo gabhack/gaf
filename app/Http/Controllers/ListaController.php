@@ -98,7 +98,7 @@ class ListaController extends Controller
 
     public function listarEmpresas()
     {
-        $empresas = Empresa::all();
+        $empresas = Empresa::with('sedes')->get();
         return response()->json($empresas);
     }
 }

@@ -1,7 +1,7 @@
 <template>
     <div>
         <h2 class="mb-5">Ver Usuario</h2>
-        <BForm @submit.prevent="submitForm">
+        <BForm>
             <b-row>
                 <b-col cols="4">
                     <h4>Datos de Empresa</h4>
@@ -11,7 +11,6 @@
                 <b-col cols="4" v-if="!isCompany">
                     <b-form-group label="Empresa" label-for="empresa_id">
                         <b-form-select
-                            :state="validateState('form.empresa_id')"
                             value-field="id"
                             text-field="nombre"
                             id="empresa_id"
@@ -24,23 +23,34 @@
             </b-row>
             <b-row class="mt-4">
                 <b-col cols="4">
-                    <b-form-group label="Ciudad" label-for="empresa_ciudad_id">
+                    <b-form-group label="Departamento" label-for="empresa_departamento_id">
                         <b-form-select
-                            :state="validateState('form.empresa.ciudad_id')"
                             value-field="id"
                             text-field="nombre"
-                            id="empresa_ciudad_id"
-                            v-model="form.empresa.ciudad_id"
-                            :options="ciudades"
-                            @change="listarSedes"
+                            id="empresa_departamento_id"
+                            v-model="form.empresa.departamento_id"
+                            :options="ubicacionesFiltradas.departamentos"
                             disabled
                         ></b-form-select>
                     </b-form-group>
                 </b-col>
                 <b-col cols="4">
+                    <b-form-group label="Ciudad" label-for="empresa_ciudad_id">
+                        <b-form-select
+                            value-field="id"
+                            text-field="nombre"
+                            id="empresa_ciudad_id"
+                            v-model="form.empresa.ciudad_id"
+                            :options="ubicacionesFiltradas.ciudades"
+                            disabled
+                        ></b-form-select>
+                    </b-form-group>
+                </b-col>
+            </b-row>
+            <b-row class="mt-4">
+                <b-col cols="4">
                     <b-form-group label="Sede" label-for="empresa_sede_id">
                         <b-form-select
-                            :state="validateState('form.empresa.sede_id')"
                             value-field="id"
                             text-field="nombre"
                             id="empresa_sede_id"
@@ -53,7 +63,6 @@
                 <b-col cols="4">
                     <b-form-group label="Cargo" label-for="empresa_cargo">
                         <b-form-select
-                            :state="validateState('form.empresa.cargo_id')"
                             value-field="id"
                             text-field="cargo"
                             id="empresa_cargo"
@@ -73,11 +82,9 @@
                 <b-col cols="4">
                     <b-form-group label="Consultas Diarias" label-for="consultas_diarias">
                         <b-form-input
-                            :state="validateState('form.consultas_diarias')"
                             id="consultas_diarias"
                             v-model="form.consultas_diarias"
                             type="number"
-                            placeholder="50"
                             disabled
                         ></b-form-input>
                     </b-form-group>
@@ -92,11 +99,9 @@
                 <b-col cols="4">
                     <b-form-group label="Nombre y Apellido" label-for="personal_nombre_apellido">
                         <b-form-input
-                            :state="validateState('form.personal.nombre_apellido')"
                             id="personal_nombre_apellido"
                             v-model="form.personal.nombre_apellido"
                             type="text"
-                            placeholder="Danilo perez"
                             disabled
                         ></b-form-input>
                     </b-form-group>
@@ -104,7 +109,6 @@
                 <b-col cols="4">
                     <b-form-group label="Tipo de Documento" label-for="personal_tipo_documento_id">
                         <b-form-select
-                            :state="validateState('form.personal.tipo_documento_id')"
                             value-field="id"
                             text-field="nombre"
                             id="tipo_personal_id"
@@ -117,11 +121,9 @@
                 <b-col cols="4">
                     <b-form-group label="Número Documento" label-for="personal_numero_documento">
                         <b-form-input
-                            :state="validateState('form.personal.numero_documento')"
                             id="personal_numero_documento"
                             v-model="form.personal.numero_documento"
                             type="number"
-                            placeholder="10253658596"
                             disabled
                         ></b-form-input>
                     </b-form-group>
@@ -129,11 +131,9 @@
                 <b-col cols="4">
                     <b-form-group label="Nacionalidad" label-for="personal_nacionalidad">
                         <b-form-input
-                            :state="validateState('form.personal.nacionalidad')"
                             id="personal_nacionalidad"
                             v-model="form.personal.nacionalidad"
                             type="text"
-                            placeholder="Colombia"
                             disabled
                         ></b-form-input>
                     </b-form-group>
@@ -141,11 +141,9 @@
                 <b-col cols="4">
                     <b-form-group label="Correo de Contacto" label-for="personal_correo_contacto">
                         <b-form-input
-                            :state="validateState('form.personal.correo_contacto')"
                             id="personal_correo_contacto"
                             v-model="form.personal.correo_contacto"
                             type="email"
-                            placeholder="usuario1@gmail.com"
                             disabled
                         ></b-form-input>
                     </b-form-group>
@@ -153,35 +151,9 @@
                 <b-col cols="4">
                     <b-form-group label="Número de Contacto" label-for="personal_numero_contacto">
                         <b-form-input
-                            :state="validateState('form.personal.numero_contacto')"
                             id="personal_numero_contacto"
                             v-model="form.personal.numero_contacto"
                             type="number"
-                            placeholder="3214556756"
-                            disabled
-                        ></b-form-input>
-                    </b-form-group>
-                </b-col>
-                <b-col cols="4" v-if="!onUpdate">
-                    <b-form-group label="Contraseña" label-for="personal_contrasena">
-                        <b-form-input
-                            :state="validateState('form.personal.contrasena')"
-                            id="personal_contrasena"
-                            v-model="form.personal.contrasena"
-                            type="password"
-                            placeholder="********"
-                            disabled
-                        ></b-form-input>
-                    </b-form-group>
-                </b-col>
-                <b-col cols="4" v-if="!onUpdate">
-                    <b-form-group label="Confirmar Contraseña" label-for="personal_confirmar_contrasena">
-                        <b-form-input
-                            :state="validateState('form.personal.confirmarContrasena')"
-                            id="personal_confirmar_contrasena"
-                            v-model="form.personal.confirmarContrasena"
-                            type="password"
-                            placeholder="********"
                             disabled
                         ></b-form-input>
                     </b-form-group>
@@ -197,7 +169,6 @@
                             :close-on-select="false"
                             :clear-on-select="false"
                             :preserve-search="true"
-                            placeholder="Busca y selecciona"
                             label="name"
                             track-by="id"
                             :taggable="true"
@@ -219,14 +190,6 @@
                             <PlusIcon></PlusIcon>
                             Documento de Identidad
                         </CustomButton>
-                        <b-form-invalid-feedback :state="validateState('form.documentacion.src_documento_identidad')">
-                            <template v-if="!$v.form.documentacion.src_documento_identidad.required">
-                                Debes añadir un archivo
-                            </template>
-                            <template v-else-if="!$v.form.documentacion.src_documento_identidad.isPDF">
-                                Debes añadir un archivo en formato PDF
-                            </template>
-                        </b-form-invalid-feedback>
                     </b-form-group>
                 </b-col>
             </b-row>
@@ -239,7 +202,6 @@
                 <b-col cols="4">
                     <b-form-group label="AMI (Análisis de mercado inteligente)" label-for="plataforma_ami">
                         <b-form-select
-                            :state="validateState('form.plataforma.ami_id')"
                             value-field="id"
                             text-field="nombre"
                             id="plataforma_ami"
@@ -252,7 +214,6 @@
                 <b-col cols="4">
                     <b-form-group label="HEGO" label-for="plataforma_hego">
                         <b-form-select
-                            :state="validateState('form.plataforma.hego_id')"
                             value-field="id"
                             text-field="nombre"
                             id="plataforma_hego"
@@ -261,15 +222,6 @@
                             disabled
                         ></b-form-select>
                     </b-form-group>
-                </b-col>
-                <b-col cols="4" align-self="end">
-                    <CustomButton class="mb-3" type="submit">
-                        <template v-if="!onUpdate">
-                            <PlusIcon></PlusIcon>
-                            Crear Usuario
-                        </template>
-                        <template v-else> Guardar Cambios </template>
-                    </CustomButton>
                 </b-col>
             </b-row>
         </BForm>
@@ -290,19 +242,12 @@
 </template>
 
 <script>
-import { email, required, requiredIf, sameAs, minLength, numeric } from 'vuelidate/lib/validators';
-
 import CustomButton from '../../customComponents/CustomButton.vue';
 import PlusIcon from '../../icons/PlusIcon.vue';
 import LiteModal from '../../customComponents/LiteModal.vue';
 import InfoCircleIcon from '../../icons/InfoCircleIcon.vue';
 import FileInput from '../../customComponents/FileInput.vue';
 import Multiselect from 'vue-multiselect';
-
-const isPDF = value => {
-    if (!value) return true;
-    return value.type === 'application/pdf';
-};
 
 export default {
     props: ['initialData', 'user'],
@@ -319,6 +264,7 @@ export default {
             form: {
                 empresa_id: null,
                 empresa: {
+                    departamento_id: null,
                     ciudad_id: null,
                     sede_id: null,
                     cargo_id: null
@@ -351,71 +297,49 @@ export default {
             tiposDocumento: [],
             amis: [],
             hegos: [],
-            empresas: []
-        };
-    },
-    computed: {
-        onUpdate() {
-            return !!this.initialData;
-        },
-        isCompany() {
-            return this.user.role.name === "EMPRESA";
-        }
-    },
-    validations() {
-        return {
-            form: {
-                empresa_id: { required },
-                empresa: {
-                    ciudad_id: { required },
-                    sede_id: { required },
-                    cargo_id: { required }
-                },
-                consultas_diarias: { required, numeric },
-                personal: {
-                    nombre_apellido: { required },
-                    tipo_documento_id: { required },
-                    numero_documento: { required, numeric },
-                    nacionalidad: { required },
-                    correo_contacto: { required, email },
-                    numero_contacto: { required, numeric },
-                    contrasena: {
-                        required: requiredIf(() => {
-                            return !this.onUpdate;
-                        }),
-                        minLength: minLength(6)
-                    },
-                    confirmarContrasena: {
-                        required: requiredIf(() => {
-                            return !this.onUpdate;
-                        }),
-                        sameAsContrasena: sameAs('contrasena')
-                    }
-                },
-                documentacion: {
-                    src_documento_identidad: {
-                        required: requiredIf(() => {
-                            return !this.form.previewDocumentoIdentidad;
-                        }),
-                        isPDF
-                    }
-                },
-                plataforma: {
-                    ami_id: { required },
-                    hego_id: { required }
-                }
+            empresas: [],
+            ubicaciones: {
+                departamentos: [],
+                ciudades: []
             }
         };
     },
+    computed: {
+        isCompany() {
+            return this.user.role.name === "EMPRESA";
+        },
+        sedesEmpresa() {
+            const empresa = this.empresas.find(empresa => empresa.id === this.form.empresa_id);
+            return empresa ? empresa.sedes : [];
+        },
+        sedesDepartamentosIds() {
+            return this.sedesEmpresa.map(sede => sede.departamento_id);
+        },
+        sedesCiudadesIds() {
+            return this.sedesEmpresa.map(sede => sede.ciudad_id);
+        },
+        ubicacionesFiltradas() {
+            return {
+                departamentos: this.ubicaciones.departamentos.filter(dep =>
+                    this.sedesDepartamentosIds.includes(dep.id)
+                ),
+                ciudades: this.form.empresa.departamento_id
+                    ? this.ubicaciones.ciudades
+                          .filter(mun => mun.departamento_id === this.form.empresa.departamento_id)
+                          .filter(mun => this.sedesCiudadesIds.includes(mun.id))
+                    : []
+            };
+        }
+    },
     async mounted() {
         await this.listarPermisos();
-        await this.listarCiudades();
-        await this.listarSedesEdit();
         await this.listarCargos();
         await this.listarTiposDocumento();
         await this.listarAmis();
         await this.listarHegos();
         await this.listarEmpresas();
+        await this.cargarUbicaciones();
+        await this.listarSedes();
 
         if (this.isCompany) {
             this.form.empresa_id = this.user.empresa.id;
@@ -432,21 +356,9 @@ export default {
         },
     },
     methods: {
-        validateState(name) {
-            const validation = _.get(this.$v, name);
-
-            if (!validation) return null;
-
-            const { $dirty, $error } = validation;
-            return $dirty ? !$error : null;
-        },
         async listarPermisos() {
             let response = await axios.get('/listas/permisos');
             this.permisos = response.data;
-        },
-        async listarCiudades() {
-            let response = await axios.get('/listas/ciudades');
-            this.ciudades = response.data;
         },
         async listarCargos() {
             let response = await axios.get('/listas/cargos');
@@ -464,19 +376,30 @@ export default {
             let response = await axios.get('/listas/hegos');
             this.hegos = response.data;
         },
+        async listarEmpresas() {
+            let response = await axios.get('/listas/empresas');
+            this.empresas = response.data;
+        },
         async listarSedes() {
             let response = await axios.get('/listas/ciudades/' + this.form.empresa.ciudad_id + '/sedes');
             this.sedes = response.data;
         },
-        async listarSedesEdit() {
-            if (this.form.empresa.ciudad_id) {
-                let response = await axios.get('/listas/ciudades/' + this.form.empresa.ciudad_id + '/sedes');
-                this.sedes = response.data;
+        async cargarUbicaciones() {
+            try {
+                const [depResponse, munResponse] = await Promise.all([
+                    axios.get('/json/departamentos.json'),
+                    axios.get('/json/municipios.json')
+                ]);
+
+                if (depResponse.data && munResponse.data) {
+                    this.ubicaciones.departamentos = depResponse.data;
+                    this.ubicaciones.ciudades = munResponse.data;
+                } else {
+                    console.error('Error: Datos inválidos en las respuestas');
+                }
+            } catch (error) {
+                console.error('Error al cargar las ubicaciones', error);
             }
-        },
-        async listarEmpresas() {
-            let response = await axios.get('/listas/empresas');
-            this.empresas = response.data;
         },
         handleFileInput(file) {
             this.form.documentacion.src_documento_identidad = file;
@@ -485,26 +408,22 @@ export default {
         showModal() {
             this.$bvModal.show('documento-identidad-modal');
         },
-        submitForm() {
-            this.$v.$touch();
-
-            if (!this.$v.$invalid) {
-                this.$emit(!this.onUpdate ? 'create' : 'update', this.form);
-            }
-        }
     }
 };
 </script>
 
 <style lang="scss" scoped>
 .form-control {
-    background-color: white;
     border-radius: 5px;
     color: black;
     font-weight: 100;
 
     &:not(.is-valid, .is-invalid) {
         border-color: #b8bec5;
+    }
+
+    &:not(:disabled) {
+        background-color: white;
     }
 
     &:placeholder {
