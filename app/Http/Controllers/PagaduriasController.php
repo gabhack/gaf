@@ -168,9 +168,10 @@ class PagaduriasController extends Controller
         Log::info("Entro a buscar la cedula: ",  ['doc' => $doc]);
 
         $user = Auth::user();
+        $userType = IsCompany() ? 'empresa' : (IsComercial() ? 'comercial' : null);
 
-        if (IsCompany() || IsComercial()) {
-            if ($user->empresa->consultas_diarias <= 0) {
+        if ($userType) {
+            if ($user->$userType->consultas_diarias <= 0) {
                 return response()->json([
                     'message' => 'No tienes consultas disponibles',
                 ], 400);
@@ -264,8 +265,8 @@ class PagaduriasController extends Controller
                 }
             }
 
-            if (IsCompany() || IsComercial()) {
-                $user->empresa->decrement('consultas_diarias', 1);
+            if ($userType) {
+                $user->$userType->decrement('consultas_diarias', 1);
             }
 
             DB::commit();

@@ -1,6 +1,6 @@
 <template>
     <b-container fluid class="my-3">
-        <Form :initialData="form" :empresas="empresas" @update="actualizarSede" />
+        <Form :initialData="form" :empresas="empresas" :user="user" @update="actualizarSede" />
     </b-container>
 </template>
 
@@ -8,16 +8,7 @@
 import Form from './Form.vue';
 
 export default {
-    props: {
-        sede: {
-            type: Object,
-            required: true
-        },
-        empresas: {
-            type: Array,
-            required: true
-        }
-    },
+    props: ['sede', 'empresas', 'user'],
     data() {
         return {
             form: {}

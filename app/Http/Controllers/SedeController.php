@@ -130,8 +130,14 @@ class SedeController extends Controller
     public function edit(Sede $sede)
     {
         try {
+            $user = Auth::user();
             $empresas = Empresa::orderBy('nombre', 'asc')->get();
-            return view('sedes.edit', compact('sede', 'empresas'));
+
+            return view('sedes.edit', [
+                'sede' => $sede,
+                'empresas' => $empresas,
+                'user' => $user,
+            ]);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Hubo un error al obtener la sede',
