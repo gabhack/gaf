@@ -664,6 +664,7 @@ export default {
                 this.isLoading = false;
             }
         },
+
         async fetchPaginatedResults(page) {
             this.isLoading = true;
             try {
@@ -696,29 +697,7 @@ export default {
             } finally {
                 this.isLoading = false;
             }
-        });
-
-        // Asegurar que hay datos
-        if (response.data.total === 0) {
-            this.results = [];
-            this.hasMore = false;
-            this.isLoading = false;
-            return;
         }
-
-        this.results = response.data.data.filter(item => item && typeof item === 'object');
-        this.total = response.data.total;
-        this.page = response.data.page;
-        this.perPage = response.data.perPage;
-        this.hasMore = response.data.hasMore; // Asegurar si hay más páginas
-
-        this.error = null;
-    } catch (error) {
-        this.error = error.response ? error.response.data.error : 'Error al buscar los resultados paginados';
-    } finally {
-        this.isLoading = false;
-    }
-}
 ,
         isValidMonthYear() {
             const mesRegex = /^(0[1-9]|1[0-2])$/;
