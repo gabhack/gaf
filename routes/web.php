@@ -562,7 +562,7 @@ Route::get('getHistoryConsults', 'VisadoController@historialConsultas');
 Route::post('visados', [VisadoController::class, 'store']);
 Route::post('visados/{id}', [VisadoController::class, 'update']);
 
-Route::prefix('/visados')->middleware('permission:ver visados')->group(function () {
+Route::prefix('/visados')->middleware('permission:ver visado')->group(function () {
     Route::post('/', [VisadoController::class, 'store']);
     Route::post('/{id}', [VisadoController::class, 'update']);
 });
