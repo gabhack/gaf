@@ -254,6 +254,7 @@ export default {
     }
 };
 </script>
+
 <style scoped lang="scss">
 ::v-deep .table {
     & thead {
@@ -267,6 +268,7 @@ export default {
             min-height: 50px !important;
         }
     }
+
     & tbody {
         background-color: #fff;
         font-size: 14px;

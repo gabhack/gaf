@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
 use \App\Consultas as Consultas;
 use \App\User as User;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -26,11 +25,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $labels = Array();
+        $labels = array();
         $fechadesde = date("Y-m-1 00:00:00");
         $fechahasta = date("Y-m-d 23:59:59");
 
-        setlocale(LC_ALL,"es_ES");
+        setlocale(LC_ALL, "es_ES");
         $labels['mes_actual'] = GetLabelEspanolMeses(date("m"));
 
         if (IsUser()) {
@@ -99,7 +98,8 @@ class HomeController extends Controller
         ]);
     }
 
-    public function ami(){
+    public function ami()
+    {
         return view('ami');
-    } 
+    }
 }

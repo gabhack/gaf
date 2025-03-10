@@ -4,22 +4,26 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 // Controladores
-use App\Http\Controllers\ContactController;
-use App\Http\Controllers\DescuentosController;
-use App\Http\Controllers\EmbargosController;
-use App\Http\Controllers\VisadoController;
-use App\Http\Controllers\DocumentController;
-use App\Http\Controllers\DemograficoController;
+use App\Http\Controllers\AreaComercialController;
 use App\Http\Controllers\ColpensionesController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\DecevalController;
+use App\Http\Controllers\DemograficoController;
+use App\Http\Controllers\DescuentosController;
+use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\EmbargosController;
+use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\FiducidiariaController;
-use App\Http\Controllers\UploadController;
-use App\Http\Controllers\JoinPensionesController;
 use App\Http\Controllers\FileUploadLogController;
-use App\Http\Controllers\ParametrosComparativaController;
 use App\Http\Controllers\JelouController;
+use App\Http\Controllers\JoinPensionesController;
+use App\Http\Controllers\ListaController;
+use App\Http\Controllers\SedeController;
+use App\Http\Controllers\UploadController;
+use App\Http\Controllers\VisadoController;
+use App\Http\Controllers\ParametrosComparativaController;
 use App\Http\Controllers\Fintra\CreditRequestController;
 use App\Http\Controllers\dataCotizerController;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -34,7 +38,6 @@ use App\Http\Controllers\dataCotizerController;
 // ------------------------------------------------------------------
 // AUTENTICACIÓN BÁSICA
 // ------------------------------------------------------------------
-
 Auth::routes(['register' => true]);
 
 // Rutas Home
@@ -139,6 +142,7 @@ Route::group(['prefix' => 'pagos'], function () {
     Route::post('/pagarefectivo', 'PagosController@payEfectivo');
     Route::get('/pagarefectivo', 'PagosController@getPayEfectivo');
 
+    // Nuevas (no estaban en el primer bloque, se conservan)
     Route::get('/edit/{id}', 'PagosController@edit');
     Route::post('/update/{id}', 'PagosController@update');
     Route::get('/delete/{id}', 'PagosController@destroy');
@@ -171,9 +175,9 @@ Route::group(['prefix' => 'deceval'], function () {
     Route::get('/consultar', 'DecevalController@consultar')->name('deceval.consultar');
     Route::post('/firmar', 'DecevalController@firmar');
     Route::get('/consulta', 'DecevalController@consulta');
-    Route::get('/test', [\App\Http\Controllers\DecevalController::class, 'testService']);
+    Route::get('/test', [DecevalController::class, 'testService']);
 
-    // Repeticiones para BBVA - sin alterar
+    // Repeticiones para BBVA - las conservamos solo una vez
     Route::post('/pagarpse', 'PagosController@pagarpse');
     Route::post('/pay', 'PagosController@pay');
     Route::post('/payPSE', 'PagosController@payPSE');
@@ -428,6 +432,7 @@ Route::group(['prefix' => 'consultas'], function () {
 // ESTUDIOS
 // ------------------------------------------------------------------
 Route::group(['prefix' => 'estudios'], function () {
+    // Primer bloque
     Route::get('/', 'EstudiosController@index')->name('hego.estudios');
     Route::get('/nuevo-estudio', 'EstudiosController@paso1')->name('hego.nuevo-estudio');
     Route::post('/iniciar', 'EstudiosController@iniciar');
@@ -448,8 +453,8 @@ Route::group(['prefix' => 'estudios'], function () {
     Route::get('/detalle-cartera/{id}/{tipoconsulta?}', 'CarteraController@detalleCateraView');
     Route::post('/comprar-cartera', 'EstudiosController@compraCartera');
 
+    // Rutas adicionales del segundo bloque (no estaban en el primero)
     Route::post('/estudio-actualizar', 'EstudiosController@actualizarNew')->name('estudio.actualizar');
-
     Route::get('/pagos/{id}', 'EstudiosController@pagos')->name('estudio.pagos');
     Route::get('/recaudo/{id}', 'EstudiosController@recaudo')->name('estudio.recaudo');
     Route::post('/recaudos/guardar', 'EstudiosController@recaudoGuardar')->name('estudio.recaudo');
@@ -514,7 +519,7 @@ Route::post('consultaDescuentossedchoco', 'DescuentossedchocoController@consulta
 Route::post('consultaDescuentossemsahagun', 'DescuentossemsahagunController@consultaUnitaria');
 Route::post('consultaDescuentossemquibdo', 'DescuentosSemQuibdoController@consultaUnitaria');
 Route::post('consultaDescuentossempopayan', 'DescuentossempopayanController@consultaUnitaria');
-// Route::post('consultaDescuentossedcauca', 'DescuentossedcaucaController@consultaUnitaria');
+//Route::post('consultaDescuentossedcauca', 'DescuentossedcaucaController@consultaUnitaria');
 Route::post('consultaDetalledecliente', 'DetalledeclienteController@consultaUnitaria');
 Route::post('consultaDescuentossemcali', 'DescuentosSemCaliController@consultaUnitaria');
 Route::post('consultaEmbargossemcali', 'EmbargosSemCaliController@consultaUnitaria');
@@ -557,12 +562,15 @@ Route::get('getHistoryConsults', 'VisadoController@historialConsultas');
 Route::post('visados', [VisadoController::class, 'store']);
 Route::post('visados/{id}', [VisadoController::class, 'update']);
 
-// ------------------------------------------------------------------
-// VISTAS VARIAS (auth middleware)
-// ------------------------------------------------------------------
+Route::prefix('/visados')->middleware('permission:ver visados')->group(function () {
+    Route::post('/', [VisadoController::class, 'store']);
+    Route::post('/{id}', [VisadoController::class, 'update']);
+});
+
+Route::get('getHistoryConsults', 'VisadoController@historialConsultas');
 Route::view('/historyClient', 'historyClient')->middleware('auth');
 Route::view('/dataClient', 'dataClient');
-Route::view('/dataClientDraft', 'dataClientDraft')->middleware('auth');
+Route::view('/dataClientDraft', 'dataClientDraft')->middleware(['auth', 'permission:hacer consultas']);
 Route::view('/refundCartera', 'refundCartera');
 Route::view('/certificados', 'certificados');
 Route::view('/massiveCharge', 'massive');
@@ -583,7 +591,9 @@ Route::resource('/datamessedvalle', 'DatamesSedValleController');
 // ------------------------------------------------------------------
 // COTIZER
 // ------------------------------------------------------------------
-Route::resource('/cotizer-data', 'dataCotizerController')->only(['store', 'index', 'show', 'update']);
+// Mantenemos solo una definición del resource
+Route::resource('/cotizer-data', dataCotizerController::class)->only(['store', 'index', 'show', 'update']);
+
 Route::get('/cotizer-data/borrar/{id}', 'dataCotizerController@destroy');
 Route::view('/solicitud', 'creditCalculator')->middleware('auth');
 Route::view('/RegisterCredit', 'registerCredit')->name('register.credit');
@@ -595,7 +605,7 @@ Route::apiResource('/whatsapp-bot', 'WhatsAppBotController');
 
 // ------------------------------------------------------------------
 // MIDDLEWARE AUTH
-// (ejemplo: obtención cupones, descuentos, embargos con login)
+// ------------------------------------------------------------------
 Route::middleware('auth')->group(function () {
     Route::post('/get-coupons', 'CouponsController@index')->name('coupons.index');
     Route::post('/get-descuentos', [DescuentosController::class, 'index'])->name('descuentos');
@@ -689,14 +699,12 @@ Route::get('/file-upload-logs', [FileUploadLogController::class, 'getLogs']);
 // PARÁMETROS COMPARATIVA FONDO/ORIGINADOR
 // ------------------------------------------------------------------
 Route::group(['prefix' => 'parametros-comparativa'], function () {
-    Route::get('/', 'ParametrosComparativaController@index')->name('parametros-comparativa.index');
-    Route::post('/store', 'ParametrosComparativaController@store')->name('parametros-comparativa.store');
-    Route::get('/comparativa', 'ParametrosComparativaController@comparativa')->name('parametros_comparativa.comparativa');
-    Route::post('/upload', 'ParametrosComparativaController@upload')->name('parametros_comparativa.upload');
-    Route::get('/opciones', 'ParametrosComparativaController@opciones')->name('parametros-comparativa.opciones');
-
-    // Nota: hay otra llamada /opciones repetida en el original, se mantiene
-    Route::get('/opciones', 'ParametrosComparativaController@opciones');
+    Route::get('/', [ParametrosComparativaController::class, 'index'])->name('parametros-comparativa.index');
+    Route::post('/store', [ParametrosComparativaController::class, 'store'])->name('parametros-comparativa.store');
+    Route::get('/comparativa', [ParametrosComparativaController::class, 'comparativa'])->name('parametros_comparativa.comparativa');
+    Route::post('/upload', [ParametrosComparativaController::class, 'upload'])->name('parametros_comparativa.upload');
+    Route::get('/opciones', [ParametrosComparativaController::class, 'opciones'])->name('parametros-comparativa.opciones');
+    // (en el código original aparecía 2 veces; solo se deja una)
 });
 
 // ------------------------------------------------------------------
@@ -713,29 +721,69 @@ Route::get('jelou/get-factor/{doc}', [JelouController::class, 'getFactorPerDoc']
 // ------------------------------------------------------------------
 // RUTAS PARA LA VISTA DE CRÉDITO (CREDITREQUEST)
 // ------------------------------------------------------------------
+Route::view('/credit-request', 'CreditRequest.CreditForm')->name('credit-request.view');
+Route::post('/credit-requests', [CreditRequestController::class, 'store'])->name('credit-request.store');
 
-// Ruta para cargar la vista del formulario (Vue.js)
-Route::view('/credit-request', 'CreditRequest.CreditForm')
-     ->name('credit-request.view');
-
-// Ruta para manejar la solicitud de crédito (POST al controlador)
-Route::post('/credit-requests', [CreditRequestController::class, 'store'])
-     ->name('credit-request.store');
-
-//     -----------------------------------------------------------
-//  RUTAS PARA LISTAR Y ACTUALIZAR CREDIT REQUEST
-// ------------------------------------------------------------------
-
-// Vista Blade que contiene la tabla (con el componente Vue)
+// Listar/actualizar credit requests
 Route::get('/credit-requests', [CreditRequestController::class, 'index'])->name('credit-request.index');
-
-// Endpoint que devuelve JSON con todos los credit requests
 Route::get('/credit-requests/all', [CreditRequestController::class, 'getAll'])->name('credit-request.all');
-
-// Endpoint para cambiar el estado a 'aprobado'
-Route::patch('/credit-requests/{id}/status', [CreditRequestController::class, 'updateStatus'])
-     ->name('credit-request.updateStatus');
-
-     Route::post('credit-requests/{id}/documents', [CreditRequestController::class, 'uploadDocument']);
+Route::patch('/credit-requests/{id}/status', [CreditRequestController::class, 'updateStatus'])->name('credit-request.updateStatus');
+Route::post('credit-requests/{id}/documents', [CreditRequestController::class, 'uploadDocument']);
 Route::get('credit-requests/{id}/documents', [CreditRequestController::class, 'getDocuments']);
 
+// ------------------------------------------------------------------
+// EMPRESAS (middleware de permiso)
+// ------------------------------------------------------------------
+Route::prefix('/empresas')->middleware('permission:ver empresas')->group(function () {
+    Route::get('/', [EmpresaController::class, 'index']);
+    Route::post('/', [EmpresaController::class, 'store']);
+    Route::get('/crear', [EmpresaController::class, 'crear']);
+    Route::get('/edit/{id}', [EmpresaController::class, 'edit']);
+    Route::get('/ver/{id}', [EmpresaController::class, 'show']);
+    Route::post('/{id}', [EmpresaController::class, 'update']);
+    Route::delete('/{id}', [EmpresaController::class, 'destroy']);
+
+    Route::get('/{id}/sedes', [EmpresaController::class, 'sedes']);
+});
+
+// ------------------------------------------------------------------
+// SEDES (middleware de permiso)
+// ------------------------------------------------------------------
+Route::prefix('/sedes')->middleware('permission:ver sedes')->group(function () {
+    Route::get('/', [SedeController::class, 'index']);
+    Route::post('/', [SedeController::class, 'store']);
+    Route::get('/crear', [SedeController::class, 'create']);
+    Route::get('/editar/{sede}', [SedeController::class, 'edit']);
+    Route::put('/{sede}', [SedeController::class, 'update']);
+    Route::delete('/{sede}', [SedeController::class, 'destroy']);
+});
+
+// ------------------------------------------------------------------
+// ÁREA COMERCIAL (middleware de permiso)
+// ------------------------------------------------------------------
+Route::prefix('/area-comerciales')->middleware('permission:ver area comercial')->group(function () {
+    Route::get('/', [AreaComercialController::class, 'index']);
+    Route::post('/', [AreaComercialController::class, 'store']);
+    Route::get('/crear', [AreaComercialController::class, 'crear']);
+    Route::get('/edit/{id}', [AreaComercialController::class, 'edit']);
+    Route::get('/ver/{id}', [AreaComercialController::class, 'show']);
+    Route::post('/{id}', [AreaComercialController::class, 'update']);
+    Route::delete('/{id}', [AreaComercialController::class, 'destroy']);
+});
+
+// ------------------------------------------------------------------
+// LISTAS
+// ------------------------------------------------------------------
+Route::prefix('/listas')->group(function () {
+    Route::get('/tipo-empresas', [ListaController::class, 'listarTipoEmpresas']);
+    Route::get('/tipo-sociedades', [ListaController::class, 'listarTipoSociedades']);
+    Route::get('/tipo-documentos', [ListaController::class, 'listarTipoDocumentos']);
+    Route::get('/ciudades', [ListaController::class, 'listarCiudades']);
+    Route::get('/sedes', [ListaController::class, 'listarSedes']);
+    Route::get('/ubicaciones', [ListaController::class, 'listarUbicaciones']);
+    Route::get('/cargos', [ListaController::class, 'listarCargos']);
+    Route::get('/amis', [ListaController::class, 'listarAmis']);
+    Route::get('/hegos', [ListaController::class, 'listarHegos']);
+    Route::get('/permisos', [ListaController::class, 'listarPermisos']);
+    Route::get('/empresas', [ListaController::class, 'listarEmpresas']);
+});

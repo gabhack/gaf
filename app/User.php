@@ -15,7 +15,12 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'roles_id', 'id_company', 'id_padre', 'name', 'email', 'password',
+        'role_id',
+        'id_company',
+        'id_padre',
+        'name',
+        'email',
+        'password',
     ];
 
     /**
@@ -25,30 +30,135 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'remember_token',
+        'password',
     ];
-	
-	
-	public function rol()
-	{
-		return $this->hasOne('\App\Roles', 'id', 'roles_id');
-	}
-	
-	public function padre()
-	{
-		return $this->hasOne('\App\User', 'id', 'users_id');
-	}
-	
-	public function company()
-	{
-		return $this->hasOne('\App\User', 'id', 'id_company');
-	}
 
-    public function hasRole($rol) {
-        if ($this->rol->rol == $rol) {
+    protected $appends = ['consultas_diarias'];
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function hasRole($role)
+    {
+        if ($this->role->name == $role) {
             return true;
-        } else {
-            return false;
         }
+
+        return false;
+    }
+
+    public function rolePermissions()
+    {
+        return $this->role ? $this->role->permissions : collect([]);
+    }
+
+    public function directPermissions()
+    {
+        return $this->morphToMany(Permission::class, 'model', 'model_has_permissions', 'model_id', 'permission_id');
+    }
+
+    public function getConsultasDiariasAttribute()
+    {
+        if ($this->empresa) {
+            return $this->empresa->consultas_diarias;
+        }
+
+        if ($this->comercial) {
+            return $this->comercial->consultas_diarias;
+        }
+
+        return null;
+    }
+
+    public function givePermission($permission)
+    {
+        if (is_string($permission)) {
+            $permission = Permission::where('name', $permission)->first();
+        }
+
+        if (is_numeric($permission)) {
+            $permission = Permission::find($permission);
+        }
+
+        if (!$permission) {
+            throw new \Exception("El permiso no existe.");
+        }
+
+        $hasPermission = $this->directPermissions->contains($permission->id);
+        if (!$hasPermission) {
+            $this->directPermissions()->attach($permission->id);
+        }
+    }
+
+    public function revokePermission($permission)
+    {
+        if (is_string($permission)) {
+            $permission = Permission::where('name', $permission)->first();
+        }
+
+        if (is_numeric($permission)) {
+            $permission = Permission::find($permission);
+        }
+
+        if (!$permission) {
+            return;
+        }
+
+        $this->directPermissions()->detach($permission->id);
+    }
+
+    public function syncPermissions($permissions)
+    {
+        $permissions = collect($permissions)->map(function ($permission) {
+            if (is_string($permission)) {
+                return Permission::where('name', $permission)->first();
+            }
+
+            if (is_numeric($permission)) {
+                return Permission::find($permission);
+            }
+
+            return $permission;
+        });
+
+        $permissions = $permissions->filter();
+
+        $this->directPermissions()->sync($permissions->pluck('id'));
+    }
+
+    public function hasPermission($permission)
+    {
+        if ($this->rolePermissions()->contains('name', $permission)) {
+            return true;
+        }
+
+        if ($this->directPermissions->contains('name', $permission)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function empresa()
+    {
+        return $this->hasOne(Empresa::class);
+    }
+
+    public function comercial()
+    {
+        return $this->hasOne(Comercial::class);
+    }
+
+    public function padre()
+    {
+        return $this->hasOne('\App\User', 'id', 'users_id');
+    }
+
+    public function company()
+    {
+        return $this->hasOne('\App\User', 'id', 'id_company');
     }
 
     public function consultas()

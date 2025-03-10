@@ -270,6 +270,7 @@ export default {
     }
 };
 </script>
+
 <style scoped lang="scss">
 ::v-deep .table {
     & thead {

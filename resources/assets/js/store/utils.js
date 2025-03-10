@@ -8,11 +8,10 @@ const normalizeDate = date => {
     const month = d.getMonth() + 1; // Mes (1-12)
     const day = new Date(year, month, 0).getDate(); // Último día del mes
     const normalizedDate = `${year}-${month < 10 ? '0' + month : month}-${day}`;
-    
+
     console.log(`[normalizeDate] Fecha original: ${date}, Fecha normalizada: ${normalizedDate}`);
     return normalizedDate;
 };
-
 
 // Verifica si una fecha es válida
 const isValidDate = date => {
@@ -41,8 +40,6 @@ export const setCurrentPeriod = data => {
 
     return sortedPeriods;
 };
-
-
 
 // Convierte un valor de cadena flotante a entero
 export const floatToInt = value => {

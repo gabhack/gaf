@@ -60,6 +60,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'role' => \App\Http\Middleware\RoleMiddleware::class,
         'basic.auth' => \App\Http\Middleware\BasicAuthMiddleware::class,
-
+        'permission' => \App\Http\Middleware\CheckPermission::class,
     ];
 }

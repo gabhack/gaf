@@ -55,7 +55,7 @@
                         :validateClass="activeId == 'dataclientMonto' ? true : false"
                     />
 
-                    <!--<b-input-group size="md" prepend="$">
+                    <!-- <b-input-group size="md" prepend="$">
                         <input
                             type="text"
                             class="style-form-control col-md-8"
@@ -65,8 +65,7 @@
                             :class="{ errorValid: activeId == 'dataclientMonto' }"
                             @change="activeId = ''"
                         />
-                       
-                    </b-input-group>-->
+                    </b-input-group> -->
                 </b-col>
                 <b-col cols="12" md="4" class="mb-2 mb-md-4">
                     <b class="panel-label mb-2"><span class="text-danger"> *</span> Cuota deseada</b>
@@ -111,6 +110,9 @@
             <b-row>
                 <b-col cols="12" md="4" v-if="!dataclient.pagadurias && !flag">
                     <CustomButton text="Consultar Pagadurias" @click="validationForm" />
+                    <small v-if="userRole != 'ADMIN_SISTEMA'" class="d-block mt-2">
+                        Consultas disponibles: {{ user.consultas_diarias || 0 }}
+                    </small>
                 </b-col>
 
                 <b-col cols="12" md="4" v-else>
@@ -143,13 +145,14 @@
         </div>
     </div>
 </template>
+
 <!-- <b-button
-                        type="button"
-                        variant="black-pearl"
-                        v-if="dataclient.doc && dataclient.name"
-                        class="px-4"
-                        @click="getAllPagadurias"
-   >
+        type="button"
+        variant="black-pearl"
+        v-if="dataclient.doc && dataclient.name"
+        class="px-4"
+        @click="getAllPagadurias"
+    >
     CONSULTAR PAGADURIAS
 </b-button> -->
 <script>
@@ -157,7 +160,9 @@ import { mapState, mapMutations } from 'vuex';
 import CustomButton from '../../customComponents/CustomButton.vue';
 import Download from '../../icons/Download.vue';
 import InputCurrency from '../../customComponents/InputCurrency.vue';
+
 export default {
+    props: ['user'],
     name: 'FormConsult',
     components: {
         CustomButton,
@@ -186,6 +191,9 @@ export default {
         console.log(this.pagaduriasTypes);
     },
     computed: {
+        userRole() {
+            return this.user.role.name;
+        },
         ...mapState('datamesModule', ['datamesSed', 'cuotadeseada']),
         ...mapState('pagaduriasModule', ['pagaduriasTypes'])
     },
@@ -227,56 +235,58 @@ export default {
         emitInfo() {
             this.getAllPagadurias();
         },
+        showToastError(message, ref) {
+            this.$bvToast.toast(message, {
+                title: '¡Error!',
+                autoHideDelay: 5000,
+                solid: true,
+                variant: 'danger'
+            });
 
+            if (ref) {
+                this.$nextTick(() => {
+                    this.$refs[ref].focus();
+                    this.activeId = ref;
+                });
+            }
+        },
         async validationForm() {
             if (!this.dataclient.doc) {
-                this.$bvToast.toast(`Debes llenar el campo de la cédula, es obligatorio`, {
-                    title: '¡Error!',
-                    autoHideDelay: 5000,
-                    solid: true,
-                    variant: 'danger'
-                }),
-                    this.$refs.dataclientDoc.focus();
-                this.activeId = 'dataclientDoc';
-            } else if (!this.dataclient.name) {
-                this.$bvToast.toast(`Debes llenar el campo del nombre, es obligatorio`, {
-                    title: '¡Error!',
-                    autoHideDelay: 5000,
-                    solid: true,
-                    variant: 'danger'
-                }),
-                    this.$refs.dataclientName.focus();
-                this.activeId = 'dataclientName';
-            } else if (!this.dataclient.monto) {
-                this.$bvToast.toast(`Debes colocar el campo del monto, es obligatorio`, {
-                    title: '¡Error!',
-                    autoHideDelay: 5000,
-                    solid: true,
-                    variant: 'danger'
-                }),
-                    this.$refs.dataclientMonto.focus();
-                this.activeId = 'dataclientMonto';
-            } else if (!this.dataclient.cuotadeseada) {
-                this.$bvToast.toast(`Debes colocar el campo de la cuota deseada es obligatorio`, {
-                    title: '¡Error!',
-                    autoHideDelay: 5000,
-                    solid: true,
-                    variant: 'danger'
-                }),
-                    this.$refs.dataclientCuotaDeseada.focus();
-                this.activeId = 'dataclientCuotaDeseada';
-            } else if (!this.dataclient.plazo) {
-                this.$bvToast.toast(`Debes colocar el campo del plazo deseada es obligatorio`, {
-                    title: '¡Error!',
-                    autoHideDelay: 5000,
-                    solid: true,
-                    variant: 'danger'
-                }),
-                    this.$refs.dataclientPlazo.focus();
-                this.activeId = 'dataclientPlazo';
-            } else {
-                this.getAllPagadurias();
+                this.showToastError('Debes llenar el campo de la cédula, es obligatorio', 'dataclientDoc');
+                return;
             }
+
+            if (!this.dataclient.name) {
+                this.showToastError('Debes llenar el campo del nombre, es obligatorio', 'dataclientName');
+                return;
+            }
+
+            if (!this.dataclient.monto) {
+                this.showToastError('Debes colocar el campo del monto, es obligatorio', 'dataclientMonto');
+                return;
+            }
+
+            if (!this.dataclient.cuotadeseada) {
+                this.showToastError(
+                    'Debes colocar el campo de la cuota deseada es obligatorio',
+                    'dataclientCuotaDeseada'
+                );
+                return;
+            }
+
+            if (!this.dataclient.plazo) {
+                this.showToastError('Debes colocar el campo del plazo deseada es obligatorio', 'dataclientPlazo');
+                return;
+            }
+
+            if (this.userRole != 'ADMIN_SISTEMA') {
+                if (this.user.consultas_diarias <= 0) {
+                    this.showToastError(`No tienes consultas disponibles`);
+                    return;
+                }
+            }
+
+            this.getAllPagadurias();
         },
         async getAllPagadurias() {
             if (this.dataclient.doc && this.dataclient.name) {
@@ -375,10 +385,16 @@ export default {
     }
 };
 </script>
+
 <style scoped lang="scss">
 .panel-label {
     font-size: 14px;
     font-weight: 400;
     line-height: 18.23px;
+}
+
+small {
+    font-size: 12px;
+    color: #6c757d;
 }
 </style>

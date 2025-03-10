@@ -35,7 +35,6 @@ class CreateSolicitudCreditoTable extends Migration
             $table->timestamps();
         });
     }
-    
 
     /**
      * Reverse the migrations.

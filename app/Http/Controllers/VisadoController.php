@@ -14,6 +14,7 @@ use App\Visado;
 use Illuminate\Http\Request;
 use Dompdf\Dompdf;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\DB;
 
 class VisadoController extends Controller
 {
@@ -159,18 +160,31 @@ class VisadoController extends Controller
     {
         $user = auth()->user();
 
-        $response = Visado::create([
-            'ced' => $request->doc,
-            'nombre' => $request->nombre,
-            'pagaduria' => $request->pagaduria,
-            'entidad' => $request->pagaduria,
-            'plazo' => $request->plazo,
-            'tipo_consulta' => 'Diamond',
-            'consultant_email' => $user->email,
-            'consultant_name' => $user->name,
-        ]);
+        DB::beginTransaction();
 
-        return response()->json($response);
+        try {
+            $response = Visado::create([
+                'ced' => $request->doc,
+                'nombre' => $request->nombre,
+                'pagaduria' => $request->pagaduria,
+                'entidad' => $request->pagaduria,
+                'plazo' => $request->plazo,
+                'tipo_consulta' => 'Diamond',
+                'consultant_email' => $user->email,
+                'consultant_name' => $user->name,
+            ]);
+
+            DB::commit();
+
+            return response()->json($response);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            return response()->json([
+                'message' => 'Error al guardar la consulta',
+                'error' => $th->getMessage(),
+            ], 500);
+        }
     }
 
     /**

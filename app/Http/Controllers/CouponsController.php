@@ -27,7 +27,7 @@ use Illuminate\Support\Str;
 class CouponsController extends Controller
 {
 
-     /**
+    /**
      * Mapa estático de pagadurías a IDs.
      * 
      * Este mapa asocia la combinación "tipo nombre" en minúsculas
@@ -138,7 +138,6 @@ class CouponsController extends Controller
         'sem yumbo' => 169,
         'sem zipaquira' => 156
     ];
-    
 
     public function showCouponsForm()
     {
@@ -146,164 +145,157 @@ class CouponsController extends Controller
     }
 
     public function index(Request $request)
-{
-    $doc = $request->doc;
-    $couponType = $request->pagaduria;
-    $pagaduriaLabel = $request->pagaduriaLabel;
+    {
+        $doc = $request->doc;
+        $couponType = $request->pagaduria;
+        $pagaduriaLabel = $request->pagaduriaLabel;
 
-    Log::info('Inicio de la consulta para fast_couponsgen.', [
-        'doc' => $doc,
-        'couponType' => $couponType,
-        'pagaduriaLabel' => $pagaduriaLabel,
-        'time' => now()
-    ]);
-
-    $results = [];
-
-    try {
-        // Normalización
-        $couponTypeNorm = trim(strtolower($couponType));
-        $pagaduriaLabelNorm = trim(strtolower($pagaduriaLabel));
-        $parts = explode(' ', $couponTypeNorm, 2);
-        if (count($parts) < 2) {
-            $parts = explode(' ', $pagaduriaLabelNorm, 2);
-        }
-
-        Log::debug('Después de normalizar pagaduría', [
-            'couponTypeNorm' => $couponTypeNorm,
-            'pagaduriaLabelNorm' => $pagaduriaLabelNorm,
-            'parts' => $parts
+        Log::info('Inicio de la consulta para fast_couponsgen.', [
+            'doc' => $doc,
+            'couponType' => $couponType,
+            'pagaduriaLabel' => $pagaduriaLabel,
+            'time' => now()
         ]);
 
-        if (count($parts) < 2) {
-            Log::warning('Formato de pagaduría no válido.', [
-                'couponType' => $couponType,
-                'pagaduriaLabel' => $pagaduriaLabel
+        $results = [];
+
+        try {
+            // Normalización
+            $couponTypeNorm = trim(strtolower($couponType));
+            $pagaduriaLabelNorm = trim(strtolower($pagaduriaLabel));
+            $parts = explode(' ', $couponTypeNorm, 2);
+
+            if (count($parts) < 2) {
+                $parts = explode(' ', $pagaduriaLabelNorm, 2);
+            }
+
+            Log::debug('Después de normalizar pagaduría', [
+                'couponTypeNorm' => $couponTypeNorm,
+                'pagaduriaLabelNorm' => $pagaduriaLabelNorm,
+                'parts' => $parts
             ]);
-            return response()->json(['error' => 'Formato de pagaduría no válido.'], 400);
-        }
 
-        [$tipo, $nombrePagaduria] = $parts;
+            if (count($parts) < 2) {
+                Log::warning('Formato de pagaduría no válido.', [
+                    'couponType' => $couponType,
+                    'pagaduriaLabel' => $pagaduriaLabel
+                ]);
+                return response()->json(['error' => 'Formato de pagaduría no válido.'], 400);
+            }
 
-        $key = $tipo . ' ' . $nombrePagaduria;
+            [$tipo, $nombrePagaduria] = $parts;
 
-        Log::debug('Clave generada para buscar en el mapa', [
-            'key' => $key
-        ]);
+            $key = $tipo . ' ' . $nombrePagaduria;
 
-        $idPagaduria = self::$pagaduriasMap[$key] ?? null;
-
-        Log::debug('ID Pagaduría encontrado', [
-            'idPagaduria' => $idPagaduria
-        ]);
-
-        if (!$idPagaduria) {
-            Log::warning('Pagaduría no encontrada en el mapa estático.', [
-                'couponType' => $couponType,
-                'pagaduriaLabel' => $pagaduriaLabel,
-                'tipo' => $tipo,
-                'nombre' => $nombrePagaduria,
+            Log::debug('Clave generada para buscar en el mapa', [
                 'key' => $key
             ]);
-            return response()->json(['error' => 'Pagaduría no encontrada.'], 404);
+
+            $idPagaduria = self::$pagaduriasMap[$key] ?? null;
+
+            Log::debug('ID Pagaduría encontrado', [
+                'idPagaduria' => $idPagaduria
+            ]);
+
+            if (!$idPagaduria) {
+                Log::warning('Pagaduría no encontrada en el mapa estático.', [
+                    'couponType' => $couponType,
+                    'pagaduriaLabel' => $pagaduriaLabel,
+                    'tipo' => $tipo,
+                    'nombre' => $nombrePagaduria,
+                    'key' => $key
+                ]);
+                return response()->json(['error' => 'Pagaduría no encontrada.'], 404);
+            }
+
+            // Construimos la query antes de ejecutarla para loggear
+            $query = \DB::connection('pgsql')
+                ->table('fast_couponsgen_visado')
+                ->where('doc', $doc)
+                ->where('idpagaduria', $idPagaduria);
+
+            $sql = $query->toSql();
+            $bindings = $query->getBindings();
+
+            Log::info('Ejecutando consulta SQL en fast_couponsgen_visado', [
+                'sql' => $sql,
+                'bindings' => $bindings,
+                'doc' => $doc,
+                'idpagaduria' => $idPagaduria
+            ]);
+
+            $dataGen = $query->get()->toArray();
+
+            Log::info('Consulta fast_couponsgen finalizada.', [
+                'time' => now(),
+                'total_records' => count($dataGen)
+            ]);
+
+            $results = array_merge($results, $dataGen);
+        } catch (\Exception $e) {
+            Log::error('Error en la consulta para fast_couponsgen.', [
+                'message' => $e->getMessage(),
+                'time' => now(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return response()->json(['error' => 'Error al ejecutar la consulta.'], 500);
         }
 
-        // Construimos la query antes de ejecutarla para loggear
-        $query = \DB::connection('pgsql')
-            ->table('fast_couponsgen_visado')
-            ->where('doc', $doc)
-            ->where('idpagaduria', $idPagaduria);
-
-        $sql = $query->toSql();
-        $bindings = $query->getBindings();
-
-        Log::info('Ejecutando consulta SQL en fast_couponsgen_visado', [
-            'sql' => $sql,
-            'bindings' => $bindings,
-            'doc' => $doc,
-            'idpagaduria' => $idPagaduria
+        Log::info('Consulta completada y datos devueltos.', [
+            'total_records' => count($results),
+            'time' => now()
         ]);
-
-        $dataGen = $query->get()->toArray();
-
-        Log::info('Consulta fast_couponsgen finalizada.', [
-            'time' => now(),
-            'total_records' => count($dataGen)
-        ]);
-
-        $results = array_merge($results, $dataGen);
-
-    } catch (\Exception $e) {
-        Log::error('Error en la consulta para fast_couponsgen.', [
-            'message' => $e->getMessage(),
-            'time' => now(),
-            'trace' => $e->getTraceAsString()
-        ]);
-        return response()->json(['error' => 'Error al ejecutar la consulta.'], 500);
-    }
-
-    Log::info('Consulta completada y datos devueltos.', [
-        'total_records' => count($results),
-        'time' => now()
-    ]);
-
-    return response()->json($results, 200);
-}
-
-
-
-
-
-
-public function getCouponsByPagaduria(Request $request)
-{
-    try {
-        if (!$request->has('month') || !$request->has('year') || !$request->has('pagaduria')) {
-            return response()->json(['error' => 'Month, year, and pagaduria are required.'], 400);
-        }
-
-        $pagaduria = $request->pagaduria;
-        $concept = $request->concept;
-        $code = $request->code;
-        $month = str_pad($request->month, 2, '0', STR_PAD_LEFT);
-        $year = $request->year;
-
-        $startDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)->startOfMonth()->toDateString();
-        $endDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)->endOfMonth()->toDateString();
-
-        $query = \DB::connection('pgsql')
-            ->table('fast_couponsgen_visado');
-
-        if ($concept) {
-            $query->where('concept', 'ILIKE', '%' . $concept . '%');
-        }
-
-        if ($code) {
-            $query->where('code', 'ILIKE', '%' . $code . '%');
-        }
-
-        $query->where('pagaduria', 'ILIKE', '%' . $pagaduria . '%');
-        $query->where('inicioperiodo', '<=', $endDate);
-        $query->where('finperiodo', '>=', $startDate);
-
-        $sql = $query->toSql();
-        $bindings = $query->getBindings();
-
-        Log::info('Ejecutando consulta SQL: ' . $sql, $bindings);
-
-        $results = $query->get()->toArray();
 
         return response()->json($results, 200);
-    } catch (\Exception $e) {
-        Log::error('Error in getCouponsByPagaduria:', [
-            'message' => $e->getMessage(),
-            'trace' => $e->getTrace()
-        ]);
-
-        return response()->json(['error' => 'Internal Server Error'], 500);
     }
-}
 
+    public function getCouponsByPagaduria(Request $request)
+    {
+        try {
+            if (!$request->has('month') || !$request->has('year') || !$request->has('pagaduria')) {
+                return response()->json(['error' => 'Month, year, and pagaduria are required.'], 400);
+            }
+
+            $pagaduria = $request->pagaduria;
+            $concept = $request->concept;
+            $code = $request->code;
+            $month = str_pad($request->month, 2, '0', STR_PAD_LEFT);
+            $year = $request->year;
+
+            $startDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)->startOfMonth()->toDateString();
+            $endDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)->endOfMonth()->toDateString();
+
+            $query = \DB::connection('pgsql')->table('fast_couponsgen_visado');
+
+            if ($concept) {
+                $query->where('concept', 'ILIKE', '%' . $concept . '%');
+            }
+
+            if ($code) {
+                $query->where('code', 'ILIKE', '%' . $code . '%');
+            }
+
+            $query->where('pagaduria', 'ILIKE', '%' . $pagaduria . '%');
+            $query->where('inicioperiodo', '<=', $endDate);
+            $query->where('finperiodo', '>=', $startDate);
+
+            $sql = $query->toSql();
+            $bindings = $query->getBindings();
+
+            Log::info('Ejecutando consulta SQL: ' . $sql, $bindings);
+
+            $results = $query->get()->toArray();
+
+            return response()->json($results, 200);
+        } catch (\Exception $e) {
+            Log::error('Error in getCouponsByPagaduria:', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTrace()
+            ]);
+
+            return response()->json(['error' => 'Internal Server Error'], 500);
+        }
+    }
 
     public function getFastCouponsByPagaduria(Request $request)
     {
@@ -312,43 +304,43 @@ public function getCouponsByPagaduria(Request $request)
             if (!$request->has('month') || !$request->has('year') || !$request->has('pagaduria')) {
                 return response()->json(['error' => 'Month, year, and pagaduria are required.'], 400);
             }
-    
+
             $month         = str_pad($request->month, 2, '0', STR_PAD_LEFT);
             $year          = $request->year;
             $concept       = $request->concept;
             $code          = $request->code;
             $pagaduriaName = trim($request->pagaduria);
-    
+
             // 1) Buscamos el ID en panel_pagaduria
             $panelPagaduria = \DB::connection('pgsql')
                 ->table('panel_pagaduria')
                 ->where('nombre', 'ILIKE', $pagaduriaName)
                 ->first();
-    
+
             if (!$panelPagaduria) {
                 return response()->json([
                     'error' => "No se encontró una pagaduría con el nombre '{$pagaduriaName}'."
                 ], 404);
             }
-    
+
             $idPagaduria = $panelPagaduria->id;
-    
+
             // 2) Definimos las fechas de inicio y fin (rango mensual)
             $startDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)
                 ->startOfMonth()
                 ->toDateString();
-    
+
             $endDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)
                 ->endOfMonth()
                 ->toDateString();
-    
+
             // 3) Construimos la consulta a la tabla fast_couponsgen_visado
             $query = \DB::connection('pgsql')
                 ->table('fast_couponsgen_visado')
                 ->where('idpagaduria', $idPagaduria)
                 ->where('inicioperiodo', '<=', $endDate)
                 ->where('finperiodo', '>=', $startDate);
-    
+
             // Agregamos filtros opcionales
             if (!empty($concept)) {
                 $query->where('concept', 'ILIKE', '%' . $concept . '%');
@@ -356,7 +348,7 @@ public function getCouponsByPagaduria(Request $request)
             if (!empty($code)) {
                 $query->where('code', 'ILIKE', '%' . $code . '%');
             }
-    
+
             // Log para depuración (opcional)
             $sql      = $query->toSql();
             $bindings = $query->getBindings();
@@ -365,66 +357,59 @@ public function getCouponsByPagaduria(Request $request)
                 'bindings' => $bindings,
                 'month'    => $month,
                 'year'     => $year,
-                'pagaduria'=> $pagaduriaName,
+                'pagaduria' => $pagaduriaName,
                 'id'       => $idPagaduria
             ]);
-    
+
             // 4) Obtenemos los resultados
             $results = $query->get();
-    
+
             return response()->json($results, 200);
-    
         } catch (\Exception $e) {
             \Log::error('Error en getFastCouponsByPagaduria:', [
                 'message' => $e->getMessage(),
                 'trace'   => $e->getTraceAsString()
             ]);
-    
+
             return response()->json(['error' => 'Internal Server Error'], 500);
         }
     }
-    
 
-    
-    
-             
     public function getIncapacidadByDoc(Request $request)
     {
         try {
             $doc = $request->doc;
             $month = $request->month;
             $year = $request->year;
-    
+
             // Asegurar que el mes tenga 2 dígitos
             $month = str_pad($month, 2, '0', STR_PAD_LEFT);
-    
+
             // Crear fechas de inicio y fin para el mes actual
             $startDateCurrentMonth = Carbon::createFromFormat('Y-m', $year . '-' . $month)->startOfMonth()->toDateString();
             $endDateCurrentMonth = Carbon::createFromFormat('Y-m', $year . '-' . $month)->endOfMonth()->toDateString();
-    
+
             // Calcular el mes anterior
             $previousMonthDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)->subMonth();
             $startDatePreviousMonth = $previousMonthDate->startOfMonth()->toDateString();
             $endDatePreviousMonth = $previousMonthDate->endOfMonth()->toDateString();
-    
+
             // Consulta para el mes actual y el anterior con el concepto específico
             $count = CouponsGen::where('doc', 'LIKE', '%' . $doc . '%')
                 ->where('concept', '=', 'Pago Incapacidad Comun Ambulatoria')
                 ->where(function ($query) use ($startDateCurrentMonth, $endDateCurrentMonth, $startDatePreviousMonth, $endDatePreviousMonth) {
                     $query->whereBetween('inicioperiodo', [$startDatePreviousMonth, $endDateCurrentMonth])
-                          ->orWhereBetween('finperiodo', [$startDatePreviousMonth, $endDateCurrentMonth]);
+                        ->orWhereBetween('finperiodo', [$startDatePreviousMonth, $endDateCurrentMonth]);
                 })->count();
-    
+
             // Verificar si la incapacidad dura dos meses o más
             $response = $count > 0 ? "Sí" : "No";
-    
+
             return response()->json(['incapacidad_dura_dos_meses_o_mas' => $response], 200);
         } catch (\Exception $e) {
             Log::error('Error in getIncapacidadByDoc:', ['message' => $e->getMessage(), 'trace' => $e->getTrace()]);
-    
+
             return response()->json(['error' => 'Internal Server Error'], 500);
         }
     }
-    
-    
 }

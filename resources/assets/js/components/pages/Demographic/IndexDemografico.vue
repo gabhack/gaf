@@ -5,7 +5,6 @@
             <div class="spinner"></div>
         </div>
 
-        <!-- Panel principal -->
         <div class="panel mb-3 col-md-12" style="margin-left: 20px">
             <div class="panel-heading" style="background-color: white">
                 <b style="color: black">Datos Demográficos</b>
@@ -14,20 +13,12 @@
                 <div style="background-color: white">
                     <hd style="color: black">
                         Por favor, asegúrese de que el archivo Excel tiene una columna con el encabezado
-                        <strong>'cédulas'</strong> y que contiene los números de cédula.
-                    </hd>
-                    <br /><br />
+                        <strong>'cédulas'</strong> y que contiene los números de cédula. </hd
+                    ><br /><br />
                 </div>
-
-                <!-- Subir archivo -->
                 <div class="form-group d-flex align-items-center">
                     <div class="custom-file-upload">
-                        <input
-                            type="file"
-                            @change="handleFileUpload"
-                            id="file-upload"
-                            class="file-input"
-                        />
+                        <input type="file" @change="handleFileUpload" id="file-upload" class="file-input" />
                         <label for="file-upload">Elegir archivo</label>
                         <span v-if="fileName" class="file-name">{{ fileName }}</span>
                     </div>
@@ -37,12 +28,10 @@
                     @click="uploadFile"
                     class="btn btn-primary"
                     style="white-space: nowrap; background-color: #2c8c73"
-                >
-                    Subir Archivo
+                    >Subir Archivo
                 </CustomButton>
-
-                <!-- Botón para mostrar/ocultar consultas recientes -->
                 <CustomButton
+                    v-if="!isLoadingResults"
                     @click="toggleRecentConsultations"
                     class="btn btn-info float-right"
                     style="white-space: nowrap; background-color: #2c8c73; margin-left: 20px"
@@ -74,23 +63,12 @@
         <div v-if="results.length" class="panel mb-3 col-md-12">
             <div class="panel-heading" style="background-color: white">
                 <div class="float-right">
-                    <!-- Botón Exportar PDF -->
-                    <button
-                        @click="exportToPDF"
-                        class="btn btn-danger mr-2"
-                        style="background-color: #2c8c73"
-                    >
+                    <button @click="exportToPDF" class="btn btn-danger mr-2" style="background-color: #2c8c73">
                         Exportar a PDF
                     </button>
-                    <!-- Botón Exportar Excel -->
-                    <button
-                        @click="exportToExcel"
-                        class="btn btn-success"
-                        style="background-color: #2c8c73"
-                    >
+                    <button @click="exportToExcel" class="btn btn-success" style="background-color: #2c8c73">
                         Exportar a Excel
                     </button>
-                    <!-- Botón para mostrar/ocultar consultas recientes (también aquí) -->
                     <CustomButton
                         @click="toggleRecentConsultations"
                         class="btn btn-info float-right"
@@ -147,6 +125,24 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="pagination">
+                    <button
+                        v-if="page > 1"
+                        @click="fetchPaginatedResults(page - 1)"
+                        class="btn btn-primary"
+                        style="background-color: #2c8c73"
+                    >
+                        Anterior
+                    </button>
+                    <button
+                        @click="fetchPaginatedResults(page + 1)"
+                        :disabled="page * perPage >= total"
+                        class="btn btn-primary"
+                        style="background-color: #2c8c73"
+                    >
+                        Siguiente
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -182,6 +178,9 @@ export default {
             showRecentConsultations: false
         };
     },
+    components: {
+        CustomButton
+    },
     computed: {
         // Filtro básico: si la cadena de búsqueda tiene más de 2 caracteres,
         // filtra por doc. Si no, muestra todo.
@@ -197,9 +196,7 @@ export default {
     methods: {
         capitalize(text) {
             if (!text) return '';
-            return text
-                .toLowerCase()
-                .replace(/\b\w/g, char => char.toUpperCase());
+            return text.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
         },
         handleFileUpload(event) {
             this.file = event.target.files[0];
@@ -244,6 +241,24 @@ export default {
                 console.error('Error fetching recent consultations:', error);
             }
         },
+        async fetchPaginatedResults(page) {
+            this.isLoadingResults = true;
+            this.isLoading = true;
+            try {
+                let response = await axios.get(
+                    `/demografico/fetch-paginated-results-demografico?page=${page}&perPage=${this.perPage}`
+                );
+                this.results = response.data.data;
+                this.total = response.data.total;
+                this.page = response.data.page;
+                this.perPage = response.data.perPage;
+            } catch (error) {
+                console.error('Error fetching paginated results:', error);
+                this.error = 'Error al buscar los resultados paginados';
+            } finally {
+                this.isLoading = false; // Stop loading after results are fetched
+            }
+        },
         loadConsultationData(data) {
             this.results = data;
         },
@@ -256,7 +271,6 @@ export default {
         // Exportar a PDF
         exportToPDF() {
             const doc = new jsPDF();
-            // Encabezados
             const columns = [
                 'Documento',
                 'Nombre',
@@ -270,7 +284,6 @@ export default {
                 'Edad',
                 'Fecha de Nacimiento'
             ];
-            // Datos
             const rows = this.results.map(item => [
                 item.doc,
                 item.nombre_usuario,
@@ -289,7 +302,6 @@ export default {
         },
         // Exportar a Excel
         exportToExcel() {
-            // Encabezados
             const columns = [
                 'Documento',
                 'Nombre',
@@ -303,7 +315,6 @@ export default {
                 'Edad',
                 'Fecha de Nacimiento'
             ];
-            // Datos
             const rows = this.results.map(item => [
                 item.doc,
                 item.nombre_usuario,

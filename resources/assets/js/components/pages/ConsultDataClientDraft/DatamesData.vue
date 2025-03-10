@@ -173,10 +173,12 @@ export default {
     }
 };
 </script>
+
 <style scoped>
 th {
     font-size: 14px;
 }
+
 .table th {
     text-align: center;
 }
@@ -185,6 +187,7 @@ th {
 .table td {
     width: 200px;
 }
+
 .table thead th {
     text-align: center;
     font-weight: 600;

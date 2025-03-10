@@ -28,7 +28,6 @@ class CreatePlanPagosTable extends Migration
         });
     }
 
-
     /**
      * Reverse the migrations.
      *

@@ -1,11 +1,5 @@
 <template>
-    <b-button 
-      :size="size" 
-      :disabled="disabled"
-      :block="block"
-      :class="color"
-      @click="$emit('click')"
-    >
+    <b-button :size="size" :disabled="disabled" :block="block" :class="color" :href="href" :type="type" @click="$emit('click')">
         <slot>{{ text }}</slot>
     </b-button>
 </template>
@@ -26,20 +20,29 @@ export default {
             type: Boolean,
             default: false
         },
-        block:{
+        block: {
             type: Boolean,
             default: false
         },
-        color:{
+        color: {
             type: String,
             default: ''
+        },
+        href: {
+            type: String,
+            default: ''
+        },
+        type: {
+            type: String,
+            default: 'button',
+            validator: value => ['button', 'submit', 'reset'].includes(value)
         }
     }
 };
 </script>
 
 <style scoped lang="scss">
-  button{
+button, a {
     padding: 8px 16px;
     border-radius: 8px;
     border-color: none;
@@ -47,26 +50,30 @@ export default {
     font-weight: 500;
     line-height: 18.23px;
     min-height: 40px;
-    background-color: #0E866C;
-    border-color: #0E866C;
+    background-color: #0e866c;
+    border-color: #0e866c;
     color: white;
-    &:hover{
-        border: 1px solid #0E866C;
-        color: #0E866C;
+
+    &:hover {
+        border: 1px solid #0e866c;
+        color: #0e866c;
     }
-    &:active{
-        background-color: #0E866C;
-        border-color: #0E866C;
+
+    &:active {
+        background-color: #0e866c;
+        border-color: #0e866c;
         color: white;
     }
-    &.white{
+
+    &.white {
         background-color: #fff;
-        border: 1px solid #0E866C;
-        color: #0E866C !important;
-        &:hover{
-            background-color: #0E866C;
+        border: 1px solid #0e866c;
+        color: #0e866c !important;
+
+        &:hover {
+            background-color: #0e866c;
             color: white !important;
         }
     }
-  }
+}
 </style>

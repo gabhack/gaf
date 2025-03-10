@@ -17,7 +17,7 @@ class UserController extends Controller
         $this->middleware('auth');
         $this->middleware('role:ADMIN_SISTEMA,ADMIN_HEGO,ADMIN_AMI,COMPANY,CREAUSUARIOS');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -46,7 +46,7 @@ class UserController extends Controller
      */
     public function create()
     {
-		$roles = \App\Roles::OrderBy('rol')->get();
+        $roles = \App\Role::OrderBy('name')->get();
         return view('usuarios/crear')->with([
             'roles' => $roles
         ]);
@@ -61,18 +61,18 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $usuario = new \App\User;
-		$usuario->name = $request->input('name');
-		$usuario->email = $request->input('email');
-		$usuario->password = bcrypt($request->input('password'));
+        $usuario->name = $request->input('name');
+        $usuario->email = $request->input('email');
+        $usuario->password = bcrypt($request->input('password'));
         if (IsSuperAdmin() || IsAMIAdmin() || IsHEGOAdmin()) {
-		    $usuario->roles_id = $request->input('rol');
+            $usuario->rol_id = $request->input('role');
             if ($request->input('hego')) {
                 $usuario->hego = 1;
             } else {
                 $usuario->hego = NULL;
             }
         } else {
-		    $usuario->roles_id =  \App\Roles::where('rol', 'USUARIO')->first()->id;
+            $usuario->rol_id =  \App\Role::where('name', 'USUARIO')->first()->id;
             $usuario->id_padre = Auth::user()->id;
             if ($request->input('ami_silver')) {
                 $usuario->ami_silver = 1;
@@ -100,10 +100,10 @@ class UserController extends Controller
                 $usuario->id_company = Auth::user()->id_company;
             }
         }
-        
-		$usuario->save();
-		
-		return redirect('usuarios');
+
+        $usuario->save();
+
+        return redirect('usuarios');
     }
 
     /**
@@ -125,9 +125,9 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-		$roles = \App\Roles::OrderBy('rol')->get();
+        $roles = \App\Role::OrderBy('name')->get();
         $usuario = \App\User::find($id);
-		return view("usuarios/editar")->with(["roles" => $roles, "usuario" => $usuario]);
+        return view("usuarios/editar")->with(["roles" => $roles, "usuario" => $usuario]);
     }
 
     /**
@@ -141,14 +141,14 @@ class UserController extends Controller
     {
 
         $usuario = \App\User::find($id);
-		$usuario->name = strtoupper($request->input('name'));
-		$usuario->email = $request->input('email');
-		
-		if($request->input('password') != "")
-			$usuario->password = bcrypt($request->input('password'));
-		
+        $usuario->name = strtoupper($request->input('name'));
+        $usuario->email = $request->input('email');
+
+        if ($request->input('password') != "")
+            $usuario->password = bcrypt($request->input('password'));
+
         if (IsSuperAdmin() || IsAMIAdmin() || IsHEGOAdmin()) {
-		    $usuario->roles_id =  \App\Roles::find($request->input('rol'))->id;
+            $usuario->rol_id =  \App\Role::find($request->input('role'))->id;
             if ($request->input('hego')) {
                 $usuario->hego = 1;
             } else {
@@ -179,10 +179,10 @@ class UserController extends Controller
                 $usuario->creausuarios = NULL;
             }
         }
-        
-		$usuario->save();
-		
-		return redirect('usuarios');
+
+        $usuario->save();
+
+        return redirect('usuarios');
     }
 
     /**
@@ -195,7 +195,6 @@ class UserController extends Controller
     {
         // \App\User::find($id)->forceDelete();
         \App\User::find($id)->Delete();
-		return redirect('usuarios');
+        return redirect('usuarios');
     }
-	
 }

@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use Auth;
 
-
 class dataCotizerController extends Controller
 {
     /**
@@ -58,85 +57,83 @@ class dataCotizerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-{
-    // Registro inicial del proceso
-    Log::info('Inicio del proceso de almacenamiento de la solicitud.');
-    Log::info('Valor de decevalProcess recibido:', ['decevalProcess' => $request->input('cotizerData.decevalProcess')]);
+    {
+        // Registro inicial del proceso
+        Log::info('Inicio del proceso de almacenamiento de la solicitud.');
+        Log::info('Valor de decevalProcess recibido:', ['decevalProcess' => $request->input('cotizerData.decevalProcess')]);
 
-    // Extracción de datos de cotizador y crédito
-    $input = $request['cotizerData'];
-    $pagaduriaCode = $request['cotizerData']['pagaduria'];
-    unset($input['pagaduria']); // Eliminar pagaduria para evitar conflictos
-    Log::info('Datos de cotizador extraídos.', ['cotizerData' => $input, 'pagaduriaCode' => $pagaduriaCode]);
+        // Extracción de datos de cotizador y crédito
+        $input = $request['cotizerData'];
+        $pagaduriaCode = $request['cotizerData']['pagaduria'];
+        unset($input['pagaduria']); // Eliminar pagaduria para evitar conflictos
+        Log::info('Datos de cotizador extraídos.', ['cotizerData' => $input, 'pagaduriaCode' => $pagaduriaCode]);
 
-    // Creación del cotizador
-    $cotizador = new dataCotizer($input);
-    $cotizador->save();
-    Log::info('Cotizador creado y guardado con éxito.', ['cotizadorId' => $cotizador->id]);
+        // Creación del cotizador
+        $cotizador = new dataCotizer($input);
+        $cotizador->save();
+        Log::info('Cotizador creado y guardado con éxito.', ['cotizadorId' => $cotizador->id]);
 
-    // Obtención de la pagaduría
-    $pagaduria = Pagadurias::where('codigo', $pagaduriaCode)->first();
-    if ($pagaduria === null) {
-        Log::error('No se encontró la pagaduría con el código proporcionado.', ['codigo' => $pagaduriaCode]);
-        return response()->json(['error' => 'Pagaduría no encontrada.'], 404);
-    }
+        // Obtención de la pagaduría
+        $pagaduria = Pagadurias::where('codigo', $pagaduriaCode)->first();
+        if ($pagaduria === null) {
+            Log::error('No se encontró la pagaduría con el código proporcionado.', ['codigo' => $pagaduriaCode]);
+            return response()->json(['error' => 'Pagaduría no encontrada.'], 404);
+        }
 
-    // Creación del estudio
-    $estudio = new Estudiostr();
-    $estudio->user_id = auth()->user()->id;
-    $estudio->pagaduria_id = $pagaduria->id;
-    $estudio->clientes_id = 200; // ID ficticio, ajustar según lógica
-    $estudio->fecha = Carbon::now()->toDateString();
-    $estudio->decision = 'PROS';
-    $estudio->data_cotizer_id = $cotizador->id;
-    $estudio->save();
-    Log::info('Estudio creado y guardado.', ['estudioId' => $estudio->id]);
+        // Creación del estudio
+        $estudio = new Estudiostr();
+        $estudio->user_id = auth()->user()->id;
+        $estudio->pagaduria_id = $pagaduria->id;
+        $estudio->clientes_id = 200; // ID ficticio, ajustar según lógica
+        $estudio->fecha = Carbon::now()->toDateString();
+        $estudio->decision = 'PROS';
+        $estudio->data_cotizer_id = $cotizador->id;
+        $estudio->save();
+        Log::info('Estudio creado y guardado.', ['estudioId' => $estudio->id]);
 
-    // Creación de la solicitud de crédito
-    $credit = new SolicitudCredito($request['creditInfo']);
-    $credit->estudio_id = $estudio->id;
-    $credit->save();
-    Log::info('Solicitud de crédito creada y guardada.', ['solicitudCreditoId' => $credit->id]);
+        // Creación de la solicitud de crédito
+        $credit = new SolicitudCredito($request['creditInfo']);
+        $credit->estudio_id = $estudio->id;
+        $credit->save();
+        Log::info('Solicitud de crédito creada y guardada.', ['solicitudCreditoId' => $credit->id]);
 
-    // Cálculo del plan de pagos
-    $tasaInteresMensual = $credit->tasa_interes / 100;
-    $saldoCapital = $credit->valor_solicitado;
-    $costoSeguro = $credit->seguro;
-    $numCuotas = $credit->nro_cuotas;
-    $cuotaMensual = ($saldoCapital * $tasaInteresMensual) / (1 - pow(1 + $tasaInteresMensual, -$numCuotas));
-    $saldoActual = $saldoCapital;
+        // Cálculo del plan de pagos
+        $tasaInteresMensual = $credit->tasa_interes / 100;
+        $saldoCapital = $credit->valor_solicitado;
+        $costoSeguro = $credit->seguro;
+        $numCuotas = $credit->nro_cuotas;
+        $cuotaMensual = ($saldoCapital * $tasaInteresMensual) / (1 - pow(1 + $tasaInteresMensual, -$numCuotas));
+        $saldoActual = $saldoCapital;
 
-    for ($i = 1; $i <= $numCuotas; $i++) {
-        $interesMensual = $saldoActual * $tasaInteresMensual;
-        $capitalMensual = $cuotaMensual - $interesMensual;
-        $saldoActual -= $capitalMensual;
+        for ($i = 1; $i <= $numCuotas; $i++) {
+            $interesMensual = $saldoActual * $tasaInteresMensual;
+            $capitalMensual = $cuotaMensual - $interesMensual;
+            $saldoActual -= $capitalMensual;
 
-        PlanPago::create([
-            'fecha' => now()->addMonths($i)->format('Y-m-d'),
-            'num_cuota' => $i,
-            'cuota' => $cuotaMensual,
-            'capital' => $capitalMensual,
-            'interes' => $interesMensual,
-            'seguro_vida' => $costoSeguro,
-            'total_cuota' => $cuotaMensual + $costoSeguro,
-            'saldo_capital' => $saldoActual,
-            'estudio_id' => $estudio->id
+            PlanPago::create([
+                'fecha' => now()->addMonths($i)->format('Y-m-d'),
+                'num_cuota' => $i,
+                'cuota' => $cuotaMensual,
+                'capital' => $capitalMensual,
+                'interes' => $interesMensual,
+                'seguro_vida' => $costoSeguro,
+                'total_cuota' => $cuotaMensual + $costoSeguro,
+                'saldo_capital' => $saldoActual,
+                'estudio_id' => $estudio->id
+            ]);
+        }
+        Log::info('Plan de pagos calculado y guardado.', ['solicitudCreditoId' => $credit->id, 'numCuotas' => $numCuotas]);
+
+        // Respuesta final si no se redirige
+        Log::info('Proceso de almacenamiento completado con éxito.');
+
+        return response()->json([
+            'cotizador' => $cotizador,
+            'estudio' => $estudio,
+            'credit' => $credit,
+            'decevalProcess' => $request->input('cotizerData.decevalProcess')
         ]);
     }
-    Log::info('Plan de pagos calculado y guardado.', ['solicitudCreditoId' => $credit->id, 'numCuotas' => $numCuotas]);
-
-
-
-    // Respuesta final si no se redirige
-    Log::info('Proceso de almacenamiento completado con éxito.');
-    return response()->json([
-        'cotizador' => $cotizador,
-        'estudio' => $estudio,
-        'credit' => $credit,
-        'decevalProcess' => $request->input('cotizerData.decevalProcess')
-    ]);
-}
-
 
     /**
      * Display the specified resource.

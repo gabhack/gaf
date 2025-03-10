@@ -78,10 +78,9 @@
 								<!-- User image -->
 								<li class="user-header">
 									<img src="{{ IsCompany() ? 'img/unnamed.png' : 'img/avatar5.png' }}" class="img-circle" alt="User Image">
-				
 									<p>
 										{{ Auth::user()->name }}
-										<small><b>{{ IsCompany() ? 'Compañía' : roles_label(Auth::user()->rol->rol) }}</b></small>
+										<small><b>{{ IsCompany() ? 'Compañía' : roles_label(Auth::user()->role->name) }}</b></small>
 									</p>
 							  	</li>
 								<!-- Menu Footer-->

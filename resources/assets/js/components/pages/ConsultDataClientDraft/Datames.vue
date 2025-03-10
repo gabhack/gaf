@@ -9,12 +9,12 @@
           <div
             class="col-6"
             v-if="
-              user.roles_id === 1 ||
-              user.roles_id === '1' ||
-              user.roles_id === 4 ||
-              user.roles_id === '4' ||
-              user.roles_id === 5 ||
-              user.roles_id === '5'
+              user.role_id === 1 ||
+              user.role_id === '1' ||
+              user.role_id === 4 ||
+              user.role_id === '4' ||
+              user.role_id === 5 ||
+              user.role_id === '5'
             "
           >
             <b class="panel-label">FONDO:</b>
@@ -67,12 +67,12 @@
           <div
             class="col-md-6"
             v-if="
-              user.roles_id === 1 ||
-              user.roles_id === '1' ||
-              user.roles_id === 4 ||
-              user.roles_id === '4' ||
-              user.roles_id === 5 ||
-              user.roles_id === '5'
+              user.role_id === 1 ||
+              user.role_id === '1' ||
+              user.role_id === 4 ||
+              user.role_id === '4' ||
+              user.role_id === 5 ||
+              user.role_id === '5'
             "
           >
             <b class="panel-label">NOMBRE DEL BANCO DONDE LE CONSIGNAN:</b>
@@ -83,12 +83,12 @@
           <div
             class="col-md-6"
             v-if="
-              user.roles_id === 1 ||
-              user.roles_id === '1' ||
-              user.roles_id === 4 ||
-              user.roles_id === '4' ||
-              user.roles_id === 5 ||
-              user.roles_id === '5'
+              user.role_id === 1 ||
+              user.role_id === '1' ||
+              user.role_id === 4 ||
+              user.role_id === '4' ||
+              user.role_id === 5 ||
+              user.role_id === '5'
             "
           >
             <b class="panel-label">SUCURSAL BANCO:</b>

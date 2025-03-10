@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
+
 if (!function_exists('insertOrUpdate')) {
 	function insertOrUpdate($table, array $rows)
 	{
@@ -1082,9 +1084,9 @@ if (!function_exists('deformat_autonumeric')) {
 }
 
 if (!function_exists('roles_label')) {
-	function roles_label($rol)
+	function roles_label($role)
 	{
-		switch ($rol) {
+		switch ($role) {
 			case 'ADMIN_SISTEMA':
 				return 'SuperAdmin';
 				break;
@@ -1104,21 +1106,20 @@ if (!function_exists('roles_label')) {
 if (!function_exists('IsSuperAdmin')) {
 	function IsSuperAdmin()
 	{
-		switch (Auth::user()->rol->rol) {
-			case 'ADMIN_SISTEMA':
-				return true;
-				break;
-			default:
-				return false;
-				break;
+		$user = Auth::user();
+
+		if (!$user || !isset($user->role)) {
+			return false;
 		}
+
+		return $user->role->name == 'ADMIN_SISTEMA';
 	}
 }
 
 if (!function_exists('IsAMIAdmin')) {
 	function IsAMIAdmin()
 	{
-		switch (Auth::user()->rol->rol) {
+		switch (Auth::user()->role->name) {
 			case 'ADMIN_AMI':
 				return true;
 				break;
@@ -1132,7 +1133,7 @@ if (!function_exists('IsAMIAdmin')) {
 if (!function_exists('IsHEGOAdmin')) {
 	function IsHEGOAdmin()
 	{
-		switch (Auth::user()->rol->rol) {
+		switch (Auth::user()->role->name) {
 			case 'ADMIN_HEGO':
 				return true;
 				break;
@@ -1149,7 +1150,7 @@ if (!function_exists('IsUser')) {
 		if (IsCompany()) {
 			return false;
 		} else {
-			switch (Auth::user()->rol->rol) {
+			switch (Auth::user()->role->name) {
 				case 'USUARIO':
 					return true;
 					break;
@@ -1175,11 +1176,26 @@ if (!function_exists('IsUserCreator')) {
 if (!function_exists('IsCompany')) {
 	function IsCompany()
 	{
-		if (!Auth::user()->id_company) {
-			return true;
-		} else {
+		$user = Auth::user();
+
+		if (!$user || !isset($user->role)) {
 			return false;
 		}
+
+		return $user->role->name == 'EMPRESA';
+	}
+}
+
+if (!function_exists('IsComercial')) {
+	function IsComercial()
+	{
+		$user = Auth::user();
+
+		if (!$user || !isset($user->role)) {
+			return false;
+		}
+
+		return $user->role->name == 'COMERCIAL';
 	}
 }
 

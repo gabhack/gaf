@@ -1,6 +1,10 @@
 @extends('layouts.app2')
 
-@section('content')
-    <client-data-component-draft :user="{{Auth::user()}}"></client-data-component-draft>
-@endsection
+@php
+    $user = Auth::user();
+    $user->role = $user->role;
+@endphp
 
+@section('content')
+    <client-data-component-draft :user="{{ $user }}"></client-data-component-draft>
+@endsection

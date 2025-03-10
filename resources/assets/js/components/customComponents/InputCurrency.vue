@@ -66,6 +66,7 @@ export default {
     }
 };
 </script>
+
 <style scoped>
 .form-control {
     background-color: white !important;

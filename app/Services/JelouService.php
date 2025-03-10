@@ -2,10 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Brand;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use App\{ BaseReporteBiometria, ReporteBiometria, InformacionUsuario };
+use App\{BaseReporteBiometria, ReporteBiometria, InformacionUsuario};
 
 class JelouService
 {
@@ -13,7 +10,7 @@ class JelouService
     {
         $baseReporteBiometria = new BaseReporteBiometria();
         $baseReporteBiometria->codigo_biometria = $request->codigo_biometria;
-        $baseReporteBiometria->tipo_biometria = $request->tipo_biometria; 
+        $baseReporteBiometria->tipo_biometria = $request->tipo_biometria;
         $baseReporteBiometria->resultado_biometria = $request->resultado_biometria;
         $baseReporteBiometria->celular = $request->celular;
         $baseReporteBiometria->nacionalidad = $request->nacionalidad;
@@ -40,7 +37,7 @@ class JelouService
     {
         $reporteBiometria = new ReporteBiometria();
         $reporteBiometria->codigo_biometria = $request->codigo_biometria;
-        $reporteBiometria->fecha_hora = $request->fecha_hora; 
+        $reporteBiometria->fecha_hora = $request->fecha_hora;
         $reporteBiometria->resultado_biometria = $request->resultado_biometria;
         $reporteBiometria->numero_identificacion = $request->numero_identificacion;
         $reporteBiometria->tipo_identificacion = $request->tipo_identificacion;
@@ -77,7 +74,7 @@ class JelouService
     {
         $informacionUsuario = new InformacionUsuario();
         $informacionUsuario->telefono = $request->telefono;
-        $informacionUsuario->aceptacion_tc = $request->aceptacion_tc; 
+        $informacionUsuario->aceptacion_tc = $request->aceptacion_tc;
         $informacionUsuario->cedula = $request->cedula;
         $informacionUsuario->nombre = $request->nombre;
         $informacionUsuario->oferta_seleccionada = $request->oferta_seleccionada;

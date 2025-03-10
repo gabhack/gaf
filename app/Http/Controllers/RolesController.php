@@ -16,7 +16,7 @@ class RolesController extends Controller
         $this->middleware('auth');
         $this->middleware('role:ADMIN_SISTEMA');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -24,7 +24,7 @@ class RolesController extends Controller
      */
     public function index()
     {
-        $lista = \App\Roles::all();
+        $lista = \App\Role::all();
         return view("roles/index")->with(["lista" => $lista]);
     }
 
@@ -46,11 +46,11 @@ class RolesController extends Controller
      */
     public function store(Request $request)
     {
-        $rol = new \App\Roles;
-		$rol->rol = strtoupper($request->input('rol'));
-		$rol->save();
-		
-		return redirect('roles');
+        $role = new \App\Role;
+        $role->name = strtoupper($request->input('role'));
+        $role->save();
+
+        return redirect('roles');
     }
 
     /**
@@ -72,8 +72,8 @@ class RolesController extends Controller
      */
     public function edit($id)
     {
-        $rol = \App\Roles::find($id);
-		return view("roles/editar")->with(["rol" => $rol]);
+        $role = \App\Role::find($id);
+        return view("roles/editar")->with(["role" => $role]);
     }
 
     /**
@@ -85,11 +85,11 @@ class RolesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $rol = \App\Roles::find($id);
-		$rol->rol = strtoupper($request->input('rol'));
-		$rol->save();
-		
-		return redirect('roles');
+        $role = \App\Role::find($id);
+        $role->name = strtoupper($request->input('role'));
+        $role->save();
+
+        return redirect('roles');
     }
 
     /**
@@ -100,7 +100,7 @@ class RolesController extends Controller
      */
     public function destroy($id)
     {
-        \App\Roles::find($id)->delete();		
-		return redirect('roles');
+        \App\Role::find($id)->delete();
+        return redirect('roles');
     }
 }

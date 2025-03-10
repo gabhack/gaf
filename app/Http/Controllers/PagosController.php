@@ -43,7 +43,7 @@ class PagosController extends Controller
 
     public function pagar()
     {
-        $roles = \App\Roles::OrderBy('rol')->get();
+        $roles = \App\Role::OrderBy('name')->get();
         //$source_id=\App\Pagos::idOpenPay();
         return view('pagos/pagar')->with([
             'source_id' => 'demo'
@@ -53,7 +53,7 @@ class PagosController extends Controller
     public function getPayPSE()
     {
         $pagos = new Pagos;
-        $roles = \App\Roles::OrderBy('rol')->get();
+        $roles = \App\Role::OrderBy('name')->get();
         $create_dt = date("Y-m-d H:i:s");
         $idtransaccion = $_GET['id'];
 
@@ -82,7 +82,7 @@ class PagosController extends Controller
 
     public function pagarpse()
     {
-        $roles = \App\Roles::OrderBy('rol')->get();
+        $roles = \App\Role::OrderBy('name')->get();
         //$source_id=\App\Pagos::idOpenPay();
         return view('pagos/pagarpse')->with([
             'source_id' => 'demo'
@@ -91,7 +91,7 @@ class PagosController extends Controller
 
     public function getPayEfectivo()
     {
-        $roles = \App\Roles::OrderBy('rol')->get();
+        $roles = \App\Role::OrderBy('name')->get();
         //$source_id=\App\Pagos::idOpenPay();
         return view('pagos/pagarefectivo');
     }

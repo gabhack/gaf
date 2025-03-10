@@ -14,22 +14,32 @@ import MercadoIcon from './MercadoIcon.vue';
 import CarteraIcon from './CarteraIcon.vue';
 import InvestigacionIcon from './InvestigacionIcon.vue';
 import LocalizacionIcon from './LocalizacionIcon.vue';
+import PlusIcon from './PlusIcon.vue';
+import UsersIcon from './UsersIcon.vue';
+import DashboardIcon from './DashboardIcon.vue';
+import InfoCircleIcon from './InfoCircleIcon.vue';
+import XIcon from './XIcon.vue';
 
 export {
-  CompaniesIcon,
-  PersonsIcon,
-  ListIcon,
-  FacebookIcon,
-  InstagramIcon,
-  YoutubeIcon,
-  TwitterIcon,
-  AdminSettingsIcon,
-  AmiIcon,
-  HegoIcon,
-  DashIcon,
-  VisadoIcon,
-  MercadoIcon,
-  CarteraIcon,
-  InvestigacionIcon,
-  LocalizacionIcon,
+    CompaniesIcon,
+    PersonsIcon,
+    ListIcon,
+    FacebookIcon,
+    InstagramIcon,
+    YoutubeIcon,
+    TwitterIcon,
+    AdminSettingsIcon,
+    AmiIcon,
+    HegoIcon,
+    DashIcon,
+    VisadoIcon,
+    MercadoIcon,
+    CarteraIcon,
+    InvestigacionIcon,
+    LocalizacionIcon,
+    PlusIcon,
+    UsersIcon,
+    DashboardIcon,
+    InfoCircleIcon,
+    XIcon
 };

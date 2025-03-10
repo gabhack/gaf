@@ -158,6 +158,7 @@
 
 <script>
 import { mapState, mapGetters, mapMutations } from 'vuex';
+
 export default {
     name: 'DescapliEmpty',
     props: {
@@ -243,6 +244,7 @@ export default {
         font-weight: 700;
         line-height: 18.23px;
     }
+
     & tbody {
         background-color: #fff;
         font-size: 14px;

@@ -1,10 +1,9 @@
-<?php 
+<?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\CouponsGen;
-use App\Jelou;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Services\JelouService;
 
@@ -23,7 +22,8 @@ class JelouController extends Controller
      * @param  Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function createBaseReporteBiometria(Request $request){
+    public function createBaseReporteBiometria(Request $request)
+    {
         $this->jelouService->createBaseReporteBiometria($request);
         return response()->json(['message' => 'Los datos fueron registrados correctamente.'], 200);
     }
@@ -34,7 +34,8 @@ class JelouController extends Controller
      * @param  Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function createReporteBiometria(Request $request){
+    public function createReporteBiometria(Request $request)
+    {
         $this->jelouService->createReporteBiometria($request);
         return response()->json(['message' => 'Los datos fueron registrados correctamente.'], 200);
     }
@@ -45,7 +46,8 @@ class JelouController extends Controller
      * @param  Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function createInformacionUsuario(Request $request){
+    public function createInformacionUsuario(Request $request)
+    {
         $this->jelouService->createInformacionUsuario($request);
         return response()->json(['message' => 'Los datos fueron registrados correctamente.'], 200);
     }
