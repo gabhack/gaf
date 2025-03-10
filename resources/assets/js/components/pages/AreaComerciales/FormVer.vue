@@ -7,8 +7,8 @@
                     <h4>Datos de Empresa</h4>
                 </b-col>
             </b-row>
-            <b-row class="mt-4">
-                <b-col cols="4" v-if="!isCompany">
+            <b-row class="mt-4" v-if="!isCompany">
+                <b-col cols="4">
                     <b-form-group label="Empresa" label-for="empresa_id">
                         <b-form-select
                             value-field="id"
@@ -381,7 +381,12 @@ export default {
             this.empresas = response.data;
         },
         async listarSedes() {
-            let response = await axios.get('/listas/ciudades/' + this.form.empresa.ciudad_id + '/sedes');
+            const response = await axios.get('/listas/sedes', {
+                params: {
+                    empresa_id: this.form.empresa_id,
+                    ciudad_id: this.form.empresa.ciudad_id
+                }
+            });
             this.sedes = response.data;
         },
         async cargarUbicaciones() {

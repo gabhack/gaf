@@ -143,11 +143,11 @@ class AreaComercialController extends Controller
     {
         try {
             $areaComercial = Comercial::with([
+                'sede',
                 'user.directPermissions',
                 'user.role'
             ])->findOrfail($id);
 
-            $areaComercial->ciudad_id = $areaComercial->sede->ciudad_id;
             $areaComercial->src_documento_identidad = $this->getFilePreview($areaComercial->src_documento_identidad);
 
             return view('area-comerciales.show', [
@@ -163,11 +163,11 @@ class AreaComercialController extends Controller
     {
         try {
             $areaComercial = Comercial::with([
+                'sede',
                 'user.directPermissions',
                 'user.role'
             ])->findOrfail($id);
 
-            $areaComercial->ciudad_id = $areaComercial->sede->ciudad_id;
             $areaComercial->src_documento_identidad = $this->getFilePreview($areaComercial->src_documento_identidad);
 
             return view('area-comerciales.edit', [

@@ -1,6 +1,5 @@
 <?php
 
-use App\Empresa;
 use App\Sede;
 use Illuminate\Database\Seeder;
 
@@ -13,8 +12,6 @@ class SedeSeeder extends Seeder
      */
     public function run()
     {
-        $empresas = Empresa::all()->pluck('id');
-
         $sedes = [
             [
                 'empresa_id' => 1,

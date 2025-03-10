@@ -723,15 +723,15 @@ Route::prefix('/area-comerciales')->middleware('permission:ver area comercial')-
 });
 
 Route::prefix('/listas')->group(function () {
-	Route::get('/tipo-empresas', 				[ListaController::class, 'listarTipoEmpresas']);
-	Route::get('/tipo-sociedades', 			[ListaController::class, 'listarTipoSociedades']);
-	Route::get('/tipo-documentos', 			[ListaController::class, 'listarTipoDocumentos']);
-	Route::get('/ciudades', 						[ListaController::class, 'listarCiudades']);
-	Route::get('/ciudades/{id}/sedes', 	[ListaController::class, 'listarSedesPorCiudad']);
-	Route::get('/ubicaciones', 				  [ListaController::class, 'listarUbicaciones']);
-	Route::get('/cargos', 							[ListaController::class, 'listarCargos']);
-	Route::get('/amis', 								[ListaController::class, 'listarAmis']);
-	Route::get('/hegos', 								[ListaController::class, 'listarHegos']);
-	Route::get('/permisos', 						[ListaController::class, 'listarPermisos']);
-	Route::get('/empresas', 						[ListaController::class, 'listarEmpresas']);
+	Route::get('/tipo-empresas', [ListaController::class, 'listarTipoEmpresas']);
+	Route::get('/tipo-sociedades', [ListaController::class, 'listarTipoSociedades']);
+	Route::get('/tipo-documentos', [ListaController::class, 'listarTipoDocumentos']);
+	Route::get('/ciudades', [ListaController::class, 'listarCiudades']);
+	Route::get('/sedes', [ListaController::class, 'listarSedes']);
+	Route::get('/ubicaciones', [ListaController::class, 'listarUbicaciones']);
+	Route::get('/cargos', [ListaController::class, 'listarCargos']);
+	Route::get('/amis', [ListaController::class, 'listarAmis']);
+	Route::get('/hegos', [ListaController::class, 'listarHegos']);
+	Route::get('/permisos', [ListaController::class, 'listarPermisos']);
+	Route::get('/empresas', [ListaController::class, 'listarEmpresas']);
 });

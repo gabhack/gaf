@@ -42,9 +42,21 @@ class ListaController extends Controller
         return response()->json($ciudades);
     }
 
-    public function listarSedesPorCiudad($ciudadId)
+    public function listarSedes(Request $request)
     {
-        $sedes = Sede::where('ciudad_id', $ciudadId)->orderBy('nombre', 'ASC')->get();
+        $ciudad = $request->query('ciudad_id');
+        $empresa = $request->query('empresa_id');
+
+        $sedes = Sede::query()
+            ->when($empresa, function ($query) use ($empresa) {
+                $query->where('empresa_id', $empresa);
+            })
+            ->when($ciudad, function ($query) use ($ciudad) {
+                $query->where('ciudad_id', $ciudad);
+            })
+            ->orderBy('nombre', 'ASC')
+            ->get();
+
         return response()->json($sedes);
     }
 

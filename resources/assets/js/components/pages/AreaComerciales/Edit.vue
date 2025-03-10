@@ -78,12 +78,12 @@ export default {
 
             try {
                 let formData = new FormData();
-                formData.append('empresa_id', this.form.empresa_id);
-                formData.append('consultas_diarias', this.form.consultas_diarias);
-                formData.append('empresa', JSON.stringify(this.form.empresa));
-                formData.append('personal', JSON.stringify(this.form.personal));
-                formData.append('plataforma', JSON.stringify(this.form.plataforma));
-                formData.append('src_documento_identidad', this.form.documentacion.src_documento_identidad);
+                formData.append('empresa_id', form.empresa_id);
+                formData.append('consultas_diarias', form.consultas_diarias);
+                formData.append('empresa', JSON.stringify(form.empresa));
+                formData.append('personal', JSON.stringify(form.personal));
+                formData.append('plataforma', JSON.stringify(form.plataforma));
+                formData.append('src_documento_identidad', form.documentacion.src_documento_identidad);
 
                 axios
                     .post(`/area-comerciales/${this.comercial.id}`, formData, {

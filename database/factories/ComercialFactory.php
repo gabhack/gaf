@@ -1,8 +1,8 @@
 <?php
 
 use App\Comercial;
-use App\Empresa;
 use App\Role;
+use App\Sede;
 use App\User;
 use Faker\Generator as Faker;
 
@@ -17,12 +17,15 @@ $factory->define(Comercial::class, function (Faker $faker) {
         'password' => bcrypt('12345678'),
     ]);
 
-    $empresas = Empresa::all()->pluck('id');
+    $sedes = Sede::all();
+    $randomSede = $faker->randomElement($sedes);
+
+    $empresa = $randomSede->empresa;
 
     return [
         'user_id' => $user->id,
-        'empresa_id' => intval($faker->randomElement($empresas)),
-        'sede_id' => $faker->numberBetween(1, 5),
+        'empresa_id' => $empresa->id,
+        'sede_id' => $randomSede->id,
         'cargo_id' => $faker->numberBetween(1, 12),
         'tipo_documento_id' => $faker->numberBetween(1, 3),
         'ami_id' => $faker->numberBetween(1, 5),
@@ -31,7 +34,7 @@ $factory->define(Comercial::class, function (Faker $faker) {
         'nombre_completo' => $faker->company,
         'numero_documento' => $faker->unique()->numerify('##########'),
         'nacionalidad' => $faker->company,
-        'correo' => $faker->company,
+        'correo' => $faker->unique()->companyEmail,
         'numero_contacto' =>  $faker->numerify('##########'),
         'src_documento_identidad' => $faker->company,
     ];

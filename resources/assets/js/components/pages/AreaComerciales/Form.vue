@@ -19,6 +19,7 @@
                             id="empresa_id"
                             v-model="form.empresa_id"
                             :options="empresas"
+                            @change="listarSedes"
                         >
                             <template #first>
                                 <b-form-select-option :value="null" disabled>
@@ -532,7 +533,12 @@ export default {
             this.empresas = response.data;
         },
         async listarSedes() {
-            let response = await axios.get('/listas/ciudades/' + this.form.empresa.ciudad_id + '/sedes');
+            const response = await axios.get('/listas/sedes', {
+                params: {
+                    empresa_id: this.form.empresa_id,
+                    ciudad_id: this.form.empresa.ciudad_id
+                }
+            });
             this.sedes = response.data;
         },
         async cargarUbicaciones() {
@@ -566,7 +572,7 @@ export default {
             }
         },
         resetSede() {
-            this.sedes = []
+            this.sedes = [];
             this.form.empresa.sede_id = null;
         }
     }
