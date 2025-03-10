@@ -20,31 +20,25 @@ class AreaComercialController extends Controller
     public function index()
     {
         $user = Auth::user();
+        $perPage = request()->get('per_page', 5);
 
-        // Set query
-        $query = Comercial::orderBy('id', 'DESC');
+        $comerciales = Comercial::query()
+            ->when(IsCompany(), function ($query) use ($user) {
+                $query->where('empresa_id', $user->empresa->id);
+            })
+            ->orderBy('id', 'DESC')
+            ->paginate($perPage)
+            ->appends(request()->query());
 
-        // Filter by company
-        if (IsCompany()) {
-            $query->where('empresa_id', $user->empresa->id);
-        }
-
-        // Pagination
-        $comerciales = $query->paginate(request()->query('per_page') ?? 5)->appends(request()->query());
-
-        // Map data
-        $data = $comerciales->map(function ($comercial) {
+        $comerciales->getCollection()->transform(function ($comercial) {
             return [
                 'id' => $comercial->id,
                 'nombre_completo' => $comercial->nombre_completo,
                 'cargo' => $comercial->cargo->cargo,
                 'sede' => $comercial->sede->nombre,
-                'ciudad' => $comercial->sede->ciudad->nombre,
                 'telefono' => $comercial->numero_contacto
             ];
         });
-
-        $comerciales->setCollection($data);
 
         return view('area-comerciales.index', [
             'comerciales' => json_encode($comerciales)

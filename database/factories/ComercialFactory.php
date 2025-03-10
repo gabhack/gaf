@@ -14,6 +14,7 @@ $factory->define(Comercial::class, function (Faker $faker) {
 
     $user = factory(User::class)->create([
         'role_id' => $roleComercial->id,
+        'password' => bcrypt('12345678'),
     ]);
 
     $empresas = Empresa::all()->pluck('id');

@@ -13,6 +13,7 @@ $factory->define(Empresa::class, function (Faker $faker) {
 
     $user = factory(User::class)->create([
         'role_id' => $roleEmpresa->id,
+        'password' => bcrypt('12345678'),
     ]);
 
     return [

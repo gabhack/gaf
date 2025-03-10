@@ -61,8 +61,7 @@ class User extends Authenticatable
 
     public function getConsultasDiariasAttribute()
     {
-        $empresa = $this->empresa;
-        return $empresa ? $empresa->consultas_diarias : null;
+        return $this->empresa->consultas_diarias ?? $this->comercial->consultas_diarias ?? null;
     }
 
     public function givePermission($permission)

@@ -16,6 +16,11 @@ class Sede extends Model
 		'nombre',
 	];
 
+	public function comerciales()
+	{
+		return $this->hasMany(Comercial::class)->withDefault();
+	}
+
 	public function empresa()
 	{
 		return $this->belongsTo(Empresa::class)->withDefault();

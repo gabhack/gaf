@@ -2,7 +2,7 @@
     <div>
         <h2 class="mb-5">Panel de {{ !onUpdate ? 'Creación' : 'Edición' }} Sedes</h2>
         <BForm @submit.prevent="submitForm">
-            <b-row>
+            <b-row v-if="!isCompany">
                 <b-col cols="4">
                     <h4>Asignar Empresa</h4>
                     <b-form-group label="Empresa" label-for="empresa_id">
@@ -98,7 +98,7 @@ import CustomButton from '../../customComponents/CustomButton.vue';
 import PlusIcon from '../../icons/PlusIcon.vue';
 
 export default {
-    props: ['initialData', 'empresas'],
+    props: ['initialData', 'empresas', 'user'],
     components: {
         CustomButton,
         PlusIcon
@@ -121,7 +121,10 @@ export default {
     computed: {
         onUpdate() {
             return !!this.initialData;
-        }
+        },
+        isCompany() {
+            return this.user.role.name === 'EMPRESA';
+        },
     },
     validations() {
         return {
@@ -135,6 +138,10 @@ export default {
     },
     mounted() {
         this.cargarUbicaciones();
+
+        if (this.isCompany) {
+            this.form.empresa_id = this.user.empresa.id;
+        }
     },
     watch: {
         initialData: {

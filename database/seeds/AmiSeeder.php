@@ -12,7 +12,13 @@ class AmiSeeder extends Seeder
      */
     public function run()
     {
-        collect(['Visado', 'Prospección de mercado', 'Recuperación de cartera', 'Investigación', 'Localización de usuarios'])->map(function ($ami) {
+        collect([
+            'Visado',
+            'Prospección de mercado',
+            'Recuperación de cartera',
+            'Investigación',
+            'Localización de usuarios'
+        ])->map(function ($ami) {
             Ami::updateOrCreate(['nombre' => $ami]);
         });
     }

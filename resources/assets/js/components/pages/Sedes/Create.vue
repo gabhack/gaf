@@ -1,6 +1,6 @@
 <template>
     <b-container fluid class="my-3">
-        <Form @create="crearSede" :empresas="empresas" />
+        <Form @create="crearSede" :empresas="empresas" :user="user" />
     </b-container>
 </template>
 
@@ -8,7 +8,7 @@
 import Form from './Form.vue';
 
 export default {
-    props: ['empresas'],
+    props: ['empresas', 'user'],
     components: {
         Form
     },
@@ -37,7 +37,7 @@ export default {
                     .post('/sedes', form)
                     .then(response => {
                         console.log('Empresa creada con éxito:', response.data);
-                        // window.location.replace('/sedes');
+                        window.location.replace('/sedes');
                     })
                     .catch(error => {
                         console.error('Error al crear empresa:', error);

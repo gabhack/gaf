@@ -9,8 +9,8 @@
                 </b-col>
             </b-row>
             <!-- Selección de Empresa (solo si el usuario no es de tipo EMPRESA) -->
-            <b-row class="mt-4">
-                <b-col cols="4" v-if="!isCompany">
+            <b-row class="mt-4" v-if="!isCompany">
+                <b-col cols="4" >
                     <b-form-group label="Empresa" label-for="empresa_id">
                         <b-form-select
                             :state="validateState('form.empresa_id')"

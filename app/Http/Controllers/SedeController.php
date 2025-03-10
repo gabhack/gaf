@@ -16,7 +16,7 @@ class SedeController extends Controller
      */
     public function index()
     {
-        $user = Auth::user()->load('role');
+        $user = Auth::user();
 
         // Set query
         $query = Sede::orderBy('id', 'DESC');
@@ -57,8 +57,13 @@ class SedeController extends Controller
     public function create()
     {
         try {
+            $user = Auth::user();
             $empresas = Empresa::orderBy('nombre', 'asc')->get();
-            return view('sedes.create', compact('empresas'));
+
+            return view('sedes.create', [
+                'empresas' => $empresas,
+                'user' => $user,
+            ]);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Hubo un error al obtener las empresas',
