@@ -333,6 +333,31 @@
             </b-row>
             <b-row>
                 <b-col cols="6">
+                    <h4>Secciones en Plataforma</h4>
+                </b-col>
+            </b-row>
+            <b-row class="mt-4">
+                <b-col cols="4">
+                    <b-form-group label="Permisos Plataforma" label-for="usuario_permisos">
+                        <multiselect
+                            id="usuario_permisos"
+                            v-model="form.usuario.permisos"
+                            :options="permisos"
+                            :multiple="true"
+                            :close-on-select="false"
+                            :clear-on-select="false"
+                            :preserve-search="true"
+                            placeholder="Busca y selecciona"
+                            label="name"
+                            track-by="id"
+                            :taggable="true"
+                            :searchable="false"
+                        ></multiselect>
+                    </b-form-group>
+                </b-col>
+            </b-row>
+            <b-row>
+                <b-col cols="6">
                     <h4>Usuario Plataforma</h4>
                 </b-col>
             </b-row>
@@ -359,24 +384,6 @@
                         ></b-form-input>
                     </b-form-group>
                 </b-col>
-                <b-col cols="4">
-                    <b-form-group label="Permisos Adicionales" label-for="usuario_permisos">
-                        <multiselect
-                            id="usuario_permisos"
-                            v-model="form.usuario.permisos"
-                            :options="permisos"
-                            :multiple="true"
-                            :close-on-select="false"
-                            :clear-on-select="false"
-                            :preserve-search="true"
-                            placeholder="Busca y selecciona"
-                            label="name"
-                            track-by="id"
-                            :taggable="true"
-                            :searchable="false"
-                        ></multiselect>
-                    </b-form-group>
-                </b-col>
             </b-row>
             <b-row class="mt-4">
                 <b-col cols="4" v-if="!onUpdate">
@@ -401,7 +408,7 @@
                         ></b-form-input>
                     </b-form-group>
                 </b-col>
-                <b-col cols="4" align-self="end">
+                <b-col cols="12" align-self="end" class="mt-4">
                     <CustomButton class="mb-3" type="submit">
                         <template v-if="!onUpdate">
                             <PlusIcon></PlusIcon>

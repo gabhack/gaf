@@ -232,25 +232,6 @@
                         ></b-form-input>
                     </b-form-group>
                 </b-col>
-                <b-col cols="4">
-                    <div class="mb-3">
-                        <label for="personal_permisos">Permisos Adicionales</label>
-                        <multiselect
-                            id="personal_permisos"
-                            v-model="form.personal.permisos"
-                            :options="permisos"
-                            :multiple="true"
-                            :close-on-select="false"
-                            :clear-on-select="false"
-                            :preserve-search="true"
-                            placeholder="Busca y selecciona"
-                            label="name"
-                            track-by="id"
-                            :taggable="true"
-                            :searchable="false"
-                        ></multiselect>
-                    </div>
-                </b-col>
             </b-row>
             <!-- Documentación -->
             <b-row>
@@ -284,6 +265,25 @@
             </b-row>
             <b-row class="mt-4">
                 <b-col cols="4">
+                    <div class="mb-3">
+                        <label for="personal_permisos">Permisos Plataforma</label>
+                        <multiselect
+                            id="personal_permisos"
+                            v-model="form.personal.permisos"
+                            :options="permisos"
+                            :multiple="true"
+                            :close-on-select="false"
+                            :clear-on-select="false"
+                            :preserve-search="true"
+                            placeholder="Busca y selecciona"
+                            label="name"
+                            track-by="id"
+                            :taggable="true"
+                            :searchable="false"
+                        ></multiselect>
+                    </div>
+                </b-col>
+                <!-- <b-col cols="4">
                     <b-form-group label="AMI (Análisis de mercado inteligente)" label-for="plataforma_ami">
                         <b-form-select
                             :state="validateState('form.plataforma.ami_id')"
@@ -306,8 +306,8 @@
                             :options="hegos"
                         ></b-form-select>
                     </b-form-group>
-                </b-col>
-                <b-col cols="4" align-self="end">
+                </b-col> -->
+                <b-col cols="12" align-self="end" class="mt-4">
                     <CustomButton class="mb-3" type="submit">
                         <template v-if="!onUpdate">
                             <PlusIcon></PlusIcon>
@@ -389,8 +389,8 @@ export default {
                 },
                 previewDocumentoIdentidad: '',
                 plataforma: {
-                    ami_id: null,
-                    hego_id: null
+                    ami_id: 1,
+                    hego_id: 1
                 }
             },
             permisos: [],

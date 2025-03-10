@@ -158,25 +158,6 @@
                         ></b-form-input>
                     </b-form-group>
                 </b-col>
-                <b-col cols="4">
-                    <div class="mb-3">
-                        <label for="personal_permisos">Permisos Adicionales</label>
-                        <multiselect
-                            id="personal_permisos"
-                            v-model="form.personal.permisos"
-                            :options="permisos"
-                            :multiple="true"
-                            :close-on-select="false"
-                            :clear-on-select="false"
-                            :preserve-search="true"
-                            label="name"
-                            track-by="id"
-                            :taggable="true"
-                            :searchable="false"
-                            disabled
-                        ></multiselect>
-                    </div>
-                </b-col>
             </b-row>
             <b-row>
                 <b-col cols="6">
@@ -200,6 +181,25 @@
             </b-row>
             <b-row class="mt-4">
                 <b-col cols="4">
+                    <div class="mb-3">
+                        <label for="personal_permisos">Permisos Plataforma</label>
+                        <multiselect
+                            id="personal_permisos"
+                            v-model="form.personal.permisos"
+                            :options="permisos"
+                            :multiple="true"
+                            :close-on-select="false"
+                            :clear-on-select="false"
+                            :preserve-search="true"
+                            label="name"
+                            track-by="id"
+                            :taggable="true"
+                            :searchable="false"
+                            disabled
+                        ></multiselect>
+                    </div>
+                </b-col>
+                <!-- <b-col cols="4">
                     <b-form-group label="AMI (Análisis de mercado inteligente)" label-for="plataforma_ami">
                         <b-form-select
                             value-field="id"
@@ -222,7 +222,7 @@
                             disabled
                         ></b-form-select>
                     </b-form-group>
-                </b-col>
+                </b-col> -->
             </b-row>
         </BForm>
         <LiteModal
@@ -286,8 +286,8 @@ export default {
                 },
                 previewDocumentoIdentidad: '',
                 plataforma: {
-                    ami_id: null,
-                    hego_id: null
+                    ami_id: 1,
+                    hego_id: 1
                 }
             },
             permisos: [],
