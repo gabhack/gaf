@@ -88,23 +88,22 @@ class CreditRequestController extends Controller
         return view('CreditRequest.index');
     }
 
-    /**
-     * Retorna todos los créditos con carteras y documentos
-     */
+
+
     public function getAll()
     {
-        // Incluimos 'carteras' y 'documents' en la carga
         $credits = CreditRequest::with(['carteras', 'documents'])
+            ->where('status', '!=', 'visado')  // Filtra los visados
             ->orderBy('updated_at', 'DESC')
             ->get();
 
-        // Ejemplo de logging en el servidor
-        foreach ($credits as $credit) {
-            Log::info('Carteras del crédito ID ' . $credit->id . ': ', $credit->carteras->toArray());
-        }
+            foreach ($credits as $credit) {
+                Log::info('Carteras del crédito ID ' . $credit->id . ': ', $credit->carteras->toArray());
+            }
 
         return response()->json($credits);
     }
+
 
     /**
      * Actualiza el estado de un crédito a 'aprobado'
@@ -163,4 +162,24 @@ class CreditRequestController extends Controller
             ], 500);
         }
     }
+
+ 
+    public function markAsVisado($id)
+    {
+        try {
+            $credit = CreditRequest::findOrFail($id);
+            $credit->status = 'visado';
+            $credit->save();
+
+            return response()->json([
+                'message' => 'Crédito marcado como visado exitosamente'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error al marcar el crédito como visado',
+                'error'   => $e->getMessage()
+            ], 500);
+        }
+    }
+
 }

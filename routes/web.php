@@ -22,8 +22,8 @@ use App\Http\Controllers\SedeController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\VisadoController;
 use App\Http\Controllers\ParametrosComparativaController;
+
 use App\Http\Controllers\Fintra\CreditRequestController;
-use App\Http\Controllers\dataCotizerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -729,7 +729,8 @@ Route::get('/credit-requests', [CreditRequestController::class, 'index'])->name(
 Route::get('/credit-requests/all', [CreditRequestController::class, 'getAll'])->name('credit-request.all');
 Route::patch('/credit-requests/{id}/status', [CreditRequestController::class, 'updateStatus'])->name('credit-request.updateStatus');
 Route::post('credit-requests/{id}/documents', [CreditRequestController::class, 'uploadDocument']);
-Route::get('credit-requests/{id}/documents', [CreditRequestController::class, 'getDocuments']);
+Route::get('credit-request/{id}/documents', [CreditRequestController::class, 'getDocuments']);
+Route::patch('/credit-requests/{id}/visado', [CreditRequestController::class, 'markAsVisado'])->name('credit-request.markAsVisado');
 
 // ------------------------------------------------------------------
 // EMPRESAS (middleware de permiso)
