@@ -83,6 +83,7 @@ public function upload(Request $request)
     }
 }
 
+
 public function fetchPaginatedResults(Request $request)
 {
     Log::info('Inicio del proceso de fetchPaginatedResults');
@@ -91,11 +92,12 @@ public function fetchPaginatedResults(Request $request)
         $page = (int) $request->query('page', 1);
         $perPage = (int) $request->query('perPage', 2000); // Ajusta según necesidad
         
-        // Obtener las cédulas desde el request
-        $cedulas = $request->input('cedulas', []);
+        // Obtener las cédulas desde caché
+        $cacheKey = 'cedulas_' . Auth::id();
+        $cedulas = Cache::get($cacheKey, []);
 
         if (empty($cedulas)) {
-            Log::info('No hay cédulas en el request');
+            Log::info('No hay cédulas en caché');
             return response()->json([
                 'data' => [],
                 'total' => 0,
@@ -155,7 +157,6 @@ public function fetchPaginatedResults(Request $request)
         return response()->json(['error' => 'Error en la obtención de resultados paginados'], 500);
     }
 }
-
 
 
 
