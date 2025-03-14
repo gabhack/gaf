@@ -653,7 +653,7 @@ public function processCedulas_vista($cedulas, $mes, $año)
                     }
                 }
 
-                if ($valorIngreso > 5200000) {
+                if ($valorIngreso > 5694000) {
                     $descuento += 0.01;
                     Log::info("Ingresos > 5.2 millones, se aumenta +1% adicional. Descuento total = " . ($descuento * 100) . "%");
                 }
