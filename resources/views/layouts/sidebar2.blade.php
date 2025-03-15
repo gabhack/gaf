@@ -293,11 +293,10 @@
         @endcan
     </div>
 
-    @if (HEGOAccess())
         <li class="nav-item">
             <a
                 class="nav-link collapsed"
-                href="/estudios"
+                href="/#"
                 style="display: flex; flex-direction: column; align-items: start; justify-content:center; padding-left: 28px;"
             >
                 <span style="font-size: 16px; font-weight: 700; line-height: 20.83px;">
@@ -311,9 +310,43 @@
             </a>
         </li>
         <li class="nav-item">
+                <a
+                    class="nav-link collapsed"
+                    data-toggle="collapse"
+                    data-target="#menuVisados"
+                    href="#"
+                    aria-expanded="false"
+                    aria-controls="menuVisados"
+                >
+                    <visado-icon></visado-icon>
+                    <span class="pl-2">Solicitudes de crédito</span>
+                </a>
+                <div
+                    class="collapse"
+                    id="menuVisados"
+                    data-parent="#accordionSidebar"
+                    aria-labelledby="menuVisados"
+                >
+                    <div class="bg-green-side py-2 collapse-inner">
+                        <a
+                            class="collapse-item"
+                            href="/credit-request"
+                        >
+                            Solicitud de crédito >
+                        </a>
+                        <a
+                            class="collapse-item"
+                            href="/credit-requests"
+                        >
+                            Gestion de colicitudes >
+                        </a>
+                    </div>
+                </div>
+            </li>
+        <!-- <li class="nav-item">
             <a
                 class="nav-link collapsed"
-                href="/solicitud"
+                href="/credit-request"
                 style="padding-left: 27px;"
             >
                 <img
@@ -324,17 +357,13 @@
                 >
                 <span class="pl-2">Solicitud de crédito</span>
             </a>
-        </li>
-        {{-- <li class="nav-item">
             <a
                 class="nav-link"
-                href="{{ url('pagos') }}"
+                href="/credit-requests"
             >
-                <ami-icon></ami-icon>
-                <span>Pagos</span>
+                <span>Gestion de colicitudes</span>
             </a>
-        </li> --}}
-    @endif
+        </li> -->
 
     {{-- @if (IsCompany())
         <li class="nav-item dropdown">
