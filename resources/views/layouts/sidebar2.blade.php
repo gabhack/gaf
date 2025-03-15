@@ -115,6 +115,18 @@
                         >
                             Listado de consultas >
                         </a>
+                        <a
+                            class="collapse-item"
+                            href="/credit-request"
+                        >
+                            Solicitud de crédito >
+                        </a>
+                        <a
+                            class="collapse-item"
+                            href="/credit-requests"
+                        >
+                            Gestion de colicitudes >
+                        </a>
                     </div>
                 </div>
             </li>
@@ -293,7 +305,7 @@
         @endcan
     </div>
 
-        <li class="nav-item">
+        <!-- <li class="nav-item">
             <a
                 class="nav-link collapsed"
                 href="/#"
@@ -308,41 +320,7 @@
                     </span>
                 </span>
             </a>
-        </li>
-        <li class="nav-item">
-                <a
-                    class="nav-link collapsed"
-                    data-toggle="collapse"
-                    data-target="#menuVisados"
-                    href="#"
-                    aria-expanded="false"
-                    aria-controls="menuVisados"
-                >
-                    <visado-icon></visado-icon>
-                    <span class="pl-2">Solicitudes de crédito</span>
-                </a>
-                <div
-                    class="collapse"
-                    id="menuVisados"
-                    data-parent="#accordionSidebar"
-                    aria-labelledby="menuVisados"
-                >
-                    <div class="bg-green-side py-2 collapse-inner">
-                        <a
-                            class="collapse-item"
-                            href="/credit-request"
-                        >
-                            Solicitud de crédito >
-                        </a>
-                        <a
-                            class="collapse-item"
-                            href="/credit-requests"
-                        >
-                            Gestion de colicitudes >
-                        </a>
-                    </div>
-                </div>
-            </li>
+        </li> -->
         <!-- <li class="nav-item">
             <a
                 class="nav-link collapsed"
