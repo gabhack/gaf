@@ -83,6 +83,41 @@
             </li>
         @endcan
 
+        <li class="nav-item">
+                <a
+                    class="nav-link collapsed"
+                    data-toggle="collapse"
+                    data-target="#menuSolicitudes"
+                    href="#"
+                    aria-expanded="false"
+                    aria-controls="menuSolicitudes"
+                >
+                    <visado-icon></visado-icon>
+                    <span class="pl-2">Solicitudes de Credito</span>
+                </a>
+                <div
+                    class="collapse"
+                    id="menuSolicitudes"
+                    data-parent="#accordionSidebar"
+                    aria-labelledby="menuSolicitudes"
+                >
+                    <div class="bg-green-side py-2 collapse-inner">
+                        <a
+                            class="collapse-item"
+                            href="/credit-request"
+                        >
+                            Solicitud de crédito >
+                        </a>
+                        <a
+                            class="collapse-item"
+                            href="/credit-requests"
+                        >
+                            Gestion de colicitudes >
+                        </a>
+                    </div>
+                </div>
+            </li>
+
         @can('permission', 'ver visado')
             <li class="nav-item">
                 <a
@@ -115,7 +150,7 @@
                         >
                             Listado de consultas >
                         </a>
-                        <a
+                        <!-- <a
                             class="collapse-item"
                             href="/credit-request"
                         >
@@ -126,7 +161,7 @@
                             href="/credit-requests"
                         >
                             Gestion de colicitudes >
-                        </a>
+                        </a> -->
                     </div>
                 </div>
             </li>
