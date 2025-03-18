@@ -1,24 +1,42 @@
 <template>
-  <form id="credit-form" @submit.prevent="submitForm" :class="collapsed ? 'collapsed' : null">
+  <form id="credit-form" @submit.prevent="submitForm" :class="collapsed ? 'collapsed' : null" enctype="multipart/form-data">
     <b-row style="width: 100%;">
       <b-col cols="12" md="8" class="pr-0">
         <b-card no-body class="card-main mt-5 mb-5 ml-5">
           <b-card-body style="padding-top: 3rem;">
             <h3 class="heading-title mb-3">Panel de Solicitudes de Consulta para Crédito</h3>
+            
+            <!-- Cédula -->
             <b-form-row>
               <b-col cols="12">
                 <b-form-group label="Cédula" label-for="doc">
-                  <b-form-input id="doc" class="form-control2" v-model="form.doc" type="text" required />
+                  <b-form-input
+                    id="doc"
+                    class="form-control2"
+                    v-model="form.doc"
+                    type="text"
+                    required
+                  />
                 </b-form-group>
               </b-col>
             </b-form-row>
+
+            <!-- Nombre -->
             <b-form-row>
               <b-col cols="12">
                 <b-form-group label="Nombre" label-for="name">
-                  <b-form-input id="name" class="form-control2" v-model="form.name" type="text" required />
+                  <b-form-input
+                    id="name"
+                    class="form-control2"
+                    v-model="form.name"
+                    type="text"
+                    required
+                  />
                 </b-form-group>
               </b-col>
             </b-form-row>
+
+            <!-- Tipo de Cliente -->
             <b-form-row>
               <b-col cols="12">
                 <b-form-group label="Tipo de Cliente" label-for="client_type">
@@ -37,34 +55,51 @@
                 </b-form-group>
               </b-col>
             </b-form-row>
+
+            <!-- Buscador y Select (Docentes) -->
             <b-form-row v-if="showDocenteOptions">
               <b-col cols="12">
+                <b-form-group label="Buscar Pagaduría (Docente)">
+                  <b-form-input
+                    v-model="docenteSearch"
+                    placeholder="Escriba para filtrar..."
+                  />
+                </b-form-group>
+              </b-col>
+              <b-col cols="12">
                 <b-form-group label="Pagaduría (Docente)">
-                  <b-form-select class="form-control2" v-model.number="form.pagaduria_id" required>
+                  <b-form-select
+                    class="form-control2"
+                    v-model.number="form.pagaduria_id"
+                    :options="filteredDocentePagadurias"
+                    required
+                  >
                     <option disabled value="">Seleccione</option>
-                    <option
-                      v-for="(code, name) in docentePagaduriasMap"
-                      :key="name"
-                      :value="code"
-                    >
-                      {{ name }}
-                    </option>
                   </b-form-select>
                 </b-form-group>
               </b-col>
             </b-form-row>
+
+            <!-- Pensionados -->
             <b-form-row v-else-if="showPensionadoOptions">
               <b-col cols="12">
                 <b-form-group label="Pagaduría (Pensionado)">
-                  <b-form-select class="form-control2" v-model.number="form.pagaduria_id" required>
+                  <b-form-select
+                    class="form-control2"
+                    v-model.number="form.pagaduria_id"
+                    required
+                  >
                     <option disabled value="">Seleccione</option>
                     <option :value="200">COLPENSIONES</option>
                     <option :value="201">FOPEP</option>
-                    <option :value="202">FIDUPREVISORA</option>
+                    <option :value="297">FIDUPREVISORA</option>
+                    <option :value="296">CASUR</option>
                   </b-form-select>
                 </b-form-group>
               </b-col>
             </b-form-row>
+
+            <!-- Cuota -->
             <b-form-row>
               <b-col cols="12">
                 <b-form-group label="Cuota" label-for="cuota">
@@ -80,6 +115,8 @@
                 </b-form-group>
               </b-col>
             </b-form-row>
+
+            <!-- Monto -->
             <b-form-row>
               <b-col cols="12">
                 <b-form-group label="Monto" label-for="monto">
@@ -95,6 +132,8 @@
                 </b-form-group>
               </b-col>
             </b-form-row>
+
+            <!-- Tasa Mensual -->
             <b-form-row>
               <b-col cols="12">
                 <b-form-group label="Tasa (Mensual)" label-for="tasa">
@@ -110,6 +149,8 @@
                 </b-form-group>
               </b-col>
             </b-form-row>
+
+            <!-- Plazo -->
             <b-form-row>
               <b-col cols="12">
                 <b-form-group label="Plazo (meses)" label-for="plazo">
@@ -124,6 +165,23 @@
                 </b-form-group>
               </b-col>
             </b-form-row>
+
+            <!-- Documento (Volante de Pago) -->
+            <b-form-row>
+              <b-col cols="12">
+                <b-form-group label="Volante de Pago" label-for="volante">
+                  <b-form-file
+                    id="volante"
+                    v-model="form.volante"
+                    :state="Boolean(form.volante)"
+                    required
+                    accept=".pdf, .jpg, .jpeg, .png"
+                    class="form-control2"
+                  />
+                </b-form-group>
+              </b-col>
+            </b-form-row>
+
             <hr />
             <h4>Carteras a comprar</h4>
             <div class="table-responsive">
@@ -144,6 +202,7 @@
                         v-model="car.tipoCartera"
                         :options="tipoCarteraOptions"
                         class="form-control2"
+                        required
                       />
                     </td>
                     <td>
@@ -151,6 +210,7 @@
                         v-model="car.nombreEntidad"
                         class="form-control2"
                         type="text"
+                        required
                       />
                     </td>
                     <td>
@@ -159,6 +219,7 @@
                         class="form-control2"
                         type="text"
                         placeholder="100.000"
+                        required
                         @input="onInputCurrencyCartera(index, 'valorCuota')"
                       />
                     </td>
@@ -168,6 +229,7 @@
                         class="form-control2"
                         type="text"
                         placeholder="1.000.000"
+                        required
                         @input="onInputCurrencyCartera(index, 'saldo')"
                       />
                     </td>
@@ -183,6 +245,7 @@
             <b-button class="btn-credit mb-3" @click="addCartera" variant="green-table">
               Agregar otra cartera
             </b-button>
+
             <hr />
             <b-button class="btn-credit" type="submit" variant="green-table">
               Guardar
@@ -205,11 +268,12 @@ import {
   BFormGroup,
   BFormSelect,
   BFormInput,
+  BFormFile,
   BButton
 } from "bootstrap-vue";
 
 export default {
-  name: "CreditRequest",
+  name: "CreditRequestForm",
   components: {
     BRow,
     BCol,
@@ -219,11 +283,13 @@ export default {
     BFormGroup,
     BFormSelect,
     BFormInput,
+    BFormFile,
     BButton
   },
   data() {
     return {
       collapsed: false,
+      docenteSearch: "", // Para filtrar pagadurías docentes
       form: {
         doc: "",
         name: "",
@@ -233,6 +299,7 @@ export default {
         monto: "",
         tasa: "",
         plazo: 1,
+        volante: null, // Documento (Volante de Pago)
         carteras: []
       },
       showDocenteOptions: false,
@@ -343,6 +410,15 @@ export default {
       ]
     };
   },
+  computed: {
+    // Filtra las pagadurías según el texto de búsqueda
+    filteredDocentePagadurias() {
+      const searchLower = this.docenteSearch.toLowerCase();
+      return Object.entries(this.docentePagaduriasMap)
+        .filter(([label]) => label.toLowerCase().includes(searchLower))
+        .map(([label, code]) => ({ value: code, text: label }));
+    }
+  },
   methods: {
     onChangeClientType() {
       this.showDocenteOptions = this.form.client_type === "docente";
@@ -395,23 +471,43 @@ export default {
     },
     async submitForm() {
       try {
-        const payload = {
-          doc: this.form.doc,
-          name: this.form.name,
-          client_type: this.form.client_type,
-          pagaduria_id: this.form.pagaduria_id,
-          cuota: parseInt(this.form.cuota.replace(/\./g, ""), 10) || 0,
-          monto: parseInt(this.form.monto.replace(/\./g, ""), 10) || 0,
-          tasa: parseFloat(this.form.tasa.replace(/[^\d.]/g, "")) || 0,
-          plazo: this.form.plazo,
-          carteras: this.form.carteras.map((c) => ({
-            tipo_cartera: c.tipoCartera,
-            nombre_entidad: c.nombreEntidad,
-            valor_cuota: parseInt(c.valorCuota.replace(/\./g, ""), 10) || 0,
-            saldo: parseInt(c.saldo.replace(/\./g, ""), 10) || 0
-          }))
-        };
-        await axios.post("/credit-requests", payload);
+        // Construimos FormData para envío de archivo
+        let formData = new FormData();
+
+        formData.append("doc", this.form.doc);
+        formData.append("name", this.form.name);
+        formData.append("client_type", this.form.client_type);
+        formData.append("pagaduria_id", this.form.pagaduria_id);
+        formData.append("cuota", this.form.cuota.replace(/\./g, "") || 0);
+        formData.append("monto", this.form.monto.replace(/\./g, "") || 0);
+        formData.append(
+          "tasa",
+          this.form.tasa.replace(/[^\d.]/g, "") || 0
+        );
+        formData.append("plazo", this.form.plazo);
+        // Agregar el volante de pago (documento) obligatorio
+        formData.append("volante", this.form.volante);
+
+        // Agregamos carteras
+        this.form.carteras.forEach((car, index) => {
+          formData.append(`carteras[${index}][tipo_cartera]`, car.tipoCartera);
+          formData.append(`carteras[${index}][nombre_entidad]`, car.nombreEntidad);
+          formData.append(
+            `carteras[${index}][valor_cuota]`,
+            car.valorCuota.replace(/\./g, "") || 0
+          );
+          formData.append(
+            `carteras[${index}][saldo]`,
+            car.saldo.replace(/\./g, "") || 0
+          );
+        });
+
+        await axios.post("/credit-requests", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          }
+        });
+
         alert("Crédito guardado con éxito.");
         window.location.href = "/credit-requests";
       } catch (error) {
@@ -443,5 +539,8 @@ export default {
     outline: none;
     box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.5);
   }
+}
+.form-control2 {
+  /* Estilos que necesites */
 }
 </style>

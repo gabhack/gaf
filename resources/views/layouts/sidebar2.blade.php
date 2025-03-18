@@ -93,7 +93,7 @@
                     aria-controls="menuSolicitudes"
                 >
                     <visado-icon></visado-icon>
-                    <span class="pl-2">Porspeccion</span>
+                    <span class="pl-2">Prospeccion</span>
                 </a>
                 <div
                     class="collapse"

@@ -18,7 +18,8 @@
             <th>Plazo</th>
             <th>Estado</th>
             <th>Documentos</th>
-            <th>Acción</th>
+            <!-- Solo se muestra la columna "Acción" si el rol es ADMIN_SISTEMA -->
+            <th v-if="isAdminSistema">Acción</th>
           </tr>
         </thead>
         <tbody>
@@ -27,6 +28,7 @@
             <td>{{ credit.doc }}</td>
             <td>{{ credit.name }}</td>
             <td>{{ credit.client_type }}</td>
+            <!-- Muestra el NOMBRE de la pagaduría en lugar del ID -->
             <td>{{ getPagaduriaNameById(credit.pagaduria_id) }}</td>
             <td>{{ formatCurrency(credit.cuota) }}</td>
             <td>{{ formatCurrency(credit.monto) }}</td>
@@ -43,32 +45,18 @@
               </span>
               <span v-else>No hay documentos</span>
             </td>
-            <td>
-              <!-- Botón de ejemplo para "Aprobar" -->
-              <button
-                v-if="credit.status !== 'aprobado'"
-                class="btn-credit"
-                @click="approveRequest(credit.id)"
-              >
-                Aprobar
-              </button>
-              <span v-else class="text-success">Aprobado</span>
-
-              <!-- Botón para abrir modal de visado manual -->
+            <!-- Solo se muestra la columna de botones si el rol es ADMIN_SISTEMA -->
+            <td v-if="isAdminSistema">
+              <!-- Visar Manualmente -->
               <button class="btn-credit ml-2" @click="openManualVisadoModal(credit)">
                 Visar Manualmente
               </button>
 
-              <!-- Otros botones de ejemplo -->
+              <!-- Ver Carteras -->
               <button class="btn-credit ml-2" @click="showCarteras(credit)">
                 <i class="fas fa-eye"></i>
               </button>
-              <button class="btn-credit ml-2" @click="markAsVisado(credit)">
-                Visar
-              </button>
-              <button class="btn-credit ml-2" @click="openUploadModal(credit)">
-                Subir Doc
-              </button>
+
             </td>
           </tr>
         </tbody>
@@ -85,7 +73,6 @@
     >
       <div v-if="visadoForm">
         <form @submit.prevent="submitVisadoManual">
-
           <!-- Documento -->
           <div class="form-group">
             <label for="doc">Documento</label>
@@ -165,16 +152,23 @@
             </select>
           </div>
 
-          <!-- Causal -->
+          <!-- Causal (select con motivos) -->
           <div class="form-group">
             <label for="causal">Causal</label>
-            <input
-              type="text"
+            <select
               class="form-control"
               id="causal"
               v-model="visadoForm.causal"
-              placeholder="Describe causa de visado..."
-            />
+            >
+              <option value="Presenta obligaciones en mora">
+                Presenta obligaciones en mora
+              </option>
+              <option value="Sin causal">Sin causal</option>
+              <option value="Negado por cupo">Negado por cupo</option>
+              <option value="Cliente en proceso de retiro">
+                Cliente en proceso de retiro
+              </option>
+            </select>
           </div>
 
           <div class="text-center mt-3">
@@ -190,12 +184,47 @@
         </form>
       </div>
     </b-modal>
+
+    <!-- Modal para ver Carteras -->
+    <b-modal
+      id="modal-carteras"
+      v-model="showCarterasModal"
+      title="Carteras asociadas"
+      hide-footer
+      centered
+    >
+      <div v-if="selectedCarteras && selectedCarteras.length">
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>Tipo de Cartera</th>
+                <th>Nombre de la Entidad</th>
+                <th>Valor Cuota</th>
+                <th>Saldo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(car, idx) in selectedCarteras" :key="idx">
+                <td>{{ car.tipo_cartera }}</td>
+                <td>{{ car.nombre_entidad }}</td>
+                <td>{{ formatCurrency(car.valor_cuota) }}</td>
+                <td>{{ formatCurrency(car.saldo) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div v-else>
+        <p>No hay carteras registradas</p>
+      </div>
+    </b-modal>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
-import Loading from 'vue-loading-overlay';
+import Loading from 'vue-loading-overlay'; 
 import { BModal } from 'bootstrap-vue';
 
 export default {
@@ -204,21 +233,139 @@ export default {
     Loading,
     BModal
   },
+  props: {
+    user: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
     return {
       credits: [],
       showTable: true,
       isLoading: false,
 
-      // Control del modal
+      // Control del modal de visado manual
       showVisadoManualModal: false,
+      visadoForm: null,
 
-      // Objeto que maneja los datos para store/update
-      visadoForm: null
+      // Control del modal de carteras
+      showCarterasModal: false,
+      selectedCarteras: [],
+
+      // Mapa unificado de TODAS las pagadurías (docentes + pensionados).
+      allPagaduriasMap: {
+        // Pensionados
+        200: "COLPENSIONES",
+        201: "FOPEP",
+        297: "FIDUPREVISORA",
+        296: "CASUR",
+        // Docentes
+        1: "sed amazonas",
+        130: "sed antioquia",
+        109: "sed arauca",
+        121: "sed atlantico",
+        5: "sed bolivar",
+        110: "sed boyaca",
+        139: "sed caldas",
+        140: "sed caqueta",
+        104: "sed casanare",
+        177: "sed cauca",
+        11: "sed cesar",
+        12: "sed choco",
+        182: "sed cordoba",
+        163: "sed cundinamarca",
+        192: "sed guajira",
+        173: "sed guaviare",
+        178: "sed huila",
+        145: "sed magdalena",
+        113: "sed meta",
+        143: "sed narino",
+        154: "sed norte de santander",
+        184: "sed putumayo",
+        166: "sed quindio",
+        114: "sed risaralda",
+        26: "sed santander",
+        175: "sed sucre",
+        122: "sed tolima",
+        165: "sed valle",
+        132: "sed vaupes",
+        32: "sed vichada",
+        27: "sem sincelejo",
+        34: "sem armenia",
+        160: "sem barrancabermeja",
+        106: "sem barranquilla",
+        111: "sem bello",
+        39: "sem bucaramanga",
+        40: "sem buenaventura",
+        157: "sem buga",
+        42: "sem cali",
+        43: "sem cartagena",
+        136: "sem cartago",
+        45: "sem chia",
+        103: "sem cienaga",
+        47: "sem cucuta",
+        112: "sem dosquebradas",
+        49: "sem duitama",
+        115: "sem envigado",
+        168: "sem estrella",
+        164: "sem facatativa",
+        55: "sem florencia",
+        170: "sem floridablanca",
+        117: "sem funza",
+        151: "sem fusagasuga",
+        179: "sem girardot",
+        61: "sem giron",
+        116: "sem guainia",
+        147: "sem ibague",
+        134: "sem ipiales",
+        135: "sem itagui",
+        146: "sem jamundi",
+        67: "sem lorica",
+        133: "sem magangue",
+        69: "sem maicao",
+        161: "sem malambo",
+        174: "sem manizales",
+        180: "sem medellin",
+        176: "sem monteria",
+        153: "sem mosquera",
+        105: "sem neiva",
+        152: "sem palmira",
+        125: "sem pasto",
+        78: "sem pereira",
+        79: "sem piedecuesta",
+        138: "sem pitalito",
+        159: "sem popayan",
+        162: "sem quibdo",
+        150: "sem riohacha",
+        129: "sem rionegro",
+        108: "sem sabaneta",
+        142: "sem sahagun",
+        158: "sem san andres",
+        126: "sem santa marta",
+        119: "sem soacha",
+        172: "sem sogamoso",
+        123: "sem soledad",
+        120: "sem tulua",
+        93: "sem tumaco",
+        141: "sem tunja",
+        137: "sem turbo",
+        144: "sem uribia",
+        171: "sem valledupar",
+        124: "sem villavicencio",
+        100: "sem yopal",
+        169: "sem yumbo",
+        156: "sem zipaquira"
+      }
     };
   },
+  computed: {
+    isAdminSistema() {
+      // Muestra la columna Acciones si user.role_id es 1
+      return this.user.role_id === 1;
+    }
+  },
   methods: {
-    /* Obtiene la lista de créditos */
     async fetchCredits() {
       try {
         this.isLoading = true;
@@ -233,66 +380,86 @@ export default {
 
     /* Abre modal para visado manual */
     openManualVisadoModal(credit) {
-      // Llenamos 'visadoForm' con los datos de la fila o en blanco
       this.visadoForm = {
         doc: credit.doc || '',
         nombre: credit.name || '',
-        pagaduria: this.getPagaduriaNameById(credit.pagaduria_id) || '',
+        pagaduria: this.getPagaduriaNameById(credit.pagaduria_id),
         plazo: credit.plazo || '',
         monto: credit.monto || '',
         cuotacredito: credit.cuota || '',
-        estado: credit.status || 'factible', // Valor por defecto
+        estado: credit.status || 'factible',
         causal: '',
-
-        // Si ya existe un visado_id, implica update
         visado_id: credit.visado_id || null,
         creditId: credit.id
       };
       this.showVisadoManualModal = true;
     },
 
-    /* Lógica unificada para store/update */
+    /* Lógica unificada store/update + marcar como visado */
     async submitVisadoManual() {
       try {
         this.isLoading = true;
 
+        // 1. Guardar/actualizar visado (storeVisado o updateVisado)
         if (!this.visadoForm.visado_id) {
-          // No existe "visado_id" => creamos un nuevo visado (store)
+          // No existe "visado_id" => crear nuevo visado
           await this.storeVisado();
         } else {
-          // Sí existe => actualizamos (update)
+          // Sí existe => actualizar
           await this.updateVisado(this.visadoForm.visado_id);
         }
 
-        // Cerrar modal y refrescar tabla
+        // 2. Marcar el credit_request con status = "visado"
+        //    Usamos creditId (el ID del CreditRequest)
+        await this.markAsVisado({ id: this.visadoForm.creditId });
+
+        // 3. Ocultar el modal y recargar la tabla
         this.showVisadoManualModal = false;
-        this.fetchCredits();
+        await this.fetchCredits();
+
+        // 4. Mostrar modal bonito de éxito
+        await this.$bvModal.msgBoxOk('El visado se ha guardado y el crédito ha sido marcado como "visado".', {
+          title: 'Operación exitosa',
+          size: 'sm',
+          buttonSize: 'sm',
+          okVariant: 'success',
+          headerClass: 'p-2 border-bottom-0',
+          footerClass: 'p-2 border-top-0',
+          centered: true
+        });
+
       } catch (error) {
         console.error('Error en visado manual:', error);
-        alert('Ocurrió un error al guardar el visado.');
-      } finally {
         this.isLoading = false;
+
+        // Modal de error
+        this.$bvModal.msgBoxOk('Ocurrió un error al guardar el visado o marcar como "visado".', {
+          title: 'Error',
+          size: 'sm',
+          buttonSize: 'sm',
+          okVariant: 'danger',
+          headerClass: 'p-2 border-bottom-0',
+          footerClass: 'p-2 border-top-0',
+          centered: true
+        });
       }
     },
 
-    /* Llamada al store (POST /visados) */
+    /* Crear nuevo visado (store) */
     async storeVisado() {
-      // Ajusta el payload según lo que requiera tu controlador "store"
       const payload = {
         doc: this.visadoForm.doc,
         nombre: this.visadoForm.nombre,
         pagaduria: this.visadoForm.pagaduria,
         plazo: this.visadoForm.plazo
-        // Si tu store() necesita otros campos (monto, cuotacredito, estado), agrégalos
+        // Agrega otros campos según tu lógica
       };
-
       const response = await axios.post('/visados', payload);
       console.log('Store Visado response:', response.data);
     },
 
-    /* Llamada al update (POST /visados/{id}) */
+    /* Actualizar visado existente (update) */
     async updateVisado(id) {
-      // Tu controlador "update()" espera estado, cuotacredito, monto, causal
       const payload = {
         estado: this.visadoForm.estado,
         cuotacredito: this.visadoForm.cuotacredito,
@@ -303,18 +470,27 @@ export default {
       console.log('Update Visado response:', response.data);
     },
 
-    /* ============== FUNCIONES AUXILIARES ============== */
-
-    getPagaduriaNameById(id) {
-      const pagaduriasMap = {
-        1: 'SED Amazonas',
-        156: 'SEM Zipaquira',
-        200: 'COLPENSIONES',
-        201: 'FOPEP',
-        202: 'FIDUPREVISORA'
-      };
-      return pagaduriasMap[id] || `ID: ${id}`;
+    /* Actualiza credit_request a status="visado" */
+    async markAsVisado(credit) {
+      await axios.patch(`/credit-requests/${credit.id}/visado`);
     },
+
+    /* Muestra el nombre de la pagaduría según su ID */
+    getPagaduriaNameById(id) {
+      return this.allPagaduriasMap[id] || `ID: ${id}`;
+    },
+
+    /* Botón para ver carteras: abre modal con carteras */
+    showCarteras(credit) {
+      if (credit.carteras && credit.carteras.length) {
+        this.selectedCarteras = credit.carteras;
+      } else {
+        this.selectedCarteras = [];
+      }
+      this.showCarterasModal = true;
+    },
+
+    /* Utilidades de formato */
     formatCurrency(value) {
       if (!value) return '$0';
       return new Intl.NumberFormat('es-CO', {
@@ -326,18 +502,12 @@ export default {
       if (!value) return '0%';
       return `${parseFloat(value).toFixed(2)}%`;
     },
-    // Funciones de ejemplo para otros botones
-    approveRequest(id) {
-      console.log('Aprobar el crédito:', id);
+    getDownloadUrl(filePath) {
+      // Ajusta según tu ruta de descargas en el storage
+      return `/storage/${filePath.replace('public/', '')}`;
     },
-    showCarteras(credit) {
-      console.log('Mostrar carteras de:', credit);
-    },
-    markAsVisado(credit) {
-      console.log('Marcar como visado:', credit);
-    },
-    openUploadModal(credit) {
-      console.log('Abrir modal para subir doc:', credit);
+    extractFilename(path) {
+      return path.split('/').pop();
     }
   },
   mounted() {
@@ -347,13 +517,10 @@ export default {
 </script>
 
 <style scoped>
-/* Contenedor principal */
 .table-container {
   width: 100%;
   padding: 20px;
 }
-
-/* Botones */
 .btn-credit {
   color: white;
   background: #0cedb0;
@@ -364,19 +531,15 @@ export default {
   cursor: pointer;
   margin: 2px;
 }
-
-/* Estilos del modal */
 .modal-content,
 .modal-body {
-  background-color: #ffffff !important; /* Fondo blanco para modal */
-  color: #000000 !important; /* Texto negro */
+  background-color: #ffffff !important;
+  color: #000000 !important;
 }
-
 label {
   color: #000 !important;
   font-weight: 600;
 }
-
 .form-control {
   color: #000 !important;
   background-color: #fff !important;
