@@ -93,7 +93,7 @@
                     aria-controls="menuSolicitudes"
                 >
                     <visado-icon></visado-icon>
-                    <span class="pl-2">Solicitudes de Credito</span>
+                    <span class="pl-2">Porspeccion</span>
                 </a>
                 <div
                     class="collapse"
@@ -106,13 +106,13 @@
                             class="collapse-item"
                             href="/credit-request"
                         >
-                            Solicitud de crédito >
+                            Visamax >
                         </a>
                         <a
                             class="collapse-item"
                             href="/credit-requests"
                         >
-                            Gestion de colicitudes >
+                            Historial de solicitudes >
                         </a>
                     </div>
                 </div>

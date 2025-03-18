@@ -1,7 +1,7 @@
 <template>
   <form id="credit-form" @submit.prevent="submitForm" :class="collapsed ? 'collapsed' : null">
-    <b-row style="width: 100%; padding: 5rem;">
-      <b-col cols="12" md="6" class="pr-0">
+    <b-row style="width: 100%;">
+      <b-col cols="12" md="8" class="pr-0">
         <b-card no-body class="card-main mt-5 mb-5 ml-5">
           <b-card-body style="padding-top: 3rem;">
             <h3 class="heading-title mb-3">Panel de Solicitudes de Consulta para Crédito</h3>
@@ -180,11 +180,11 @@
                 </tbody>
               </table>
             </div>
-            <b-button class="btn-credit mb-3" @click="addCartera">
+            <b-button class="btn-credit mb-3" @click="addCartera" variant="green-table">
               Agregar otra cartera
             </b-button>
             <hr />
-            <b-button class="btn-credit" type="submit">
+            <b-button class="btn-credit" type="submit" variant="green-table">
               Guardar
             </b-button>
           </b-card-body>
@@ -431,7 +431,6 @@ export default {
 }
 .btn-credit {
   color: white;
-  background-color: #28a745 !important;
   border: none;
   border-radius: 5px;
   padding: 10px 20px;
@@ -439,7 +438,6 @@ export default {
   cursor: pointer;
   transition: all 0.3s ease;
   &:hover {
-    background-color: #218838 !important;
   }
   &:focus {
     outline: none;
