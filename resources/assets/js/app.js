@@ -147,7 +147,10 @@ Vue.component('editar-sedes', require('./components/pages/Sedes/Edit.vue').defau
 
 //fintra
 Vue.component('credit-form', require('./components/pages/CreditRequest/CreditForm.vue').default);
-Vue.component('credit-requests-list', require('./components/pages/CreditRequest/CreditRequestsList.vue').default);
+//Vue.component('credit-requests-list', require('./components/pages/CreditRequest/CreditRequestsList.vue').default);
+Vue.component('credit-requests-list',
+    require('./components/pages/ConsultDataClientDraft/indexCreditRequest.vue').default
+);
 
 /* Vue Init */
 const app = new Vue({

@@ -26,7 +26,7 @@
             </div>
 
             <div id="consulta-container" class="row">
-                <CreditRequestsList @emitInfo="emitInfo" @downloadPdf="print" />
+                <CreditRequestsList :user="user" @emitInfo="emitInfo" @downloadPdf="print" />
 
                 <!--============================
                 DATAMES FOPEP -
@@ -688,11 +688,12 @@ export default {
     this.carteras = payload.carteras;
     this.carterasCargadas = true;
   }
-
+console.log("el payload");
+console.log(payload);
   this.getCoupons({
                 doc: payload.doc,
                 pagaduria: this.couponsType,
-                pagaduriaLabel: this.pagaduriaLabel
+                pagaduriaLabel: payload.pagaduria
             });
 
             this.getDescapli(payload);
@@ -701,12 +702,12 @@ export default {
             this.getEmbargos({
                 doc: payload.doc,
                 pagaduria: this.embargosType,
-                pagaduriaLabel: this.pagaduriaLabel
+                pagaduriaLabel: payload.pagaduria
             });
             this.getDescuentos({
                 doc: payload.doc,
                 pagaduria: this.descuentosType,
-                pagaduriaLabel: this.pagaduriaLabel
+                pagaduriaLabel: payload.pagaduria
             });
 
             if (payload.pagaduria == 'FOPEP') {

@@ -13,12 +13,11 @@ use Illuminate\Support\Facades\Storage;
 
 class CreditRequestController extends Controller
 {
-    /**
-     * Guarda un crédito junto con sus carteras y el documento (volante de pago) obligatorio.
-     */
     public function store(Request $request)
     {
-        // Validación
+        Log::info('=== Llamada a store() de CreditRequestController ===');
+        Log::info('Request data =>', $request->all());
+
         $request->validate([
             'doc'          => 'required|string|max:20',
             'name'         => 'required|string|max:255',
@@ -28,66 +27,53 @@ class CreditRequestController extends Controller
             'monto'        => 'required|numeric|min:0',
             'tasa'         => 'required|numeric|min:0',
             'plazo'        => 'required|integer|min:1',
-            'volante'      => 'required|file|mimes:pdf,jpg,jpeg,png', // Volante de pago
+            'tipo_credito' => 'required|string|max:50',
         ]);
 
         try {
             DB::beginTransaction();
 
-            // 1. Crear el registro principal de crédito
+            Log::info('Creando CreditRequest...');
             $credit = new CreditRequest();
-            $credit->doc          = $request->input('doc');
-            $credit->name         = $request->input('name');
-            $credit->client_type  = $request->input('client_type');
-            $credit->pagaduria_id = $request->input('pagaduria_id');
-            $credit->cuota        = $request->input('cuota');
-            $credit->monto        = $request->input('monto');
-            $credit->tasa         = $request->input('tasa');
-            $credit->plazo        = $request->input('plazo');
-            // Ejemplo de status por defecto (puedes ajustar a tu criterio):
+            $credit->doc          = $request->doc;
+            $credit->name         = $request->name;
+            $credit->client_type  = $request->client_type;
+            $credit->pagaduria_id = $request->pagaduria_id;
+            $credit->cuota        = $request->cuota;
+            $credit->monto        = $request->monto;
+            $credit->tasa         = $request->tasa;
+            $credit->plazo        = $request->plazo;
             $credit->status       = 'pendiente';
+            $credit->tipo_credito = $request->tipo_credito;
             $credit->save();
 
-            // 2. Guardar carteras asociadas
+            Log::info('CreditRequest creado con ID=' . $credit->id);
+
+            // Carteras
             if ($request->has('carteras') && is_array($request->carteras)) {
-                foreach ($request->carteras as $carteraItem) {
+                Log::info('Procesando carteras =>', $request->carteras);
+                foreach ($request->carteras as $carItem) {
                     $cartera = new CreditCartera();
                     $cartera->credit_request_id = $credit->id;
-                    $cartera->valor_cuota      = $carteraItem['valor_cuota'] ?? 0;
-                    $cartera->saldo            = $carteraItem['saldo'] ?? 0;
-                    $cartera->tipo_cartera     = $carteraItem['tipo_cartera'] ?? null;
-                    $cartera->nombre_entidad   = $carteraItem['nombre_entidad'] ?? null;
+                    $cartera->valor_cuota      = $carItem['valor_cuota'] ?? 0;
+                    $cartera->saldo            = $carItem['saldo'] ?? 0;
+                    $cartera->tipo_cartera     = $carItem['tipo_cartera'] ?? null;
+                    $cartera->nombre_entidad   = $carItem['nombre_entidad'] ?? null;
                     $cartera->save();
                 }
             }
 
-            // 3. Subir el documento (volante de pago) y guardarlo
-            if ($request->hasFile('volante')) {
-                $path = $request->file('volante')->store('public/documents');
-
-                $document = new CreditDocument();
-                $document->credit_request_id = $credit->id;
-                $document->file_path         = $path;
-                $document->save();
-            }
-
-            $credit->load('carteras', 'documents');
-            Log::info('Carteras del crédito ID ' . $credit->id . ': ', $credit->carteras->toArray());
-
             DB::commit();
 
+            // Retornamos ID para que el front llame /upload-document
             return response()->json([
                 'message' => 'Crédito guardado exitosamente.',
-                'data'    => $credit
+                'data'    => ['id' => $credit->id]
             ], 201);
 
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Error al guardar el crédito', [
-                'error'   => $e->getMessage(),
-                'trace'   => $e->getTraceAsString(),
-                'request' => $request->all()
-            ]);
+            Log::error('Error al guardar el crédito => ' . $e->getMessage());
             return response()->json([
                 'message' => 'Error al guardar el crédito',
                 'error'   => $e->getMessage()
@@ -95,46 +81,74 @@ class CreditRequestController extends Controller
         }
     }
 
-    /**
-     * Retorna la vista principal (puedes ajustar la ruta de tu Blade según tu estructura).
-     */
+    public function uploadDocument($id, Request $request)
+    {
+        Log::info("=== uploadDocument() ===");
+        Log::info("Request => ", $request->all());
+    
+        // Validar que se recibió un archivo
+        if (!$request->hasFile('archivo')) {
+            Log::error("❌ No se recibió ningún archivo.");
+            return response()->json(['error' => 'No se recibió ningún archivo'], 400);
+        }
+    
+        // Validar el archivo
+        $request->validate([
+            'archivo' => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240' // 10MB máximo
+        ]);
+    
+        // Buscar el crédito
+        $credit = CreditRequest::find($id);
+        if (!$credit) {
+            Log::error("❌ Crédito con ID={$id} no encontrado.");
+            return response()->json(['error' => 'Crédito no encontrado'], 404);
+        }
+    
+        // Guardar archivo en storage
+        $path = $request->file('archivo')->store('public/documents');
+        Log::info("✅ Archivo guardado en: {$path}");
+    
+        // Guardar en la base de datos
+        $document = new CreditDocument();
+        $document->credit_request_id = $credit->id;
+        $document->file_path = $path;
+        $document->save();
+    
+        Log::info("✅ Documento registrado en la base de datos con ID={$document->id}");
+    
+        return response()->json([
+            'message' => 'Documento subido correctamente',
+            'doc_id' => $document->id,
+            'file_path' => $path
+        ], 201);
+    }
+    
+
     public function index()
     {
         return view('CreditRequest.index');
     }
 
-    /**
-     * Retorna todos los créditos (con carteras y documentos),
-     * omitiendo los que tengan status 'visado' (según el ejemplo original).
-     */
     public function getAll()
     {
+        Log::info('=== getAll credit-requests ===');
         $credits = CreditRequest::with(['carteras', 'documents'])
             ->where('status', '!=', 'visado')
             ->orderBy('updated_at', 'DESC')
             ->get();
 
-        foreach ($credits as $credit) {
-            Log::info('Carteras del crédito ID ' . $credit->id . ': ', $credit->carteras->toArray());
-        }
+        Log::info('Total credit requests => ' . $credits->count());
 
         return response()->json($credits);
     }
 
-    /**
-     * Actualiza el estado de un crédito a 'aprobado' (si lo necesitaras; 
-     * en tu solicitud se dejó de usar el botón, pero se mantiene el método por si acaso).
-     */
     public function updateStatus($id)
     {
         try {
             $credit = CreditRequest::findOrFail($id);
             $credit->status = 'aprobado';
             $credit->save();
-
-            return response()->json([
-                'message' => 'Solicitud aprobada exitosamente'
-            ], 200);
+            return response()->json(['message' => 'Solicitud aprobada exitosamente'], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error al aprobar la solicitud',
@@ -143,22 +157,18 @@ class CreditRequestController extends Controller
         }
     }
 
-    /**
-     * Marcar como visado (si se necesitase).
-     */
     public function markAsVisado($id)
     {
-        Log::info("markAsVisado llamado con ID: " . $id);
-
+        Log::info('markAsVisado llamado con ID=' . $id);
         try {
             $credit = CreditRequest::findOrFail($id);
             $credit->status = 'visado';
             $credit->save();
-
             return response()->json([
                 'message' => 'Crédito marcado como visado exitosamente'
             ], 200);
         } catch (\Exception $e) {
+            Log::error('Error al marcar visado => ' . $e->getMessage());
             return response()->json([
                 'message' => 'Error al marcar el crédito como visado',
                 'error'   => $e->getMessage()

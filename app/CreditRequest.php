@@ -15,12 +15,13 @@ class CreditRequest extends Model
         'doc',
         'name',
         'client_type',
-        'pagaduria_id',  
+        'pagaduria_id',
         'cuota',
         'monto',
         'tasa',
         'plazo',
-        'status' 
+        'status',
+        'tipo_credito', // NUEVO CAMPO
     ];
 
     /**
@@ -31,9 +32,11 @@ class CreditRequest extends Model
         return $this->hasMany(CreditCartera::class, 'credit_request_id');
     }
 
+    /**
+     * Relación con los documentos (archivos) asociados.
+     */
     public function documents()
-{
-    return $this->hasMany(CreditDocument::class);
-}
-
+    {
+        return $this->hasMany(CreditDocument::class);
+    }
 }
