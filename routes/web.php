@@ -728,8 +728,8 @@ Route::post('/credit-requests', [CreditRequestController::class, 'store'])->name
 Route::get('/credit-requests', [CreditRequestController::class, 'index'])->name('credit-request.index');
 Route::get('/credit-requests/all', [CreditRequestController::class, 'getAll'])->name('credit-request.all');
 Route::patch('/credit-requests/{id}/status', [CreditRequestController::class, 'updateStatus'])->name('credit-request.updateStatus');
-Route::post('credit-requests/{id}/documents', [CreditRequestController::class, 'uploadDocument']);
-Route::get('credit-request/{id}/documents', [CreditRequestController::class, 'getDocuments']);
+Route::post('/credit-requests/{id}/documents', [CreditRequestController::class, 'uploadDocument']);
+Route::get('/scredit-request/{id}/documents', [CreditRequestController::class, 'getDocuments']);
 Route::patch('/credit-requests/{id}/visado', [CreditRequestController::class, 'markAsVisado'])->name('credit-request.markAsVisado');
 
 // ------------------------------------------------------------------

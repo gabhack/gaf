@@ -756,12 +756,7 @@
                                         <p class="panel-value">{{ datamessedvalle.fecnombr }}</p>
                                     </div>
                                 </div>
-                                <div class="col-6" v-if="dataclient.pagaduria === 'SEMCALI'">
-                                    <b class="panel-label">FECHA VINCULACIÃ“N:</b>
-                                    <div v-for="(datamessemcali, key) in datamessemcali" :key="key">
-                                        <p class="panel-value">{{ datamessemcali.fnombramiento }}</p>
-                                    </div>
-                                </div>
+                                
                                 <!-- TIPO VINCULACION  -->
                                 <div class="col-6" v-if="dataclient.pagaduria === 'SEDVALLE'">
                                     <b class="panel-label">TIPO VINCULACIÃ“N:</b>
@@ -2283,9 +2278,7 @@
                                                                     v-for="(datamessemcali, key) in datamessemcali"
                                                                     :key="key"
                                                                 >
-                                                                    <p class="panel-value">
-                                                                        {{ datamessemcali.fnombramiento }}
-                                                                    </p>
+                                                                  
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -3393,9 +3386,7 @@
                                                                     v-for="(datamessemcali, key) in datamessemcali"
                                                                     :key="key"
                                                                 >
-                                                                    <p class="panel-value">
-                                                                        {{ datamessemcali.fnombramiento }}
-                                                                    </p>
+                                                                    
                                                                 </div>
                                                             </div>
                                                         </div>

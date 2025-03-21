@@ -21,7 +21,7 @@ class CreditRequest extends Model
         'tasa',
         'plazo',
         'status',
-        'tipo_credito', // NUEVO CAMPO
+        'tipo_credito', 
     ];
 
     /**

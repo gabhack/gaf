@@ -140,100 +140,50 @@ class VisadoController extends Controller
         // return $dompdf->download("Consulta{$request->id_consulta}.pdf");
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
+  
     public function store(Request $request)
     {
         $user = auth()->user();
-
+    
         DB::beginTransaction();
-
+    
         try {
             $response = Visado::create([
-                'ced' => $request->doc,
-                'nombre' => $request->nombre,
-                'pagaduria' => $request->pagaduria,
-                'entidad' => $request->pagaduria,
-                'plazo' => $request->plazo,
-                'tipo_consulta' => 'Diamond',
-                'consultant_email' => $user->email,
+                'ced'             => $request->doc,
+                'nombre'          => $request->nombre,
+                'pagaduria'       => $request->pagaduria,
+                'entidad'         => $request->pagaduria,
+                'plazo'           => $request->plazo,
+                'tipo_consulta'   => 'Diamond',
+                'consultant_email'=> $user->email,
                 'consultant_name' => $user->name,
+                // Guarda la observación si viene del front
+                'observacion'     => $request->observacion ?? null,
             ]);
-
+    
             DB::commit();
-
+    
             return response()->json($response);
         } catch (\Throwable $th) {
             DB::rollBack();
-
             return response()->json([
                 'message' => 'Error al guardar la consulta',
-                'error' => $th->getMessage(),
+                'error'   => $th->getMessage(),
             ], 500);
         }
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param \App\Visado $visado
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Visado $visado)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Visado $visado
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Visado $visado)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Visado $visado
-     * @return \Illuminate\Http\Response
-     */
+    
     public function update(Request $request, $id)
     {
         $visado = Visado::find($id);
-        $visado->estado = $request->estado;
+        $visado->estado       = $request->estado;
         $visado->cuotacredito = $request->cuotacredito;
-        $visado->monto = $request->monto;
-        $visado->causal = $request->causal;
+        $visado->monto        = $request->monto;
+        $visado->causal       = $request->causal;
+        // Ahora guardamos la observación
+        $visado->observacion  = $request->observacion ?? null;
+    
         $visado->save();
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param \App\Visado $visado
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Visado $visado)
-    {
-        //
-    }
+    
 }

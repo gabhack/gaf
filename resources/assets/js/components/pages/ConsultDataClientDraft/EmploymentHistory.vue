@@ -158,14 +158,7 @@
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody role="rowgroup">
-                                        <!---->
-                                        <tr role="row" v-for="(item, index) in datamesSedArray" :key="index">
-                                            <td aria-colindex="1" role="cell">{{ item.fnombramiento || '--' }}</td>
-                                        </tr>
-
-                                        <!----><!---->
-                                    </tbody>
+                                   
                                     <!---->
                                 </table>
                             </div>
@@ -732,14 +725,7 @@ export default {
                         return value || '--';
                     }
                 },
-                {
-                    key: 'fnombramiento',
-                    label: 'Fecha vinculacíon',
-                    sortable: false,
-                    formatter: value => {
-                        return value || '--';
-                    }
-                },
+               
                 {
                     key: 'cargo',
                     label: 'Cargo',

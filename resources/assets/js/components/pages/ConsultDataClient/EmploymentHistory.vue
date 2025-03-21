@@ -177,12 +177,7 @@
                             </div>
                         </div>
 
-                        <div class="col-6">
-                            <b class="panel-label">FECHA VINCULACION:</b>
-                            <div>
-                                <p class="panel-value">{{ datamessemcali.fnombramiento }}</p>
-                            </div>
-                        </div>
+                     
 
                         <div class="col-6">
                             <b class="panel-label">AREA DE DESEMPEÑO:</b>

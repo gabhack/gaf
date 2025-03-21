@@ -145,6 +145,8 @@
         />
       </b-form-group>
 
+    
+
       <!-- Documentos (múltiples) -->
       <div class="mb-3">
         <h5>Documentos</h5>
@@ -194,6 +196,7 @@
               <th>Nombre de la Entidad</th>
               <th>Valor Cuota</th>
               <th>Saldo</th>
+              <th>Opera X Desprendible</th> <!-- check -->
               <th></th>
             </tr>
           </thead>
@@ -237,6 +240,15 @@
                   @input="onInputCurrencyCartera(index, 'saldo')"
                 />
               </td>
+              <!-- Nuevo check => opera_x_desprendible -->
+              <td class="text-center">
+                <b-form-checkbox
+                  v-model="car.opera_x_desprendible"
+                  switch
+                >
+                  Sí
+                </b-form-checkbox>
+              </td>
               <td>
                 <b-button variant="danger" @click="removeCartera(index)">
                   Quitar
@@ -267,6 +279,8 @@ import {
   BFormInput,
   BFormSelect,
   BFormFile,
+  BFormTextarea,
+  BFormCheckbox,
   BButton,
   BTable,
   BRow,
@@ -282,6 +296,8 @@ export default {
     BFormInput,
     BFormSelect,
     BFormFile,
+    BFormTextarea,
+    BFormCheckbox,
     BButton,
     BTable
   },
@@ -299,7 +315,7 @@ export default {
         plazo: 1,
         carteras: []
       },
-      documentos: [],
+      documentos: [], // { file: null } por fila
 
       clientTypeOptions: [
         { value: "", text: "Seleccione" },
@@ -307,17 +323,109 @@ export default {
         { value: "pensionado", text: "Pensionado" }
       ],
       docentePagaduriasMap: {
-        "sed amazonas": 1,
-        "sed antioquia": 130,
-        "sem armenia": 34,
-        // ...
-        "sem zipaquira": 156
-      },
+  "sed amazonas": 1,
+  "sed antioquia": 130,
+  "sem armenia": 34,
+  "sed arauca": 109,
+  "sed atlantico": 121,
+  "sem barrancabermeja": 160,
+  "sem barranquilla": 106,
+  "sem bello": 111,
+  "sed bolivar": 5,
+  "sed boyaca": 110,
+  "sem bucaramanga": 39,
+  "sem buenaventura": 40,
+  "sem buga": 157,
+  "sed caldas": 139,
+  "sem cali": 42,
+  "sed caqueta": 140,
+  "sed casanare": 104,
+  "sem cartagena": 43,
+  "sem cartago": 136,
+  "sed cauca": 177,
+  "sem chia": 45,
+  "sem cienaga": 103,
+  "sed cesar": 11,
+  "sem cucuta": 47,
+  "sed choco": 12,
+  "sed cordoba": 182,
+  "sed cundinamarca": 163,
+  "sem dosquebradas": 112,
+  "sem duitama": 49,
+  "sem envigado": 115,
+  "sem estrella": 168,
+  "sem facatativa": 164,
+  "sem florencia": 55,
+  "sem floridablanca": 170,
+  "sem funza": 117,
+  "sem fusagasuga": 151,
+  "sem girardot": 179,
+  "sem giron": 61,
+  "sem guainia": 116,
+  "sed guajira": 192,
+  "sed guaviare": 173,
+  "sed huila": 178,
+  "sem ibague": 147,
+  "sem ipiales": 134,
+  "sem itagui": 135,
+  "sem jamundi": 146,
+  "sem lorica": 67,
+  "sed magdalena": 145,
+  "sem magangue": 133,
+  "sem maicao": 69,
+  "sem malambo": 161,
+  "sed meta": 113,
+  "sem manizales": 174,
+  "sem medellin": 180,
+  "sem monteria": 176,
+  "sem mosquera": 153,
+  "sem neiva": 105,
+  "sed narino": 143,
+  "sed norte de santander": 154,
+  "sem palmira": 152,
+  "sem pasto": 125,
+  "sem pereira": 78,
+  "sem piedecuesta": 79,
+  "sem pitalito": 138,
+  "sed putumayo": 184,
+  "sed quindio": 166,
+  "sem quibdo": 162,
+  "sem riohacha": 150,
+  "sem rionegro": 129,
+  "sed risaralda": 114,
+  "sed santander": 26,
+  "sem sabaneta": 108,
+  "sem sahagun": 142,
+  "sem san andres": 158,
+  "sem santa marta": 126,
+  "sed sucre": 175,
+  "sem soacha": 119,
+  "sem sogamoso": 172,
+  "sem soledad": 123,
+  "sed tolima": 122,
+  "sem tulua": 120,
+  "sem tunja": 141,
+  "sem turbo": 137,
+  "sem tumaco": 93,
+  "sem uribia": 144,
+  "sed valle": 165,
+  "sem valledupar": 171,
+  "sed vaupes": 132,
+  "sed vichada": 32,
+  "sem villavicencio": 124,
+  "sem sincelejo": 27,
+  "sem yopal": 100,
+  "sem yumbo": 169,
+  "sem zipaquira": 156
+},  
       tipoCreditoOptions: [
         { value: "", text: "Seleccione" },
         { value: "Libre Inversión", text: "Libre Inversión" },
         { value: "Compra de Cartera", text: "Compra de Cartera" },
-        { value: "Refinanciación", text: "Refinanciación" }
+        { value: "Refinanciación", text: "Refinanciación" },
+        { value: "Refinanciaciónmas + libre inversión", text: "Refinanciaciónmas + libre inversión" },
+        { value: "Refinanciación + Libre Inversión", text: "Refinanciación + Libre Inversión" }
+
       ],
       tipoCarteraOptions: [
         { value: "Banco", text: "Banco" },
@@ -367,11 +475,10 @@ export default {
         this.form[field] = "";
         return;
       }
-      // Aplica puntos de millar
       this.form[field] = this.addThousandDots(raw);
     },
     addThousandDots(value) {
-      // REGEX correcto para separar miles con punto
+      // REGEX correcto => agrega '.' cada 3 dígitos
       return value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     },
 
@@ -412,13 +519,14 @@ export default {
       );
     },
 
-    /** Carteras => manipular array de {tipoCartera, nombreEntidad, valorCuota, saldo} */
+    /** Carteras => manipular array de {tipoCartera, nombreEntidad, valorCuota, saldo, opera_x_desprendible} */
     addCartera() {
       this.form.carteras.push({
         tipoCartera: "",
         nombreEntidad: "",
         valorCuota: "",
-        saldo: ""
+        saldo: "",
+        opera_x_desprendible: false // NUEVO
       });
     },
     removeCartera(index) {
@@ -429,7 +537,6 @@ export default {
       this.form.carteras[index][field] = raw ? this.addThousandDots(raw) : "";
     },
 
-    /** Submit => crea el credit, luego sube documentos => redirect */
     async submitForm() {
       try {
         let payload = {
@@ -446,7 +553,8 @@ export default {
             tipo_cartera: c.tipoCartera,
             nombre_entidad: c.nombreEntidad,
             valor_cuota: parseInt(c.valorCuota.replace(/\./g, "")) || 0,
-            saldo: parseInt(c.saldo.replace(/\./g, "")) || 0
+            saldo: parseInt(c.saldo.replace(/\./g, "")) || 0,
+            opera_x_desprendible: c.opera_x_desprendible // NUEVO
           }))
         };
 
