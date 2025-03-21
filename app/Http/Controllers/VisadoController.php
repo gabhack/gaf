@@ -144,11 +144,15 @@ class VisadoController extends Controller
     public function store(Request $request)
     {
         $user = auth()->user();
+        \Log::info("📥 Iniciando proceso de creación de visado.", [
+            'usuario' => $user->email,
+            'request' => $request->all()
+        ]);
     
         DB::beginTransaction();
     
         try {
-            $response = Visado::create([
+            $visado = Visado::create([
                 'ced'             => $request->doc,
                 'nombre'          => $request->nombre,
                 'pagaduria'       => $request->pagaduria,
@@ -157,21 +161,32 @@ class VisadoController extends Controller
                 'tipo_consulta'   => 'Diamond',
                 'consultant_email'=> $user->email,
                 'consultant_name' => $user->name,
-                // Guarda la observación si viene del front
                 'observacion'     => $request->observacion ?? null,
             ]);
     
             DB::commit();
     
-            return response()->json($response);
+            \Log::info("✅ Visado creado exitosamente.", [
+                'visado_id' => $visado->id,
+                'ced'       => $visado->ced
+            ]);
+    
+            return response()->json($visado, 201);
         } catch (\Throwable $th) {
             DB::rollBack();
+    
+            \Log::error("❌ Error creando visado.", [
+                'mensaje' => $th->getMessage(),
+                'trace'   => $th->getTraceAsString()
+            ]);
+    
             return response()->json([
                 'message' => 'Error al guardar la consulta',
                 'error'   => $th->getMessage(),
             ], 500);
         }
     }
+    
     
     public function update(Request $request, $id)
     {

@@ -656,28 +656,75 @@ const allPagaduriasMap = {
     }
     this.showVisadoManualModal = true
   },
-async submitVisadoManual() {
-try {
-  this.isLoading = true;
-  await axios.post(`/visados/${this.visadoForm.visado_id}`, {
-    estado: this.visadoForm.estado,
-    cuotacredito: this.visadoForm.cuotacredito,
-    monto: this.visadoForm.monto,
-    causal: this.visadoForm.causal,
-    observacion: this.visadoForm.observacion 
-  });
-  
-  alert("Visado manual guardado con éxito.");
-  this.showVisadoManualModal = false;
-  // etc.
-} catch (err) {
-  console.error(err);
-  alert("Error guardando visado manual.");
-} finally {
-  this.isLoading = false;
-}
+  async submitVisadoManual() {
+  try {
+    console.log("📥 Iniciando envío del formulario de visado manual...");
+    this.isLoading = true;
+
+    // Validación de campos obligatorios
+    const requiredFields = {
+      doc: 'Documento',
+      nombre: 'Nombre',
+      pagaduria: 'Pagaduría',
+      plazo: 'Plazo',
+      monto: 'Monto',
+      cuotacredito: 'Cuota Crédito',
+      estado: 'Estado',
+      causal: 'Causal',
+      observacion: 'Observación',
+    };
+
+    for (const [key, fieldName] of Object.entries(requiredFields)) {
+      if (
+        this.visadoForm[key] === '' ||
+        this.visadoForm[key] === null ||
+        this.visadoForm[key] === undefined
+      ) {
+        alert(`El campo "${fieldName}" es obligatorio.`);
+        this.isLoading = false;
+        return;
+      }
+    }
+
+    const payload = {
+      estado: this.visadoForm.estado,
+      cuotacredito: this.visadoForm.cuotacredito,
+      monto: this.visadoForm.monto,
+      causal: this.visadoForm.causal,
+      observacion: this.visadoForm.observacion,
+      creditId: this.visadoForm.creditId,
+      doc: this.visadoForm.doc,
+      nombre: this.visadoForm.nombre,
+      pagaduria: this.visadoForm.pagaduria,
+      plazo: this.visadoForm.plazo
+    };
+
+    console.log("🚀 Payload para enviar:", payload);
+
+    let response;
+    if (this.visadoForm.visado_id) {
+      console.log(`🔄 Actualizando visado existente con ID: ${this.visadoForm.visado_id}`);
+      response = await axios.put(`/visados/${this.visadoForm.visado_id}`, payload);
+    } else {
+      console.log("✨ Creando un nuevo visado...");
+      response = await axios.post(`/visados`, payload);
+    }
+
+    console.log("✅ Respuesta del servidor:", response.data);
+
+    alert("Visado manual guardado con éxito.");
+    this.showVisadoManualModal = false;
+
+    await this.fetchCredits();
+
+  } catch (err) {
+    console.error("❌ Error al enviar el formulario de visado manual:", err);
+    alert(`Error guardando visado manual: ${err.response?.data?.message || err.message}`);
+  } finally {
+    this.isLoading = false;
+    console.log("🛑 Fin del proceso de envío del formulario.");
+  }
 },
-  
 
   // Ver Carteras => modal
   showCarteras(credit) {
