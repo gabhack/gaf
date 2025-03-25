@@ -920,7 +920,7 @@ const allPagaduriasMap = {
 
         const status = await this.saveVisados(credit);
         
-        if (status === 200) {
+        if (status === 201) {
           const payload = {
     ...this.dataclient,
     carteras: credit.carteras || []
