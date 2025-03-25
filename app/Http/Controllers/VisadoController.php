@@ -144,31 +144,84 @@ class VisadoController extends Controller
     public function store(Request $request)
     {
         $user = auth()->user();
+    
         \Log::info("📥 Iniciando proceso de creación de visado.", [
             'usuario' => $user->email,
             'request' => $request->all()
+        ]);
+    
+        $data = $request->validate([
+            'conc'             => 'nullable|string',
+            'estado'           => 'nullable|string',
+            'causal'           => 'nullable|string',
+            'fconsultaami'     => 'nullable|date',
+            'doc'              => 'required|string',
+            'nombre'           => 'required|string',
+            'pagaduria'        => 'required|string',
+            'tcredito'         => 'nullable|string',
+            'clibinv'          => 'nullable|numeric',
+            'ccompra'          => 'nullable|numeric',
+            'entidad'          => 'nullable|string',
+            'pagare'           => 'nullable|string',
+            'vcredito'         => 'nullable|numeric',
+            'vdesembolso'      => 'nullable|numeric',
+            'plazo'            => 'required|numeric',
+            'cuotacredito'     => 'nullable|numeric',
+            'monto'            => 'nullable|numeric',
+            'aprobado'         => 'nullable|string',
+            'porcincorp'       => 'nullable|numeric',
+            'cmaxincorp'       => 'nullable|numeric',
+            'frespuesta'       => 'nullable|date',
+            'fvinculacion'     => 'nullable|date',
+            'tvinculacion'     => 'nullable|string',
+            'tipo_consulta'    => 'nullable|string',
+            'info_obligaciones'=> 'nullable|string',
+            'consultant_email' => 'nullable|email',
+            'consultant_name'  => 'nullable|string',
+            'observacion'      => 'nullable|string',
+            'creditId'         => 'nullable|numeric',
         ]);
     
         DB::beginTransaction();
     
         try {
             $visado = Visado::create([
-                'ced'             => $request->doc,
-                'nombre'          => $request->nombre,
-                'pagaduria'       => $request->pagaduria,
-                'entidad'         => $request->pagaduria,
-                'plazo'           => $request->plazo,
-                'tipo_consulta'   => 'Diamond',
-                'consultant_email'=> $user->email,
-                'consultant_name' => $user->name,
-                'observacion'     => $request->observacion ?? null,
+                'conc'              => $data['conc'] ?? null,
+                'estado'            => $data['estado'] ?? null,
+                'causal'            => $data['causal'] ?? null,
+                'fconsultaami'      => $data['fconsultaami'] ?? null,
+                'ced'               => $data['doc'],
+                'nombre'            => $data['nombre'],
+                'pagaduria'         => $data['pagaduria'],
+                'tcredito'          => $data['tcredito'] ?? null,
+                'clibinv'           => $data['clibinv'] ?? null,
+                'ccompra'           => $data['ccompra'] ?? null,
+                'entidad'           => $data['entidad'] ?? $data['pagaduria'],
+                'pagare'            => $data['pagare'] ?? null,
+                'vcredito'          => $data['vcredito'] ?? null,
+                'vdesembolso'       => $data['vdesembolso'] ?? null,
+                'plazo'             => $data['plazo'],
+                'monto'         => isset($data['monto']) ? (int) floatval($data['monto']) : null,
+'cuotacredito'  => isset($data['cuotacredito']) ? (int) floatval($data['cuotacredito']) : null,
+                'aprobado'          => $data['aprobado'] ?? null,
+                'porcincorp'        => $data['porcincorp'] ?? null,
+                'cmaxincorp'        => $data['cmaxincorp'] ?? null,
+                'frespuesta'        => $data['frespuesta'] ?? null,
+                'fvinculacion'      => $data['fvinculacion'] ?? null,
+                'tvinculacion'      => $data['tvinculacion'] ?? null,
+                'tipo_consulta'     => $data['tipo_consulta'] ?? 'Diamond',
+                'info_obligaciones' => $data['info_obligaciones'] ?? null,
+                'consultant_email'  => $data['consultant_email'] ?? $user->email,
+                'consultant_name'   => $data['consultant_name'] ?? $user->name,
+                'observacion'       => $data['observacion'] ?? null,
             ]);
     
             DB::commit();
     
             \Log::info("✅ Visado creado exitosamente.", [
                 'visado_id' => $visado->id,
-                'ced'       => $visado->ced
+                'ced'       => $visado->ced,
+                'usuario'   => $user->email
             ]);
     
             return response()->json($visado, 201);
@@ -177,6 +230,8 @@ class VisadoController extends Controller
     
             \Log::error("❌ Error creando visado.", [
                 'mensaje' => $th->getMessage(),
+                'usuario' => $user->email,
+                'request' => $request->all(),
                 'trace'   => $th->getTraceAsString()
             ]);
     
