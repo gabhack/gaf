@@ -416,7 +416,9 @@ export default {
   "sem sincelejo": 27,
   "sem yopal": 100,
   "sem yumbo": 169,
-  "sem zipaquira": 156
+  "sem zipaquira": 156,
+        "casur": 296,
+        "fiduprevisora": 297
 },  
       tipoCreditoOptions: [
         { value: "", text: "Seleccione" },

@@ -296,8 +296,8 @@ const allPagaduriasMap = {
   // Pensionados
   200: "COLPENSIONES",
   201: "FOPEP",
-  297: "FIDUPREVISORA",
-  296: "CASUR",
+  297: "fiduprevisora",
+  296: "casur",
   // Docentes (ordenados alfabéticamente, p. ej.)
   1: "sed amazonas",
   130: "sed antioquia",
@@ -540,7 +540,8 @@ const allPagaduriasMap = {
   "sem sincelejo": 27,
   "sem yopal": 100,
   "sem yumbo": 169,
-  "sem zipaquira": 156
+  "sem zipaquira": 156,
+  
 },  
         tipoCreditoOptions: [
           { value: "", text: "Seleccione" },

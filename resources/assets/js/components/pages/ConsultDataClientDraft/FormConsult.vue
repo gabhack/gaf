@@ -71,16 +71,18 @@
                     <b class="panel-label mb-2"><span class="text-danger"> *</span> Cuota deseada</b>
 
                     <InputCurrency
-                        v-model="dataclient.cuotadeseada"
-                        ref="dataclientCuotaDeseada"
-                        @change="activeId = ''"
-                        label=""
-                        id=""
-                        name=""
-                        placeholder="Cantidad de cuotas"
-                        rules="required"
-                        validateClass="errorValid"
-                    />
+    v-model="dataclient.cuotadeseada"
+    ref="dataclientCuotaDeseada"
+    @change="activeId = ''"
+    label=""
+    id=""
+    name=""
+    placeholder="Cantidad de cuotas"
+    rules="required"
+    :validateClass="activeId == 'dataclientCuotaDeseada'" 
+/>
+
+
                     <!--<b-input-group size="md" prepend="$">
                         <input
                             type="text"
@@ -335,7 +337,7 @@ export default {
                 .then(value => {
                     if (!value) return;
                     this.saveVisados(val).then(status => {
-                        if (status != 200) return;
+                        if (status != 201) return;
                         console.log("Datos enviados en emitInfo:", this.dataclient);
 
                         this.$emit('emitInfo', this.dataclient);

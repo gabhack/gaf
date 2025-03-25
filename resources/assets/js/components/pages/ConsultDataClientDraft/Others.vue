@@ -189,7 +189,7 @@ export default {
                     if (!value) return;
                     this.isLoading = true;
                     this.saveVisados(val, pagaduria).then(status => {
-                        if (status != 200) return;
+                        if (status != 201) return;
                         this[val] = true;
                     });
                 });

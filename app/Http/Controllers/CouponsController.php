@@ -136,7 +136,9 @@ class CouponsController extends Controller
         'sem villavicencio' => 124,
         'sem yopal' => 100,
         'sem yumbo' => 169,
-        'sem zipaquira' => 156
+        'sem zipaquira' => 156,
+        'casur' => 296,
+        'fiduprevisora' => 297
     ];
 
     public function showCouponsForm()

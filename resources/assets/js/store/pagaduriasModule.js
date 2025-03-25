@@ -107,7 +107,11 @@ const pagaduriasModule = {
             { label: 'SEM GIRARDOT', value: 'SEMGIRARDOT', key: 'SEM GIRARDOT' },
             { label: 'SEM LORICA', value: 'SEMLORICA', key: 'SEM LORICA' },
             { label: 'SEM IBAGUE', value: 'SEMIBAGUE', key: 'SEM IBAGUE' },
-            { label: 'SEM FUNZA', value: 'SEMFUNZA', key: 'SEM FUNZA' }
+            { label: 'SEM FUNZA', value: 'SEMFUNZA', key: 'SEM FUNZA' },
+            { label: 'fiduprevisora', value: 'fiduprevisora', key: 'fiduprevisora' },
+            { label: 'casur', value: 'casur', key: 'casur' },
+
+
         ],
         selectedPeriod: ''
     },

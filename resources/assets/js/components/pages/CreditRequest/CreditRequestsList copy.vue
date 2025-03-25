@@ -374,7 +374,9 @@ const allPagaduriasMap = {
   124: "sem villavicencio",
   100: "sem yopal",
   169: "sem yumbo",
-  156: "sem zipaquira"
+  156: "sem zipaquira",
+  296: "casur",
+  297: "fiduprevisora"
 }
 
 export default {

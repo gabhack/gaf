@@ -165,24 +165,24 @@ class PagaduriasController extends Controller
 
     public function perDoc($doc)
     {
-        Log::info("Entro a buscar la cedula: ",  ['doc' => $doc]);
-
+        Log::info("Entró a buscar la cédula", ['doc' => $doc]);
+    
         $user = Auth::user();
         $userType = IsCompany() ? 'empresa' : (IsComercial() ? 'comercial' : null);
-
+    
         if ($userType) {
             if ($user->$userType->consultas_diarias <= 0) {
+                Log::warning("Usuario sin consultas disponibles", ['user_id' => $user->id, 'tipo' => $userType]);
                 return response()->json([
                     'message' => 'No tienes consultas disponibles',
                 ], 400);
             }
         }
-
+    
         DB::beginTransaction();
-
+    
         try {
             $models = [
-                DatamesFidu::class => 'doc',
                 DatamesFopep::class => 'doc',
                 DatamesSedAntioquia::class => 'doc',
                 DatamesSedArauca::class => 'doc',
@@ -234,60 +234,71 @@ class PagaduriasController extends Controller
                 DatamesSemYumbo::class => 'doc',
                 DatamesSemZipaquira::class => 'doc',
             ];
-
+    
             $results = [];
-
+    
             foreach ($models as $model => $column) {
+                Log::info("Consultando modelo: " . class_basename($model), ['columna' => $column, 'valor' => $doc]);
+    
                 $data = $model::where($column, 'LIKE', '%' . $doc . '%')
                     ->orderBy('id', 'desc')
                     ->first();
-
+    
                 if ($data) {
                     $modelName = class_basename($model);
-                    $results[Str::camel($modelName)] = $data;
+                    $key = Str::camel($modelName);
+                    $results[$key] = $data;
+                    Log::info("Resultado encontrado en {$modelName}", ['id' => $data->id]);
+                } else {
+                    Log::info("Sin resultado en " . class_basename($model));
                 }
             }
-
-            // $dataGen = DatamesGen::where('doc', 'like', '%' . $doc . '%')->get();
+    
             $dataGen = DatamesGen::where('doc', '=', $doc)->get();
-
+            Log::info("Consultando DatamesGen", ['total_encontrados' => $dataGen->count()]);
+    
             if ($dataGen) {
                 foreach ($dataGen as $item) {
-                    // Verifica si la pagaduría ya existe en $results
+                    Log::info("Procesando DatamesGen item", ['pagaduria' => $item->pagaduria, 'id' => $item->id]);
+    
                     if (!isset($results[$item->pagaduria])) {
                         $results[$item->pagaduria] = $item;
+                        Log::info("Agregado nuevo resultado desde DatamesGen", ['pagaduria' => $item->pagaduria]);
                     } else {
-                        // Si ya existe, compara los IDs y conserva el más reciente
                         if ($item->id > $results[$item->pagaduria]->id) {
                             $results[$item->pagaduria] = $item;
+                            Log::info("Actualizado resultado de DatamesGen por uno más reciente", ['pagaduria' => $item->pagaduria]);
                         }
                     }
                 }
             }
-
+    
             if ($userType) {
                 $user->$userType->decrement('consultas_diarias', 1);
+                Log::info("Consulta descontada para el usuario", ['user_id' => $user->id, 'tipo' => $userType]);
             }
-
+    
             DB::commit();
-
+    
             $results = !empty($results) ? $results : (object) [];
-
+            Log::info("Resultados finales", ['total_resultados' => count((array)$results)]);
+    
             return response()->json($results, 200);
         } catch (\Exception $e) {
             DB::rollBack();
-
+    
             Log::error("Error al buscar pagadurías por documento: {$e->getMessage()}", [
-                'doc' => $doc, // Incluye el documento para identificar la consulta que causó el error
-                'exception' => $e->getTraceAsString(), // Para un diagnóstico más detallado
+                'doc' => $doc,
+                'exception' => $e->getTraceAsString(),
             ]);
-
+    
             return response()->json([
                 'error' => 'Ocurrió un error al procesar la solicitud',
-                'message' => $e->getMessage(), // Mensaje exacto del error
+                'message' => $e->getMessage(),
             ], 500);
         }
     }
+    
 
     public function getPagaduriasNames()
     {
@@ -392,7 +403,9 @@ class PagaduriasController extends Controller
             "SEM VILLAVICENCIO",
             "SEM YOPAL",
             "SEM YUMBO",
-            "SEM ZIPAQUIRA"
+            "SEM ZIPAQUIRA",
+            "casur",
+            "fiduprevisora"
         ];
 
         return response()->json($nombres, 200);
