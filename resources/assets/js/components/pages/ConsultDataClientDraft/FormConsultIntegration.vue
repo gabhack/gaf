@@ -138,7 +138,7 @@ export default {
                 .then(value => {
                     if (!value) return;
                     this.saveVisados(val).then(status => {
-                        if (status != 200) return;
+                        if (status != 201) return;
                         this.$emit('emitInfo', this.dataclient);
                     });
                 });

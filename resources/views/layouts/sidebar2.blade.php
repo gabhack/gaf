@@ -275,7 +275,7 @@
                         </a>
                         <a
                             class="collapse-item"
-                            href="/old/demografico"
+                            href="/demografico"
                         >
                             Datos demograficos
                         </a>
