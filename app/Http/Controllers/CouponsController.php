@@ -93,7 +93,7 @@ class CouponsController extends Controller
         'sem florencia' => 55,
         'sem floridablanca' => 170,
         'sem funza' => 117,
-        'sem fusagasuga' => 151,
+        'sem fusagazuga' => 151,
         'sem girardot' => 179,
         'sem giron' => 61,
         'sem guainia' => 116,
