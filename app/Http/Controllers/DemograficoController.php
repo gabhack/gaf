@@ -227,7 +227,7 @@ public function fetchPaginatedResults(Request $request)
 
     try {
         $page = (int) $request->query('page', 1);
-        $perPage = (int) $request->query('perPage', 2000); // Ajusta según necesidad
+        $perPage = (int) $request->query('perPage', 10000); // Ajusta según necesidad
         
         // Obtener las cédulas desde caché
         $cacheKey = 'cedulas_' . Auth::id();
