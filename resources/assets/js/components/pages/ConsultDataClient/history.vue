@@ -8,37 +8,20 @@
                     </div>
                     <div class="d-flex mt-3 mb-3" style="color: #000; border: 1px solid #b9bdc3; border-radius: 10px">
                         <div class="form-group col-md-3">
-                            <label for="" style="color: black">Desde</label>
-                            <b-form-input
-                                placeholder="Desde"
-                                v-model="queryParams.desde"
-                                type="date"
-                                class="small-input form-control2"
-                            />
+                            <label style="color: black">Desde</label>
+                            <b-form-input v-model="queryParams.desde" type="date" class="small-input form-control2" />
                         </div>
                         <div class="form-group col-md-3">
-                            <label for="" style="color: black">Hasta</label>
-                            <b-form-input
-                                placeholder="Hasta"
-                                v-model="queryParams.hasta"
-                                type="date"
-                                class="small-input form-control2"
-                            />
+                            <label style="color: black">Hasta</label>
+                            <b-form-input v-model="queryParams.hasta" type="date" class="small-input form-control2" />
                         </div>
                         <div class="form-group col-md-3">
-                            <label for="" style="color: black">Documento</label>
-                            <input class="form-control2" placeholder="Documento" v-model="filter" />
+                            <label style="color: black">Documento</label>
+                            <input class="form-control2" v-model="filter" placeholder="Documento" />
                         </div>
                         <div class="form-group col-md-3 mt-4">
-                            <b-button
-                                type="submit"
-                                class="mr-2 align-self-end mb-3"
-                                variant="success"
-                                id="filtrarButton"
-                                @click="getHistoryConsults"
-                            >
-                                <i class="fa fa-filter" aria-hidden="true"></i>
-                                Filtrar
+                            <b-button variant="success" @click="getHistoryConsults">
+                                <i class="fa fa-filter"></i> Filtrar
                             </b-button>
                         </div>
                     </div>
@@ -64,7 +47,7 @@
                                 <b-button variant="primary" class="mb-2" @click="getData(data.item)">
                                     Observar
                                 </b-button>
-                                <b-button variant="secondary" href="/solicitud"> Proceso HEGO </b-button>
+                                <b-button variant="secondary" href="/solicitud">Proceso HEGO</b-button>
                             </template>
                         </b-table>
                     </div>
@@ -99,38 +82,34 @@ export default {
             pagaduriaType: '',
             fields: [
                 { key: 'created_at', label: 'Fecha y Hora', sortable: true },
-                { key: 'tipo_consulta', label: 'Tipo de Consulta', sortable: true },
                 { key: 'pagaduria', label: 'Pagaduria', sortable: true },
                 { key: 'ced', label: 'Cedula', sortable: true },
                 { key: 'estado', label: 'Estado', sortable: true },
                 { key: 'causal', label: 'Causal', sortable: true },
+                { key: 'observacion', label: 'Observación', sortable: true },
                 { key: 'nombre', label: 'Nombre Completo', sortable: true },
                 { key: 'score', label: 'Score', sortable: true },
                 {
                     key: 'cuotacredito',
                     label: 'Cuota',
                     sortable: true,
-                    formatter: (value, key, item) => {
-                        let formatter = new Intl.NumberFormat('es-CO', {
+                    formatter: value =>
+                        new Intl.NumberFormat('es-CO', {
                             style: 'currency',
                             currency: 'COP',
                             minimumFractionDigits: 0
-                        });
-                        return formatter.format(value);
-                    }
+                        }).format(value)
                 },
                 {
                     key: 'monto',
                     label: 'Monto',
                     sortable: true,
-                    formatter: (value, key, item) => {
-                        let formatter = new Intl.NumberFormat('es-CO', {
+                    formatter: value =>
+                        new Intl.NumberFormat('es-CO', {
                             style: 'currency',
                             currency: 'COP',
                             minimumFractionDigits: 0
-                        });
-                        return formatter.format(value);
-                    }
+                        }).format(value)
                 },
                 { key: 'plazo', label: 'Plazo', sortable: true },
                 { key: 'actions', label: 'Acciones' }
@@ -139,77 +118,34 @@ export default {
             perPage: 15,
             totalRows: 0,
             currentPage: 1,
-            queryParams: {
-                desde: null,
-                hasta: null
-            }
+            queryParams: { desde: null, hasta: null }
         };
     },
     mounted() {
-        console.log('Componente montado, iniciando carga de datos...');
         this.getHistoryConsults();
     },
     methods: {
         getHistoryConsults() {
-            console.log('Iniciando solicitud de datos...');
             this.isBusy = true;
-
-            const url = `/getHistoryConsults?page=${this.currentPage}`;
-            console.log('URL de la solicitud:', url);
-
             axios
-                .get(url)
+                .get(`/getHistoryConsults?page=${this.currentPage}`)
                 .then(response => {
-                    console.log('Respuesta de la API recibida:', response);
-
                     const dataWrapper = response.data.data || {};
-                    console.log('Datos envueltos recibidos:', dataWrapper);
-
-                    if (Array.isArray(dataWrapper.data)) {
-                        console.log('Datos válidos, actualizando historial...');
-                        this.HistoryConsult.data = dataWrapper.data;
-                        this.HistoryConsult.per_page = dataWrapper.per_page || 15;
-                        this.HistoryConsult.total = dataWrapper.total || 0;
-                        console.log('Historial actualizado:', this.HistoryConsult.data);
-                    } else {
-                        console.error('Los datos no son un arreglo:', dataWrapper.data);
-                        this.HistoryConsult.data = [];
-                    }
-
-                    this.perPage = this.HistoryConsult.per_page;
-                    this.totalRows = this.HistoryConsult.total;
+                    this.HistoryConsult.data = dataWrapper.data || [];
+                    this.perPage = dataWrapper.per_page || 15;
+                    this.totalRows = dataWrapper.total || 0;
                 })
-                .catch(error => {
-                    console.error('Error al obtener consultas:', error);
-                    this.HistoryConsult = { data: [], per_page: 15, total: 0 };
-                })
-                .finally(() => {
-                    console.log('Finalización de la solicitud de datos');
-                    this.isBusy = false;
-                });
+                .catch(() => (this.HistoryConsult = { data: [], per_page: 15, total: 0 }))
+                .finally(() => (this.isBusy = false));
         },
         getData(data) {
-            console.log('Obteniendo detalles para:', data);
             this.pagaduriaType = data.pagaduria;
             this.detailHistory = data;
             this.id_consult = data.id;
         },
         back() {
-            console.log('Regresando al listado principal');
             this.id_consult = null;
         }
     }
 };
 </script>
-
-<style scoped>
-.small-input {
-    width: 100px;
-}
-
-.form-control2 {
-    border: 1px solid #b9bdc3;
-    background-color: white;
-    border-radius: 10px;
-}
-</style>

@@ -424,9 +424,10 @@ export default {
         { value: "", text: "Seleccione" },
         { value: "Libre Inversión", text: "Libre Inversión" },
         { value: "Compra de Cartera", text: "Compra de Cartera" },
+        { value: "Recuperación de Cartera", text: "Recuperación de Cartera" },
         { value: "Refinanciación", text: "Refinanciación" },
-        { value: "Refinanciaciónmas + libre inversión", text: "Refinanciaciónmas + libre inversión" },
-        { value: "Refinanciación + Libre Inversión", text: "Refinanciación + Libre Inversión" }
+        { value: "Refinanciaciónmas + libre inversión", text: "Refinanciación + libre inversión" },
+        { value: "Refinanciación + Libre Inversión", text: "Refinanciación + Compra cartera" }
 
       ],
       tipoCarteraOptions: [

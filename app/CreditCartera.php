@@ -18,7 +18,8 @@ class CreditCartera extends Model
         'valor_cuota',
         'saldo',
         'tipo_cartera',
-        'nombre_entidad'
+        'nombre_entidad',
+        'opera_x_desprendible'
     ];
     
 

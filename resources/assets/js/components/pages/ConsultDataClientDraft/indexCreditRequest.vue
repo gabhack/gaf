@@ -216,6 +216,7 @@
           <th>Entidad</th>
           <th>Valor Cuota</th>
           <th>Saldo</th>
+          <th>Opera en desprendible</th>
         </tr>
       </thead>
       <tbody>
@@ -224,6 +225,8 @@
           <td>{{ cart.nombre_entidad }}</td>
           <td>{{ cart.valor_cuota }}</td>
           <td>{{ cart.saldo }}</td>
+          <td>{{ cart.opera_x_desprendible ? 'Sí' : 'No' }}</td>
+
         </tr>
       </tbody>
     </table>

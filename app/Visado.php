@@ -40,5 +40,6 @@ class Visado extends Model
         'info_obligaciones',
         'consultant_email',
         'consultant_name',
+        'observacion'
     ];
 }

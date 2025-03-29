@@ -847,7 +847,10 @@ const allPagaduriasMap = {
                   });
               }
           },
+  
           async modalConfirmConsultPag(credit) {
+  console.log("⚙️ Iniciando consulta con credit:", credit);
+
   this.$bvModal
     .msgBoxConfirm('Esta acción tiene un costo', {
       title: '¿Está seguro que desea realizar la consulta?',
@@ -861,53 +864,82 @@ const allPagaduriasMap = {
       footerClass: 'p-2 border-top-0',
       centered: true
     })
-    .then(async value => {
-      if (!value) return;
+    .then(async confirmed => {
+      console.log("✅ Confirmación modal:", confirmed);
+      if (!confirmed) return;
 
-      this.isLoading = true; // ✅ Spinner activado desde aquí
+      this.isLoading = true;
 
       try {
         const response = await axios.get(`/pagadurias/per-doc/${credit.doc}`);
+        console.log("🔍 Pagadurías obtenidas:", response.data);
 
         if (Object.keys(response.data).length > 0) {
           this.dataclient.pagadurias = response.data;
+          console.log("📌 Pagadurías asignadas:", this.dataclient.pagadurias);
           this.setCuotaDeseada(credit.cuota);
+          console.log("📌 Cuota deseada asignada:", credit.cuota);
         }
 
-        this.dataclient.pagaduria = this.getPagaduriaNameById(credit.pagaduria_id);
+        const pagaduriaName = this.getPagaduriaNameById(credit.pagaduria_id);
+        console.log("📌 Pagaduría encontrada:", pagaduriaName, "para ID:", credit.pagaduria_id);
 
-        if (this.dataclient.pagaduria) {
-          const normalize = str => str?.toString().toUpperCase().replace(/\s+/g, '');
-          const pagaduriaValue = normalize(this.dataclient.pagaduria);
-          this.setPagaduriaType(pagaduriaValue);
-
-          const type = this.pagaduriasTypes.find(type => normalize(type.value) === pagaduriaValue);
-
-          if (type && this.dataclient.pagadurias[type.key]) {
-            const pagaduria = this.dataclient.pagadurias[type.key];
-            this.dataclient.pagaduriaKey = type.key.slice(7).toLowerCase();
-            pagaduria.documentType = 'documentType';
-            this.dataclient.cargo = pagaduria.cargo;
-
-            const pagaduriaLabel = type.label;
-            this.setPagaduriaLabel(pagaduriaLabel);
-
-            const baseKey = type.key.includes('datames') ? type.key.slice(7) : type.key;
-            this.setCouponsType(type.key.includes('datames') ? `Coupons${baseKey}` : type.key);
-            this.setEmbargosType(type.key.includes('datames') ? `Embargos${baseKey}` : type.key);
-            this.setDescuentosType(type.key.includes('datames') ? `Descuentos${baseKey}` : type.key);
-
-            this.setDatamesSed(pagaduria);
-          } else {
-            console.warn("⚠️ No se encontró type o pagaduría correspondiente:", type);
-          }
-        } else {
-          console.warn("⚠️ No se pudo obtener nombre de pagaduría con el ID:", credit.pagaduria_id);
+        if (!pagaduriaName) {
+          console.warn("⚠️ No se pudo obtener nombre de pagaduría con ID:", credit.pagaduria_id);
+          this.isLoading = false;
+          return;
         }
 
         const normalize = str => str?.toString().toUpperCase().replace(/\s+/g, '');
-        const pagaduriaValue = normalize(this.dataclient.pagaduria);
-                this.dataclient = {
+        const pagaduriaValue = normalize(pagaduriaName);
+        console.log("📌 Pagaduría normalizada:", pagaduriaValue);
+
+        this.setPagaduriaType(pagaduriaValue);
+        console.log("📌 PagaduriaType establecido:", pagaduriaValue);
+
+        const type = this.pagaduriasTypes.find(t => normalize(t.value) === pagaduriaValue);
+        console.log("🔎 Resultado búsqueda de type:", type);
+
+        if (!type || !this.dataclient.pagadurias[type.key]) {
+          console.warn("⚠️ Formato de pagaduría no válido o tipo no encontrado:", { couponType: type, pagaduriaLabel: pagaduriaValue });
+          toastr.warning("Formato de pagaduría no válido o no encontrado.");
+          this.isLoading = false;
+          return;
+        }
+
+        const pagaduria = this.dataclient.pagadurias[type.key];
+        console.log("📌 Pagaduria obtenida desde dataclient.pagadurias:", pagaduria);
+
+        this.dataclient.pagaduriaKey = type.key.slice(7).toLowerCase();
+        console.log("📌 PagaduriaKey asignado:", this.dataclient.pagaduriaKey);
+
+        pagaduria.documentType = 'documentType';
+        this.dataclient.cargo = pagaduria.cargo;
+        console.log("📌 Cargo asignado:", this.dataclient.cargo);
+
+        const pagaduriaLabel = type.label;
+        this.setPagaduriaLabel(pagaduriaLabel);
+        console.log("📌 PagaduriaLabel asignado:", pagaduriaLabel);
+
+        const baseKey = type.key.includes('datames') ? type.key.slice(7) : type.key;
+        console.log("📌 BaseKey calculado:", baseKey);
+
+        const couponType = type.key.includes('datames') ? `Coupons${baseKey}` : type.key;
+        const embargosType = type.key.includes('datames') ? `Embargos${baseKey}` : type.key;
+        const descuentosType = type.key.includes('datames') ? `Descuentos${baseKey}` : type.key;
+
+        this.setCouponsType(couponType);
+        this.setEmbargosType(embargosType);
+        this.setDescuentosType(descuentosType);
+
+        console.log("📌 couponType establecido:", couponType);
+        console.log("📌 embargosType establecido:", embargosType);
+        console.log("📌 descuentosType establecido:", descuentosType);
+
+        this.setDatamesSed(pagaduria);
+        console.log("📌 DatamesSed asignado:", pagaduria);
+
+        this.dataclient = {
           doc: credit.doc,
           name: credit.name,
           cuotadeseada: credit.cuota,
@@ -917,27 +949,31 @@ const allPagaduriasMap = {
           pagadurias: response.data,
           pagaduriaKey: this.dataclient.pagaduriaKey,
         };
+        console.log("✅ dataclient actualizado:", this.dataclient);
 
         const status = await this.saveVisados(credit);
-        
+        console.log("📌 Status devuelto por saveVisados:", status);
+
         if (status === 201) {
           const payload = {
-    ...this.dataclient,
-    carteras: credit.carteras || []
-  };
-          console.log("Datos enviados en emitInfo:", this.dataclient);
-          this.$emit('emitInfo', payload);
-          this.flag = true;
+            ...this.dataclient,
+            carteras: credit.carteras || []
+          };
 
-          // ✅ Ocultar tabla después de guardar exitosamente
+          console.log("✅ Emitiendo información (emitInfo) con payload:", payload);
+          this.$emit('emitInfo', payload);
+
+          this.flag = true;
           this.showTable = false;
+          console.log("✅ Tabla ocultada y flag activado");
         }
 
       } catch (error) {
-        console.error("Error en proceso visado:", error);
+        console.error("❌ Error en proceso visado:", error);
         toastr.error("Error durante el proceso de visado");
       } finally {
-        this.isLoading = false; // ✅ Spinner desactivado al final del todo
+        this.isLoading = false;
+        console.log("🛑 Fin de consulta");
       }
     });
 },
