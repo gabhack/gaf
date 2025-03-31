@@ -37,6 +37,7 @@ import VueSwal from 'vue-swal';
 Vue.use(VueSwal);
 
 import DemographicData from './components/pages/Demographic/DemographicData.vue';
+import DemographicData2 from './components/pages/Demographic/DemographicDataFiltroEntidad.vue';
 import DemographicIndex from './components/pages/Demographic/IndexDemografico.vue';
 import UploadPensiones from './components/pages/Pensiones/uploadColpensiones.vue';
 import UploadFiducidiaria from './components/pages/Pensiones/upload-fiducidiaria.vue';
@@ -125,6 +126,7 @@ Vue.component('parametros', require('./components/pages/Parametros.vue').default
 
 //Datos demograficos de datames
 Vue.component('DemographicData', DemographicData);
+Vue.component('DemographicData2', DemographicData2);
 Vue.component('DemographicIndex', DemographicIndex);
 Vue.component('UploadPensiones', UploadPensiones);
 Vue.component('UploadFiducidiaria', UploadFiducidiaria);

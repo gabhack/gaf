@@ -898,7 +898,7 @@ private function parseConcatenatedString($concatenatedString)
         return response()->json($recentConsultations);
     }
 
-    public function show()
+    public function show()  // ANALISIS DE CARTERA
     {
         Log::info('Inicio del proceso de show');
         Log::info('Fin del proceso de show');

@@ -2,7 +2,7 @@
 
 @section('content')
     <div id="app">
-        <demographic-data></demographic-data>
+        <demographic-data2></demographic-data2>
     </div>
 @endsection
 
