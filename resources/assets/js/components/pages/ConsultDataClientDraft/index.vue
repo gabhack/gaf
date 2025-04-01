@@ -171,6 +171,8 @@
                             pagaduriaType == 'SEDVICHADA' ||
                             pagaduriaType == 'SEDGUAJIRA' ||
                             pagaduriaType == 'SEDGUAVIARE' ||
+                            pagaduriaType == 'SEDGUAVfiduprevisoraIARE' ||
+                            pagaduriaType == 'casur' ||
                             pagaduriaType == 'SEDNARINO'
                         "
                     />
@@ -304,6 +306,8 @@
                             pagaduriaType == 'SEDVICHADA' ||
                             pagaduriaType == 'SEDGUAJIRA' ||
                             pagaduriaType == 'SEDGUAVIARE' ||
+                            pagaduriaType == 'casur' ||
+                            pagaduriaType == 'fiduprevisora' ||
                             pagaduriaType == 'SEDNARINO'
                         "
                         :disabledProspect="disabledProspect"

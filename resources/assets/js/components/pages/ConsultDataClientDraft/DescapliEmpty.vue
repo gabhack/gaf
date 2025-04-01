@@ -11,7 +11,6 @@
                         @click="visible = !visible"
                         style="cursor: pointer; gap: 10px"
                     >
-                        <!-- SVG -->
                         <svg
                             version="1.1"
                             :class="{ rotate180: visible }"
@@ -30,10 +29,9 @@
                             <path
                                 fill="#3a5659"
                                 d="M6.4,8.6C7,9.1,8,9.1,8.6,8.6l6-6c0.4-0.4,0.6-1.1,0.3-1.6C14.6,0.4,14.1,0,13.5,0l-12,0C0.9,0,0.3,0.4,0.1,0.9
-	S0,2.1,0.4,2.6L6.4,8.6L6.4,8.6z"
+                            S0,2.1,0.4,2.6L6.4,8.6L6.4,8.6z"
                             />
                         </svg>
-
                         Obligaciones Vigentes al Día
                     </h3>
                 </b-col>
@@ -86,9 +84,7 @@
                                     <input
                                         v-model="data.item.check"
                                         type="checkbox"
-                                        :disabled="
-                                            disabledProspect || ['APFPM', 'APEPEN', 'APESDN'].includes(data.item.code)
-                                        "
+                                        :disabled="disabledProspect || ['APFPM','APEPEN','APESDN'].includes(data.item.code)"
                                         @change="calcularEgresos"
                                     />
                                 </template>
@@ -157,7 +153,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations } from 'vuex';
+import { mapState, mapGetters, mapMutations } from 'vuex'
 
 export default {
     name: 'DescapliEmpty',
@@ -181,19 +177,19 @@ export default {
             arrayCoupons: [],
             internalSelectedPeriod: null,
             visible: true
-        };
+        }
     },
     mounted() {
-        this.internalSelectedPeriod = this.selectedPeriod;
-        this.updateArrayCoupons();
+        this.internalSelectedPeriod = this.selectedPeriod
+        this.updateArrayCoupons()
     },
     watch: {
         selectedPeriod(newVal) {
-            this.internalSelectedPeriod = newVal;
-            this.updateArrayCoupons();
+            this.internalSelectedPeriod = newVal
+            this.updateArrayCoupons()
         },
         couponsIngresos() {
-            this.updateArrayCoupons();
+            this.updateArrayCoupons()
         }
     },
     computed: {
@@ -201,37 +197,39 @@ export default {
         ...mapState('pagaduriasModule', ['coupons']),
         ...mapGetters('pagaduriasModule', ['couponsIngresos', 'pagaduriaPeriodos']),
         isLoading() {
-            return this.pagaduriaPeriodos.length < 2;
+            return this.pagaduriaPeriodos.length < 2
         }
     },
     methods: {
         ...mapMutations('datamesModule', ['setConteoEgresos', 'setConteoEgresosPlus']),
         ...mapMutations('pagaduriasModule', ['setSelectedPeriod']),
         updateArrayCoupons() {
-            this.arrayCoupons = this.couponsIngresos.items.map(item => ({ ...item, check: false }));
-            this.setConteoEgresos(0);
-            this.setConteoEgresosPlus(0);
+            this.arrayCoupons = (this.couponsIngresos && this.couponsIngresos.items)
+                ? this.couponsIngresos.items.map(item => ({ ...item, check: false }))
+                : []
+            this.setConteoEgresos(0)
+            this.setConteoEgresosPlus(0)
         },
         calcularEgresos() {
             const { totalEgresos, totalEgresosPlus } = this.arrayCoupons.reduce(
                 (acc, item) => {
                     if (!item.check && item.code !== 'APFPM') {
-                        acc.totalEgresos += Number(item.vaplicado);
+                        acc.totalEgresos += Number(item.vaplicado)
                     } else if (item.check && item.code !== 'APFPM') {
-                        acc.totalEgresosPlus += Number(item.vaplicado);
+                        acc.totalEgresosPlus += Number(item.vaplicado)
                     }
-                    return acc;
+                    return acc
                 },
                 { totalEgresos: 0, totalEgresosPlus: 0 }
-            );
-            this.setConteoEgresos(totalEgresos);
-            this.setConteoEgresosPlus(totalEgresosPlus);
+            )
+            this.setConteoEgresos(totalEgresos)
+            this.setConteoEgresosPlus(totalEgresosPlus)
         },
         onPeriodChange() {
-            this.setSelectedPeriod(this.internalSelectedPeriod);
+            this.setSelectedPeriod(this.internalSelectedPeriod)
         }
     }
-};
+}
 </script>
 
 <style scoped lang="scss">
@@ -244,7 +242,6 @@ export default {
         font-weight: 700;
         line-height: 18.23px;
     }
-
     & tbody {
         background-color: #fff;
         font-size: 14px;

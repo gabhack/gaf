@@ -9,7 +9,6 @@
                 @click="visible = !visible"
                 style="cursor: pointer; gap: 10px"
             >
-                <!-- SVG -->
                 <svg
                     version="1.1"
                     :class="{ rotate180: visible }"
@@ -28,185 +27,96 @@
                     <path
                         fill="#3a5659"
                         d="M6.4,8.6C7,9.1,8,9.1,8.6,8.6l6-6c0.4-0.4,0.6-1.1,0.3-1.6C14.6,0.4,14.1,0,13.5,0l-12,0C0.9,0,0.3,0.4,0.1,0.9
-	S0,2.1,0.4,2.6L6.4,8.6L6.4,8.6z"
+                        S0,2.1,0.4,2.6L6.4,8.6L6.4,8.6z"
                     />
                 </svg>
-
                 Historial Laboral
             </h3>
-            <!--
-            <div v-if="datamesSedArray.length > 0" class="general-info">
-                <br />
-                <ul style="list-style-type: none; padding: 0; margin: 0">
-                    <li v-for="(item, index) in datamesSedArray" :key="index">
-                        <p>
-                            <b style="color: #3a5659">Fecha ingreso:</b><br /><span>{{
-                                item.fecha_ingreso || '--'
-                            }}</span>
-                        </p>
-                        <p>
-                            <b style="color: #3a5659">Fecha vinculación:</b><br /><span>{{
-                                item.fnombramiento || '--'
-                            }}</span>
-                        </p>
-                        <p>
-                            <b style="color: #3a5659">Cargo:</b><br /><span>{{ item.cargo || '--' }}</span>
-                        </p>
-                        <p>
-                            <b style="color: #3a5659">Grado:</b><br /><span>{{ item.grado || '--' }}</span>
-                        </p>
-                        <p>
-                            <b style="color: #3a5659">Principal:</b><br /><span>{{ item.depen || '--' }}</span>
-                        </p>
-                        <p>
-                            <b style="color: #3a5659">Ciudad laboral:</b><br /><span>{{ item.ciudad || '--' }}</span>
-                        </p>
-                    </li>
-                </ul>
-            </div>
--->
-
             <b-collapse id="info-historial" v-model="visible" class="mt-2">
                 <div v-if="datamesSedArray.length > 0" class="general-info col-12 px-0">
                     <div class="col-12 px-0 d-flex align-items-start justify-content-between flex-column flex-sm-row">
-                        <!-------------fecha de ingreso---------------->
-                        <!--<div class="col-12 col-48 px-0">
-                            <div class="mt-3 table-responsive">
-                                <table role="table" aria-colcount="1" class="table b-table table-striped table-hover">
-
-                                    <thead role="rowgroup" class="table-header-nowrap">
-                                        <tr role="row">
-                                            <th role="columnheader" scope="col" aria-colindex="1">Fecha de Ingreso</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody role="rowgroup">
-                                        <tr role="row" v-for="(item, index) in datamesSedArray" :key="index">
-                                            <td aria-colindex="1" role="cell">{{ item.fecha_ingreso || '--' }}</td>
-                                        </tr>
-                                    </tbody>
-
-                                </table>
-                            </div>
-                        </div>-->
-
-                        <!-------------Cargo---------------->
                         <div class="col-12 col-48 px-0">
                             <div v-if="datamesSed">
-                            <div class="mt-3 table-responsive">
-                                <table role="table" aria-colcount="1" class="table b-table table-striped table-hover">
-                                    <!----><!---->
-                                    <thead role="rowgroup" class="table-header-nowrap">
-                                        <!---->
-                                        <tr role="row">
-                                            <th role="columnheader" scope="col" aria-colindex="1">Cargo</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody role="rowgroup">
-                                        <!---->
-                                        <tr role="row" v-for="(item, index) in datamesSedArray" :key="index">
-                                            <td aria-colindex="1" role="cell">{{ item.cargo || '--' }}</td>
-                                        </tr>
-
-                                        <!----><!---->
-                                    </tbody>
-                                    <!---->
-                                </table>
+                                <div class="mt-3 table-responsive">
+                                    <table role="table" aria-colcount="1" class="table b-table table-striped table-hover">
+                                        <thead role="rowgroup" class="table-header-nowrap">
+                                            <tr role="row">
+                                                <th role="columnheader" scope="col" aria-colindex="1">Cargo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody role="rowgroup">
+                                            <tr role="row" v-for="(item, index) in datamesSedArray" :key="index">
+                                                <td aria-colindex="1" role="cell">{{ item.cargo || 'N/A' }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-
-                        </div>
                     </div>
-
                     <div class="col-12 px-0 d-flex align-items-start justify-content-between flex-column flex-sm-row">
-                        <!-------------principal---------------->
                         <div class="col-12 col-48 px-0">
                             <div class="mt-3 table-responsive">
                                 <div v-if="datamesSed">
-
-                                <table role="table" aria-colcount="1" class="table b-table table-striped table-hover">
-                                    <!----><!---->
-                                    <thead role="rowgroup" class="table-header-nowrap">
-                                        <!---->
-                                        <tr role="row">
-                                            <th role="columnheader" scope="col" aria-colindex="1">Principal</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody role="rowgroup">
-                                        <!---->
-                                        <tr role="row" v-for="(item, index) in datamesSedArray" :key="index">
-                                            <td aria-colindex="1" role="cell">{{ item.depen || '--' }}</td>
-                                        </tr>
-
-                                        <!----><!---->
-                                    </tbody>
-                                    <!---->
-                                </table>
+                                    <table
+                                        role="table"
+                                        aria-colcount="1"
+                                        class="table b-table table-striped table-hover"
+                                    >
+                                        <thead role="rowgroup" class="table-header-nowrap">
+                                            <tr role="row">
+                                                <th role="columnheader" scope="col" aria-colindex="1">Principal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody role="rowgroup">
+                                            <tr role="row" v-for="(item, index) in datamesSedArray" :key="index">
+                                                <td aria-colindex="1" role="cell">{{ item.depen || 'N/A' }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                        <!-------------Fecha vinculación---------------->
                         <div class="col-12 col-48 px-0">
                             <div class="mt-3 table-responsive">
                                 <table role="table" aria-colcount="1" class="table b-table table-striped table-hover">
-                                    <!----><!---->
                                     <thead role="rowgroup" class="table-header-nowrap">
-                                        <!---->
                                         <tr role="row">
-                                            <th role="columnheader" scope="col" aria-colindex="1">
-                                                Fecha de Vinculación
-                                            </th>
+                                            <th role="columnheader" scope="col" aria-colindex="1">Fecha de Vinculación</th>
                                         </tr>
                                     </thead>
-                                   
-                                    <!---->
                                 </table>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!--============================
-                            FOPEP
-                    ==============================-->
                 <template v-if="pagaduriaType === 'FOPEP'">
                     <div class="col-12 px-0 info-general">
-                        <!--------VALOR INGRESO:----------------->
                         <div class="col-12 col-48 px-0">
                             <div class="mt-3 table-responsive">
                                 <table role="table" aria-colcount="1" class="table b-table table-striped table-hover">
-                                    <!----><!---->
                                     <thead role="rowgroup" class="table-header-nowrap">
-                                        <!---->
                                         <tr role="row">
                                             <th role="columnheader" scope="col" aria-colindex="2">VALOR INGRESO:</th>
                                         </tr>
                                     </thead>
                                     <tbody role="rowgroup">
-                                        <!---->
                                         <tr role="row">
                                             <td aria-colindex="1" role="cell">{{ valorIngreso | currency }}</td>
                                         </tr>
-
-                                        <!----><!---->
                                     </tbody>
-                                    <!---->
                                 </table>
                             </div>
                         </div>
-                        <!---------------SUELDO BASICO:----------->
                         <div class="col-12 col-48 px-0">
                             <div class="mt-3 table-responsive">
                                 <table role="table" aria-colcount="1" class="table b-table table-striped table-hover">
-                                    <!----><!---->
                                     <thead role="rowgroup" class="table-header-nowrap">
-                                        <!---->
                                         <tr role="row">
                                             <th role="columnheader" scope="col" aria-colindex="2">SUELDO BASICO:</th>
                                         </tr>
                                     </thead>
                                     <tbody role="rowgroup">
-                                        <!---->
                                         <tr role="row">
                                             <td aria-colindex="2" role="cell">
                                                 <p class="panel-value" v-if="salarioBasico">
@@ -215,15 +125,11 @@
                                                 <p class="panel-value" v-else>{{ datamesSed.pension | currency }}</p>
                                             </td>
                                         </tr>
-
-                                        <!----><!---->
                                     </tbody>
-                                    <!---->
                                 </table>
                             </div>
                         </div>
                     </div>
-
                     <div class="col-4" v-if="ingresosExtras.length > 0">
                         <b class="panel-label">INGRESOS EXTRAS:</b>
                         <div class="row">
@@ -236,22 +142,17 @@
                         </div>
                         <div class="row" v-for="extra in ingresosExtras" :key="extra.code">
                             <div class="col-2">
-                                <div>
-                                    <p class="panel-value">{{ extra.concept }}</p>
-                                </div>
+                                <p class="panel-value">{{ extra.concept }}</p>
                             </div>
                             <div class="col-2">
-                                <div>
-                                    <p class="panel-value">{{ extra.ingresos | currency }}</p>
-                                </div>
+                                <p class="panel-value">{{ extra.ingresos | currency }}</p>
                             </div>
                         </div>
                     </div>
-
                     <div class="col-2">
                         <b class="panel-label">TIPO PENSION:</b>
                         <div>
-                            <p class="panel-value">{{ datamesSed.tp }}</p>
+                            <p class="panel-value">{{ datamesSed.tp || 'N/A' }}</p>
                         </div>
                     </div>
                     <div class="col-md-2">
@@ -266,14 +167,12 @@
                             <p class="panel-value">{{ datamesSed.vsalud | currency }}</p>
                         </div>
                     </div>
-
                     <div class="col-md-2">
                         <b class="panel-label">VALOR DESCUENTOS:</b>
                         <div>
                             <p class="panel-value">{{ datamesSed.vdesc | currency }}</p>
                         </div>
                     </div>
-
                     <div class="col-md-2">
                         <b class="panel-label">VALOR CUPO:</b>
                         <div>
@@ -287,18 +186,11 @@
                         </div>
                     </div>
                 </template>
-
-                <!--============================
-                            SED VALLE
-                    ==============================-->
-
                 <div v-if="datamessedvalle">
                     <div class="col-12">
                         <div class="mt-3 table-responsive">
                             <table role="table" aria-colcount="2" class="table b-table table-striped table-hover">
-                                <!----><!---->
                                 <thead role="rowgroup" class="table-header-nowrap">
-                                    <!---->
                                     <tr role="row">
                                         <th role="columnheader" scope="col" aria-colindex="1" colspan="1">
                                             VALOR INGRESO:
@@ -309,7 +201,6 @@
                                     </tr>
                                 </thead>
                                 <tbody role="rowgroup">
-                                    <!---->
                                     <tr role="row">
                                         <td aria-colindex="1" role="cell" colspan="1">
                                             <p class="panel-value">{{ valorIngreso | currency }}</p>
@@ -321,14 +212,10 @@
                                             <p class="panel-value" v-else>{{ datamessedvalle.vpension | currency }}</p>
                                         </td>
                                     </tr>
-
-                                    <!----><!---->
                                 </tbody>
-                                <!---->
                             </table>
                         </div>
                     </div>
-
                     <div class="col-4" v-if="ingresosExtras.length > 0">
                         <b class="panel-label">INGRESOS EXTRAS:</b>
                         <div class="row">
@@ -341,117 +228,96 @@
                         </div>
                         <div class="row" v-for="extra in ingresosExtras" :key="extra.code">
                             <div class="col-2">
-                                <div>
-                                    <p class="panel-value">{{ extra.concept }}</p>
-                                </div>
+                                <p class="panel-value">{{ extra.concept }}</p>
                             </div>
                             <div class="col-2">
-                                <div>
-                                    <p class="panel-value">{{ extra.ingresos | currency }}</p>
-                                </div>
+                                <p class="panel-value">{{ extra.ingresos | currency }}</p>
                             </div>
                         </div>
                     </div>
-
                     <div class="col-2">
                         <b class="panel-label">FECHA INGRESO:</b>
                         <div>
-                            <p class="panel-value">{{ datamessedvalle.fechingr }}</p>
+                            <p class="panel-value">{{ datamessedvalle.fechingr || 'N/A' }}</p>
                         </div>
                     </div>
-
                     <div class="col-2">
                         <b class="panel-label">AREA DE DESEMPEÑO:</b>
                         <div>
-                            <p class="panel-value">{{ datamessedvalle.esquema }}</p>
+                            <p class="panel-value">{{ datamessedvalle.esquema || 'N/A' }}</p>
                         </div>
                     </div>
-
                     <div class="col-2">
                         <b class="panel-label">CARGO:</b>
                         <div>
-                            <p class="panel-value">{{ datamessedvalle.cargo }}</p>
+                            <p class="panel-value">{{ datamessedvalle.cargo || 'N/A' }}</p>
                         </div>
                     </div>
-
                     <div class="col-2">
                         <b class="panel-label">FECHA VINCULACIÓN:</b>
                         <div>
-                            <p class="panel-value">{{ datamessedvalle.fecnombr }}</p>
+                            <p class="panel-value">{{ datamessedvalle.fecnombr || 'N/A' }}</p>
                         </div>
                     </div>
-
                     <div class="col-2">
                         <b class="panel-label"> TIPO DE CONTRATO:</b>
                         <div>
-                            <p class="panel-value">{{ datamessedvalle.ncontr }}</p>
+                            <p class="panel-value">{{ datamessedvalle.ncontr || 'N/A' }}</p>
                         </div>
                     </div>
-
                     <div class="col-2">
                         <b class="panel-label">GRADO:</b>
                         <div>
-                            <p class="panel-value">{{ datamessedvalle.grado ? datamessedvalle.grado : '-' }}</p>
+                            <p class="panel-value">{{ datamessedvalle.grado ? datamessedvalle.grado : 'N/A' }}</p>
                         </div>
                     </div>
-
                     <div class="col-2">
                         <b class="panel-label">PRINCIPAL :</b>
                         <div>
                             <p class="panel-value">
-                                {{ datamessedvalle.dependencia ? datamessedvalle.dependencia : '-' }}
+                                {{ datamessedvalle.dependencia ? datamessedvalle.dependencia : 'N/A' }}
                             </p>
                         </div>
                     </div>
-
                     <div class="col-2">
                         <b class="panel-label">SEDE:</b>
                         <div>
                             <p class="panel-value">
-                                {{ datamessedvalle.centrocosto ? datamessedvalle.centrocosto : '-' }}
+                                {{ datamessedvalle.centrocosto ? datamessedvalle.centrocosto : 'N/A' }}
                             </p>
                         </div>
                     </div>
-
                     <div class="col-2">
                         <b class="panel-label">TIPO VINCULACIÓN:</b>
                         <div>
-                            <p class="panel-value">{{ datamessedvalle.nivcontr }}</p>
+                            <p class="panel-value">{{ datamessedvalle.nivcontr || 'N/A' }}</p>
                         </div>
                     </div>
-
                     <div class="col-2">
                         <b class="panel-label">ESTADO LABORAL:</b>
                         <div>
-                            <p class="panel-value">{{ datamessedvalle.estlaboral }}</p>
+                            <p class="panel-value">{{ datamessedvalle.estlaboral || 'N/A' }}</p>
                         </div>
                     </div>
-
                     <div class="col-2">
                         <b class="panel-label">CENTRO DE EDUCACIÓN:</b>
                         <div>
-                            <p class="panel-value">{{ datamessedvalle.centrocosto }}</p>
+                            <p class="panel-value">{{ datamessedvalle.centrocosto || 'N/A' }}</p>
                         </div>
                     </div>
-
                     <div class="col-2">
                         <b class="panel-label">SEDE EN LA QUE PRESTA EL SERVICIO:</b>
                         <div>
-                            <p class="panel-value">{{ datamessedvalle.sedecoleg }}</p>
+                            <p class="panel-value">{{ datamessedvalle.sedecoleg || 'N/A' }}</p>
                         </div>
                     </div>
-
                     <div class="col-2">
                         <b class="panel-label">CIUDAD LABORAL:</b>
                         <div>
-                            <p class="panel-value">{{ datamessedvalle.ciudad ? datamessedvalle.ciudad : '-' }}</p>
+                            <p class="panel-value">{{ datamessedvalle.ciudad ? datamessedvalle.ciudad : 'N/A' }}</p>
                         </div>
                     </div>
                 </div>
-
-                <!--============================
-                        FIDUPREVISORA
-                    ==============================-->
                 <template v-if="datamesfidu">
                     <div class="col-2">
                         <b class="panel-label">VALOR INGRESO:</b>
@@ -459,21 +325,18 @@
                             <p class="panel-value">{{ datamesfidu.vpension | currency }}</p>
                         </div>
                     </div>
-
                     <div class="col-2">
                         <b class="panel-label">VINCULACION:</b>
                         <div>
-                            <p class="panel-value">{{ datamesfidu.vinc }}</p>
+                            <p class="panel-value">{{ datamesfidu.vinc || 'N/A' }}</p>
                         </div>
                     </div>
-
                     <div class="col-2">
                         <b class="panel-label">FECHA DE PAGO PENSION:</b>
                         <div>
-                            <p class="panel-value">{{ datamesfidu.fechpago }}</p>
+                            <p class="panel-value">{{ datamesfidu.fechpago || 'N/A' }}</p>
                         </div>
                     </div>
-
                     <div class="col-2">
                         <b class="panel-label">VALOR DESCUENTO:</b>
                         <div>
@@ -481,21 +344,13 @@
                         </div>
                     </div>
                 </template>
-
-                <!-- DATAMES SED -->
-                <template v-if="datamesfidu || datamessedvalle || pagaduriaType === 'FOPEP'"> </template>
+                <template v-if="datamesfidu || datamessedvalle || pagaduriaType === 'FOPEP'"></template>
                 <div v-else-if="datamesSed">
-                    <div
-                        v-if="arrayCoupons.length > 0"
-                        class="col-12 px-0 d-flex align-items-start justify-content-between flex-column flex-sm-row"
-                    >
-                        <!--------VALOR INGRESO:----------------->
+                    <div v-if="arrayCoupons.length > 0" class="col-12 px-0 d-flex align-items-start justify-content-between flex-column flex-sm-row">
                         <div class="col-12 col-48 px-0">
                             <div class="mt-3 table-responsive">
                                 <table role="table" aria-colcount="2" class="table b-table table-striped table-hover">
-                                    <!----><!---->
                                     <thead role="rowgroup" class="table-header-nowrap">
-                                        <!---->
                                         <tr role="row">
                                             <th role="columnheader" scope="col" aria-colindex="1" colspan="1">
                                                 Valor de Ingreso
@@ -503,74 +358,38 @@
                                         </tr>
                                     </thead>
                                     <tbody role="rowgroup">
-                                        <!---->
                                         <tr role="row">
                                             <td aria-colindex="1" role="cell" colspan="1">
                                                 {{ valorIngreso | currency }}
                                             </td>
                                         </tr>
-
-                                        <!----><!---->
                                     </tbody>
-                                    <!---->
                                 </table>
                             </div>
                         </div>
-                        <!--------TOTAL:----------------->
                         <div class="col-12 col-48 px-0">
                             <div class="mt-3 table-responsive">
                                 <table role="table" aria-colcount="2" class="table b-table table-striped table-hover">
-                                    <!----><!---->
                                     <thead role="rowgroup" class="table-header-nowrap">
-                                        <!---->
                                         <tr role="row">
                                             <th role="columnheader" scope="col" aria-colindex="2" colspan="1">Total</th>
                                         </tr>
                                     </thead>
                                     <tbody role="rowgroup">
-                                        <!---->
                                         <tr role="row">
                                             <td aria-colindex="2" role="cell" colspan="1">
                                                 {{ valorIngreso | currency }}
                                             </td>
                                         </tr>
-
-                                        <!----><!---->
                                     </tbody>
-                                    <!---->
                                 </table>
                             </div>
                         </div>
                     </div>
-                    <!--<div v-if="salarioBasico.length > 0">
-                        <div class="mt-3 table-responsive">
-                            <table role="table" aria-colcount="2" class="table b-table table-striped table-hover">
-                                <thead role="rowgroup" class="table-header-nowrap">
-                                    <tr role="row">
-                                        <th role="columnheader" scope="col" aria-colindex="2" colspan="2">
-                                            Salario Básico
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody role="rowgroup">
-                                    <tr role="row" v-for="(item, index) in salarioBasico" :key="index">
-                                        <td aria-colindex="2" role="cell" colspan="1">
-                                            {{ item.concept }}
-                                        </td>
-                                        <td aria-colindex="2" role="cell" colspan="1">
-                                            {{ item.ingresos | currency }}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>-->
                     <div v-if="ingresosExtras.length > 0" style="width: 100%">
                         <div class="mt-3 table-responsive">
                             <table role="table" aria-colcount="2" class="table b-table table-striped table-hover">
-                                <!----><!---->
                                 <thead role="rowgroup" class="table-header-nowrap">
-                                    <!---->
                                     <tr role="row">
                                         <th role="columnheader" scope="col" aria-colindex="1" colspan="2">
                                             Ingresos Extras
@@ -578,7 +397,6 @@
                                     </tr>
                                 </thead>
                                 <tbody role="rowgroup">
-                                    <!---->
                                     <tr role="row" v-for="(item, index) in ingresosExtras" :key="index">
                                         <td colspan="1">
                                             {{ item.concept }}
@@ -587,108 +405,56 @@
                                             {{ item.ingresos | currency }}
                                         </td>
                                     </tr>
-                                    <!----><!---->
                                 </tbody>
-                                <!---->
                             </table>
                         </div>
                     </div>
                     <div v-if="arrayCoupons.length > 0" style="width: 100%">
                         <div class="mt-3 table-responsive">
                             <table role="table" aria-colcount="2" class="table b-table table-hover">
-                                <!----><!---->
                                 <thead role="rowgroup" class="table-header-nowrap">
-                                    <!---->
                                     <tr role="row">
-                                        <th
-                                            class="text-left"
-                                            role="columnheader"
-                                            scope="col"
-                                            aria-colindex="2"
-                                            colspan="2"
-                                        >
+                                        <th class="text-left" role="columnheader" scope="col" aria-colindex="2" colspan="2">
                                             Días Laborados
                                         </th>
                                     </tr>
                                 </thead>
                                 <tbody role="rowgroup">
-                                    <!---->
                                     <tr role="row">
                                         <td class="text-left" aria-colindex="1" role="cell" colspan="1">Total días</td>
                                         <td class="text-right" aria-colindex="2" role="cell" colspan="1">
-                                            <b
-                                                style="
-                                                    font-weight: normal;
-                                                    color: inherit;
-                                                    padding-left: 10px;
-                                                    text-align: right;
-                                                "
-                                                >{{
-                                                    arrayCoupons.length > 0 ? arrayCoupons[0].dias_laborados : '--'
-                                                }}</b
-                                            >
+                                            <b style="font-weight: normal; color: inherit; padding-left: 10px; text-align: right;">
+                                                {{ arrayCoupons.length > 0 ? arrayCoupons[0].dias_laborados : 'N/A' }}
+                                            </b>
                                         </td>
                                     </tr>
-
-                                    <!----><!---->
                                 </tbody>
-                                <!---->
                             </table>
                         </div>
                     </div>
                 </div>
-                <div
-                    class="col-6"
-                    v-if="
-                        user.role_id === 1 ||
-                        user.role_id === '1' ||
-                        user.role_id === 4 ||
-                        user.role_id === '4' ||
-                        user.role_id === 5 ||
-                        user.role_id === '5'
-                    "
-                >
+                <div class="col-6" v-if="user.role_id === 1 || user.role_id === '1' || user.role_id === 4 || user.role_id === '4' || user.role_id === 5 || user.role_id === '5'">
                     <b class="panel-label">FECHA CARGA DATA:</b>
                     <div>
-                        <p class="panel-value">{{ fechavinc.fecdata }}</p>
+                        <p class="panel-value">{{ fechavinc.fecdata || 'N/A' }}</p>
                     </div>
                 </div>
-                <div
-                    class="col-6"
-                    v-if="
-                        user.role_id === 1 ||
-                        user.role_id === '1' ||
-                        user.role_id === 4 ||
-                        user.role_id === '4' ||
-                        user.role_id === 5 ||
-                        user.role_id === '5'
-                    "
-                >
+                <div class="col-6" v-if="user.role_id === 1 || user.role_id === '1' || user.role_id === 4 || user.role_id === '4' || user.role_id === 5 || user.role_id === '5'">
                     <b class="panel-label">MES CARGA DATA:</b>
                     <div>
-                        <p class="panel-value">{{ fechavinc.mesdata }}</p>
+                        <p class="panel-value">{{ fechavinc.mesdata || 'N/A' }}</p>
                     </div>
                 </div>
-                <div
-                    class="col-6"
-                    v-if="
-                        user.role_id === 1 ||
-                        user.role_id === '1' ||
-                        user.role_id === 4 ||
-                        user.role_id === '4' ||
-                        user.role_id === 5 ||
-                        user.role_id === '5'
-                    "
-                >
+                <div class="col-6" v-if="user.role_id === 1 || user.role_id === '1' || user.role_id === 4 || user.role_id === '4' || user.role_id === 5 || user.role_id === '5'">
                     <b class="panel-label">AÑO CARGA DATA:</b>
                     <div>
-                        <p class="panel-value">{{ fechavinc.anodata }}</p>
+                        <p class="panel-value">{{ fechavinc.anodata || 'N/A' }}</p>
                     </div>
                 </div>
                 <div class="col-6" v-if="fechavinc.vinc">
                     <b class="panel-label">ANTIGUEDAD LABORAL:</b>
                     <div>
-                        <p class="panel-value">{{ fechavinc.vinc }}</p>
+                        <p class="panel-value">{{ fechavinc.vinc || 'N/A' }}</p>
                     </div>
                 </div>
             </b-collapse>
@@ -697,7 +463,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapState, mapGetters } from 'vuex'
 
 export default {
     name: 'EmploymentHistory',
@@ -722,16 +488,15 @@ export default {
                     label: 'Fecha ingreso',
                     sortable: false,
                     formatter: value => {
-                        return value || '--';
+                        return value || 'N/A'
                     }
                 },
-               
                 {
                     key: 'cargo',
                     label: 'Cargo',
                     sortable: false,
                     formatter: value => {
-                        return value || '--';
+                        return value || 'N/A'
                     }
                 },
                 {
@@ -739,7 +504,7 @@ export default {
                     label: 'Grado',
                     sortable: false,
                     formatter: value => {
-                        return value || '--';
+                        return value || 'N/A'
                     }
                 },
                 {
@@ -747,7 +512,7 @@ export default {
                     label: 'Principal',
                     sortable: false,
                     formatter: value => {
-                        return value || '--';
+                        return value || 'N/A'
                     }
                 },
                 {
@@ -755,79 +520,70 @@ export default {
                     label: 'Ciudad laboral',
                     sortable: false,
                     formatter: value => {
-                        return value || '--';
+                        return value || 'N/A'
                     }
                 }
             ],
             arrayCoupons: [],
             visible: true
-        };
+        }
     },
     computed: {
         ...mapState('datamesModule', ['datamesSed']),
         ...mapState('pagaduriasModule', ['pagaduriaType', 'setSelectedPeriod']),
-        ...mapGetters('pagaduriasModule', [
-            'ingresosExtras',
-            'salarioBasico',
-            'valorIngreso',
-            'couponsIngresos',
-            'pagaduriaPeriodos'
-        ]),
-
+        ...mapGetters('pagaduriasModule', ['ingresosExtras', 'salarioBasico', 'valorIngreso', 'couponsIngresos', 'pagaduriaPeriodos']),
         datamesSedArray() {
-            return [this.datamesSed];
+            return [this.datamesSed]
         },
         revisarAca() {
-            return this.couponsIngresos.items;
+            return this.couponsIngresos.items
         }
+    },
+    created() {
+    },
+    mounted() {
     },
     watch: {
         couponsIngresos() {
-            this.arrayCoupons = [];
-            this.arrayCoupons = [...this.couponsIngresos.items];
-            function extractNumber(str) {
-                const match = str.match(/\d+/);
-                return match ? match[0] : null;
+            this.arrayCoupons = []
+            this.arrayCoupons = [...this.couponsIngresos.items]
+            const extractNumber = str => {
+                const match = str.match(/\d+/)
+                return match ? match[0] : null
             }
             this.arrayCoupons.forEach(coupon => {
-                coupon.dias_laborados = extractNumber(coupon.dias_laborados);
-            });
+                coupon.dias_laborados = extractNumber(coupon.dias_laborados)
+            })
         }
     }
-};
+}
 </script>
 
 <style scoped>
 th {
     font-size: 14px;
 }
-
 ul {
     margin: 0;
     padding: 0;
 }
-
 li {
     list-style-type: none;
     margin-bottom: 10px;
     padding: 0;
     border-bottom: none;
 }
-
 p {
     margin: 0;
     font-size: 14px;
 }
-
 b {
     font-size: 14px;
 }
-
 .table thead th {
     font-weight: 600;
     vertical-align: middle;
 }
-
 @media (min-width: 770px) {
     .col-48 {
         max-width: 48%;

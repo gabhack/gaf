@@ -213,27 +213,26 @@ export default {
             this.$emit('downloadPdf');
         },
         selectedPagaduria() {
-            this.setPagaduriaType(this.dataclient.pagaduria);
+    this.setPagaduriaType(this.dataclient.pagaduria)
+    if (this.dataclient.pagaduria) {
+        const type = this.pagaduriasTypes.find(type => type.value === this.dataclient.pagaduria)
+        const pagaduria = this.dataclient.pagadurias[type.key]
+        console.log('pagaduria antes de setDatamesSed:', pagaduria)
 
-            if (this.dataclient.pagaduria) {
-                const type = this.pagaduriasTypes.find(type => type.value === this.dataclient.pagaduria);
+        this.dataclient.pagaduriaKey = type.key.slice(7).toLowerCase()
+        pagaduria.documentType = 'documentType'
+        this.dataclient.cargo = pagaduria.cargo
 
-                const pagaduria = this.dataclient.pagadurias[type.key];
-                this.dataclient.pagaduriaKey = type.key.slice(7).toLowerCase();
-                pagaduria.documentType = 'documentType';
-                this.dataclient.cargo = pagaduria.cargo;
+        const pagaduriaLabel = type.label
+        this.setPagaduriaLabel(pagaduriaLabel)
 
-                const pagaduriaLabel = type.label;
-                this.setPagaduriaLabel(pagaduriaLabel);
+        this.setCouponsType(type.key.includes('datames') ? `Coupons${type.key.slice(7)}` : type.key)
+        this.setEmbargosType(type.key.includes('datames') ? `Embargos${type.key.slice(7)}` : type.key)
+        this.setDescuentosType(type.key.includes('datames') ? `Descuentos${type.key.slice(7)}` : type.key)
 
-                this.setCouponsType(type.key.includes('datames') ? `Coupons${type.key.slice(7)}` : type.key);
-                this.setEmbargosType(type.key.includes('datames') ? `Embargos${type.key.slice(7)}` : type.key);
-                // prettier-ignore
-                this.setDescuentosType(type.key.includes('datames') ? `Descuentos${type.key.slice(7)}` : type.key);
-
-                this.setDatamesSed(pagaduria);
-            }
-        },
+        this.setDatamesSed(pagaduria)
+    }
+},
         emitInfo() {
             this.getAllPagadurias();
         },

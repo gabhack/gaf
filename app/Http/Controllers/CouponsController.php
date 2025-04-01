@@ -147,109 +147,126 @@ class CouponsController extends Controller
     }
 
     public function index(Request $request)
-    {
-        $doc = $request->doc;
-        $couponType = $request->pagaduria;
-        $pagaduriaLabel = $request->pagaduriaLabel;
+{
+    $doc = $request->doc;
+    $couponType = $request->pagaduria;       // p.ej. "casur" o "fuerzas casur"
+    $pagaduriaLabel = $request->pagaduriaLabel; // p.ej. "casur", "otra casur", etc.
 
-        Log::info('Inicio de la consulta para fast_couponsgen.', [
-            'doc' => $doc,
-            'couponType' => $couponType,
-            'pagaduriaLabel' => $pagaduriaLabel,
-            'time' => now()
+    Log::info('Inicio de la consulta para fast_couponsgen.', [
+        'doc' => $doc,
+        'couponTypeRaw' => $couponType,
+        'pagaduriaLabelRaw' => $pagaduriaLabel,
+        'time' => now()
+    ]);
+
+    $results = [];
+
+    try {
+        // 1. Normalizar (quitar espacios sobrantes y convertir a minúsculas)
+        $couponTypeNorm = trim(strtolower($couponType));
+        $pagaduriaLabelNorm = trim(strtolower($pagaduriaLabel));
+
+        Log::debug('Parámetros normalizados.', [
+            'couponTypeNorm' => $couponTypeNorm,
+            'pagaduriaLabelNorm' => $pagaduriaLabelNorm
         ]);
 
-        $results = [];
+        // 2. Intentamos generar una clave a partir de $couponType
+        $idPagaduria = $this->getPagaduriaIdFromString($couponTypeNorm);
 
-        try {
-            // Normalización
-            $couponTypeNorm = trim(strtolower($couponType));
-            $pagaduriaLabelNorm = trim(strtolower($pagaduriaLabel));
-            $parts = explode(' ', $couponTypeNorm, 2);
-
-            if (count($parts) < 2) {
-                $parts = explode(' ', $pagaduriaLabelNorm, 2);
-            }
-
-            Log::debug('Después de normalizar pagaduría', [
-                'couponTypeNorm' => $couponTypeNorm,
-                'pagaduriaLabelNorm' => $pagaduriaLabelNorm,
-                'parts' => $parts
-            ]);
-
-            if (count($parts) < 2) {
-                Log::warning('Formato de pagaduría no válido.', [
-                    'couponType' => $couponType,
-                    'pagaduriaLabel' => $pagaduriaLabel
-                ]);
-                return response()->json(['error' => 'Formato de pagaduría no válido.'], 400);
-            }
-
-            [$tipo, $nombrePagaduria] = $parts;
-
-            $key = $tipo . ' ' . $nombrePagaduria;
-
-            Log::debug('Clave generada para buscar en el mapa', [
-                'key' => $key
-            ]);
-
-            $idPagaduria = self::$pagaduriasMap[$key] ?? null;
-
-            Log::debug('ID Pagaduría encontrado', [
-                'idPagaduria' => $idPagaduria
-            ]);
-
-            if (!$idPagaduria) {
-                Log::warning('Pagaduría no encontrada en el mapa estático.', [
-                    'couponType' => $couponType,
-                    'pagaduriaLabel' => $pagaduriaLabel,
-                    'tipo' => $tipo,
-                    'nombre' => $nombrePagaduria,
-                    'key' => $key
-                ]);
-                return response()->json(['error' => 'Pagaduría no encontrada.'], 404);
-            }
-
-            // Construimos la query antes de ejecutarla para loggear
-            $query = \DB::connection('pgsql')
-                ->table('fast_couponsgen_visado')
-                ->where('doc', $doc)
-                ->where('idpagaduria', $idPagaduria);
-
-            $sql = $query->toSql();
-            $bindings = $query->getBindings();
-
-            Log::info('Ejecutando consulta SQL en fast_couponsgen_visado', [
-                'sql' => $sql,
-                'bindings' => $bindings,
-                'doc' => $doc,
-                'idpagaduria' => $idPagaduria
-            ]);
-
-            $dataGen = $query->get()->toArray();
-
-            Log::info('Consulta fast_couponsgen finalizada.', [
-                'time' => now(),
-                'total_records' => count($dataGen)
-            ]);
-
-            $results = array_merge($results, $dataGen);
-        } catch (\Exception $e) {
-            Log::error('Error en la consulta para fast_couponsgen.', [
-                'message' => $e->getMessage(),
-                'time' => now(),
-                'trace' => $e->getTraceAsString()
-            ]);
-            return response()->json(['error' => 'Error al ejecutar la consulta.'], 500);
+        // 3. Si no se logró encontrar en el mapa, probamos con $pagaduriaLabel
+        if (!$idPagaduria && !empty($pagaduriaLabelNorm)) {
+            $idPagaduria = $this->getPagaduriaIdFromString($pagaduriaLabelNorm);
         }
 
-        Log::info('Consulta completada y datos devueltos.', [
-            'total_records' => count($results),
-            'time' => now()
+        // 4. Si sigue sin encontrarse la pagaduría, es un error (formato o no existe en el mapa)
+        if (!$idPagaduria) {
+            Log::warning('No se encontró pagaduría en el mapa. Puede ser formato inválido o falta en la configuración.', [
+                'couponTypeNorm' => $couponTypeNorm,
+                'pagaduriaLabelNorm' => $pagaduriaLabelNorm
+            ]);
+            return response()->json(['error' => 'Pagaduría no encontrada o formato inválido.'], 400);
+        }
+
+        Log::debug('ID de la pagaduría resuelto', [
+            'idPagaduria' => $idPagaduria
         ]);
 
-        return response()->json($results, 200);
+        // 5. Construimos la query antes de ejecutarla (para loguear)
+        $query = \DB::connection('pgsql')
+            ->table('fast_couponsgen_visado')
+            ->where('doc', $doc)
+            ->where('idpagaduria', $idPagaduria);
+
+        $sql = $query->toSql();
+        $bindings = $query->getBindings();
+
+        Log::info('Ejecutando consulta SQL en fast_couponsgen_visado', [
+            'sql' => $sql,
+            'bindings' => $bindings,
+            'doc' => $doc,
+            'idpagaduria' => $idPagaduria
+        ]);
+
+        $dataGen = $query->get()->toArray();
+
+        Log::info('Consulta fast_couponsgen finalizada.', [
+            'time' => now(),
+            'total_records' => count($dataGen)
+        ]);
+
+        $results = array_merge($results, $dataGen);
+    } catch (\Exception $e) {
+        Log::error('Error en la consulta para fast_couponsgen.', [
+            'message' => $e->getMessage(),
+            'time' => now(),
+            'trace' => $e->getTraceAsString()
+        ]);
+        return response()->json(['error' => 'Error al ejecutar la consulta.'], 500);
     }
+
+    Log::info('Consulta completada y datos devueltos.', [
+        'total_records' => count($results),
+        'time' => now()
+    ]);
+
+    return response()->json($results, 200);
+}
+
+/**
+ * Dado un string normalizado, intenta derivar una clave y encontrarla en el mapa.
+ *
+ *  - Si el string tiene múltiples palabras, arma "primera palabra + resto".
+ *  - Si solo tiene una palabra, usa esa palabra directamente como clave.
+ *  - Retorna el id de la pagaduría si existe en self::$pagaduriasMap, o null.
+ */
+private function getPagaduriaIdFromString(string $normalized): ?int
+{
+    if (empty($normalized)) {
+        return null;
+    }
+
+    // Separamos en espacios (todas las palabras)
+    $parts = explode(' ', $normalized);
+
+    if (count($parts) > 1) {
+        // Ejemplo: "fuerzas casur" => $tipo = "fuerzas", $resto = "casur"
+        $tipo = array_shift($parts); 
+        $resto = implode(' ', $parts); 
+        $key = $tipo . ' ' . $resto;
+    } else {
+        // Solo 1 palabra, ej: "casur"
+        $key = $normalized;
+    }
+
+    Log::debug('Generando clave para el mapa de pagadurías', [
+        'original' => $normalized,
+        'key' => $key
+    ]);
+
+    return self::$pagaduriasMap[$key] ?? null;
+}
+
 
     public function getCouponsByPagaduria(Request $request)
     {

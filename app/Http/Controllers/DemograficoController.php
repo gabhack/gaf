@@ -1093,7 +1093,6 @@ private function parseConcatenatedString($concatenatedString)
             $mes = (int)$mes;
             $año = (int)$año;
     
-            // Obtener datos relevantes para la cédula
             Log::info("Consultando fast_aggregate_data...");
             $resultData = DB::connection('pgsql')
                 ->table('fast_aggregate_data')
@@ -1109,7 +1108,6 @@ private function parseConcatenatedString($concatenatedString)
     
             Log::info("Datos obtenidos de fast_aggregate_data", ['resultData' => $resultData]);
     
-            // Verificar presencia en Colpensiones, Fiducidiaria y Fopep
             Log::info("Verificando existencia en Colpensiones, Fiducidiaria y Fopep...");
             $existsInColpensiones = Colpensiones::on('pgsql')->where('documento', $cedula)->exists();
             $existsInFiducidiaria = Fiducidiaria::on('pgsql')->where('documento', $cedula)->exists();
@@ -1121,7 +1119,6 @@ private function parseConcatenatedString($concatenatedString)
                 'Fopep' => $existsInFopep
             ]);
     
-            // Formatear fecha de nacimiento
             $fechaNacimiento = $resultData->fecha_nacimiento ?? null;
             if ($fechaNacimiento) {
                 try {
@@ -1139,7 +1136,6 @@ private function parseConcatenatedString($concatenatedString)
                 }
             }
     
-            // Procesar embargos
             $embargos = collect();
             if ($resultData->embargos_concatenados) {
                 preg_match_all('/(\d+): ([^,]+), ([\d\/-]+), ([\d,]+)/', $resultData->embargos_concatenados, $matches, PREG_SET_ORDER);
@@ -1154,7 +1150,6 @@ private function parseConcatenatedString($concatenatedString)
             }
             Log::info("Embargos procesados", ['embargos' => $embargos]);
     
-            // Procesar cupones
             $cupones = collect(explode(', ', $resultData->cupones_concatenados))
                 ->map(function ($cupon) {
                     $parts = explode(': ', $cupon);
@@ -1171,7 +1166,6 @@ private function parseConcatenatedString($concatenatedString)
                 ->toArray();
             Log::info("Cupones procesados", ['cupones' => $cupones]);
     
-            // Procesar descuentos
             $descuentos = collect(explode(', ', $resultData->descuentos_concatenados))
                 ->filter(function ($descuento) {
                     return !str_contains($descuento, 'ALERTA');
@@ -1190,7 +1184,6 @@ private function parseConcatenatedString($concatenatedString)
     
             Log::info("Descuentos procesados", ['descuentos' => $descuentos]);
     
-            // Cálculos financieros
             $salarioMinimo = 1423500;
             $valorIngreso = $resultData->ingresos_ajustados;
             $totalEgresos = $resultData->total_egresos;
@@ -1200,7 +1193,6 @@ private function parseConcatenatedString($concatenatedString)
                 'totalEgresos' => $totalEgresos
             ]);
     
-            // Aplicación de descuentos
             $descuento = 0.08;
             if (in_array($resultData->pagaduria, ['FOPEP', 'FIDUPREVISORA'])) {
                 if ($valorIngreso == $salarioMinimo) {
@@ -1218,9 +1210,15 @@ private function parseConcatenatedString($concatenatedString)
             Log::info("Descuento aplicado", ['descuento' => $descuento]);
     
             $valorIngresoConDescuento = $valorIngreso - ($valorIngreso * $descuento);
+    
+            $rtsfaValue = collect($cupones)->filter(function($c) {
+                return strtoupper($c['concept']) === 'RTFSA';
+            })->sum('egresos');
+    
+            $valorIngresoConDescuento = $valorIngresoConDescuento - $rtsfaValue;
+    
             Log::info("Valor ingreso después de descuento", ['valorIngresoConDescuento' => $valorIngresoConDescuento]);
     
-            // Cálculo de compra de cartera
             if ($valorIngresoConDescuento < $salarioMinimo * 2) {
                 $compraCartera = $valorIngresoConDescuento - $salarioMinimo;
             } else {
@@ -1228,11 +1226,9 @@ private function parseConcatenatedString($concatenatedString)
             }
             Log::info("Compra de cartera calculada", ['compraCartera' => $compraCartera]);
     
-            // Cálculo de libre inversión
             $libreInversion = $compraCartera - $totalEgresos;
             Log::info("Cupo de libre inversión calculado", ['cupoLibre' => $libreInversion]);
     
-            // Resultado final
             $resultado = [
                 'doc' => $cedula,
                 'nombre_usuario' => $resultData->nombre_usuario,
