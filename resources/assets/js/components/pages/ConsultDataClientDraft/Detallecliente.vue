@@ -27,8 +27,8 @@
                     <defs></defs>
                     <path
                         fill="#3a5659"
-                        d="M6.4,8.6C7,9.1,8,9.1,8.6,8.6l6-6c0.4-0.4,0.6-1.1,0.3-1.6C14.6,0.4,14.1,0,13.5,0l-12,0C0.9,0,0.3,0.4,0.1,0.9
-	S0,2.1,0.4,2.6L6.4,8.6L6.4,8.6z"
+                        d="M6.4,8.6C7,9.1,8,9.1,8.6,8.6l6-6c0.4-0.4,0.6-1.1,0.3-1.6C14.6,0.4,14.1,0,13.5,0l-12,0
+                        C0.9,0,0.3,0.4,0.1,0.9S0,2.1,0.4,2.6L6.4,8.6L6.4,8.6z"
                     />
                 </svg>
 
@@ -151,9 +151,15 @@ export default {
                 cuotaMaxima += this.totales.libreInversionSuma;
             }
 
+            // Log distintivo para depurar
+            console.log('[DETALLE CLIENTE] >> Libre Inversión:', libreInversion);
+            console.log('[DETALLE CLIENTE] >> Compra Cartera:', compraCartera);
+            console.log('[DETALLE CLIENTE] >> Cuota Máxima:', cuotaMaxima);
+
+            // Asignar los valores formateados en la tabla
             this.items[0].Valor = this.formatCurrency(libreInversion); // Libre Inversión
             this.items[1].Valor = this.formatCurrency(compraCartera); // Compra Cartera
-            this.items[2].Valor = this.formatCurrency(cuotaMaxima); // Cuota Máxima
+            this.items[2].Valor = this.formatCurrency(cuotaMaxima);   // Cuota Máxima
         },
         formatCurrency(value) {
             return `$${new Intl.NumberFormat('es-ES', {

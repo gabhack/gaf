@@ -171,8 +171,6 @@
                             pagaduriaType == 'SEDVICHADA' ||
                             pagaduriaType == 'SEDGUAJIRA' ||
                             pagaduriaType == 'SEDGUAVIARE' ||
-                            pagaduriaType == 'SEDGUAVfiduprevisoraIARE' ||
-                            pagaduriaType == 'casur' ||
                             pagaduriaType == 'SEDNARINO'
                         "
                     />
@@ -205,6 +203,38 @@
                     </div>
                     <Detallecliente class="detallecliente-top-margin" :totales="totalesData" />
                 </template>
+
+<!-- Tabla de Carteras de la Solicitud (sin botón, ni modal) -->
+<div class="info-container col-12 mb-3" v-if="carterasCargadas && carteras.length > 0">
+  <h5 style="margin-bottom: 15px">Carteras de la Solicitud</h5>
+
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Tipo de Cartera</th>
+          <th>Entidad</th>
+          <th>Valor Cuota</th>
+          <th>Saldo</th>
+          <th>Opera en desprendible</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(cart, idx) in carteras" :key="idx">
+          <td>{{ cart.tipo_cartera }}</td>
+          <td>{{ cart.nombre_entidad }}</td>
+          <td>{{ cart.valor_cuota }}</td>
+          <td>{{ cart.saldo }}</td>
+          <td>{{ cart.opera_x_desprendible ? 'Sí' : 'No' }}</td>
+
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
 
                 <template v-if="showOthers">
                     <DescapliEmpty
@@ -306,8 +336,8 @@
                             pagaduriaType == 'SEDVICHADA' ||
                             pagaduriaType == 'SEDGUAJIRA' ||
                             pagaduriaType == 'SEDGUAVIARE' ||
-                            pagaduriaType == 'casur' ||
                             pagaduriaType == 'fiduprevisora' ||
+                            pagaduriaType == 'huila' ||
                             pagaduriaType == 'SEDNARINO'
                         "
                         :disabledProspect="disabledProspect"
@@ -320,7 +350,7 @@
                     <Descnoap v-if="pagaduriaType == 'FOPEP'" :descnoap="descnoap" />
 
                     <EmbargosEmpty v-if="pagaduriaType == 'SED'" :embargosempty="embargosempty" />
-                    <Embargos v-else />
+                    <Embargos v-else :selectedPeriod="selectedPeriod" />
                     <hr class="divider" />
                     <!--===================================
                             LIQUIDACIONES
@@ -330,7 +360,7 @@
                         :descuentossemsahagun="descuentossemsahagun"
                     /> -->
                     <DescuentosEmpty v-if="pagaduriaType == 'SED'" :descuentosempty="descuentosempty" />
-                    <Descuentos v-else />
+                    <Descuentos :selectedPeriod="selectedPeriod" v-else />
                     <hr class="divider" />
                     <div class="col-12 text-right">
                         <CustomButton text="Visar" style="width: 164px" @click="visadoFunction" />
@@ -350,7 +380,12 @@
                 /> -->
             </div>
         </div>
+
+       
+
     </div>
+
+    
 </template>
 
 <script src="print.js"></script>
@@ -445,7 +480,7 @@ export default {
             descuentossemquibdo: [],
             descuentossemsahagun: [],
             descuentossempopayan: [],
-
+            selectedPeriod:'',
             monto: 0,
 
             pagaduriaKey: '',
@@ -455,7 +490,17 @@ export default {
             isLoading: false,
             disabledProspect: false,
             visado: null,
-            visadoValido: 'NO FACTIBLE'
+            visadoValido: 'NO FACTIBLE',
+            totalesData: {
+            libreInversion: 0,
+            libreInversionSuma: 0,
+            compraCartera: 0,
+            cuotaMaxima: 0,
+
+            showCarterasModal: false,
+    carteras: [],
+    carterasCargadas: false,
+        },
         };
     },
     watch: {
@@ -466,6 +511,7 @@ export default {
             deep: true,
             immediate: true
         },
+
         ingresosExtras(val) {
             let totalIncapacidad = 0;
 
@@ -501,6 +547,7 @@ export default {
             this.calcularTotales();
         }
     },
+
     computed: {
         ...mapState('pagaduriasModule', ['coupons', 'couponsType', 'pagaduriaType', 'pagaduriaLabel']),
         ...mapGetters('pagaduriasModule', [
@@ -642,10 +689,15 @@ export default {
 
             this.monto = payload.monto;
 
-            this.getCoupons({
+            if (payload.carteras) {
+                this.carteras = payload.carteras;
+                this.carterasCargadas = true;
+            }
+
+  this.getCoupons({
                 doc: payload.doc,
                 pagaduria: this.couponsType,
-                pagaduriaLabel: this.pagaduriaLabel
+                pagaduriaLabel: payload.pagaduria
             });
 
             this.getDescapli(payload);
@@ -654,12 +706,12 @@ export default {
             this.getEmbargos({
                 doc: payload.doc,
                 pagaduria: this.embargosType,
-                pagaduriaLabel: this.pagaduriaLabel
+                pagaduriaLabel: payload.pagaduria
             });
             this.getDescuentos({
                 doc: payload.doc,
                 pagaduria: this.descuentosType,
-                pagaduriaLabel: this.pagaduriaLabel
+                pagaduriaLabel: payload.pagaduria
             });
 
             if (payload.pagaduria == 'FOPEP') {
@@ -673,6 +725,10 @@ export default {
             }
 
             this.getFechaVinc(payload).then(response => {
+                console.log('----- DEPURANDO -----');
+  console.log('Valor actual de pagaduriaType:', this.pagaduriaType);
+  console.log('Valor actual de showOthers (antes de asignar):', this.showOthers);
+
                 this.showOthers = true;
                 this.isLoading = false;
             });
@@ -712,16 +768,14 @@ export default {
         async getCoupons(payload) {
             const data = {
                 doc: payload.doc,
-                pagaduria: payload.pagaduria,
-                pagaduriaLabel: payload.pagaduriaLabel
+                pagaduria: this.couponsType,
+                pagaduriaLabel: this.pagaduriaLabel
             };
-            console.log('Datos enviados a get-coupons (antes d efetch):', payload);
 
+            console.log('Datos enviados a get-coupons (antes d efetch):', payload);
             const response = await axios.post('/get-coupons', payload);
             const couponData = response.data.items || response.data; // Ajusta según el formato del backend
-
             console.log('Datos enviados a fetchCoupons:', couponData);
-
             this.fetchCoupons(couponData);
 
             setTimeout(() => {
@@ -774,123 +828,102 @@ export default {
 
         //Visando consulta
         visadoFunction() {
-            let causal = '';
-            let obligacionMarcadas = false;
-            let embargosSinMora = false;
+    let causal = '';
+    let obligacionMarcadas = false;
+    let embargosSinMora = false;
 
-            const cuotaMaximaDef = this.conteoEgresosPlus + this.totales.libreInversionSuma;
+    const cuotaMaximaDef = Number(this.conteoEgresosPlus) + Number(this.totalesData.libreInversion);
 
-            console.log('Inicio de visadoFunction:', {
-                cuotaDeseada: this.cuotadeseada,
-                cuotaMaximaDef: this.totalesData.compraCartera,
-                conteoEgresosPlus: this.conteoEgresosPlus,
-                libreInversionSuma: this.totalesData.libreInversion,
-                descuentosPerPeriod: this.descuentosPerPeriod,
-                ingresosExtras: this.ingresosExtras
+    console.log('Inicio de visadoFunction:', {
+        cuotaDeseada: this.cuotadeseada,
+        conteoEgresosPlus: this.conteoEgresosPlus,
+        libreInversion: this.totalesData.libreInversion,
+        cuotaMaximaDef,
+        descuentosPerPeriod: this.descuentosPerPeriod,
+        ingresosExtras: this.ingresosExtras
+    });
+
+    const definitivaAlerta = this.ingresosExtras.some(item => {
+        const isDefinitiva = item.concept.includes('Definitiva') || item.concept.includes('definitiva');
+        if (isDefinitiva) {
+            console.log('Definitiva encontrada:', item);
+        }
+        return isDefinitiva;
+    });
+
+    const cuotaMenor = Number(this.cuotadeseada) < cuotaMaximaDef;
+    const cuotaMayor = Number(this.cuotadeseada) > cuotaMaximaDef;
+
+    if (this.descuentosPerPeriod.total > 0) {
+        obligacionMarcadas = this.descuentosPerPeriod.items.some(item => item.check === true);
+        console.log('Obligaciones marcadas:', obligacionMarcadas);
+    } else {
+        embargosSinMora = true;
+        console.log('No hay descuentos, embargos sin mora:', embargosSinMora);
+    }
+
+    if (cuotaMenor && !obligacionMarcadas) {
+        console.log('Condición cuota menor sin obligaciones marcadas:', { cuotaMenor, obligacionMarcadas });
+        this.visadoValido = 'NO FACTIBLE';
+        causal = 'Presenta obligaciones en mora';
+    } else if (cuotaMenor && obligacionMarcadas) {
+        console.log('Condición cuota menor con obligaciones marcadas:', { cuotaMenor, obligacionMarcadas });
+        this.visadoValido = 'FACTIBLE';
+        causal = 'Sin causal';
+    }
+
+    if (cuotaMayor && embargosSinMora) {
+        console.log('Condición cuota mayor con embargos sin mora:', { cuotaMayor, embargosSinMora });
+        this.visadoValido = 'NO FACTIBLE';
+        causal += 'Negado por cupo';
+    } else if (cuotaMenor && embargosSinMora) {
+        console.log('Condición cuota menor con embargos sin mora:', { cuotaMenor, embargosSinMora });
+        this.visadoValido = 'FACTIBLE';
+        causal = 'Sin causal';
+    } else {
+        if (cuotaMayor && !obligacionMarcadas && !embargosSinMora) {
+            console.log('Condición cuota mayor sin obligaciones ni embargos en mora:', {
+                cuotaMayor,
+                obligacionMarcadas,
+                embargosSinMora
             });
-
-            const definitivaAlerta = this.ingresosExtras.some(item => {
-                const isDefinitiva = item.concept.includes('Definitiva') || item.concept.includes('definitiva');
-
-                if (isDefinitiva) {
-                    console.log('Definitiva encontrada:', item);
-                }
-
-                return isDefinitiva;
+            this.visadoValido = 'NO FACTIBLE';
+            causal = '1. Presenta obligaciones en mora, 2. Negado por cupo';
+        } else if (cuotaMayor && obligacionMarcadas) {
+            console.log('Condición cuota mayor con obligaciones marcadas:', {
+                cuotaMayor,
+                obligacionMarcadas
             });
+            this.visadoValido = 'NO FACTIBLE';
+            causal = 'Negado por cupo';
+        }
+    }
 
-            const cuotaMenor = Number(this.cuotadeseada) < cuotaMaximaDef;
-            const cuotaMayor = Number(this.cuotadeseada) > cuotaMaximaDef;
+    if (definitivaAlerta) {
+        console.log('Cliente en proceso de retiro:', definitivaAlerta);
+        this.visadoValido = 'NO FACTIBLE';
+        causal = 'Cliente en proceso de retiro';
+    }
 
-            if (this.descuentosPerPeriod.total > 0) {
-                obligacionMarcadas = this.descuentosPerPeriod.items.some(item => item.check === true);
-                console.log('Obligaciones marcadas:', obligacionMarcadas);
-            } else {
-                embargosSinMora = true;
-                console.log('No hay descuentos, embargos sin mora:', embargosSinMora);
-            }
+    const data = {
+        estado: this.visadoValido,
+        cuotacredito: this.cuotadeseada,
+        monto: this.monto,
+        causal
+    };
 
-            if (cuotaMenor && !obligacionMarcadas) {
-                console.log('Condición cuota menor sin obligaciones marcadas:', {
-                    cuotaMenor,
-                    obligacionMarcadas
-                });
+    console.log('Datos a enviar en visado:', data);
 
-                this.visadoValido = 'NO FACTIBLE';
-                causal = 'Presenta obligaciones en mora';
-            } else if (cuotaMenor && obligacionMarcadas) {
-                console.log('Condición cuota menor con obligaciones marcadas:', {
-                    cuotaMenor,
-                    obligacionMarcadas
-                });
-
-                this.visadoValido = 'FACTIBLE';
-                causal = 'Sin causal';
-            }
-
-            if (cuotaMayor && embargosSinMora) {
-                console.log('Condición cuota mayor con embargos sin mora:', {
-                    cuotaMayor,
-                    embargosSinMora
-                });
-
-                this.visadoValido = 'NO FACTIBLE';
-                causal += 'Negado por cupo';
-            } else if (cuotaMenor && embargosSinMora) {
-                console.log('Condición cuota menor con embargos sin mora:', {
-                    cuotaMenor,
-                    embargosSinMora
-                });
-
-                this.visadoValido = 'FACTIBLE';
-                causal = 'Sin causal';
-            } else {
-                if (cuotaMayor && !obligacionMarcadas && !embargosSinMora) {
-                    console.log('Condición cuota mayor sin obligaciones ni embargos en mora:', {
-                        cuotaMayor,
-                        obligacionMarcadas,
-                        embargosSinMora
-                    });
-
-                    this.visadoValido = 'NO FACTIBLE';
-                    causal = '1. Presenta obligaciones en mora, 2. Negado por cupo';
-                } else if (cuotaMayor && obligacionMarcadas) {
-                    console.log('Condición cuota mayor con obligaciones marcadas:', {
-                        cuotaMayor,
-                        obligacionMarcadas
-                    });
-
-                    this.visadoValido = 'NO FACTIBLE';
-                    causal = 'Negado por cupo';
-                }
-            }
-
-            if (definitivaAlerta) {
-                console.log('Cliente en proceso de retiro:', definitivaAlerta);
-                this.visadoValido = 'NO FACTIBLE';
-                causal = 'Cliente en proceso de retiro';
-            }
-
-            const data = {
-                estado: this.visadoValido,
-                cuotacredito: this.cuotadeseada,
-                monto: this.monto,
-                causal
-            };
-
-            console.log('Datos a enviar en visado:', data);
-
-            axios
-                .post(`/visados/${this.visado.id}`, data)
-                .then(response => {
-                    console.log('Respuesta del servidor:', response);
-                    window.location.href = '/historyClient';
-                })
-                .catch(error => {
-                    console.error('Error en visadoFunction:', error);
-                });
-        },
-
+    axios
+        .post(`/visados/${this.visado.id}`, data)
+        .then(response => {
+            console.log('Respuesta del servidor:', response);
+            window.location.href = '/historyClient';
+        })
+        .catch(error => {
+            console.error('Error en visadoFunction:', error);
+        });
+},
         async calcularTotales() {
             console.log('Entrando a calcularTotales');
             const firstItem = this.couponsIngresos?.items?.[0];
@@ -945,7 +978,6 @@ export default {
     }
 };
 </script>
-
 <style>
 .info-container {
     display: flex;
@@ -965,7 +997,6 @@ export default {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     width: 30%; /* Ajustar el ancho para un diseño responsivo */
 }
-
 .table-text {
     font-size: 12px;
 }

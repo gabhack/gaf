@@ -336,6 +336,8 @@
                             pagaduriaType == 'SEDVICHADA' ||
                             pagaduriaType == 'SEDGUAJIRA' ||
                             pagaduriaType == 'SEDGUAVIARE' ||
+                            pagaduriaType == 'fiduprevisora' ||
+                            pagaduriaType == 'huila' ||
                             pagaduriaType == 'SEDNARINO'
                         "
                         :disabledProspect="disabledProspect"
@@ -830,12 +832,13 @@ export default {
     let obligacionMarcadas = false;
     let embargosSinMora = false;
 
-    const cuotaMaximaDef = this.conteoEgresosPlus + this.totales.libreInversionSuma;
+    const cuotaMaximaDef = Number(this.conteoEgresosPlus) + Number(this.totalesData.libreInversion);
+
     console.log('Inicio de visadoFunction:', {
         cuotaDeseada: this.cuotadeseada,
-        cuotaMaximaDef: this.totalesData.compraCartera,
         conteoEgresosPlus: this.conteoEgresosPlus,
-        libreInversionSuma: this.totalesData.libreInversion,
+        libreInversion: this.totalesData.libreInversion,
+        cuotaMaximaDef,
         descuentosPerPeriod: this.descuentosPerPeriod,
         ingresosExtras: this.ingresosExtras
     });
@@ -860,33 +863,21 @@ export default {
     }
 
     if (cuotaMenor && !obligacionMarcadas) {
-        console.log('Condición cuota menor sin obligaciones marcadas:', {
-            cuotaMenor,
-            obligacionMarcadas
-        });
+        console.log('Condición cuota menor sin obligaciones marcadas:', { cuotaMenor, obligacionMarcadas });
         this.visadoValido = 'NO FACTIBLE';
         causal = 'Presenta obligaciones en mora';
     } else if (cuotaMenor && obligacionMarcadas) {
-        console.log('Condición cuota menor con obligaciones marcadas:', {
-            cuotaMenor,
-            obligacionMarcadas
-        });
+        console.log('Condición cuota menor con obligaciones marcadas:', { cuotaMenor, obligacionMarcadas });
         this.visadoValido = 'FACTIBLE';
         causal = 'Sin causal';
     }
 
     if (cuotaMayor && embargosSinMora) {
-        console.log('Condición cuota mayor con embargos sin mora:', {
-            cuotaMayor,
-            embargosSinMora
-        });
+        console.log('Condición cuota mayor con embargos sin mora:', { cuotaMayor, embargosSinMora });
         this.visadoValido = 'NO FACTIBLE';
         causal += 'Negado por cupo';
     } else if (cuotaMenor && embargosSinMora) {
-        console.log('Condición cuota menor con embargos sin mora:', {
-            cuotaMenor,
-            embargosSinMora
-        });
+        console.log('Condición cuota menor con embargos sin mora:', { cuotaMenor, embargosSinMora });
         this.visadoValido = 'FACTIBLE';
         causal = 'Sin causal';
     } else {
@@ -933,7 +924,6 @@ export default {
             console.error('Error en visadoFunction:', error);
         });
 },
-
         async calcularTotales() {
             console.log('Entrando a calcularTotales');
             const firstItem = this.couponsIngresos?.items?.[0];
