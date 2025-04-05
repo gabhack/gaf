@@ -134,7 +134,7 @@ class CouponsController extends Controller
         'sem uribia' => 144,
         'sem valledupar' => 171,
         'sem villavicencio' => 124,
-        'sem yopal' => 100,
+        'sem yopal' => 289,
         'sem yumbo' => 169,
         'sem zipaquira' => 156,
         'casur' => 296,

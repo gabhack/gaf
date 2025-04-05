@@ -351,7 +351,7 @@
     "sem barrancabermeja": 160,
     "sem barranquilla": 106,
     "sem bello": 111,
-    "sed bolivar": 5,
+    "sed bolivar": 293,
     "sed boyaca": 110,
     "sem bucaramanga": 39,
     "sem buenaventura": 40,
@@ -434,7 +434,7 @@
     "sed vichada": 32,
     "sem villavicencio": 124,
     "sem sincelejo": 27,
-    "sem yopal": 100,
+    "sem yopal": 289,
     "sem yumbo": 169,
     "sem zipaquira": 156
   },  
