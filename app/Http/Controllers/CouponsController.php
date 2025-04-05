@@ -45,7 +45,7 @@ class CouponsController extends Controller
         'sed antioquia' => 130,
         'sed arauca' => 109,
         'sed atlantico' => 121,
-        'sed bolivar' => 5,
+        'sed bolivar' => 293,
         'sed boyaca' => 110,
         'sed caldas' => 139,
         'sed caqueta' => 140,
@@ -240,32 +240,53 @@ class CouponsController extends Controller
  *  - Si solo tiene una palabra, usa esa palabra directamente como clave.
  *  - Retorna el id de la pagaduría si existe en self::$pagaduriasMap, o null.
  */
+/**
+ * Dado un string normalizado, intenta derivar una clave y encontrarla en el mapa.
+ *
+ * - Si el string tiene múltiples palabras, arma "primera palabra + resto".
+ * - Si solo tiene una palabra, usa esa palabra directamente como clave.
+ * - Retorna el id de la pagaduría si existe en self::$pagaduriasMap, o null.
+ *
+ * @param string $normalized
+ * @return int|null
+ */
 private function getPagaduriaIdFromString(string $normalized): ?int
 {
+    Log::debug('Inicio de getPagaduriaIdFromString', ['input' => $normalized]);
+
     if (empty($normalized)) {
+        Log::warning('Input vacío en getPagaduriaIdFromString');
         return null;
     }
 
     // Separamos en espacios (todas las palabras)
     $parts = explode(' ', $normalized);
+    Log::debug('Partes extraídas del string normalizado', ['parts' => $parts]);
 
     if (count($parts) > 1) {
         // Ejemplo: "fuerzas casur" => $tipo = "fuerzas", $resto = "casur"
-        $tipo = array_shift($parts); 
-        $resto = implode(' ', $parts); 
+        $tipo = array_shift($parts);
+        $resto = implode(' ', $parts);
         $key = $tipo . ' ' . $resto;
     } else {
         // Solo 1 palabra, ej: "casur"
         $key = $normalized;
     }
 
-    Log::debug('Generando clave para el mapa de pagadurías', [
-        'original' => $normalized,
-        'key' => $key
-    ]);
+    Log::debug('Clave generada para buscar en el mapa', ['key' => $key]);
 
-    return self::$pagaduriasMap[$key] ?? null;
+    // Intentamos obtener el ID desde el mapa estático
+    $id = self::$pagaduriasMap[$key] ?? null;
+
+    if ($id) {
+        Log::info('ID de pagaduría encontrado en el mapa', ['id' => $id]);
+    } else {
+        Log::warning('ID de pagaduría no encontrado en el mapa', ['key' => $key]);
+    }
+
+    return $id;
 }
+
 
 
     public function getCouponsByPagaduria(Request $request)
