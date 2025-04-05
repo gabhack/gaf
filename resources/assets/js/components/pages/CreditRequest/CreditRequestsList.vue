@@ -391,7 +391,7 @@ const allPagaduriasMap = {
   144: "sem uribia",
   171: "sem valledupar",
   124: "sem villavicencio",
-  100: "sem yopal",
+  289: "sem yopal",
   169: "sem yumbo",
   156: "sem zipaquira"
 }
@@ -538,7 +538,7 @@ const allPagaduriasMap = {
   "sed vichada": 32,
   "sem villavicencio": 124,
   "sem sincelejo": 27,
-  "sem yopal": 100,
+  "sem yopal": 289,
   "sem yumbo": 169,
   "sem zipaquira": 156,
   
