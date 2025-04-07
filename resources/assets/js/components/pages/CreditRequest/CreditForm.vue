@@ -360,7 +360,7 @@ export default {
     "sem funza": 117,
     "sem fusagasuga": 151,
     "sem girardot": 179,
-    "sem giron": 61,
+    "sem giron": 287,
     "sem guainia": 116,
     "sed guajira": 192,
     "sed guaviare": 173,

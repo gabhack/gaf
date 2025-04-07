@@ -334,7 +334,7 @@ const allPagaduriasMap = {
   117: "sem funza",
   151: "sem fusagasuga",
   179: "sem girardot",
-  61: "sem giron",
+  287: "sem giron",
   116: "sem guainia",
   147: "sem ibague",
   134: "sem ipiales",
