@@ -284,7 +284,9 @@ class PagaduriasController extends Controller
             "SEM VILLAVICENCIO",
             "SEM YOPAL",
             "SEM YUMBO",
-            "SEM ZIPAQUIRA"
+            "SEM ZIPAQUIRA",
+            "CASUR",
+            "FIDUPREVISORA"
         ];
 
         return response()->json($nombres, 200);

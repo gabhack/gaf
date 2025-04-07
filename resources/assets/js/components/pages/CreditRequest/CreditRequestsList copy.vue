@@ -319,7 +319,7 @@ const allPagaduriasMap = {
   40: "sem buenaventura",
   157: "sem buga",
   42: "sem cali",
-  43: "sem cartagena",
+  189: "sem cartagena",
   136: "sem cartago",
   45: "sem chia",
   103: "sem cienaga",

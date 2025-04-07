@@ -360,7 +360,7 @@
     "sem cali": 42,
     "sed caqueta": 140,
     "sed casanare": 104,
-    "sem cartagena": 43,
+    "sem cartagena": 189,
     "sem cartago": 136,
     "sed cauca": 177,
     "sem chia": 45,
@@ -436,7 +436,9 @@
     "sem sincelejo": 27,
     "sem yopal": 289,
     "sem yumbo": 169,
-    "sem zipaquira": 156
+    "sem zipaquira": 156,
+    "casur": 296,
+    "fiduprevisora": 297
   },  
           tipoCreditoOptions: [
             { value: "", text: "Seleccione" },

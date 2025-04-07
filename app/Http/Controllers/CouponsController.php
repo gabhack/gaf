@@ -80,7 +80,7 @@ class CouponsController extends Controller
         'sem buenaventura' => 40,
         'sem buga' => 157,
         'sem cali' => 42,
-        'sem cartagena' => 43,
+        'sem cartagena' => 189,
         'sem cartago' => 136,
         'sem chia' => 45,
         'sem cienaga' => 103,
@@ -140,6 +140,7 @@ class CouponsController extends Controller
         'casur' => 296,
         'fiduprevisora' => 297
     ];
+    
 
     public function showCouponsForm()
     {
