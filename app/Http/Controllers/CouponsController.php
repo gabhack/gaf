@@ -79,7 +79,7 @@ class CouponsController extends Controller
         'sem bucaramanga' => 39,
         'sem buenaventura' => 40,
         'sem buga' => 157,
-        'sem cali' => 42,
+        'sem cali' => 191,
         'sem cartagena' => 189,
         'sem cartago' => 136,
         'sem chia' => 45,

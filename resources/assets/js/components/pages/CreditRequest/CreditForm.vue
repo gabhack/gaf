@@ -337,7 +337,7 @@ export default {
     "sem buenaventura": 40,
     "sem buga": 157,
     "sed caldas": 139,
-    "sem cali": 42,
+    "sem cali": 191,
     "sed caqueta": 140,
     "sed casanare": 104,
     "sem cartagena": 189,
