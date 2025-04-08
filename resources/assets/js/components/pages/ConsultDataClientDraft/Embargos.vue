@@ -31,7 +31,7 @@
                   S0,2.1,0.4,2.6L6.4,8.6z"
                 />
               </svg>
-              Detalle de Embargos4
+              Detalle de Embargos
             </h3>
           </b-col>
           <b-col cols="2" class="d-none d-md-flex justify-content-end align-items-start">
