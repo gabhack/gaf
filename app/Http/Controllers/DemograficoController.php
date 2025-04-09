@@ -912,9 +912,14 @@ private function parseConcatenatedString($concatenatedString)
 
         try {
             $record = DatamesGen::where('doc', $doc)
-                ->select('doc', 'nombre_usuario', 'cencosto as centro_costo', 'tipo_contrato', 'edad', 'fecha_nacimiento', 'created_at')
-                ->orderBy('created_at', 'desc')
-                ->first();
+    ->select('doc', 'nombre_usuario', 'cencosto as centro_costo', 'tipo_contrato', 'edad', 'fecha_nacimiento', 'created_at')
+    ->orderBy('created_at', 'desc')
+    ->first();
+
+if ($record) {
+    $record->nombre_usuario = $record->nombre_usuario ?: 'No se encontró nombre en datames';
+}
+
 
             if (!$record) {
                 Log::info('Documento no encontrado:', ['doc' => $doc]);
