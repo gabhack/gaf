@@ -132,7 +132,7 @@ class JelouController extends Controller
     private function calcularCompraCartera($ingreso)
     {
         try {
-            $salarioMinimo = 1423000;
+            $salarioMinimo = 1423500;
 
             if ($ingreso > 2 * $salarioMinimo * 0.92) {
                 $compraCartera = ($ingreso * 0.92) / 2;
@@ -148,4 +148,23 @@ class JelouController extends Controller
             return false;
         }
     }
+
+    public function getJelouCandidates(Request $request)
+{
+    $defaultLimit = 1000;
+    $limit = $defaultLimit;
+
+    try {
+        $records = \DB::table('jelou_candidates')
+            ->select('nombre', 'oferta AS monto', 'telefono')
+            ->limit($limit)
+            ->get();
+
+        return response()->json($records, 200);
+    } catch (\Exception $e) {
+        Log::error('Error en getJelouCandidates: ' . $e->getMessage());
+        return response()->json(['error' => 'Ocurrió un error al obtener los registros'], 500);
+    }
+}
+
 }

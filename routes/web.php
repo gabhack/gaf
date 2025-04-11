@@ -717,7 +717,7 @@ Route::view('/politicas/tratamiento-datos', 'politicas.tratamiento')->name('poli
 // JELÓU
 // ------------------------------------------------------------------
 Route::get('jelou/get-factor/{doc}', [JelouController::class, 'getFactorPerDoc']);
-
+Route::get('jelou/candidates', [JelouController::class, 'getJelouCandidates']);
 // ------------------------------------------------------------------
 // RUTAS PARA LA VISTA DE CRÉDITO (CREDITREQUEST)
 // ------------------------------------------------------------------
