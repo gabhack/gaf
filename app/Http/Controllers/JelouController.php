@@ -150,25 +150,34 @@ class JelouController extends Controller
     }
 
     public function getJelouCandidates(Request $request)
-{
-    $defaultLimit = 1000;
-    $limit = $defaultLimit;
-
-    try {
-        $records = \DB::connection('pgsql')
-            ->table('test_dummy_jelou')
-            // La vista usa 'monto', no 'oferta'
-            ->select('nombre', 'monto', 'telefono')
-            ->limit($limit)
-            ->get();
-
-        return response()->json($records, 200);
-    } catch (\Exception $e) {
-        \Log::error('Error en getJelouCandidates: ' . $e->getMessage());
-        return response()->json(['error' => 'Ocurrió un error al obtener los registros'], 500);
+    {
+        $apiUser = 'jelou2024';
+        $apiPassword = 'qIZK&U$kla';
+    
+        $user = $request->header('php-auth-user');
+        $password = $request->header('php-auth-pw');
+    
+        if ($user !== $apiUser || $password !== $apiPassword) {
+            return response()->json(['error' => 'Unauthorized: invalid credentials'], 401);
+        }
+    
+        $defaultLimit = 1000;
+        $limit = $defaultLimit;
+    
+        try {
+            $records = \DB::connection('pgsql')
+                ->table('test_dummy_jelou')
+                ->select('nombre', 'monto', 'telefono')
+                ->limit($limit)
+                ->get();
+    
+            return response()->json($records, 200);
+        } catch (\Exception $e) {
+            \Log::error('Error en getJelouCandidates: ' . $e->getMessage());
+            return response()->json(['error' => 'Ocurrió un error al obtener los registros'], 500);
+        }
     }
-}
-
+    
     
 
 }
