@@ -323,7 +323,7 @@ const allPagaduriasMap = {
   136: "sem cartago",
   45: "sem chia",
   103: "sem cienaga",
-  47: "sem cucuta",
+  286: "sem cucuta",
   112: "sem dosquebradas",
   49: "sem duitama",
   115: "sem envigado",

@@ -337,6 +337,7 @@
                             pagaduriaType == 'SEDGUAJIRA' ||
                             pagaduriaType == 'SEDGUAVIARE' ||
                             pagaduriaType == 'fiduprevisora' ||
+                            pagaduriaType == 'casur' ||
                             pagaduriaType == 'huila' ||
                             pagaduriaType == 'SEDNARINO'
                         "
@@ -563,7 +564,7 @@ export default {
         ...mapState('datamesModule', ['cuotadeseada', 'conteoEgresosPlus']),
         ...mapGetters('descuentosModule', ['descuentosPerPeriod']),
         totales() {
-            const valrSM = 1423000;
+            const valrSM = 1423500;
 
             //REGLAS BASICAS:
 
@@ -606,7 +607,7 @@ export default {
             }
 
             let disccount = 0.08;
-            if (this.pagaduriaType === 'FOPEP' || this.pagaduriaType == 'FIDUPREVISORA') {
+            if (this.pagaduriaType === 'FOPEP' || this.pagaduriaType == 'FIDUPREVISORA'| this.pagaduriaType == 'CASUR') {
                 if (valorIngreso == valrSM) {
                     disccount = 0.04;
                 } else if (valorIngreso > valrSM && valorIngreso < valrSM * 2) {
@@ -619,7 +620,6 @@ export default {
 
             //hay que adicionar un 1% menos de los ingresos para personas que ganen màs de 5.2 millones antes de deducciones
             //hay que restar la retencion (cuadrar con briyit)
-
             const valorIngresoTemp = valorIngreso - valorIngreso * disccount;
             console.log('valoringresotemp', valorIngresoTemp);
 
@@ -924,58 +924,63 @@ export default {
             console.error('Error en visadoFunction:', error);
         });
 },
-        async calcularTotales() {
-            console.log('Entrando a calcularTotales');
-            const firstItem = this.couponsIngresos?.items?.[0];
-            if (!firstItem) {
-                console.error('No se encontró ningún elemento en couponsIngresos.items');
-                return;
-            }
+async calcularTotales() {
+    console.log('=== INICIO calcularTotales ===');
 
-            const { finperiodo, doc } = firstItem;
-            if (!finperiodo || isNaN(new Date(finperiodo).getTime())) {
-                console.error('El campo finperiodo no es válido:', finperiodo);
-                return;
-            }
-
-            const finPeriodDate = new Date(finperiodo);
-            const mes = finPeriodDate.getMonth() + 1;
-            const año = finPeriodDate.getFullYear();
-
-            try {
-                this.isLoading = true;
-                const response = await fetch(`/demografico/calcular-cupo/${doc}/${mes}/${año}`);
-                if (!response.ok) {
-                    throw new Error(`Error al obtener datos: ${response.status}`);
-                }
-
-                const data = await response.json();
-
-                console.log('Respuesta del servidor:', data);
-
-                // Asegúrate de que data es un array y accede al primer elemento
-                const result = data;
-
-                if (!result) {
-                    console.error('El array de respuesta está vacío');
-                    return;
-                }
-
-                this.totalesData = {
-                    libreInversion: result.cupo_libre || 0,
-                    libreInversionSuma: result.libreInversionSuma || 0,
-                    compraCartera: result.compra_cartera || 0,
-                    cuotaMaxima: result.cuotaMaxima || 0
-                };
-
-                console.log('Totales actualizados y reflejados en el DOM:', this.totalesData);
-            } catch (error) {
-                console.error('Error en calcularTotales:', error);
-            } finally {
-                this.isLoading = false;
-            }
+    try {
+        if (!this.couponsIngresos || !this.couponsIngresos.items || this.couponsIngresos.items.length === 0) {
+            console.warn('No hay datos en couponsIngresos.items:', this.couponsIngresos);
+            return;
         }
+
+        const firstItem = this.couponsIngresos.items[0];
+        console.log('Primer item de couponsIngresos:', firstItem);
+
+        const { finperiodo, doc } = firstItem;
+
+        if (!finperiodo || typeof finperiodo !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(finperiodo)) {
+            console.error('Formato de fecha inválido:', finperiodo);
+            return;
+        }
+
+        const [year, month, day] = finperiodo.split('-');
+        const año = parseInt(year);
+        const mes = parseInt(month);
+
+        console.log(`Consultando backend con doc=${doc}, mes=${mes}, año=${año}`);
+        this.isLoading = true;
+
+        const response = await fetch(`/demografico/calcular-cupo/${doc}/${mes}/${año}`);
+
+        if (!response.ok) {
+            throw new Error(`Error en respuesta del servidor: ${response.status} ${response.statusText}`);
+        }
+
+        const result = await response.json();
+        console.log('Respuesta JSON recibida:', result);
+
+        if (!result || typeof result !== 'object') {
+            console.error('Respuesta inválida del servidor:', result);
+            return;
+        }
+
+        this.totalesData = {
+            libreInversion: result.cupo_libre || 0,
+            libreInversionSuma: result.libreInversionSuma || 0,
+            compraCartera: result.compra_cartera || 0,
+            cuotaMaxima: result.cuotaMaxima || 0
+        };
+
+        console.log('Totales actualizados y reflejados en el DOM:', this.totalesData);
+    } catch (error) {
+        console.error('❌ Error en calcularTotales:', error);
+    } finally {
+        this.isLoading = false;
+        console.log('=== FIN calcularTotales ===');
     }
+}
+}
+
 };
 </script>
 <style>

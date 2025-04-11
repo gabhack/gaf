@@ -366,7 +366,7 @@
     "sem chia": 45,
     "sem cienaga": 103,
     "sed cesar": 11,
-    "sem cucuta": 47,
+    "sem cucuta": 286,
     "sed choco": 12,
     "sed cordoba": 182,
     "sed cundinamarca": 163,
