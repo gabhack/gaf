@@ -155,16 +155,20 @@ class JelouController extends Controller
     $limit = $defaultLimit;
 
     try {
-        $records = \DB::table('jelou_candidates')
-            ->select('nombre', 'oferta AS monto', 'telefono')
+        $records = \DB::connection('pgsql')
+            ->table('test_dummy_jelou')
+            // La vista usa 'monto', no 'oferta'
+            ->select('nombre', 'monto', 'telefono')
             ->limit($limit)
             ->get();
 
         return response()->json($records, 200);
     } catch (\Exception $e) {
-        Log::error('Error en getJelouCandidates: ' . $e->getMessage());
+        \Log::error('Error en getJelouCandidates: ' . $e->getMessage());
         return response()->json(['error' => 'Ocurrió un error al obtener los registros'], 500);
     }
 }
+
+    
 
 }
