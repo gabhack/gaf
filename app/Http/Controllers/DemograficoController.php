@@ -1208,6 +1208,10 @@ if ($record) {
                     $descuento = 0.12;
                 }
             }
+            if (in_array(strtoupper($resultData->pagaduria), ['CASUR'])) {
+                $descuento = 0.04;  
+            }
+            
             if ($valorIngreso > 5694000) {
                 $descuento += 0.01;
             }
