@@ -21,16 +21,14 @@ class CreditRequest extends Model
         'plazo',
         'status',
         'tipo_credito',
-        'user_id',       // <--- Agregamos este campo
+        'user_id',     
     ];
 
-    // Relación con carteras
     public function carteras()
     {
-        return $this->hasMany(CreditCartera::class, 'credit_request_id');
+        return $this->hasMany(CreditCartera::class,'credit_request_id');
     }
 
-    // Relación con documentos
     public function documents()
     {
         return $this->hasMany(CreditDocument::class);

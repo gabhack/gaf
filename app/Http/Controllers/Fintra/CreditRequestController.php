@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\CreditRequest;
 use App\CreditCartera;
 use App\CreditDocument;
+use App\Comercial;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -15,8 +16,7 @@ class CreditRequestController extends Controller
 {
     public function store(Request $request)
     {
-        Log::info('store() - Ingreso');
-        Log::info('Datos recibidos:', $request->all());
+        Log::info('store - inicio', $request->all());
 
         $request->validate([
             'doc'          => 'required|string|max:20',
@@ -30,63 +30,53 @@ class CreditRequestController extends Controller
             'tipo_credito' => 'required|string|max:50'
         ]);
 
+        DB::beginTransaction();
         try {
-            DB::beginTransaction();
-            Log::info('Creando nuevo CreditRequest');
-
-            $credit = new CreditRequest();
-            $credit->doc          = $request->doc;
-            $credit->name         = $request->name;
-            $credit->client_type  = $request->client_type;
-            $credit->pagaduria_id = $request->pagaduria_id;
-            $credit->cuota        = $request->cuota;
-            $credit->monto        = $request->monto;
-            $credit->tasa         = $request->tasa;
-            $credit->plazo        = $request->plazo;
-            $credit->status       = 'pendiente';
-            $credit->tipo_credito = $request->tipo_credito;
-            $credit->user_id      = Auth::id();
+            $credit = new CreditRequest([
+                'doc'          => $request->doc,
+                'name'         => $request->name,
+                'client_type'  => $request->client_type,
+                'pagaduria_id' => $request->pagaduria_id,
+                'cuota'        => $request->cuota,
+                'monto'        => $request->monto,
+                'tasa'         => $request->tasa,
+                'plazo'        => $request->plazo,
+                'status'       => 'pendiente',
+                'tipo_credito' => $request->tipo_credito,
+                'user_id'      => Auth::id(),
+            ]);
             $credit->save();
+            Log::info('store - credit id', ['id' => $credit->id]);
 
-            Log::info('CreditRequest creado con id=' . $credit->id);
-
-            if ($request->has('carteras') && is_array($request->carteras)) {
-                Log::info('Guardando carteras:', $request->carteras);
-                foreach ($request->carteras as $carItem) {
-                    $cartera                       = new CreditCartera();
-                    $cartera->credit_request_id    = $credit->id;
-                    $cartera->valor_cuota          = $carItem['valor_cuota'] ?? 0;
-                    $cartera->saldo                = $carItem['saldo'] ?? 0;
-                    $cartera->tipo_cartera         = $carItem['tipo_cartera'] ?? null;
-                    $cartera->nombre_entidad       = $carItem['nombre_entidad'] ?? null;
-                    $cartera->opera_x_desprendible = !empty($carItem['opera_x_desprendible']);
-                    $cartera->save();
+            if ($request->filled('carteras')) {
+                foreach ($request->carteras as $item) {
+                    CreditCartera::create([
+                        'credit_request_id'    => $credit->id,
+                        'valor_cuota'          => $item['valor_cuota'] ?? 0,
+                        'saldo'                => $item['saldo'] ?? 0,
+                        'tipo_cartera'         => $item['tipo_cartera'] ?? null,
+                        'nombre_entidad'       => $item['nombre_entidad'] ?? null,
+                        'opera_x_desprendible' => !empty($item['opera_x_desprendible']),
+                    ]);
                 }
             }
 
             DB::commit();
-            return response()->json([
-                'message' => 'Crédito guardado exitosamente.',
-                'data'    => ['id' => $credit->id]
-            ], 201);
-        } catch (\Exception $e) {
+            Log::info('store - fin');
+            return response()->json(['message' => 'Crédito guardado', 'data' => ['id' => $credit->id]], 201);
+        } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('Error al guardar el crédito: ' . $e->getMessage());
-            return response()->json([
-                'message' => 'Error al guardar el crédito',
-                'error'   => $e->getMessage()
-            ], 500);
+            Log::error('store - error', ['e' => $e->getMessage()]);
+            return response()->json(['message' => 'Error al guardar', 'error' => $e->getMessage()], 500);
         }
     }
 
     public function uploadDocument($id, Request $request)
     {
-        Log::info('uploadDocument() - Ingreso');
-        Log::info('Datos recibidos:', $request->all());
+        Log::info('uploadDocument - inicio', ['credit_id' => $id]);
 
         if (!$request->hasFile('archivo')) {
-            Log::error('No se recibió ningún archivo');
-            return response()->json(['error' => 'No se recibió ningún archivo'], 400);
+            return response()->json(['error' => 'No se recibió archivo'], 400);
         }
 
         $request->validate([
@@ -95,25 +85,17 @@ class CreditRequestController extends Controller
 
         $credit = CreditRequest::find($id);
         if (!$credit) {
-            Log::error('Crédito no encontrado id=' . $id);
             return response()->json(['error' => 'Crédito no encontrado'], 404);
         }
 
         $path = $request->file('archivo')->store('public/documents');
-        Log::info('Archivo guardado en: ' . $path);
+        $doc  = CreditDocument::create([
+            'credit_request_id' => $credit->id,
+            'file_path'         => $path
+        ]);
 
-        $document                     = new CreditDocument();
-        $document->credit_request_id  = $credit->id;
-        $document->file_path          = $path;
-        $document->save();
-
-        Log::info('Documento registrado en la BD con id=' . $document->id);
-
-        return response()->json([
-            'message'    => 'Documento subido correctamente',
-            'doc_id'     => $document->id,
-            'file_path'  => $path
-        ], 201);
+        Log::info('uploadDocument - doc id', ['doc_id' => $doc->id]);
+        return response()->json(['message' => 'Documento subido', 'doc_id' => $doc->id], 201);
     }
 
     public function index()
@@ -123,60 +105,65 @@ class CreditRequestController extends Controller
 
     public function getAll()
     {
-        Log::info('getAll() - Ingreso');
+        Log::info('getAll - inicio');
+
         $user = Auth::user();
+        Log::info('getAll - user', ['id' => $user->id ?? null, 'role_id' => $user->role_id ?? null]);
 
-        $query = CreditRequest::with(['carteras', 'documents'])
-            ->where('status', '!=', 'visado');
+        $credits = CreditRequest::query()
+            ->where('status', '!=', 'visado')
+            ->when(!$user || $user->role_id !== 1, fn($q) => $q->where('user_id', $user->id))
+            ->orderBy('updated_at', 'DESC')
+            ->get();
 
-        if (!$user || $user->role_id !== 1) {
-            $query->where('user_id', $user->id);
-            Log::info('Filtrando por usuario id=' . $user->id);
-        } else {
-            Log::info('Usuario admin, mostrando todos los registros');
-        }
+        Log::info('getAll - credits', ['total' => $credits->count()]);
 
-        $credits = $query->orderBy('updated_at', 'DESC')->get();
-        Log::info('Total registros: ' . $credits->count());
+        $ids = $credits->pluck('user_id')->unique();
+        Log::info('getAll - user_ids', $ids->all());
 
+        $comerciales = Comercial::with('empresa')
+            ->whereIn('user_id', $ids)
+            ->get()
+            ->keyBy('user_id');
+
+        Log::info('getAll - comerciales', ['total' => $comerciales->count()]);
+
+        $credits->transform(function ($c) use ($comerciales) {
+            $c->empresa = optional(optional($comerciales[$c->user_id] ?? null)->empresa)->nombre;
+            return $c;
+        });
+
+        Log::info('getAll - fin');
         return response()->json($credits);
     }
 
     public function updateStatus($id)
     {
-        Log::info('updateStatus() - Ingreso id=' . $id);
+        Log::info('updateStatus - inicio', ['id' => $id]);
         try {
             $credit         = CreditRequest::findOrFail($id);
             $credit->status = 'aprobado';
             $credit->save();
-            Log::info('Solicitud aprobada id=' . $id);
-            return response()->json(['message' => 'Solicitud aprobada exitosamente'], 200);
-        } catch (\Exception $e) {
-            Log::error('Error al aprobar: ' . $e->getMessage());
-            return response()->json([
-                'message' => 'Error al aprobar la solicitud',
-                'error'   => $e->getMessage()
-            ], 500);
+            Log::info('updateStatus - aprobado', ['id' => $id]);
+            return response()->json(['message' => 'Solicitud aprobada'], 200);
+        } catch (\Throwable $e) {
+            Log::error('updateStatus - error', ['id' => $id, 'e' => $e->getMessage()]);
+            return response()->json(['message' => 'Error al aprobar', 'error' => $e->getMessage()], 500);
         }
     }
 
     public function markAsVisado($id)
     {
-        Log::info('markAsVisado() - Ingreso id=' . $id);
+        Log::info('markAsVisado - inicio', ['id' => $id]);
         try {
             $credit         = CreditRequest::findOrFail($id);
             $credit->status = 'visado';
             $credit->save();
-            Log::info('Crédito marcado como visado id=' . $id);
-            return response()->json([
-                'message' => 'Crédito marcado como visado exitosamente'
-            ], 200);
-        } catch (\Exception $e) {
-            Log::error('Error al marcar como visado: ' . $e->getMessage());
-            return response()->json([
-                'message' => 'Error al marcar el crédito como visado',
-                'error'   => $e->getMessage()
-            ], 500);
+            Log::info('markAsVisado - visado', ['id' => $id]);
+            return response()->json(['message' => 'Crédito visado'], 200);
+        } catch (\Throwable $e) {
+            Log::error('markAsVisado - error', ['id' => $id, 'e' => $e->getMessage()]);
+            return response()->json(['message' => 'Error al visar', 'error' => $e->getMessage()], 500);
         }
     }
 }
