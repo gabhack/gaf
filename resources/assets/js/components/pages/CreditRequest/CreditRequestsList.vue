@@ -255,7 +255,7 @@ export default {
         /* --- Paso 3: guardar visado --- */
         const status = await this.saveVisados(credit)
         if (status === 201) {
-          const payload = { ...credit, carteras: credit.carteras || [] }
+          const payload = { ...credit, carteras: credit.carteras || [], visado:   this.dataclient.visado, creditId: credit.id    }
           this.$emit('emitInfo', payload)
           this.flag = true
           this.showTable = false

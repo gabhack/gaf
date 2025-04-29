@@ -1,39 +1,30 @@
 <template>
     <div class="col-md-12 px-0">
         <div class="panel panel-primary mb-3">
+            <!-- Encabezado colapsable -->
             <h3
                 class="heading-title w-100 d-flex align-items-center justify-content-start"
                 :class="visible ? null : 'collapsed'"
-                :aria-expanded="visible ? 'true' : 'false'"
+                :aria-expanded="visible"
                 aria-controls="info-laboral"
                 @click="visible = !visible"
-                style="cursor: pointer; gap: 10px"
+                style="cursor:pointer;gap:10px;"
             >
-                <!-- SVG -->
                 <svg
-                    version="1.1"
                     :class="{ rotate180: visible }"
                     xmlns="http://www.w3.org/2000/svg"
-                    xmlns:xlink="http://www.w3.org/1999/xlink"
-                    xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
-                    x="0px"
-                    y="0px"
-                    width="15px"
-                    height="9px"
+                    width="15"
+                    height="9"
                     viewBox="0 0 15 9"
-                    style="enable-background: new 0 0 15 9"
-                    xml:space="preserve"
                 >
-                    <defs></defs>
                     <path
                         fill="#3a5659"
-                        d="M6.4,8.6C7,9.1,8,9.1,8.6,8.6l6-6c0.4-0.4,0.6-1.1,0.3-1.6C14.6,0.4,14.1,0,13.5,0l-12,0
-                        C0.9,0,0.3,0.4,0.1,0.9S0,2.1,0.4,2.6L6.4,8.6L6.4,8.6z"
+                        d="M6.4 8.6a1.8 1.8 0 0 0 2.2 0l6-6c.4-.4.6-1.1.3-1.6A1.4 1.4 0 0 0 13.5 0h-12C.9 0 .3.4.1.9S0 2.1.4 2.6l6 6Z"
                     />
                 </svg>
-
                 Detalle del Cliente
             </h3>
+
             <b-row>
                 <b-collapse id="info-laboral" v-model="visible" class="mt-2 w-100">
                     <b-col cols="12" class="px-3">
@@ -45,17 +36,17 @@
                             striped
                             hover
                             thead-class="table-header-nowrap"
-                        ></b-table>
+                        />
                         <b-row class="pt-2">
-                            <b-col cols="12" class="d-flex justify-content-end align-items-center">
-                                <div class="d-flex flex-column justify-content-center align-items-center">
+                            <b-col cols="12" class="d-flex justify-content-end">
+                                <div class="d-flex flex-column align-items-center">
                                     <p>Cuota Deseada</p>
                                     <input
                                         type="number"
                                         class="form-control2"
-                                        style="max-width: 90px; border-color: #ced3da !important"
+                                        style="max-width:90px;border-color:#ced3da!important;"
                                         :value="cuotadeseada"
-                                        @input="event => setCuotaDeseada(event.target.value)"
+                                        @input="e => setCuotaDeseada(e.target.value)"
                                     />
                                 </div>
                             </b-col>
@@ -72,6 +63,8 @@ import { mapState, mapMutations, mapGetters } from 'vuex';
 
 export default {
     name: 'DetalleCliente',
+    props: ['totales'],
+
     data() {
         return {
             fields: [
@@ -82,95 +75,85 @@ export default {
             ],
             items: [
                 {
-                    isActive: true,
                     Obligaciones: 'Obligaciones vigentes al día',
                     Cantidad_obligaciones: 0,
-                    Cupo_aproximado: 'Libre inversión',
-                    Valor: '$0'
+                    Cupo_aproximado: 'Libre Inversión',
+                    Valor: '$0.00'
                 },
                 {
-                    isActive: false,
                     Obligaciones: 'Obligaciones vigentes en mora',
                     Cantidad_obligaciones: 0,
-                    Cupo_aproximado: 'Cuota Máxima',
-                    Valor: '$0'
+                    Cupo_aproximado: 'Compra Cartera',
+                    Valor: '$0.00'
                 },
                 {
-                    isActive: false,
                     Obligaciones: 'Embargos',
                     Cantidad_obligaciones: 0,
-                    Cupo_aproximado: 'Compra Cartera',
-                    Valor: '$0'
+                    Cupo_aproximado: 'Cuota Máxima',
+                    Valor: '$0.00'
                 }
             ],
             visible: true
         };
     },
-    props: ['totales'],
+
     computed: {
-        ...mapState('datamesModule', ['cuotadeseada', 'conteoEgresos', 'conteoEgresosPlus']),
+        ...mapState('datamesModule', ['cuotadeseada', 'conteoEgresosPlus']),
         ...mapGetters('pagaduriasModule', ['couponsIngresos']),
         ...mapGetters('embargosModule', ['embargosPerPeriod']),
         ...mapGetters('descuentosModule', ['descuentosPerPeriod'])
     },
+
     watch: {
-        couponsIngresos(newVal) {
-            this.items[0].Cantidad_obligaciones = newVal?.total || 0;
+        couponsIngresos(v) {
+            this.items[0].Cantidad_obligaciones = v?.total || 0;
         },
-        descuentosPerPeriod(newVal) {
-            this.items[1].Cantidad_obligaciones = newVal?.total || 0;
+        descuentosPerPeriod(v) {
+            this.items[1].Cantidad_obligaciones = v?.total || 0;
         },
-        embargosPerPeriod(newVal) {
-            this.items[2].Cantidad_obligaciones = newVal?.total || 0;
+        embargosPerPeriod(v) {
+            this.items[2].Cantidad_obligaciones = v?.total || 0;
         },
-        'totales.libreInversion'() {
-            this.updateValores();
-        },
-        'totales.compraCartera'() {
-            this.updateValores();
-        },
-        conteoEgresosPlus() {
-            this.updateValores();
-        }
+        'totales.libreInversion': 'updateValores',
+        'totales.compraCartera': 'updateValores',
+        'totales.cuotaMaxima': 'updateValores',
+        conteoEgresosPlus: 'updateValores'
     },
+
     mounted() {
         this.updateValores();
     },
+
     methods: {
         ...mapMutations('datamesModule', ['setCuotaDeseada']),
+
         updateValores() {
-            const libreInversion = this.totales?.libreInversion || 0;
-            const compraCartera = this.totales?.compraCartera || 0;
+            const libreInversion = this.totales?.libreInversion ?? 0;
+            const compraCartera = this.totales?.compraCartera ?? 0;
 
-            // Cuota Máxima = suma de valores que afectan "libre inversión"
             let cuotaMaxima = libreInversion;
+            cuotaMaxima += (this.conteoEgresosPlus || 0) + (this.totales?.libreInversionSuma || 0);
 
-            if (this.conteoEgresosPlus) {
-                cuotaMaxima += this.conteoEgresosPlus + this.totales.libreInversionSuma;
-            } else {
-                cuotaMaxima += this.totales.libreInversionSuma;
-            }
-
-            // Log distintivo para depurar
             console.log('[DETALLE CLIENTE] >> Libre Inversión:', libreInversion);
             console.log('[DETALLE CLIENTE] >> Compra Cartera:', compraCartera);
             console.log('[DETALLE CLIENTE] >> Cuota Máxima:', cuotaMaxima);
 
-            // Asignar los valores formateados en la tabla
+            /*  MANTENEMOS EL ORDEN ORIGINAL  */
             this.items[0].Valor = this.formatCurrency(libreInversion); // Libre Inversión
-            this.items[1].Valor = this.formatCurrency(compraCartera); // Compra Cartera
-            this.items[2].Valor = this.formatCurrency(cuotaMaxima);   // Cuota Máxima
+            this.items[1].Valor = this.formatCurrency(compraCartera);  // Compra Cartera
+            this.items[2].Valor = this.formatCurrency(cuotaMaxima);    // Cuota Máxima
         },
-        formatCurrency(value) {
-            return `$${new Intl.NumberFormat('es-ES', {
+
+        formatCurrency(v) {
+            return new Intl.NumberFormat('es-ES', {
                 style: 'currency',
                 currency: 'COP',
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
             })
-                .format(value)
+                .format(v)
                 .replace('COP', '')
-                .trim()}`;
+                .trim();
         }
     }
 };
@@ -178,44 +161,23 @@ export default {
 
 <style lang="scss" scoped>
 ::v-deep .table {
-    & thead {
-        background-color: #3a5659;
-        white-space: nowrap;
-        color: white;
-        font-size: 14px;
-        font-weight: 700;
-        line-height: 18.23px;
-        & tr th {
-            padding: 12px 40px;
-            text-align: center;
-            min-height: 50px !important;
-            & div {
-                min-height: 50px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
+    thead {
+        background:#3a5659;
+        color:#fff;
+        font-size:14px;
+        font-weight:700;
+        & tr th{
+            padding:12px 40px;
+            text-align:center;
+            white-space:nowrap;
         }
     }
-    & tbody {
-        background-color: #fff;
-        font-size: 14px;
-        font-weight: 400;
-        line-height: 18.23px;
-        & td {
-            text-align: center;
-        }
+    tbody{
+        background:#fff;
+        font-size:14px;
+        & td{ text-align:center; }
     }
 }
-p {
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 18.23px;
-    margin-bottom: 14px;
-}
-
-.table thead th {
-    font-weight: 600;
-    vertical-align: middle;
-}
+p{ font-size:14px;margin-bottom:14px; }
+.rotate180{ transform:rotate(180deg); }
 </style>

@@ -11,29 +11,17 @@
       <form v-if="localForm" @submit.prevent="submit">
         <!-- Documento -->
         <b-form-group label="Documento" label-for="doc">
-          <b-form-input
-            id="doc"
-            v-model.trim="localForm.doc"
-            required
-          />
+          <b-form-input id="doc" v-model.trim="localForm.doc" required />
         </b-form-group>
   
         <!-- Nombre -->
         <b-form-group label="Nombre" label-for="nombre">
-          <b-form-input
-            id="nombre"
-            v-model.trim="localForm.nombre"
-            required
-          />
+          <b-form-input id="nombre" v-model.trim="localForm.nombre" required />
         </b-form-group>
   
         <!-- Pagaduría -->
         <b-form-group label="Pagaduría" label-for="pagaduria">
-          <b-form-input
-            id="pagaduria"
-            v-model.trim="localForm.pagaduria"
-            required
-          />
+          <b-form-input id="pagaduria" v-model.trim="localForm.pagaduria" required />
         </b-form-group>
   
         <div class="row">
@@ -108,11 +96,7 @@
         <!-- Botones -->
         <div class="text-center mt-3">
           <button type="submit" class="btn-credit">Guardar</button>
-          <button
-            type="button"
-            class="btn-credit ml-2"
-            @click="visible = false"
-          >
+          <button type="button" class="btn-credit ml-2" @click="visible = false">
             Cancelar
           </button>
         </div>
@@ -142,18 +126,13 @@
     },
   
     props: {
-      /* v-model del modal */
-      value: { type: Boolean, default: false },
-      /* Objeto base que viene del padre */
-      visadoForm: {
-        type: Object,
-        default: null
-      }
+      value: { type: Boolean, default: false },     // v-model
+      visadoForm: { type: Object, default: null }   // datos desde el padre
     },
   
-    data() {
+    data () {
       return {
-        localForm: null, // copia reactiva del formulario
+        localForm: null,
         estadoOptions: [
           { value: 'factible',    text: 'factible' },
           { value: 'no factible', text: 'no factible' }
@@ -162,14 +141,11 @@
     },
   
     computed: {
-      /* Sincroniza v-model (visible) */
       visible: {
-        get() { return this.value },
-        set(v) { this.$emit('input', v) }
+        get () { return this.value },
+        set (v) { this.$emit('input', v) }
       },
-  
-      /* Causales dinámicas según estado */
-      causalesOptions() {
+      causalesOptions () {
         if (!this.localForm) return []
         return this.localForm.estado === 'factible'
           ? [{ value: 'Sin causal', text: 'Sin causal' }]
@@ -184,97 +160,80 @@
     },
   
     watch: {
-      /* Cuando se abra el modal o cambie visadoForm,
-         creamos/clonamos el formulario local */
       visadoForm: {
         immediate: true,
         deep: true,
-        handler(val) {
-          this.localForm = val
-            ? JSON.parse(JSON.stringify(val))
-            : null
+        handler (val) {
+          this.localForm = val ? JSON.parse(JSON.stringify(val)) : null
         }
       }
     },
   
     methods: {
-      async submit() {
+      async submit () {
         try {
-          // === Validación simple ===
-          const requiredFields = {
-            doc: 'Documento',
-            nombre: 'Nombre',
-            pagaduria: 'Pagaduría',
-            plazo: 'Plazo',
-            monto: 'Monto',
-            cuotacredito: 'Cuota crédito',
-            estado: 'Estado',
-            causal: 'Causal',
-            observacion: 'Observación'
-          }
-  
-          for (const [key, label] of Object.entries(requiredFields)) {
-            const v = this.localForm[key]
-            if (v === '' || v === null || v === undefined) {
-              alert(`El campo "${label}" es obligatorio`)
+          /* -------- validación mínima -------- */
+          const required = [
+            'doc','nombre','pagaduria','plazo','monto',
+            'cuotacredito','estado','causal','observacion'
+          ]
+          for (const k of required) {
+            if (!this.localForm[k] && this.localForm[k] !== 0) {
+              alert(`El campo "${k}" es obligatorio`)
               return
             }
           }
   
-          // === Construir payload ===
+          /* -------- payload para visados -------- */
           const payload = {
-            estado:        this.localForm.estado,
-            cuotacredito:  this.localForm.cuotacredito,
-            monto:         this.localForm.monto,
-            causal:        this.localForm.causal,
-            observacion:   this.localForm.observacion,
-            creditId:      this.localForm.creditId,
-            doc:           this.localForm.doc,
-            nombre:        this.localForm.nombre,
-            pagaduria:     this.localForm.pagaduria,
-            plazo:         this.localForm.plazo
+            estado:       this.localForm.estado,
+            cuotacredito: this.localForm.cuotacredito,
+            monto:        this.localForm.monto,
+            causal:       this.localForm.causal,
+            observacion:  this.localForm.observacion,
+            creditId:     this.localForm.creditId,
+            doc:          this.localForm.doc,
+            nombre:       this.localForm.nombre,
+            pagaduria:    this.localForm.pagaduria,
+            plazo:        this.localForm.plazo
           }
   
-          // === Llamada API ===
-          let res
+          /* -------- crear / actualizar visado -------- */
           if (this.localForm.visado_id) {
-            // Actualizar visado existente
-            res = await axios.put(`/visados/${this.localForm.visado_id}`, payload)
+            await axios.put(`/visados/${this.localForm.visado_id}`, payload)
           } else {
-            // Crear nuevo visado
-            res = await axios.post('/visados', payload)
+            const { data } = await axios.post('/visados', payload)
+            this.localForm.visado_id = data.id   // por si se necesita luego
           }
   
-          // Feedback
-          if (this.$bvToast) {
-            this.$bvToast.toast('Visado guardado con éxito.', {
-              title: 'Éxito',
-              variant: 'success',
-              solid: true,
-              toaster: 'b-toaster-top-center',
-              autoHideDelay: 3500
-            })
-          } else {
-            alert('Visado guardado con éxito.')
-          }
+          /* -------- ACTUALIZAR ESTATUS DEL CRÉDITO -------- */
+          await axios.patch(
+            `/credit-requests/${this.localForm.creditId}/status`,
+            { status: this.localForm.estado.toLowerCase() }
+          )
   
-          // Notifica al padre para refrescar
-          this.$emit('saved', res.data)
+          /* -------- feedback -------- */
+          this.$bvToast?.toast('Visado guardado y estado actualizado.', {
+            title: 'Éxito',
+            variant: 'success',
+            solid: true,
+            toaster: 'b-toaster-top-center',
+            autoHideDelay: 3500
+          })
+  
+          /* -------- notificar al padre -------- */
+          this.$emit('saved')
           this.visible = false
         } catch (err) {
           console.error('Error guardando visado', err)
           const msg = err.response?.data?.message || err.message
-          if (this.$bvToast) {
-            this.$bvToast.toast(`Error: ${msg}`, {
-              title: 'Error',
-              variant: 'danger',
-              solid: true,
-              toaster: 'b-toaster-top-center',
-              autoHideDelay: 5000
-            })
-          } else {
-            alert(`Error guardando visado: ${msg}`)
-          }
+          this.$bvToast?.toast(`Error: ${msg}`, {
+            title: 'Error',
+            variant: 'danger',
+            solid: true,
+            toaster: 'b-toaster-top-center',
+            autoHideDelay: 5000
+          })
         }
       }
     }
@@ -283,26 +242,16 @@
   
   <style scoped>
   /* Botón reutilizado del proyecto */
-  .btn-credit {
-    color: #fff;
-    background: #0cedb0;
-    border: none;
-    border-radius: 5px;
-    padding: 7px 14px;
-    font-size: 14px;
-    cursor: pointer;
-    margin: 2px;
+  .btn-credit{
+    color:#fff;background:#0cedb0;border:none;border-radius:5px;
+    padding:7px 14px;font-size:14px;cursor:pointer;margin:2px;
   }
-  /* Ajustes de inputs para coherencia visual */
+  /* Inputs coherentes con el resto del sistema */
   .form-control,
   .b-form-input,
-  textarea {
-    background: #ffffff !important;
-    color: #000 !important;
+  textarea{
+    background:#fff !important;color:#000 !important;
   }
-  label {
-    font-weight: 600;
-    color: #000 !important;
-  }
+  label{font-weight:600;color:#000 !important;}
   </style>
   

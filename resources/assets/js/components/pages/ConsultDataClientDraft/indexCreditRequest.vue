@@ -482,7 +482,6 @@ export default {
             descuentossempopayan: [],
             selectedPeriod:'',
             monto: 0,
-
             pagaduriaKey: '',
             cargo: null,
             showOthers: false,
@@ -491,18 +490,18 @@ export default {
             disabledProspect: false,
             visado: null,
             visadoValido: 'NO FACTIBLE',
+            creditId: null,
             totalesData: {
             libreInversion: 0,
             libreInversionSuma: 0,
             compraCartera: 0,
             cuotaMaxima: 0,
-
             showCarterasModal: false,
-    carteras: [],
-    carterasCargadas: false,
-        },
-        };
-    },
+            carteras: [],
+            carterasCargadas: false,
+                },
+                };
+            },
     watch: {
         couponsIngresos: {
             handler() {
@@ -692,6 +691,7 @@ export default {
             if (payload.carteras) {
                 this.carteras = payload.carteras;
                 this.carterasCargadas = true;
+                this.creditId = payload.creditId;
             }
 
   this.getCoupons({
@@ -909,20 +909,22 @@ export default {
         estado: this.visadoValido,
         cuotacredito: this.cuotadeseada,
         monto: this.monto,
-        causal
+        causal,
+        creditId: this.creditId  
     };
 
     console.log('Datos a enviar en visado:', data);
 
-    axios
-        .post(`/visados/${this.visado.id}`, data)
-        .then(response => {
-            console.log('Respuesta del servidor:', response);
-            window.location.href = '/historyClient';
-        })
-        .catch(error => {
-            console.error('Error en visadoFunction:', error);
-        });
+    axios.post(`/visados/${this.visado.id}`, data)
+  .then(async () => {
+    await axios.patch(`/credit-requests/${this.creditId}/status`, {
+      status: this.visadoValido.toLowerCase()
+    })
+    window.location.href = '/historyClient'
+  })
+  .catch(error => {
+    console.error('Error en visadoFunction:', error)
+  });
 },
         async calcularTotales() {
             console.log('Entrando a calcularTotales');

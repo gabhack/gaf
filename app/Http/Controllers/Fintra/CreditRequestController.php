@@ -137,20 +137,29 @@ class CreditRequestController extends Controller
         return response()->json($credits);
     }
 
-    public function updateStatus($id)
+    public function updateStatus($id, Request $request)
     {
         Log::info('updateStatus - inicio', ['id' => $id]);
+    
         try {
             $credit         = CreditRequest::findOrFail($id);
-            $credit->status = 'aprobado';
+            // ▸ si no viene nada por seguridad déjalo en “aprobado”
+            $credit->status = $request->status ?? 'aprobado';
             $credit->save();
-            Log::info('updateStatus - aprobado', ['id' => $id]);
-            return response()->json(['message' => 'Solicitud aprobada'], 200);
+    
+            Log::info('updateStatus - actualizado', [
+                'id'     => $id,
+                'status' => $credit->status
+            ]);
+    
+            return response()->json(['message' => 'Estado actualizado'], 200);
+    
         } catch (\Throwable $e) {
             Log::error('updateStatus - error', ['id' => $id, 'e' => $e->getMessage()]);
-            return response()->json(['message' => 'Error al aprobar', 'error' => $e->getMessage()], 500);
+            return response()->json(['message' => 'Error', 'error' => $e->getMessage()], 500);
         }
     }
+    
 
     public function markAsVisado($id)
     {

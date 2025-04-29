@@ -194,54 +194,7 @@
                         </div>
                     </template>
 
-                    <div
-                        class="col-6"
-                        v-if="
-                            user.role_id === 1 ||
-                            user.role_id === '1' ||
-                            user.role_id === 4 ||
-                            user.role_id === '4' ||
-                            user.role_id === 5 ||
-                            user.role_id === '5'
-                        "
-                    >
-                        <b class="panel-label">FECHA CARGA DATA:</b>
-                        <div>
-                            <p class="panel-value">{{ fechavinc.fecdata }}</p>
-                        </div>
-                    </div>
-                    <div
-                        class="col-6"
-                        v-if="
-                            user.role_id === 1 ||
-                            user.role_id === '1' ||
-                            user.role_id === 4 ||
-                            user.role_id === '4' ||
-                            user.role_id === 5 ||
-                            user.role_id === '5'
-                        "
-                    >
-                        <b class="panel-label">MES CARGA DATA:</b>
-                        <div>
-                            <p class="panel-value">{{ fechavinc.mesdata }}</p>
-                        </div>
-                    </div>
-                    <div
-                        class="col-6"
-                        v-if="
-                            user.role_id === 1 ||
-                            user.role_id === '1' ||
-                            user.role_id === 4 ||
-                            user.role_id === '4' ||
-                            user.role_id === 5 ||
-                            user.role_id === '5'
-                        "
-                    >
-                        <b class="panel-label">AÑO CARGA DATA:</b>
-                        <div>
-                            <p class="panel-value">{{ fechavinc.anodata }}</p>
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
         </div>

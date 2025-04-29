@@ -391,8 +391,8 @@
 
 <script src="print.js"></script>
 <script rel="stylesheet" type="text/css" href="print.css" />
-
 <script>
+/* ────────────────────────── IMPORTS ────────────────────────── */
 import printJS from 'print-js';
 import FormConsult from './FormConsult';
 import EmploymentHistory from './EmploymentHistory';
@@ -424,9 +424,10 @@ import 'vue-loading-overlay/dist/vue-loading.css';
 
 import { mapActions, mapState, mapGetters } from 'vuex';
 
+/* ───────────────────── COMPONENT ───────────────────── */
 export default {
     props: ['user'],
-    created() {},
+
     components: {
         FormConsult,
         EmploymentHistory,
@@ -455,9 +456,11 @@ export default {
         Loading
     },
 
+    /* ───────────────────── DATA ───────────────────── */
     data() {
         return {
             type_consult: 'individual',
+            /*  datames / desc / emb arrays ­*/
             fechavinc: null,
             datamesFopep: null,
             datamessedvalle: null,
@@ -481,9 +484,8 @@ export default {
             descuentossemquibdo: [],
             descuentossemsahagun: [],
             descuentossempopayan: [],
-            selectedPeriod:'',
+            selectedPeriod: '',
             monto: 0,
-
             pagaduriaKey: '',
             cargo: null,
             showOthers: false,
@@ -492,18 +494,22 @@ export default {
             disabledProspect: false,
             visado: null,
             visadoValido: 'NO FACTIBLE',
+
+            /* Totales como números crudos (sin redondeo) */
             totalesData: {
-            libreInversion: 0,
-            libreInversionSuma: 0,
-            compraCartera: 0,
-            cuotaMaxima: 0,
+                libreInversion: 0,
+                libreInversionSuma: 0,
+                compraCartera: 0,
+                cuotaMaxima: 0
+            },
 
             showCarterasModal: false,
-    carteras: [],
-    carterasCargadas: false,
-        },
+            carteras: [],
+            carterasCargadas: false
         };
     },
+
+    /* ───────────────────── WATCHERS ───────────────────── */
     watch: {
         couponsIngresos: {
             handler() {
@@ -513,42 +519,40 @@ export default {
             immediate: true
         },
 
-        ingresosExtras(val) {
+        ingresosExtras() {
             let totalIncapacidad = 0;
 
             this.ingresosExtras.some(item => {
-                if (item.concept.includes('Definitiva') || item.concept.includes('definitiva')) {
-                    let data = {
+                if (item.concept.toLowerCase().includes('definitiva')) {
+                    this.alertDefinitiva({
                         message: 'Cliente en proceso de retiro',
                         variant: 'danger'
-                    };
-                    this.alertDefinitiva(data);
+                    });
                     return true;
                 }
             });
 
             this.ingresosExtras.forEach(item => {
-                if (item.concept.includes('Incapacidad') || item.concept.includes('incapacidad')) {
+                if (item.concept.toLowerCase().includes('incapacidad')) {
                     totalIncapacidad += Number(item.ingresos);
                 }
             });
 
-            // Valida si el valor de la incapacidad es mayor al valor del ingreso
             if (Number(totalIncapacidad) > Number(this.valorIngreso)) {
-                let data = {
+                this.alertIncapacidad({
                     message: 'Cliente no apto por incapacidad',
                     variant: 'danger'
-                };
-                this.alertIncapacidad(data);
+                });
             }
         }
     },
+
+    /* ─────────────────── LIFECYCLE ─────────────────── */
     mounted() {
-        if (this.couponsIngresos) {
-            this.calcularTotales();
-        }
+        if (this.couponsIngresos) this.calcularTotales();
     },
 
+    /* ─────────────────── COMPUTED ─────────────────── */
     computed: {
         ...mapState('pagaduriasModule', ['coupons', 'couponsType', 'pagaduriaType', 'pagaduriaLabel']),
         ...mapGetters('pagaduriasModule', [
@@ -563,130 +567,95 @@ export default {
         ...mapState('descuentosModule', ['descuentosType']),
         ...mapState('datamesModule', ['cuotadeseada', 'conteoEgresosPlus']),
         ...mapGetters('descuentosModule', ['descuentosPerPeriod']),
+
+        /* --------  TOTALES SIN REDONDEAR NI TRUNCAR  -------- */
         totales() {
             const valrSM = 1423500;
 
-            //REGLAS BASICAS:
-
-            //Si el sueldo (sueba)(despues de aportes) es menor a dos minimos entonces - 1 minimo
-            //si el sueldo (sueba) (despues de aportes) es mayor a dos minimos entonces se pica por la mitad
-            //Si el sueldo (sueba) es mayor a 5.2millones se resta ademas de los aportes el 1% de solidaridad y se pica por la mitad
-            //si el sueld basico (code sueba) es mayor a 6.2 millones entonces  sueldo -aportes-solidaridad- promedio 4 meses de renta y piquelo por la mitad
-
-            //TODO LO ANTERIOR se le llama COMPRA CARTERA (una variable)
-            //CUPO LIBRE INVERSION es COmpra Cartera - egresos (no incluye, porque ya se incluyo aporte, solidaridad y promedio de renta)
-
+            /* → lógica original de negocio ← */
             let totalWithoutHealthPension = 0;
-            this.couponsIngresos.items.forEach(item => {
-                if (item.code !== 'APFPM' && item.code !== 'APEPEN' && item.code !== 'APESDN') {
-                    totalWithoutHealthPension += Number(item.vaplicado);
-                }
+            this.couponsIngresos.items.forEach(i => {
+                if (!['APFPM', 'APEPEN', 'APESDN'].includes(i.code))
+                    totalWithoutHealthPension += Number(i.vaplicado);
             });
 
             let valorIngreso = 0;
-            if (this.pagaduriaType === 'FOPEP') {
-                // (aparte del 8% de pagadurias) 3 reglas: <=minimo entonces 4% --- > minimo < 3.900.000 10% ---  >3900000 12%
-                valorIngreso = Number(this.datamesFopep.vpension.replace(/[^0-9]/g, '').slice(0, -2));
-            } else if (this.pagaduriaType == 'FIDUPREVISORA') {
-                valorIngreso = Number(this.datamesFidu.vpension.replace(/[^0-9]/g, '').slice(0, -2));
-            } else {
-                valorIngreso = this.couponsPerPeriod.items.filter(item => item.code === 'INGCUP')[0]?.ingresos || 0; //buscar concepto
-            }
+            if (this.pagaduriaType === 'FOPEP')
+                valorIngreso = Number(this.datamesFopep.vpension.replace(/\D/g, '').slice(0, -2));
+            else if (this.pagaduriaType === 'FIDUPREVISORA')
+                valorIngreso = Number(this.datamesFidu.vpension.replace(/\D/g, '').slice(0, -2));
+            else
+                valorIngreso =
+                    this.couponsPerPeriod.items.find(i => i.code === 'INGCUP')?.ingresos || 0;
 
-            let increase = 0;
-            if (this.cargo == 'Rector Institucion Educativa Completa') {
-                ///comprobar los cargos
-                increase = valorIngreso * 0.3;
-                valorIngreso = parseFloat(valorIngreso) + parseFloat(increase);
-            } else if (this.cargo == 'Coordinador') {
-                increase = valorIngreso * 0.2;
-                valorIngreso = parseFloat(valorIngreso) + parseFloat(increase);
-            } else if (this.cargo == 'Director De Nucleo') {
-                increase = valorIngreso * 0.35;
-                valorIngreso = parseFloat(valorIngreso) + parseFloat(increase);
-            }
+            if (this.cargo === 'Rector Institucion Educativa Completa') valorIngreso *= 1.3;
+            if (this.cargo === 'Coordinador') valorIngreso *= 1.2;
+            if (this.cargo === 'Director De Nucleo') valorIngreso *= 1.35;
 
             let disccount = 0.08;
-            if (this.pagaduriaType === 'FOPEP' || this.pagaduriaType == 'FIDUPREVISORA'| this.pagaduriaType == 'CASUR') {
-                if (valorIngreso == valrSM) {
-                    disccount = 0.04;
-                } else if (valorIngreso > valrSM && valorIngreso < valrSM * 2) {
-                    //no aplica, son 3900000
-                    disccount = 0.08;
-                } else if (valorIngreso >= valrSM * 2) {
-                    disccount = 0.12;
-                }
+            if (['FOPEP', 'FIDUPREVISORA', 'CASUR'].includes(this.pagaduriaType)) {
+                if (valorIngreso === valrSM) disccount = 0.04;
+                else if (valorIngreso >= valrSM * 2) disccount = 0.12;
             }
 
-            //hay que adicionar un 1% menos de los ingresos para personas que ganen màs de 5.2 millones antes de deducciones
-            //hay que restar la retencion (cuadrar con briyit)
             const valorIngresoTemp = valorIngreso - valorIngreso * disccount;
-            console.log('valoringresotemp', valorIngresoTemp);
+            const previousDiscount = valorIngresoTemp / 2;
 
-            let items = [];
-            // let itemslength = [];
+            const items =
+                ['FOPEP', 'FIDUPREVISORA'].includes(this.pagaduriaType)
+                    ? this.descapli
+                    : this.couponsPerPeriod.items.filter(
+                          i => i.code !== 'INGCUP' && Number(i.egresos) > 0
+                      );
 
-            let totalEgresos = 0;
-            if (this.pagaduriaType === 'FOPEP' || this.pagaduriaType == 'FIDUPREVISORA') {
-                items = this.descapli;
-                // itemslength = items.length;
-                totalEgresos = items.reduce((a, b) => a + Number(b.vaplicado), 0);
-            } else {
-                items = this.couponsPerPeriod.items.filter(item => item.code !== 'INGCUP' && Number(item.egresos) > 0);
-                // itemslength = items.length;
-                totalEgresos = items.reduce((total, item) => total + Number(item.egresos), 0);
-            }
+            const totalEgresos = items.reduce(
+                (t, i) => t + Number(i.egresos || i.vaplicado),
+                0
+            );
 
-            let previousDiscount = valorIngresoTemp / 2;
+            let libreInversion =
+                valorIngresoTemp < valrSM * 2
+                    ? valorIngresoTemp - valrSM - totalWithoutHealthPension
+                    : valorIngresoTemp / 2 - totalWithoutHealthPension;
 
-            let libreInversion = 0;
-            if (valorIngresoTemp < valrSM * 2) {
-                libreInversion = valorIngresoTemp - valrSM - totalWithoutHealthPension;
-            } else {
-                libreInversion = valorIngresoTemp / 2 - totalWithoutHealthPension;
-            }
+            let compraCartera =
+                previousDiscount < valrSM
+                    ? valorIngresoTemp - valrSM
+                    : valorIngresoTemp / 2;
 
-            let libreInversionSuma = libreInversion;
-            console.log('libreinversion original', libreInversion);
+            let cuotaMaxima =
+                previousDiscount < valrSM
+                    ? valorIngresoTemp - valrSM
+                    : valorIngresoTemp / 2;
 
-            let compraCartera = 0;
-            if (previousDiscount < valrSM) {
-                compraCartera = valorIngresoTemp - valrSM;
-            } else {
-                compraCartera = valorIngresoTemp / 2;
-            }
-
-            let cuotaMaxima = 0;
-            if (previousDiscount < valrSM) {
-                cuotaMaxima = valorIngresoTemp - valrSM;
-            } else {
-                cuotaMaxima = valorIngresoTemp / 2;
-            }
-
+            /*  devolvemos los valores crudos tal como salen (positivos o negativos)  */
             return {
-                libreInversion: libreInversion < 0 ? 0 : libreInversion,
-                libreInversionSuma: libreInversionSuma,
-                compraCartera: compraCartera < 0 ? 0 : compraCartera,
-                cuotaMaxima: cuotaMaxima < 0 ? 0 : cuotaMaxima
+                libreInversion,
+                libreInversionSuma: libreInversion,
+                compraCartera,
+                cuotaMaxima
             };
         }
     },
+
+    /* ─────────────────── METHODS ─────────────────── */
     methods: {
         ...mapActions('pagaduriasModule', ['fetchCoupons']),
         ...mapActions('embargosModule', ['fetchEmbargos']),
         ...mapActions('descuentosModule', ['fetchDescuentos']),
+
+        /* ---------------- EMIT INFO ---------------- */
         emitInfo(payload) {
             this.isLoading = true;
             this.pagadurias = payload.pagadurias;
             this.pagaduriaKey = payload.pagaduriaKey;
             this.cargo = payload.cargo;
-
-            this.datamesFopep = null;
-            this.datamessedvalle = null;
-            this.datamesFidu = null;
-            this.datamessemcali = null;
+            this.datamesFopep =
+                this.datamessedvalle =
+                this.datamesFidu =
+                this.datamessemcali =
+                    null;
             this.visado = payload.visado;
-
             this.monto = payload.monto;
 
             if (payload.carteras) {
@@ -694,7 +663,7 @@ export default {
                 this.carterasCargadas = true;
             }
 
-  this.getCoupons({
+            this.getCoupons({
                 doc: payload.doc,
                 pagaduria: this.couponsType,
                 pagaduriaLabel: payload.pagaduria
@@ -714,103 +683,63 @@ export default {
                 pagaduriaLabel: payload.pagaduria
             });
 
-            if (payload.pagaduria == 'FOPEP') {
-                this.getDatames(payload);
-            } else if (payload.pagaduria == 'SEDVALLE') {
-                this.getDatamesSedValle(payload);
-            } else if (payload.pagaduria == 'FIDUPREVISORA') {
-                this.getDatamesFidu(payload);
-            } else if (payload.pagaduria == 'SEMCALI') {
-                this.getDatamesSemCali(payload);
-            }
+            if (payload.pagaduria === 'FOPEP') this.getDatames(payload);
+            else if (payload.pagaduria === 'SEDVALLE') this.getDatamesSedValle(payload);
+            else if (payload.pagaduria === 'FIDUPREVISORA') this.getDatamesFidu(payload);
+            else if (payload.pagaduria === 'SEMCALI') this.getDatamesSemCali(payload);
 
-            this.getFechaVinc(payload).then(response => {
-                console.log('----- DEPURANDO -----');
-  console.log('Valor actual de pagaduriaType:', this.pagaduriaType);
-  console.log('Valor actual de showOthers (antes de asignar):', this.showOthers);
-
+            this.getFechaVinc(payload).then(() => {
                 this.showOthers = true;
                 this.isLoading = false;
             });
         },
+
+        /* ---------------- AXIOS HELPER METHODS ---------------- */
         async getDatames(payload) {
-            const response = await axios.get(`/datamesfopep/${payload.doc}`);
-            this.datamesFopep = response.data;
+            this.datamesFopep = (await axios.get(`/datamesfopep/${payload.doc}`)).data;
         },
         async getDatamesSedValle(payload) {
-            const response = await axios.post('/datamessedvalle/consultaUnitaria', { doc: payload.doc });
-            this.datamessedvalle = response.data.data;
+            this.datamessedvalle = (
+                await axios.post('/datamessedvalle/consultaUnitaria', { doc: payload.doc })
+            ).data.data;
         },
         async getDatamesFidu(payload) {
-            const response = await axios.post('/datamesfidu/consultaUnitaria', { doc: payload.doc });
-            this.datamesFidu = response.data.data;
+            this.datamesFidu = (
+                await axios.post('/datamesfidu/consultaUnitaria', { doc: payload.doc })
+            ).data.data;
         },
         async getDatamesSemCali(payload) {
-            const response = await axios.post('/consultaDatamessemcali', { doc: payload.doc });
-            this.datamessemcali = response.data.data;
+            this.datamessemcali = (
+                await axios.post('/consultaDatamessemcali', { doc: payload.doc })
+            ).data.data;
         },
         async getFechaVinc(payload) {
-            const response = await axios.get(`/fechavinc/${payload.doc}`);
-            this.fechavinc = response.data;
+            this.fechavinc = (await axios.get(`/fechavinc/${payload.doc}`)).data;
         },
         async getDescapli(payload) {
-            const response = await axios.get(`/descapli/${payload.doc}`);
-            this.descapli = response.data;
+            this.descapli = (await axios.get(`/descapli/${payload.doc}`)).data;
         },
         async getDescnoap(payload) {
-            const response = await axios.get(`/descnoap/${payload.doc}`);
-            this.descnoap = response.data;
-        },
-        async getDescuentossemsahagun(payload) {
-            const response = await axios.post('/consultaDescuentossemsahagun', { doc: payload.doc });
-            this.descuentossemsahagun = response.data.data;
+            this.descnoap = (await axios.get(`/descnoap/${payload.doc}`)).data;
         },
         async getCoupons(payload) {
-            const data = {
-                doc: payload.doc,
-                pagaduria: this.couponsType,
-                pagaduriaLabel: this.pagaduriaLabel
-            };
-
-            console.log('Datos enviados a get-coupons (antes d efetch):', payload);
-            const response = await axios.post('/get-coupons', payload);
-            const couponData = response.data.items || response.data; // Ajusta según el formato del backend
-            console.log('Datos enviados a fetchCoupons:', couponData);
-            this.fetchCoupons(couponData);
-
+            const res = await axios.post('/get-coupons', payload);
+            this.fetchCoupons(res.data.items || res.data);
             setTimeout(() => {
-                // Valida si el tiene incapacidades
-                if (this.incapacidadValida === false) {
-                    this.$bvToast.show('toast-incapacidad-month');
-                }
+                if (!this.incapacidadValida) this.$bvToast.show('toast-incapacidad-month');
             }, 1000);
         },
         async getEmbargos(payload) {
-            const data = {
-                doc: payload.doc,
-                pagaduria: payload.pagaduria,
-                pagaduriaLabel: payload.pagaduriaLabel
-            };
-
-            const response = await axios.post('/get-embargos', data);
-            this.fetchEmbargos(response.data);
+            this.fetchEmbargos((await axios.post('/get-embargos', payload)).data);
         },
         async getDescuentos(payload) {
-            const data = {
-                doc: payload.doc,
-                pagaduria: payload.pagaduria,
-                pagaduriaLabel: payload.pagaduriaLabel
-            };
+            this.fetchDescuentos((await axios.post('/get-descuentos', payload)).data);
+        },
 
-            const response = await axios.post('/get-descuentos', data);
-            this.fetchDescuentos(response.data);
-        },
-        print() {
-            window.print();
-        },
+        /* ---------------- TOASTS ---------------- */
         alertIncapacidad(data) {
-            this.$bvToast.toast(`${data.message}`, {
-                title: data.title ? data.title : 'Alerta del sistema',
+            this.$bvToast.toast(data.message, {
+                title: data.title || 'Alerta del sistema',
                 autoHideDelay: 10000,
                 variant: data.variant,
                 solid: true
@@ -818,171 +747,115 @@ export default {
         },
         alertDefinitiva(data) {
             this.disabledProspect = true;
-            this.$bvToast.toast(`${data.message}`, {
-                title: data.title ? data.title : 'Alerta del sistema',
+            this.$bvToast.toast(data.message, {
+                title: data.title || 'Alerta del sistema',
                 autoHideDelay: 10000,
                 variant: data.variant,
                 solid: true
             });
         },
 
-        //Visando consulta
+        print() {
+            window.print();
+        },
+
+        /* ---------------- VISADO FUNCTION ---------------- */
         visadoFunction() {
-    let causal = '';
-    let obligacionMarcadas = false;
-    let embargosSinMora = false;
+            let causal = '';
+            let obligacionMarcadas = false;
+            let embargosSinMora = false;
 
-    const cuotaMaximaDef = Number(this.conteoEgresosPlus) + Number(this.totalesData.libreInversion);
+            const cuotaMaximaDef =
+                Number(this.conteoEgresosPlus) + Number(this.totalesData.libreInversion);
 
-    console.log('Inicio de visadoFunction:', {
-        cuotaDeseada: this.cuotadeseada,
-        conteoEgresosPlus: this.conteoEgresosPlus,
-        libreInversion: this.totalesData.libreInversion,
-        cuotaMaximaDef,
-        descuentosPerPeriod: this.descuentosPerPeriod,
-        ingresosExtras: this.ingresosExtras
-    });
+            const definitivaAlerta = this.ingresosExtras.some(i =>
+                i.concept.toLowerCase().includes('definitiva')
+            );
 
-    const definitivaAlerta = this.ingresosExtras.some(item => {
-        const isDefinitiva = item.concept.includes('Definitiva') || item.concept.includes('definitiva');
-        if (isDefinitiva) {
-            console.log('Definitiva encontrada:', item);
+            const cuotaMenor = Number(this.cuotadeseada) < cuotaMaximaDef;
+            const cuotaMayor = Number(this.cuotadeseada) > cuotaMaximaDef;
+
+            if (this.descuentosPerPeriod.total > 0) {
+                obligacionMarcadas = this.descuentosPerPeriod.items.some(i => i.check === true);
+            } else {
+                embargosSinMora = true;
+            }
+
+            if (cuotaMenor && !obligacionMarcadas) {
+                this.visadoValido = 'NO FACTIBLE';
+                causal = 'Presenta obligaciones en mora';
+            } else if (cuotaMenor && obligacionMarcadas) {
+                this.visadoValido = 'FACTIBLE';
+                causal = 'Sin causal';
+            }
+
+            if (cuotaMayor && embargosSinMora) {
+                this.visadoValido = 'NO FACTIBLE';
+                causal += (causal ? ', ' : '') + 'Negado por cupo';
+            } else if (cuotaMenor && embargosSinMora) {
+                this.visadoValido = 'FACTIBLE';
+                causal = 'Sin causal';
+            } else if (cuotaMayor && !obligacionMarcadas && !embargosSinMora) {
+                this.visadoValido = 'NO FACTIBLE';
+                causal =
+                    '1. Presenta obligaciones en mora, 2. Negado por cupo';
+            } else if (cuotaMayor && obligacionMarcadas) {
+                this.visadoValido = 'NO FACTIBLE';
+                causal = 'Negado por cupo';
+            }
+
+            if (definitivaAlerta) {
+                this.visadoValido = 'NO FACTIBLE';
+                causal = 'Cliente en proceso de retiro';
+            }
+
+            const data = {
+                estado: this.visadoValido,
+                cuotacredito: this.cuotadeseada,
+                monto: this.monto,
+                causal
+            };
+
+            axios
+                .post(`/visados/${this.visado.id}`, data)
+                .then(() => (window.location.href = '/historyClient'))
+                .catch(err => console.error('visadoFunction error:', err));
+        },
+
+        /* -------------- CALCULAR TOTALES (BACKEND) -------------- */
+        async calcularTotales() {
+            try {
+                if (!this.couponsIngresos?.items?.length) return;
+
+                const { finperiodo, doc } = this.couponsIngresos.items[0];
+                const [year, month] = finperiodo.split('-');
+                this.isLoading = true;
+
+                const res = await fetch(
+                    `/demografico/calcular-cupo/${doc}/${parseInt(month)}/${parseInt(year)}`
+                );
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+                const r = await res.json();
+
+                /*  guardamos los números crudos  */
+                this.totalesData = {
+                    libreInversion: r.cupo_libre,
+                    libreInversionSuma: r.libreInversionSuma,
+                    compraCartera: r.compra_cartera,
+                    cuotaMaxima: r.cuotaMaxima
+                };
+            } catch (e) {
+                console.error('calcularTotales:', e);
+            } finally {
+                this.isLoading = false;
+            }
         }
-        return isDefinitiva;
-    });
-
-    const cuotaMenor = Number(this.cuotadeseada) < cuotaMaximaDef;
-    const cuotaMayor = Number(this.cuotadeseada) > cuotaMaximaDef;
-
-    if (this.descuentosPerPeriod.total > 0) {
-        obligacionMarcadas = this.descuentosPerPeriod.items.some(item => item.check === true);
-        console.log('Obligaciones marcadas:', obligacionMarcadas);
-    } else {
-        embargosSinMora = true;
-        console.log('No hay descuentos, embargos sin mora:', embargosSinMora);
     }
-
-    if (cuotaMenor && !obligacionMarcadas) {
-        console.log('Condición cuota menor sin obligaciones marcadas:', { cuotaMenor, obligacionMarcadas });
-        this.visadoValido = 'NO FACTIBLE';
-        causal = 'Presenta obligaciones en mora';
-    } else if (cuotaMenor && obligacionMarcadas) {
-        console.log('Condición cuota menor con obligaciones marcadas:', { cuotaMenor, obligacionMarcadas });
-        this.visadoValido = 'FACTIBLE';
-        causal = 'Sin causal';
-    }
-
-    if (cuotaMayor && embargosSinMora) {
-        console.log('Condición cuota mayor con embargos sin mora:', { cuotaMayor, embargosSinMora });
-        this.visadoValido = 'NO FACTIBLE';
-        causal += 'Negado por cupo';
-    } else if (cuotaMenor && embargosSinMora) {
-        console.log('Condición cuota menor con embargos sin mora:', { cuotaMenor, embargosSinMora });
-        this.visadoValido = 'FACTIBLE';
-        causal = 'Sin causal';
-    } else {
-        if (cuotaMayor && !obligacionMarcadas && !embargosSinMora) {
-            console.log('Condición cuota mayor sin obligaciones ni embargos en mora:', {
-                cuotaMayor,
-                obligacionMarcadas,
-                embargosSinMora
-            });
-            this.visadoValido = 'NO FACTIBLE';
-            causal = '1. Presenta obligaciones en mora, 2. Negado por cupo';
-        } else if (cuotaMayor && obligacionMarcadas) {
-            console.log('Condición cuota mayor con obligaciones marcadas:', {
-                cuotaMayor,
-                obligacionMarcadas
-            });
-            this.visadoValido = 'NO FACTIBLE';
-            causal = 'Negado por cupo';
-        }
-    }
-
-    if (definitivaAlerta) {
-        console.log('Cliente en proceso de retiro:', definitivaAlerta);
-        this.visadoValido = 'NO FACTIBLE';
-        causal = 'Cliente en proceso de retiro';
-    }
-
-    const data = {
-        estado: this.visadoValido,
-        cuotacredito: this.cuotadeseada,
-        monto: this.monto,
-        causal
-    };
-
-    console.log('Datos a enviar en visado:', data);
-
-    axios
-        .post(`/visados/${this.visado.id}`, data)
-        .then(response => {
-            console.log('Respuesta del servidor:', response);
-            window.location.href = '/historyClient';
-        })
-        .catch(error => {
-            console.error('Error en visadoFunction:', error);
-        });
-},
-async calcularTotales() {
-    console.log('=== INICIO calcularTotales ===');
-
-    try {
-        if (!this.couponsIngresos || !this.couponsIngresos.items || this.couponsIngresos.items.length === 0) {
-            console.warn('No hay datos en couponsIngresos.items:', this.couponsIngresos);
-            return;
-        }
-
-        const firstItem = this.couponsIngresos.items[0];
-        console.log('Primer item de couponsIngresos:', firstItem);
-
-        const { finperiodo, doc } = firstItem;
-
-        if (!finperiodo || typeof finperiodo !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(finperiodo)) {
-            console.error('Formato de fecha inválido:', finperiodo);
-            return;
-        }
-
-        const [year, month, day] = finperiodo.split('-');
-        const año = parseInt(year);
-        const mes = parseInt(month);
-
-        console.log(`Consultando backend con doc=${doc}, mes=${mes}, año=${año}`);
-        this.isLoading = true;
-
-        const response = await fetch(`/demografico/calcular-cupo/${doc}/${mes}/${año}`);
-
-        if (!response.ok) {
-            throw new Error(`Error en respuesta del servidor: ${response.status} ${response.statusText}`);
-        }
-
-        const result = await response.json();
-        console.log('Respuesta JSON recibida:', result);
-
-        if (!result || typeof result !== 'object') {
-            console.error('Respuesta inválida del servidor:', result);
-            return;
-        }
-
-        this.totalesData = {
-            libreInversion: result.cupo_libre || 0,
-            libreInversionSuma: result.libreInversionSuma || 0,
-            compraCartera: result.compra_cartera || 0,
-            cuotaMaxima: result.cuotaMaxima || 0
-        };
-
-        console.log('Totales actualizados y reflejados en el DOM:', this.totalesData);
-    } catch (error) {
-        console.error('❌ Error en calcularTotales:', error);
-    } finally {
-        this.isLoading = false;
-        console.log('=== FIN calcularTotales ===');
-    }
-}
-}
-
 };
 </script>
+
+
 <style>
 .info-container {
     display: flex;
