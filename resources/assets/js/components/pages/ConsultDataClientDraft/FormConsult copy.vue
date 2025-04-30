@@ -416,7 +416,7 @@
     "sed santander": 26,
     "sem sabaneta": 108,
     "sem sahagun": 142,
-    "sem san andres": 158,
+    "sem san": 158,
     "sem santa marta": 126,
     "sed sucre": 175,
     "sem soacha": 119,

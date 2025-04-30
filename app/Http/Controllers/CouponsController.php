@@ -122,7 +122,7 @@ class CouponsController extends Controller
         'sem rionegro' => 129,
         'sem sabaneta' => 108,
         'sem sahagun' => 142,
-        'sem san andres' => 158,
+        'sem san' => 158,
         'sem santa marta' => 126,
         'sem soacha' => 119,
         'sem sogamoso' => 172,
