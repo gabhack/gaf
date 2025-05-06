@@ -114,7 +114,11 @@ class CreditRequestController extends Controller
     $user = Auth::user();
     Log::info('getAll - user', ['id' => $user->id ?? null, 'role_id' => $user->role_id ?? null]);
 
-    $credits = CreditRequest::with('visado') // Se carga la relación visado
+    $credits = CreditRequest::with([
+            'visado:id,causal',
+            'documents:id,credit_request_id,file_path',
+            'carteras:credit_request_id,tipo_cartera,nombre_entidad,valor_cuota,saldo,opera_x_desprendible'
+        ])
         ->where('status', '!=', 'visado')
         ->when(!$user || $user->role_id !== 1, function ($q) use ($user) {
             return $q->where('user_id', $user->id);
@@ -122,26 +126,30 @@ class CreditRequestController extends Controller
         ->orderBy('updated_at', 'DESC')
         ->get();
 
-    Log::info('getAll - credits obtenidos', ['total' => $credits->count()]);
-
-    $ids = $credits->pluck('user_id')->unique();
-    Log::info('getAll - user_ids únicos', $ids->all());
+    Log::info('getAll - credits obtenidos', [
+        'total'          => $credits->count(),
+        'con_visado'     => $credits->filter(fn($c) => !is_null($c->visado_id))->count(),
+        'con_documentos' => $credits->filter(fn($c) => $c->documents->isNotEmpty())->count(),
+        'con_carteras'   => $credits->filter(fn($c) => $c->carteras->isNotEmpty())->count()
+    ]);
 
     $comerciales = Comercial::with('empresa')
-        ->whereIn('user_id', $ids)
+        ->whereIn('user_id', $credits->pluck('user_id')->unique())
         ->get()
         ->keyBy('user_id');
 
-    Log::info('getAll - comerciales encontrados', ['total' => $comerciales->count()]);
-
     $credits->transform(function ($c) use ($comerciales) {
         $c->empresa = optional(optional($comerciales[$c->user_id] ?? null)->empresa)->nombre;
+        $c->causal  = optional($c->visado)->causal;
         return $c;
     });
 
     Log::info('getAll - fin');
     return response()->json($credits);
 }
+
+
+    
 
 
     public function updateStatus($id, Request $request)

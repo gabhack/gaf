@@ -1,16 +1,24 @@
 <template>
   <div class="d-flex justify-content-center">
-    <form id="credit-form" @submit.prevent="submitForm" class="card-main mt-5 mb-5 px-4 py-4" style="max-width:860px;width:100%">
+    <form
+      id="credit-form"
+      @submit.prevent="submitForm"
+      class="card-main mt-5 mb-5 px-4 py-4"
+      style="max-width:860px;width:100%"
+    >
       <div v-if="isLoading" class="overlay">
         <b-spinner variant="success" style="width:3rem;height:3rem"/>
       </div>
 
+      <!-- ───── Información del Cliente ───── -->
       <b-card no-body class="section-card mb-4">
         <div class="section-header">
           <ClientTypeIcon class="section-icon"/>
           <span>Información del Cliente</span>
         </div>
+
         <b-card-body>
+          <!-- doc / nombre / tipo solicitante -->
           <b-form-group label="Cédula">
             <b-form-input class="form-control2" v-model="form.doc" required/>
           </b-form-group>
@@ -21,14 +29,26 @@
                 <b-form-input class="form-control2" v-model="form.name" placeholder="Nombre y apellido" required/>
               </div>
               <div class="col-md-6">
-                <b-form-select class="form-control2" v-model="form.client_type" :options="clientTypeOptions" required @change="onChangeClientType"/>
+                <b-form-select
+                  class="form-control2"
+                  v-model="form.client_type"
+                  :options="clientTypeOptions"
+                  required
+                  @change="onChangeClientType"
+                />
               </div>
             </div>
           </b-form-group>
 
+          <!-- Pagadurías -->
           <div v-if="showDocenteOptions">
             <b-form-group label="Pagaduría (Docente)">
-              <b-form-select class="form-control2" v-model.number="form.pagaduria_id" :options="docentePagaduriasOptions" required/>
+              <b-form-select
+                class="form-control2"
+                v-model.number="form.pagaduria_id"
+                :options="docentePagaduriasOptions"
+                required
+              />
             </b-form-group>
           </div>
 
@@ -45,7 +65,12 @@
 
             <div v-if="showTipoPension">
               <b-form-group label="Tipo de Pensión">
-                <b-form-select class="form-control2" v-model="form.tipo_pension" :options="tipoPensionOptions" required/>
+                <b-form-select
+                  class="form-control2"
+                  v-model="form.tipo_pension"
+                  :options="tipoPensionOptions"
+                  required
+                />
               </b-form-group>
               <b-form-group label="Resolución">
                 <b-form-input class="form-control2" v-model="form.resolucion" required/>
@@ -55,395 +80,414 @@
         </b-card-body>
       </b-card>
 
+      <!-- ───── Condiciones del Crédito ───── -->
       <b-card no-body class="section-card mb-4">
         <div class="section-header">
           <RequisitosCumplidosIcon class="section-icon"/>
           <span>Condiciones del Crédito</span>
         </div>
+
         <b-card-body>
           <div class="row g-3">
             <div class="col-md-6">
               <b-form-group label="Valor de la cuota mensual">
-                <b-form-input class="form-control2" v-model="form.cuota" placeholder="1.000.000" required @keypress="onlyNumbers" @input="onInputCurrency('cuota')"/>
+                <b-form-input
+                  class="form-control2"
+                  v-model="form.cuota"
+                  placeholder="1.000.000"
+                  required
+                  @keypress="onlyNumbers"
+                  @input="onInputCurrency('cuota')"
+                />
               </b-form-group>
             </div>
+
             <div class="col-md-6">
               <b-form-group label="Monto solicitado">
-                <b-form-input class="form-control2" v-model="form.monto" placeholder="1.000.000" required @keypress="onlyNumbers" @input="onInputCurrency('monto')"/>
+                <b-form-input
+                  class="form-control2"
+                  v-model="form.monto"
+                  placeholder="1.000.000"
+                  required
+                  @keypress="onlyNumbers"
+                  @input="onInputCurrency('monto')"
+                />
               </b-form-group>
             </div>
+
             <div class="col-md-6">
               <b-form-group label="Tasa mensual (%)">
-                <b-form-input class="form-control2" v-model="form.tasa" placeholder="1.50 %" required @keypress="onlyNumbersAndDot" @input="onInputPercentage('tasa')"/>
+                <b-form-input
+                  class="form-control2"
+                  v-model="form.tasa"
+                  placeholder="1.50 %"
+                  required
+                  @keypress="onlyNumbersAndDot"
+                  @input="onInputPercentage('tasa')"
+                />
               </b-form-group>
             </div>
+
             <div class="col-md-6">
               <b-form-group label="Plazo (en meses)">
-                <b-form-input class="form-control2" v-model.number="form.plazo" type="number" min="1" required @keypress="onlyNumbers"/>
+                <b-form-input
+                  class="form-control2"
+                  v-model.number="form.plazo"
+                  type="number"
+                  min="1"
+                  required
+                  @keypress="onlyNumbers"
+                />
               </b-form-group>
             </div>
           </div>
 
           <b-form-group label="Tipo de Crédito">
-            <b-form-select class="form-control2" v-model="form.tipo_credito" :options="tipoCreditoOptions" required/>
+            <b-form-select
+              class="form-control2"
+              v-model="form.tipo_credito"
+              :options="tipoCreditoOptions"
+              required
+            />
           </b-form-group>
         </b-card-body>
       </b-card>
 
+      <!-- ───── Documentos ───── -->
       <b-card no-body class="section-card mb-4">
         <div class="section-header">
           <DocumentIcon class="section-icon"/>
           <span>Documentos Requeridos</span>
         </div>
+
         <b-card-body>
-          <p class="mb-2">Sube al menos un documento de identidad o soporte laboral.<br><small class="text-muted">Los archivos se adjuntan al finalizar el proceso.</small></p>
+          <p class="mb-2">
+            Sube al menos un documento de identidad o soporte laboral.<br>
+            <small class="text-muted">Los archivos se adjuntan al finalizar el proceso.</small>
+          </p>
+
           <div class="table-responsive">
             <table class="table table-bordered align-middle mb-3 table-soft-head">
               <thead><tr><th class="w-75">Archivo</th><th class="text-center w-25">Acción</th></tr></thead>
               <tbody>
                 <tr v-for="(doc,idx) in documentos" :key="idx">
-                  <td><b-form-file :state="Boolean(doc.file)" accept=".pdf,.jpg,.jpeg,.png" @change="onFileChange($event,idx)"/></td>
-                  <td class="text-center"><b-button size="sm" variant="outline-danger" @click="removeArchivo(idx)">Quitar</b-button></td>
+                  <td>
+                    <b-form-file
+                      :state="Boolean(doc.file)"
+                      accept=".pdf,.jpg,.jpeg,.png"
+                      @change="onFileChange($event,idx)"
+                    />
+                  </td>
+                  <td class="text-center">
+                    <b-button size="sm" variant="outline-danger" @click="removeArchivo(idx)">Quitar</b-button>
+                  </td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <button type="button" class="btn-outline-gray" @click="addArchivo"><PlusIcon class="me-1"/> Agregar nuevo documento</button>
+
+          <button type="button" class="btn-outline-gray" @click="addArchivo">
+            <PlusIcon class="me-1"/> Agregar nuevo documento
+          </button>
         </b-card-body>
       </b-card>
 
+      <!-- ───── Cartera ───── -->
       <b-card no-body class="section-card mb-4">
         <div class="section-header">
           <CarteraIcon class="section-icon"/>
           <span>Información de Cartera a Comprar</span>
         </div>
+
         <b-card-body>
           <div class="table-responsive">
             <table class="table table-bordered align-middle mb-3 table-soft-head">
-              <thead><tr><th>Tipo</th><th>Entidad</th><th>Valor Cuota</th><th>Saldo</th><th>Desprendible</th><th class="text-center">Acción</th></tr></thead>
+              <thead>
+                <tr>
+                  <th>Tipo</th><th>Entidad</th><th>Valor Cuota</th>
+                  <th>Saldo</th><th>Desprendible</th><th class="text-center">Acción</th>
+                </tr>
+              </thead>
               <tbody>
                 <tr v-for="(car,i) in form.carteras" :key="i">
-                  <td><b-form-select v-model="car.tipoCartera" :options="tipoCarteraOptions" class="form-control2" required/></td>
-                  <td><b-form-input v-model="car.nombreEntidad" class="form-control2" required/></td>
-                  <td><b-form-input v-model="car.valorCuota" class="form-control2" placeholder="100.000" required @keypress="onlyNumbers" @input="onInputCurrencyCartera(i,'valorCuota')"/></td>
-                  <td><b-form-input v-model="car.saldo" class="form-control2" placeholder="1.000.000" required @keypress="onlyNumbers" @input="onInputCurrencyCartera(i,'saldo')"/></td>
-                  <td class="text-center"><b-form-checkbox v-model="car.opera_x_desprendible" switch/></td>
-                  <td class="text-center"><b-button size="sm" variant="outline-danger" @click="removeCartera(i)">Quitar</b-button></td>
+                  <td>
+                    <b-form-select
+                      v-model="car.tipoCartera"
+                      :options="tipoCarteraOptions"
+                      class="form-control2"
+                      :disabled="!requireCarteras"
+                      required
+                    />
+                  </td>
+                  <td>
+                    <b-form-input
+                      v-model="car.nombreEntidad"
+                      class="form-control2"
+                      :disabled="!requireCarteras"
+                      required
+                    />
+                  </td>
+                  <td>
+                    <b-form-input
+                      v-model="car.valorCuota"
+                      class="form-control2"
+                      placeholder="100.000"
+                      :disabled="!requireCarteras"
+                      required
+                      @keypress="onlyNumbers"
+                      @input="onInputCurrencyCartera(i,'valorCuota')"
+                    />
+                  </td>
+                  <td>
+                    <b-form-input
+                      v-model="car.saldo"
+                      class="form-control2"
+                      placeholder="1.000.000"
+                      :disabled="!requireCarteras"
+                      required
+                      @keypress="onlyNumbers"
+                      @input="onInputCurrencyCartera(i,'saldo')"
+                    />
+                  </td>
+                  <td class="text-center">
+                    <b-form-checkbox v-model="car.opera_x_desprendible" :disabled="!requireCarteras" switch/>
+                  </td>
+                  <td class="text-center">
+                    <b-button
+                      size="sm"
+                      variant="outline-danger"
+                      @click="removeCartera(i)"
+                      :disabled="!requireCarteras"
+                    >Quitar</b-button>
+                  </td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <button type="button" class="btn-green mb-3" @click="addCartera"><PlusIcon class="me-1"/> Agregar cartera</button>
+
+          <button
+            type="button"
+            class="btn-green mb-3"
+            @click="addCartera"
+            :disabled="!requireCarteras"
+          >
+            <PlusIcon class="me-1"/> Agregar cartera
+          </button>
         </b-card-body>
       </b-card>
 
       <b-button class="btn-green-gradient w-100" type="submit">Guardar solicitud</b-button>
 
-      <b-alert v-if="alertMessage" :variant="alertVariant" show dismissible class="mt-3 text-center" @dismissed="alertMessage=''">{{alertMessage}}</b-alert>
+      <b-alert
+        v-if="alertMessage"
+        :variant="alertVariant"
+        show
+        dismissible
+        class="mt-3 text-center"
+        @dismissed="alertMessage=''"
+      >{{alertMessage}}</b-alert>
     </form>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import { BFormGroup,BFormInput,BFormSelect,BFormFile,BFormCheckbox,BButton,BAlert,BSpinner,BCard,BCardBody } from "bootstrap-vue";
-import PlusIcon from "../../icons/PlusIcon.vue";
-import ClientTypeIcon from "../../icons/ClientTypeIcon.vue";
+import {
+  BFormGroup,BFormInput,BFormSelect,BFormFile,BFormCheckbox,
+  BButton,BAlert,BSpinner,BCard,BCardBody
+} from "bootstrap-vue";
+import PlusIcon               from "../../icons/PlusIcon.vue";
+import ClientTypeIcon         from "../../icons/ClientTypeIcon.vue";
 import RequisitosCumplidosIcon from "../../icons/RequisitosCumplidosIcon.vue";
-import DocumentIcon from "../../icons/DocumentIcon.vue";
-import CarteraIcon from "../../icons/CarteraIcon.vue";
+import DocumentIcon           from "../../icons/DocumentIcon.vue";
+import CarteraIcon            from "../../icons/CarteraIcon.vue";
 
-const tipoPensionFopepRaw = ['50% sobrevivenci', 'clase error', 'invalidez', 'pension de jubilacion', 'pension anticipa', 'pension convencion', 'pension gracia', 'sobrevivencia', 'sustitucion'];
-const tipoPensionFiduRaw = ['APE ajuste pension vejez', 'APJ ajuste pension por aportes', 'MPB mesada pensinal a beneficiarios', 'PEI pension de invalidez', 'PER reliquidacion pensional', 'PEV pension vejez', 'PIP pension de invalidez post-mortem', 'PJA pension de jubilacion por aportes', 'PJP pension jub. post-mortem', 'PJS pension sobrevivientes', 'PJU pension de jubilacion', 'PPD pension postmortem 18', 'PPV pension postmortem 20 aqos', 'PSA ajuste sustitucion pensional', 'PSU pension sustitucion', 'REJ reajuste pensional', 'RPI revision sustitucion pension invalidez', 'RPM reliquidacion post-mortem de jubilacion', 'SPI sustitucion pension invalidez', 'SRP sustitucion de reliquidacion pensional'];
+/* ─────────── opciones fijas de pensión ─────────── */
+const fixedPensionOptions=[
+  {value:"JUBILACIÓN O VEJEZ",text:"JUBILACIÓN O VEJEZ"},
+  {value:"INVALIDEZ",text:"INVALIDEZ"},
+  {value:"PENSIÓN DE GRACIA",text:"PENSIÓN DE GRACIA"},
+  {value:"SUSTITUCIÓN",text:"SUSTITUCIÓN"}
+];
 
-export default {
-  components: {
-    BFormGroup, BFormInput, BFormSelect, BFormFile, BFormCheckbox, BButton, BAlert, BSpinner, BCard, BCardBody,
-    PlusIcon, ClientTypeIcon, DocumentIcon, CarteraIcon, RequisitosCumplidosIcon
+/* ─────────── componente ─────────── */
+export default{
+  components:{
+    BFormGroup,BFormInput,BFormSelect,BFormFile,BFormCheckbox,
+    BButton,BAlert,BSpinner,BCard,BCardBody,
+    PlusIcon,ClientTypeIcon,DocumentIcon,CarteraIcon,RequisitosCumplidosIcon
   },
-  data() {
-    return {
-      isLoading: false,
-      alertMessage: "",
-      alertVariant: "warning",
-      form: {
-        doc: "", name: "", client_type: "", pagaduria_id: "", tipo_credito: "", cuota: "", monto: "", tasa: "", plazo: 1,
-        tipo_pension: "", resolucion: "", carteras: []
+  data(){
+    return{
+      isLoading:false,
+      alertMessage:"",
+      alertVariant:"warning",
+      form:{
+        doc:"",name:"",client_type:"",pagaduria_id:"",
+        tipo_credito:"",cuota:"",monto:"",tasa:"",plazo:1,
+        tipo_pension:"",resolucion:"",carteras:[]
       },
-      documentos: [],
-      clientTypeOptions: [
-        { value: "", text: "Seleccione" },
-        { value: "docente", text: "Docente" },
-        { value: "pensionado", text: "Pensionado" }
+      documentos:[],
+      /* ───── listas ───── */
+      clientTypeOptions:[
+        {value:"",text:"Seleccione"},
+        {value:"docente",text:"Docente"},
+        {value:"pensionado",text:"Pensionado"}
       ],
-      docentePagaduriasMap: {
-    "sed amazonas": 1,
-    "sed antioquia": 130,
-    "sem armenia": 34,
-    "sed arauca": 109,
-    "sed atlantico": 121,
-    "sem barrancabermeja": 160,
-    "sem barranquilla": 106,
-    "sem bello": 111,
-    "sed bolivar": 293,
-    "sed boyaca": 110,
-    "sem bucaramanga": 39,
-    "sem buenaventura": 40,
-    "sem buga": 157,
-    "sed caldas": 139,
-    "sem cali": 42,
-    "sed caqueta": 140,
-    "sed casanare": 104,
-    "sem cartagena": 189,
-    "sem cartago": 136,
-    "sed cauca": 177,
-    "sem chia": 45,
-    "sem cienaga": 103,
-    "sed cesar": 11,
-    "sem cucuta": 286,
-    "sed choco": 294,
-    "sed cordoba": 182,
-    "sed cundinamarca": 163,
-    "sem dosquebradas": 112,
-    "sem duitama": 49,
-    "sem envigado": 115,
-    "sem estrella": 168,
-    "sem facatativa": 164,
-    "sem florencia": 55,
-    "sem floridablanca": 170,
-    "sem funza": 117,
-    "sem fusagasuga": 151,
-    "sem girardot": 179,
-    "sem giron": 287,
-    "sem guainia": 116,
-    "sed guajira": 192,
-    "sed guaviare": 173,
-    "sed huila": 178,
-    "sem ibague": 147,
-    "sem ipiales": 134,
-    "sem itagui": 135,
-    "sem jamundi": 146,
-    "sem lorica": 67,
-    "sed magdalena": 145,
-    "sem magangue": 133,
-    "sem maicao": 69,
-    "sem malambo": 161,
-    "sed meta": 113,
-    "sem manizales": 174,
-    "sem medellin": 180,
-    "sem monteria": 176,
-    "sem mosquera": 153,
-    "sem neiva": 105,
-    "sed narino": 143,
-    "sed norte de santander": 154,
-    "sem palmira": 152,
-    "sem pasto": 125,
-    "sem pereira": 78,
-    "sem piedecuesta": 79,
-    "sem pitalito": 138,
-    "sed putumayo": 184,
-    "sed quindio": 166,
-    "sem quibdo": 162,
-    "sem riohacha": 150,
-    "sem rionegro": 129,
-    "sed risaralda": 114,
-    "sed santander": 26,
-    "sem sabaneta": 108,
-    "sem sahagun": 142,
-    "sem san": 158,
-    "sem santa marta": 126,
-    "sed sucre": 175,
-    "sem soacha": 119,
-    "sem sogamoso": 172,
-    "sem soledad": 123,
-    "sed tolima": 122,
-    "sem tulua": 120,
-    "sem tunja": 141,
-    "sem turbo": 137,
-    "sem tumaco": 93,
-    "sem uribia": 144,
-    "sed valle": 165,
-    "sem valledupar": 171,
-    "sed vaupes": 132,
-    "sed vichada": 32,
-    "sem villavicencio": 124,
-    "sed sincelejo": 27,
-    "sem yopal": 289,
-    "sem yumbo": 169,
-    "sem zipaquira": 156,
-    "casur": 296,
-    "fiduprevisora": 297
-  },  
-        tipoCreditoOptions: [
-        { value: "", text: "Seleccione" },
-        { value: "Libre Inversión", text: "Libre Inversión" },
-        { value: "Compra de Cartera", text: "Compra de Cartera" },
-        { value: "Refinanciación", text: "Refinanciación" },
-        { value: "Refinanciaciónmas + Libre inversión", text: "Refinanciación + Libre inversión" },
-        { value: "Refinanciación + Libre Inversión", text: "Refinanciación + Compra Cartera" }
+      docentePagaduriasMap:{ /*  ← mapa COMPLETO  */
+        "sed amazonas":1,"sed antioquia":130,"sem armenia":34,"sed arauca":109,"sed atlantico":121,
+        "sem barrancabermeja":160,"sem barranquilla":106,"sem bello":111,"sed bolivar":293,"sed boyaca":110,
+        "sem bucaramanga":39,"sem buenaventura":40,"sem buga":157,"sed caldas":139,"sem cali":42,"sed caqueta":140,
+        "sed casanare":104,"sem cartagena":189,"sem cartago":136,"sed cauca":177,"sem chia":45,"sem cienaga":103,
+        "sed cesar":11,"sem cucuta":286,"sed choco":294,"sed cordoba":182,"sed cundinamarca":163,"sem dosquebradas":112,
+        "sem duitama":49,"sem envigado":115,"sem estrella":168,"sem facatativa":164,"sem florencia":55,
+        "sem floridablanca":170,"sem funza":117,"sem fusagasuga":151,"sem girardot":179,"sem giron":287,
+        "sem guainia":116,"sed guajira":192,"sed guaviare":173,"sed huila":178,"sem ibague":147,"sem ipiales":134,
+        "sem itagui":135,"sem jamundi":146,"sem lorica":67,"sed magdalena":145,"sem magangue":133,"sem maicao":69,
+        "sem malambo":161,"sed meta":113,"sem manizales":174,"sem medellin":180,"sem monteria":176,"sem mosquera":153,
+        "sem neiva":105,"sed narino":143,"sed norte de santander":154,"sem palmira":152,"sem pasto":125,
+        "sem pereira":78,"sem piedecuesta":79,"sem pitalito":138,"sed putumayo":184,"sed quindio":166,"sem quibdo":162,
+        "sem riohacha":150,"sem rionegro":129,"sed risaralda":114,"sed santander":26,"sem sabaneta":108,"sem sahagun":142,
+        "sem san":158,"sem santa marta":126,"sed sucre":175,"sem soacha":119,"sem sogamoso":172,"sem soledad":123,
+        "sed tolima":122,"sem tulua":120,"sem tunja":141,"sem turbo":137,"sem tumaco":93,"sem uribia":144,
+        "sed valle":165,"sem valledupar":171,"sed vaupes":132,"sed vichada":32,"sem villavicencio":124,
+        "sed sincelejo":27,"sem yopal":289,"sem yumbo":169,"sem zipaquira":156,"casur":296,"fiduprevisora":297
+      },
+      tipoCreditoOptions:[
+        {value:"",text:"Seleccione"},
+        {value:"Libre Inversión",text:"Libre Inversión"},
+        {value:"Compra de Cartera",text:"Compra de Cartera"},
+        {value:"Refinanciación",text:"Refinanciación"},
+        {value:"Refinanciaciónmas + Libre inversión",text:"Refinanciación + Libre inversión"},
+        {value:"Refinanciación + Libre Inversión",text:"Refinanciación + Compra Cartera"}
       ],
-      tipoCarteraOptions: [
-        { value: "Banco", text: "Banco" },
-        { value: "Cooperativa", text: "Cooperativa" },
-        { value: "CFC", text: "CFC" },
-        { value: "Financiera", text: "Financiera" },
-        { value: "Embargo", text: "Embargo" },
-        { value: "Afiliaciones", text: "Afiliaciones" }
-      ],
-      tipoPensionFopepOptions: tipoPensionFopepRaw.map(t => ({ value: t, text: t.replace(/\b\w/g, l => l.toUpperCase()) })),
-      tipoPensionFiduOptions: tipoPensionFiduRaw.map(t => ({ value: t, text: t.replace(/\b\w/g, l => l.toUpperCase()) }))
-    };
+      tipoCarteraOptions:[
+        {value:"Banco",text:"Banco"},
+        {value:"Cooperativa",text:"Cooperativa"},
+        {value:"CFC",text:"CFC"},
+        {value:"Financiera",text:"Financiera"},
+        {value:"Embargo",text:"Embargo"},
+        {value:"Afiliaciones",text:"Afiliaciones"}
+      ]
+    }
   },
-  computed: {
-    showDocenteOptions() {
-      return this.form.client_type === "docente";
-    },
-    showPensionadoOptions() {
-      return this.form.client_type === "pensionado";
-    },
-    docentePagaduriasOptions() {
-      const opts = [{ value: "", text: "Seleccione" }];
-      for (const [k, v] of Object.entries(this.docentePagaduriasMap)) {
-        opts.push({ value: v, text: k.replace(/(sed|sem)/gi, "").trim().toUpperCase() });
+  computed:{
+    /* visibilidad */
+    showDocenteOptions(){return this.form.client_type==="docente"},
+    showPensionadoOptions(){return this.form.client_type==="pensionado"},
+    showTipoPension(){return this.showPensionadoOptions},
+    /* lista pagadurías docentes */
+    docentePagaduriasOptions(){
+      const opts=[{value:"",text:"Seleccione"}];
+      for(const [k,v] of Object.entries(this.docentePagaduriasMap)){
+        opts.push({value:v,text:k.replace(/(sed|sem)/gi,"").trim().toUpperCase()});
       }
       return opts;
     },
-    showTipoPension() {
-      return this.showPensionadoOptions && (this.form.pagaduria_id == 201 || this.form.pagaduria_id == 297);
-    },
-    tipoPensionOptions() {
-      return this.form.pagaduria_id == 201 ? this.tipoPensionFopepOptions :
-             this.form.pagaduria_id == 297 ? this.tipoPensionFiduOptions : [];
+    /* tipo pensión (lista fija) */
+    tipoPensionOptions(){return fixedPensionOptions},
+    /* regla para carteras obligatorias */
+    requireCarteras(){
+      return this.form.tipo_credito==="Compra de Cartera" ||
+             this.form.tipo_credito==="Refinanciación + Libre Inversión";
     }
   },
-  watch: {
-    'form.client_type'() {
-      this.form.pagaduria_id = "";
-      this.form.tipo_pension = "";
-      this.form.resolucion = "";
-    },
-    'form.pagaduria_id'() {
-      this.form.tipo_pension = "";
-      this.form.resolucion = "";
+  watch:{
+    /* al cambiar solicitante, limpiar campos relacionados */
+    'form.client_type'(){this.form.pagaduria_id="";this.form.tipo_pension="";this.form.resolucion="";},
+    'form.pagaduria_id'(){this.form.tipo_pension="";this.form.resolucion="";},
+    /* si cambia tipo crédito y ya no requiere carteras ⇒ vaciar arreglo */
+    requireCarteras(val){
+      if(!val) this.form.carteras=[];
     }
   },
-  methods: {
-    onlyNumbers(e) {
-      if (!/[0-9]/.test(e.key)) e.preventDefault();
+  methods:{
+    /* utils teclado */
+    onlyNumbers(e){if(!/[0-9]/.test(e.key))e.preventDefault();},
+    onlyNumbersAndDot(e){if(!/[0-9.]/.test(e.key))e.preventDefault();},
+    /* formato moneda / porcentaje */
+    onInputCurrency(f){
+      const raw=this.form[f].replace(/\D/g,"");
+      this.form[f]=raw?raw.replace(/\B(?=(\d{3})+(?!\d))/g,"."):"";
     },
-    onlyNumbersAndDot(e) {
-      if (!/[0-9.]/.test(e.key)) e.preventDefault();
+    onInputPercentage(f){
+      let raw=this.form[f].replace(/[^0-9.]/g,"");
+      const p=raw.split(".");
+      if(p.length>2)raw=p[0]+"."+p.slice(1).join("");
+      if(p[1])raw=p[0]+"."+p[1].slice(0,2);
+      this.form[f]=raw?`${raw}%`:"";
     },
-    onInputCurrency(f) {
-      const raw = this.form[f].replace(/\D/g, "");
-      this.form[f] = raw ? raw.replace(/\B(?=(\d{3})+(?!\d))/g, ".") : "";
+    /* documentos */
+    addArchivo(){this.documentos.push({file:null});},
+    removeArchivo(i){this.documentos.splice(i,1);},
+    onFileChange(e,i){this.documentos[i].file=e.target.files[0]||null;},
+    async uploadArchivo(i,id){
+      if(!this.documentos[i].file)return;
+      const fd=new FormData();fd.append("archivo",this.documentos[i].file);
+      await axios.post(`/credit-requests/${id}/documents`,fd,{headers:{"Content-Type":"multipart/form-data"}});
     },
-    onInputPercentage(f) {
-      let raw = this.form[f].replace(/[^0-9.]/g, "");
-      const p = raw.split(".");
-      if (p.length > 2) raw = p[0] + "." + p.slice(1).join("");
-      if (p[1]) raw = p[0] + "." + p[1].slice(0, 2);
-      this.form[f] = raw ? `${raw}%` : "";
-    },
-    addArchivo() {
-      this.documentos.push({ file: null });
-    },
-    removeArchivo(i) {
-      this.documentos.splice(i, 1);
-    },
-    onFileChange(e, i) {
-      this.documentos[i].file = e.target.files[0] || null;
-    },
-    async uploadArchivo(i, id) {
-      if (!this.documentos[i].file) return;
-      const fd = new FormData();
-      fd.append("archivo", this.documentos[i].file);
-      await axios.post(`/credit-requests/${id}/documents`, fd, {
-        headers: { "Content-Type": "multipart/form-data" }
+    /* carteras */
+    addCartera(){
+      if(!this.requireCarteras) return;
+      this.form.carteras.push({
+        tipoCartera:"",nombreEntidad:"",
+        valorCuota:"",saldo:"",opera_x_desprendible:false
       });
     },
-    addCartera() {
-      this.form.carteras.push({ tipoCartera: "", nombreEntidad: "", valorCuota: "", saldo: "", opera_x_desprendible: false });
+    removeCartera(i){if(this.requireCarteras)this.form.carteras.splice(i,1);},
+    onInputCurrencyCartera(i,f){
+      const raw=this.form.carteras[i][f].replace(/\D/g,"");
+      this.form.carteras[i][f]=raw?raw.replace(/\B(?=(\d{3})+(?!\d))/g,"."):"";
     },
-    removeCartera(i) {
-      this.form.carteras.splice(i, 1);
+    onChangeClientType(){
+      this.form.pagaduria_id="";this.form.tipo_pension="";this.form.resolucion="";
     },
-    onInputCurrencyCartera(i, f) {
-      const raw = this.form.carteras[i][f].replace(/\D/g, "");
-      this.form.carteras[i][f] = raw ? raw.replace(/\B(?=(\d{3})+(?!\d))/g, ".") : "";
-    },
-    onChangeClientType() {
-      this.form.pagaduria_id = "";
-      this.form.tipo_pension = "";
-      this.form.resolucion = "";
-    },
-    async submitForm() {
-      if (this.documentos.length < 1) {
-        this.alertVariant = "warning";
-        this.alertMessage = "Debes añadir al menos un documento.";
-        return;
+    /* submit */
+    async submitForm(){
+      /* validaciones mínimas */
+      if(this.documentos.length<1){this.alert("warning","Debes añadir al menos un documento.");return;}
+      if(!this.documentos.some(d=>d.file)){this.alert("warning","Selecciona un archivo antes de guardar.");return;}
+      if(this.requireCarteras && this.form.carteras.length<1){
+        this.alert("warning","Debes agregar al menos una cartera.");return;
       }
-      if (!this.documentos.some(d => d.file)) {
-        this.alertVariant = "warning";
-        this.alertMessage = "Selecciona un archivo antes de guardar.";
-        return;
+      if(this.showTipoPension && (!this.form.tipo_pension || !this.form.resolucion)){
+        this.alert("warning","Selecciona tipo de pensión y resolución.");return;
       }
-      if (this.form.tipo_credito === "Compra de Cartera" && this.form.carteras.length < 1) {
-        this.alertVariant = "warning";
-        this.alertMessage = "Debes agregar al menos una cartera.";
-        return;
-      }
-      if (this.showTipoPension && (!this.form.tipo_pension || !this.form.resolucion)) {
-        this.alertVariant = "warning";
-        this.alertMessage = "Selecciona tipo de pensión y resolución.";
-        return;
-      }
-      this.isLoading = true;
-      try {
-        const payload = {
-          doc: this.form.doc,
-          name: this.form.name,
-          client_type: this.form.client_type,
-          pagaduria_id: this.form.pagaduria_id,
-          tipo_credito: this.form.tipo_credito,
-          cuota: parseInt(this.form.cuota.replace(/\./g, "")) || 0,
-          monto: parseInt(this.form.monto.replace(/\./g, "")) || 0,
-          tasa: parseFloat(this.form.tasa.replace(/[^\d.]/g, "")) || 0,
-          plazo: parseInt(this.form.plazo) || 1,
-          tipo_pension: this.form.tipo_pension,
-          resolucion: this.form.resolucion,
-          carteras: this.form.carteras.map(c => ({
-            tipo_cartera: c.tipoCartera,
-            nombre_entidad: c.nombreEntidad,
-            valor_cuota: parseInt(c.valorCuota.replace(/\./g, "")) || 0,
-            saldo: parseInt(c.saldo.replace(/\./g, "")) || 0,
-            opera_x_desprendible: c.opera_x_desprendible
+
+      this.isLoading=true;
+      try{
+        const payload={
+          doc:this.form.doc,name:this.form.name,client_type:this.form.client_type,
+          pagaduria_id:this.form.pagaduria_id,tipo_credito:this.form.tipo_credito,
+          cuota:parseInt(this.form.cuota.replace(/\./g,""))||0,
+          monto:parseInt(this.form.monto.replace(/\./g,""))||0,
+          tasa:parseFloat(this.form.tasa.replace(/[^\d.]/g,""))||0,
+          plazo:parseInt(this.form.plazo)||1,
+          tipo_pension:this.form.tipo_pension,resolucion:this.form.resolucion,
+          carteras:this.form.carteras.map(c=>({
+            tipo_cartera:c.tipoCartera,nombre_entidad:c.nombreEntidad,
+            valor_cuota:parseInt(c.valorCuota.replace(/\./g,""))||0,
+            saldo:parseInt(c.saldo.replace(/\./g,""))||0,
+            opera_x_desprendible:c.opera_x_desprendible
           }))
         };
-        const { data } = await axios.post("/credit-requests", payload);
-        const id = data?.data?.id;
-        if (!id) {
-          this.alertVariant = "danger";
-          this.alertMessage = "Error inesperado. Intenta de nuevo.";
-          this.isLoading = false;
-          return;
-        }
-        for (let i = 0; i < this.documentos.length; i++) {
-          await this.uploadArchivo(i, id);
-        }
-        this.$bvToast.toast("Crédito y documentos guardados con éxito.", {
-          title: "Éxito", variant: "success", solid: true, toaster: "b-toaster-top-center", autoHideDelay: 4000
+        /* crear solicitud */
+        const {data}=await axios.post("/credit-requests",payload);
+        const id=data?.data?.id;
+        if(!id){this.alert("danger","Error inesperado. Intenta de nuevo.");this.isLoading=false;return;}
+        /* subir docs */
+        for(let i=0;i<this.documentos.length;i++){await this.uploadArchivo(i,id);}
+        this.$bvToast.toast("Crédito y documentos guardados con éxito.",{
+          title:"Éxito",variant:"success",solid:true,toaster:"b-toaster-top-center",autoHideDelay:4000
         });
-        setTimeout(() => window.location.href = "/credit-requests", 1500);
-      } catch (e) {
-        this.alertVariant = "danger";
-        this.alertMessage = "Ocurrió un error al guardar el crédito.";
-      } finally {
-        this.isLoading = false;
-      }
-    }
+        setTimeout(()=>window.location.href="/credit-requests",1500);
+      }catch(e){
+        this.alert("danger","Ocurrió un error al guardar el crédito.");
+      }finally{this.isLoading=false;}
+    },
+    alert(variant,msg){this.alertVariant=variant;this.alertMessage=msg;}
   }
-};
+}
 </script>
 
 <style scoped lang="scss">
