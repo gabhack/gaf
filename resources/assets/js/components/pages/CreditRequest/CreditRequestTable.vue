@@ -1,82 +1,76 @@
 <template>
-    <div class="table-responsive">
-      <table class="table table-bordered table-hover">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Cédula</th>
-            <th>Nombre</th>
-            <th>Tipo Solicitante</th>
-            <th>Empresa</th>
-            <th>Pagaduría</th>
-            <th>Cuota</th>
-            <th>Monto</th>
-            <th>Tasa&nbsp;(Mensual)</th>
-            <th>Plazo</th>
-            <th>Estado</th>
-            <th>Tipo&nbsp;Crédito</th>
-            <th>Creado</th>
-            <th>Documentos</th>
-            <th v-if="isAdmin">Acción</th>
-          </tr>
-        </thead>
-  
-        <tbody>
-          <tr v-for="credit in credits" :key="credit.id">
-            <td>{{ credit.id }}</td>
-            <td>{{ credit.doc }}</td>
-            <td>{{ credit.name }}</td>
-            <td>{{ credit.client_type }}</td>
-            <td>{{ credit.empresa }}</td>
-            <td>{{ getPagaduriaNameById(credit.pagaduria_id) }}</td>
-            <td>{{ formatCurrency(credit.cuota) }}</td>
-            <td>{{ formatCurrency(credit.monto) }}</td>
-            <td>{{ formatPercentage(credit.tasa) }}</td>
-            <td>{{ credit.plazo }}</td>
-  
-            <!--  ─────  Badge de estado  ─────  -->
-            <td>
-              <span class="status-badge"
-                    :class="statusClass(credit.status)">
-                <i :class="iconClass(credit.status)"
-                   class="status-icon" />
-                {{ statusLabel(credit.status) }}
-              </span>
-            </td>
-  
-            <td>{{ credit.tipo_credito }}</td>
-            <td>{{ formatDate(credit.created_at) }}</td>
-  
-            <td>
-              <template v-if="credit.documents && credit.documents.length">
-                <div v-for="(doc, i) in credit.documents" :key="doc.id">
-                  <a :href="getDownloadUrl(doc.file_path)" target="_blank">
-                    doc-{{ i + 1 }}
-                  </a>
-                </div>
-              </template>
-              <span v-else>No hay documentos</span>
-            </td>
-  
-            <td v-if="isAdmin">
-              <button class="btn-credit"
-                      @click="$emit('open-visado', credit)">
-                Visar Manualmente
-              </button>
-              <button class="btn-credit ml-2"
-                      @click="$emit('view-carteras', credit)">
-                <i class="fas fa-eye" />
-              </button>
-              <button class="btn-credit ml-2"
-                      @click="$emit('visar', credit)">
-                Visar
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </template>
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover">
+      <thead>
+  <tr>
+    <th>ID</th>
+    <th>Creado</th>
+    <th>Cédula</th>
+    <th>Nombre</th>
+    <th>Tipo Solicitante</th>
+    <th>Tipo Pensión</th>
+    <th>Resolución</th>
+    <th>Empresa</th>
+    <th>Pagaduría</th>
+    <th>Cuota</th>
+    <th>Monto</th>
+    <th>Tasa&nbsp;(Mensual)</th>
+    <th>Plazo</th>
+    <th>Estado</th>
+    <th>Causal Visado</th>
+    <th>Tipo&nbsp;Crédito</th>
+    <th>Documentos</th>
+    <th v-if="isAdmin">Acción</th>
+  </tr>
+</thead>
+
+<tbody>
+  <tr v-for="credit in credits" :key="credit.id">
+    <td>{{ credit.id }}</td>
+    <td>{{ formatDate(credit.created_at) }}</td>
+    <td>{{ credit.doc }}</td>
+    <td>{{ credit.name }}</td>
+    <td>{{ credit.client_type }}</td>
+    <td>{{ credit.tipo_pension || '-' }}</td>
+    <td>{{ credit.resolucion || '-' }}</td>
+    <td>{{ credit.empresa }}</td>
+    <td>{{ getPagaduriaNameById(credit.pagaduria_id) }}</td>
+    <td>{{ formatCurrency(credit.cuota) }}</td>
+    <td>{{ formatCurrency(credit.monto) }}</td>
+    <td>{{ formatPercentage(credit.tasa) }}</td>
+    <td>{{ credit.plazo }}</td>
+    <td>
+      <span class="status-badge" :class="statusClass(credit.status)">
+        <i :class="iconClass(credit.status)" class="status-icon" />
+        {{ statusLabel(credit.status) }}
+      </span>
+    </td>
+    <td>{{ credit.visado ? credit.visado.causal : '' }}</td>
+    <td>{{ credit.tipo_credito }}</td>
+    <td>
+      <template v-if="credit.documents && credit.documents.length">
+        <div v-for="(doc, i) in credit.documents" :key="doc.id">
+          <a :href="getDownloadUrl(doc.file_path)" target="_blank">
+            doc-{{ i + 1 }}
+          </a>
+        </div>
+      </template>
+      <span v-else>No hay documentos</span>
+    </td>
+    <td v-if="isAdmin">
+      <button class="btn-credit" @click="$emit('open-visado', credit)">Visar Manualmente</button>
+      <button class="btn-credit ml-2" @click="$emit('view-carteras', credit)">
+        <i class="fas fa-eye" />
+      </button>
+      <button class="btn-credit ml-2" @click="$emit('visar', credit)">Visar</button>
+    </td>
+  </tr>
+</tbody>
+
+    </table>
+  </div>
+</template>
+
   
   <script>
   export default {

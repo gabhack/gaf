@@ -27,7 +27,9 @@ class CreditRequestController extends Controller
             'monto'        => 'required|numeric|min:0',
             'tasa'         => 'required|numeric|min:0',
             'plazo'        => 'required|integer|min:1',
-            'tipo_credito' => 'required|string|max:50'
+            'tipo_credito' => 'required|string|max:50',
+            'tipo_pension' => 'nullable|string|max:100',
+            'resolucion'   => 'nullable|string|max:255'
         ]);
 
         DB::beginTransaction();
@@ -44,6 +46,8 @@ class CreditRequestController extends Controller
                 'status'       => 'pendiente',
                 'tipo_credito' => $request->tipo_credito,
                 'user_id'      => Auth::id(),
+                'tipo_pension' => $request->tipo_pension,
+                'resolucion'   => $request->resolucion
             ]);
             $credit->save();
             Log::info('store - credit id', ['id' => $credit->id]);
@@ -104,62 +108,74 @@ class CreditRequestController extends Controller
     }
 
     public function getAll()
-    {
-        Log::info('getAll - inicio');
+{
+    Log::info('getAll - inicio');
 
-        $user = Auth::user();
-        Log::info('getAll - user', ['id' => $user->id ?? null, 'role_id' => $user->role_id ?? null]);
+    $user = Auth::user();
+    Log::info('getAll - user', ['id' => $user->id ?? null, 'role_id' => $user->role_id ?? null]);
 
-        $credits = CreditRequest::query()
-            ->where('status', '!=', 'visado')
-            ->when(!$user || $user->role_id !== 1, function ($q) use ($user) {
-                return $q->where('user_id', $user->id);
-            })
-            ->orderBy('updated_at', 'DESC')
-            ->get();
+    $credits = CreditRequest::with('visado') // Se carga la relación visado
+        ->where('status', '!=', 'visado')
+        ->when(!$user || $user->role_id !== 1, function ($q) use ($user) {
+            return $q->where('user_id', $user->id);
+        })
+        ->orderBy('updated_at', 'DESC')
+        ->get();
 
-        Log::info('getAll - credits', ['total' => $credits->count()]);
+    Log::info('getAll - credits obtenidos', ['total' => $credits->count()]);
 
-        $ids = $credits->pluck('user_id')->unique();
-        Log::info('getAll - user_ids', $ids->all());
+    $ids = $credits->pluck('user_id')->unique();
+    Log::info('getAll - user_ids únicos', $ids->all());
 
-        $comerciales = Comercial::with('empresa')
-            ->whereIn('user_id', $ids)
-            ->get()
-            ->keyBy('user_id');
+    $comerciales = Comercial::with('empresa')
+        ->whereIn('user_id', $ids)
+        ->get()
+        ->keyBy('user_id');
 
-        Log::info('getAll - comerciales', ['total' => $comerciales->count()]);
+    Log::info('getAll - comerciales encontrados', ['total' => $comerciales->count()]);
 
-        $credits->transform(function ($c) use ($comerciales) {
-            $c->empresa = optional(optional($comerciales[$c->user_id] ?? null)->empresa)->nombre;
-            return $c;
-        });
+    $credits->transform(function ($c) use ($comerciales) {
+        $c->empresa = optional(optional($comerciales[$c->user_id] ?? null)->empresa)->nombre;
+        return $c;
+    });
 
-        Log::info('getAll - fin');
-        return response()->json($credits);
-    }
+    Log::info('getAll - fin');
+    return response()->json($credits);
+}
+
 
     public function updateStatus($id, Request $request)
-    {
-        Log::info('updateStatus - inicio', ['id' => $id]);
+{
+    Log::info('updateStatus - inicio', [
+        'id' => $id,
+        'request_data' => $request->all()
+    ]);
 
-        try {
-            $credit         = CreditRequest::findOrFail($id);
-            $credit->status = $request->status ?? 'aprobado';
-            $credit->save();
+    try {
+        $credit = CreditRequest::findOrFail($id);
+        $credit->status = $request->status ?? 'aprobado';
 
-            Log::info('updateStatus - actualizado', [
-                'id'     => $id,
-                'status' => $credit->status
-            ]);
-
-            return response()->json(['message' => 'Estado actualizado'], 200);
-
-        } catch (\Throwable $e) {
-            Log::error('updateStatus - error', ['id' => $id, 'e' => $e->getMessage()]);
-            return response()->json(['message' => 'Error', 'error' => $e->getMessage()], 500);
+        if ($request->has('visado_id')) {
+            $credit->visado_id = $request->visado_id;
+            Log::info('updateStatus - visado_id asignado', ['visado_id' => $request->visado_id]);
         }
+
+        $credit->save();
+
+        Log::info('updateStatus - actualizado', [
+            'id' => $credit->id,
+            'status' => $credit->status,
+            'visado_id' => $credit->visado_id
+        ]);
+
+        return response()->json(['message' => 'Estado actualizado'], 200);
+
+    } catch (\Throwable $e) {
+        Log::error('updateStatus - error', ['id' => $id, 'e' => $e->getMessage()]);
+        return response()->json(['message' => 'Error', 'error' => $e->getMessage()], 500);
     }
+}
+
 
     public function markAsVisado($id)
     {

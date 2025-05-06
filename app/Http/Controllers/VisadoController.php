@@ -6,6 +6,7 @@ use App\DatamesFidu;
 use App\DatamesFopep;
 use App\DatamesSedValle;
 use App\DatamesSemCali;
+use App\CreditRequest;
 use App\Descapli;
 use App\Descnoap;
 use App\EmbargosSedValle;
@@ -196,9 +197,9 @@ class VisadoController extends Controller
     {
         $user = auth()->user();
 
-        \Log::info("📥 Iniciando proceso de creación de visado.", [
+        \Log::info('📥 VisadoController@store – request recibido', [
             'usuario' => $user->email,
-            'request' => $request->all()
+            'payload' => $request->all()
         ]);
 
         $data = $request->validate([
@@ -230,14 +231,15 @@ class VisadoController extends Controller
             'consultant_email'  => 'nullable|email',
             'consultant_name'   => 'nullable|string',
             'observacion'       => 'nullable|string',
-            'creditId'          => 'nullable|numeric',
+            'creditId'          => 'nullable|numeric',   // ⬅️  el ID del crédito
         ]);
 
         DB::beginTransaction();
 
         try {
+            /* ---------- 1. crear visado ---------- */
             $visado = Visado::create([
-                'conc'              => $data['conc'] ?? null,
+                'conc'              => $data['conc']   ?? null,
                 'estado'            => $data['estado'] ?? null,
                 'causal'            => $data['causal'] ?? null,
                 'fconsultaami'      => $data['fconsultaami'] ?? null,
@@ -245,19 +247,15 @@ class VisadoController extends Controller
                 'nombre'            => $data['nombre'],
                 'pagaduria'         => $data['pagaduria'],
                 'tcredito'          => $data['tcredito'] ?? null,
-                'clibinv'           => $data['clibinv'] ?? null,
-                'ccompra'           => $data['ccompra'] ?? null,
-                'entidad'           => $data['entidad'] ?? $data['pagaduria'],
-                'pagare'            => $data['pagare'] ?? null,
+                'clibinv'           => $data['clibinv']  ?? null,
+                'ccompra'           => $data['ccompra']  ?? null,
+                'entidad'           => $data['entidad']  ?? $data['pagaduria'],
+                'pagare'            => $data['pagare']   ?? null,
                 'vcredito'          => $data['vcredito'] ?? null,
                 'vdesembolso'       => $data['vdesembolso'] ?? null,
                 'plazo'             => $data['plazo'],
-                'monto'             => isset($data['monto'])
-                                        ? (int) floatval($data['monto'])
-                                        : null,
-                'cuotacredito'      => isset($data['cuotacredito'])
-                                        ? (int) floatval($data['cuotacredito'])
-                                        : null,
+                'monto'             => isset($data['monto'])        ? (int) floatval($data['monto'])        : null,
+                'cuotacredito'      => isset($data['cuotacredito']) ? (int) floatval($data['cuotacredito']) : null,
                 'aprobado'          => $data['aprobado'] ?? null,
                 'porcincorp'        => $data['porcincorp'] ?? null,
                 'cmaxincorp'        => $data['cmaxincorp'] ?? null,
@@ -267,32 +265,48 @@ class VisadoController extends Controller
                 'tipo_consulta'     => $data['tipo_consulta'] ?? 'Diamond',
                 'info_obligaciones' => $data['info_obligaciones'] ?? null,
                 'consultant_email'  => $data['consultant_email'] ?? $user->email,
-                'consultant_name'   => $data['consultant_name'] ?? $user->name,
+                'consultant_name'   => $data['consultant_name']  ?? $user->name,
                 'observacion'       => $data['observacion'] ?? null,
             ]);
 
+            /* ---------- 2. si viene creditId ⇒ asociar ---------- */
+            if (!empty($data['creditId'])) {
+                $credit = CreditRequest::find($data['creditId']);
+
+                if ($credit) {
+                    $credit->visado_id = $visado->id;
+                    $credit->save();
+
+                    \Log::info('🔗 Visado asociado al crédito', [
+                        'credit_id' => $credit->id,
+                        'visado_id' => $visado->id
+                    ]);
+                } else {
+                    \Log::warning('⚠️ creditId enviado pero no existe', [
+                        'creditId' => $data['creditId']
+                    ]);
+                }
+            }
+
             DB::commit();
 
-            \Log::info("✅ Visado creado exitosamente.", [
-                'visado_id' => $visado->id,
-                'ced'       => $visado->ced,
-                'usuario'   => $user->email
+            \Log::info('✅ Visado creado correctamente', [
+                'visado_id' => $visado->id
             ]);
 
             return response()->json($visado, 201);
-        } catch (\Throwable $th) {
+
+        } catch (\Throwable $e) {
             DB::rollBack();
 
-            \Log::error("❌ Error creando visado.", [
-                'mensaje' => $th->getMessage(),
-                'usuario' => $user->email,
-                'request' => $request->all(),
-                'trace'   => $th->getTraceAsString()
+            \Log::error('❌ Error creando visado', [
+                'error'   => $e->getMessage(),
+                'trace'   => $e->getTraceAsString()
             ]);
 
             return response()->json([
                 'message' => 'Error al guardar la consulta',
-                'error'   => $th->getMessage(),
+                'error'   => $e->getMessage()
             ], 500);
         }
     }

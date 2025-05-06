@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
@@ -21,16 +20,24 @@ class CreditRequest extends Model
         'plazo',
         'status',
         'tipo_credito',
-        'user_id',     
+        'user_id',
+        'tipo_pension',
+        'resolucion',
+        'visado_id'
     ];
 
     public function carteras()
     {
-        return $this->hasMany(CreditCartera::class,'credit_request_id');
+        return $this->hasMany(CreditCartera::class, 'credit_request_id');
     }
 
     public function documents()
     {
         return $this->hasMany(CreditDocument::class);
+    }
+
+    public function visado()
+    {
+        return $this->belongsTo(Visado::class, 'visado_id');
     }
 }
