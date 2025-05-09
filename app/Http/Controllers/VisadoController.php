@@ -194,100 +194,122 @@ class VisadoController extends Controller
      * Crea un nuevo Visado.
      */
     public function store(Request $request)
-    {
-        \Log::info('VisadoController@store inicio', $request->all());
-    
-        $data = $request->validate([
-            'conc'              => 'nullable|string',
-            'estado'            => 'nullable|string',
-            'causal'            => 'nullable|string',
-            'fconsultaami'      => 'nullable|date',
-            'doc'               => 'required|string',
-            'nombre'            => 'required|string',
-            'pagaduria'         => 'required|string',
-            'tcredito'          => 'nullable|string',
-            'clibinv'           => 'nullable|numeric',
-            'ccompra'           => 'nullable|numeric',
-            'entidad'           => 'nullable|string',
-            'pagare'            => 'nullable|string',
-            'vcredito'          => 'nullable|numeric',
-            'vdesembolso'       => 'nullable|numeric',
-            'plazo'             => 'required|numeric',
-            'cuotacredito'      => 'nullable|numeric',
-            'monto'             => 'nullable|numeric',
-            'aprobado'          => 'nullable|string',
-            'porcincorp'        => 'nullable|numeric',
-            'cmaxincorp'        => 'nullable|numeric',
-            'frespuesta'        => 'nullable|date',
-            'fvinculacion'      => 'nullable|date',
-            'tvinculacion'      => 'nullable|string',
-            'tipo_consulta'     => 'nullable|string',
-            'info_obligaciones' => 'nullable|string',
-            'consultant_email'  => 'nullable|email',
-            'consultant_name'   => 'nullable|string',
-            'observacion'       => 'nullable|string',
-            'creditId'          => 'nullable|numeric',
+{
+    \Log::info('VisadoController@store – inicio', ['payload' => $request->all()]);
+
+    $data = $request->validate([
+        'conc'              => 'nullable|string',
+        'estado'            => 'nullable|string',
+        'causal'            => 'nullable|string',
+        'fconsultaami'      => 'nullable|date',
+        'doc'               => 'required|string',
+        'nombre'            => 'required|string',
+        'pagaduria'         => 'required|string',
+        'tcredito'          => 'nullable|string',
+        'clibinv'           => 'nullable|numeric',
+        'ccompra'           => 'nullable|numeric',
+        'entidad'           => 'nullable|string',
+        'pagare'            => 'nullable|string',
+        'vcredito'          => 'nullable|numeric',
+        'vdesembolso'       => 'nullable|numeric',
+        'plazo'             => 'required|numeric',
+        'cuotacredito'      => 'nullable|numeric',
+        'monto'             => 'nullable|numeric',
+        'aprobado'          => 'nullable|string',
+        'porcincorp'        => 'nullable|numeric',
+        'cmaxincorp'        => 'nullable|numeric',
+        'frespuesta'        => 'nullable|date',
+        'fvinculacion'      => 'nullable|date',
+        'tvinculacion'      => 'nullable|string',
+        'tipo_consulta'     => 'nullable|string',
+        'info_obligaciones' => 'nullable|string',
+        'consultant_email'  => 'nullable|email',
+        'consultant_name'   => 'nullable|string',
+        'observacion'       => 'nullable|string',
+        'creditId'          => 'nullable|numeric',
+    ]);
+
+    \Log::info('Datos validados', $data);
+
+    DB::beginTransaction();
+
+    try {
+        $visado = Visado::create([
+            'conc'              => $data['conc']              ?? null,
+            'estado'            => $data['estado']            ?? null,
+            'causal'            => $data['causal']            ?? null,
+            'fconsultaami'      => $data['fconsultaami']      ?? null,
+            'ced'               => $data['doc'],
+            'nombre'            => $data['nombre'],
+            'pagaduria'         => $data['pagaduria'],
+            'tcredito'          => $data['tcredito']          ?? null,
+            'clibinv'           => $data['clibinv']           ?? null,
+            'ccompra'           => $data['ccompra']           ?? null,
+            'entidad'           => $data['entidad']           ?? $data['pagaduria'],
+            'pagare'            => $data['pagare']            ?? null,
+            'vcredito'          => $data['vcredito']          ?? null,
+            'vdesembolso'       => $data['vdesembolso']       ?? null,
+            'plazo'             => $data['plazo'],
+            'monto'             => isset($data['monto'])        ? (int) floatval($data['monto'])        : null,
+            'cuotacredito'      => isset($data['cuotacredito']) ? (int) floatval($data['cuotacredito']) : null,
+            'aprobado'          => $data['aprobado']          ?? null,
+            'porcincorp'        => $data['porcincorp']        ?? null,
+            'cmaxincorp'        => $data['cmaxincorp']        ?? null,
+            'frespuesta'        => $data['frespuesta']        ?? null,
+            'fvinculacion'      => $data['fvinculacion']      ?? null,
+            'tvinculacion'      => $data['tvinculacion']      ?? null,
+            'tipo_consulta'     => $data['tipo_consulta']     ?? 'Diamond',
+            'info_obligaciones' => $data['info_obligaciones'] ?? null,
+            'consultant_email'  => $data['consultant_email']  ?? auth()->user()->email,
+            'consultant_name'   => $data['consultant_name']   ?? auth()->user()->name,
+            'observacion'       => $data['observacion']       ?? null,
         ]);
-    
-        DB::beginTransaction();
-    
-        try {
-            $visado = Visado::create([
-                'conc'              => $data['conc']              ?? null,
-                'estado'            => $data['estado']            ?? null,
-                'causal'            => $data['causal']            ?? null,
-                'fconsultaami'      => $data['fconsultaami']      ?? null,
-                'ced'               => $data['doc'],
-                'nombre'            => $data['nombre'],
-                'pagaduria'         => $data['pagaduria'],
-                'tcredito'          => $data['tcredito']          ?? null,
-                'clibinv'           => $data['clibinv']           ?? null,
-                'ccompra'           => $data['ccompra']           ?? null,
-                'entidad'           => $data['entidad']           ?? $data['pagaduria'],
-                'pagare'            => $data['pagare']            ?? null,
-                'vcredito'          => $data['vcredito']          ?? null,
-                'vdesembolso'       => $data['vdesembolso']       ?? null,
-                'plazo'             => $data['plazo'],
-                'monto'             => isset($data['monto'])        ? (int) floatval($data['monto'])        : null,
-                'cuotacredito'      => isset($data['cuotacredito']) ? (int) floatval($data['cuotacredito']) : null,
-                'aprobado'          => $data['aprobado']          ?? null,
-                'porcincorp'        => $data['porcincorp']        ?? null,
-                'cmaxincorp'        => $data['cmaxincorp']        ?? null,
-                'frespuesta'        => $data['frespuesta']        ?? null,
-                'fvinculacion'      => $data['fvinculacion']      ?? null,
-                'tvinculacion'      => $data['tvinculacion']      ?? null,
-                'tipo_consulta'     => $data['tipo_consulta']     ?? 'Diamond',
-                'info_obligaciones' => $data['info_obligaciones'] ?? null,
-                'consultant_email'  => $data['consultant_email']  ?? auth()->user()->email,
-                'consultant_name'   => $data['consultant_name']   ?? auth()->user()->name,
-                'observacion'       => $data['observacion']       ?? null,
-            ]);
-    
-            \Log::info('Visado creado', ['visado_id' => $visado->id]);
-    
-            if (!empty($data['creditId'])) {
-                $credit = CreditRequest::find($data['creditId']);
-                if ($credit) {
-                    $credit->visado_id = $visado->id;
-                    $credit->save();
-                    \Log::info('Visado asociado', [
-                        'credit_id' => $credit->id,
-                        'visado_id' => $visado->id
-                    ]);
-                } else {
-                    \Log::warning('creditId no encontrado', ['creditId' => $data['creditId']]);
-                }
+
+        \Log::info('Visado creado', ['visado_id' => $visado->id]);
+
+        if (!empty($data['creditId'])) {
+            \Log::info('creditId recibido', ['creditId' => $data['creditId']]);
+
+            $credit = CreditRequest::find($data['creditId']);
+
+            if ($credit) {
+                \Log::info('CreditRequest encontrado', [
+                    'credit_id'         => $credit->id,
+                    'visado_id_actual'  => $credit->visado_id
+                ]);
+
+                $credit->visado_id = $visado->id;
+                $credit->save();
+
+                \Log::info('CreditRequest actualizado', [
+                    'credit_id'        => $credit->id,
+                    'visado_id_nuevo'  => $credit->visado_id
+                ]);
+            } else {
+                \Log::warning('CreditRequest NO encontrado', ['creditId' => $data['creditId']]);
             }
-    
-            DB::commit();
-    
-            return response()->json($visado, 201);
-        } catch (\Throwable $e) {
-            DB::rollBack();
-            \Log::error('Error creando visado', ['error' => $e->getMessage()]);
-            return response()->json(['message' => 'Error al guardar', 'error' => $e->getMessage()], 500);
+        } else {
+            \Log::info('Sin creditId en la petición');
         }
+
+        DB::commit();
+
+        \Log::info('VisadoController@store – fin OK', ['visado_id' => $visado->id]);
+        return response()->json($visado, 201);
+    } catch (\Throwable $e) {
+        DB::rollBack();
+        \Log::error('VisadoController@store – error', [
+            'mensaje' => $e->getMessage(),
+            'trace'   => $e->getTraceAsString()
+        ]);
+
+        return response()->json([
+            'message' => 'Error al guardar',
+            'error'   => $e->getMessage()
+        ], 500);
     }
+}
+
     
 
     /**

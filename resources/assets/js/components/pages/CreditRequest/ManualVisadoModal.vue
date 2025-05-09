@@ -211,7 +211,7 @@
             `/credit-requests/${this.localForm.creditId}/status`,
             { status: this.localForm.estado.toLowerCase() }
           )
-  
+  console.log("ENtro al manual")
           /* -------- feedback -------- */
           this.$bvToast?.toast('Visado guardado y estado actualizado.', {
             title: 'Éxito',

@@ -918,7 +918,8 @@ export default {
     axios.post(`/visados/${this.visado.id}`, data)
   .then(async () => {
     await axios.patch(`/credit-requests/${this.creditId}/status`, {
-      status: this.visadoValido.toLowerCase()
+      status: this.visadoValido.toLowerCase(),
+      visado_id: this.visado.id
     })
     window.location.href = '/historyClient'
   })

@@ -127,10 +127,16 @@ class CreditRequestController extends Controller
         ->get();
 
     Log::info('getAll - credits obtenidos', [
-        'total'          => $credits->count(),
-        'con_visado'     => $credits->filter(fn($c) => !is_null($c->visado_id))->count(),
-        'con_documentos' => $credits->filter(fn($c) => $c->documents->isNotEmpty())->count(),
-        'con_carteras'   => $credits->filter(fn($c) => $c->carteras->isNotEmpty())->count()
+        'total' => $credits->count(),
+        'con_visado' => $credits->filter(function ($c) {
+            return !is_null($c->visado_id);
+        })->count(),
+        'con_documentos' => $credits->filter(function ($c) {
+            return $c->documents->isNotEmpty();
+        })->count(),
+        'con_carteras' => $credits->filter(function ($c) {
+            return $c->carteras->isNotEmpty();
+        })->count(),
     ]);
 
     $comerciales = Comercial::with('empresa')
@@ -140,13 +146,14 @@ class CreditRequestController extends Controller
 
     $credits->transform(function ($c) use ($comerciales) {
         $c->empresa = optional(optional($comerciales[$c->user_id] ?? null)->empresa)->nombre;
-        $c->causal  = optional($c->visado)->causal;
+        $c->causal = optional($c->visado)->causal;
         return $c;
     });
 
     Log::info('getAll - fin');
     return response()->json($credits);
 }
+
 
 
     
