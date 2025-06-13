@@ -206,4 +206,49 @@ class CreditRequestController extends Controller
             return response()->json(['message' => 'Error al visar', 'error' => $e->getMessage()], 500);
         }
     }
+
+    public function bulkStore(Request $request)
+    {
+        $rows = $request->validate([
+            'rows'   => 'required|array|min:1',
+            'rows.*.doc'          => 'required|string|max:20',
+            'rows.*.name'         => 'required|string|max:255',
+            'rows.*.client_type'  => 'required|string|max:50',
+            'rows.*.pagaduria_id' => 'required|integer',
+            'rows.*.cuota'        => 'required|numeric|min:0',
+            'rows.*.monto'        => 'required|numeric|min:0',
+            'rows.*.tasa'         => 'required|numeric|min:0',
+            'rows.*.plazo'        => 'required|integer|min:1',
+            'rows.*.tipo_credito' => 'required|string|max:50',
+            'rows.*.tipo_pension' => 'nullable|string|max:100',
+            'rows.*.resolucion'   => 'nullable|string|max:255',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            foreach ($rows['rows'] as $r) {
+                CreditRequest::create([
+                    'doc'          => $r['doc'],
+                    'name'         => $r['name'],
+                    'client_type'  => $r['client_type'],
+                    'pagaduria_id' => $r['pagaduria_id'],
+                    'cuota'        => $r['cuota'],
+                    'monto'        => $r['monto'],
+                    'tasa'         => $r['tasa'],
+                    'plazo'        => $r['plazo'],
+                    'status'       => 'pendiente',
+                    'tipo_credito' => $r['tipo_credito'],
+                    'user_id'      => Auth::id(),
+                    'tipo_pension' => $r['tipo_pension'] ?? null,
+                    'resolucion'   => $r['resolucion']   ?? null
+                ]);
+            }
+            DB::commit();
+            return response()->json(['message'=>'Carga masiva completada.'],201);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error('bulkStore-error',['e'=>$e->getMessage()]);
+            return response()->json(['error'=>$e->getMessage()],500);
+        }
+    }
 }
