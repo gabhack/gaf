@@ -82,7 +82,7 @@ class CouponsController extends Controller
         'sem cali' => 191,
         'sem cartagena' => 189,
         'sem cartago' => 136,
-        'sem chia' => 45,
+        'sem chia' => 195,
         'sem cienaga' => 103,
         'sem cucuta' => 286,
         'sem dosquebradas' => 112,
