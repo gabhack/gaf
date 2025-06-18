@@ -100,46 +100,85 @@
       <div v-if="isLoading" class="overlay"><b-spinner variant="success" style="width:3rem;height:3rem" /></div>
 
       <b-card no-body class="section-card mb-4">
-        <div class="section-header"><ClientTypeIcon class="section-icon" /> Información del Cliente</div>
+        <div class="section-header">
+          <ClientTypeIcon class="section-icon" />
+          Información del Cliente
+        </div>
         <b-card-body>
-          <b-form-group label="Cédula"><b-form-input class="form-control2" v-model="form.doc" required /></b-form-group>
-
-          <b-form-group label="Nombre completo">
-            <div class="row g-3">
-              <div class="col-md-6"><b-form-input class="form-control2" v-model="form.name" required /></div>
-              <div class="col-md-6">
-                <b-form-select class="form-control2" v-model="form.client_type" :options="clientTypeOptions" required @change="onChangeClientType" />
-              </div>
-            </div>
+          <!-- Cédula -->
+          <b-form-group label="Cédula">
+            <b-form-input
+              class="form-control2"
+              v-model="form.doc"
+              required
+            />
           </b-form-group>
-          <div v-if="showDocenteOptions">
-            <b-form-group label="Pagaduría (Docente)">
+
+          <!-- Nombre completo + Tipo de cliente en la misma fila -->
+          <div class="row">
+            <div class="col-md-6">
+              <b-form-group label="Nombre completo">
+                <b-form-input
+                  class="form-control2"
+                  v-model="form.name"
+                  required
+                />
+              </b-form-group>
+            </div>
+            <div class="col-md-6">
               <b-form-group label="Tipo de cliente">
-  <b-form-select
-    class="form-control2"
-    v-model="form.client_type"
-    :options="clientTypeOptions"
-    required
-    @change="onChangeClientType"
-  />
-</b-form-group>
-            </b-form-group>
+                <b-form-select
+                  class="form-control2"
+                  v-model="form.client_type"
+                  :options="clientTypeOptions"
+                  required
+                  @change="onChangeClientType"
+                />
+              </b-form-group>
+            </div>
           </div>
 
+          <!-- Pagaduría según tipo de cliente -->
+          <div v-if="showDocenteOptions">
+            <b-form-group label="Pagaduría (Docente)">
+              <b-form-select
+                class="form-control2"
+                v-model.number="form.pagaduria_id"
+                :options="docentePagaduriasOptions"
+                required
+              />
+            </b-form-group>
+          </div>
           <div v-else-if="showPensionadoOptions">
             <b-form-group label="Pagaduría (Pensionado)">
-              <b-form-select class="form-control2" v-model.number="form.pagaduria_id" required>
+              <b-form-select
+                class="form-control2"
+                v-model.number="form.pagaduria_id"
+                required
+              >
                 <option disabled value="">Seleccione</option>
-                <option :value="200">COLPENSIONES</option><option :value="201">FOPEP</option>
-                <option :value="296">CASUR</option><option :value="297">FIDUPREVISORA</option>
+                <option :value="200">COLPENSIONES</option>
+                <option :value="201">FOPEP</option>
+                <option :value="296">CASUR</option>
+                <option :value="297">FIDUPREVISORA</option>
               </b-form-select>
             </b-form-group>
-
             <div v-if="showTipoPension">
               <b-form-group label="Tipo de Pensión">
-                <b-form-select class="form-control2" v-model="form.tipo_pension" :options="fixedPensionOptions" required />
+                <b-form-select
+                  class="form-control2"
+                  v-model="form.tipo_pension"
+                  :options="fixedPensionOptions"
+                  required
+                />
               </b-form-group>
-              <b-form-group label="Resolución"><b-form-input class="form-control2" v-model="form.resolucion" required /></b-form-group>
+              <b-form-group label="Resolución">
+                <b-form-input
+                  class="form-control2"
+                  v-model="form.resolucion"
+                  required
+                />
+              </b-form-group>
             </div>
           </div>
         </b-card-body>
