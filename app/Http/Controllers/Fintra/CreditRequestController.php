@@ -97,144 +97,55 @@ class CreditRequestController extends Controller
 
     public function getAll()
     {
+        Log::info('getAll - inicio');
         $user = Auth::user();
+        Log::info('getAll - user', [
+            'id'      => $user->id ?? null,
+            'role_id' => $user->role_id ?? null,
+        ]);
+    
         $credits = CreditRequest::with([
                 'visado:id,causal',
                 'documents:id,credit_request_id,file_path',
-                'carteras:credit_request_id,tipo_cartera,nombre_entidad,valor_cuota,saldo,opera_x_desprendible'
+                'carteras:credit_request_id,tipo_cartera,nombre_entidad,valor_cuota,saldo,opera_x_desprendible',
             ])
-            ->where('status','!=','visado')
-            ->when(!$user || $user->role_id!==1, fn($q)=>$q->where('user_id',$user->id))
-            ->orderByDesc('updated_at')
+            ->where('status', '!=', 'visado')
+            ->when(
+                ! $user || $user->role_id !== 1,
+                function ($q) use ($user) {
+                    return $q->where('user_id', $user->id);
+                }
+            )
+            ->orderBy('updated_at', 'desc')
             ->get();
-
-        $empresas = Comercial::with('empresa')
-            ->whereIn('user_id',$credits->pluck('user_id')->unique())
-            ->get()->keyBy('user_id');
-
-        $credits->transform(function($c)use($empresas){
-            $c->empresa = optional(optional($empresas[$c->user_id]??null)->empresa)->nombre;
+    
+        Log::info('getAll - credits obtenidos', [
+            'total'          => $credits->count(),
+            'con_visado'     => $credits->filter(function ($c) {
+                return ! is_null($c->visado_id);
+            })->count(),
+            'con_documentos' => $credits->filter(function ($c) {
+                return $c->documents->isNotEmpty();
+            })->count(),
+            'con_carteras'   => $credits->filter(function ($c) {
+                return $c->carteras->isNotEmpty();
+            })->count(),
+        ]);
+    
+        $comerciales = Comercial::with('empresa')
+            ->whereIn('user_id', $credits->pluck('user_id')->unique())
+            ->get()
+            ->keyBy('user_id');
+    
+        $credits->transform(function ($c) use ($comerciales) {
+            $c->empresa = optional(optional($comerciales[$c->user_id] ?? null)->empresa)->nombre;
             $c->causal  = optional($c->visado)->causal;
             return $c;
         });
-
+    
+        Log::info('getAll - fin');
+    
         return response()->json($credits);
     }
-
-    public function updateStatus($id,Request $request)
-    {
-        try{
-            $credit = CreditRequest::findOrFail($id);
-            $credit->status = $request->status ?? 'aprobado';
-            if($request->has('visado_id')) $credit->visado_id = $request->visado_id;
-            $credit->save();
-            return response()->json(['message'=>'Estado actualizado'],200);
-        }catch(\Throwable $e){
-            return response()->json(['message'=>'Error','error'=>$e->getMessage()],500);
-        }
-    }
-
-    public function markAsVisado($id)
-    {
-        try{
-            $c = CreditRequest::findOrFail($id);
-            $c->status='visado';
-            $c->save();
-            return response()->json(['message'=>'Crédito visado'],200);
-        }catch(\Throwable $e){
-            return response()->json(['message'=>'Error','error'=>$e->getMessage()],500);
-        }
-    }
-
-    public function bulkStore(Request $request)
-{
-    Log::info('bulk-in', $request->all());
-
-    $rows = $request->validate([
-        'rows'                             => 'required|array|min:1',
-        'rows.*.doc'                       => 'required|string|max:20',
-        'rows.*.name'                      => 'required|string|max:255',
-        'rows.*.client_type'               => 'required|string|max:50',
-        'rows.*.pagaduria_id'              => 'required|integer',
-        'rows.*.cuota'                     => 'required|numeric|min:0',
-        'rows.*.monto'                     => 'required|numeric|min:0',
-        'rows.*.tasa'                      => 'required|numeric|min:0',
-        'rows.*.plazo'                     => 'required|integer|min:1',
-        'rows.*.tipo_credito'              => 'required|string|max:50',
-        'rows.*.tipo_pension'              => 'nullable|string|max:100',
-        'rows.*.resolucion'                => 'nullable|string|max:255',
-        'rows.*.carteras'                  => 'nullable|array',
-        'rows.*.carteras.*.tipo_cartera'         => 'nullable|string|max:50',
-        'rows.*.carteras.*.nombre_entidad'       => 'nullable|string|max:255',
-        'rows.*.carteras.*.valor_cuota'          => 'nullable|numeric|min:0',
-        'rows.*.carteras.*.saldo'                => 'nullable|numeric|min:0',
-        'rows.*.carteras.*.opera_x_desprendible' => 'boolean',
-        'rows.*.docs'                       => 'nullable|array',
-        'rows.*.docs.*.file_path'           => 'required_with:rows.*.docs|string|max:255',
-    ]);
-
-    DB::beginTransaction();
-    try {
-        foreach ($rows['rows'] as $index => $r) {
-            Log::info('bulk-row', ['index' => $index, 'data' => $r]);
-
-            // 1) Crear el CreditRequest
-            $credit = CreditRequest::create([
-                'doc'          => $r['doc'],
-                'name'         => $r['name'],
-                'client_type'  => $r['client_type'],
-                'pagaduria_id' => $r['pagaduria_id'],
-                'cuota'        => $r['cuota'],
-                'monto'        => $r['monto'],
-                'tasa'         => $r['tasa'],
-                'plazo'        => $r['plazo'],
-                'status'       => 'pendiente',
-                'tipo_credito' => $r['tipo_credito'],
-                'user_id'      => Auth::id(),
-                'tipo_pension' => $r['tipo_pension'] ?? null,
-                'resolucion'   => $r['resolucion']   ?? null,
-            ]);
-
-            // 2) Registrar carteras si vienen
-            $createdC = 0;
-            if (! empty($r['carteras'])) {
-                foreach ($r['carteras'] as $c) {
-                    CreditCartera::create([
-                        'credit_request_id'    => $credit->id,
-                        'tipo_cartera'         => $c['tipo_cartera']   ?? null,
-                        'nombre_entidad'       => $c['nombre_entidad'] ?? null,
-                        'valor_cuota'          => $c['valor_cuota']    ?? 0,
-                        'saldo'                => $c['saldo']          ?? 0,
-                        'opera_x_desprendible' => ! empty($c['opera_x_desprendible']),
-                    ]);
-                    $createdC++;
-                }
-            }
-            Log::info('bulk-row-carteras', ['row' => $index, 'created' => $createdC]);
-
-            // 3) Registrar documentos si vienen
-            $createdD = 0;
-            if (! empty($r['docs'])) {
-                foreach ($r['docs'] as $d) {
-                    CreditDocument::create([
-                        'credit_request_id' => $credit->id,
-                        'file_path'         => $d['file_path'],
-                    ]);
-                    $createdD++;
-                }
-            }
-            Log::info('bulk-row-docs', ['row' => $index, 'created' => $createdD]);
-        }
-
-        DB::commit();
-        Log::info('bulk-ok');
-        return response()->json(['message' => 'Carga masiva completada.'], 201);
-
-    } catch (\Throwable $e) {
-        DB::rollBack();
-        Log::error('bulk-error', ['e' => $e->getMessage()]);
-        return response()->json(['error' => $e->getMessage()], 500);
-    }
-}
-
+    
 }
