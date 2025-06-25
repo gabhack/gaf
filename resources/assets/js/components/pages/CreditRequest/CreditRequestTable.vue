@@ -168,7 +168,7 @@
         129: 'SEM RIONEGRO',
         108: 'SEM SABANETA',
         142: 'SEM SAHAGÚN',
-        158: 'SEM SAN',
+        158: 'SEM SAN ANDRES',
         126: 'SEM SANTA MARTA',
         119: 'SEM SOACHA',
         172: 'SEM SOGAMOSO',

@@ -93,7 +93,7 @@
                     aria-controls="menuSolicitudes"
                 >
                     <visado-icon></visado-icon>
-                    <span class="pl-2">Prospeccion</span>
+                    <span class="pl-2">Consulta</span>
                 </a>
                 <div
                     class="collapse"
@@ -101,20 +101,17 @@
                     data-parent="#accordionSidebar"
                     aria-labelledby="menuSolicitudes"
                 >
-                    <div class="bg-green-side py-2 collapse-inner">
-                        <a
-                            class="collapse-item"
-                            href="/credit-request"
-                        >
-                            Visamax >
-                        </a>
-                        <a
-                            class="collapse-item"
-                            href="/credit-requests"
-                        >
-                            Historial de solicitudes >
-                        </a>
-                    </div>
+                <div class="bg-green-side py-2 collapse-inner">
+                    <a class="collapse-item" href="/credit-request">
+                        Consulta individual
+                    </a>
+                    <a class="collapse-item" href="{{ route('credit-request.bulk') }}">
+                        Carga masiva de solicitudes
+                    </a>
+                    <a class="collapse-item" href="/credit-requests">
+                        Historial de solicitudes
+                    </a>
+                </div>
                 </div>
             </li>
 

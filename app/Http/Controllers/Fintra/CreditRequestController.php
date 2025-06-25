@@ -14,6 +14,118 @@ use Illuminate\Support\Facades\Auth;
 
 class CreditRequestController extends Controller
 {
+    /* ------------------------------------------------ PAGADURÍAS --------------------------------------------- */
+    protected static $pagaduriaMap = [
+        'sed amazonas'                 => 1,
+        'sed antioquia'                => 130,
+        'sem armenia'                  => 34,
+        'sed arauca'                   => 109,
+        'sed atlantico'                => 121,
+        'sem barrancabermeja'          => 160,
+        'sem barranquilla'             => 106,
+        'sem bello'                    => 111,
+        'sed bolivar'                  => 293,
+        'sed boyaca'                   => 110,
+        'sem bucaramanga'              => 39,
+        'sem buenaventura'             => 40,
+        'sem buga'                     => 157,
+        'sed caldas'                   => 139,
+        'sem cali'                     => 42,
+        'sed caqueta'                  => 140,
+        'sed casanare'                 => 104,
+        'sem cartagena'                => 189,
+        'sem cartago'                  => 136,
+        'sed cauca'                    => 177,
+        'sem chia'                     => 45,
+        'sem cienaga'                  => 103,
+        'sed cesar'                    => 11,
+        'sem cucuta'                   => 286,
+        'sed choco'                    => 294,
+        'sed cordoba'                  => 182,
+        'sed cundinamarca'             => 163,
+        'sem dosquebradas'             => 112,
+        'sem duitama'                  => 49,
+        'sem envigado'                 => 115,
+        'sem estrella'                 => 168,
+        'sem facatativa'               => 164,
+        'sem florencia'                => 55,
+        'sem floridablanca'            => 170,
+        'sem funza'                    => 117,
+        'sem fusagasuga'               => 151,
+        'sem girardot'                 => 179,
+        'sem giron'                    => 287,
+        'sem guainia'                  => 116,
+        'sed guajira'                  => 192,
+        'sed guaviare'                 => 173,
+        'sed huila'                    => 178,
+        'sem ibague'                   => 147,
+        'sem ipiales'                  => 134,
+        'sem itagui'                   => 135,
+        'sem jamundi'                  => 146,
+        'sem lorica'                   => 67,
+        'sed magdalena'                => 145,
+        'sem magangue'                 => 133,
+        'sem maicao'                   => 69,
+        'sem malambo'                  => 161,
+        'sed meta'                     => 113,
+        'sem manizales'                => 174,
+        'sem medellin'                 => 180,
+        'sem monteria'                 => 176,
+        'sem mosquera'                 => 153,
+        'sem neiva'                    => 105,
+        'sed narino'                   => 143,
+        'sed norte de santander'       => 154,
+        'sem palmira'                  => 152,
+        'sem pasto'                    => 125,
+        'sem pereira'                  => 78,
+        'sem piedecuesta'              => 79,
+        'sem pitalito'                 => 138,
+        'sed putumayo'                 => 184,
+        'sed quindio'                  => 166,
+        'sem quibdo'                   => 162,
+        'sem riohacha'                 => 150,
+        'sem rionegro'                 => 129,
+        'sed risaralda'                => 114,
+        'sed santander'                => 26,
+        'sem sabaneta'                 => 108,
+        'sem sahagun'                  => 142,
+        'sem san andres'                      => 158,
+        'sem santa marta'              => 126,
+        'sed sucre'                    => 175,
+        'sem soacha'                   => 119,
+        'sem sogamoso'                 => 172,
+        'sem soledad'                  => 123,
+        'sed tolima'                   => 122,
+        'sem tulua'                    => 120,
+        'sem tunja'                    => 141,
+        'sem turbo'                    => 137,
+        'sem tumaco'                   => 93,
+        'sem uribia'                   => 144,
+        'sed valle'                    => 165,
+        'sem valledupar'               => 171,
+        'sed vaupes'                   => 132,
+        'sed vichada'                  => 32,
+        'sem villavicencio'            => 124,
+        'sed sincelejo'                => 27,
+        'sem yopal'                    => 289,
+        'sem yumbo'                    => 169,
+        'sem zipaquira'                => 156,
+        'colpensiones'                 => 200,
+        'fopep'                        => 201,
+        'casur'                        => 296,
+        'fiduprevisora'                => 297,
+    ];
+
+    protected function mapPagaduria($value)
+    {
+        if (is_numeric($value)) {
+            return (int) $value;
+        }
+        $key = trim(mb_strtolower($value));
+        return self::$pagaduriaMap[$key] ?? 0;
+    }
+
+    /* -----------------------------------------------  SAVE INDIVIDUAL ----------------------------------------- */
     public function store(Request $request)
     {
         Log::info('store-in', $request->all());
@@ -22,7 +134,7 @@ class CreditRequestController extends Controller
             'doc'          => 'required|string|max:20',
             'name'         => 'required|string|max:255',
             'client_type'  => 'required|string|max:50',
-            'pagaduria_id' => 'required|integer',
+            'pagaduria_id' => 'required',
             'cuota'        => 'required|numeric|min:0',
             'monto'        => 'required|numeric|min:0',
             'tasa'         => 'required|numeric|min:0',
@@ -35,7 +147,7 @@ class CreditRequestController extends Controller
             'carteras.*.nombre_entidad' => 'nullable|string|max:255',
             'carteras.*.valor_cuota'    => 'nullable|numeric|min:0',
             'carteras.*.saldo'          => 'nullable|numeric|min:0',
-            'carteras.*.opera_x_desprendible' => 'boolean'
+            'carteras.*.opera_x_desprendible' => 'boolean',
         ]);
 
         DB::beginTransaction();
@@ -44,7 +156,7 @@ class CreditRequestController extends Controller
                 'doc'          => $request->doc,
                 'name'         => $request->name,
                 'client_type'  => $request->client_type,
-                'pagaduria_id' => $request->pagaduria_id,
+                'pagaduria_id' => $this->mapPagaduria($request->pagaduria_id),
                 'cuota'        => $request->cuota,
                 'monto'        => $request->monto,
                 'tasa'         => $request->tasa,
@@ -53,7 +165,7 @@ class CreditRequestController extends Controller
                 'tipo_credito' => $request->tipo_credito,
                 'user_id'      => Auth::id(),
                 'tipo_pension' => $request->tipo_pension,
-                'resolucion'   => $request->resolucion
+                'resolucion'   => $request->resolucion,
             ]);
 
             foreach ($request->input('carteras', []) as $c) {
@@ -63,89 +175,155 @@ class CreditRequestController extends Controller
                     'saldo'                => $c['saldo'] ?? 0,
                     'tipo_cartera'         => $c['tipo_cartera'] ?? null,
                     'nombre_entidad'       => $c['nombre_entidad'] ?? null,
-                    'opera_x_desprendible' => !empty($c['opera_x_desprendible']),
+                    'opera_x_desprendible' => ! empty($c['opera_x_desprendible']),
                 ]);
             }
 
             DB::commit();
-            Log::info('store-ok', ['id'=>$credit->id]);
-            return response()->json(['message'=>'Crédito guardado','data'=>['id'=>$credit->id]],201);
+            Log::info('store-ok', ['id' => $credit->id]);
+            return response()->json(['message' => 'Crédito guardado', 'data' => ['id' => $credit->id]], 201);
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('store-error',['e'=>$e->getMessage()]);
-            return response()->json(['message'=>'Error','error'=>$e->getMessage()],500);
+            Log::error('store-error', ['e' => $e->getMessage()]);
+            return response()->json(['message' => 'Error', 'error' => $e->getMessage()], 500);
         }
     }
 
-    public function uploadDocument($id, Request $request)
+    /* ----------------------------------------  CARGA MASIVA --------------------------------------------------- */
+    public function bulkStore(Request $request)
     {
-        if (!$request->hasFile('archivo')) return response()->json(['error'=>'No se recibió archivo'],400);
+        Log::info('bulk-in', $request->all());
 
-        $request->validate(['archivo'=>'required|file|mimes:pdf,jpg,jpeg,png|max:10240']);
+        $rows = $request->validate([
+            'rows'                             => 'required|array|min:1',
+            'rows.*.doc'                       => 'required|string|max:20',
+            'rows.*.name'                      => 'required|string|max:255',
+            'rows.*.client_type'               => 'required|string|max:50',
+            'rows.*.pagaduria_id'              => 'required',
+            'rows.*.cuota'                     => 'required|numeric|min:0',
+            'rows.*.monto'                     => 'required|numeric|min:0',
+            'rows.*.tasa'                      => 'required|numeric|min:0',
+            'rows.*.plazo'                     => 'required|integer|min:1',
+            'rows.*.tipo_credito'              => 'required|string|max:50',
+            'rows.*.tipo_pension'              => 'nullable|string|max:100',
+            'rows.*.resolucion'                => 'nullable|string|max:255',
+            'rows.*.carteras'                  => 'nullable|array',
+            'rows.*.carteras.*.tipo_cartera'         => 'nullable|string|max:50',
+            'rows.*.carteras.*.nombre_entidad'       => 'nullable|string|max:255',
+            'rows.*.carteras.*.valor_cuota'          => 'nullable|numeric|min:0',
+            'rows.*.carteras.*.saldo'                => 'nullable|numeric|min:0',
+            'rows.*.carteras.*.opera_x_desprendible' => 'boolean',
+            'rows.*.docs'                       => 'nullable|array',
+            'rows.*.docs.*.file_path'           => 'required_with:rows.*.docs|string|max:255',
+        ]);
 
-        $credit = CreditRequest::find($id);
-        if (!$credit) return response()->json(['error'=>'Crédito no encontrado'],404);
+        DB::beginTransaction();
+        try {
+            /*  NO se invierte el orden: se insertan tal y como vienen                                    */
+            foreach ($rows['rows'] as $r) {
 
-        $path = $request->file('archivo')->store('public/documents');
-        $doc  = CreditDocument::create(['credit_request_id'=>$credit->id,'file_path'=>$path]);
+                $credit = CreditRequest::create([
+                    'doc'          => $r['doc'],
+                    'name'         => $r['name'],
+                    'client_type'  => $r['client_type'],
+                    'pagaduria_id' => $this->mapPagaduria($r['pagaduria_id']),
+                    'cuota'        => $r['cuota'],
+                    'monto'        => $r['monto'],
+                    'tasa'         => $r['tasa'],
+                    'plazo'        => $r['plazo'],
+                    'status'       => 'pendiente',
+                    'tipo_credito' => $r['tipo_credito'],
+                    'user_id'      => Auth::id(),
+                    'tipo_pension' => $r['tipo_pension'] ?? null,
+                    'resolucion'   => $r['resolucion']   ?? null,
+                ]);
 
-        Log::info('upload-doc', ['credit_id'=>$id,'doc_id'=>$doc->id]);
-        return response()->json(['message'=>'Documento subido','doc_id'=>$doc->id],201);
+                if (! empty($r['carteras'])) {
+                    foreach ($r['carteras'] as $c) {
+                        CreditCartera::create([
+                            'credit_request_id'    => $credit->id,
+                            'tipo_cartera'         => $c['tipo_cartera']   ?? null,
+                            'nombre_entidad'       => $c['nombre_entidad'] ?? null,
+                            'valor_cuota'          => $c['valor_cuota']    ?? 0,
+                            'saldo'                => $c['saldo']          ?? 0,
+                            'opera_x_desprendible' => ! empty($c['opera_x_desprendible']),
+                        ]);
+                    }
+                }
+
+                if (! empty($r['docs'])) {
+                    foreach ($r['docs'] as $d) {
+                        CreditDocument::create([
+                            'credit_request_id' => $credit->id,
+                            'file_path'         => $d['file_path'],
+                        ]);
+                    }
+                }
+            }
+
+            DB::commit();
+            return response()->json(['message' => 'Carga masiva completada.'], 201);
+
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error('bulk-error', ['e' => $e->getMessage()]);
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
-    public function index(){ return view('CreditRequest.index'); }
+    /* -------------------------------------------  RESTO MÉTODOS  --------------------------------------------- */
+    public function uploadDocument($id, Request $request)
+    {
+        if (! $request->hasFile('archivo')) {
+            return response()->json(['error' => 'No se recibió archivo'], 400);
+        }
+
+        $request->validate(['archivo' => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240']);
+
+        $credit = CreditRequest::find($id);
+        if (! $credit) {
+            return response()->json(['error' => 'Crédito no encontrado'], 404);
+        }
+
+        $path = $request->file('archivo')->store('public/documents');
+        $doc  = CreditDocument::create(['credit_request_id' => $credit->id, 'file_path' => $path]);
+
+        Log::info('upload-doc', ['credit_id' => $id, 'doc_id' => $doc->id]);
+        return response()->json(['message' => 'Documento subido', 'doc_id' => $doc->id], 201);
+    }
+
+    public function index()
+    {
+        return view('CreditRequest.index');
+    }
 
     public function getAll()
     {
-        Log::info('getAll - inicio');
         $user = Auth::user();
-        Log::info('getAll - user', [
-            'id'      => $user->id ?? null,
-            'role_id' => $user->role_id ?? null,
-        ]);
-    
+
         $credits = CreditRequest::with([
                 'visado:id,causal',
                 'documents:id,credit_request_id,file_path',
                 'carteras:credit_request_id,tipo_cartera,nombre_entidad,valor_cuota,saldo,opera_x_desprendible',
             ])
             ->where('status', '!=', 'visado')
-            ->when(
-                ! $user || $user->role_id !== 1,
-                function ($q) use ($user) {
-                    return $q->where('user_id', $user->id);
-                }
-            )
-            ->orderBy('updated_at', 'desc')
+            ->when(! $user || $user->role_id !== 1, function ($q) use ($user) {
+                return $q->where('user_id', $user->id);
+            })
+            ->orderByDesc('updated_at')
             ->get();
-    
-        Log::info('getAll - credits obtenidos', [
-            'total'          => $credits->count(),
-            'con_visado'     => $credits->filter(function ($c) {
-                return ! is_null($c->visado_id);
-            })->count(),
-            'con_documentos' => $credits->filter(function ($c) {
-                return $c->documents->isNotEmpty();
-            })->count(),
-            'con_carteras'   => $credits->filter(function ($c) {
-                return $c->carteras->isNotEmpty();
-            })->count(),
-        ]);
-    
-        $comerciales = Comercial::with('empresa')
+
+        $empresas = Comercial::with('empresa')
             ->whereIn('user_id', $credits->pluck('user_id')->unique())
             ->get()
             ->keyBy('user_id');
-    
-        $credits->transform(function ($c) use ($comerciales) {
-            $c->empresa = optional(optional($comerciales[$c->user_id] ?? null)->empresa)->nombre;
+
+        $credits->transform(function ($c) use ($empresas) {
+            $c->empresa = optional(optional($empresas[$c->user_id] ?? null)->empresa)->nombre;
             $c->causal  = optional($c->visado)->causal;
             return $c;
         });
-    
-        Log::info('getAll - fin');
-    
+
         return response()->json($credits);
     }
-    
 }

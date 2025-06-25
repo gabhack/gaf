@@ -41,6 +41,7 @@ import DemographicData2 from './components/pages/Demographic/DemographicDataFilt
 import DemographicIndex from './components/pages/Demographic/IndexDemografico.vue';
 import UploadPensiones from './components/pages/Pensiones/uploadColpensiones.vue';
 import UploadFiducidiaria from './components/pages/Pensiones/upload-fiducidiaria.vue';
+import CreditRequestBulk from './components/pages/CreditRequest/CreditRequestBulk.vue';
 
 import JoinPensiones from './components/pages/Pensiones/joinpensiones.vue';
 import Index from './components/pages/Integrations/index.vue';
@@ -149,7 +150,7 @@ Vue.component('editar-sedes', require('./components/pages/Sedes/Edit.vue').defau
 
 //fintra
 Vue.component('credit-form', require('./components/pages/CreditRequest/CreditForm.vue').default);
-//Vue.component('credit-requests-list', require('./components/pages/CreditRequest/CreditRequestsList.vue').default);
+Vue.component('credit-request-bulk', CreditRequestBulk);
 Vue.component('credit-requests-list',
     require('./components/pages/ConsultDataClientDraft/indexCreditRequest.vue').default
 );

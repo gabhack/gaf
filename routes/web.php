@@ -591,8 +591,7 @@ Route::resource('/datamessedvalle', 'DatamesSedValleController');
 // ------------------------------------------------------------------
 // COTIZER
 // ------------------------------------------------------------------
-// Mantenemos solo una definición del resource
-Route::resource('/cotizer-data', dataCotizerController::class)->only(['store', 'index', 'show', 'update']);
+
 
 Route::get('/cotizer-data/borrar/{id}', 'dataCotizerController@destroy');
 Route::view('/solicitud', 'creditCalculator')->middleware('auth');
@@ -723,7 +722,14 @@ Route::get('jelou/candidates', [JelouController::class, 'getJelouCandidates']);
 // ------------------------------------------------------------------
 Route::view('/credit-request', 'CreditRequest.CreditForm')->name('credit-request.view');
 Route::post('/credit-requests', [CreditRequestController::class, 'store'])->name('credit-request.store');
+Route::get(
+    '/credit-requests/bulk',
+    function () {
+        return view('CreditRequest.CreditRequestBulk');
+    }
+)->name('credit-request.bulk');
 Route::post('/credit-requests/bulk', [CreditRequestController::class, 'bulkStore']);
+
 
 // Listar/actualizar credit requests
 Route::get('/credit-requests', [CreditRequestController::class, 'index'])->name('credit-request.index');
