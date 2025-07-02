@@ -8,7 +8,7 @@
       <!-- Encabezado / Descripción -->
       <b-row>
         <b-col cols="12" md="9" style="margin-left: 28px">
-          <h3 class="heading-title">Análisis de Cartera</h3>
+          <h3 class="heading-title">Análisis de Carteras</h3>
           <p>
             Acceda a información estratégica que facilita la toma de decisiones en la compra de cartera,
             permitiendo identificar y priorizar a los pensionados y empleados activos del sector público con
@@ -673,6 +673,16 @@
         categoryFilter: 'all' // "all" | "cupones" | "descuentos" | "embargos"
       }
     },
+    mounted() {
+    const qs = new URLSearchParams(window.location.search);
+    this.mes  = qs.get('mes')  || '';
+    this.año  = qs.get('año')  || qs.get('anio') || '';
+    console.log('[DemographicData] mounted', { mes: this.mes, año: this.año });
+
+    if (this.mes && this.año) {
+      this.fetchPaginatedResults(1);
+    }
+  },
     computed: {
       // Opciones del filtro de tipo de deducción
       categoryOptions() {
@@ -916,35 +926,34 @@
           this.isLoading = false
         }
       },
-      async fetchPaginatedResults(page) {
-        this.isLoading = true
-        try {
-          const response = await axios.get('/demografico/fetch-paginated-results', {
-            params: {
-              page: page,
-              perPage: this.perPage,
-              mes: this.mes,
-              año: this.año
-            }
-          })
-          this.results = response.data.data
-            .filter(item => item && typeof item === 'object')
-            .map(item => ({
-              ...item,
-              showCupones: false,
-              showEmbargos: false,
-              showDescuentos: false
-            }))
-          this.total = response.data.total
-          this.page = response.data.page
-          this.perPage = response.data.perPage
-          this.error = null
-        } catch (error) {
-          this.error = error.response ? error.response.data.error : 'Error al buscar los resultados paginados'
-        } finally {
-          this.isLoading = false
-        }
-      },
+      async fetchPaginatedResults(page = 1) {
+      this.isLoading = true;
+      try {
+        console.log('[DemographicData] fetch', { page, mes: this.mes, año: this.año });
+
+        const { data } = await axios.get('/demografico/fetch-paginated-results', {
+          params: {
+            page,
+            perPage: this.perPage,
+            mes: this.mes,
+            año: this.año    // siempre con tilde
+          }
+        });
+
+        this.results = (data.data || []).map(r => ({
+          ...r,
+          showCupones: false,
+          showEmbargos: false,
+          showDescuentos: false
+        }));
+        this.total = data.total;
+        this.page  = data.page;
+      } catch (e) {
+        this.error = e.response?.data?.error || 'Error al cargar datos';
+      } finally {
+        this.isLoading = false;
+      }
+    },
       isValidMonthYear() {
         const mesRegex = /^(0[1-9]|1[0-2])$/
         const añoRegex = /^[0-9]{4}$/

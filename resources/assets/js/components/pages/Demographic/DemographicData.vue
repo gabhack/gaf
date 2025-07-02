@@ -586,6 +586,12 @@ export default {
             expandedRows: [] // Lista para rastrear filas expandidas
         };
     },
+    created ()   { this.initFromQuery() }   ,
+mounted ()   { this.initFromQuery() }   ,
+activated () { this.initFromQuery() }   ,
+watch: {
+  '$route.query': { immediate: true, handler () { this.initFromQuery() } }
+},
     computed: {
         filteredResults() {
             if (!this.results || !Array.isArray(this.results)) {
@@ -603,6 +609,18 @@ export default {
         }
     },
     methods: {
+        initFromQuery () {
+            console.log('[initFromQuery] ');
+    const urlParams = new URLSearchParams(window.location.search)
+    this.mes  = urlParams.get('mes')  || ''
+    this.año  = urlParams.get('año')  || urlParams.get('anio') || ''
+
+    console.log('[initFromQuery] ', { mes: this.mes, año: this.año })
+
+    if (this.mes && this.año && !this.results.length) {
+      this.fetchPaginatedResults(1)
+    }
+  },
         capitalize(text) {
             if (!text) return '';
             return text.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
@@ -665,39 +683,33 @@ export default {
             }
         },
 
-        async fetchPaginatedResults(page) {
-            this.isLoading = true;
-            try {
-                let response = await axios.get('/demografico/fetch-paginated-results', {
-                    params: {
-                        page: page,
-                        perPage: this.perPage,
-                        mes: this.mes,
-                        año: this.año
-                    }
-                });
-
-                console.log('Datos recibidos:', response.data.data); // Depuración
-
-                // Mapear los resultados para agregar propiedades para mostrar detalles
-                this.results = response.data.data
-                    .filter(item => item && typeof item === 'object')
-                    .map(item => ({
-                        ...item,
-                        showCupones: false,
-                        showEmbargos: false,
-                        showDescuentos: false
-                    }));
-                this.total = response.data.total;
-                this.page = response.data.page;
-                this.perPage = response.data.perPage;
-                this.error = null; // Limpiar errores si la solicitud fue exitosa
-            } catch (error) {
-                this.error = error.response ? error.response.data.error : 'Error al buscar los resultados paginados';
-            } finally {
-                this.isLoading = false;
-            }
-        }
+        async fetchPaginatedResults (page) {
+      this.isLoading = true
+      try {
+        console.log('[DemographicData] fetch', { page, mes: this.mes, año: this.año })
+        const { data } = await axios.get('/demografico/fetch-paginated-results', {
+          params: {
+            page,
+            perPage: this.perPage,
+            mes: this.mes,
+            año: this.año          // ← siempre con tilde
+          }
+        })
+        this.results = (data.data || []).map(r => ({
+          ...r,
+          showCupones: false,
+          showEmbargos: false,
+          showDescuentos: false
+        }))
+        this.total = data.total
+        this.page  = data.page
+      } catch (e) {
+        this.error = e.response?.data?.error || 'Error al cargar datos'
+      } finally {
+        this.isLoading = false
+      }
+    
+  }
 ,
         isValidMonthYear() {
             const mesRegex = /^(0[1-9]|1[0-2])$/;

@@ -22,7 +22,7 @@ use App\Http\Controllers\SedeController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\VisadoController;
 use App\Http\Controllers\ParametrosComparativaController;
-
+use App\Http\Controllers\Admin\DataCoverageController;
 use App\Http\Controllers\Fintra\CreditRequestController;
 
 /*
@@ -573,8 +573,8 @@ Route::view('/dataClient', 'dataClient');
 Route::view('/dataClientDraft', 'dataClientDraft')->middleware(['auth', 'permission:hacer consultas']);
 Route::view('/refundCartera', 'refundCartera');
 Route::view('/certificados', 'certificados');
-Route::view('/massiveCharge', 'massive');
-
+Route::view('/massiveCharge', 'massive')
+->name('credit-request.bulk');
 // ------------------------------------------------------------------
 // VALIDACIÓN
 // ------------------------------------------------------------------
@@ -656,7 +656,6 @@ Route::get('/demografico/recent-consultations', [DemograficoController::class, '
 Route::get('/demografico/fetch-paginated-results', [DemograficoController::class, 'fetchPaginatedResults']);
 Route::get('/demografico/fetch-paginated-results-demografico', [DemograficoController::class, 'fetchPaginatedResultsDemografico']);
 Route::get('/demografico/calcular-cupo/{cedula}/{mes}/{ano}', [DemograficoController::class, 'calcularCupoPorCedula'])->name('demografico.calcularCupo');
-Route::get('/demografico/{doc}', [DemograficoController::class, 'getDemograficoPorDoc'])->name('demografico.get');
 
 // ------------------------------------------------------------------
 // DOCUMENTOS (MIDDLEWARE AUTH)
@@ -730,6 +729,20 @@ Route::get(
 )->name('credit-request.bulk');
 Route::post('/credit-requests/bulk', [CreditRequestController::class, 'bulkStore']);
 
+//REVIEW CONTROL CARGA DATA
+Route::middleware(['auth','permission:ver visado'])->group(function () {
+    Route::view('/admin/data-coverage', 'Admin.DataCoverage')->name('data-coverage.view');
+
+    // --- listado de pagadurías
+    Route::get('/api/data-coverage',              [DataCoverageController::class,'index'])
+         ->name('data-coverage.index');
+
+    // --- cobertura por pagaduría  <---  NUEVA
+    Route::get('/api/data-coverage/pagaduria',    [DataCoverageController::class,'pagaduria'])
+         ->name('data-coverage.pagaduria');
+});
+
+
 
 // Listar/actualizar credit requests
 Route::get('/credit-requests', [CreditRequestController::class, 'index'])->name('credit-request.index');
@@ -795,3 +808,28 @@ Route::prefix('/listas')->group(function () {
     Route::get('/permisos', [ListaController::class, 'listarPermisos']);
     Route::get('/empresas', [ListaController::class, 'listarEmpresas']);
 });
+
+
+Route::view('/demografico', 'Demographic.IndexDemografico');
+
+
+// Demográfico – vistas Vue
+Route::view('/demografico/subir',      'Demographic.PendingDemographicUpload')
+     ->name('demografico.pending.upload.page');
+
+Route::view('/demografico/pendientes', 'Demographic.PendingDemographicUploadList')
+     ->name('demografico.pending.list.page');
+
+// Demográfico – API pendientes
+Route::post('/demografico/pending-uploads',           [DemograficoController::class, 'uploadPending'])
+     ->name('demografico.pending.upload');
+
+Route::get('/demografico/pending-uploads',            [DemograficoController::class, 'listPending'])
+     ->name('demografico.pending.list');
+
+Route::post('/demografico/pending-uploads/{id}/approve', [DemograficoController::class, 'approveUpload'])
+     ->name('demografico.pending.approve');
+
+     //muevo esta ruta dinamica al final
+
+     Route::get('/demografico/{doc}', [DemograficoController::class, 'getDemograficoPorDoc'])->name('demografico.get');

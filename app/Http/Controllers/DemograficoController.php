@@ -11,14 +11,16 @@ use App\DatamesFopep;
 use App\DescuentosGen;
 use App\Colpensiones;
 use App\Fiducidiaria;
+use App\PendingDemographicUpload;
 use App\DemographicConsultLog;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Str;           
 use PhpOffice\PhpSpreadsheet\IOFactory;
-    use Illuminate\Support\Facades\Cache;
-
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Http\JsonResponse;
 
 class DemograficoController extends Controller
 {
@@ -1266,6 +1268,96 @@ if ($record) {
         }
     }
     
+    public function uploadPending(Request $r)
+    {
+        $r->validate([
+            'file' => 'required|file|mimes:xlsx,xls',
+            'mes'  => 'required|integer|min:1|max:12',
+            'anio' => 'required|integer|min:1900|max:'.(date('Y')+1),
+        ]);
+    
+        /* ---------- leer el Excel y obtener $cedulas ---------- */
+        $reader = IOFactory::createReader('Xlsx');
+        $reader->setReadDataOnly(true);
+        $sheet  = $reader->load($r->file('file')->getRealPath())->getActiveSheet();
+    
+        $col    = array_search('cedulas',
+                   array_map('strtolower',$sheet->rangeToArray('A1:'.$sheet->getHighestColumn().'1')[0]));
+        if ($col === false) return response()->json(['error'=>'Columna "cedulas" no encontrada'],400);
+    
+        $cedulas = [];
+        foreach ($sheet->getRowIterator(2) as $row) {
+            $v = trim($sheet->getCellByColumnAndRow($col+1,$row->getRowIndex())->getValue());
+            if ($v!=='') $cedulas[] = $v;
+        }
+    
+        /* ---------- guardar archivo ---------- */
+        $storedPath = $r->file('file')
+                        ->storeAs('demografico_pending',Str::uuid().'.'.$r->file('file')->getClientOriginalExtension(),'public');
+    
+        /* ---------- crear registro ---------- */
+        $upload = PendingDemographicUpload::create([
+            'user_id'       => Auth::id(),
+            'original_name' => $r->file('file')->getClientOriginalName(),
+            'stored_path'   => $storedPath,
+            'mes'           => $r->mes,
+            'anio'          => $r->anio,
+            'cedulas'       => $cedulas,          // ← se graban
+            'status'        => 'pending',
+        ]);
+    
+        return response()->json(['upload_id'=>$upload->id],200);
+    }
+    
+
+public function listPending()
+{
+    return PendingDemographicUpload::where('status', 'pending')   
+        ->orderBy('created_at', 'desc')
+        ->get([
+            'id',
+            'user_id',
+            'original_name',
+            'stored_path',
+            'mes',
+            'anio',
+            'status',
+            'created_at'
+        ])
+        ->map(function ($u) {
+            return [
+                'id'            => $u->id,
+                'user_id'       => $u->user_id,
+                'original_name' => $u->original_name,
+                'mes'           => $u->mes,
+                'anio'          => $u->anio,
+                'status'        => $u->status,
+                'created_at'    => (string) $u->created_at,
+            ];
+        });
+}
+
+
+public function approveUpload($id)
+{
+    $u               = PendingDemographicUpload::findOrFail($id);
+    $u->timestamps   = false;
+    $u->status       = 'analyzed';
+    $u->analyzed_by  = Auth::id();
+    $u->analyzed_at  = now()->format('Y-m-d H:i:s.u');
+    $u->save();
+
+    /* ---- cachear las cédulas para el usuario que analiza ---- */
+    Cache::put('cedulas_'.Auth::id(), $u->cedulas, 3600);
+
+    return response()->json([
+        'analyzed'      => true,
+        'mes'           => $u->mes,
+        'año'           => $u->anio,
+        'analizado_por' => $u->analyzed_by,
+    ]);
+}
+
 
 
 
