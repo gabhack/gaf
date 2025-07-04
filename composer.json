@@ -20,7 +20,8 @@
         "orchestra/parser": "^3.5",
         "phpoffice/phpspreadsheet": "^1.23",
         "pusher/pusher-php-server": "^5.0",
-        "smalot/pdfparser": "^0.16"
+        "smalot/pdfparser": "^0.16",
+        "spatie/laravel-permission": "*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

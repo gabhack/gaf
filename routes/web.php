@@ -559,18 +559,17 @@ Route::resource('descnoap', 'DescnoapController');
 Route::post('detalleConsulta', 'VisadoController@detalleConsulta');
 Route::post('pdfDetalle', 'VisadoController@pdfDetalle');
 Route::get('getHistoryConsults', 'VisadoController@historialConsultas');
-Route::post('visados', [VisadoController::class, 'store']);
-Route::post('visados/{id}', [VisadoController::class, 'update']);
+
 
 Route::prefix('/visados')->middleware('permission:ver visado')->group(function () {
     Route::post('/', [VisadoController::class, 'store']);
     Route::post('/{id}', [VisadoController::class, 'update']);
 });
 
-Route::get('getHistoryConsults', 'VisadoController@historialConsultas');
 Route::view('/historyClient', 'historyClient')->middleware('auth');
 Route::view('/dataClient', 'dataClient');
 Route::view('/dataClientDraft', 'dataClientDraft')->middleware(['auth', 'permission:hacer consultas']);
+Route::view('/dataClientDraftwithoutvisa', 'dataClientDraftwithoutvisa');
 Route::view('/refundCartera', 'refundCartera');
 Route::view('/certificados', 'certificados');
 Route::view('/massiveCharge', 'massive')
@@ -721,17 +720,20 @@ Route::get('jelou/candidates', [JelouController::class, 'getJelouCandidates']);
 // ------------------------------------------------------------------
 Route::view('/credit-request', 'CreditRequest.CreditForm')->name('credit-request.view');
 Route::post('/credit-requests', [CreditRequestController::class, 'store'])->name('credit-request.store');
-Route::get(
-    '/credit-requests/bulk',
-    function () {
-        return view('CreditRequest.CreditRequestBulk');
-    }
-)->name('credit-request.bulk');
+Route::get('/credit-requests/bulk', [CreditRequestController::class, 'bulkForm'])
+     ->name('credit-request.bulk');
+
+
+Route::post('/credit-requests/{id}/upload-visado-pdf',
+    [CreditRequestController::class, 'uploadVisadoPdf'])
+    ->middleware('auth'); 
 Route::post('/credit-requests/bulk', [CreditRequestController::class, 'bulkStore']);
+Route::get('/data-coverage/batch',        [DataCoverageController::class,'batch']);
 
 //REVIEW CONTROL CARGA DATA
 Route::middleware(['auth','permission:ver visado'])->group(function () {
     Route::view('/admin/data-coverage', 'Admin.DataCoverage')->name('data-coverage.view');
+
 
     // --- listado de pagadurías
     Route::get('/api/data-coverage',              [DataCoverageController::class,'index'])
@@ -821,11 +823,14 @@ Route::view('/demografico/pendientes', 'Demographic.PendingDemographicUploadList
      ->name('demografico.pending.list.page');
 
 // Demográfico – API pendientes
-Route::post('/demografico/pending-uploads',           [DemograficoController::class, 'uploadPending'])
-     ->name('demografico.pending.upload');
+Route::post('/demografico/pending-uploads',
+    [DemograficoController::class,'uploadPending']
+)->middleware(['auth','permission:demografico.pending.upload']);
 
-Route::get('/demografico/pending-uploads',            [DemograficoController::class, 'listPending'])
-     ->name('demografico.pending.list');
+// lista de pendientes
+Route::get('/demografico/pending-uploads',
+    [DemograficoController::class,'listPending']
+)->middleware(['auth','permission:demografico.pending.list']);
 
 Route::post('/demografico/pending-uploads/{id}/approve', [DemograficoController::class, 'approveUpload'])
      ->name('demografico.pending.approve');

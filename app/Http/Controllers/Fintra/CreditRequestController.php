@@ -10,6 +10,7 @@ use App\Comercial;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 
 class CreditRequestController extends Controller
@@ -306,7 +307,6 @@ class CreditRequestController extends Controller
                 'documents:id,credit_request_id,file_path',
                 'carteras:credit_request_id,tipo_cartera,nombre_entidad,valor_cuota,saldo,opera_x_desprendible',
             ])
-            ->where('status', '!=', 'visado')
             ->when(! $user || $user->role_id !== 1, function ($q) use ($user) {
                 return $q->where('user_id', $user->id);
             })
@@ -326,4 +326,62 @@ class CreditRequestController extends Controller
 
         return response()->json($credits);
     }
+
+    public function uploadVisadoPdf($id, Request $request)
+    {
+        Log::info('uploadVisadoPdf-in', ['credit_id' => $id]);
+    
+        $request->validate(['archivo' => 'required|file|mimes:pdf|max:20480']);
+        $credit = CreditRequest::findOrFail($id);
+    
+        $path = $request->file('archivo')->store('public/visados');
+        Log::info('uploadVisadoPdf-stored', ['path' => $path]);
+    
+        $url = Storage::url($path);
+        $credit->forceFill(['pdf_path' => $url])->save();
+    
+        Log::info('uploadVisadoPdf-saved', ['url' => $url, 'credit_id' => $credit->id]);
+        return response()->json(['url' => $url], 200);
+    }
+    
+
+public function bulkForm()
+{
+    return view('CreditRequest.CreditRequestBulk');
+}
+
+public function updateStatus($id, Request $request)
+{
+    Log::info('updateStatus-in', ['credit_id' => $id, 'payload' => $request->all()]);
+
+    $credit = CreditRequest::findOrFail($id);
+    $credit->status    = $request->status;
+    $credit->visado_id = $request->visado_id ?? $credit->visado_id;
+    $credit->save();
+
+    Log::info('updateStatus-saved', [
+        'credit_id' => $credit->id,
+        'status'    => $credit->status,
+        'visado_id' => $credit->visado_id
+    ]);
+
+    return response()->json(['message' => 'Estado actualizado'], 200);
+}
+
+
+    public function markAsVisado($id)
+    {
+        Log::info('markAsVisado - inicio', ['id' => $id]);
+        try {
+            $credit         = CreditRequest::findOrFail($id);
+            $credit->status = 'visado';
+            $credit->save();
+            Log::info('markAsVisado - visado', ['id' => $id]);
+            return response()->json(['message' => 'Crédito visado'], 200);
+        } catch (\Throwable $e) {
+            Log::error('markAsVisado - error', ['id' => $id, 'e' => $e->getMessage()]);
+            return response()->json(['message' => 'Error al visar', 'error' => $e->getMessage()], 500);
+        }
+    }
+
 }

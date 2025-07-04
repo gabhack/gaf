@@ -10,21 +10,11 @@ class CreditRequest extends Model
     protected $table = 'credit_requests';
 
     protected $fillable = [
-        'doc',
-        'name',
-        'client_type',
-        'pagaduria_id',
-        'cuota',
-        'monto',
-        'tasa',
-        'plazo',
-        'status',
-        'tipo_credito',
-        'user_id',
-        'tipo_pension',
-        'resolucion',
-        'visado_id'
+        'doc','name','client_type','pagaduria_id','cuota','monto','tasa',
+        'plazo','status','tipo_credito','user_id','tipo_pension','resolucion',
+        'visado_id','pdf_path'
     ];
+    
 
     public function carteras()
     {

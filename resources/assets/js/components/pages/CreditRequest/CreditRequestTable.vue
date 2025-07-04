@@ -48,15 +48,25 @@
     <td>{{ credit.visado ? credit.visado.causal : '' }}</td>
     <td>{{ credit.tipo_credito }}</td>
     <td>
-      <template v-if="credit.documents && credit.documents.length">
-        <div v-for="(doc, i) in credit.documents" :key="doc.id">
-          <a :href="getDownloadUrl(doc.file_path)" target="_blank">
-            doc-{{ i + 1 }}
-          </a>
-        </div>
-      </template>
-      <span v-else>No hay documentos</span>
-    </td>
+  <div v-if="credit.pdf_path">
+    <a :href="credit.pdf_path" target="_blank">visado.pdf</a>
+  </div>
+
+  <template v-if="credit.documents && credit.documents.length">
+    <div v-for="(doc, i) in credit.documents" :key="doc.id">
+      <a :href="getDownloadUrl(doc.file_path)" target="_blank">
+        doc-{{ i + 1 }}
+      </a>
+    </div>
+  </template>
+
+  <span
+    v-if="!credit.pdf_path && (!credit.documents || !credit.documents.length)"
+  >
+    No hay documentos
+  </span>
+</td>
+
     <td v-if="isAdmin">
       <button class="btn-credit" @click="$emit('open-visado', credit)">Visar Manualmente</button>
       <button class="btn-credit ml-2" @click="$emit('view-carteras', credit)">
