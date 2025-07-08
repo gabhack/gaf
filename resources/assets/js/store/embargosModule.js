@@ -1,60 +1,69 @@
 import { setCurrentPeriod } from './utils';
 
 const embargosModule = {
-    namespaced: true,
-    state: {
-        embargos: [],
-        embargosType: '',
-        selectedPeriod: ''
-    },
-    getters: {
-        embargosPeriodos: state => {
-            console.log("EMBARGOS:");
-            let periodos = state.embargos.reduce((acc, embargo) => {
-                
-                console.log(embargo.nomina);
-                if (acc.indexOf(embargo.nomina) === -1) {
-                    acc.push(embargo.nomina);
-                }
-                return acc;
-            }, []);
+  namespaced: true,
+  state: {
+    embargos: [],
+    embargosType: '',
+    selectedPeriod: ''
+  },
+  getters: {
+    embargosPeriodos: state => {
+      console.log('[embargosModule] state.embargos:', state.embargos);
 
-            // Agregar el periodo actual si no existe
-            periodos = setCurrentPeriod(periodos);
-
-            // Ordenar periodos de forma descendente, se convierte a fecha para poder ordenar
-            return periodos.sort((a, b) => new Date(b) - new Date(a));
-        },
-        embargosPerPeriod: state => {
-            const items = state.embargos.filter(item => item.nomina === state.selectedPeriod);
-
-            return {
-                items: items.map(item => ({ ...item, check: false })),
-                total: items.length
-            };
+      // Extrae todos los valores de nomina
+      let periodos = state.embargos.reduce((acc, embargo) => {
+        console.log('[embargosModule] embargo.nomina raw:', embargo.nomina);
+        if (!acc.includes(embargo.nomina)) {
+          acc.push(embargo.nomina);
         }
-    },
-    mutations: {
-        setEmbargos: (state, payload) => {
-            state.embargos = payload;
-        },
-        setEmbargosType: (state, payload) => {
-            state.embargosType = payload;
-        },
-        setSelectedPeriod: (state, payload) => {
-            state.selectedPeriod = payload;
-        }
-    },
-    actions: {
-        fetchEmbargos: (ctx, data) => {
-            ctx.commit('setEmbargos', data);
+        return acc;
+      }, []);
 
-            // Seleccionar el primer periodo por defecto
-            if (ctx.getters.embargosPeriodos.length > 0) {
-                ctx.commit('setSelectedPeriod', ctx.getters.embargosPeriodos[0]);
-            }
-        }
+      // Asegura que el período actual esté incluido
+      periodos = setCurrentPeriod(periodos);
+
+      // Ordena de más reciente a más antiguo
+      const sorted = periodos.sort((a, b) => new Date(b) - new Date(a));
+      console.log('[embargosModule] embargosPeriodos computed:', sorted);
+      return sorted;
+    },
+    embargosPerPeriod: state => {
+      console.log('[embargosModule] selectedPeriod:', state.selectedPeriod);
+      const items = state.embargos.filter(item => item.nomina === state.selectedPeriod);
+      console.log('[embargosModule] embargosPerPeriod items:', items);
+      return {
+        items: items.map(item => ({ ...item, check: false })),
+        total: items.length
+      };
     }
+  },
+  mutations: {
+    setEmbargos: (state, payload) => {
+      console.log('[embargosModule] mutation setEmbargos payload:', payload);
+      state.embargos = payload;
+    },
+    setEmbargosType: (state, payload) => {
+      console.log('[embargosModule] mutation setEmbargosType:', payload);
+      state.embargosType = payload;
+    },
+    setSelectedPeriod: (state, payload) => {
+      console.log('[embargosModule] mutation setSelectedPeriod:', payload);
+      state.selectedPeriod = payload;
+    }
+  },
+  actions: {
+    fetchEmbargos: ({ commit, getters }, data) => {
+      console.log('[embargosModule] action fetchEmbargos data:', data);
+      commit('setEmbargos', data);
+
+      const periods = getters.embargosPeriodos;
+      if (periods.length > 0) {
+        console.log('[embargosModule] setting default selectedPeriod:', periods[0]);
+        commit('setSelectedPeriod', periods[0]);
+      }
+    }
+  }
 };
 
 export default embargosModule;

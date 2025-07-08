@@ -3,16 +3,16 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\ParsesPgTzDates;
 
 class EmbargosGen extends Model
 {
+    use ParsesPgTzDates;
+
     protected $connection = 'pgsql';
-
-    protected $table = 'embargosgen';
-
-    protected $guarded = ['id'];
-
-    protected $fillable = [
+    protected $table      = 'embargosgen';
+    protected $guarded    = ['id'];
+    protected $fillable   = [
         'doc',
         'nomp',
         'docdeman',
@@ -26,6 +26,12 @@ class EmbargosGen extends Model
         'netoemb',
         'pagaduria',
         'nomina',
-        'tipoembargo'
+        'tipoembargo',
+    ];
+
+    protected $casts = [
+        'fembini' => 'datetime',
+        'fembfin' => 'datetime',
+        'nomina'  => 'datetime',
     ];
 }
