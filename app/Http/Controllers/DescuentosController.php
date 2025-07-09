@@ -71,49 +71,46 @@ class DescuentosController extends Controller
     }
 
     public function getDescuentosByPagaduria(Request $request)
-    {
-        try {
-            if (!$request->has(['month', 'year', 'pagaduria'])) {
-                return response()->json(['error' => 'month, year, y pagaduria son requeridos.'], 400);
-            }
-
-            $pagaduria = $request->input('pagaduria');
-            $mliquid   = $request->input('mliquid');
-            $month     = str_pad($request->input('month'), 2, '0', STR_PAD_LEFT);
-            $year      = $request->input('year');
-
-            $startDate = Carbon::createFromFormat('Y-m', "{$year}-{$month}")->startOfMonth();
-            $endDate   = Carbon::createFromFormat('Y-m', "{$year}-{$month}")->endOfMonth();
-
-            $query = DescuentosGen::on('pgsql');
-
-            if ($mliquid) {
-                $query->where('mliquid', 'ILIKE', "%{$mliquid}%");
-            }
-
-            $query->where('pagaduria', 'ILIKE', "%{$pagaduria}%")
-                  ->whereBetween('nomina', [$startDate, $endDate])
-                  ->select(
-                      'id',
-                      'doc',
-                      'nomp',
-                      'mliquid',
-                      'temb',
-                      DB::raw("to_char(nomina, 'YYYY-MM-DD') as nomina")
-                  );
-
-            $results = $query->get()->toArray();
-
-            return response()->json($this->normalizeNominaDates($results), 200);
-        } catch (\Exception $e) {
-            Log::error('Error en getDescuentosByPagaduria', [
-                'message' => $e->getMessage(),
-                'trace'   => $e->getTrace(),
-            ]);
-
-            return response()->json(['error' => 'Internal Server Error'], 500);
-        }
+{
+    if (!$request->has(['month', 'year', 'pagaduria'])) {
+        return response()->json(['error' => 'month, year y pagaduria son requeridos.'], 400);
     }
+
+    $month     = str_pad($request->input('month'), 2, '0', STR_PAD_LEFT);
+    $year      = $request->input('year');
+    $pagaduria = $request->input('pagaduria');
+    $mliquid   = $request->input('mliquid');
+
+    $perPage = (int)$request->input('perPage', 20);
+    $page    = (int)$request->input('page', 1);
+
+    $start = Carbon::createFromFormat('Y-m', "{$year}-{$month}")->startOfMonth();
+    $end   = Carbon::createFromFormat('Y-m', "{$year}-{$month}")->endOfMonth();
+
+    $base = DescuentosGen::on('pgsql')
+        ->where('pagaduria', 'ILIKE', "%{$pagaduria}%")
+        ->whereBetween('nomina', [$start, $end]);
+
+    if ($mliquid) {
+        $base->where('mliquid', 'ILIKE', "%{$mliquid}%");
+    }
+
+    $total = $base->count();
+
+    $rows  = $base->select(
+                'id','doc','nomp','mliquid','nomina','valor'
+            )
+            ->orderBy('doc')
+            ->forPage($page, $perPage)
+            ->get()
+            ->map(function ($r) {
+                $r->nomina = Carbon::parse($r->nomina)->toDateString();
+                return $r;
+            });
+
+    return response()->json(['data' => $rows, 'total' => $total], 200);
+}
+
 
     private function normalizeNominaDates(array $rows): array
     {

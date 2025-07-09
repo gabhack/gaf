@@ -338,83 +338,79 @@ private function getPagaduriaIdFromString(string $normalized): ?int
         }
     }
 
-    public function getFastCouponsByPagaduria(Request $request)
-    {
-        try {
-            // Validar parámetros obligatorios
-            if (!$request->has('month') || !$request->has('year') || !$request->has('pagaduria')) {
-                return response()->json(['error' => 'Month, year, and pagaduria are required.'], 400);
-            }
 
-            $month         = str_pad($request->month, 2, '0', STR_PAD_LEFT);
-            $year          = $request->year;
-            $concept       = $request->concept;
-            $code          = $request->code;
-            $pagaduriaName = trim($request->pagaduria);
+/**
+ * Paginación ligera de “Cartera al Día” sin COUNT(*) para evitar timeouts.
+ */
 
-            // 1) Buscamos el ID en panel_pagaduria
-            $panelPagaduria = \DB::connection('pgsql')
+ public function getFastCouponsByPagaduria(Request $request)
+{
+    // 1) Validación
+    $request->validate([
+        'pagaduria' => 'required|string',
+        'month'     => 'required|integer|min:1|max:12',
+        'year'      => 'required|digits:4',
+        'concept'   => 'nullable|string',
+        'code'      => 'nullable|string',
+        'perPage'   => 'nullable|integer|min:1',
+        'page'      => 'nullable|integer|min:1',
+    ]);
+
+    // 2) Normalizamos inputs
+    $pagaduriaName = trim($request->input('pagaduria'));
+    $month         = str_pad($request->input('month'), 2, '0', STR_PAD_LEFT);
+    $year          = $request->input('year');
+    $concept       = $request->input('concept', null);
+    $code          = $request->input('code', null);
+    $perPage       = (int) $request->input('perPage', 20);
+    $page          = (int) $request->input('page', 1);
+
+    // 3) Buscamos la pagaduría en panel_pagaduria
+    $panel = \DB::connection('pgsql')
                 ->table('panel_pagaduria')
                 ->where('nombre', 'ILIKE', $pagaduriaName)
                 ->first();
 
-            if (!$panelPagaduria) {
-                return response()->json([
-                    'error' => "No se encontró una pagaduría con el nombre '{$pagaduriaName}'."
-                ], 404);
-            }
-
-            $idPagaduria = $panelPagaduria->id;
-
-            // 2) Definimos las fechas de inicio y fin (rango mensual)
-            $startDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)
-                ->startOfMonth()
-                ->toDateString();
-
-            $endDate = Carbon::createFromFormat('Y-m', $year . '-' . $month)
-                ->endOfMonth()
-                ->toDateString();
-
-            // 3) Construimos la consulta a la tabla fast_couponsgen_visado
-            $query = \DB::connection('pgsql')
-                ->table('fast_couponsgen_visado')
-                ->where('idpagaduria', $idPagaduria)
-                ->where('inicioperiodo', '<=', $endDate)
-                ->where('finperiodo', '>=', $startDate);
-
-            // Agregamos filtros opcionales
-            if (!empty($concept)) {
-                $query->where('concept', 'ILIKE', '%' . $concept . '%');
-            }
-            if (!empty($code)) {
-                $query->where('code', 'ILIKE', '%' . $code . '%');
-            }
-
-            // Log para depuración (opcional)
-            $sql      = $query->toSql();
-            $bindings = $query->getBindings();
-            \Log::info('Consulta generada para fast_couponsgen_visado:', [
-                'sql'      => $sql,
-                'bindings' => $bindings,
-                'month'    => $month,
-                'year'     => $year,
-                'pagaduria' => $pagaduriaName,
-                'id'       => $idPagaduria
-            ]);
-
-            // 4) Obtenemos los resultados
-            $results = $query->get();
-
-            return response()->json($results, 200);
-        } catch (\Exception $e) {
-            \Log::error('Error en getFastCouponsByPagaduria:', [
-                'message' => $e->getMessage(),
-                'trace'   => $e->getTraceAsString()
-            ]);
-
-            return response()->json(['error' => 'Internal Server Error'], 500);
-        }
+    if (! $panel) {
+        return response()->json([
+            'error' => "Pagaduría '{$pagaduriaName}' no encontrada."
+        ], 404);
     }
+
+    // 4) Rango de fechas
+    $start = Carbon::createFromFormat('Y-m', "{$year}-{$month}")->startOfMonth();
+    $end   = Carbon::createFromFormat('Y-m', "{$year}-{$month}")->endOfMonth();
+
+    // 5) Query base
+    $query = \DB::connection('pgsql')
+        ->table('fast_couponsgen_visado')
+        ->where('idpagaduria', $panel->id)
+        ->where('inicioperiodo', '<=', $end)
+        ->where('finperiodo',    '>=', $start);
+
+    if ($concept) {
+        $query->where('concept', 'ILIKE', "%{$concept}%");
+    }
+    if ($code) {
+        $query->where('code',    'ILIKE', "%{$code}%");
+    }
+
+    // 6) Paginación con paginate()
+    $paginator = $query
+        ->orderBy('doc')
+        ->paginate($perPage, ['*'], 'page', $page);
+
+    // 7) Devolvemos sólo items + total para que el front siga funcionando igual
+    return response()->json([
+        'data'  => $paginator->items(),
+        'total' => $paginator->total(),
+    ], 200);
+}
+
+
+
+    
+    
 
     public function getIncapacidadByDoc(Request $request)
     {
