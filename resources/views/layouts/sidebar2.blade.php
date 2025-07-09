@@ -118,7 +118,7 @@
                     </a>
                   @endcan
                   
-                  @can('permission', 'demografico.pending.list')
+                  @can('permission', 'demografico.pending.upload')
                     <a class="collapse-item"
                        href="{{ route('demografico.pending.list.page') }}">
                       Pendientes por análisis

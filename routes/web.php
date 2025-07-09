@@ -830,7 +830,7 @@ Route::post('/demografico/pending-uploads',
 // lista de pendientes
 Route::get('/demografico/pending-uploads',
     [DemograficoController::class,'listPending']
-)->middleware(['auth','permission:demografico.pending.list']);
+);
 
 Route::post('/demografico/pending-uploads/{id}/approve', [DemograficoController::class, 'approveUpload'])
      ->name('demografico.pending.approve');
