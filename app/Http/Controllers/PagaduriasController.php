@@ -165,91 +165,63 @@ class PagaduriasController extends Controller
 
     public function perDoc($doc)
     {
-        Log::info("Entró a buscar la cédula", ['doc' => $doc]);
+        Log::info('Entró a buscar la cédula', ['doc' => $doc]);
     
-        $user = Auth::user();
-        $userType = IsCompany() ? 'empresa' : (IsComercial() ? 'comercial' : null);
+        $user      = Auth::user();
+        $userType  = IsCompany() ? 'empresa' : (IsComercial() ? 'comercial' : null);
     
-        if ($userType) {
-            if ($user->$userType->consultas_diarias <= 0) {
-                Log::warning("Usuario sin consultas disponibles", ['user_id' => $user->id, 'tipo' => $userType]);
-                return response()->json([
-                    'message' => 'No tienes consultas disponibles',
-                ], 400);
-            }
+        if ($userType && $user->$userType->consultas_diarias <= 0) {
+            Log::warning('Usuario sin consultas disponibles', ['user_id' => $user->id, 'tipo' => $userType]);
+            return response()->json(['message' => 'No tienes consultas disponibles'], 400);
         }
     
         DB::beginTransaction();
     
         try {
-            $models = [
-                DatamesFopep::class => 'doc',
-              
-            ];
-    
             $results = [];
     
-            foreach ($models as $model => $column) {
-                Log::info("Consultando modelo: " . class_basename($model), ['columna' => $column, 'valor' => $doc]);
+            $latestIds = DatamesGen::select('pagaduria', DB::raw('MAX(id) as id'))
+                ->where('doc', $doc)
+                ->groupBy('pagaduria')
+                ->pluck('id', 'pagaduria');
     
-                $data = $model::where($column, 'LIKE', '%' . $doc . '%')
-                    ->orderBy('id', 'desc')
-                    ->first();
+            Log::info('Consultando DatamesGen', ['pagadurias_distintas' => $latestIds->count()]);
     
-                if ($data) {
-                    $modelName = class_basename($model);
-                    $key = Str::camel($modelName);
-                    $results[$key] = $data;
-                    Log::info("Resultado encontrado en {$modelName}", ['id' => $data->id]);
-                } else {
-                    Log::info("Sin resultado en " . class_basename($model));
-                }
-            }
-    
-            $dataGen = DatamesGen::where('doc', '=', $doc)->get();
-            Log::info("Consultando DatamesGen", ['total_encontrados' => $dataGen->count()]);
-    
-            if ($dataGen) {
-                foreach ($dataGen as $item) {
-                    Log::info("Procesando DatamesGen item", ['pagaduria' => $item->pagaduria, 'id' => $item->id]);
-    
-                    if (!isset($results[$item->pagaduria])) {
-                        $results[$item->pagaduria] = $item;
-                        Log::info("Agregado nuevo resultado desde DatamesGen", ['pagaduria' => $item->pagaduria]);
-                    } else {
-                        if ($item->id > $results[$item->pagaduria]->id) {
-                            $results[$item->pagaduria] = $item;
-                            Log::info("Actualizado resultado de DatamesGen por uno más reciente", ['pagaduria' => $item->pagaduria]);
-                        }
-                    }
+            if ($latestIds->isNotEmpty()) {
+                $items = DatamesGen::whereIn('id', $latestIds->values())->get()->keyBy('pagaduria');
+                foreach ($items as $pagaduria => $item) {
+                    $results[$pagaduria] = $item;
+                    Log::info('Resultado de DatamesGen', ['pagaduria' => $pagaduria, 'id' => $item->id]);
                 }
             }
     
             if ($userType) {
-                $user->$userType->decrement('consultas_diarias', 1);
-                Log::info("Consulta descontada para el usuario", ['user_id' => $user->id, 'tipo' => $userType]);
+                $user->$userType->decrement('consultas_diarias');
+                Log::info('Consulta descontada para el usuario', ['user_id' => $user->id, 'tipo' => $userType]);
             }
     
             DB::commit();
     
-            $results = !empty($results) ? $results : (object) [];
-            Log::info("Resultados finales", ['total_resultados' => count((array)$results)]);
+            $payload = !empty($results) ? $results : (object) [];
+            Log::info('Resultados finales', ['total_resultados' => count((array) $payload)]);
     
-            return response()->json($results, 200);
-        } catch (\Exception $e) {
+            return response()->json($payload, 200);
+        } catch (\Throwable $e) {
             DB::rollBack();
     
-            Log::error("Error al buscar pagadurías por documento: {$e->getMessage()}", [
-                'doc' => $doc,
-                'exception' => $e->getTraceAsString(),
+            Log::error('Error al buscar pagadurías por documento', [
+                'doc'       => $doc,
+                'exception' => $e->getMessage(),
+                'stack'     => $e->getTraceAsString(),
             ]);
     
             return response()->json([
-                'error' => 'Ocurrió un error al procesar la solicitud',
+                'error'   => 'Ocurrió un error al procesar la solicitud',
                 'message' => $e->getMessage(),
             ], 500);
         }
     }
+    
     
 
     public function getPagaduriasNames()

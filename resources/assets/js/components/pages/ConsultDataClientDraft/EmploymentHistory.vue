@@ -78,16 +78,37 @@
                             </div>
                         </div>
                         <div class="col-12 col-48 px-0">
-                            <div class="mt-3 table-responsive">
-                                <table role="table" aria-colcount="1" class="table b-table table-striped table-hover">
-                                    <thead role="rowgroup" class="table-header-nowrap">
-                                        <tr role="row">
-                                            <th role="columnheader" scope="col" aria-colindex="1">Fecha de Vinculación</th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                        </div>
+  <div class="mt-3 table-responsive">
+    <table role="table" aria-colcount="1"
+           class="table b-table table-striped table-hover">
+      <thead role="rowgroup" class="table-header-nowrap">
+        <tr role="row">
+          <th role="columnheader" scope="col" aria-colindex="1">
+            Fecha de Vinculación
+          </th>
+        </tr>
+      </thead>
+
+      <!-- Agregar el cuerpo de la tabla -->
+      <tbody role="rowgroup">
+        <!-- Si quieres iterar sobre tu array -->
+        <tr role="row" v-for="(item, idx) in datamesSedArray" :key="idx">
+          <td role="cell" aria-colindex="1">
+            {{ item.fechaVinculacion || 'N/A' }}
+          </td>
+        </tr>
+
+        <!-- O si sólo tienes un valor único en `fechavinc.vinc` -->
+        <tr role="row" v-if="!datamesSedArray.length && fechavinc.vinc">
+          <td role="cell" aria-colindex="1">
+            {{ fechavinc.vinc }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
                     </div>
                 </div>
                 <template v-if="pagaduriaType === 'FOPEP'">
@@ -344,8 +365,6 @@
                         </div>
                     </div>
                 </template>
-                <template v-if="datamesfidu || datamessedvalle || pagaduriaType === 'FOPEP'"></template>
-                <div v-else-if="datamesSed">
                     <div v-if="arrayCoupons.length > 0" class="col-12 px-0 d-flex align-items-start justify-content-between flex-column flex-sm-row">
                         <div class="col-12 col-48 px-0">
                             <div class="mt-3 table-responsive">
@@ -432,25 +451,7 @@
                             </table>
                         </div>
                     </div>
-                </div>
-                <div class="col-6" v-if="user.role_id === 1 || user.role_id === '1' || user.role_id === 4 || user.role_id === '4' || user.role_id === 5 || user.role_id === '5'">
-                    <b class="panel-label">FECHA CARGA DATA:</b>
-                    <div>
-                        <p class="panel-value">{{ fechavinc.fecdata || 'N/A' }}</p>
-                    </div>
-                </div>
-                <div class="col-6" v-if="user.role_id === 1 || user.role_id === '1' || user.role_id === 4 || user.role_id === '4' || user.role_id === 5 || user.role_id === '5'">
-                    <b class="panel-label">MES CARGA DATA:</b>
-                    <div>
-                        <p class="panel-value">{{ fechavinc.mesdata || 'N/A' }}</p>
-                    </div>
-                </div>
-                <div class="col-6" v-if="user.role_id === 1 || user.role_id === '1' || user.role_id === 4 || user.role_id === '4' || user.role_id === 5 || user.role_id === '5'">
-                    <b class="panel-label">AÑO CARGA DATA:</b>
-                    <div>
-                        <p class="panel-value">{{ fechavinc.anodata || 'N/A' }}</p>
-                    </div>
-                </div>
+               
                 <div class="col-6" v-if="fechavinc.vinc">
                     <b class="panel-label">ANTIGUEDAD LABORAL:</b>
                     <div>
