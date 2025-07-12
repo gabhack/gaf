@@ -68,7 +68,9 @@ class EmbargosController extends Controller
                     $partial = $modelClass::on('pgsql')
                         ->where($column, 'LIKE', "%{$doc}%")
                         ->get()
-                        ->toArray();
+                        ->map
+                        ->getAttributes()
+                        ->all();
 
                     Log::info("{$name} returned " . count($partial) . ' records');
                     $results = array_merge($results, $partial);
@@ -88,7 +90,7 @@ class EmbargosController extends Controller
                 $queryGen->where(function ($q) use ($pagaduria, $pagaduriaLabel) {
                     $q->where('pagaduria', $pagaduria)
                         ->orWhere('pagaduria', $pagaduriaLabel);
-                })->whereBetween('nomina', [$startDate, $endDate]);
+                })->whereRaw("to_date(nomina, 'YYYY-MM-DD') BETWEEN ? AND ?", [$startDate->toDateString(), $endDate->toDateString()]);
             } else {
                 Log::info('Filtering EmbargosGen by pagaduria only');
 
@@ -98,7 +100,7 @@ class EmbargosController extends Controller
                 });
             }
 
-            $dataGen = $queryGen->get()->toArray();
+            $dataGen = $queryGen->get()->map->getAttributes()->all();
 
             Log::info('EmbargosGen returned ' . count($dataGen) . ' records');
 
@@ -141,7 +143,9 @@ class EmbargosController extends Controller
                 $results = $model::on('pgsql')
                     ->where($column, 'LIKE', "%{$doc}%")
                     ->get()
-                    ->toArray();
+                    ->map
+                    ->getAttributes()
+                    ->all();
             }
         }
 
@@ -149,49 +153,60 @@ class EmbargosController extends Controller
     }
 
     public function getEmbargosByPagaduria(Request $request)
-{
-    if (!$request->has(['month', 'year', 'pagaduria'])) {
-        return response()->json(['error' => 'month, year y pagaduria son requeridos.'], 400);
+    {
+        if (!$request->has(['month', 'year', 'pagaduria'])) {
+            return response()->json(['error' => 'month, year y pagaduria son requeridos.'], 400);
+        }
+
+        $month             = str_pad($request->input('month'), 2, '0', STR_PAD_LEFT);
+        $year              = $request->input('year');
+        $pagaduria         = $request->input('pagaduria');
+        $entidadDemandante = $request->input('entidadDemandante');
+        $perPage           = (int) $request->input('perPage', 20);
+        $page              = (int) $request->input('page', 1);
+
+        $start = Carbon::createFromFormat('Y-m', "{$year}-{$month}")->startOfMonth()->format('Y-m-d');
+        $end   = Carbon::createFromFormat('Y-m', "{$year}-{$month}")->endOfMonth()->format('Y-m-d');
+
+        Log::info('EmbargosGen filtro', [
+            'pagaduria' => $pagaduria,
+            'start'     => $start,
+            'end'       => $end,
+            'entidad'   => $entidadDemandante
+        ]);
+
+        $base = EmbargosGen::on('pgsql')
+            ->where('pagaduria', 'ILIKE', "%{$pagaduria}%")
+            ->whereRaw("to_date(nomina, 'YYYY-MM-DD') BETWEEN ? AND ?", [$start, $end]);
+
+        if ($entidadDemandante) {
+            $base->where('entidaddeman', 'ILIKE', "%{$entidadDemandante}%");
+        }
+
+        $total = $base->count();
+
+        $rows = $base->select(
+                    'id','doc','nomp','docdeman','entidaddeman','motemb','temb',
+                    DB::raw("to_char(to_date(nomina, 'YYYY-MM-DD'), 'YYYY-MM-DD') as nomina")
+                )
+                ->orderBy('doc')
+                ->forPage($page, $perPage)
+                ->get();
+
+        Log::info('EmbargosGen resultados', ['total' => $total, 'page' => $page]);
+
+        return response()->json(['data' => $rows, 'total' => $total], 200);
     }
-
-    $month             = str_pad($request->input('month'), 2, '0', STR_PAD_LEFT);
-    $year              = $request->input('year');
-    $pagaduria         = $request->input('pagaduria');
-    $entidadDemandante = $request->input('entidadDemandante');
-
-    $perPage = (int)$request->input('perPage', 20);
-    $page    = (int)$request->input('page', 1);
-
-    $start = Carbon::createFromFormat('Y-m', "{$year}-{$month}")->startOfMonth();
-    $end   = Carbon::createFromFormat('Y-m', "{$year}-{$month}")->endOfMonth();
-
-    $base = EmbargosGen::on('pgsql')
-        ->where('pagaduria', 'ILIKE', "%{$pagaduria}%")
-        ->whereBetween('nomina', [$start, $end]);
-
-    if ($entidadDemandante) {
-        $base->where('entidaddeman', 'ILIKE', "%{$entidadDemandante}%");
-    }
-
-    $total = $base->count();
-
-    $rows  = $base->select(
-                'id','doc','nomp','docdeman','entidaddeman','motemb','temb',
-                DB::raw("to_char(nomina, 'YYYY-MM-DD') as nomina")
-            )
-            ->orderBy('doc')
-            ->forPage($page, $perPage)
-            ->get();
-
-    return response()->json(['data' => $rows, 'total' => $total], 200);
-}
-
 
     private function normalizeNominaDates(array $rows): array
     {
         foreach ($rows as &$row) {
             if (isset($row['nomina']) && $row['nomina']) {
-                $row['nomina'] = Carbon::parse($row['nomina'])->toDateString();
+                if (preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $row['nomina'])) {
+                    $row['nomina'] = Carbon::createFromFormat('d/m/Y', $row['nomina'])->toDateString();
+                } else {
+                    $row['nomina'] = Carbon::parse($row['nomina'])->toDateString();
+                }
             }
         }
 

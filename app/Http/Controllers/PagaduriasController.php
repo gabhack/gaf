@@ -165,7 +165,8 @@ class PagaduriasController extends Controller
 
     public function perDoc($doc)
     {
-        Log::info('Entró a buscar la cédula', ['doc' => $doc]);
+        $startTotal = microtime(true);
+        Log::info('Inició búsqueda por documento', ['doc' => $doc]);
     
         $user      = Auth::user();
         $userType  = IsCompany() ? 'empresa' : (IsComercial() ? 'comercial' : null);
@@ -176,23 +177,29 @@ class PagaduriasController extends Controller
         }
     
         DB::beginTransaction();
-    
         try {
             $results = [];
     
+            $startQuery = microtime(true);
             $latestIds = DatamesGen::select('pagaduria', DB::raw('MAX(id) as id'))
                 ->where('doc', $doc)
                 ->groupBy('pagaduria')
                 ->pluck('id', 'pagaduria');
-    
-            Log::info('Consultando DatamesGen', ['pagadurias_distintas' => $latestIds->count()]);
+            $queryDuration = microtime(true) - $startQuery;
+            Log::info('Tiempo consulta a base de datos (pluck)', ['segundos' => $queryDuration]);
     
             if ($latestIds->isNotEmpty()) {
+                $startFetch = microtime(true);
                 $items = DatamesGen::whereIn('id', $latestIds->values())->get()->keyBy('pagaduria');
+                $fetchDuration = microtime(true) - $startFetch;
+                Log::info('Tiempo consulta a base de datos (whereIn)', ['segundos' => $fetchDuration]);
+    
+                $startLoop = microtime(true);
                 foreach ($items as $pagaduria => $item) {
                     $results[$pagaduria] = $item;
-                    Log::info('Resultado de DatamesGen', ['pagaduria' => $pagaduria, 'id' => $item->id]);
                 }
+                $loopDuration = microtime(true) - $startLoop;
+                Log::info('Tiempo procesamiento loop resultados', ['segundos' => $loopDuration]);
             }
     
             if ($userType) {
@@ -205,10 +212,12 @@ class PagaduriasController extends Controller
             $payload = !empty($results) ? $results : (object) [];
             Log::info('Resultados finales', ['total_resultados' => count((array) $payload)]);
     
+            $totalDuration = microtime(true) - $startTotal;
+            Log::info('Tiempo total del método perDoc()', ['segundos' => $totalDuration]);
+    
             return response()->json($payload, 200);
         } catch (\Throwable $e) {
             DB::rollBack();
-    
             Log::error('Error al buscar pagadurías por documento', [
                 'doc'       => $doc,
                 'exception' => $e->getMessage(),
@@ -221,6 +230,7 @@ class PagaduriasController extends Controller
             ], 500);
         }
     }
+    
     
     
 
