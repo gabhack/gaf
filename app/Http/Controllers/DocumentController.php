@@ -3,11 +3,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Document;
-use Storage;
 use Response;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\DocumentsImport;
 use App\Exceptions\ImportValidationException;
+use Illuminate\Support\Facades\Storage;
+
 
 class DocumentController extends Controller
 {

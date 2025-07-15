@@ -771,7 +771,9 @@ public function processCedulas_vista($cedulas, $mes, $año)
                     ->filter(function ($item) {
                         // Eliminar nulos y valores <= 0
                         return $item && $item['valor'] > 0;
-                    });
+                    })
+                    ->unique('mliquid')
+                    ;
                 $descuentos = $descuentos->isEmpty() ? null : $descuentos;
 
                 // Aplicar descuento base según pagaduría y salario

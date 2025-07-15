@@ -674,15 +674,24 @@
       }
     },
     mounted() {
-    const qs = new URLSearchParams(window.location.search);
-    this.mes  = qs.get('mes')  || '';
-    this.año  = qs.get('año')  || qs.get('anio') || '';
-    console.log('[DemographicData] mounted', { mes: this.mes, año: this.año });
+  // --- leer query‑string para mes / año -------------
+  const qs = new URLSearchParams(window.location.search)
+  this.mes = qs.get('mes') || ''
+  this.año = qs.get('año') || qs.get('anio') || ''
+  console.log('[DemographicData] mounted', { mes: this.mes, año: this.año })
 
-    if (this.mes && this.año) {
-      this.fetchPaginatedResults(1);
+  if (this.mes && this.año) {
+    this.fetchPaginatedResults(1)
+  }
+
+  // --- limpiar filas expandidas cuando se cierre cualquier modal -------------
+  //  (Bootstrap‑Vue emite este evento en $root)
+  this.$root.$on('bv::modal::hidden', (bvEvent, modalId) => {
+    if (['modalCupones', 'modalEmbargos', 'modalDescuentos'].includes(modalId)) {
+      this.closeExpandedRows()
     }
-  },
+  })
+},
     computed: {
       // Opciones del filtro de tipo de deducción
       categoryOptions() {
@@ -976,14 +985,12 @@
         this.showRecentConsultations = !this.showRecentConsultations
       },
       toggleDetails(result, type) {
-        const key = `${result.doc}-${type}`
-        const index = this.expandedRows.indexOf(key)
-        if (index > -1) {
-          this.expandedRows.splice(index, 1)
-        } else {
-          this.expandedRows.push(key)
-        }
-      },
+    this.expandedRows = this.expandedRows.filter(
+      key => !key.endsWith(`-${type}`)
+    )
+    const key = `${result.doc}-${type}`
+    this.expandedRows.push(key)
+  },
       isRowExpanded(result, type) {
         const key = `${result.doc}-${type}`
         return this.expandedRows.includes(key)
