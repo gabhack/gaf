@@ -13,6 +13,10 @@ trait ParsesPgTzDates
             return parent::asDateTime($value);
         }
 
+        if ($value === '' || trim($value) === '') {
+            return null;
+        }
+
         if (is_string($value)) {
             if (preg_match('/^(\d{1,2})-([a-z]{3})-(\d{2})$/i', $value, $m)) {
                 $months = [
@@ -20,12 +24,11 @@ trait ParsesPgTzDates
                     'may'=>'05','jun'=>'06','jul'=>'07','ago'=>'08',
                     'sep'=>'09','oct'=>'10','nov'=>'11','dic'=>'12',
                 ];
-                $day   = str_pad($m[1], 2, '0', STR_PAD_LEFT);
-                $abbr  = strtolower($m[2]);
-                $year  = $m[3];
+                $day      = str_pad($m[1], 2, '0', STR_PAD_LEFT);
+                $abbr     = strtolower($m[2]);
+                $yearFull = '20' . $m[3];
                 if (isset($months[$abbr])) {
-                    $yearFull = '20' . $year;
-                    $value    = sprintf('%s-%s-%s', $yearFull, $months[$abbr], $day);
+                    $value = sprintf('%s-%s-%s', $yearFull, $months[$abbr], $day);
                     return parent::asDateTime($value);
                 }
             }
