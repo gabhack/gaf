@@ -111,20 +111,14 @@
                     <a class="collapse-item" href="/credit-requests">
                         Historial de solicitudes
                     </a>
-                    @can('permission', 'demografico.pending.upload')
-                    <a class="collapse-item"
-                       href="{{ route('demografico.pending.upload.page') }}">
-                      Subir para análisis
-                    </a>
-                  @endcan
-                  
-                  @can('permission', 'demografico.pending.upload')
-                    <a class="collapse-item"
-
-                       href="{{ route('demografico.pending.list.page') }}">
-                      Pendientes por análisis
-                    </a>
-                  @endcan
+                    <div class="bg-green-side py-2 collapse-inner">
+                        <a
+                            class="collapse-item"
+                            href="/analisis-de-cartera"
+                        >
+                            Análisis de Cartera
+                        </a>
+                    </div>
                   
                   @can('permission', 'hacer consultas sin visar')
                   <a class="collapse-item" href="{{ url('dataClientDraftwithoutvisa') }}">

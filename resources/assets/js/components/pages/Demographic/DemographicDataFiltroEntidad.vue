@@ -15,6 +15,7 @@
             potencial de recuperación.
           </p>
         </b-col>
+        
       </b-row>
   
       <!-- Caso: Sin resultados -->
@@ -86,31 +87,35 @@
               </b-form-group>
             </div>
             <b-col
-              cols="12"
-              style="
-                min-height: 150px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                cursor: pointer;
-              "
-              @click="triggerFileInput"
-              @dragover.prevent="handleDragOver"
-              @dragleave.prevent="handleDragLeave"
-              @drop.prevent="handleDrop"
-            >
-              <div
-                style="display: flex; flex-direction: column; align-items: center; justify-content: center"
-              >
-                <UploadFile class="mb-2" />
-                <p class="text-center" style="margin-bottom: 0.5rem">
-                  Arrastre o suelte el archivo <br />
-                  o
-                </p>
-                <CustomButton text="Seleccionar archivo" :color="'white'" />
-              </div>
-              <input type="file" ref="fileInput" @change="handleFileUpload" style="display: none" />
-            </b-col>
+  cols="12"
+  style="min-height: 150px; display: flex; flex-direction: column; align-items: center; cursor: pointer;"
+  @click="triggerFileInput"
+  @dragover.prevent="handleDragOver"
+  @dragleave.prevent="handleDragLeave"
+  @drop.prevent="handleDrop"
+>
+  <div
+    style="border:1px solid #ccc; padding:16px; border-radius:4px; background:#f9f9f9; margin-bottom:1rem; width:100%; max-width:400px; text-align:left;"
+  >
+    <strong>Instrucciones para la subida del archivo</strong>
+    <ul style="margin:0; padding-left:1.2em;">
+      <li>Formato: <code>XLSX</code> (Excel)</li>
+      <li>Debe contener una única columna con encabezado <code>cedulas</code></li>
+      <li>Las cédulas deben ir <em>sin</em> puntos, comas ni caracteres—solo dígitos.</li>
+    </ul>
+  </div>
+
+  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+    <UploadFile class="mb-2" />
+    <p class="text-center" style="margin-bottom: 0.5rem">
+      Arrastre o suelte el archivo <br />
+      o
+    </p>
+    <CustomButton text="Seleccionar archivo" :color="'white'" />
+  </div>
+  <input type="file" ref="fileInput" @change="handleFileUpload" style="display: none" />
+</b-col>
+
           </b-row>
           <div class="d-flex justify-content-center align-item-center mb-5" style="width: 100%" v-if="file">
             <div
