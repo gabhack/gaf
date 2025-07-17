@@ -25,80 +25,88 @@ class DescuentosController extends Controller
     use ParsesPgTzDates;
 
     public function index(Request $request)
-    {
-        $doc            = $request->input('doc');
-        $descuentoType  = $request->input('pagaduria');
-        $pagaduriaLabel = $request->input('pagaduriaLabel');
-    
-        $models = [
-            DescuentosSedAtlantico::class,
-            DescuentosSemMonteria::class,
-            DescuentosSemBarranquilla::class,
-            DescuentosSedCauca::class,
-            DescuentosSedCaldas::class,
-            DescuentosSedCordoba::class,
-            DescuentosSedChoco::class,
-            DescuentosSedValle::class,
-            DescuentosSemCali::class,
-            DescuentosSemPopayan::class,
-            DescuentosSemQuibdo::class,
-        ];
-    
-        $results = [];
-    
-        foreach ($models as $model) {
-            if (class_basename($model) === $descuentoType) {
-                $collection = $model::on('pgsql')
-                    ->where('doc', 'LIKE', "%{$doc}%")
-                    ->get();
-                foreach ($collection as $item) {
-                    $dateFields = array_keys(array_filter(
-                        $item->getCasts(),
-                        fn($t) => in_array($t, ['date','datetime','immutable_date','immutable_datetime'])
-                    ));
-                    foreach ($dateFields as $field) {
-                        $raw = $item->getOriginal($field);
-                        if (preg_match('/^\d{1,2}-[a-z]{3}-\d{2}$/i', $raw)) {
-                            Log::error('Formato inválido de fecha', [
-                                'model'     => $model,
-                                'id'        => $item->id,
-                                'column'    => $field,
-                                'raw_value' => $raw,
-                            ]);
-                        }
+{
+    $doc            = $request->input('doc');
+    $descuentoType  = $request->input('pagaduria');
+    $pagaduriaLabel = $request->input('pagaduriaLabel');
+
+    $models = [
+        DescuentosSedAtlantico::class,
+        DescuentosSemMonteria::class,
+        DescuentosSemBarranquilla::class,
+        DescuentosSedCauca::class,
+        DescuentosSedCaldas::class,
+        DescuentosSedCordoba::class,
+        DescuentosSedChoco::class,
+        DescuentosSedValle::class,
+        DescuentosSemCali::class,
+        DescuentosSemPopayan::class,
+        DescuentosSemQuibdo::class,
+    ];
+
+    $results = [];
+
+    foreach ($models as $model) {
+        if (class_basename($model) === $descuentoType) {
+            $collection = $model::on('pgsql')
+                ->where('doc', 'LIKE', "%{$doc}%")
+                ->get();
+
+            foreach ($collection as $item) {
+                $casts = $item->getCasts();
+                $dateFields = array_keys(array_filter($casts, function ($t) {
+                    return in_array($t, ['date','datetime','immutable_date','immutable_datetime']);
+                }));
+
+                foreach ($dateFields as $field) {
+                    $raw = $item->getOriginal($field);
+                    if (preg_match('/^\d{1,2}-[a-z]{3}-\d{2}$/i', $raw)) {
+                        Log::error('Formato inválido de fecha', [
+                            'model'     => $model,
+                            'id'        => $item->id,
+                            'column'    => $field,
+                            'raw_value' => $raw,
+                        ]);
                     }
                 }
-                $results = array_merge($results, $collection->toArray());
             }
+
+            $results = array_merge($results, $collection->toArray());
         }
-    
-        $genCollection = DescuentosGen::on('pgsql')
-            ->where('doc', 'LIKE', "%{$doc}%")
-            ->where(fn($q) => $q->where('pagaduria', $descuentoType)->orWhere('pagaduria', $pagaduriaLabel))
-            ->get();
-    
-        foreach ($genCollection as $item) {
-            $dateFields = array_keys(array_filter(
-                $item->getCasts(),
-                fn($t) => in_array($t, ['date','datetime','immutable_date','immutable_datetime'])
-            ));
-            foreach ($dateFields as $field) {
-                $raw = $item->getOriginal($field);
-                if (preg_match('/^\d{1,2}-[a-z]{3}-\d{2}$/i', $raw)) {
-                    Log::error('Formato inválido de fecha', [
-                        'model'     => DescuentosGen::class,
-                        'id'        => $item->id,
-                        'column'    => $field,
-                        'raw_value' => $raw,
-                    ]);
-                }
-            }
-        }
-    
-        $results = array_merge($results, $genCollection->toArray());
-    
-        return response()->json($this->normalizeNominaDates($results), 200);
     }
+
+    $genCollection = DescuentosGen::on('pgsql')
+        ->where('doc', 'LIKE', "%{$doc}%")
+        ->where(function ($q) use ($descuentoType, $pagaduriaLabel) {
+            $q->where('pagaduria', $descuentoType)
+              ->orWhere('pagaduria', $pagaduriaLabel);
+        })
+        ->get();
+
+    foreach ($genCollection as $item) {
+        $casts = $item->getCasts();
+        $dateFields = array_keys(array_filter($casts, function ($t) {
+            return in_array($t, ['date','datetime','immutable_date','immutable_datetime']);
+        }));
+
+        foreach ($dateFields as $field) {
+            $raw = $item->getOriginal($field);
+            if (preg_match('/^\d{1,2}-[a-z]{3}-\d{2}$/i', $raw)) {
+                Log::error('Formato inválido de fecha', [
+                    'model'     => DescuentosGen::class,
+                    'id'        => $item->id,
+                    'column'    => $field,
+                    'raw_value' => $raw,
+                ]);
+            }
+        }
+    }
+
+    $results = array_merge($results, $genCollection->toArray());
+
+    return response()->json($this->normalizeNominaDates($results), 200);
+}
+
     
     
     
