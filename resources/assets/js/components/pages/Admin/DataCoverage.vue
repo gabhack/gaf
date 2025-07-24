@@ -3,25 +3,24 @@
     <div class="d-flex flex-wrap align-items-end gap-2 mb-3 w-100">
       <b-form-select v-model="year" :options="years" class="form-control2"/>
       <b-form-select v-model="month" :options="months" class="form-control2"/>
-      <b-form-select v-model="type" :options="types" class="form-control2"/>
       <b-button variant="success" :disabled="isSearching" @click="start">Buscar</b-button>
       <template v-if="isSearching">
-        <b-progress :max="pagadurias.length" :value="done" height="22px" class="flex-grow-1"/>
-        <span class="ms-2 fw-bold">{{ done }} / {{ pagadurias.length }}</span>
+        <b-progress :max="total" :value="done" height="22px" class="flex-grow-1"/>
+        <span class="ms-2 fw-bold">{{ done }} / {{ total }}</span>
       </template>
     </div>
     <b-table small hover :items="rows" :fields="fields">
       <template #cell(datames)="d">
-        <Status :loading="getLoad(d.item.id,'datames')" :value="d.item.datames"/>
+        <Status :loading="loading[d.item.id]" :value="d.item.datames"/>
       </template>
       <template #cell(cupones)="d">
-        <Status :loading="getLoad(d.item.id,'cupones')" :value="d.item.cupones"/>
+        <Status :loading="loading[d.item.id]" :value="d.item.cupones"/>
       </template>
       <template #cell(descuentos)="d">
-        <Status :loading="getLoad(d.item.id,'descuentos')" :value="d.item.descuentos"/>
+        <Status :loading="loading[d.item.id]" :value="d.item.descuentos"/>
       </template>
       <template #cell(embargos)="d">
-        <Status :loading="getLoad(d.item.id,'embargos')" :value="d.item.embargos"/>
+        <Status :loading="loading[d.item.id]" :value="d.item.embargos"/>
       </template>
     </b-table>
   </div>
@@ -36,9 +35,7 @@ const Status = {
   components: { BSpinner },
   template: `<div class="text-center" style="min-width:34px">
     <b-spinner small v-if="loading"/>
-    <span class="text-success fw-bold" v-else-if="value===true">Sí</span>
-    <span class="text-danger fw-bold" v-else-if="value===false">No</span>
-    <span v-else>-</span>
+    <span v-else>{{ value === null ? '-' : value }}</span>
   </div>`
 }
 
@@ -51,10 +48,12 @@ export default {
       rows: [],
       loading: {},
       done: 0,
+      total: 0,
       isSearching: false,
       year: String(n.getFullYear()),
       month: String(n.getMonth() + 1).padStart(2, '0'),
-      type: 'all',
+      batchSize: 1,
+      concurrency: 3,
       fields: [
         { key: 'pagaduria', label: 'Pagaduría' },
         { key: 'datames', label: 'DataMes' },
@@ -66,64 +65,46 @@ export default {
       months: Array.from({ length: 12 }, (_, i) => {
         const m = i + 1
         return { value: String(m).padStart(2, '0'), text: String(m).padStart(2, '0') }
-      }),
-      types: [
-        { value: 'all', text: 'Todos' },
-        { value: 'datames', text: 'DataMes' },
-        { value: 'cupones', text: 'Cupones' },
-        { value: 'descuentos', text: 'Descuentos' },
-        { value: 'embargos', text: 'Embargos' }
-      ]
+      })
     }
   },
   async mounted() {
-    const { data } = await axios.get('/api/data-coverage')
+    const { data } = await axios.get('/admin/data-coverage/list')
     this.pagadurias = data
+    this.total = data.length
     this.rows = data.map(p => ({
       id: p.id,
       pagaduria: p.nombre,
-      datames: null, cupones: null, descuentos: null, embargos: null
+      datames: null,
+      cupones: null,
+      descuentos: null,
+      embargos: null
     }))
   },
   methods: {
-    getLoad(id, key) {
-      return this.loading[id] && this.loading[id][key]
-    },
     async start() {
       if (this.isSearching) return
       this.isSearching = true
       this.done = 0
-      const batchSize = 10
-      for (let i = 0; i < this.pagadurias.length; i += batchSize) {
-        const batch = this.pagadurias.slice(i, i + batchSize)
-        const promises = batch.map(async p => {
-          this.$set(this.loading, p.id, { busy: true })
-          try {
-            const { data } = await axios.get('/api/data-coverage/pagaduria', {
-              params: { id: p.id, year: this.year, month: this.month, type: this.type },
-              timeout: 300000
-            })
-            const idx = this.rows.findIndex(r => r.id === p.id)
-            if (idx > -1) {
-              if (this.type === 'all') {
-                Object.assign(this.rows[idx], {
-                  datames: data.datames,
-                  cupones: data.cupones,
-                  descuentos: data.descuentos,
-                  embargos: data.embargos
-                })
-              } else {
-                this.$set(this.rows[idx], this.type, data[this.type])
-              }
-            }
-          } catch {}
-          finally {
-            this.done++
-            this.$delete(this.loading[p.id], 'busy')
-          }
-        })
-        await Promise.all(promises)
+      this.pagadurias.forEach(p => this.$set(this.loading, p.id, true))
+      const offsets = []
+      for (let o = 0; o < this.total; o += this.batchSize) offsets.push(o)
+      const worker = async () => {
+        while (offsets.length) {
+          const off = offsets.shift()
+          const { data } = await axios.get('/admin/data-coverage/batch', {
+            params: { year: this.year, month: this.month, offset: off, limit: this.batchSize },
+            timeout: 300000
+          })
+          data.forEach(d => {
+            this.$set(this.loading, d.id, false)
+            const idx = this.rows.findIndex(r => r.id === d.id)
+            if (idx > -1) Object.assign(this.rows[idx], d)
+          })
+          this.done += data.length
+        }
       }
+      await Promise.all([...Array(this.concurrency)].map(() => worker()))
       this.isSearching = false
     }
   }

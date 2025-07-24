@@ -731,20 +731,13 @@ Route::post('/credit-requests/bulk', [CreditRequestController::class, 'bulkStore
 Route::get('/data-coverage/batch',        [DataCoverageController::class,'batch']);
 
 //REVIEW CONTROL CARGA DATA
-Route::middleware(['auth','permission:ver visado'])->group(function () {
-    Route::view('/admin/data-coverage', 'Admin.DataCoverage')->name('data-coverage.view');
-
-
-    // --- listado de pagadurías
-    Route::get('/api/data-coverage',              [DataCoverageController::class,'index'])
-         ->name('data-coverage.index');
-
-    // --- cobertura por pagaduría  <---  NUEVA
-    Route::get('/api/data-coverage/pagaduria',    [DataCoverageController::class,'pagaduria'])
-         ->name('data-coverage.pagaduria');
-});
-
-
+Route::middleware(['auth', 'permission:ver visado'])
+     ->prefix('admin')
+     ->group(function () {
+         Route::view('data-coverage', 'Admin.DataCoverage')->name('admin.data-coverage.view');
+         Route::get('data-coverage/list',  [DataCoverageController::class, 'index']);
+         Route::get('data-coverage/batch', [DataCoverageController::class, 'batch']);
+     });
 
 // Listar/actualizar credit requests
 Route::get('/credit-requests', [CreditRequestController::class, 'index'])->name('credit-request.index');
