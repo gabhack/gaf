@@ -1,4 +1,4 @@
-import { setCurrentPeriod } from './utils';
+import { setCurrentPeriod } from './utils'
 
 const embargosModule = {
   namespaced: true,
@@ -9,61 +9,41 @@ const embargosModule = {
   },
   getters: {
     embargosPeriodos: state => {
-      console.log('[embargosModule] state.embargos:', state.embargos);
-
-      // Extrae todos los valores de nomina
-      let periodos = state.embargos.reduce((acc, embargo) => {
-        console.log('[embargosModule] embargo.nomina raw:', embargo.nomina);
-        if (!acc.includes(embargo.nomina)) {
-          acc.push(embargo.nomina);
-        }
-        return acc;
-      }, []);
-
-      // Asegura que el período actual esté incluido
-      periodos = setCurrentPeriod(periodos);
-
-      // Ordena de más reciente a más antiguo
-      const sorted = periodos.sort((a, b) => new Date(b) - new Date(a));
-      console.log('[embargosModule] embargosPeriodos computed:', sorted);
-      return sorted;
+      let periodos = state.embargos.reduce((acc, e) => {
+        if (!acc.includes(e.nomina)) acc.push(e.nomina)
+        return acc
+      }, [])
+      periodos = setCurrentPeriod(periodos)
+      return periodos.sort((a, b) => new Date(b) - new Date(a))
     },
     embargosPerPeriod: state => {
-      console.log('[embargosModule] selectedPeriod:', state.selectedPeriod);
-      const items = state.embargos.filter(item => item.nomina === state.selectedPeriod);
-      console.log('[embargosModule] embargosPerPeriod items:', items);
+      const periodKey = state.selectedPeriod.slice(0, 7)
+      const items = state.embargos.filter(i => i.nomina.slice(0, 7) === periodKey)
       return {
-        items: items.map(item => ({ ...item, check: false })),
+        items: items.map(i => ({ ...i, check: false })),
         total: items.length
-      };
+      }
     }
   },
   mutations: {
     setEmbargos: (state, payload) => {
-      console.log('[embargosModule] mutation setEmbargos payload:', payload);
-      state.embargos = payload;
+      state.embargos = payload
     },
     setEmbargosType: (state, payload) => {
-      console.log('[embargosModule] mutation setEmbargosType:', payload);
-      state.embargosType = payload;
+      state.embargosType = payload
     },
     setSelectedPeriod: (state, payload) => {
-      console.log('[embargosModule] mutation setSelectedPeriod:', payload);
-      state.selectedPeriod = payload;
+      state.selectedPeriod = payload
     }
   },
   actions: {
     fetchEmbargos: ({ commit, getters }, data) => {
-      console.log('[embargosModule] action fetchEmbargos data:', data);
-      commit('setEmbargos', data);
-
-      const periods = getters.embargosPeriodos;
-      if (periods.length > 0) {
-        console.log('[embargosModule] setting default selectedPeriod:', periods[0]);
-        commit('setSelectedPeriod', periods[0]);
+      commit('setEmbargos', data)
+      if (getters.embargosPeriodos.length > 0) {
+        commit('setSelectedPeriod', getters.embargosPeriodos[0])
       }
     }
   }
-};
+}
 
-export default embargosModule;
+export default embargosModule
