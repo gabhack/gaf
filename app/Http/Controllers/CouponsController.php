@@ -345,7 +345,6 @@ private function getPagaduriaIdFromString(string $normalized): ?int
 
  public function getFastCouponsByPagaduria(Request $request)
 {
-    // 1) Validación
     $request->validate([
         'pagaduria' => 'required|string',
         'month'     => 'required|integer|min:1|max:12',
@@ -356,54 +355,46 @@ private function getPagaduriaIdFromString(string $normalized): ?int
         'page'      => 'nullable|integer|min:1',
     ]);
 
-    // 2) Normalizamos inputs
     $pagaduriaName = trim($request->input('pagaduria'));
     $month         = str_pad($request->input('month'), 2, '0', STR_PAD_LEFT);
     $year          = $request->input('year');
-    $concept       = $request->input('concept', null);
-    $code          = $request->input('code', null);
-    $perPage       = (int) $request->input('perPage', 20);
+    $concept       = $request->input('concept');
+    $code          = $request->input('code');
+    $perPage       = (int) $request->input('perPage', 50);
     $page          = (int) $request->input('page', 1);
 
-    // 3) Buscamos la pagaduría en panel_pagaduria
     $panel = \DB::connection('pgsql')
                 ->table('panel_pagaduria')
                 ->where('nombre', 'ILIKE', $pagaduriaName)
                 ->first();
 
     if (! $panel) {
-        return response()->json([
-            'error' => "Pagaduría '{$pagaduriaName}' no encontrada."
-        ], 404);
+        return response()->json(['error' => "Pagaduría '{$pagaduriaName}' no encontrada."], 404);
     }
 
-    // 4) Rango de fechas
     $start = Carbon::createFromFormat('Y-m', "{$year}-{$month}")->startOfMonth();
     $end   = Carbon::createFromFormat('Y-m', "{$year}-{$month}")->endOfMonth();
 
-    // 5) Query base
     $query = \DB::connection('pgsql')
         ->table('fast_couponsgen_visado')
         ->where('idpagaduria', $panel->id)
         ->where('inicioperiodo', '<=', $end)
-        ->where('finperiodo',    '>=', $start);
+        ->where('finperiodo', '>=', $start);
 
     if ($concept) {
         $query->where('concept', 'ILIKE', "%{$concept}%");
     }
+
     if ($code) {
-        $query->where('code',    'ILIKE', "%{$code}%");
+        $query->where('code', 'ILIKE', "%{$code}%");
     }
 
-    // 6) Paginación con paginate()
-    $paginator = $query
-        ->orderBy('doc')
-        ->paginate($perPage, ['*'], 'page', $page);
+    $items = $query->orderBy('doc')->forPage($page, $perPage)->get();
+    $total = $query->count();
 
-    // 7) Devolvemos sólo items + total para que el front siga funcionando igual
     return response()->json([
-        'data'  => $paginator->items(),
-        'total' => $paginator->total(),
+        'data'  => $items,
+        'total' => $total,
     ], 200);
 }
 
