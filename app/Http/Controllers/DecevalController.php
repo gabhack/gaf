@@ -18,7 +18,11 @@ class DecevalController extends Controller
    public $userTU = 'IDV_ABC.CH2';
    public $passTU = '2025.Gmm;0p[yTU16';
    public $urlTU = "https://www.transuniondecisioncentreuat.com.mx/TU.DE.PONT_LATAM/";
+   //datos produccion
+   //public $mod = 'produccion';
    //public $urlTU = "https://www.transuniondecisioncentre.com.mx/TU.DE.PONT_LATAM/";
+   //public $userTU = 'GO3+FE_Ckcomercializadora_PROD_38903032';
+   //public $passTU = '15.LrtU]}QpeWX';
 
 
    public function __construct()
