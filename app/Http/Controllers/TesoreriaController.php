@@ -1,0 +1,295 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Estudiostr;
+use App\Carteras;
+use Illuminate\Http\Request;
+use App\Simulacion;
+use App\dataCotizer;
+use App\Giro;
+use Illuminate\Support\Facades\DB as DB;
+use Redirect;
+
+class TesoreriaController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
+    {
+
+        $options = $this->getOptions($request);
+
+        return view("estudios/tesoreria")->with($options);
+    }
+
+    public function detalleTesoreria($idEstudio)
+    {
+        //devolvemos la data relacionada con data_cotizer y estudiostr
+        $detalleTesoreria = dataCotizer::join("estudiostr as es", "es.data_cotizer_id", "=", "data_cotizer.id")
+            ->join("solicitud_credito as sc", "sc.estudio_id", "=", "es.id")
+            ->join("pagadurias as p", "es.pagaduria_id", "=", "p.id")
+            ->where("es.id", $idEstudio)
+            ->select(
+                "es.id as numero_libranza",
+                "data_cotizer.firstName as nombre",
+                "data_cotizer.firstLastname as apellido",
+                "data_cotizer.idNumber as cedula",
+                "data_cotizer.city as direccion",
+                "data_cotizer.phoneNumber as telefono",
+                "data_cotizer.email as correo_electronico",
+                "p.pagaduria as pagaduria",
+                "es.subestado as estado_tesoreria",
+                "es.created_at as fecha",
+                "sc.credito_total as solicitado",
+                "sc.nro_cuotas as plazo",
+                "sc.cuota as cuota_total",
+                "sc.credito_total as valor_credito",
+                DB::raw("(SELECT SUM(saldo) FROM carteras WHERE carteras.estudios_id = es.id) as compras_cartera"),
+                "sc.aval as intereses_anticipados",
+                "sc.gmf as gmf",
+                DB::raw("(SELECT SUM(saldo) FROM carteras WHERE carteras.estudios_id = es.id) - sc.credito_total  as desembolso_cliente"),
+                DB::raw("(SELECT SUM(saldo) FROM carteras WHERE carteras.estudios_id = es.id) - sc.credito_total  as saldo_girar")
+            )
+            ->where("es.id", "=", $idEstudio)
+            ->first();
+
+        if (is_null($detalleTesoreria)) {
+
+            $detalleTesoreria["numero_libranza"] = '';
+            $detalleTesoreria["nombre"] = '';
+            $detalleTesoreria["apellido"] = '';
+            $detalleTesoreria["cedula"] = '';
+            $detalleTesoreria["direccion"] = '';
+            $detalleTesoreria["telefono"] = '';
+            $detalleTesoreria["correo_electronico"] = '';
+            $detalleTesoreria["pagaduria"] = '';
+            $detalleTesoreria["estado_tesoreria"] = '';
+            $detalleTesoreria["fecha"] = '';
+            $detalleTesoreria["solicitado"] = '';
+            $detalleTesoreria["plazo"] = '';
+            $detalleTesoreria["cuota_total"] = '';
+            $detalleTesoreria["valor_credito"] = '';
+            $detalleTesoreria["compras_cartera"] = '';
+            $detalleTesoreria["intereses_anticipados"] = '';
+            $detalleTesoreria["gmf"] = '';
+            $detalleTesoreria["desembolso_cliente"] = '';
+            $detalleTesoreria["saldo_girar"] = '';
+        }
+
+        $giros = Giro::where("estudio_id", $idEstudio)->get();
+
+        $carteras = Carteras::where("estudios_id", $idEstudio)->get();
+        $beneficiarios = \App\EntidadesDesembolso::all();
+        $formapagos = \App\FormaPago::all();
+        $cuentabancarias = \App\CuentasBancarias::all();
+        $tipogiros = \App\TipoGiro::all();
+
+        return view("estudios/detalle_tesoreria", compact("detalleTesoreria", "carteras", "giros", "beneficiarios", "formapagos", "cuentabancarias", "tipogiros"));
+        //Devolvemos las carteras asociadas al estudio
+    }
+
+
+    public function getOptions(Request $request)
+    {
+        //Parametros de entrada para busqueda y filtrado
+        $search = '';
+        $fechadesde = '';
+        $fechahasta = '';
+        $asesor = array();
+        $periodo = '';
+        $decision = '';
+
+        if (isset($request->busq)) {
+            $search = $request->busq;
+        }
+
+        if (isset($request->filtro['fecha_desde']) && $request->filtro['fecha_desde'] !== '') {
+            $fechadesde = $request->filtro['fecha_desde'];
+        } else {
+            $fechadesde = '1800-01-01';
+        }
+
+        if (isset($request->filtro['fecha_hasta']) && $request->filtro['fecha_hasta'] !== '') {
+            $fechahasta = $request->filtro['fecha_hasta'];
+        } else {
+            $fechahasta = date("Y-m-d");
+        }
+
+        if (isset($request->filtro['asesor']) && $request->filtro['asesor'] !== '') {
+            $asesor = '';
+            $asesor = $request->filtro['asesor'];
+        }
+
+        if (isset($request->filtro['decision']) && $request->filtro['decision'] !== '') {
+            $decision = '';
+            $decision = $request->filtro['decision'];
+        }
+
+        if (isset($request->filtro['periodo']) && $request->filtro['periodo'] !== '') {
+            $periodo = $request->filtro['periodo'];
+        }
+
+        //Query
+        $subestados_tesoreria = [58, 2, 54];
+
+        $lista = Estudiostr::where('decision', 'APRO')
+            ->orderBy("id", "DESC");
+
+
+        // ->orWhere(function ($query) use ($subestados_tesoreria) {
+        //     $query->where('estado', 'EST')
+        //         ->where('decision', 'VIABLE')
+        //         ->whereIn('subestado_id', $subestados_tesoreria);
+        // })
+        //     ->WhereHas('asesor', function ($q) use ($asesor) {
+        //         if (!is_array($asesor)) {
+        //             $q->where('id', $asesor);
+        //         }
+        //     })
+        //     ->where(function ($q) use ($decision) {
+        //         if ($decision !== '') {
+        //             $q->where('decision', $decision);
+        //         }
+        //     })
+        //     ->where(function ($q) use ($periodo) {
+        //         if ($periodo !== '') {
+        //             $q->where('periodo_estudio', $periodo);
+        //         }
+        //     })
+        //     ->whereBetween('fecha', [$fechadesde, $fechahasta])
+        //     ->WhereHas('cliente', function ($q) use ($search) {
+        //         $q->where('nombres', 'like', '%' . $search . '%');
+        //         $q->orWhere('apellidos', 'like', '%' . $search . '%');
+        //         $q->orWhere('documento', 'like', '%' . $search . '%');
+        //         $q->orWhere(DB::raw('CONCAT_WS(" ", nombres, apellidos)'), 'like', '%' . $search . '%');
+        //     });
+
+        //Preparar la salida
+        $listaOut = $lista->paginate(10)->appends(request()->except('page'));
+        $links = $listaOut->links();
+        $options = array(
+            "lista" => $listaOut,
+            "links" => $links
+        );
+
+        // //Parametros de busqueda y filtrado para front
+        // if (isset($request->busq) && $request->busq !== '') {
+        //     $options['busq'] = $request->busq;
+        // }
+
+        // if (isset($request->filtro['fecha_desde']) && $request->filtro['fecha_desde'] !== '') {
+        //     $options['filtro']['fecha_desde'] = $request->filtro['fecha_desde'];
+        // }
+
+        // if (isset($request->filtro['fecha_hasta']) && $request->filtro['fecha_hasta'] !== '') {
+        //     $options['filtro']['fecha_hasta'] = $request->filtro['fecha_hasta'];
+        // }
+
+        // if (isset($request->filtro['asesor']) && $request->filtro['asesor'] !== '') {
+        //     $options['filtro']['asesor'] = $request->filtro['asesor'];
+        // }
+
+        // if (isset($request->filtro['decision']) && $request->filtro['decision'] !== '') {
+        //     $options['filtro']['decision'] = $request->filtro['decision'];
+        // }
+
+        // if (isset($request->filtro['periodo']) && $request->filtro['periodo'] !== '') {
+        //     $options['filtro']['periodo'] = $request->filtro['periodo'];
+        // }
+
+        return $options;
+    }
+
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
+
+    public function agregarGiro(Request $request)
+    {
+        $input = $request->all();
+        $beneficiario = \App\EntidadesDesembolso::find($request->id_beneficiario);
+
+        $input['beneficiario'] = $beneficiario->nombre;
+
+        $giro = new \App\Giro();
+        $giro->estudio_id = $request->estudio_id;
+        $giro->id_beneficiario = $request->id_beneficiario;
+        $giro->beneficiario = $beneficiario->nombre;
+        $giro->identificacion = $request->identificacion;
+        $giro->valor_girar = $request->valor_girar;
+        $giro->referencia = $request->referencia;
+        $giro->forma_pago = $request->forma_pago;
+        $giro->id_tipogiro = $request->id_tipogiro;
+        $giro->fecha_giro = date('Y-m-d');
+        $giro->save();
+
+        return \Redirect::back();
+    }
+}

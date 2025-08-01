@@ -1,0 +1,4833 @@
+@extends('layouts.app2')
+
+@section('content')
+<div class="container-fluid">
+    <div>
+        @if ($resultado)
+        <div class="text-right mb-3">
+            <download-pdf-button></download-pdf-button>
+        </div>
+        @foreach($resultado as $dato)
+        <div id="consulta-container" class="row">
+            <div class="col-6">
+                <div class="panel mb-3">
+                    <div class="panel-heading"><b>RESULTADO DE LA CONSULTA</b></div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <!---->
+                            @if (isset($dato["Tercero"]["TipoIdentificacion"]))
+                            <div class="col-6">
+                                <b class="panel-label">TIPO IDENTIFICACIÓN:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["TipoIdentificacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["Estado"]))
+                            <div class="col-6">
+                                <b class="panel-label">EST. DOCUMENTO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["Estado"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["Fecha"]))
+                            <div class="col-6">
+                                <b class="panel-label">FECHA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["Fecha"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["NumeroIdentificacion"]))
+                            <div class="col-6">
+                                <b class="panel-label">No. IDENTIFICACIÓN:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["NumeroIdentificacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["FechaExpedicion"]))
+                            <div class="col-6">
+                                <b class="panel-label">FECHA EXPEDICIÓN:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["FechaExpedicion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["Hora"]))
+                            <div class="col-6">
+                                <b class="panel-label">HORA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["Hora"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!---->
+            <!---->
+            <!---->
+            <div class="col-6">
+                <div class="panel mb-3">
+                    <div class="panel-heading"><b>RESULTADO DE LA CONSULTA</b></div>
+                    <div class="panel-body">
+                        <div class="row">
+                            @if (isset($dato["Tercero"]["NombreTitular"]))
+                            <div class="col-6">
+                                <b class="panel-label">NOMBRES APELLIDOS - RAZÓN SOCIAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["NombreTitular"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["LugarExpedicion"]))
+                            <div class="col-md-6">
+                                <b class="panel-label">LUGAR DE EXPEDICIÓN:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["LugarExpedicion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["Entidad"]))
+                            <div class="col-md-6">
+                                <b class="panel-label">USUARIO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["Entidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["NombreCiiu"]))
+                            <div class="col-md-6">
+                                <b class="panel-label">ACTIVIDAD ECONÓMICA - CIIU:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["NombreCiiu"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["RangoEdad"]))
+                            <div class="col-md-6">
+                                <b class="panel-label">RANGO EDAD PROBABLE:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["RangoEdad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["NumeroInforme"]))
+                            <div class="col-md-6">
+                                <b class="panel-label">No INFORME:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["NumeroInforme"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if (isset($dato["Tercero"]["Consolidado"]["ResumenPrincipal"]["Registro"]) and count($dato["Tercero"]["Consolidado"]["ResumenPrincipal"]["Registro"])>0 and count( $dato["Tercero"]["Consolidado"]["ResumenPrincipal"]["Registro"]) != count($dato["Tercero"]["Consolidado"]["ResumenPrincipal"]["Registro"], 1))
+            <div class="col-md-12">
+                <div class="panel panel-primary mb-3">
+                    <div class="panel-heading"><b>REGISTROS</b></div>
+                    @foreach($dato["Tercero"]["Consolidado"]["ResumenPrincipal"]["Registro"] as $Registro)
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PAQUETE INFORMACIÓN:</b>
+                                <div>
+                                    <p class="panel-value">{{ $Registro["PaqueteInformacion"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NUMERO OBLIGACIONES:</b>
+                                <div>
+                                    <p class="panel-value">{{ $Registro["NumeroObligaciones"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TOTAL SALDO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $Registro["TotalSaldo"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PARTICIPACIÓN DEUDA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $Registro["ParticipacionDeuda"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NUMERO OBLIGACIONES DIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $Registro["NumeroObligacionesDia"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">SALDO OBLIGACIONES DIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $Registro["SaldoObligacionesDia"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CUOTA OBLIGACIONES DIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $Registro["CuotaObligacionesDia"] }}</p>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CANTIDAD OBLIGACIONES MORA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $Registro["CantidadObligacionesMora"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">SALDO OBLIGACIONES MORA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $Registro["SaldoObligacionesMora"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CUOTA OBLIGACIONES MORA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $Registro["CuotaObligacionesMora"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR MORA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $Registro["ValorMora"] }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-heading"></div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
+            @if (isset($dato["Tercero"]["Score"]))
+            <div class="col-md-12">
+                <div class="panel panel-primary mb-3">
+                    <div class="panel-heading"><b>SCORE</b></div>
+                    <div class="panel-body">
+                        <div class="row">
+                            @php $field = $dato["Tercero"]["Score"]; @endphp
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">INDICADOR:</b>
+                                <div>
+                                    <p class="panel-value">{{ $field["IndicadorScore"] ? $field["IndicadorScore"] : "-" }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $field["TipoScore"] ? $field["TipoScore"] : "-" }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CODIGO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $field["CodigoScore"] ? $field["CodigoScore"] : "-" }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PUNTAJE:</b>
+                                <div>
+                                    <p class="panel-value">{{ $field["Puntaje"] ? $field["Puntaje"] : "-" }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TASA DE MOROSIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $field["TasaMorosidad"] ? $field["TasaMorosidad"] : "-" }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">INDICADOR PREDETERMINADO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $field["IndicadorDefault"] ? $field["IndicadorDefault"] : "-" }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">SUBPOBLACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $field["SubPoblacion"] ? $field["SubPoblacion"] : "-" }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">POLÍTICA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $field["Politica"] ? $field["Observacion"] : "-" }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">OBSERVACIÓN:</b>
+                                <div>
+                                    <p class="panel-value">{{ $field["Observacion"] ? $field["Observacion"] : "-" }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+
+            @if (isset($dato["Tercero"]["Consolidado"]["ResumenPrincipal"]["Registro"]) and count($dato["Tercero"]["Consolidado"]["ResumenPrincipal"]["Registro"])>0 and count( $dato["Tercero"]["Consolidado"]["ResumenPrincipal"]["Registro"]) == count($dato["Tercero"]["Consolidado"]["ResumenPrincipal"]["Registro"], 1))
+            <div class="col-md-12">
+                <div class="panel panel-primary mb-3">
+                    <div class="panel-heading"><b>REGISTROS</b></div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PAQUETE INFORMACIÓN:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["Consolidado"]["ResumenPrincipal"]["Registro"]["PaqueteInformacion"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NUMERO OBLIGACIONES:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["Consolidado"]["ResumenPrincipal"]["Registro"]["NumeroObligaciones"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TOTAL SALDO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["Consolidado"]["ResumenPrincipal"]["Registro"]["TotalSaldo"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PARTICIPACIÓN DEUDA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["Consolidado"]["ResumenPrincipal"]["Registro"]["ParticipacionDeuda"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NUMERO OBLIGACIONES DIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["Consolidado"]["ResumenPrincipal"]["Registro"]["NumeroObligacionesDia"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">SALDO OBLIGACIONES DIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["Consolidado"]["ResumenPrincipal"]["Registro"]["SaldoObligacionesDia"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CUOTA OBLIGACIONES DIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["Consolidado"]["ResumenPrincipal"]["Registro"]["CuotaObligacionesDia"] }}</p>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CANTIDAD OBLIGACIONES MORA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["Consolidado"]["ResumenPrincipal"]["Registro"]["CantidadObligacionesMora"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">SALDO OBLIGACIONES MORA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["Consolidado"]["ResumenPrincipal"]["Registro"]["SaldoObligacionesMora"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CUOTA OBLIGACIONES MORA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["Consolidado"]["ResumenPrincipal"]["Registro"]["CuotaObligacionesMora"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR MORA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["Consolidado"]["ResumenPrincipal"]["Registro"]["ValorMora"] }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+
+
+
+            @if (isset($dato["Tercero"]["CuentasVigentes"]["Obligacion"]) and count($dato["Tercero"]["CuentasVigentes"]["Obligacion"])>0 and count( $dato["Tercero"]["CuentasVigentes"]["Obligacion"]) != count($dato["Tercero"]["CuentasVigentes"]["Obligacion"], 1))
+            <div class="col-md-12">
+                <div class="panel panel-primary mb-3">
+                    <div class="panel-heading"><b>CUENTAS VIGENTES</b></div>
+                    @foreach($dato["Tercero"]["CuentasVigentes"]["Obligacion"] as $CuentasVigentes)
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-2">
+                                <b class="panel-label table-text">PAQUETE INFORMACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $CuentasVigentes["PaqueteInformacion"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">IDENTIFICADOR LINEA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $CuentasVigentes["IdentificadorLinea"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label table-text">TIPO CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $CuentasVigentes["TipoContrato"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label table-text">TIPO ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $CuentasVigentes["TipoEntidad"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $CuentasVigentes["NombreEntidad"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label table-text">CIUDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $CuentasVigentes["Ciudad"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label table-text">SUCURSAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $CuentasVigentes["Sucursal"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label table-text">NUMERO OBLIGACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $CuentasVigentes["NumeroObligacion"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label table-text">ESTADO OBLIGACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $CuentasVigentes["EstadoObligacion"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label table-text">FECHA APERTURA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $CuentasVigentes["FechaApertura"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label table-text">FECHA TERMINACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $CuentasVigentes["FechaTerminacion"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label table-text">VALOR INICIAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $CuentasVigentes["ValorInicial"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label table-text">COMPORTAMIENTOS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $CuentasVigentes["Comportamientos"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label table-text">FECHA DE CORTE:</b>
+                                <div>
+                                    <p class="panel-value">{{ $CuentasVigentes["FechaCorte"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label table-text">FECHA PERMANENCIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $CuentasVigentes["FechaPermanencia"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label table-text">CHEQUES DEVUELTOS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $CuentasVigentes["ChequesDevueltos"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label table-text">DIAS CARTERA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $CuentasVigentes["DiasCartera"] }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
+            @if (isset($dato["Tercero"]["CuentasVigentes"]["Obligacion"]) and count($dato["Tercero"]["CuentasVigentes"]["Obligacion"])>0 and count( $dato["Tercero"]["CuentasVigentes"]["Obligacion"]) == count($dato["Tercero"]["CuentasVigentes"]["Obligacion"], 1))
+            <div class="col-md-12">
+                <div class="panel panel-primary mb-3">
+                    <div class="panel-heading"><b>CUENTAS VIGENTES</b></div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-2">
+                                <b class="panel-label table-text">PAQUETE INFORMACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["CuentasVigentes"]["Obligacion"]["PaqueteInformacion"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">IDENTIFICADOR LINEA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["CuentasVigentes"]["Obligacion"]["IdentificadorLinea"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label table-text">TIPO CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["CuentasVigentes"]["Obligacion"]["TipoContrato"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label table-text">TIPO ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["CuentasVigentes"]["Obligacion"]["TipoEntidad"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["CuentasVigentes"]["Obligacion"]["NombreEntidad"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label table-text">CIUDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["CuentasVigentes"]["Obligacion"]["Ciudad"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label table-text">SUCURSAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["CuentasVigentes"]["Obligacion"]["Sucursal"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label table-text">NUMERO OBLIGACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["CuentasVigentes"]["Obligacion"]["NumeroObligacion"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label table-text">ESTADO OBLIGACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["CuentasVigentes"]["Obligacion"]["EstadoObligacion"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label table-text">FECHA APERTURA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["CuentasVigentes"]["Obligacion"]["FechaApertura"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label table-text">FECHA TERMINACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["CuentasVigentes"]["Obligacion"]["FechaTerminacion"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label table-text">VALOR INICIAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["CuentasVigentes"]["Obligacion"]["ValorInicial"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label table-text">COMPORTAMIENTOS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["CuentasVigentes"]["Obligacion"]["Comportamientos"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label table-text">FECHA DE CORTE:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["CuentasVigentes"]["Obligacion"]["FechaCorte"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label table-text">FECHA PERMANENCIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["CuentasVigentes"]["Obligacion"]["FechaPermanencia"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label table-text">CHEQUES DEVUELTOS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["CuentasVigentes"]["Obligacion"]["ChequesDevueltos"] }}</p>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <b class="panel-label table-text">DIAS CARTERA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["CuentasVigentes"]["Obligacion"]["DiasCartera"] }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+
+
+
+
+            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]) and count($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"])>0 and count( $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]) != count($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"], 1))
+            <div class="col-md-12">
+                <div class="panel panel-primary mb-3">
+                    <div class="panel-heading"><b>SECTOR FINANCIOER AL DIA</b></div>
+                    @foreach($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"] as $SectorFinancieroAlDia)
+                    <div class="panel-body">
+                        <div class="row">
+                            @if (isset($SectorFinancieroAlDia["PaqueteInformacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PAQUETE INFORMACIÓN:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["PaqueteInformacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["IdentificadorLinea"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">IDENTIFICADOR LINEA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["IdentificadorLinea"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["TipoContrato"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["TipoContrato"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["EstadoContrato"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["EstadoContrato"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["TipoEntidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["TipoEntidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["NombreEntidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["NombreEntidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["Ciudad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CIUDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["Ciudad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["Sucursal"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">SUCURSAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["Sucursal"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["NumeroObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NUMERO OBLIGACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["NumeroObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["Calidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CALIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["Calidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["EstadoObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO OBLIGACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["EstadoObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["ModalidadCredito"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">MODALIDAD CREDITO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["ModalidadCredito"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["LineaCredito"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">LINEA CREDITO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["LineaCredito"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["Periodicidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PERIODICIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["Periodicidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["FechaApertura"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA APERTURA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["FechaApertura"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["FechaTerminacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA TERMINACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["FechaTerminacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["Calificacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CALIFICACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["Calificacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["ValorInicial"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR INICIAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["ValorInicial"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["SaldoObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">SALDO OBLIGATORIO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["SaldoObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["ValorMora"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR MORAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["ValorMora"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["ValorCuota"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR CUOTA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["ValorCuota"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["TipoMoneda"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO MONEDA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["TipoMoneda"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["CuotasCanceladas"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">COUTAS CANCELADAS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["CuotasCanceladas"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["TipoGarantia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO GARANTIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["TipoGarantia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["CubrimientoGarantia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CUBRIMIENTO GARANTIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["CubrimientoGarantia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["MoraMaxima"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">MORA MAXIMA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["MoraMaxima"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["Comportamientos"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">COMPORTAMIENTOS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["Comportamientos"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["ParticipacionDeuda"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PARTICIPACION DEUDA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["ParticipacionDeuda"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["ProbabilidadNoPago"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PROBABILIDAD NO PAGO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["ProbabilidadNoPago"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["FechaCorte"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA CORTE:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["FechaCorte"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["ModoExtincion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">MODO EXTINCION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["ModoExtincion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["FechaPago"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA PAGO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["FechaPago"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["FechaPermanencia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA PERMANENCIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["FechaPermanencia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["NumeroReestructuraciones"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO REESTRACTURACIONES:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["NumeroReestructuraciones"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["NaturalezaReestructuracion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NATURALEZA REESTRICTURACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["NaturalezaReestructuracion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["TipoEntidadOriginadoraCartera"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO ENTIDAD ORIDINADORA CARTERA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["TipoEntidadOriginadoraCartera"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["EntidadOriginadoraCartera"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ENTIDAD ORIDINADORA CARTERA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["EntidadOriginadoraCartera"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["TipoPago"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO PAGO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["TipoPago"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["EstadoTitular"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO TITULAR:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["EstadoTitular"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["NumeroCuotasPactadas"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO CUOTAS PACTADAS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["NumeroCuotasPactadas"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["NumeroCuotasMora"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO COUTAS MORA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["NumeroCuotasMora"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroAlDia["Reestructurado"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">REESTRUCTADO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroAlDia["Reestructurado"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="panel-heading"></div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
+            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]) and count($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"])>0 and count( $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]) == count($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"], 1))
+            <div class="col-md-12">
+                <div class="panel panel-primary mb-3">
+                    <div class="panel-heading"><b>SECTOR FINANCIOER AL DIA</b></div>
+                    <div class="panel-body">
+                        <div class="row">
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["PaqueteInformacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PAQUETE INFORMACIÓN:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["PaqueteInformacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["IdentificadorLinea"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">IDENTIFICADOR LINEA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["IdentificadorLinea"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["TipoContrato"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["TipoContrato"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["EstadoContrato"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["EstadoContrato"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["TipoEntidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["TipoEntidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["NombreEntidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["NombreEntidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["Ciudad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CIUDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["Ciudad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["Sucursal"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">SUCURSAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["Sucursal"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["NumeroObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NUMERO OBLIGACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["NumeroObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["Calidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CALIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["Calidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["EstadoObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO OBLIGACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["EstadoObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["ModalidadCredito"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">MODALIDAD CREDITO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["ModalidadCredito"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["LineaCredito"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">LINEA CREDITO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["LineaCredito"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["Periodicidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PERIODICIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["Periodicidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["FechaApertura"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA APERTURA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["FechaApertura"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["FechaTerminacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA TERMINACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["FechaTerminacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["Calificacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CALIFICACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["Calificacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["ValorInicial"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR INICIAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["ValorInicial"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["SaldoObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">SALDO OBLIGATORIO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["SaldoObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["ValorMora"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR MORAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["ValorMora"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["ValorCuota"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR CUOTA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["ValorCuota"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["TipoMoneda"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO MONEDA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["TipoMoneda"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["CuotasCanceladas"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">COUTAS CANCELADAS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["CuotasCanceladas"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["TipoGarantia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO GARANTIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["TipoGarantia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["CubrimientoGarantia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CUBRIMIENTO GARANTIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["CubrimientoGarantia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["MoraMaxima"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">MORA MAXIMA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["MoraMaxima"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["Comportamientos"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">COMPORTAMIENTOS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["Comportamientos"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["ParticipacionDeuda"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PARTICIPACION DEUDA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["ParticipacionDeuda"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["ProbabilidadNoPago"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PROBABILIDAD NO PAGO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["ProbabilidadNoPago"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["FechaCorte"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA CORTE:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["FechaCorte"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["ModoExtincion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">MODO EXTINCION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["ModoExtincion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["FechaPago"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA PAGO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["FechaPago"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["FechaPermanencia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA PERMANENCIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["FechaPermanencia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["NumeroReestructuraciones"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO REESTRACTURACIONES:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["NumeroReestructuraciones"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["NaturalezaReestructuracion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NATURALEZA REESTRICTURACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["NaturalezaReestructuracion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["TipoEntidadOriginadoraCartera"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO ENTIDAD ORIDINADORA CARTERA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["TipoEntidadOriginadoraCartera"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["EntidadOriginadoraCartera"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ENTIDAD ORIDINADORA CARTERA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["EntidadOriginadoraCartera"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["TipoPago"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO PAGO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["TipoPago"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["EstadoTitular"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO TITULAR:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["EstadoTitular"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["NumeroCuotasPactadas"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO CUOTAS PACTADAS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["NumeroCuotasPactadas"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["NumeroCuotasMora"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO COUTAS MORA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["NumeroCuotasMora"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["Reestructurado"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">REESTRUCTADO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroAlDia"]["Obligacion"]["Reestructurado"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+
+
+            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]) and count($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"])>0 and count( $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]) != count($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"], 1))
+            <div class="col-md-12">
+                <div class="panel panel-primary mb-3">
+                    <div class="panel-heading"><b>SECTOR FINANCIERO EN MORA</b></div>
+                    @foreach($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"] as $SectorFinancieroEnMora)
+                    <div class="panel-body">
+                        <div class="row">
+                            @if (isset($SectorFinancieroEnMora["PaqueteInformacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PAQUETE INFORMACIÓN:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["PaqueteInformacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["IdentificadorLinea"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">IDENTIFICADOR LINEA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["IdentificadorLinea"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["TipoContrato"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["TipoContrato"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["EstadoContrato"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["EstadoContrato"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["TipoEntidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["TipoEntidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["NombreEntidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["NombreEntidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["Ciudad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CIUDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["Ciudad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["Sucursal"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">SUCURSAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["Sucursal"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["NumeroObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NUMERO OBLIGACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["NumeroObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["Calidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CALIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["Calidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["EstadoObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO OBLIGACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["EstadoObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["ModalidadCredito"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">MODALIDAD CREDITO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["ModalidadCredito"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["LineaCredito"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">LINEA CREDITO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["LineaCredito"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["Periodicidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PERIODICIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["Periodicidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["FechaApertura"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA APERTURA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["FechaApertura"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["FechaTerminacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA TERMINACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["FechaTerminacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["Calificacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CALIFICACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["Calificacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["ValorInicial"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR INICIAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["ValorInicial"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["SaldoObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">SALDO OBLIGATORIO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["SaldoObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["ValorMora"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR MORAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["ValorMora"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["ValorCuota"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR CUOTA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["ValorCuota"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["TipoMoneda"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO MONEDA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["TipoMoneda"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["CuotasCanceladas"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">COUTAS CANCELADAS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["CuotasCanceladas"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["TipoGarantia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO GARANTIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["TipoGarantia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["CubrimientoGarantia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CUBRIMIENTO GARANTIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["CubrimientoGarantia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["MoraMaxima"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">MORA MAXIMA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["MoraMaxima"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["Comportamientos"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">COMPORTAMIENTOS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["Comportamientos"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["ParticipacionDeuda"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PARTICIPACION DEUDA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["ParticipacionDeuda"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["ProbabilidadNoPago"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PROBABILIDAD NO PAGO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["ProbabilidadNoPago"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["FechaCorte"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA CORTE:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["FechaCorte"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["ModoExtincion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">MODO EXTINCION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["ModoExtincion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["FechaPago"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA PAGO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["FechaPago"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["FechaPermanencia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA PERMANENCIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["FechaPermanencia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["NumeroReestructuraciones"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO REESTRACTURACIONES:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["NumeroReestructuraciones"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["NaturalezaReestructuracion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NATURALEZA REESTRICTURACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["NaturalezaReestructuracion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["TipoEntidadOriginadoraCartera"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO ENTIDAD ORIDINADORA CARTERA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["TipoEntidadOriginadoraCartera"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["EntidadOriginadoraCartera"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ENTIDAD ORIDINADORA CARTERA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["EntidadOriginadoraCartera"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["TipoPago"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO PAGO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["TipoPago"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["EstadoTitular"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO TITULAR:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["EstadoTitular"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["NumeroCuotasPactadas"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO CUOTAS PACTADAS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["NumeroCuotasPactadas"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["NumeroCuotasMora"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO COUTAS MORA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["NumeroCuotasMora"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroEnMora["Reestructurado"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">REESTRUCTADO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroEnMora["Reestructurado"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="panel-heading"></div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
+            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]) and count($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"])>0 and count( $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]) == count($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"], 1))
+            <div class="col-md-12">
+                <div class="panel panel-primary mb-3">
+                    <div class="panel-heading"><b>SECTOR FINANCIERO EN MORA</b></div>
+                    <div class="panel-body">
+                        <div class="row">
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["PaqueteInformacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PAQUETE INFORMACIÓN:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["PaqueteInformacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["IdentificadorLinea"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">IDENTIFICADOR LINEA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["IdentificadorLinea"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["TipoContrato"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["TipoContrato"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["EstadoContrato"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["EstadoContrato"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["TipoEntidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["TipoEntidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["NombreEntidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["NombreEntidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["Ciudad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CIUDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["Ciudad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["Sucursal"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">SUCURSAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["Sucursal"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["NumeroObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NUMERO OBLIGACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["NumeroObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["Calidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CALIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["Calidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["EstadoObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO OBLIGACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["EstadoObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["ModalidadCredito"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">MODALIDAD CREDITO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["ModalidadCredito"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["LineaCredito"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">LINEA CREDITO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["LineaCredito"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["Periodicidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PERIODICIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["Periodicidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["FechaApertura"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA APERTURA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["FechaApertura"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["FechaTerminacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA TERMINACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["FechaTerminacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["Calificacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CALIFICACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["Calificacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["ValorInicial"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR INICIAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["ValorInicial"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["SaldoObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">SALDO OBLIGATORIO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["SaldoObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["ValorMora"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR MORAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["ValorMora"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["ValorCuota"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR CUOTA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["ValorCuota"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["TipoMoneda"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO MONEDA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["TipoMoneda"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["CuotasCanceladas"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">COUTAS CANCELADAS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["CuotasCanceladas"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["TipoGarantia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO GARANTIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["TipoGarantia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["CubrimientoGarantia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CUBRIMIENTO GARANTIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["CubrimientoGarantia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["MoraMaxima"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">MORA MAXIMA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["MoraMaxima"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["Comportamientos"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">COMPORTAMIENTOS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["Comportamientos"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["ParticipacionDeuda"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PARTICIPACION DEUDA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["ParticipacionDeuda"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["ProbabilidadNoPago"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PROBABILIDAD NO PAGO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["ProbabilidadNoPago"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["FechaCorte"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA CORTE:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["FechaCorte"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["ModoExtincion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">MODO EXTINCION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["ModoExtincion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["FechaPago"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA PAGO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["FechaPago"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["FechaPermanencia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA PERMANENCIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["FechaPermanencia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["NumeroReestructuraciones"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO REESTRACTURACIONES:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["NumeroReestructuraciones"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["NaturalezaReestructuracion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NATURALEZA REESTRICTURACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["NaturalezaReestructuracion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["TipoEntidadOriginadoraCartera"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO ENTIDAD ORIDINADORA CARTERA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["TipoEntidadOriginadoraCartera"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["EntidadOriginadoraCartera"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ENTIDAD ORIDINADORA CARTERA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["EntidadOriginadoraCartera"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["TipoPago"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO PAGO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["TipoPago"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["EstadoTitular"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO TITULAR:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["EstadoTitular"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["NumeroCuotasPactadas"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO CUOTAS PACTADAS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["NumeroCuotasPactadas"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["NumeroCuotasMora"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO COUTAS MORA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["NumeroCuotasMora"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["Reestructurado"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">REESTRUCTADO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroEnMora"]["Obligacion"]["Reestructurado"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+
+
+
+            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]) and count($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"])>0 and count( $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]) != count($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"], 1))
+            <div class="col-md-12">
+                <div class="panel panel-primary mb-3">
+                    <div class="panel-heading"><b>SECTOR FINANCIERO EXTINGUIDAS</b></div>
+                    @foreach($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"] as $SectorFinancieroExtinguidas)
+                    <div class="panel-body">
+                        <div class="row">
+                            @if (isset($SectorFinancieroExtinguidas["PaqueteInformacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PAQUETE INFORMACIÓN:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["PaqueteInformacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["IdentificadorLinea"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">IDENTIFICADOR LINEA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["IdentificadorLinea"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["TipoContrato"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["TipoContrato"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["EstadoContrato"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["EstadoContrato"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["TipoEntidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["TipoEntidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["NombreEntidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["NombreEntidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["Ciudad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CIUDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["Ciudad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["Sucursal"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">SUCURSAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["Sucursal"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["NumeroObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NUMERO OBLIGACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["NumeroObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["Calidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CALIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["Calidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["EstadoObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO OBLIGACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["EstadoObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["ModalidadCredito"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">MODALIDAD CREDITO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["ModalidadCredito"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["LineaCredito"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">LINEA CREDITO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["LineaCredito"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["Periodicidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PERIODICIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["Periodicidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["FechaApertura"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA APERTURA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["FechaApertura"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["FechaTerminacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA TERMINACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["FechaTerminacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["Calificacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CALIFICACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["Calificacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["ValorInicial"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR INICIAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["ValorInicial"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["SaldoObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">SALDO OBLIGATORIO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["SaldoObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["ValorMora"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR MORAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["ValorMora"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["ValorCuota"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR CUOTA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["ValorCuota"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["TipoMoneda"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO MONEDA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["TipoMoneda"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["CuotasCanceladas"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">COUTAS CANCELADAS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["CuotasCanceladas"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["TipoGarantia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO GARANTIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["TipoGarantia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["CubrimientoGarantia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CUBRIMIENTO GARANTIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["CubrimientoGarantia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["MoraMaxima"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">MORA MAXIMA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["MoraMaxima"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["Comportamientos"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">COMPORTAMIENTOS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["Comportamientos"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["ParticipacionDeuda"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PARTICIPACION DEUDA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["ParticipacionDeuda"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["ProbabilidadNoPago"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PROBABILIDAD NO PAGO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["ProbabilidadNoPago"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["FechaCorte"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA CORTE:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["FechaCorte"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["ModoExtincion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">MODO EXTINCION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["ModoExtincion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["FechaPago"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA PAGO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["FechaPago"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["FechaPermanencia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA PERMANENCIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["FechaPermanencia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["NumeroReestructuraciones"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO REESTRACTURACIONES:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["NumeroReestructuraciones"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["NaturalezaReestructuracion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NATURALEZA REESTRICTURACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["NaturalezaReestructuracion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["TipoEntidadOriginadoraCartera"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO ENTIDAD ORIDINADORA CARTERA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["TipoEntidadOriginadoraCartera"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["EntidadOriginadoraCartera"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ENTIDAD ORIDINADORA CARTERA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["EntidadOriginadoraCartera"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["TipoPago"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO PAGO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["TipoPago"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["EstadoTitular"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO TITULAR:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["EstadoTitular"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["NumeroCuotasPactadas"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO CUOTAS PACTADAS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["NumeroCuotasPactadas"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["NumeroCuotasMora"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO COUTAS MORA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["NumeroCuotasMora"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorFinancieroExtinguidas["Reestructurado"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">REESTRUCTADO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorFinancieroExtinguidas["Reestructurado"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="panel-heading"></div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
+            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]) and count($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"])>0 and count( $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]) == count($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"], 1))
+            <div class="col-md-12">
+                <div class="panel panel-primary mb-3">
+                    <div class="panel-heading"><b>SECTOR FINANCIERO EXTINGUIDAS</b></div>
+                    <div class="panel-body">
+                        <div class="row">
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["PaqueteInformacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PAQUETE INFORMACIÓN:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["PaqueteInformacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["IdentificadorLinea"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">IDENTIFICADOR LINEA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["IdentificadorLinea"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["TipoContrato"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["TipoContrato"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["EstadoContrato"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["EstadoContrato"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["TipoEntidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["TipoEntidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["NombreEntidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["NombreEntidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["Ciudad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CIUDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["Ciudad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["Sucursal"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">SUCURSAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["Sucursal"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["NumeroObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NUMERO OBLIGACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["NumeroObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["Calidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CALIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["Calidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["EstadoObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO OBLIGACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["EstadoObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["ModalidadCredito"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">MODALIDAD CREDITO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["ModalidadCredito"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["LineaCredito"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">LINEA CREDITO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["LineaCredito"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["Periodicidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PERIODICIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["Periodicidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["FechaApertura"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA APERTURA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["FechaApertura"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["FechaTerminacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA TERMINACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["FechaTerminacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["Calificacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CALIFICACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["Calificacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["ValorInicial"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR INICIAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["ValorInicial"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["SaldoObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">SALDO OBLIGATORIO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["SaldoObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["ValorMora"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR MORAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["ValorMora"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["ValorCuota"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR CUOTA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["ValorCuota"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["TipoMoneda"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO MONEDA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["TipoMoneda"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["CuotasCanceladas"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">COUTAS CANCELADAS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["CuotasCanceladas"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["TipoGarantia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO GARANTIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["TipoGarantia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["CubrimientoGarantia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CUBRIMIENTO GARANTIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["CubrimientoGarantia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["MoraMaxima"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">MORA MAXIMA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["MoraMaxima"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["Comportamientos"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">COMPORTAMIENTOS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["Comportamientos"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["ParticipacionDeuda"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PARTICIPACION DEUDA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["ParticipacionDeuda"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["ProbabilidadNoPago"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PROBABILIDAD NO PAGO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["ProbabilidadNoPago"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["FechaCorte"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA CORTE:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["FechaCorte"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["ModoExtincion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">MODO EXTINCION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["ModoExtincion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["FechaPago"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA PAGO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["FechaPago"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["FechaPermanencia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA PERMANENCIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["FechaPermanencia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["NumeroReestructuraciones"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO REESTRACTURACIONES:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["NumeroReestructuraciones"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["NaturalezaReestructuracion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NATURALEZA REESTRICTURACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["NaturalezaReestructuracion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["TipoEntidadOriginadoraCartera"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO ENTIDAD ORIDINADORA CARTERA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["TipoEntidadOriginadoraCartera"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["EntidadOriginadoraCartera"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ENTIDAD ORIDINADORA CARTERA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["EntidadOriginadoraCartera"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["TipoPago"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO PAGO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["TipoPago"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["EstadoTitular"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO TITULAR:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["EstadoTitular"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["NumeroCuotasPactadas"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO CUOTAS PACTADAS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["NumeroCuotasPactadas"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["NumeroCuotasMora"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO COUTAS MORA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["NumeroCuotasMora"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["Reestructurado"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">REESTRUCTADO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorFinancieroExtinguidas"]["Obligacion"]["Reestructurado"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+
+
+
+
+            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]) and count($dato["Tercero"]["SectorRealAlDia"]["Obligacion"])>0 and count( $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]) != count($dato["Tercero"]["SectorRealAlDia"]["Obligacion"], 1))
+            <div class="col-md-12">
+                <div class="panel panel-primary mb-3">
+                    <div class="panel-heading"><b>SECTOR REAL AL DIA</b></div>
+                    @foreach($dato["Tercero"]["SectorRealAlDia"]["Obligacion"] as $SectorRealAlDia)
+                    <div class="panel-body">
+                        <div class="row">
+                            @if (isset($SectorRealAlDia["PaqueteInformacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PAQUETE INFORMACIÓN:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["PaqueteInformacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["IdentificadorLinea"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">IDENTIFICADOR LINEA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["IdentificadorLinea"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["TipoContrato"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["TipoContrato"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["EstadoContrato"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["EstadoContrato"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["TipoEntidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["TipoEntidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["NombreEntidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["NombreEntidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["Ciudad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CIUDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["Ciudad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["Sucursal"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">SUCURSAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["Sucursal"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["NumeroObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NUMERO OBLIGACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["NumeroObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["Calidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CALIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["Calidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["EstadoObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO OBLIGACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["EstadoObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["LineaCredito"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">LINEA CREDITO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["LineaCredito"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["Periodicidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PERIODICIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["Periodicidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["FechaApertura"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA APERTURA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["FechaApertura"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["FechaTerminacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA TERMINACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["FechaTerminacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["ValorInicial"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR INICIAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["ValorInicial"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["SaldoObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">SALDO OBLIGATORIO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["SaldoObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["ValorMora"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR MORAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["ValorMora"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["ValorCuota"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR CUOTA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["ValorCuota"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["CuotasCanceladas"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">COUTAS CANCELADAS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["CuotasCanceladas"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["TipoGarantia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO GARANTIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["TipoGarantia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["MoraMaxima"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">MORA MAXIMA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["MoraMaxima"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["Comportamientos"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">COMPORTAMIENTOS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["Comportamientos"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["ParticipacionDeuda"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PARTICIPACION DEUDA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["ParticipacionDeuda"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["FechaCorte"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA CORTE:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["FechaCorte"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["ModoExtincion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">MODO EXTINCION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["ModoExtincion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["FechaPago"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA PAGO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["FechaPago"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["FechaPermanencia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA PERMANENCIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["FechaPermanencia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["ChequesDevueltos"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CHEQUES DEVUELTOS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["ChequesDevueltos"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["TipoPago"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO PAGO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["TipoPago"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["EstadoTitular"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO TITULAR:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["EstadoTitular"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["NumeroCuotasPactadas"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO CUOTAS PACTADAS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["NumeroCuotasPactadas"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["NumeroCuotasMora"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO COUTAS MORA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["NumeroCuotasMora"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["ValorCargoFijo"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR CARGO FIJOA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["ValorCargoFijo"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["ClausulaPermanencia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CLAUSULA PERMANENCIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["ClausulaPermanencia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["Reestructurado"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">REESTRUCTADO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["Reestructurado"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["Vigencia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VIGENCIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["Vigencia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["NumeroMesesContrato"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">N0 MESES CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["NumeroMesesContrato"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealAlDia["NumeroMesesClausula"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO MESES CLAUSULA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealAlDia["NumeroMesesClausula"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="panel-heading"></div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
+            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]) and count($dato["Tercero"]["SectorRealAlDia"]["Obligacion"])>0 and count( $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]) == count($dato["Tercero"]["SectorRealAlDia"]["Obligacion"], 1))
+            <div class="col-md-12">
+                <div class="panel panel-primary mb-3">
+                    <div class="panel-heading"><b>SECTOR REAL AL DIA</b></div>
+                    <div class="panel-body">
+                        <div class="row">
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["PaqueteInformacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PAQUETE INFORMACIÓN:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["PaqueteInformacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["IdentificadorLinea"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">IDENTIFICADOR LINEA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["IdentificadorLinea"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["TipoContrato"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["TipoContrato"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["EstadoContrato"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["EstadoContrato"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["TipoEntidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["TipoEntidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["NombreEntidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["NombreEntidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["Ciudad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CIUDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["Ciudad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["Sucursal"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">SUCURSAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["Sucursal"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["NumeroObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NUMERO OBLIGACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["NumeroObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["Calidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CALIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["Calidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["EstadoObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO OBLIGACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["EstadoObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["LineaCredito"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">LINEA CREDITO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["LineaCredito"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["Periodicidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PERIODICIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["Periodicidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["FechaApertura"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA APERTURA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["FechaApertura"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["FechaTerminacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA TERMINACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["FechaTerminacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["ValorInicial"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR INICIAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["ValorInicial"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["SaldoObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">SALDO OBLIGATORIO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["SaldoObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["ValorMora"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR MORAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["ValorMora"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["ValorCuota"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR CUOTA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["ValorCuota"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["CuotasCanceladas"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">COUTAS CANCELADAS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["CuotasCanceladas"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["TipoGarantia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO GARANTIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["TipoGarantia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["MoraMaxima"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">MORA MAXIMA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["MoraMaxima"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["Comportamientos"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">COMPORTAMIENTOS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["Comportamientos"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["ParticipacionDeuda"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PARTICIPACION DEUDA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["ParticipacionDeuda"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["FechaCorte"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA CORTE:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["FechaCorte"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["ModoExtincion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">MODO EXTINCION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["ModoExtincion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["FechaPago"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA PAGO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["FechaPago"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["FechaPermanencia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA PERMANENCIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["FechaPermanencia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["ChequesDevueltos"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CHEQUES DEVUELTOS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["ChequesDevueltos"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["TipoPago"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO PAGO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["TipoPago"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["EstadoTitular"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO TITULAR:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["EstadoTitular"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["NumeroCuotasPactadas"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO CUOTAS PACTADAS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["NumeroCuotasPactadas"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["NumeroCuotasMora"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO COUTAS MORA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["NumeroCuotasMora"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["ValorCargoFijo"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR CARGO FIJOA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["ValorCargoFijo"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["ClausulaPermanencia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CLAUSULA PERMANENCIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["ClausulaPermanencia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["Reestructurado"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">REESTRUCTADO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["Reestructurado"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["Vigencia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VIGENCIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["Vigencia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["NumeroMesesContrato"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">N0 MESES CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["NumeroMesesContrato"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["NumeroMesesClausula"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO MESES CLAUSULA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealAlDia"]["Obligacion"]["NumeroMesesClausula"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+
+            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]) and count($dato["Tercero"]["SectorRealEnMora"]["Obligacion"])>0 and count( $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]) != count($dato["Tercero"]["SectorRealEnMora"]["Obligacion"], 1))
+            <div class="col-md-12">
+                <div class="panel panel-primary mb-3">
+                    <div class="panel-heading"><b>SECTOR REAL EN MORA</b></div>
+                    @foreach($dato["Tercero"]["SectorRealEnMora"]["Obligacion"] as $SectorRealEnMora)
+                    <div class="panel-body">
+                        <div class="row">
+                            @if (isset($SectorRealEnMora["PaqueteInformacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PAQUETE INFORMACIÓN:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["PaqueteInformacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["IdentificadorLinea"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">IDENTIFICADOR LINEA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["IdentificadorLinea"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["TipoContrato"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["TipoContrato"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["EstadoContrato"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["EstadoContrato"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["TipoEntidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["TipoEntidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["NombreEntidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["NombreEntidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["Ciudad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CIUDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["Ciudad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["Sucursal"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">SUCURSAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["Sucursal"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["NumeroObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NUMERO OBLIGACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["NumeroObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["Calidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CALIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["Calidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["EstadoObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO OBLIGACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["EstadoObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["LineaCredito"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">LINEA CREDITO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["LineaCredito"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["Periodicidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PERIODICIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["Periodicidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["FechaApertura"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA APERTURA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["FechaApertura"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["FechaTerminacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA TERMINACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["FechaTerminacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["ValorInicial"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR INICIAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["ValorInicial"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["SaldoObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">SALDO OBLIGATORIO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["SaldoObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["ValorMora"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR MORAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["ValorMora"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["ValorCuota"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR CUOTA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["ValorCuota"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["CuotasCanceladas"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">COUTAS CANCELADAS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["CuotasCanceladas"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["TipoGarantia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO GARANTIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["TipoGarantia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["MoraMaxima"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">MORA MAXIMA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["MoraMaxima"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["Comportamientos"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">COMPORTAMIENTOS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["Comportamientos"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["ParticipacionDeuda"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PARTICIPACION DEUDA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["ParticipacionDeuda"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["FechaCorte"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA CORTE:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["FechaCorte"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["ModoExtincion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">MODO EXTINCION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["ModoExtincion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["FechaPago"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA PAGO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["FechaPago"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["FechaPermanencia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA PERMANENCIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["FechaPermanencia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["ChequesDevueltos"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CHEQUES DEVUELTOS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["ChequesDevueltos"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["TipoPago"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO PAGO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["TipoPago"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["EstadoTitular"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO TITULAR:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["EstadoTitular"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["NumeroCuotasPactadas"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO CUOTAS PACTADAS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["NumeroCuotasPactadas"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["NumeroCuotasMora"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO COUTAS MORA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["NumeroCuotasMora"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["ValorCargoFijo"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR CARGO FIJOA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["ValorCargoFijo"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["ClausulaPermanencia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CLAUSULA PERMANENCIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["ClausulaPermanencia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["Reestructurado"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">REESTRUCTADO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["Reestructurado"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["Vigencia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VIGENCIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["Vigencia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["NumeroMesesContrato"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">N0 MESES CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["NumeroMesesContrato"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealEnMora["NumeroMesesClausula"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO MESES CLAUSULA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealEnMora["NumeroMesesClausula"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="panel-heading"></div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
+            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]) and count($dato["Tercero"]["SectorRealEnMora"]["Obligacion"])>0 and count( $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]) == count($dato["Tercero"]["SectorRealEnMora"]["Obligacion"], 1))
+            <div class="col-md-12">
+                <div class="panel panel-primary mb-3">
+                    <div class="panel-heading"><b>SECTOR REAL EN MORA</b></div>
+                    <div class="panel-body">
+                        <div class="row">
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["PaqueteInformacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PAQUETE INFORMACIÓN:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["PaqueteInformacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["IdentificadorLinea"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">IDENTIFICADOR LINEA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["IdentificadorLinea"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["TipoContrato"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["TipoContrato"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["EstadoContrato"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["EstadoContrato"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["TipoEntidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["TipoEntidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["NombreEntidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["NombreEntidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["Ciudad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CIUDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["Ciudad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["Sucursal"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">SUCURSAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["Sucursal"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["NumeroObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NUMERO OBLIGACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["NumeroObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["Calidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CALIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["Calidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["EstadoObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO OBLIGACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["EstadoObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["LineaCredito"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">LINEA CREDITO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["LineaCredito"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["Periodicidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PERIODICIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["Periodicidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["FechaApertura"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA APERTURA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["FechaApertura"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["FechaTerminacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA TERMINACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["FechaTerminacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["ValorInicial"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR INICIAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["ValorInicial"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["SaldoObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">SALDO OBLIGATORIO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["SaldoObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["ValorMora"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR MORAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["ValorMora"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["ValorCuota"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR CUOTA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["ValorCuota"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["CuotasCanceladas"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">COUTAS CANCELADAS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["CuotasCanceladas"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["TipoGarantia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO GARANTIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["TipoGarantia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["MoraMaxima"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">MORA MAXIMA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["MoraMaxima"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["Comportamientos"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">COMPORTAMIENTOS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["Comportamientos"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["ParticipacionDeuda"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PARTICIPACION DEUDA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["ParticipacionDeuda"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["FechaCorte"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA CORTE:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["FechaCorte"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["ModoExtincion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">MODO EXTINCION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["ModoExtincion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["FechaPago"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA PAGO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["FechaPago"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["FechaPermanencia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA PERMANENCIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["FechaPermanencia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["ChequesDevueltos"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CHEQUES DEVUELTOS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["ChequesDevueltos"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["TipoPago"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO PAGO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["TipoPago"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["EstadoTitular"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO TITULAR:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["EstadoTitular"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["NumeroCuotasPactadas"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO CUOTAS PACTADAS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["NumeroCuotasPactadas"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["NumeroCuotasMora"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO COUTAS MORA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["NumeroCuotasMora"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["ValorCargoFijo"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR CARGO FIJOA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["ValorCargoFijo"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["ClausulaPermanencia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CLAUSULA PERMANENCIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["ClausulaPermanencia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["Reestructurado"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">REESTRUCTADO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["Reestructurado"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["Vigencia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VIGENCIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["Vigencia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["NumeroMesesContrato"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">N0 MESES CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["NumeroMesesContrato"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["NumeroMesesClausula"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO MESES CLAUSULA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealEnMora"]["Obligacion"]["NumeroMesesClausula"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+
+
+
+            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]) and count($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"])>0 and count( $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]) != count($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"], 1))
+            <div class="col-md-12">
+                <div class="panel panel-primary mb-3">
+                    <div class="panel-heading"><b>SECTOR REAL EXTINGUIDAS</b></div>
+                    @foreach($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"] as $SectorRealExtinguidas)
+                    <div class="panel-body">
+                        <div class="row">
+                            @if (isset($SectorRealExtinguidas["PaqueteInformacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PAQUETE INFORMACIÓN:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["PaqueteInformacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["IdentificadorLinea"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">IDENTIFICADOR LINEA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["IdentificadorLinea"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["TipoContrato"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["TipoContrato"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["EstadoContrato"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["EstadoContrato"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["TipoEntidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["TipoEntidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["NombreEntidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["NombreEntidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["Ciudad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CIUDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["Ciudad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["Sucursal"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">SUCURSAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["Sucursal"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["NumeroObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NUMERO OBLIGACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["NumeroObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["Calidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CALIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["Calidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["EstadoObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO OBLIGACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["EstadoObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["LineaCredito"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">LINEA CREDITO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["LineaCredito"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["Periodicidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PERIODICIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["Periodicidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["FechaApertura"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA APERTURA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["FechaApertura"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["FechaTerminacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA TERMINACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["FechaTerminacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["ValorInicial"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR INICIAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["ValorInicial"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["SaldoObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">SALDO OBLIGATORIO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["SaldoObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["ValorMora"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR MORAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["ValorMora"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["ValorCuota"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR CUOTA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["ValorCuota"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["CuotasCanceladas"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">COUTAS CANCELADAS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["CuotasCanceladas"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["TipoGarantia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO GARANTIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["TipoGarantia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["MoraMaxima"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">MORA MAXIMA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["MoraMaxima"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["Comportamientos"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">COMPORTAMIENTOS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["Comportamientos"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["ParticipacionDeuda"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PARTICIPACION DEUDA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["ParticipacionDeuda"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["FechaCorte"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA CORTE:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["FechaCorte"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["ModoExtincion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">MODO EXTINCION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["ModoExtincion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["FechaPago"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA PAGO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["FechaPago"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["FechaPermanencia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA PERMANENCIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["FechaPermanencia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["ChequesDevueltos"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CHEQUES DEVUELTOS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["ChequesDevueltos"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["TipoPago"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO PAGO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["TipoPago"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["EstadoTitular"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO TITULAR:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["EstadoTitular"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["NumeroCuotasPactadas"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO CUOTAS PACTADAS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["NumeroCuotasPactadas"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["NumeroCuotasMora"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO COUTAS MORA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["NumeroCuotasMora"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["ValorCargoFijo"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR CARGO FIJOA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["ValorCargoFijo"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["ClausulaPermanencia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CLAUSULA PERMANENCIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["ClausulaPermanencia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["Reestructurado"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">REESTRUCTADO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["Reestructurado"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["Vigencia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VIGENCIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["Vigencia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["NumeroMesesContrato"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">N0 MESES CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["NumeroMesesContrato"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($SectorRealExtinguidas["NumeroMesesClausula"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO MESES CLAUSULA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $SectorRealExtinguidas["NumeroMesesClausula"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="panel-heading"></div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
+
+            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]) and count($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"])>0 and count( $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]) == count($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"], 1))
+            <div class="col-md-12">
+                <div class="panel panel-primary mb-3">
+                    <div class="panel-heading"><b>SECTOR REAL EXTINGUIDAS</b></div>
+                    <div class="panel-body">
+                        <div class="row">
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["PaqueteInformacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PAQUETE INFORMACIÓN:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["PaqueteInformacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["IdentificadorLinea"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">IDENTIFICADOR LINEA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["IdentificadorLinea"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["TipoContrato"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["TipoContrato"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["EstadoContrato"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["EstadoContrato"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["TipoEntidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["TipoEntidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["NombreEntidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["NombreEntidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["Ciudad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CIUDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["Ciudad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["Sucursal"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">SUCURSAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["Sucursal"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["NumeroObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NUMERO OBLIGACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["NumeroObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["Calidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CALIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["Calidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["EstadoObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO OBLIGACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["EstadoObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["LineaCredito"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">LINEA CREDITO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["LineaCredito"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["Periodicidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PERIODICIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["Periodicidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["FechaApertura"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA APERTURA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["FechaApertura"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["FechaTerminacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA TERMINACION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["FechaTerminacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["ValorInicial"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR INICIAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["ValorInicial"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["SaldoObligacion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">SALDO OBLIGATORIO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["SaldoObligacion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["ValorMora"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR MORAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["ValorMora"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["ValorCuota"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR CUOTA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["ValorCuota"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["CuotasCanceladas"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">COUTAS CANCELADAS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["CuotasCanceladas"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["TipoGarantia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO GARANTIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["TipoGarantia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["MoraMaxima"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">MORA MAXIMA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["MoraMaxima"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["Comportamientos"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">COMPORTAMIENTOS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["Comportamientos"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["ParticipacionDeuda"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">PARTICIPACION DEUDA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["ParticipacionDeuda"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["FechaCorte"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA CORTE:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["FechaCorte"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["ModoExtincion"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">MODO EXTINCION:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["ModoExtincion"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["FechaPago"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA PAGO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["FechaPago"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["FechaPermanencia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA PERMANENCIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["FechaPermanencia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["ChequesDevueltos"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CHEQUES DEVUELTOS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["ChequesDevueltos"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["TipoPago"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">TIPO PAGO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["TipoPago"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["EstadoTitular"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">ESTADO TITULAR:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["EstadoTitular"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["NumeroCuotasPactadas"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO CUOTAS PACTADAS:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["NumeroCuotasPactadas"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["NumeroCuotasMora"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO COUTAS MORA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["NumeroCuotasMora"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["ValorCargoFijo"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VALOR CARGO FIJOA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["ValorCargoFijo"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["ClausulaPermanencia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CLAUSULA PERMANENCIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["ClausulaPermanencia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["Reestructurado"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">REESTRUCTADO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["Reestructurado"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["Vigencia"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">VIGENCIA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["Vigencia"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["NumeroMesesContrato"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">N0 MESES CONTRATO:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["NumeroMesesContrato"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["NumeroMesesClausula"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NO MESES CLAUSULA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["SectorRealExtinguidas"]["Obligacion"]["NumeroMesesClausula"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+
+            @if (isset($dato["Tercero"]["HuellaConsulta"]["Consulta"]) and count($dato["Tercero"]["HuellaConsulta"]["Consulta"])>0 and count( $dato["Tercero"]["HuellaConsulta"]["Consulta"]) != count($dato["Tercero"]["HuellaConsulta"]["Consulta"], 1))
+            <div class="col-md-12">
+                <div class="panel panel-primary mb-3">
+                    <div class="panel-heading"><b>HUELLAS CONSULTA</b></div>
+                    @foreach($dato["Tercero"]["HuellaConsulta"]["Consulta"] as $HuellaConsulta)
+                    <div class="panel-body">
+                        <div class="row">
+                            @if (isset($HuellaConsulta["FechaConsulta"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA CONSULTA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $HuellaConsulta["FechaConsulta"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($HuellaConsulta["NombreTipoEntidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NOMBRE TIPO ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $HuellaConsulta["NombreTipoEntidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($HuellaConsulta["NombreEntidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $HuellaConsulta["NombreEntidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($HuellaConsulta["Sucursal"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">SUCURSAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $HuellaConsulta["Sucursal"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($HuellaConsulta["Ciudad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CIUDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $HuellaConsulta["Ciudad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($HuellaConsulta["MotivoConsulta"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">MOTIVO CONSULTA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $HuellaConsulta["MotivoConsulta"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($HuellaConsulta["CodigoTipoEntidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CODIGO TIPO ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $HuellaConsulta["CodigoTipoEntidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($HuellaConsulta["CodigoEntidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CODIGO ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $HuellaConsulta["CodigoEntidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="panel-heading"></div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
+            @if (isset($dato["Tercero"]["HuellaConsulta"]["Consulta"]) and count($dato["Tercero"]["HuellaConsulta"]["Consulta"])>0 and count( $dato["Tercero"]["HuellaConsulta"]["Consulta"]) == count($dato["Tercero"]["HuellaConsulta"]["Consulta"], 1))
+            <div class="col-md-12">
+                <div class="panel panel-primary mb-3">
+                    <div class="panel-heading"><b>HUELLAS CONSULTA</b></div>
+                    <div class="panel-body">
+                        <div class="row">
+                            @if (isset($dato["Tercero"]["HuellaConsulta"]["Consulta"]["FechaConsulta"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">FECHA CONSULTA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["HuellaConsulta"]["Consulta"]["FechaConsulta"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["HuellaConsulta"]["Consulta"]["NombreTipoEntidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NOMBRE TIPO ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["HuellaConsulta"]["Consulta"]["NombreTipoEntidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["HuellaConsulta"]["Consulta"]["NombreEntidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">NOMBRE ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["HuellaConsulta"]["Consulta"]["NombreEntidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["HuellaConsulta"]["Consulta"]["Sucursal"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">SUCURSAL:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["HuellaConsulta"]["Consulta"]["Sucursal"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["HuellaConsulta"]["Consulta"]["Ciudad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CIUDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["HuellaConsulta"]["Consulta"]["Ciudad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["HuellaConsulta"]["Consulta"]["MotivoConsulta"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">MOTIVO CONSULTA:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["HuellaConsulta"]["Consulta"]["MotivoConsulta"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["HuellaConsulta"]["Consulta"]["CodigoTipoEntidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CODIGO TIPO ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["HuellaConsulta"]["Consulta"]["CodigoTipoEntidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                            @if (isset($dato["Tercero"]["HuellaConsulta"]["Consulta"]["CodigoEntidad"]))
+                            <div class="col-md-2">
+                                <b class="panel-label table-text">CODIGO ENTIDAD:</b>
+                                <div>
+                                    <p class="panel-value">{{ $dato["Tercero"]["HuellaConsulta"]["Consulta"]["CodigoEntidad"] }}</p>
+                                </div>
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+
+        </div>
+        @endforeach
+        @else
+        <div class="col-md-12">
+            <h4>Aún no hay usuarios para mostrar.</h4>
+        </div>
+        @endif
+    </div>
+</div>
+@endsection
+
+@section('title')
+Consulta Cifin
+@endsection
+
+@section('header-content')
+Consulta Cifin
+@endsection
+
+@section('breadcrumb')
+<li class="breadcrumb-item"><a href="{{ url('home') }}"><i class="fa fa-dashboard mr-2"></i>Inicio</a></li>
+<li class="breadcrumb-item"><a href="{{ url('cifin') }}">Cifin</a></li>
+<li class="breadcrumb-item active">Consulta</li>
+@endsection

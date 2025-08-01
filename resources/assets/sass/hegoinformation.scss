@@ -1,0 +1,104 @@
+// Variables
+@import "colors";
+
+html,
+body {
+  font-family: Poppins;
+}
+
+.text-line {
+  margin-top: 10px;
+  font-size: 29px;
+  font-weight: bold;
+}
+
+.back-section1 {
+  background-image: url("/img/money-flow.png");
+  background-repeat: no-repeat;
+  height: 80vh;
+  max-height: 700px;
+  background-size: contain;
+}
+
+.text-ami {
+  font-size: 72px;
+  margin-bottom: 15px;
+}
+
+.text-sec {
+  font-size: 20px;
+}
+
+.text-spacing {
+  font-size: 18px;
+  line-height: 27px;
+  letter-spacing: 0.3em;
+  background-color: #000;
+  color: #fff;
+  padding: 1.5rem;
+  margin-bottom: 35px;
+
+  &.border-rr {
+    border-radius: 0px 50px 50px 0px;
+  }
+
+  &.border-rl {
+    border-radius: 50px 0px 0px 50px;
+  }
+}
+
+//Responsive
+
+@media (max-width: 600px) {
+  .text-ami {
+    font-size: 34px;
+    margin-bottom: 15px;
+    margin-top: -50%;
+  }
+  .text-sec {
+    font-size: 16px;
+    text-align: justify;
+    padding: 5px 20px;
+  }
+  .text-sec2 {
+    font-size: 16px;
+    text-align: justify;
+    padding: 5px 50px;
+  }
+  .img-sec2 {
+    width: 80% !important;
+    margin-right: -35px;
+  }
+  .res-marg {
+    margin-top: -50%;
+  }
+  .img-sec3 {
+    text-align: right;
+  }
+  .text-sec3 {
+    font-size: 15px;
+    margin-bottom: 20px;
+  }
+  .text-sec4 {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  .pad-resp {
+    padding: 0px 50px;
+  }
+  .width-res {
+    width: 35% !important;
+  }
+  .respo {
+    display: block !important;
+  }
+  .desk {
+    display: none !important;
+  }
+}
+.desk {
+  display: block;
+}
+.respo {
+  display: none;
+}

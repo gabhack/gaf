@@ -1,0 +1,28 @@
+$black: #000000;
+$black-pearl: #021b1e;
+$spring-green: #0cedb0;
+$caribbean-green: #10dd8e;
+$elf-green: #1e8271;
+$green-table: #3a5659;
+$green-2side:#0D614F;
+$green-side: #06282C;
+$white: #ffffff;
+$tangerine-yellow: #fcca00;
+$orange: #faa600;
+$alice-blue: #f5f8fa;
+$gainsboro: #e1e1e1;
+
+$theme-colors: (
+  'black-pearl': $black-pearl,
+  'spring-green': $spring-green,
+  'caribbean-green': $caribbean-green,
+  'elf-green': $elf-green,
+  'green-2side': $green-2side,
+  'green-side': $green-side,
+  'green-table': $green-table,
+  'black': $black,
+  'white': $white,
+  'tangerine-yellow': $tangerine-yellow,
+  'orange': $orange,
+  'gainsboro': $gainsboro
+);

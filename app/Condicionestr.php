@@ -1,0 +1,19 @@
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class Condicionestr extends Model
+{
+    use SoftDeletes;
+    
+    protected $table = 'condicionestr';
+    
+	
+	public function tipocliente()
+	{
+		return $this->hasOne('\App\TiposCliente', 'id', 'tiposcliente_id');
+	}
+}

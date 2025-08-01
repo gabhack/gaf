@@ -1,0 +1,50 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "npm run development",
+    "development": "mix",
+    "watch": "mix watch",
+    "watch-poll": "mix watch -- --watch-options-poll=1000",
+    "hot": "mix watch --hot",
+    "prod": "npm run production",
+    "production": "mix --production"
+  },
+  "devDependencies": {
+    "axios": "^0.24.0",
+    "bootstrap-sass": "^3.3.7",
+    "cross-env": "^5.0.1",
+    "jquery": "^3.5.1",
+    "laravel-mix": "^6.0.34",
+    "lodash": "^4.17.4",
+    "resolve-url-loader": "4.0.0",
+    "sass": "^1.43.4",
+    "sass-loader": "12.2.0",
+    "vue": "^2.6.14",
+    "vue-loader": "15.9.8",
+    "vue-template-compiler": "^2.6.14"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.4",
+    "@pdf-lib/fontkit": "^1.1.1",
+    "apexcharts": "^4.3.0",
+    "bootstrap": "^4.6.0",
+    "bootstrap-vue": "^2.21.2",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.8.2",
+    "laravel-echo": "^1.16.1",
+    "moment": "^2.30.1",
+    "pdf-lib": "^1.17.1",
+    "print-js": "^1.6.0",
+    "pusher-js": "^8.4.0-rc2",
+    "toastr": "^2.1.4",
+    "vue-apexcharts": "^1.6.2",
+    "vue-currency-filter": "^5.2.0",
+    "vue-iframes": "0.0.19",
+    "vue-loading-overlay": "^3.0.1",
+    "vue-multiselect": "2.1.6",
+    "vue-swal": "^1.0.0",
+    "vuelidate": "0.7.7",
+    "vuex": "^3.6.1",
+    "xlsx": "^0.18.5"
+  }
+}

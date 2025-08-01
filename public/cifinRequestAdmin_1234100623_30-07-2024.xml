@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws/">
+        <soapenv:Header/>
+            <soapenv:Body>
+            <ws:consultaXml>
+                <codigoInformacion>5702</codigoInformacion>
+                <motivoConsulta>24</motivoConsulta>
+                <numeroIdentificacion>1234100623</numeroIdentificacion>
+                <primerApellido>CHAGUENDO</primerApellido>
+                <tipoIdentificacion>1</tipoIdentificacion>
+            </ws:consultaXml>
+        </soapenv:Body>
+    </soapenv:Envelope>
