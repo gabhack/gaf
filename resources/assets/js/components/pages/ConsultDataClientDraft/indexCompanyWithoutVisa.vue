@@ -234,12 +234,6 @@
 </div>
 
 
-
-<!-- en tu template del index, encima del bloque problemático -->
-<p style="color:red">
-  pagaduriaType recibido: {{ pagaduriaType }}
-</p>
-
                 <template v-if="showOthers">
                     <DescapliEmpty
     v-if="showDescapli"
