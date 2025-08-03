@@ -187,110 +187,54 @@ class PagaduriasController extends Controller
         return response()->json($nombres, 200);
     }
 
+    private function fetchPanelPagadurias(): \Illuminate\Support\Collection
+    {
+        return \DB::connection('pgsql')
+            ->table('panel_pagaduria')
+            ->select('nombre', 'nombre_largo', 'acronimo')
+            ->orderBy('nombre')
+            ->get();
+    }
+    
     public function getPagaduriasNamesAmi()
     {
-        $nombres = [
-            "SED AMAZONAS",
-            "SED ANTIOQUIA",
-            "SED ARAUCA",
-            "SED ATLANTICO",
-            "SED BOLIVAR",
-            "SED BOYACA",
-            "SED CALDAS",
-            "SED CAQUETA",
-            "SED CASANARE",
-            "SED CAUCA",
-            "SED CESAR",
-            "SED CHOCO",
-            "SED CORDOBA",
-            "SED CUNDINAMARCA",
-            "SED GUAJIRA",
-            "SED GUAVIARE",
-            "SED HUILA",
-            "SED MAGDALENA",
-            "SED META",
-            "SED NARINO",
-            "SED NORTE DE SANTANDER",
-            "SED PUTUMAYO",
-            "SED QUINDIO",
-            "SED RISARALDA",
-            "SED SANTANDER",
-            "SED SINCELEJO",
-            "SED SUCRE",
-            "SED TOLIMA",
-            "SED VALLE",
-            "SED VAUPES",
-            "SED VICHADA",
-            "SEM APARTADO",
-            "SEM ARMENIA",
-            "SEM BARRANCABERMEJA",
-            "SEM BARRANQUILLA",
-            "SEM BELLO",
-            "SEM BUCARAMANGA",
-            "SEM BUENAVENTURA",
-            "SEM BUGA",
-            "SEM CALI",
-            "SEM CARTAGENA",
-            "SEM CARTAGO",
-            "SEM CHIA",
-            "SEM CIENAGA",
-            "SEM CUCUTA",
-            "SEM DOSQUEBRADAS",
-            "SEM DUITAMA",
-            "SEM ENVIGADO",
-            "SEM FACATATIVA",
-            "SEM FLORENCIA",
-            "SEM FLORIDABLANCA",
-            "SEM FUNZA",
-            "SEM FUSAGASUGA",
-            "SEM GIRARDOT",
-            "SEM GIRON",
-            "SEM GUAINIA",
-            "SEM IBAGUE",
-            "SEM IPIALES",
-            "SEM ITAGUI",
-            "SEM JAMUNDI",
-            "SEM LORICA",
-            "SEM MAGANGUE",
-            "SEM MAICAO",
-            "SEM MALAMBO",
-            "SEM MANIZALES",
-            "SEM MEDELLIN",
-            "SEM MONTERIA",
-            "SEM MOSQUERA",
-            "SEM NEIVA",
-            "SEM PALMIRA",
-            "SEM PASTO",
-            "SEM PEREIRA",
-            "SEM PIEDECUESTA",
-            "SEM PITALITO",
-            "SEM POPAYAN",
-            "SEM QUIBDO",
-            "SEM RIOHACHA",
-            "SEM RIONEGRO",
-            "SEM SABANETA",
-            "SEM SAHAGUN",
-            "SEM SAN ANDRES",
-            "SEM SANTA MARTA",
-            "SEM SOACHA",
-            "SEM SOGAMOSO",
-            "SEM SOLEDAD",
-            "SEM TULUA",
-            "SEM TUMACO",
-            "SEM TUNJA",
-            "SEM TURBO",
-            "SEM URIBIA",
-            "SEM VALLEDUPAR",
-            "SEM VILLAVICENCIO",
-            "SEM YOPAL",
-            "SEM YUMBO",
-            "SEM ZIPAQUIRA",
-            "CASUR",
-            "FIDUPREVISORA"
-        ];
-
-        return response()->json($nombres, 200);
+        try {
+            $rows = $this->fetchPanelPagadurias();
+    
+            // Si no hay nada, puedes caer en un fallback mínimo (vacío)
+            if ($rows->isEmpty()) {
+                return response()->json([], 200);
+            }
+    
+            $nombres = $rows->pluck('nombre')
+                ->map(fn($n) => mb_strtoupper($n))
+                ->values()
+                ->all();
+    
+            return response()->json($nombres, 200);
+        } catch (\Exception $e) {
+            Log::error('Error cargando pagadurias desde panel_pagaduria:', [
+                'exception' => $e->getMessage(),
+                'stack' => $e->getTraceAsString(),
+            ]);
+            return response()->json([], 200); 
+        }
     }
+    
+    public function getPagaduriasPanel()
+    {
+        try {
+            $rows = $this->fetchPanelPagadurias();
+            return response()->json($rows, 200);
+        } catch (\Exception $e) {
+            Log::error('Error cargando panel_pagaduria full:', [
+                'exception' => $e->getMessage(),
+                'stack' => $e->getTraceAsString(),
+            ]);
+            return response()->json([], 200);
+        }
+    }
+    
 
     public function getSituacionLaboralByDoc($doc)
     {

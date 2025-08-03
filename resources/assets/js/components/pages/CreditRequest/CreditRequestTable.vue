@@ -129,7 +129,7 @@
         165: 'SED VALLE',
         132: 'SED VAUPES',
         32: 'SED VICHADA',
-        27: 'SED SINCELEJO',
+        27: 'SEM SINCELEJO',
         34: 'SEM ARMENIA',
         160: 'SEM BARRANCABERMEJA',
         106: 'SEM BARRANQUILLA',

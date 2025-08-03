@@ -1,232 +1,132 @@
-import { setCurrentPeriod, floatToInt } from './utils'
+import axios from 'axios'
+import { setCurrentPeriod, floatToInt, normalizePeriod } from './utils'
+
+const buildValue = n => n.replace(/\s+/g, '').toUpperCase()
+
+function buildSlug(name) {
+  const up = name.trim().toUpperCase()
+  if (up === 'FIDUPREVISORA') return 'datamesFidu'
+  if (up === 'FOPEP') return 'datamesFopep'
+  const parts = up.split(/\s+/)
+  if (parts[0] === 'SEM' || parts[0] === 'SED') {
+    const pre = parts[0].toLowerCase()
+    const rest = parts.slice(1).map(p => p[0] + p.slice(1).toLowerCase()).join('')
+    return `datames${pre[0].toUpperCase() + pre.slice(1)}${rest}`
+  }
+  return 'datames' + parts.map(p => p[0] + p.slice(1).toLowerCase()).join('')
+}
+
+const presetPagadurias = [
+  { label: 'FIDUPREVISORA', value: 'FIDUPREVISORA', key: 'FIDUPREVISORA', slug: 'datamesFidu' },
+  { label: 'FOPEP', value: 'FOPEP', key: 'FOPEP', slug: 'datamesFopep' }
+]
 
 const pagaduriasModule = {
   namespaced: true,
-  state: {
+  state: () => ({
     coupons: [],
     couponsType: '',
     pagaduriaType: '',
     pagaduriaLabel: '',
-    pagaduriasTypes: [
-      { label: 'FIDUPREVISORA', value: 'FIDUPREVISORA', key: 'datamesFidu' },
-      { label: 'FOPEP', value: 'FOPEP', key: 'datamesFopep' },
-      { label: 'SED ANTIOQUIA', value: 'SEDANTIOQUIA', key: 'SED ANTIOQUIA' },
-      { label: 'SED ARAUCA', value: 'SEDARAUCA', key: 'SED ARAUCA' },
-      { label: 'SED ATLANTICO', value: 'SEDATLANTICO', key: 'SED ATLANTICO' },
-      { label: 'SED BOLIVAR', value: 'SEDBOLIVAR', key: 'SED BOLIVAR' },
-      { label: 'SED BOYACA', value: 'SEDBOYACA', key: 'SED BOYACA' },
-      { label: 'SED CALDAS', value: 'SEDCALDAS', key: 'SED CALDAS' },
-      { label: 'SED CASANARE', value: 'SEDCASANARE', key: 'SED CASANARE' },
-      { label: 'SED CAUCA', value: 'SEDCAUCA', key: 'SED CAUCA' },
-      { label: 'SED CHOCO', value: 'SEDCHOCO', key: 'SED CHOCO' },
-      { label: 'SED CORDOBA', value: 'SEDCORDOBA', key: 'SED CORDOBA' },
-      { label: 'SED CUNDINAMARCA', value: 'SEDCUNDINAMARCA', key: 'SED CUNDINAMARCA' },
-      { label: 'SED GUAJIRA', value: 'SEDGUAJIRA', key: 'SED GUAJIRA' },
-      { label: 'SED GUAVIARE', value: 'SEDGUAVIARE', key: 'SED GUAVIARE' },
-      { label: 'SED MAGDALENA', value: 'SEDMAGDALENA', key: 'SED MAGDALENA' },
-      { label: 'SED META', value: 'SEDMETA', key: 'meta' && 'SED META' },
-      { label: 'SED NARINO', value: 'SEDNARINO', key: 'SED NARINO' },
-      { label: 'SED NORTE SANTANDER', value: 'SEDNORTEDESANTANDER', key: 'SED NORTE DE SANTANDER' },
-      { label: 'SED SANTANDER', value: 'SEDSANTANDER', key: 'SED SANTANDER' },
-      { label: 'SED RISARALDA', value: 'SEDRISARALDA', key: 'SED RISARALDA' },
-      { label: 'SED SUCRE', value: 'SEDSUCRE', key: 'SED SUCRE' },
-      { label: 'SED TOLIMA', value: 'SEDTOLIMA', key: 'SED TOLIMA' },
-      { label: 'SED VALLE', value: 'SEDVALLE', key: 'SED VALLE' },
-      { label: 'SED CAQUETA', value: 'SEDCAQUETA', key: 'SED CAQUETA' },
-      { label: 'SED PUTUMAYO', value: 'SEDPUTUMAYO', key: 'SED PUTUMAYO' },
-      { label: 'SED CESAR', value: 'SEDCESAR', key: 'SED CESAR' },
-      { label: 'SED QUINDIO', value: 'SEDQUINDIO', key: 'SED QUINDIO' },
-      { label: 'SED AMAZONAS', value: 'SEDAMAZONAS', key: 'SED AMAZONAS' },
-      { label: 'SED VAUPES', value: 'SEDVAUPES', key: 'SED VAUPES' },
-      { label: 'SED VICHADA', value: 'SEDVICHADA', key: 'SED VICHADA' },
-      { label: 'SEM BARRANQUILLA', value: 'SEMBARRANQUILLA', key: 'SEM BARRANQUILLA' },
-      { label: 'SEM APARTADO', value: 'SEMAPARTADO', key: 'SEM APARTADO' },
-      { label: 'SEM ESTRELLA', value: 'SEMESTRELLA', key: 'SEM ESTRELLA' },
-      { label: 'SEM SANTA MARTA', value: 'SEMSANTAMARTA', key: 'SEM SANTA MARTA' },
-      { label: 'SEM BARRANCABERMEJA', value: 'SEMBARRANCABERMEJA', key: 'SEM BARRANCABERMEJA' },
-      { label: 'SEM RIOHACHA', value: 'SEMRIOHACHA', key: 'SEM RIOHACHA' },
-      { label: 'SEM RIONEGRO', value: 'SEMRIONEGRO', key: 'SEM RIONEGRO' },
-      { label: 'SEM SABANETA', value: 'SEMSABANETA', key: 'SEM SABANETA' },
-      { label: 'SEM SAN ANDRES', value: 'SEMSAN', key: 'SEM SAN' },
-      { label: 'SEM SOACHA', value: 'SEMSOACHA', key: 'SEM SOACHA' },
-      { label: 'SEM PITALITO', value: 'SEMPITALITO', key: 'SEM PITALITO' },
-      { label: 'SEM BUGA', value: 'SEMBUGA', key: 'SEM BUGA' },
-      { label: 'SEM CUCUTA', value: 'SEMCUCUTA', key: 'SEM CUCUTA' },
-      { label: 'SEM SOGAMOSO', value: 'SEMSOGAMOSO', key: 'SEM SOGAMOSO' },
-      { label: 'SEM TULUA', value: 'SEMTULUA', key: 'SEM TULUA' },
-      { label: 'SEM TUMACO', value: 'SEMTUMACO', key: 'SEM TUMACO' },
-      { label: 'SEM CIENAGA', value: 'SEMCIENAGA', key: 'SEM CIENAGA' },
-      { label: 'SEM CALI', value: 'SEMCALI', key: 'SEM CALI' },
-      { label: 'SEM DOSQUEBRADAS', value: 'SEMDOSQUEBRADAS', key: 'SEM DOSQUEBRADAS' },
-      { label: 'SEM CARTAGENA', value: 'SEMCARTAGENA', key: 'SEM CARTAGENA' },
-      { label: 'SEM ENVIGADO', value: 'SEMENVIGADO', key: 'SEM ENVIGADO' },
-      { label: 'SEM CARTAGO', value: 'SEMCARTAGO', key: 'SEM CARTAGO' },
-      { label: 'SEM BELLO', value: 'SEMBELLO', key: 'SEM BELLO' },
-      { label: 'SEM DUITAMA', value: 'SEMDUITAMA', key: 'SEM DUITAMA' },
-      { label: 'SEM GIRON', value: 'SEMGIRON', key: 'SEM GIRON' },
-      { label: 'SEM CHIA', value: 'SEMCHIA', key: 'SEM CHIA' },
-      { label: 'SEM VILLAVICENCIO', value: 'SEMVILLAVICENCIO', key: 'SEM VILLAVICENCIO' },
-      { label: 'SEM IPIALES', value: 'SEMIPIALES', key: 'SEM IPIALES' },
-      { label: 'SEM JAMUNDI', value: 'SEMJAMUNDI', key: 'SEM JAMUNDI' },
-      { label: 'SEM MAGANGUE', value: 'SEMMAGANGUE', key: 'SEM MAGANGUE' },
-      { label: 'SEM MONTERIA', value: 'SEMMONTERIA', key: 'SEM MONTERIA' },
-      { label: 'SED HUILA', value: 'SEDHUILA', key: 'SED HUILA' },
-      { label: 'SEM NEIVA', value: 'SEMNEIVA', key: 'SEM NEIVA' },
-      { label: 'SEM PALMIRA', value: 'SEMPALMIRA', key: 'SEM PALMIRA' },
-      { label: 'SEM GUAINIA', value: 'SEMGUAINIA', key: 'SEM GUAINIA' },
-      { label: 'SEM ITAGUI', value: 'SEMITAGUI', key: 'SEM ITAGUI' },
-      { label: 'SEM PIEDECUESTA', value: 'SEMPIEDECUESTA', key: 'SEM PIEDECUESTA' },
-      { label: 'SEM PEREIRA', value: 'SEMPEREIRA', key: 'SEM PEREIRA' },
-      { label: 'SEM MEDELLIN', value: 'SEMMEDELLIN', key: 'SEM MEDELLIN' },
-      { label: 'SEM MANIZALES', value: 'SEMMANIZALES', key: 'SEM MANIZALES' },
-      { label: 'SEM PASTO', value: 'SEMPASTO', key: 'SEM PASTO' },
-      { label: 'SEM MAICAO', value: 'SEMMAICAO', key: 'SEM MAICAO' },
-      { label: 'SEM MALAMBO', value: 'SEMMALAMBO', key: 'SEM MALAMBO' },
-      { label: 'SEM POPAYAN', value: 'SEMPOPAYAN', key: 'SEM POPAYAN' },
-      { label: 'SEM QUIBDO', value: 'SEMQUIBDO', key: 'SEM QUIBDO' },
-      { label: 'SEM RIONEGRO', value: 'SEMRIONEGRO', key: 'SEM RIONEGRO' },
-      { label: 'SEM SABANETA', value: 'SEMSABANETA', key: 'SEM SABANETA' },
-      { label: 'SEM SAHAGUN', value: 'SEMSAHAGUN', key: 'SEM SAHAGUN' },
-      { label: 'SED SINCELEJO', value: 'SEDSINCELEJO', key: 'SED SINCELEJO' },
-      { label: 'SEM SOLEDAD', value: 'SEMSOLEDAD', key: 'SEM SOLEDAD' },
-      { label: 'SEM VALLEDUPAR', value: 'SEMVALLEDUPAR', key: 'SEM VALLEDUPAR' },
-      { label: 'SEM YOPAL', value: 'SEMYOPAL', key: 'SEM YOPAL' },
-      { label: 'SEM YUMBO', value: 'SEMYUMBO', key: 'SEM YUMBO' },
-      { label: 'SEM ZIPAQUIRA', value: 'SEMZIPAQUIRA', key: 'SEM ZIPAQUIRA' },
-      { label: 'SEM MOSQUERA', value: 'SEMMOSQUERA', key: 'SEM MOSQUERA' },
-      { label: 'SEM URIBIA', value: 'SEMURIBIA', key: 'SEM URIBIA' },
-      { label: 'SEM TURBO', value: 'SEMTURBO', key: 'SEM TURBO' },
-      { label: 'SEM TUNJA', value: 'SEMTUNJA', key: 'SEM TUNJA' },
-      { label: 'SEM BUCARAMANGA', value: 'SEMBUCARAMANGA', key: 'SEM BUCARAMANGA' },
-      { label: 'SEM BUENAVENTURA', value: 'SEMBUENAVENTURA', key: 'SEM BUENAVENTURA' },
-      { label: 'SEM ARMENIA', value: 'SEMARMENIA', key: 'SEM ARMENIA' },
-      { label: 'SEM FLORENCIA', value: 'SEMFLORENCIA', key: 'SEM FLORENCIA' },
-      { label: 'SEM FLORIDABLANCA', value: 'SEMFLORIDABLANCA', key: 'SEM FLORIDABLANCA' },
-      { label: 'SEM FACATATIVA', value: 'SEMFACATATIVA', key: 'SEM FACATATIVA' },
-      { label: 'SEM FUSAGAZUGA', value: 'SEMFUSAGAZUGA', key: 'SEM FUSAGAZUGA' },
-      { label: 'SEM GIRARDOT', value: 'SEMGIRARDOT', key: 'SEM GIRARDOT' },
-      { label: 'SEM LORICA', value: 'SEMLORICA', key: 'SEM LORICA' },
-      { label: 'SEM IBAGUE', value: 'SEMIBAGUE', key: 'SEM IBAGUE' },
-      { label: 'SEM FUNZA', value: 'SEMFUNZA', key: 'SEM FUNZA' },
-      { label: 'fiduprevisora', value: 'fiduprevisora', key: 'fiduprevisora' },
-      { label: 'casur', value: 'casur', key: 'casur' }
-    ],
+    pagaduriasTypes: [],
     selectedPeriod: ''
-  },
+  }),
   getters: {
     couponsPerPeriod: state => {
-      if (!state.selectedPeriod || state.coupons.length === 0) return { items: [] }
-      const periodKey = state.selectedPeriod.slice(0, 7)
-      const filtered = state.coupons.filter(item => {
-        const inicio = item.inicioperiodo.slice(0, 7)
-        const fin = item.finperiodo.slice(0, 7)
-        return inicio === periodKey || fin === periodKey
-      })
-      return { items: filtered }
-    },
-    couponsIngresos: (state, getters) => {
-      if (!getters.couponsPerPeriod.items || getters.couponsPerPeriod.items.length === 0) {
-        return { items: [], total: 0, amount: 0 }
-      }
-      const items = getters.couponsPerPeriod.items.filter(item => Number(item.egresos) > 0)
-      return {
-        items,
-        total: items.length,
-        amount: items.reduce((sum, item) => sum + Number(item.egresos), 0)
-      }
-    },
-    ingresosExtras: (state, getters) => {
-      if (!getters.couponsPerPeriod.items) return []
-      return getters.couponsPerPeriod.items.filter(
-        item => item.code !== 'SUEBA' && item.code !== 'INGCUP' && Number(item.ingresos) > 0
+      if (!state.selectedPeriod || !state.coupons.length) return { items: [] }
+      const key = state.selectedPeriod.slice(0, 7)
+      const items = state.coupons.filter(
+        i => i.inicioperiodo.slice(0, 7) === key || i.finperiodo.slice(0, 7) === key
       )
+      return { items }
     },
-    valorIngreso: (state, getters) => {
-      const item = getters.couponsPerPeriod.items?.find(coupon => coupon.code === 'INGCUP')
-      return item?.ingresos || 0
+    couponsIngresos: (state, g) => {
+      if (!g.couponsPerPeriod.items.length) return { items: [], total: 0, amount: 0 }
+      const items = g.couponsPerPeriod.items.filter(i => Number(i.egresos) > 0)
+      return { items, total: items.length, amount: items.reduce((s, i) => s + Number(i.egresos), 0) }
     },
-    salarioBasico: (state, getters) => {
-      if (!getters.couponsPerPeriod.items) return []
-      return getters.couponsPerPeriod.items
-        .filter(coupon => coupon.code === 'SUEBA')
-        .map(coupon => ({ concept: coupon.concept, ingresos: coupon.ingresos }))
-    },
+    ingresosExtras: (state, g) => g.couponsPerPeriod.items.filter(
+      i => i.code !== 'SUEBA' && i.code !== 'INGCUP' && Number(i.ingresos) > 0
+    ),
+    valorIngreso: (state, g) => g.couponsPerPeriod.items.find(i => i.code === 'INGCUP')?.ingresos || 0,
+    salarioBasico: (state, g) => g.couponsPerPeriod.items
+      .filter(i => i.code === 'SUEBA')
+      .map(i => ({ concept: i.concept, ingresos: i.ingresos })),
     pagaduriaPeriodos: state => {
-      let periodos = state.coupons.reduce((acc, coupon) => {
-        const fin = coupon.finperiodo?.trim()
-        if (fin && !isNaN(new Date(fin).getTime()) && !acc.includes(fin)) acc.push(fin)
-        return acc
+      const list = state.coupons.reduce((a, c) => {
+        const fin = c.finperiodo?.trim()
+        if (fin && !isNaN(new Date(fin)) && !a.includes(fin)) a.push(fin)
+        return a
       }, [])
-      periodos = setCurrentPeriod(periodos)
-      return periodos.sort((a, b) => new Date(b) - new Date(a))
+      const withCurrent = setCurrentPeriod(list)
+      return withCurrent.sort((a, b) => new Date(b) - new Date(a))
     },
     ingresosIncapacidad: state => {
       const items = state.coupons.filter(
-        item => (item.code === 'PGINC' || item.code === 'PGINC100') && Number(item.ingresos) > 0
+        i => (i.code === 'PGINC' || i.code === 'PGINC100') && Number(i.ingresos) > 0
       )
-      const amount = items.reduce((ing, item) => ing + Number(item.ingresos), 0)
-      return { items, total: items.length, amount }
+      return { items, total: items.length, amount: items.reduce((s, i) => s + Number(i.ingresos), 0) }
     },
-    ingresosIncapacidadPerPeriod: (state, getters) => {
-      if (!getters.couponsPerPeriod.items) return { items: [], total: 0, amount: 0 }
-      const items = getters.couponsPerPeriod.items.filter(
-        item => (item.code === 'PGINC' || item.code === 'PGINC100') && Number(item.ingresos) > 0
+    ingresosIncapacidadPerPeriod: (state, g) => {
+      if (!g.couponsPerPeriod.items.length) return { items: [], total: 0, amount: 0 }
+      const items = g.couponsPerPeriod.items.filter(
+        i => (i.code === 'PGINC' || i.code === 'PGINC100') && Number(i.ingresos) > 0
       )
-      const amount = items.reduce((ing, item) => ing + Number(item.ingresos), 0)
-      return { items, total: items.length, amount }
+      return { items, total: items.length, amount: items.reduce((s, i) => s + Number(i.ingresos), 0) }
     },
-    incapacidadValida: (state, getters) => {
-      const monthsNumber = 2
-      const actualYear = new Date().getFullYear()
-      const actualMonth = 10
-      const ingresosIncap = getters.ingresosIncapacidad
-      if (!ingresosIncap || !Array.isArray(ingresosIncap.items)) return true
-      const newItems = ingresosIncap.items.map(item => {
-        const year = item.finperiodo.toString().substring(0, 4)
-        const month = item.finperiodo.toString().substring(5, 7)
-        return { ...item, year: Number(year), month: Number(month) }
+    incapacidadValida: (state, g) => {
+      const months = 2
+      const yNow = new Date().getFullYear()
+      const mNow = new Date().getMonth() + 1
+      const inc = g.ingresosIncapacidad.items
+      const recent = inc.filter(i => {
+        const y = +i.finperiodo.slice(0, 4)
+        const m = +i.finperiodo.slice(5, 7)
+        return y === yNow && m >= mNow - months + 1
       })
-      const periodsByYear = newItems.filter(
-        item => item.year === actualYear && item.month > actualMonth - monthsNumber
-      )
-      const periodsGroupByMonth = periodsByYear.reduce((group, item) => {
-        const { month } = item
-        group[month] = group[month] || []
-        group[month].push(item)
-        return group
-      }, {})
-      return Object.keys(periodsGroupByMonth).length < monthsNumber
+      const monthsFound = new Set(recent.map(i => i.finperiodo.slice(5, 7)))
+      return monthsFound.size < months
     }
   },
   mutations: {
-    setPagaduriaType: (state, payload) => {
-      state.pagaduriaType = payload
-    },
-    setPagaduriaLabel: (state, payload) => {
-      state.pagaduriaLabel = payload
-    },
-    setCoupons: (state, payload) => {
-      state.coupons = payload
-    },
-    setCouponsType: (state, payload) => {
-      state.couponsType = payload
-    },
-    setSelectedPeriod: (state, payload) => {
-      state.selectedPeriod = payload
-    }
-  },
+    setPagaduriasTypes: (s, p) => (s.pagaduriasTypes = p),
+    setPagaduriaType: (s, p) => (s.pagaduriaType = p),
+    setPagaduriaLabel: (s, p) => (s.pagaduriaLabel = p),
+    setCoupons: (s, p) => (s.coupons = p),
+    setCouponsType: (s, p) => (s.couponsType = p),
+    setSelectedPeriod: (s, raw) => (s.selectedPeriod = normalizePeriod(raw))  },
   actions: {
-    fetchCoupons: (ctx, data) => {
-      const items = data.map(item => ({
-        ...item,
-        nomtercero: item.concept,
-        ingresos: floatToInt(item.ingresos),
-        egresos: floatToInt(item.egresos),
-        vaplicado: floatToInt(item.egresos)
+    async loadPagaduriasTypes({ commit }) {
+      try {
+        const { data } = await axios.get('/pagadurias/namesAmi')
+        const api = data.map(n => ({
+          label: n,
+          value: buildValue(n),
+          key: n.toUpperCase(),
+          slug: buildSlug(n)
+        }))
+        const merged = [...api, ...presetPagadurias.filter(
+          p => !api.some(a => a.label.toUpperCase() === p.label.toUpperCase())
+        )]
+        commit('setPagaduriasTypes', merged)
+      } catch (e) {
+        commit('setPagaduriasTypes', presetPagadurias)
+      }
+    },
+    fetchCoupons({ commit, getters }, rows) {
+      const items = rows.map(r => ({
+        ...r,
+        nomtercero: r.concept,
+        ingresos: floatToInt(r.ingresos),
+        egresos: floatToInt(r.egresos),
+        vaplicado: floatToInt(r.egresos)
       }))
-      ctx.commit('setCoupons', items)
-      const periods = ctx.getters.pagaduriaPeriodos
-      if (periods.length > 0) ctx.commit('setSelectedPeriod', periods[0])
+      commit('setCoupons', items)
+      const validPeriod = getters.pagaduriaPeriodos.find(p => {
+        const key = p.slice(0, 7)
+        return items.some(i => i.inicioperiodo.slice(0, 7) === key || i.finperiodo.slice(0, 7) === key)
+      })
+      if (validPeriod) commit('setSelectedPeriod', validPeriod)
     }
   }
 }

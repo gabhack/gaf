@@ -30,7 +30,8 @@
     },
     "autoload": {
 		"files": [
-			"app/Helpers/Helper.php"
+			"app/Helpers/Helper.php",
+            "app/Helpers/PagaduriaHelper.php"
 		],
         "classmap": [
             "database"

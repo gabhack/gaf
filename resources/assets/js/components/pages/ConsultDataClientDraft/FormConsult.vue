@@ -121,22 +121,26 @@
                     <div v-if="!flag">
                         <h3 style="padding-bottom: 24px" class="heading-title">Consultar pagadurias</h3>
                         <b class="panel-label mb-2">Pagadurias</b>
-                        <b-form-select
-                            v-if="dataclient.pagadurias"
-                            v-model="dataclient.pagaduria"
-                            required
-                            @change="modalConfirmConsultPag"
-                        >
-                            <option :value="null" disabled hidden>Elija una pagaduria</option>
-                            <option
-                                v-for="type in pagaduriasTypes"
-                                v-if="dataclient.pagadurias[type.key]"
-                                :value="type.value"
-                                :key="type.key"
-                            >
-                                {{ type.label }}
-                            </option>
-                        </b-form-select>
+                       <!-- select de pagadurías -->
+<b-form-select
+  v-if="dataclient.pagadurias"
+  v-model="dataclient.pagaduria"
+  required
+  @change="modalConfirmConsultPag"
+>
+  <option :value="null" disabled hidden>Elija una pagaduría</option>
+
+  <!-- ahora key == nombre recibido -->
+  <option
+    v-for="type in pagaduriasTypes"
+    v-if="dataclient.pagadurias[type.key]"
+    :value="type.value"
+    :key="type.key"
+  >
+    {{ type.label }}
+  </option>
+</b-form-select>
+
 
                         <b-form-select v-else v-model="dataclient.pagaduria" class="text-center">
                             <option :value="null" disabled>Ingresa una cedula y presiona consultar</option>
@@ -190,6 +194,7 @@ export default {
         };
     },
     mounted() {
+        this.$store.dispatch('pagaduriasModule/loadPagaduriasTypes')
         console.log(this.pagaduriasTypes);
     },
     computed: {
@@ -212,26 +217,36 @@ export default {
         pdfEmit() {
             this.$emit('downloadPdf');
         },
-        selectedPagaduria() {
-    this.setPagaduriaType(this.dataclient.pagaduria)
-    if (this.dataclient.pagaduria) {
-        const type = this.pagaduriasTypes.find(type => type.value === this.dataclient.pagaduria)
-        const pagaduria = this.dataclient.pagadurias[type.key]
-        console.log('pagaduria antes de setDatamesSed:', pagaduria)
+        selectedPagaduria () {
+  /* guarda el “value” (sin espacios) en Vuex */
+  this.setPagaduriaType(this.dataclient.pagaduria)
+  if (!this.dataclient.pagaduria) return
 
-        this.dataclient.pagaduriaKey = type.key.slice(7).toLowerCase()
-        pagaduria.documentType = 'documentType'
-        this.dataclient.cargo = pagaduria.cargo
+  /* localiza el objeto de tipo */
+  const type = this.pagaduriasTypes.find(t => t.value === this.dataclient.pagaduria)
+  if (!type) return
 
-        const pagaduriaLabel = type.label
-        this.setPagaduriaLabel(pagaduriaLabel)
+  /* el backend usa la clave CON espacios */
+  const pagaduriaObj = this.dataclient.pagadurias[type.key]
+  if (!pagaduriaObj) return
 
-        this.setCouponsType(type.key.includes('datames') ? `Coupons${type.key.slice(7)}` : type.key)
-        this.setEmbargosType(type.key.includes('datames') ? `Embargos${type.key.slice(7)}` : type.key)
-        this.setDescuentosType(type.key.includes('datames') ? `Descuentos${type.key.slice(7)}` : type.key)
+  /* -------- valores Vuex / locales -------- */
+  this.dataclient.pagaduriaKey = type.slug.slice(7).toLowerCase()
+  pagaduriaObj.documentType    = 'documentType'
+  this.dataclient.cargo        = pagaduriaObj.cargo
 
-        this.setDatamesSed(pagaduria)
-    }
+  this.setPagaduriaLabel(type.key)   // “SED HUILA” (CON espacio)
+
+  this.setCouponsType(
+    type.slug.includes('datames') ? `Coupons${type.slug.slice(7)}` : type.slug
+  )
+  this.setEmbargosType(
+    type.slug.includes('datames') ? `Embargos${type.slug.slice(7)}` : type.slug
+  )
+  this.setDescuentosType(
+    type.slug.includes('datames') ? `Descuentos${type.slug.slice(7)}` : type.slug
+  )
+  this.setDatamesSed(pagaduriaObj)
 },
         emitInfo() {
             this.getAllPagadurias();

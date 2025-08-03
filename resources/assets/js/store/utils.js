@@ -80,3 +80,19 @@ export const floatToInt = value => {
   console.log(`[floatToInt] Cleaned string="${newInt}", finalNumber=${finalNumber}`)
   return finalNumber
 }
+
+/**
+ * Normaliza un periodo:
+ * - Si viene "YYYY-MM" lo convierte a "YYYY-MM-DD" (último día del mes)
+ * - Si ya viene "YYYY-MM-DD" lo deja igual
+ * - Devuelve '' si no reconoce el formato
+ */
+export function normalizePeriod(str = '') {
+  if (/^\d{4}-\d{2}-\d{2}$/.test(str)) return str;          // Caso 100 % OK
+  if (/^\d{4}-\d{2}$/.test(str)) {
+    const [year, month] = str.split('-').map(Number);
+    const lastDay = new Date(year, month, 0).getDate();      // 28-31
+    return `${year}-${String(month).padStart(2,'0')}-${String(lastDay).padStart(2,'0')}`;
+  }
+  return '';
+}

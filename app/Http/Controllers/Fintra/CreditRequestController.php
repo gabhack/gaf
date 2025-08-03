@@ -12,110 +12,27 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use App\Helpers\PagaduriaHelper;
 
 class CreditRequestController extends Controller
 {
+
+    public function __construct()
+    {
+        if (empty(self::$pagaduriasMap)) {
+            self::$pagaduriasMap = PagaduriaHelper::map();
+        }
+    }
     /* ------------------------------------------------ PAGADURÍAS --------------------------------------------- */
-    protected static $pagaduriaMap = [
-        'sed amazonas'                 => 1,
-        'sed antioquia'                => 130,
-        'sem armenia'                  => 34,
-        'sed arauca'                   => 109,
-        'sed atlantico'                => 121,
-        'sem barrancabermeja'          => 160,
-        'sem barranquilla'             => 106,
-        'sem bello'                    => 111,
-        'sed bolivar'                  => 293,
-        'sed boyaca'                   => 110,
-        'sem bucaramanga'              => 39,
-        'sem buenaventura'             => 40,
-        'sem buga'                     => 157,
-        'sed caldas'                   => 139,
-        'sem cali'                     => 42,
-        'sed caqueta'                  => 140,
-        'sed casanare'                 => 104,
-        'sem cartagena'                => 189,
-        'sem cartago'                  => 136,
-        'sed cauca'                    => 177,
-        'sem chia'                     => 45,
-        'sem cienaga'                  => 103,
-        'sed cesar'                    => 11,
-        'sem cucuta'                   => 286,
-        'sed choco'                    => 294,
-        'sed cordoba'                  => 182,
-        'sed cundinamarca'             => 163,
-        'sem dosquebradas'             => 112,
-        'sem duitama'                  => 49,
-        'sem envigado'                 => 115,
-        'sem estrella'                 => 168,
-        'sem facatativa'               => 164,
-        'sem florencia'                => 55,
-        'sem floridablanca'            => 170,
-        'sem funza'                    => 117,
-        'sem fusagasuga'               => 151,
-        'sem girardot'                 => 179,
-        'sem giron'                    => 287,
-        'sem guainia'                  => 116,
-        'sed guajira'                  => 192,
-        'sed guaviare'                 => 173,
-        'sed huila'                    => 178,
-        'sem ibague'                   => 147,
-        'sem ipiales'                  => 134,
-        'sem itagui'                   => 135,
-        'sem jamundi'                  => 146,
-        'sem lorica'                   => 67,
-        'sed magdalena'                => 145,
-        'sem magangue'                 => 133,
-        'sem maicao'                   => 69,
-        'sem malambo'                  => 161,
-        'sed meta'                     => 113,
-        'sem manizales'                => 174,
-        'sem medellin'                 => 180,
-        'sem monteria'                 => 176,
-        'sem mosquera'                 => 153,
-        'sem neiva'                    => 105,
-        'sed narino'                   => 143,
-        'sed norte de santander'       => 154,
-        'sem palmira'                  => 152,
-        'sem pasto'                    => 125,
-        'sem pereira'                  => 78,
-        'sem piedecuesta'              => 79,
-        'sem pitalito'                 => 138,
-        'sed putumayo'                 => 184,
-        'sed quindio'                  => 166,
-        'sem quibdo'                   => 162,
-        'sem riohacha'                 => 150,
-        'sem rionegro'                 => 129,
-        'sed risaralda'                => 114,
-        'sed santander'                => 26,
-        'sem sabaneta'                 => 108,
-        'sem sahagun'                  => 142,
-        'sem san andres'                      => 158,
-        'sem santa marta'              => 126,
-        'sed sucre'                    => 175,
-        'sem soacha'                   => 119,
-        'sem sogamoso'                 => 172,
-        'sem soledad'                  => 123,
-        'sed tolima'                   => 122,
-        'sem tulua'                    => 120,
-        'sem tunja'                    => 141,
-        'sem turbo'                    => 137,
-        'sem tumaco'                   => 93,
-        'sem uribia'                   => 144,
-        'sed valle'                    => 165,
-        'sem valledupar'               => 171,
-        'sed vaupes'                   => 132,
-        'sed vichada'                  => 32,
-        'sem villavicencio'            => 124,
-        'sed sincelejo'                => 27,
-        'sem yopal'                    => 289,
-        'sem yumbo'                    => 169,
-        'sem zipaquira'                => 156,
-        'colpensiones'                 => 200,
-        'fopep'                        => 201,
-        'casur'                        => 296,
-        'fiduprevisora'                => 297,
-    ];
+    private static array $pagaduriasMap = [];
+
+    private static function loadPagadurias(): void
+{
+    if (empty(self::$pagaduriasMap)) {
+        self::$pagaduriasMap = PagaduriaHelper::map();
+    }
+}
+
 
     protected function mapPagaduria($value)
     {

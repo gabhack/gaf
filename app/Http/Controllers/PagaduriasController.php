@@ -61,6 +61,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use App\Helpers\PagaduriaHelper;
 
 class PagaduriasController extends Controller
 {
@@ -210,8 +211,18 @@ class PagaduriasController extends Controller
             DB::commit();
     
             $payload = !empty($results) ? $results : (object) [];
-            Log::info('Resultados finales', ['total_resultados' => count((array) $payload)]);
-    
+            Log::info('Resultados finales', [
+                'total'      => count($results),
+                'registros'  => collect($results)->map(function ($item) {
+                    return [
+                        'pagaduria'      => $item->pagaduria,
+                        'id'             => $item->id,
+                        'inicioperiodo'  => $item->inicioperiodo,
+                        'finperiodo'     => $item->finperiodo,
+                        // agrega aquí otros campos que quieras inspeccionar
+                    ];
+                })->values()->all(),
+            ]);    
             $totalDuration = microtime(true) - $startTotal;
             Log::info('Tiempo total del método perDoc()', ['segundos' => $totalDuration]);
     
@@ -268,7 +279,7 @@ class PagaduriasController extends Controller
             "SED QUINDIO",
             "SED RISARALDA",
             "SED SANTANDER",
-            "SED SINCELEJO",
+            "SEM SINCELEJO",
             "SED SUCRE",
             "SED TOLIMA",
             "SED VALLE",

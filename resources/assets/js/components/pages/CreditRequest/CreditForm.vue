@@ -384,7 +384,7 @@ export default {
         "sem soledad":123,"sed tolima":122,"sem tulua":120,"sem tunja":141,
         "sem turbo":137,"sem tumaco":93,"sem uribia":144,"sed valle":165,
         "sem valledupar":171,"sed vaupes":132,"sed vichada":32,"sem villavicencio":124,
-        "sed sincelejo":27,"sem yopal":289,"sem yumbo":169,"sem zipaquira":156,
+        "sem sincelejo":27,"sem yopal":289,"sem yumbo":169,"sem zipaquira":156,
         "colpensiones":200,"fopep":201,"casur":296,"fiduprevisora":297
       }
     };

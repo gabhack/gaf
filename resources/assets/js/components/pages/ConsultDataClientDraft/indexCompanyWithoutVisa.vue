@@ -235,114 +235,16 @@
 
 
 
+<!-- en tu template del index, encima del bloque problemático -->
+<p style="color:red">
+  pagaduriaType recibido: {{ pagaduriaType }}
+</p>
 
                 <template v-if="showOthers">
                     <DescapliEmpty
-                        v-if="
-                            pagaduriaType == 'FIDUPREVISORA' ||
-                            pagaduriaType == 'SEDVALLE' ||
-                            pagaduriaType == 'SEDCAUCA' ||
-                            pagaduriaType == 'SEDCHOCO' ||
-                            pagaduriaType == 'SEDCALDAS' ||
-                            pagaduriaType == 'SEDBOYACA' ||
-                            pagaduriaType == 'SEDCORDOBA' ||
-                            pagaduriaType == 'SEMQUIBDO' ||
-                            pagaduriaType == 'SEMSANTAMARTA' ||
-                            pagaduriaType == 'SEMCALI' ||
-                            pagaduriaType == 'SEDMAGDALENA' ||
-                            pagaduriaType == 'SEMSAHAGUN' ||
-                            pagaduriaType == 'SEMMONTERIA' ||
-                            pagaduriaType == 'SEMBARRANQUILLA' ||
-                            pagaduriaType == 'SEDATLANTICO' ||
-                            pagaduriaType == 'SEDBOLIVAR' ||
-                            pagaduriaType == 'SEMPOPAYAN' ||
-                            pagaduriaType == 'FOPEP' ||
-                            pagaduriaType == 'SEMMEDELLIN' ||
-                            pagaduriaType == 'SEDHUILA' ||
-                            pagaduriaType == 'SEDRISARALDA' ||
-                            pagaduriaType == 'SEDMETA' ||
-                            pagaduriaType == 'SEDCUNDINAMARCA' ||
-                            pagaduriaType == 'SEMMOSQUERA' ||
-                            pagaduriaType == 'SEMMAGANGUE' ||
-                            pagaduriaType == 'SEMBUGA' ||
-                            pagaduriaType == 'SEMNEIVA' ||
-                            pagaduriaType == 'SEMZIPAQUIRA' ||
-                            pagaduriaType == 'SEMYUMBO' ||
-                            pagaduriaType == 'SEMYOPAL' ||
-                            pagaduriaType == 'SEMFLORENCIA' ||
-                            pagaduriaType == 'SEMFLORIDABLANCA' ||
-                            pagaduriaType == 'SEMIPIALES' ||
-                            pagaduriaType == 'SEMVALLEDUPAR' ||
-                            pagaduriaType == 'SEMURIBIA' ||
-                            pagaduriaType == 'SEMTURBO' ||
-                            pagaduriaType == 'SEMTUNJA' ||
-                            pagaduriaType == 'SEMBUCARAMANGA' ||
-                            pagaduriaType == 'SEMMANIZALES' ||
-                            pagaduriaType == 'SEMMAICAO' ||
-                            pagaduriaType == 'SEMMALAMBO' ||
-                            pagaduriaType == 'SEMPASTO' ||
-                            pagaduriaType == 'SEMBUENAVENTURA' ||
-                            pagaduriaType == 'SEMPALMIRA' ||
-                            pagaduriaType == 'SEMJAMUNDI' ||
-                            pagaduriaType == 'SEMFUSAGAZUGA' ||
-                            pagaduriaType == 'SEMCARTAGO' ||
-                            pagaduriaType == 'SEMDUITAMA' ||
-                            pagaduriaType == 'SEMFUNZA' ||
-                            pagaduriaType == 'SEMESTRELLA' ||
-                            pagaduriaType == 'SEMGIRON' ||
-                            pagaduriaType == 'SEMPIEDECUESTA' ||
-                            pagaduriaType == 'SEMPEREIRA' ||
-                            pagaduriaType == 'SEMGIRARDOT' ||
-                            pagaduriaType == 'SEMGUAINIA' ||
-                            pagaduriaType == 'SEMLORICA' ||
-                            pagaduriaType == 'SEMIBAGUE' ||
-                            pagaduriaType == 'SEMCHIA' ||
-                            pagaduriaType == 'SEMITAGUI' ||
-                            pagaduriaType == 'SEMAPARTADO' ||
-                            pagaduriaType == 'SEMBARRANCABERMEJA' ||
-                            pagaduriaType == 'SEMPITALITO' ||
-                            pagaduriaType == 'SEMRIOHACHA' ||
-                            pagaduriaType == 'SEMRIONEGRO' ||
-                            pagaduriaType == 'SEMTULUA' ||
-                            pagaduriaType == 'SEMTUMACO' ||
-                            pagaduriaType == 'SEMSABANETA' ||
-                            pagaduriaType == 'SEMSAN' ||
-                            pagaduriaType == 'SEMSOACHA' ||
-                            pagaduriaType == 'SEMSOGAMOSO' ||
-                            pagaduriaType == 'SEMSOLEDAD' ||
-                            pagaduriaType == 'SEMBELLO' ||
-                            pagaduriaType == 'SEMCIENAGA' ||
-                            pagaduriaType == 'SEMCARTAGENA' ||
-                            pagaduriaType == 'SEMARMENIA' ||
-                            pagaduriaType == 'SEMVILLAVICENCIO' ||
-                            pagaduriaType == 'SEMCUCUTA' ||
-                            pagaduriaType == 'SEMDOSQUEBRADAS' ||
-                            pagaduriaType == 'SEMENVIGADO' ||
-                            pagaduriaType == 'SEMFACATATIVA' ||
-                            pagaduriaType == 'SEDNORTEDESANTANDER' ||
-                            pagaduriaType == 'SEDSANTANDER' ||
-                            pagaduriaType == 'SEDCASANARE' ||
-                            pagaduriaType == 'SEDCAQUETA' ||
-                            pagaduriaType == 'SEDANTIOQUIA' ||
-                            pagaduriaType == 'SEDARAUCA' ||
-                            pagaduriaType == 'SEDPUTUMAYO' ||
-                            pagaduriaType == 'SEDQUINDIO' ||
-                            pagaduriaType == 'SEDSINCELEJO' ||
-                            pagaduriaType == 'SEDSUCRE' ||
-                            pagaduriaType == 'SEDCESAR' ||
-                            pagaduriaType == 'SEDAMAZONAS' ||
-                            pagaduriaType == 'SEDTOLIMA' ||
-                            pagaduriaType == 'SEDVAUPES' ||
-                            pagaduriaType == 'SEDVICHADA' ||
-                            pagaduriaType == 'SEDGUAJIRA' ||
-                            pagaduriaType == 'SEDGUAVIARE' ||
-                            pagaduriaType == 'fiduprevisora' ||
-                            pagaduriaType == 'casur' ||
-                            pagaduriaType == 'huila' ||
-                            pagaduriaType == 'SEDNARINO'
-                        "
-                        :disabledProspect="disabledProspect"
-                    />
+    v-if="showDescapli"
+    :disabledProspect="disabledProspect"
+  />
                     <hr class="divider" />
                     <!--===================================
                             OBLIGACIONES VIGENTES EN MORA
@@ -364,7 +266,6 @@
                     <Descuentos :selectedPeriod="selectedPeriod" v-else />
                     <hr class="divider" />
                     <div class="col-12 text-right">
-                        <!-- <b-button class="mb-3" variant="black-pearl" @click="visadoFunction">Visar</b-button> -->
                     </div>
                 </template>
 
@@ -553,20 +454,31 @@ export default {
 
     /* ─────────────────── COMPUTED ─────────────────── */
     computed: {
-        ...mapState('pagaduriasModule', ['coupons', 'couponsType', 'pagaduriaType', 'pagaduriaLabel']),
-        ...mapGetters('pagaduriasModule', [
-            'couponsPerPeriod',
-            'valorIngreso',
-            'ingresosIncapacidadPerPeriod',
-            'incapacidadValida',
-            'couponsIngresos',
-            'ingresosExtras'
-        ]),
-        ...mapState('embargosModule', ['embargosType']),
-        ...mapState('descuentosModule', ['descuentosType']),
-        ...mapState('datamesModule', ['cuotadeseada', 'conteoEgresosPlus']),
-        ...mapGetters('descuentosModule', ['descuentosPerPeriod']),
+  ...mapState('pagaduriasModule', [
+    'coupons',
+    'couponsType',
+    'pagaduriaType',
+    'pagaduriaLabel',
+    'pagaduriasTypes'      // ← añadido
+  ]),
+  ...mapGetters('pagaduriasModule', [
+    'couponsPerPeriod',
+    'valorIngreso',
+    'ingresosIncapacidadPerPeriod',
+    'incapacidadValida',
+    'couponsIngresos',
+    'ingresosExtras'
+  ]),
+  ...mapState('embargosModule', ['embargosType']),
+  ...mapState('descuentosModule', ['descuentosType']),
+  ...mapState('datamesModule', ['cuotadeseada', 'conteoEgresosPlus']),
+  ...mapGetters('descuentosModule', ['descuentosPerPeriod']),
 
+  showDescapli () {
+    const normalize = s => (s || '').replace(/\s+/g, '').toUpperCase()
+    const current = normalize(this.pagaduriaType)
+    return this.pagaduriasTypes.some(p => normalize(p.value) === current)
+  },
         /* --------  TOTALES SIN REDONDEAR NI TRUNCAR  -------- */
         totales() {
             const valrSM = 1423500;
@@ -636,8 +548,11 @@ export default {
             };
         }
     },
-
-    /* ─────────────────── METHODS ─────────────────── */
+    created () {
+  if (!this.pagaduriasTypes.length) {
+    this.$store.dispatch('pagaduriasModule/loadPagaduriasTypes')
+  }
+},
     methods: {
         ...mapActions('pagaduriasModule', ['fetchCoupons']),
         ...mapActions('embargosModule', ['fetchEmbargos']),

@@ -22,125 +22,36 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use App\Helpers\PagaduriaHelper;
 
 
 class CouponsController extends Controller
 {
 
-    /**
-     * Mapa estático de pagadurías a IDs.
-     * 
-     * Este mapa asocia la combinación "tipo nombre" en minúsculas
-     * a una idpagaduria. Por ejemplo, "sed huila" => 17.
-     * 
-     * CONSECUENCIAS DEL MAPA:
-     * - Acelera la consulta al no tener que consultar la base de datos
-     *   para obtener idpagaduria.
-     * - Requiere mantenimiento manual: si se agrega, elimina o cambia una
-     *   pagaduría en la BD, este mapa debe actualizarse.
-     * - No es escalable a largo plazo. Es una medida temporal de optimización.
-     */
-    private static $pagaduriasMap = [
-        'sed amazonas' => 1,
-        'sed antioquia' => 130,
-        'sed arauca' => 109,
-        'sed atlantico' => 121,
-        'sed bolivar' => 293,
-        'sed boyaca' => 110,
-        'sed caldas' => 139,
-        'sed caqueta' => 140,
-        'sed casanare' => 104,
-        'sed cauca' => 177,
-        'sed cesar' => 11,
-        'sed choco' => 294,
-        'sed cordoba' => 182,
-        'sed cundinamarca' => 163,
-        'sed guajira' => 192,
-        'sed guaviare' => 173,
-        'sed huila' => 178,
-        'sed magdalena' => 145,
-        'sed meta' => 113,
-        'sed narino' => 143,
-        'sed norte de santander' => 154,
-        'sed putumayo' => 184,
-        'sed quindio' => 166,
-        'sed risaralda' => 114,
-        'sed santander' => 26,
-        'sed sucre' => 175,
-        'sed tolima' => 122,
-        'sed valle' => 165,
-        'sed vaupes' => 132,
-        'sed vichada' => 32,
-        'sed sincelejo' => 27,
-        'sem armenia' => 34,
-        'sem barrancabermeja' => 160,
-        'sem barranquilla' => 106,
-        'sem bello' => 111,
-        'sem bucaramanga' => 39,
-        'sem buenaventura' => 40,
-        'sem buga' => 157,
-        'sem cali' => 191,
-        'sem cartagena' => 189,
-        'sem cartago' => 136,
-        'sem chia' => 195,
-        'sem cienaga' => 103,
-        'sem cucuta' => 286,
-        'sem dosquebradas' => 112,
-        'sem duitama' => 49,
-        'sem envigado' => 115,
-        'sem estrella' => 168,
-        'sem facatativa' => 164,
-        'sem florencia' => 55,
-        'sem floridablanca' => 170,
-        'sem funza' => 117,
-        'sem fusagazuga' => 151,
-        'sem girardot' => 179,
-        'sem giron' => 287,
-        'sem guainia' => 116,
-        'sem ibague' => 147,
-        'sem apartado' => 148,
-        'sem ipiales' => 134,
-        'sem itagui' => 135,
-        'sem jamundi' => 146,
-        'sem lorica' => 67,
-        'sem magangue' => 133,
-        'sem maicao' => 69,
-        'sem malambo' => 161,
-        'sem manizales' => 174,
-        'sem medellin' => 180,
-        'sem monteria' => 176,
-        'sem mosquera' => 153,
-        'sem neiva' => 105,
-        'sem palmira' => 152,
-        'sem pasto' => 125,
-        'sem pereira' => 78,
-        'sem piedecuesta' => 79,
-        'sem pitalito' => 138,
-        'sem popayan' => 159,
-        'sem quibdo' => 162,
-        'sem riohacha' => 150,
-        'sem rionegro' => 129,
-        'sem sabaneta' => 108,
-        'sem sahagun' => 142,
-        'sem san andres' => 158,
-        'sem santa marta' => 126,
-        'sem soacha' => 119,
-        'sem sogamoso' => 172,
-        'sem soledad' => 123,
-        'sem tulua' => 120,
-        'sem tumaco' => 93,
-        'sem tunja' => 141,
-        'sem turbo' => 137,
-        'sem uribia' => 144,
-        'sem valledupar' => 171,
-        'sem villavicencio' => 124,
-        'sem yopal' => 289,
-        'sem yumbo' => 169,
-        'sem zipaquira' => 156,
-        'casur' => 296,
-        'fiduprevisora' => 297
-    ];
-    
+    // CouponsController (o donde tengas el mapa)
+private static array $pagaduriasMap      = [];  // nombre exacto  → id
+private static array $pagaduriasNoSpaces = [];  // nombre-sin-esp → id
+
+public function __construct()
+{
+    if (empty(self::$pagaduriasMap)) {
+        self::$pagaduriasMap = PagaduriaHelper::map();            // nombre → id
+        // índice auxiliar: “sedhuila” → id
+        self::$pagaduriasNoSpaces = collect(self::$pagaduriasMap)
+            ->mapWithKeys(fn($id, $name) =>
+                [str_replace(' ', '', mb_strtolower($name)) => $id]
+            )
+            ->all();
+    }
+}
+
+
+    private static function loadPagadurias(): void
+{
+    if (empty(self::$pagaduriasMap)) {
+        self::$pagaduriasMap = PagaduriaHelper::map();
+    }
+}
 
     public function showCouponsForm()
     {
@@ -233,60 +144,30 @@ class CouponsController extends Controller
 
     return response()->json($results, 200);
 }
-
-/**
- * Dado un string normalizado, intenta derivar una clave y encontrarla en el mapa.
- *
- *  - Si el string tiene múltiples palabras, arma "primera palabra + resto".
- *  - Si solo tiene una palabra, usa esa palabra directamente como clave.
- *  - Retorna el id de la pagaduría si existe en self::$pagaduriasMap, o null.
- */
-/**
- * Dado un string normalizado, intenta derivar una clave y encontrarla en el mapa.
- *
- * - Si el string tiene múltiples palabras, arma "primera palabra + resto".
- * - Si solo tiene una palabra, usa esa palabra directamente como clave.
- * - Retorna el id de la pagaduría si existe en self::$pagaduriasMap, o null.
- *
- * @param string $normalized
- * @return int|null
- */
-private function getPagaduriaIdFromString(string $normalized): ?int
+private function getPagaduriaIdFromString(string $input): ?int
 {
-    Log::debug('Inicio de getPagaduriaIdFromString', ['input' => $normalized]);
+    if (!$input) return null;
 
-    if (empty($normalized)) {
-        Log::warning('Input vacío en getPagaduriaIdFromString');
-        return null;
+    $clean = mb_strtolower($input);
+
+    // quita prefijos “coupons”, “embargos” y “descuentos”
+    $clean = preg_replace('/^(coupons|embargos|descuentos)/', '', $clean);
+
+    /* 1 ▸ intento directo (con espacio) */
+    if (isset(self::$pagaduriasMap[$clean])) {
+        return self::$pagaduriasMap[$clean];
     }
 
-    // Separamos en espacios (todas las palabras)
-    $parts = explode(' ', $normalized);
-    Log::debug('Partes extraídas del string normalizado', ['parts' => $parts]);
-
-    if (count($parts) > 1) {
-        // Ejemplo: "fuerzas casur" => $tipo = "fuerzas", $resto = "casur"
-        $tipo = array_shift($parts);
-        $resto = implode(' ', $parts);
-        $key = $tipo . ' ' . $resto;
-    } else {
-        // Solo 1 palabra, ej: "casur"
-        $key = $normalized;
+    /* 2 ▸ intento sin espacios */
+    $noSpace = str_replace(' ', '', $clean);
+    if (isset(self::$pagaduriasNoSpaces[$noSpace])) {
+        return self::$pagaduriasNoSpaces[$noSpace];
     }
 
-    Log::debug('Clave generada para buscar en el mapa', ['key' => $key]);
-
-    // Intentamos obtener el ID desde el mapa estático
-    $id = self::$pagaduriasMap[$key] ?? null;
-
-    if ($id) {
-        Log::info('ID de pagaduría encontrado en el mapa', ['id' => $id]);
-    } else {
-        Log::warning('ID de pagaduría no encontrado en el mapa', ['key' => $key]);
-    }
-
-    return $id;
+    /* 3 ▸ nada encontrado */
+    return null;
 }
+
 
 
 
