@@ -433,7 +433,7 @@
     "sed vaupes": 132,
     "sed vichada": 32,
     "sem villavicencio": 124,
-    "sed sincelejo": 27,
+    "sem sincelejo": 27,
     "sem yopal": 289,
     "sem yumbo": 169,
     "sem zipaquira": 156,
