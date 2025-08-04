@@ -8,8 +8,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use App\Traits\ParsesPgTzDates;
 use App\Helpers\PagaduriaHelper;
-
-/* modelos SED / SEM */
 use App\EmbargosSedCauca;
 use App\EmbargosSedChoco;
 use App\EmbargosSedCordoba;
@@ -22,21 +20,19 @@ use App\EmbargosSemCali;
 use App\EmbargosSemPopayan;
 use App\EmbargosSemMonteria;
 use App\EmbargosSemQuibdo;
-/* modelo genérico */
 use App\EmbargosGen;
 
 class EmbargosController extends Controller
 {
     use ParsesPgTzDates;
 
-    private static array $modelsMap = [];
-    private static array $columnMap = [];
-    private static array $pagaduriasMap = [];
-    private static array $pagaduriasNoSpaces = [];
+    private static $modelsMap   = [];
+    private static $columnMap   = [];
+    private static $pagMap      = [];
+    private static $pagNoSpaces = [];
 
     public function __construct()
     {
-        /* mapa de modelos particulares */
         if (empty(self::$modelsMap)) {
             self::$modelsMap = [
                 'sedcauca'        => EmbargosSedCauca::class,
@@ -44,128 +40,99 @@ class EmbargosController extends Controller
                 'sedcordoba'      => EmbargosSedCordoba::class,
                 'semcali'         => EmbargosSemCali::class,
                 'sedvalle'        => EmbargosSedValle::class,
-                'sedcauca'        => EmbargosSedCauca::class,
                 'sedcaldas'       => EmbargosSedCaldas::class,
+                'sedatlantico'    => EmbargosSedAtlantico::class,
                 'sedbolivar'      => EmbargosSedBolivar::class,
                 'sembarranquilla' => EmbargosSemBarranquilla::class,
                 'sempopayan'      => EmbargosSemPopayan::class,
                 'semmonteria'     => EmbargosSemMonteria::class,
                 'semquibdo'       => EmbargosSemQuibdo::class,
             ];
-
-            /* columna primaria para cada modelo */
-            foreach (self::$modelsMap as $key => $cls) {
-                self::$columnMap[$cls] = in_array($cls, [EmbargosSemQuibdo::class, EmbargosSedBolivar::class])
-                    ? 'idemp'
-                    : 'doc';
+            foreach (self::$modelsMap as $cls) {
+                self::$columnMap[$cls] = in_array($cls, [EmbargosSemQuibdo::class, EmbargosSedBolivar::class]) ? 'idemp' : 'doc';
             }
         }
-
-        /* mapa de pagadurías → id numérico (panel_pagaduria) */
-        if (empty(self::$pagaduriasMap)) {
-            self::$pagaduriasMap      = PagaduriaHelper::map();
-            self::$pagaduriasNoSpaces = collect(self::$pagaduriasMap)
-                ->mapWithKeys(fn($id, $name) => [str_replace(' ', '', mb_strtolower($name)) => $id])
-                ->all();
+        if (empty(self::$pagMap)) {
+            self::$pagMap = PagaduriaHelper::map();
+            self::$pagNoSpaces = collect(self::$pagMap)->mapWithKeys(function ($id, $name) {
+                return [str_replace(' ', '', mb_strtolower($name)) => $id];
+            })->all();
         }
     }
 
-    public function index(Request $request)
+    public function index(Request $r)
     {
-        Log::info('EmbargosController@index start', $request->all());
+        Log::info('EmbargosController@index start', $r->all());
 
-        $doc            = $request->input('doc');
-        $rawType        = $request->input('pagaduria');      // p.ej. EmbargosSedMagdalena
-        $rawLabel       = $request->input('pagaduriaLabel'); // p.ej. SEDMAGDALENA
-        $monthParam     = $request->input('month');
-        $yearParam      = $request->input('year');
+        $doc        = $r->input('doc');
+        $rawType    = $r->input('pagaduria');
+        $rawLabel   = $r->input('pagaduriaLabel');
+        $monthParam = $r->input('month');
+        $yearParam  = $r->input('year');
 
         $typeNorm  = trim(mb_strtolower($rawType));
         $labelNorm = trim(mb_strtolower($rawLabel));
 
-        /* ------------- buscar id pagaduría ------------- */
-        $idPagaduria = $this->getPagaduriaIdFromString($typeNorm)
-            ?: $this->getPagaduriaIdFromString($labelNorm);
-
-        Log::info('Resolved pagaduria id', ['idPagaduria' => $idPagaduria]);
+        $idPag = $this->pagId($typeNorm) ?: $this->pagId($labelNorm);
+        Log::info('Resolved pagaduria id', ['id' => $idPag]);
 
         $results = [];
 
-        /* -------- 1 ▸ modelo particular (si existe) ------- */
         $modelKey = str_replace(['embargos', 'descuentos', 'coupons'], '', $typeNorm);
         if (isset(self::$modelsMap[$modelKey])) {
-            $modelClass = self::$modelsMap[$modelKey];
-            $column     = self::$columnMap[$modelClass];
-            Log::info('Querying specific model', ['model' => $modelClass, 'column' => $column]);
-
-            $modelRows = $modelClass::on('pgsql')
-                ->where($column, 'LIKE', "%{$doc}%")
-                ->get()
-                ->map
-                ->getAttributes()
-                ->all();
-
-            Log::info('Specific model returned', ['count' => count($modelRows)]);
-            $results = array_merge($results, $modelRows);
+            $model   = self::$modelsMap[$modelKey];
+            $column  = self::$columnMap[$model];
+            Log::info('Querying specific model', ['model' => $model, 'column' => $column]);
+            $part    = $model::on('pgsql')->where($column, 'LIKE', "%{$doc}%")->get()->map(function ($r) {
+                return $r->getAttributes();
+            })->all();
+            Log::info('Specific model rows', ['count' => count($part)]);
+            $results = array_merge($results, $part);
         } else {
             Log::info('No specific model matched', ['key' => $modelKey]);
         }
 
-        /* -------- 2 ▸ EmbargosGen filtrando por id ------- */
-        $queryGen = EmbargosGen::on('pgsql')->where('doc', 'LIKE', "%{$doc}%");
-
-        if ($idPagaduria) {
-            $queryGen->where('idpagaduria', $idPagaduria);
+        $gen = EmbargosGen::on('pgsql')->where('doc', 'LIKE', "%{$doc}%");
+        if ($idPag) {
+            $gen->where('idpagaduria', $idPag);
         } else {
-            $queryGen->where(function ($q) use ($rawType, $rawLabel) {
-                $q->where('pagaduria', $rawType)
-                  ->orWhere('pagaduria', $rawLabel);
+            $gen->where(function ($q) use ($rawType, $rawLabel) {
+                $q->where('pagaduria', $rawType)->orWhere('pagaduria', $rawLabel);
             });
         }
-
         if (is_numeric($monthParam) && is_numeric($yearParam)) {
-            $month     = str_pad($monthParam, 2, '0', STR_PAD_LEFT);
-            $startDate = Carbon::createFromFormat('Y-m', "{$yearParam}-{$month}")->startOfMonth();
-            $endDate   = Carbon::createFromFormat('Y-m', "{$yearParam}-{$month}")->endOfMonth();
-            $queryGen->whereRaw("to_date(nomina, 'YYYY-MM-DD') BETWEEN ? AND ?", [
-                $startDate->toDateString(),
-                $endDate->toDateString()
-            ]);
+            $m  = str_pad($monthParam, 2, '0', STR_PAD_LEFT);
+            $s  = Carbon::createFromFormat('Y-m', "{$yearParam}-{$m}")->startOfMonth()->toDateString();
+            $e  = Carbon::createFromFormat('Y-m', "{$yearParam}-{$m}")->endOfMonth()->toDateString();
+            $gen->whereRaw("to_date(nomina,'YYYY-MM-DD') BETWEEN ? AND ?", [$s, $e]);
         }
-
-        $sqlGen     = $queryGen->toSql();
-        $bindingsGen = $queryGen->getBindings();
-        Log::info('EmbargosGen SQL', ['sql' => $sqlGen, 'bindings' => $bindingsGen]);
-
-        $genRows = $queryGen->get()->map->getAttributes()->all();
-        Log::info('EmbargosGen results', ['count' => count($genRows)]);
+        Log::info('EmbargosGen SQL', ['sql' => $gen->toSql(), 'bindings' => $gen->getBindings()]);
+        $genRows = $gen->get()->map(function ($r) {
+            return $r->getAttributes();
+        })->all();
+        Log::info('EmbargosGen rows', ['count' => count($genRows)]);
 
         $results = array_merge($results, $genRows);
-
-        /* -------- normalizar fechas nomina -------- */
-        $results = $this->normalizeNominaDates($results);
+        $results = $this->normNomina($results);
 
         Log::info('EmbargosController@index end', ['total' => count($results)]);
-
         return response()->json($results, 200);
     }
 
-    /* ---------------- helpers ---------------- */
-
-    private function getPagaduriaIdFromString(string $input): ?int
+    private function pagId($str)
     {
-        if (!$input) return null;
-        $clean = mb_strtolower($input);
-        $clean = preg_replace('/^(coupons|embargos|descuentos)/', '', $clean);
-
-        if (isset(self::$pagaduriasMap[$clean])) {
-            return self::$pagaduriasMap[$clean];
+        if (!$str) {
+            return null;
+        }
+        $clean = preg_replace('/^(coupons|embargos|descuentos)/', '', $str);
+        if (isset(self::$pagMap[$clean])) {
+            return self::$pagMap[$clean];
         }
         $noSpace = str_replace(' ', '', $clean);
-        return self::$pagaduriasNoSpaces[$noSpace] ?? null;
+        return isset(self::$pagNoSpaces[$noSpace]) ? self::$pagNoSpaces[$noSpace] : null;
     }
 
-    private function normalizeNominaDates(array $rows): array
+    private function normNomina(array $rows)
     {
         foreach ($rows as &$row) {
             if (isset($row['nomina']) && $row['nomina']) {
