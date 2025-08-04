@@ -29,9 +29,9 @@ class CouponsController extends Controller
 {
 
     // CouponsController (o donde tengas el mapa)
-private static array $pagaduriasMap      = [];  // nombre exacto  → id
-private static array $pagaduriasNoSpaces = [];  // nombre-sin-esp → id
-
+    private static $pagaduriasMap = [];
+    private static $pagaduriasNoSpaces = [];
+    
 public function __construct()
 {
     if (empty(self::$pagaduriasMap)) {
