@@ -2,6 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+use App\Traits\ParsesPgTzDates;
+use App\Helpers\PagaduriaHelper;
+
+/* modelos SED / SEM */
 use App\DescuentosSedAtlantico;
 use App\DescuentosSedCauca;
 use App\DescuentosSedCordoba;
@@ -13,151 +21,178 @@ use App\DescuentosSemBarranquilla;
 use App\DescuentosSemPopayan;
 use App\DescuentosSemMonteria;
 use App\DescuentosSemQuibdo;
+/* modelo genérico */
 use App\DescuentosGen;
-use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\DB;
-use App\Traits\ParsesPgTzDates;
 
 class DescuentosController extends Controller
 {
     use ParsesPgTzDates;
 
+    private static array $modelsMap = [];
+    private static array $columnMap = [];
+    private static array $pagaduriasMap = [];
+    private static array $pagaduriasNoSpaces = [];
+
+    public function __construct()
+    {
+        if (empty(self::$modelsMap)) {
+            self::$modelsMap = [
+                'sedatlantico'     => DescuentosSedAtlantico::class,
+                'sedcauca'         => DescuentosSedCauca::class,
+                'sedcordoba'       => DescuentosSedCordoba::class,
+                'sedchoco'         => DescuentosSedChoco::class,
+                'sedcaldas'        => DescuentosSedCaldas::class,
+                'sedvalle'         => DescuentosSedValle::class,
+                'semcali'          => DescuentosSemCali::class,
+                'sembarranquilla'  => DescuentosSemBarranquilla::class,
+                'sempopayan'       => DescuentosSemPopayan::class,
+                'semmonteria'      => DescuentosSemMonteria::class,
+                'semquibdo'        => DescuentosSemQuibdo::class,
+            ];
+
+            foreach (self::$modelsMap as $k => $cls) {
+                self::$columnMap[$cls] = $cls === DescuentosSemQuibdo::class ? 'idemp' : 'doc';
+            }
+        }
+
+        if (empty(self::$pagaduriasMap)) {
+            self::$pagaduriasMap      = PagaduriaHelper::map();
+            self::$pagaduriasNoSpaces = collect(self::$pagaduriasMap)
+                ->mapWithKeys(fn($id, $name) => [str_replace(' ', '', mb_strtolower($name)) => $id])
+                ->all();
+        }
+    }
+
     public function index(Request $request)
-{
-    $doc            = $request->input('doc');
-    $descuentoType  = $request->input('pagaduria');
-    $pagaduriaLabel = $request->input('pagaduriaLabel');
+    {
+        Log::info('DescuentosController@index start', $request->all());
 
-    $models = [
-        DescuentosSedAtlantico::class,
-        DescuentosSemMonteria::class,
-        DescuentosSemBarranquilla::class,
-        DescuentosSedCauca::class,
-        DescuentosSedCaldas::class,
-        DescuentosSedCordoba::class,
-        DescuentosSedChoco::class,
-        DescuentosSedValle::class,
-        DescuentosSemCali::class,
-        DescuentosSemPopayan::class,
-        DescuentosSemQuibdo::class,
-    ];
+        $doc        = $request->input('doc');
+        $rawType    = $request->input('pagaduria');
+        $rawLabel   = $request->input('pagaduriaLabel');
+        $monthParam = $request->input('month');
+        $yearParam  = $request->input('year');
 
-    $results = [];
+        $typeNorm  = trim(mb_strtolower($rawType));
+        $labelNorm = trim(mb_strtolower($rawLabel));
 
-    foreach ($models as $model) {
-        if (class_basename($model) === $descuentoType) {
-            $collection = $model::on('pgsql')
-                ->where('doc', 'LIKE', "%{$doc}%")
-                ->get();
+        $idPagaduria = $this->getPagaduriaIdFromString($typeNorm)
+            ?: $this->getPagaduriaIdFromString($labelNorm);
 
-            foreach ($collection as $item) {
-                $casts = $item->getCasts();
-                $dateFields = array_keys(array_filter($casts, function ($t) {
-                    return in_array($t, ['date','datetime','immutable_date','immutable_datetime']);
-                }));
+        Log::info('Resolved pagaduria id', ['idPagaduria' => $idPagaduria]);
 
-                foreach ($dateFields as $field) {
-                    $raw = $item->getOriginal($field);
-                    if (preg_match('/^\d{1,2}-[a-z]{3}-\d{2}$/i', $raw)) {
-                        Log::error('Formato inválido de fecha', [
-                            'model'     => $model,
-                            'id'        => $item->id,
-                            'column'    => $field,
-                            'raw_value' => $raw,
-                        ]);
-                    }
-                }
-            }
+        $results   = [];
+        $modelKey  = str_replace(['coupons', 'descuentos', 'embargos'], '', $typeNorm);
 
-            $results = array_merge($results, $collection->toArray());
+        if (isset(self::$modelsMap[$modelKey])) {
+            $modelClass = self::$modelsMap[$modelKey];
+            $column     = self::$columnMap[$modelClass];
+
+            Log::info('Querying specific model', ['model' => $modelClass, 'column' => $column]);
+
+            $specificRows = $modelClass::on('pgsql')
+                ->where($column, 'LIKE', "%{$doc}%")
+                ->get()
+                ->map
+                ->getAttributes()
+                ->all();
+
+            Log::info('Specific model results', ['count' => count($specificRows)]);
+            $results = array_merge($results, $specificRows);
+        } else {
+            Log::info('No specific model matched', ['key' => $modelKey]);
         }
-    }
 
-    $genCollection = DescuentosGen::on('pgsql')
-        ->where('doc', 'LIKE', "%{$doc}%")
-        ->where(function ($q) use ($descuentoType, $pagaduriaLabel) {
-            $q->where('pagaduria', $descuentoType)
-              ->orWhere('pagaduria', $pagaduriaLabel);
-        })
-        ->get();
+        $queryGen = DescuentosGen::on('pgsql')->where('doc', 'LIKE', "%{$doc}%");
 
-    foreach ($genCollection as $item) {
-        $casts = $item->getCasts();
-        $dateFields = array_keys(array_filter($casts, function ($t) {
-            return in_array($t, ['date','datetime','immutable_date','immutable_datetime']);
-        }));
-
-        foreach ($dateFields as $field) {
-            $raw = $item->getOriginal($field);
-            if (preg_match('/^\d{1,2}-[a-z]{3}-\d{2}$/i', $raw)) {
-                Log::error('Formato inválido de fecha', [
-                    'model'     => DescuentosGen::class,
-                    'id'        => $item->id,
-                    'column'    => $field,
-                    'raw_value' => $raw,
-                ]);
-            }
+        if ($idPagaduria) {
+            $queryGen->where('idpagaduria', $idPagaduria);
+        } else {
+            $queryGen->where(function ($q) use ($rawType, $rawLabel) {
+                $q->where('pagaduria', $rawType)
+                  ->orWhere('pagaduria', $rawLabel);
+            });
         }
+
+        if (is_numeric($monthParam) && is_numeric($yearParam)) {
+            $month     = str_pad($monthParam, 2, '0', STR_PAD_LEFT);
+            $startDate = Carbon::createFromFormat('Y-m', "{$yearParam}-{$month}")->startOfMonth();
+            $endDate   = Carbon::createFromFormat('Y-m', "{$yearParam}-{$month}")->endOfMonth();
+            $queryGen->whereBetween('nomina', [$startDate, $endDate]);
+        }
+
+        $sql   = $queryGen->toSql();
+        $bind  = $queryGen->getBindings();
+        Log::info('DescuentosGen SQL', ['sql' => $sql, 'bindings' => $bind]);
+
+        $genRows = $queryGen->get()->map->getAttributes()->all();
+        Log::info('DescuentosGen results', ['count' => count($genRows)]);
+
+        $results = array_merge($results, $genRows);
+
+        $results = $this->normalizeNominaDates($results);
+
+        Log::info('DescuentosController@index end', ['total' => count($results)]);
+
+        return response()->json($results, 200);
     }
-
-    $results = array_merge($results, $genCollection->toArray());
-
-    return response()->json($this->normalizeNominaDates($results), 200);
-}
-
-    
-    
-    
 
     public function getDescuentosByPagaduria(Request $request)
-{
-    if (!$request->has(['month', 'year', 'pagaduria'])) {
-        Log::info('getDescuentosByPagaduria request missing params', $request->all());
-        return response()->json(['error' => 'month, year y pagaduria son requeridos.'], 400);
+    {
+        if (!$request->has(['month', 'year', 'pagaduria'])) {
+            Log::info('getDescuentosByPagaduria missing params', $request->all());
+            return response()->json(['error' => 'month, year y pagaduria son requeridos.'], 400);
+        }
+
+        $month     = str_pad($request->input('month'), 2, '0', STR_PAD_LEFT);
+        $year      = $request->input('year');
+        $name      = trim($request->input('pagaduria'));
+        $mliquid   = $request->input('mliquid');
+        $perPage   = (int) $request->input('perPage', 20);
+        $page      = (int) $request->input('page', 1);
+
+        $panel = DB::connection('pgsql')
+            ->table('panel_pagaduria')
+            ->where('nombre', 'ILIKE', $name)
+            ->first();
+
+        $start = Carbon::createFromFormat('Y-m', "{$year}-{$month}")->startOfMonth();
+        $end   = Carbon::createFromFormat('Y-m', "{$year}-{$month}")->endOfMonth();
+
+        $base = DescuentosGen::on('pgsql')
+            ->when($panel, fn($q) => $q->where('idpagaduria', $panel->id))
+            ->when(!$panel, fn($q) => $q->where('pagaduria', 'ILIKE', "%{$name}%"))
+            ->whereBetween('nomina', [$start, $end]);
+
+        if ($mliquid) {
+            $base->where('mliquid', 'ILIKE', "%{$mliquid}%");
+        }
+
+        $total = $base->count();
+
+        $rows = $base->select('id', 'doc', 'nomp', 'mliquid', 'nomina', 'valor')
+            ->orderBy('doc')
+            ->forPage($page, $perPage)
+            ->get()
+            ->map(function ($r) {
+                $r->nomina = Carbon::parse($r->nomina)->toDateString();
+                return $r;
+            });
+
+        Log::info('getDescuentosByPagaduria results', ['total' => $total]);
+
+        return response()->json(['data' => $rows, 'total' => $total], 200);
     }
 
-    Log::info('getDescuentosByPagaduria request', $request->all());
+    private function getPagaduriaIdFromString(string $input): ?int
+    {
+        if (!$input) return null;
+        $clean = preg_replace('/^(coupons|descuentos|embargos)/', '', mb_strtolower($input));
 
-    $month     = str_pad($request->input('month'), 2, '0', STR_PAD_LEFT);
-    $year      = $request->input('year');
-    $pagaduria = $request->input('pagaduria');
-    $mliquid   = $request->input('mliquid');
-    $perPage   = (int) $request->input('perPage', 20);
-    $page      = (int) $request->input('page', 1);
-
-    $start = Carbon::createFromFormat('Y-m', "{$year}-{$month}")->startOfMonth();
-    $end   = Carbon::createFromFormat('Y-m', "{$year}-{$month}")->endOfMonth();
-
-    $base = DescuentosGen::on('pgsql')
-        ->where('pagaduria', 'ILIKE', "%{$pagaduria}%")
-        ->whereBetween('nomina', [$start, $end]);
-
-    if ($mliquid) {
-        $base->where('mliquid', 'ILIKE', "%{$mliquid}%");
+        if (isset(self::$pagaduriasMap[$clean]))             return self::$pagaduriasMap[$clean];
+        $noSpace = str_replace(' ', '', $clean);
+        return self::$pagaduriasNoSpaces[$noSpace] ?? null;
     }
-
-    $total = $base->count();
-
-    $rows = $base->select('id', 'doc', 'nomp', 'mliquid', 'nomina', 'valor')
-        ->orderBy('doc')
-        ->forPage($page, $perPage)
-        ->get()
-        ->map(function ($r) {
-            $r->nomina = Carbon::parse($r->nomina)->toDateString();
-            return $r;
-        });
-
-    Log::info('getDescuentosByPagaduria resultados', [
-        'total' => $total,
-        'data'  => $rows->toArray(),
-    ]);
-
-    return response()->json(['data' => $rows, 'total' => $total], 200);
-}
-
-
 
     private function normalizeNominaDates(array $rows): array
     {
