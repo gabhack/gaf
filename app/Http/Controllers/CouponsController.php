@@ -32,18 +32,18 @@ class CouponsController extends Controller
     private static $pagaduriasMap = [];
     private static $pagaduriasNoSpaces = [];
     
-public function __construct()
-{
-    if (empty(self::$pagaduriasMap)) {
-        self::$pagaduriasMap = PagaduriaHelper::map();            // nombre → id
-        // índice auxiliar: “sedhuila” → id
-        self::$pagaduriasNoSpaces = collect(self::$pagaduriasMap)
-            ->mapWithKeys(fn($id, $name) =>
-                [str_replace(' ', '', mb_strtolower($name)) => $id]
-            )
-            ->all();
+    public function __construct()
+    {
+        if (empty(self::$pagaduriasMap)) {
+            self::$pagaduriasMap = PagaduriaHelper::map();
+            self::$pagaduriasNoSpaces = collect(self::$pagaduriasMap)
+                ->mapWithKeys(function ($id, $name) {
+                    return [str_replace(' ', '', mb_strtolower($name)) => $id];
+                })
+                ->all();
+        }
     }
-}
+    
 
 
     private static function loadPagadurias(): void
