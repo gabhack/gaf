@@ -16,34 +16,27 @@ use App\Helpers\PagaduriaHelper;
 
 class CreditRequestController extends Controller
 {
+    /* -------- cache de pagadurías -------- */
+    private static $pagaduriasMap = [];
 
     public function __construct()
     {
         if (empty(self::$pagaduriasMap)) {
-            self::$pagaduriasMap = PagaduriaHelper::map();
+            self::$pagaduriasMap = PagaduriaHelper::map();     // ['sedmagdalena' => 145, ...]
         }
     }
-    /* ------------------------------------------------ PAGADURÍAS --------------------------------------------- */
-    private static array $pagaduriasMap = [];
 
-    private static function loadPagadurias(): void
-{
-    if (empty(self::$pagaduriasMap)) {
-        self::$pagaduriasMap = PagaduriaHelper::map();
-    }
-}
-
-
-    protected function mapPagaduria($value)
+    /* -------- traduce texto / id a id numérico -------- */
+    private function mapPagaduria($value)
     {
         if (is_numeric($value)) {
             return (int) $value;
         }
         $key = trim(mb_strtolower($value));
-        return self::$pagaduriaMap[$key] ?? 0;
+        return isset(self::$pagaduriasMap[$key]) ? self::$pagaduriasMap[$key] : 0;
     }
 
-    /* -----------------------------------------------  SAVE INDIVIDUAL ----------------------------------------- */
+    /* ------------------------------- alta individual ------------------------------- */
     public function store(Request $request)
     {
         Log::info('store-in', $request->all());
@@ -89,10 +82,10 @@ class CreditRequestController extends Controller
             foreach ($request->input('carteras', []) as $c) {
                 CreditCartera::create([
                     'credit_request_id'    => $credit->id,
-                    'valor_cuota'          => $c['valor_cuota'] ?? 0,
-                    'saldo'                => $c['saldo'] ?? 0,
-                    'tipo_cartera'         => $c['tipo_cartera'] ?? null,
-                    'nombre_entidad'       => $c['nombre_entidad'] ?? null,
+                    'valor_cuota'          => isset($c['valor_cuota']) ? $c['valor_cuota'] : 0,
+                    'saldo'                => isset($c['saldo']) ? $c['saldo'] : 0,
+                    'tipo_cartera'         => isset($c['tipo_cartera']) ? $c['tipo_cartera'] : null,
+                    'nombre_entidad'       => isset($c['nombre_entidad']) ? $c['nombre_entidad'] : null,
                     'opera_x_desprendible' => ! empty($c['opera_x_desprendible']),
                 ]);
             }
@@ -107,7 +100,7 @@ class CreditRequestController extends Controller
         }
     }
 
-    /* ----------------------------------------  CARGA MASIVA --------------------------------------------------- */
+    /* ------------------------------- carga masiva ------------------------------- */
     public function bulkStore(Request $request)
     {
         Log::info('bulk-in', $request->all());
@@ -137,7 +130,6 @@ class CreditRequestController extends Controller
 
         DB::beginTransaction();
         try {
-            /*  NO se invierte el orden: se insertan tal y como vienen                                    */
             foreach ($rows['rows'] as $r) {
 
                 $credit = CreditRequest::create([
@@ -152,18 +144,18 @@ class CreditRequestController extends Controller
                     'status'       => 'pendiente',
                     'tipo_credito' => $r['tipo_credito'],
                     'user_id'      => Auth::id(),
-                    'tipo_pension' => $r['tipo_pension'] ?? null,
-                    'resolucion'   => $r['resolucion']   ?? null,
+                    'tipo_pension' => isset($r['tipo_pension']) ? $r['tipo_pension'] : null,
+                    'resolucion'   => isset($r['resolucion'])   ? $r['resolucion']   : null,
                 ]);
 
                 if (! empty($r['carteras'])) {
                     foreach ($r['carteras'] as $c) {
                         CreditCartera::create([
                             'credit_request_id'    => $credit->id,
-                            'tipo_cartera'         => $c['tipo_cartera']   ?? null,
-                            'nombre_entidad'       => $c['nombre_entidad'] ?? null,
-                            'valor_cuota'          => $c['valor_cuota']    ?? 0,
-                            'saldo'                => $c['saldo']          ?? 0,
+                            'tipo_cartera'         => isset($c['tipo_cartera'])   ? $c['tipo_cartera']   : null,
+                            'nombre_entidad'       => isset($c['nombre_entidad']) ? $c['nombre_entidad'] : null,
+                            'valor_cuota'          => isset($c['valor_cuota'])    ? $c['valor_cuota']    : 0,
+                            'saldo'                => isset($c['saldo'])          ? $c['saldo']          : 0,
                             'opera_x_desprendible' => ! empty($c['opera_x_desprendible']),
                         ]);
                     }
@@ -189,7 +181,8 @@ class CreditRequestController extends Controller
         }
     }
 
-    /* -------------------------------------------  RESTO MÉTODOS  --------------------------------------------- */
+    /* -------------------- resto de métodos: subir docs, listar, estado, visado -------------------- */
+
     public function uploadDocument($id, Request $request)
     {
         if (! $request->hasFile('archivo')) {
@@ -236,8 +229,10 @@ class CreditRequestController extends Controller
             ->keyBy('user_id');
 
         $credits->transform(function ($c) use ($empresas) {
-            $c->empresa = optional(optional($empresas[$c->user_id] ?? null)->empresa)->nombre;
-            $c->causal  = optional($c->visado)->causal;
+            $c->empresa = isset($empresas[$c->user_id]) && $empresas[$c->user_id]->empresa
+                ? $empresas[$c->user_id]->empresa->nombre
+                : null;
+            $c->causal  = $c->visado ? $c->visado->causal : null;
             return $c;
         });
 
@@ -247,58 +242,55 @@ class CreditRequestController extends Controller
     public function uploadVisadoPdf($id, Request $request)
     {
         Log::info('uploadVisadoPdf-in', ['credit_id' => $id]);
-    
+
         $request->validate(['archivo' => 'required|file|mimes:pdf|max:20480']);
+
         $credit = CreditRequest::findOrFail($id);
-    
-        $path = $request->file('archivo')->store('public/visados');
+        $path   = $request->file('archivo')->store('public/visados');
         Log::info('uploadVisadoPdf-stored', ['path' => $path]);
-    
+
         $url = Storage::url($path);
-        $credit->forceFill(['pdf_path' => $url])->save();
-    
+        $credit->fill(['pdf_path' => $url])->save();
+
         Log::info('uploadVisadoPdf-saved', ['url' => $url, 'credit_id' => $credit->id]);
         return response()->json(['url' => $url], 200);
     }
-    
 
-public function bulkForm()
-{
-    return view('CreditRequest.CreditRequestBulk');
-}
+    public function bulkForm()
+    {
+        return view('CreditRequest.CreditRequestBulk');
+    }
 
-public function updateStatus($id, Request $request)
-{
-    Log::info('updateStatus-in', ['credit_id' => $id, 'payload' => $request->all()]);
+    public function updateStatus($id, Request $request)
+    {
+        Log::info('updateStatus-in', ['credit_id' => $id, 'payload' => $request->all()]);
 
-    $credit = CreditRequest::findOrFail($id);
-    $credit->status    = $request->status;
-    $credit->visado_id = $request->visado_id ?? $credit->visado_id;
-    $credit->save();
+        $credit = CreditRequest::findOrFail($id);
+        $credit->status    = $request->status;
+        $credit->visado_id = $request->visado_id ? $request->visado_id : $credit->visado_id;
+        $credit->save();
 
-    Log::info('updateStatus-saved', [
-        'credit_id' => $credit->id,
-        'status'    => $credit->status,
-        'visado_id' => $credit->visado_id
-    ]);
+        Log::info('updateStatus-saved', [
+            'credit_id' => $credit->id,
+            'status'    => $credit->status,
+            'visado_id' => $credit->visado_id,
+        ]);
 
-    return response()->json(['message' => 'Estado actualizado'], 200);
-}
-
+        return response()->json(['message' => 'Estado actualizado'], 200);
+    }
 
     public function markAsVisado($id)
     {
-        Log::info('markAsVisado - inicio', ['id' => $id]);
+        Log::info('markAsVisado-inicio', ['id' => $id]);
         try {
             $credit         = CreditRequest::findOrFail($id);
             $credit->status = 'visado';
             $credit->save();
-            Log::info('markAsVisado - visado', ['id' => $id]);
+            Log::info('markAsVisado-visado', ['id' => $id]);
             return response()->json(['message' => 'Crédito visado'], 200);
         } catch (\Throwable $e) {
-            Log::error('markAsVisado - error', ['id' => $id, 'e' => $e->getMessage()]);
+            Log::error('markAsVisado-error', ['id' => $id, 'e' => $e->getMessage()]);
             return response()->json(['message' => 'Error al visar', 'error' => $e->getMessage()], 500);
         }
     }
-
 }
