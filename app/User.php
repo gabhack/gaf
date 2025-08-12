@@ -9,11 +9,6 @@ class User extends Authenticatable
 {
     use Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'role_id',
         'id_company',
@@ -23,17 +18,12 @@ class User extends Authenticatable
         'password',
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
     protected $hidden = [
         'remember_token',
         'password',
     ];
 
-    protected $appends = ['consultas_diarias'];
+    protected $appends = ['consultas_diarias', 'entity_filters'];
 
     public function role()
     {
@@ -45,7 +35,6 @@ class User extends Authenticatable
         if ($this->role->name == $role) {
             return true;
         }
-
         return false;
     }
 
@@ -70,6 +59,14 @@ class User extends Authenticatable
         }
 
         return null;
+    }
+
+    public function getEntityFiltersAttribute()
+    {
+        if ($this->empresa && is_array($this->empresa->entity_filters)) {
+            return $this->empresa->entity_filters;
+        }
+        return [];
     }
 
     public function givePermission($permission)

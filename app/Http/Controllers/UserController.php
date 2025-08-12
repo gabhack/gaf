@@ -2,100 +2,80 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
+use App\User;
+use App\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('auth');
+        // Mantiene tu middleware de roles
         $this->middleware('role:ADMIN_SISTEMA,ADMIN_HEGO,ADMIN_AMI,COMPANY,CREAUSUARIOS');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         if (IsSuperAdmin() || IsAMIAdmin() || IsHEGOAdmin()) {
-            $lista = \App\User::all();
+            $lista = User::orderBy('id', 'desc')->get();
         } else {
             if (IsCompany()) {
-                $lista = \App\User::where('id_company', Auth::user()->id)
-                    ->orWhere('id_padre', Auth::user()->id)->get();
+                $lista = User::where('id_company', Auth::user()->id)
+                    ->orWhere('id_padre', Auth::user()->id)
+                    ->orderBy('id', 'desc')
+                    ->get();
             } else {
-                $lista = \App\User::where('id_padre', Auth::user()->id)->get();
+                $lista = User::where('id_padre', Auth::user()->id)
+                    ->orderBy('id', 'desc')
+                    ->get();
             }
         }
 
-        return view("usuarios/index")->with(["lista" => $lista]);
+        return view('usuarios/index', ['lista' => $lista]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        $roles = \App\Role::OrderBy('name')->get();
-        return view('usuarios/crear')->with([
-            'roles' => $roles
-        ]);
+        $roles = Role::orderBy('name')->get();
+        return view('usuarios/crear', ['roles' => $roles]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $usuario = new \App\User;
-        $usuario->name = $request->input('name');
-        $usuario->email = $request->input('email');
-        $usuario->password = bcrypt($request->input('password'));
+        $baseRules = [
+            'name'     => ['required', 'string', 'max:150'],
+            'email'    => ['required', 'email', 'max:190', 'unique:users,email'],
+            'password' => ['required', 'string', 'min:6'],
+        ];
+
         if (IsSuperAdmin() || IsAMIAdmin() || IsHEGOAdmin()) {
-            $usuario->rol_id = $request->input('role');
-            if ($request->input('hego')) {
-                $usuario->hego = 1;
-            } else {
-                $usuario->hego = NULL;
-            }
+            $baseRules['role'] = ['required', Rule::exists('roles', 'id')];
+        }
+
+        $validated = $request->validate($baseRules);
+
+        $usuario = new User();
+        $usuario->name     = strtoupper($validated['name']);
+        $usuario->email    = $validated['email'];
+        $usuario->password = bcrypt($validated['password']);
+
+        if (IsSuperAdmin() || IsAMIAdmin() || IsHEGOAdmin()) {
+            $usuario->role_id = (int) $request->input('role');
+            $usuario->hego    = $request->boolean('hego') ? 1 : null;
         } else {
-            $usuario->rol_id =  \App\Role::where('name', 'USUARIO')->first()->id;
-            $usuario->id_padre = Auth::user()->id;
-            if ($request->input('ami_silver')) {
-                $usuario->ami_silver = 1;
-            } else {
-                $usuario->ami_silver = NULL;
-            }
-            if ($request->input('ami_gold')) {
-                $usuario->ami_gold = 1;
-            } else {
-                $usuario->ami_gold = NULL;
-            }
-            if ($request->input('ami_diamond')) {
-                $usuario->ami_diamond = 1;
-            } else {
-                $usuario->ami_diamond = NULL;
-            }
+            $usuario->role_id  = Role::where('name', 'USUARIO')->value('id');
+            $usuario->id_padre = Auth::id();
+
+            $usuario->ami_silver  = $request->boolean('ami_silver') ? 1 : null;
+            $usuario->ami_gold    = $request->boolean('ami_gold') ? 1 : null;
+            $usuario->ami_diamond = $request->boolean('ami_diamond') ? 1 : null;
+
             if (IsCompany()) {
-                $usuario->id_company = Auth::user()->id;
-                if ($request->input('creausuarios')) {
-                    $usuario->creausuarios = 1;
-                } else {
-                    $usuario->creausuarios = NULL;
-                }
+                $usuario->id_company   = Auth::id();
+                $usuario->creausuarios = $request->boolean('creausuarios') ? 1 : null;
             } else {
                 $usuario->id_company = Auth::user()->id_company;
             }
@@ -103,98 +83,69 @@ class UserController extends Controller
 
         $usuario->save();
 
-        return redirect('usuarios');
+        return redirect('usuarios')->with('status', 'Usuario creado correctamente.');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        //
+        abort(404);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        $roles = \App\Role::OrderBy('name')->get();
-        $usuario = \App\User::find($id);
-        return view("usuarios/editar")->with(["roles" => $roles, "usuario" => $usuario]);
+        $usuario = User::findOrFail($id);
+        $roles   = Role::orderBy('name')->get();
+        return view('usuarios/editar', ['roles' => $roles, 'usuario' => $usuario]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
+        $usuario = User::findOrFail($id);
 
-        $usuario = \App\User::find($id);
-        $usuario->name = strtoupper($request->input('name'));
-        $usuario->email = $request->input('email');
+        $rules = [
+            'name'  => ['required', 'string', 'max:150'],
+            'email' => ['required', 'email', 'max:190', Rule::unique('users', 'email')->ignore($usuario->id)],
+        ];
 
-        if ($request->input('password') != "")
-            $usuario->password = bcrypt($request->input('password'));
-
-        if (IsSuperAdmin() || IsAMIAdmin() || IsHEGOAdmin()) {
-            $usuario->rol_id =  \App\Role::find($request->input('role'))->id;
-            if ($request->input('hego')) {
-                $usuario->hego = 1;
-            } else {
-                $usuario->hego = NULL;
-            }
-        } else {
-            if ($request->input('ami_silver')) {
-                $usuario->ami_silver = 1;
-            } else {
-                $usuario->ami_silver = NULL;
-            }
-            if ($request->input('ami_gold')) {
-                $usuario->ami_gold = 1;
-            } else {
-                $usuario->ami_gold = NULL;
-            }
-            if ($request->input('ami_diamond')) {
-                $usuario->ami_diamond = 1;
-            } else {
-                $usuario->ami_diamond = NULL;
-            }
+        if ($request->filled('password')) {
+            $rules['password'] = ['string', 'min:6'];
         }
 
-        if (IsCompany()) {
-            if ($request->input('creausuarios')) {
-                $usuario->creausuarios = 1;
-            } else {
-                $usuario->creausuarios = NULL;
+        if (IsSuperAdmin() || IsAMIAdmin() || IsHEGOAdmin()) {
+            $rules['role'] = ['required', Rule::exists('roles', 'id')];
+        }
+
+        $validated = $request->validate($rules);
+
+        $usuario->name  = strtoupper($validated['name']);
+        $usuario->email = $validated['email'];
+
+        if ($request->filled('password')) {
+            $usuario->password = bcrypt($request->input('password'));
+        }
+
+        if (IsSuperAdmin() || IsAMIAdmin() || IsHEGOAdmin()) {
+            $usuario->role_id = (int) $request->input('role');
+            $usuario->hego    = $request->boolean('hego') ? 1 : null;
+        } else {
+            $usuario->ami_silver  = $request->boolean('ami_silver') ? 1 : null;
+            $usuario->ami_gold    = $request->boolean('ami_gold') ? 1 : null;
+            $usuario->ami_diamond = $request->boolean('ami_diamond') ? 1 : null;
+
+            if (IsCompany()) {
+                $usuario->creausuarios = $request->boolean('creausuarios') ? 1 : null;
             }
         }
 
         $usuario->save();
 
-        return redirect('usuarios');
+        return redirect('usuarios')->with('status', 'Usuario actualizado correctamente.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        // \App\User::find($id)->forceDelete();
-        \App\User::find($id)->Delete();
-        return redirect('usuarios');
+        $usuario = User::findOrFail($id);
+        $usuario->delete(); // Soft delete si el modelo lo tiene; si no, borra duro
+        return redirect('usuarios')->with('status', 'Usuario eliminado correctamente.');
     }
 }

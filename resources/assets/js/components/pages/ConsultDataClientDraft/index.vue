@@ -20,7 +20,23 @@
         </div>
   
         <div id="consulta-container" class="row">
-          <FormConsult :user="user" @emitInfo="emitInfo" @downloadPdf="print" />
+          <FormConsult ref="formConsult" :user="user" @emitInfo="emitInfo" @downloadPdf="print" />
+  
+          <div class="col-12 mb-3" v-if="currentDoc">
+            <div class="action-bar">
+              <div class="form-inline">
+                <label class="mr-2 mb-0">Cédula</label>
+                <input class="form-control form-control-sm mr-2" :value="currentDoc" readonly />
+                <button class="btn btn-sm btn-outline-primary" @click="refreshConsulta" :disabled="isLoading">
+                  Actualizar
+                </button>
+              </div>
+              <div class="d-none d-md-flex align-items-center">
+                <span class="badge badge-light mr-2">Pagaduría: {{ pagaduriaLabel || '—' }}</span>
+                <button class="btn btn-sm btn-outline-secondary" @click="print">Descargar PDF</button>
+              </div>
+            </div>
+          </div>
   
           <div class="info-container col-12">
             <DatamesComponent v-if="pagaduriaType == 'FOPEP' && datamesFopep" :user="user" :datamesFopep="datamesFopep" />
@@ -84,7 +100,7 @@
             <DescuentosEmpty v-if="pagaduriaType == 'SED'" :descuentosempty="descuentosempty" />
             <Descuentos :selectedPeriod="selectedPeriod" v-else />
             <hr class="divider" />
-            <div class="col-12 text-right">
+            <div class="col-12 d-flex justify-content-end align-items-center">
               <CustomButton text="Visar" style="width: 164px" @click="visadoFunction" />
             </div>
           </template>
@@ -177,7 +193,8 @@
         },
         showCarterasModal: false,
         carteras: [],
-        carterasCargadas: false
+        carterasCargadas: false,
+        lastQuery: null
       }
     },
     watch: {
@@ -263,6 +280,11 @@
           compraCartera,
           cuotaMaxima
         }
+      },
+      currentDoc() {
+        if (this.lastQuery?.doc) return this.lastQuery.doc
+        const a = this.couponsIngresos?.items?.[0]?.doc
+        return a || null
       }
     },
     created() {
@@ -276,6 +298,7 @@
       ...mapActions('descuentosModule', ['fetchDescuentos']),
       emitInfo(payload) {
         this.isLoading = true
+        this.lastQuery = payload
         this.pagadurias = payload.pagadurias
         this.pagaduriaKey = payload.pagaduriaKey
         this.cargo = payload.cargo
@@ -422,6 +445,46 @@
         } finally {
           this.isLoading = false
         }
+      },
+      refreshConsulta() {
+        if (!this.lastQuery?.doc || !this.lastQuery?.pagaduria) {
+          this.$bvToast.toast('Primero realiza una consulta.', {
+            title: 'Atención',
+            autoHideDelay: 6000,
+            variant: 'warning',
+            solid: true
+          })
+          return
+        }
+        this.emitInfo({ ...this.lastQuery })
+      },
+      nuevaConsulta() {
+        this.type_consult = 'individual'
+        this.fechavinc = null
+        this.datamesFopep = null
+        this.datamessedvalle = null
+        this.datamesFidu = null
+        this.datamessemcali = null
+        this.descapli = []
+        this.descnoap = []
+        this.embargosempty = []
+        this.descuentosempty = []
+        this.selectedPeriod = ''
+        this.monto = 0
+        this.pagaduriaKey = ''
+        this.cargo = null
+        this.showOthers = false
+        this.pagadurias = null
+        this.carteras = []
+        this.carterasCargadas = false
+        this.visado = null
+        this.lastQuery = null
+        if (this.$refs.formConsult && this.$refs.formConsult.$el) {
+          const top = this.$refs.formConsult.$el.getBoundingClientRect().top + window.pageYOffset - 80
+          window.scrollTo({ top, behavior: 'smooth' })
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+        }
       }
     }
   }
@@ -460,6 +523,15 @@
   }
   .detallecliente-top-margin {
     margin-top: 20px;
+  }
+  .action-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffff;
+    border: 1px solid #e7eaee;
+    border-radius: 8px;
+    padding: 10px 12px;
   }
   </style>
   

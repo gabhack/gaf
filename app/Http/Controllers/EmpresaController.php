@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
+use Illuminate\Support\Facades\Auth;
 
 class EmpresaController extends Controller
 {
@@ -341,4 +342,46 @@ class EmpresaController extends Controller
             return response()->json(['message' => $message], 500);
         }
     }
+
+    public function entityFiltersForCurrentUser(Request $request)
+    {
+        $user = Auth::user();
+        Log::info('entityFiltersForCurrentUser - Usuario autenticado', ['user' => $user]);
+    
+        if (!$user) {
+            Log::warning('entityFiltersForCurrentUser - Usuario no autenticado');
+            return response()->json([], 401);
+        }
+    
+        $companyUserId = $user->id_company ?: $user->id;
+        Log::info('entityFiltersForCurrentUser - companyUserId', ['companyUserId' => $companyUserId]);
+    
+        $empresa = Empresa::where('user_id', $companyUserId)->first();
+        Log::info('entityFiltersForCurrentUser - Empresa encontrada', ['empresa' => $empresa]);
+    
+        $filters = [];
+        if ($empresa && $empresa->entity_filters) {
+            Log::info('entityFiltersForCurrentUser - entity_filters crudo', ['entity_filters' => $empresa->entity_filters]);
+            $filters = is_array($empresa->entity_filters)
+                ? $empresa->entity_filters
+                : (json_decode($empresa->entity_filters, true) ?: []);
+        } else {
+            Log::info('entityFiltersForCurrentUser - No se encontraron filtros para la empresa');
+        }
+    
+        Log::info('entityFiltersForCurrentUser - Filtros antes de limpiar', ['filters' => $filters]);
+    
+        $filters = collect($filters)
+            ->map(fn($s) => strtoupper(trim((string)$s)))
+            ->filter(fn($s) => $s !== '' && $s !== 'NO HAY CREDITO')
+            ->unique()
+            ->values()
+            ->all();
+    
+        Log::info('entityFiltersForCurrentUser - Filtros finales', ['filters' => $filters]);
+    
+        return response()->json($filters);
+    }
+
+    
 }

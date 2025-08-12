@@ -23,6 +23,11 @@ class Empresa extends Model
         'departamento_id',
         'ciudad_id',
         'direccion',
+        'entity_filters',
+    ];
+
+    protected $casts = [
+        'entity_filters' => 'array',
     ];
 
     public function tipo_sociedad()
@@ -78,5 +83,10 @@ class Empresa extends Model
     public function sedes()
     {
         return $this->hasMany(Sede::class);
+    }
+
+    public function miembros()
+    {
+        return $this->hasMany(User::class, 'id_company', 'user_id');
     }
 }
