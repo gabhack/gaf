@@ -346,42 +346,73 @@ class EmpresaController extends Controller
     public function entityFiltersForCurrentUser(Request $request)
     {
         $user = Auth::user();
-        Log::info('entityFiltersForCurrentUser - Usuario autenticado', ['user' => $user]);
+        Log::info('entityFiltersForCurrentUser - Usuario autenticado', [
+            'user_id' => $user ? $user->id : null,
+            'id_company' => $user ? $user->id_company : null,
+        ]);
     
         if (!$user) {
             Log::warning('entityFiltersForCurrentUser - Usuario no autenticado');
             return response()->json([], 401);
         }
     
-        $companyUserId = $user->id_company ?: $user->id;
+        // si tiene empresa, usamos ese user_id; si no, su propio id
+        $companyUserId = $user->id_company ? $user->id_company : $user->id;
         Log::info('entityFiltersForCurrentUser - companyUserId', ['companyUserId' => $companyUserId]);
     
         $empresa = Empresa::where('user_id', $companyUserId)->first();
-        Log::info('entityFiltersForCurrentUser - Empresa encontrada', ['empresa' => $empresa]);
+        Log::info('entityFiltersForCurrentUser - Empresa encontrada', [
+            'empresa_id' => $empresa ? $empresa->id : null
+        ]);
     
         $filters = [];
-        if ($empresa && $empresa->entity_filters) {
-            Log::info('entityFiltersForCurrentUser - entity_filters crudo', ['entity_filters' => $empresa->entity_filters]);
-            $filters = is_array($empresa->entity_filters)
-                ? $empresa->entity_filters
-                : (json_decode($empresa->entity_filters, true) ?: []);
+    
+        if ($empresa && $empresa->entity_filters !== null) {
+            // Puede venir casteado a array (por $casts) o como JSON string
+            if (is_array($empresa->entity_filters)) {
+                $filters = $empresa->entity_filters;
+                Log::info('entityFiltersForCurrentUser - entity_filters es array', ['count' => count($filters)]);
+            } elseif (is_string($empresa->entity_filters)) {
+                Log::info('entityFiltersForCurrentUser - entity_filters crudo (string JSON)', [
+                    'len' => strlen($empresa->entity_filters)
+                ]);
+                $decoded = json_decode($empresa->entity_filters, true);
+                if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                    $filters = $decoded;
+                    Log::info('entityFiltersForCurrentUser - JSON decodificado OK', ['count' => count($filters)]);
+                } else {
+                    Log::warning('entityFiltersForCurrentUser - Error decodificando JSON de entity_filters', [
+                        'json_last_error' => json_last_error_msg()
+                    ]);
+                }
+            } else {
+                Log::warning('entityFiltersForCurrentUser - entity_filters con tipo inesperado', [
+                    'type' => gettype($empresa->entity_filters)
+                ]);
+            }
         } else {
             Log::info('entityFiltersForCurrentUser - No se encontraron filtros para la empresa');
         }
     
         Log::info('entityFiltersForCurrentUser - Filtros antes de limpiar', ['filters' => $filters]);
     
-        $filters = collect($filters)
-            ->map(fn($s) => strtoupper(trim((string)$s)))
-            ->filter(fn($s) => $s !== '' && $s !== 'NO HAY CREDITO')
-            ->unique()
-            ->values()
-            ->all();
+        // Normalizar (trim + upper), filtrar vacíos y “NO HAY CREDITO”, deduplicar y reindexar
+        $normalized = array_map(function ($s) {
+            return strtoupper(trim((string) $s));
+        }, $filters);
     
-        Log::info('entityFiltersForCurrentUser - Filtros finales', ['filters' => $filters]);
+        $normalized = array_filter($normalized, function ($s) {
+            return $s !== '' && $s !== 'NO HAY CREDITO';
+        });
     
-        return response()->json($filters);
+        $normalized = array_values(array_unique($normalized));
+    
+        Log::info('entityFiltersForCurrentUser - Filtros finales', ['filters' => $normalized]);
+    
+        return response()->json($normalized);
     }
-
     
+
 }
+
+
