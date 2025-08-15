@@ -376,10 +376,9 @@ Route::post('consultaDatamessemcali', 'DatamesSemCaliController@consultaUnitaria
 Route::post('consultaDeduccionessemcali', 'DeduccionesSemCaliController@consultaUnitaria');
 Route::post('consultaSabana', 'SabanaController@consultaUnitaria');
 Route::post('consultaDescuentossedvalle', 'DescuentossedvalleController@consultaUnitaria');
-Route::post('consultaDescuentossedchoco', 'DescuentossedchocoController@consultaUnitaria');
+Route::post('consultaDescuentossedchoco', 'DescuentossedvalleController@consultaUnitaria');
 Route::post('consultaDescuentossemsahagun', 'DescuentossemsahagunController@consultaUnitaria');
 Route::post('consultaDescuentossemquibdo', 'DescuentosSemQuibdoController@consultaUnitaria');
-Route::post('consultaDescuentossempopayan', 'DescuentossempopayanController@consultaUnitaria');
 Route::post('consultaDetalledecliente', 'DetalledeclienteController@consultaUnitaria');
 Route::post('consultaDescuentossemcali', 'DescuentosSemCaliController@consultaUnitaria');
 Route::post('consultaEmbargossemcali', 'EmbargosSemCaliController@consultaUnitaria');
@@ -535,7 +534,7 @@ Route::patch('/credit-requests/{id}/visado', [CreditRequestController::class, 'm
 
 Route::get('/empresas/entidad-filtros', [EmpresaController::class, 'entityFiltersForCurrentUser'])->middleware('auth');
 
-Route::prefix('/empresas')->middleware('permission:ver empresas')->group(function () {
+Route::prefix('/empresas')->middleware(['auth', 'permission:ver empresas'])->group(function () {
     Route::get('/', [EmpresaController::class, 'index']);
     Route::post('/', [EmpresaController::class, 'store']);
     Route::get('/crear', [EmpresaController::class, 'crear']);
@@ -546,7 +545,7 @@ Route::prefix('/empresas')->middleware('permission:ver empresas')->group(functio
     Route::get('/{id}/sedes', [EmpresaController::class, 'sedes']);
 });
 
-Route::prefix('/sedes')->middleware('permission:ver sedes')->group(function () {
+Route::prefix('/sedes')->middleware(['auth', 'permission:ver sedes'])->group(function () {
     Route::get('/', [SedeController::class, 'index']);
     Route::post('/', [SedeController::class, 'store']);
     Route::get('/crear', [SedeController::class, 'create']);
@@ -555,7 +554,7 @@ Route::prefix('/sedes')->middleware('permission:ver sedes')->group(function () {
     Route::delete('/{sede}', [SedeController::class, 'destroy']);
 });
 
-Route::prefix('/area-comerciales')->middleware('permission:ver area comercial')->group(function () {
+Route::prefix('/area-comerciales')->middleware(['auth', 'permission:ver area comercial'])->group(function () {
     Route::get('/', [AreaComercialController::class, 'index']);
     Route::post('/', [AreaComercialController::class, 'store']);
     Route::get('/crear', [AreaComercialController::class, 'crear']);

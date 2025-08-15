@@ -13,7 +13,7 @@ class DataCoverageController extends Controller
         return DB::connection('pgsql')
             ->table('panel_pagaduria')
             ->select('id', 'nombre')
-            ->whereNotIn('id', [308, 296, 297])
+            ->whereNotIn('id', [308])
             ->orderBy('nombre')
             ->get();
     }
@@ -29,7 +29,7 @@ class DataCoverageController extends Controller
         $pagadurias = DB::connection('pgsql')
             ->table('panel_pagaduria')
             ->select('id', 'nombre')
-            ->whereNotIn('id', [308, 296, 297])
+            ->whereNotIn('id', [308])
             ->orderBy('nombre')
             ->offset($offset)
             ->limit($limit)
