@@ -92,50 +92,47 @@
                 <div class="bg-green-side py-2 collapse-inner">
                     <a class="collapse-item" href="/parametros-comparativa">Parámetros de control</a>
                     <a class="collapse-item" href="/parametros-comparativa/comparativa">Comparativas</a>
+                    <a class="collapse-item" href="/parametros-comparativa/lineal">Serie Temporal</a>
+                    <a class="collapse-item" href="/parametros-comparativa/sucursal">Por Sucursal</a>
+                    <a class="collapse-item" href="/parametros-comparativa/sueldo-vs-descuentos">Sueldo vs Descuentos</a>
+                    <a class="collapse-item" href="/parametros-comparativa/entidad">Por Entidad</a>
+                    <a class="collapse-item" href="/parametros-comparativa/embargos">Embargos</a>
+                    <a class="collapse-item" href="/parametros-comparativa/multiple">Múltiple</a>
                 </div>
             </div>
         </li>
         @endcan
 
-        @can('permission', 'ver recuperacion cartera')
+        @can('permission', 'ver reportes')
         <li class="nav-item">
-            <a class="nav-link collapsed" data-toggle="collapse" data-target="#menuRecuperacion" href="#" aria-expanded="false" aria-controls="menuRecuperacion">
-                <cartera-icon></cartera-icon>
-                <span class="pl-2">Recuperación de cartera</span>
+            <a class="nav-link collapsed" data-toggle="collapse" data-target="#menuReportes" href="#" aria-expanded="false" aria-controls="menuReportes">
+                <reportes-icon></reportes-icon>
+                <span class="pl-2">Reportes</span>
             </a>
-            <div class="collapse" id="menuRecuperacion" data-parent="#accordionSidebar" aria-labelledby="menuRecuperacion">
+            <div class="collapse" id="menuReportes" data-parent="#accordionSidebar" aria-labelledby="menuReportes">
                 <div class="bg-green-side py-2 collapse-inner">
-                    <a class="collapse-item" href="/analisis-de-cartera">Análisis de Cartera</a>
+                    <a class="collapse-item" href="/reportes/embargos">Embargos</a>
+                    <a class="collapse-item" href="/reportes/embargos-monthly">Embargos x Mes</a>
+                    <a class="collapse-item" href="/reportes/exp">EXP</a>
+                    <a class="collapse-item" href="/reportes/ingresos-vs-descuentos">Ingresos vs Descuentos</a>
+                    <a class="collapse-item" href="/reportes/ingresos-vs-egresos">Ingresos vs Egresos</a>
+                    <a class="collapse-item" href="/reportes/cuatroxmil">4x1000</a>
+                    <a class="collapse-item" href="/reportes/pagadurias">Pagadurías</a>
+                    <a class="collapse-item" href="/reportes/embargos-pagadurias">Embargos x Pagadurías</a>
+                    <a class="collapse-item" href="/reportes/pagadurias-ingresos-descuentos">Pagadurías Ingresos-Descuentos</a>
+                    <a class="collapse-item" href="/reportes/anti-fraude">Anti-fraude</a>
                 </div>
             </div>
         </li>
         @endcan
 
-        @can('permission', 'ver investigacion')
+        @can('permission', 'ver join data')
         <li class="nav-item">
-            <a class="nav-link collapsed" data-toggle="collapse" data-target="#menuInvestigacion" href="#" aria-expanded="false" aria-controls="menuInvestigacion">
-                <investigacion-icon></investigacion-icon>
-                <span class="pl-2">Investigación</span>
+            <a class="nav-link collapsed" data-toggle="collapse" data-target="#menuJoinData" href="#" aria-expanded="false" aria-controls="menuJoinData">
+                <join-icon></join-icon>
+                <span class="pl-2">Join data</span>
             </a>
-            <div class="collapse" id="menuInvestigacion" data-parent="#accordionSidebar" aria-labelledby="menuInvestigacion">
-                <div class="bg-green-side py-2 collapse-inner">
-                    <a class="collapse-item" href="#">Investigación de bienes</a>
-                    <a class="collapse-item" href="/certificados">Certificado de nacimiento</a>
-                    <a class="collapse-item" href="/demografico">Datos demograficos</a>
-                    <a class="collapse-item" href="#">Datos personales</a>
-                    <a class="collapse-item" href="#">Información financiera</a>
-                </div>
-            </div>
-        </li>
-        @endcan
-
-        @can('permission', 'ver localizacion usuarios')
-        <li class="nav-item">
-            <a class="nav-link collapsed" data-toggle="collapse" data-target="#menuLocalizacion" href="#" aria-expanded="false" aria-controls="menuLocalizacion">
-                <localizacion-icon></localizacion-icon>
-                <span class="pl-2">Localización de usuarios</span>
-            </a>
-            <div class="collapse" id="menuLocalizacion" data-parent="#accordionSidebar" aria-labelledby="menuLocalizacion">
+            <div class="collapse" id="menuJoinData" data-parent="#accordionSidebar" aria-labelledby="menuJoinData">
                 <div class="bg-green-side py-2 collapse-inner">
                     <a class="collapse-item" href="/colpensiones">Colpensiones</a>
                     <a class="collapse-item" href="/fiduprevisora">Fiduprevisora</a>
@@ -144,6 +141,25 @@
             </div>
         </li>
         @endcan
+    </div>
+
+    <div class="borders-space">
+        <div class="pl-4 mb-4">
+            <span class="sidebar-titles1">HEGO®</span><br>
+            <span class="sidebar-titles2">Simulación y solicitud</span>
+        </div>
+
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url('estudios') }}" style="padding-left: 28px;">
+                <span class="pl-2">Simulación HEGO</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url('solicitud') }}" style="padding-left: 28px;">
+                <span class="pl-2">Solicitud de crédito</span>
+            </a>
+        </li>
     </div>
 
     @if (IsSuperAdmin())
@@ -167,6 +183,14 @@
                 <a class="collapse-item" href="{{ url('entidadesdesembolso') }}">Entidades Desembolso</a>
                 <a class="collapse-item" href="{{ url('formapago') }}">Forma Pago</a>
                 <a class="collapse-item" href="{{ url('tipogiro') }}">Tipo Giro</a>
+                <a class="collapse-item" href="{{ url('motivos') }}">Motivos</a>
+                <a class="collapse-item" href="{{ url('iibb') }}">IIBB</a>
+                <a class="collapse-item" href="{{ url('cargar-neptuno') }}">Cargar Neptuno</a>
+                <a class="collapse-item" href="{{ url('pagadurias-alias') }}">Alias Pagadurías</a>
+                <a class="collapse-item" href="{{ url('estados-proceso') }}">Estados Proceso</a>
+                <a class="collapse-item" href="{{ url('formas-desembolso') }}">Formas de Desembolso</a>
+                <a class="collapse-item" href="{{ url('bancos') }}">Bancos</a>
+                <a class="collapse-item" href="{{ url('actividades') }}">Actividades</a>
             </div>
         </div>
     </li>

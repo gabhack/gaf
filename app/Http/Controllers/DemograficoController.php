@@ -1092,148 +1092,163 @@ if ($record) {
     
 
     //PARA VISADO
-    public function calcularCupoPorCedula($cedula, $mes, $año)
-    {
-        Log::info('Inicio del cálculo para una sola cédula', compact('cedula', 'mes', 'año'));
-        try {
-            $mes  = (int) $mes;
-            $año  = (int) $año;
-    
-            $resultData = DB::connection('pgsql')
-                ->table('fast_aggregate_data')
-                ->where('doc', $cedula)
-                ->whereRaw('extract(month  from CAST(inicioperiodo AS date)) = ?', [$mes])
-                ->whereRaw('extract(year   from CAST(inicioperiodo AS date)) = ?', [$año])
-                ->first();
-    
-            if (!$resultData) {
-                Log::info('No se encontró información para la cédula', compact('cedula'));
-                return null;
-            }
-    
-            $existsInColpensiones = Colpensiones::on('pgsql')->where('documento', $cedula)->exists();
-            $existsInFiducidiaria = Fiducidiaria::on('pgsql')->where('documento', $cedula)->exists();
-            $existsInFopep        = DatamesFopep::on('pgsql')->where('doc', $cedula)->exists();
-    
-            $fechaNacimiento = $resultData->fecha_nacimiento ?? null;
-            if ($fechaNacimiento) {
-                try {
-                    if (is_numeric($fechaNacimiento)) {
-                        $fechaNacimiento = Carbon::createFromTimestamp($fechaNacimiento)->format('Y-m-d');
-                    } elseif (preg_match('/\d{2}\/\d{2}\/\d{4}/', $fechaNacimiento)) {
-                        $fechaNacimiento = Carbon::createFromFormat('d/m/Y', $fechaNacimiento)->format('Y-m-d');
-                    } else {
-                        $fechaNacimiento = Carbon::parse($fechaNacimiento)->format('Y-m-d');
-                    }
-                } catch (\Exception $e) {
-                    Log::error('Error procesando fecha de nacimiento', ['error' => $e->getMessage()]);
-                    $fechaNacimiento = null;
-                }
-            }
-    
-            $embargos = collect();
-            if ($resultData->embargos_concatenados) {
-                preg_match_all('/(\d+): ([^,]+), ([\d\/-]+), ([\d,]+)/', $resultData->embargos_concatenados, $matches, PREG_SET_ORDER);
-                foreach ($matches as $match) {
-                    $embargos->push([
-                        'docdeman'     => trim($match[1]),
-                        'entidaddeman' => trim($match[2]),
-                        'fembini'      => trim($match[3]),
-                        'valor'        => (float) str_replace(',', '', $match[4]),
-                    ]);
-                }
-            }
-    
-            $cupones = collect(explode(', ', $resultData->cupones_concatenados))
-                ->map(function ($cupon) {
-                    $parts = explode(': ', $cupon);
-                    if (count($parts) === 2) {
-                        [$concept, $egresos] = $parts;
-                        return ['concept' => strtoupper(trim($concept)), 'egresos' => (float) str_replace(',', '', $egresos)];
-                    }
-                    return null;
-                })
-                ->filter(function ($cupon) {
-                    return $cupon && $cupon['egresos'] > 0;
-                })
-                ->values()
-                ->toArray();
-    
-            $descuentos = collect(explode(', ', $resultData->descuentos_concatenados))
-                ->filter(function ($descuento) {
-                    return !str_contains($descuento, 'ALERTA');
-                })
-                ->map(function ($descuento) {
-                    $parts = explode(': ', $descuento);
-                    if (count($parts) === 2) {
-                        [$mliquid, $valor] = $parts;
-                        return ['mliquid' => trim($mliquid), 'valor' => (float) $valor];
-                    }
-                    return null;
-                })
-                ->filter(function ($descuento) {
-                    return $descuento && $descuento['valor'] > 0;
-                });
-    
-            $salarioMinimo = 1423500;
-            $valorIngreso  = $resultData->ingresos_ajustados;
-            $totalEgresos  = $resultData->total_egresos;
-    
-            $descuento = 0.08;
-            if (in_array($resultData->pagaduria, ['FOPEP', 'FIDUPREVISORA'])) {
-                if ($valorIngreso == $salarioMinimo) {
-                    $descuento = 0.04;
-                } elseif ($valorIngreso < $salarioMinimo * 2) {
-                    $descuento = 0.08;
-                } else {
-                    $descuento = 0.12;
-                }
-            }
-            if (in_array(strtoupper($resultData->pagaduria), ['CASUR'])) {
-                $descuento = 0.04;
-            }
-            if ($valorIngreso > 5694000) {
-                $descuento += 0.01;
-            }
-    
-            $valorIngresoConDescuento = $valorIngreso - ($valorIngreso * $descuento);
-    
-            $rtsfaValue = collect($cupones)->firstWhere('concept', 'RTFSA')['egresos'] ?? 0;
-            if ($valorIngreso > $salarioMinimo * 5) {
-                $valorIngresoConDescuento -= $rtsfaValue;
-            }
-    
-            if ($valorIngresoConDescuento < $salarioMinimo * 2) {
-                $compraCartera = $valorIngresoConDescuento - $salarioMinimo;
-            } else {
-                $compraCartera = $valorIngresoConDescuento / 2;
-            }
-    
-            $libreInversion = $compraCartera - $totalEgresos;
-    
-            return [
-                'doc'               => $cedula,
-                'nombre_usuario'    => $resultData->nombre_usuario,
-                'tipo_contrato'     => $resultData->tipo_contrato,
-                'edad'              => $resultData->edad,
-                'fecha_nacimiento'  => $fechaNacimiento,
-                'pagaduria'         => $resultData->pagaduria,
-                'cargo'             => $resultData->cargos,
-                'situacion_laboral' => $resultData->situacion_laboral,
-                'compra_cartera'    => $compraCartera,
-                'cupo_libre'        => $libreInversion,
-                'cupones'           => $cupones,
-                'embargos'          => $embargos->values()->toArray(),
-                'descuentos'        => $descuentos->values()->toArray(),
-                'colpensiones'      => $existsInColpensiones,
-                'fiducidiaria'      => $existsInFiducidiaria,
-                'fopep'             => $existsInFopep,
-            ];
-        } catch (\Exception $e) {
-            Log::error('Error en calcularCupoPorCedula', ['error' => $e->getMessage()]);
+  public function calcularCupoPorCedula($cedula, $mes, $año)
+{
+    Log::info('Inicio del cálculo para una sola cédula', compact('cedula', 'mes', 'año'));
+    try {
+        $mes  = (int) $mes;
+        $año  = (int) $año;
+
+        $resultData = DB::connection('pgsql')
+            ->table('fast_aggregate_data')
+            ->where('doc', $cedula)
+            ->whereRaw('extract(month  from CAST(inicioperiodo AS date)) = ?', [$mes])
+            ->whereRaw('extract(year   from CAST(inicioperiodo AS date)) = ?', [$año])
+            ->first();
+
+        if (!$resultData) {
+            Log::info('No se encontró información para la cédula', compact('cedula'));
             return null;
         }
+
+        $existsInColpensiones = Colpensiones::on('pgsql')->where('documento', $cedula)->exists();
+        $existsInFiducidiaria = Fiducidiaria::on('pgsql')->where('documento', $cedula)->exists();
+        $existsInFopep        = DatamesFopep::on('pgsql')->where('doc', $cedula)->exists();
+
+        $fechaNacimiento = $resultData->fecha_nacimiento ?? null;
+        if ($fechaNacimiento) {
+            try {
+                if (is_numeric($fechaNacimiento)) {
+                    $fechaNacimiento = Carbon::createFromTimestamp($fechaNacimiento)->format('Y-m-d');
+                } elseif (preg_match('/\d{2}\/\d{2}\/\d{4}/', $fechaNacimiento)) {
+                    $fechaNacimiento = Carbon::createFromFormat('d/m/Y', $fechaNacimiento)->format('Y-m-d');
+                } else {
+                    $fechaNacimiento = Carbon::parse($fechaNacimiento)->format('Y-m-d');
+                }
+            } catch (\Exception $e) {
+                Log::error('Error procesando fecha de nacimiento', ['error' => $e->getMessage()]);
+                $fechaNacimiento = null;
+            }
+        }
+
+        $embargos = collect();
+        if ($resultData->embargos_concatenados) {
+            preg_match_all('/(\d+): ([^,]+), ([\d\/-]+), ([\d,]+)/', $resultData->embargos_concatenados, $matches, PREG_SET_ORDER);
+            foreach ($matches as $match) {
+                $embargos->push([
+                    'docdeman'     => trim($match[1]),
+                    'entidaddeman' => trim($match[2]),
+                    'fembini'      => trim($match[3]),
+                    'valor'        => (float) str_replace(',', '', $match[4]),
+                ]);
+            }
+        }
+
+        $cupones = collect(explode(', ', $resultData->cupones_concatenados))
+            ->map(function ($cupon) {
+                $parts = explode(': ', $cupon);
+                if (count($parts) === 2) {
+                    [$concept, $egresos] = $parts;
+                    return ['concept' => strtoupper(trim($concept)), 'egresos' => (float) str_replace(',', '', $egresos)];
+                }
+                return null;
+            })
+            ->filter(function ($cupon) {
+                return $cupon && $cupon['egresos'] > 0;
+            })
+            ->values()
+            ->toArray();
+
+        $descuentos = collect(explode(', ', $resultData->descuentos_concatenados))
+            ->filter(function ($descuento) {
+                return !str_contains($descuento, 'ALERTA');
+            })
+            ->map(function ($descuento) {
+                $parts = explode(': ', $descuento);
+                if (count($parts) === 2) {
+                    [$mliquid, $valor] = $parts;
+                    return ['mliquid' => trim($mliquid), 'valor' => (float) $valor];
+                }
+                return null;
+            })
+            ->filter(function ($descuento) {
+                return $descuento && $descuento['valor'] > 0;
+            });
+
+        $salarioMinimo = 1423500;
+        $valorIngreso  = $resultData->ingresos_ajustados;
+        $totalEgresos  = $resultData->total_egresos;
+
+        Log::info('Valor ingreso bruto y egresos cargados', [
+            'valorIngreso' => $valorIngreso,
+            'totalEgresos' => $totalEgresos
+        ]);
+
+        $descuento = 0.08;
+        if (in_array($resultData->pagaduria, ['FOPEP', 'FIDUPREVISORA'])) {
+            if ($valorIngreso == $salarioMinimo) {
+                $descuento = 0.04;
+            } elseif ($valorIngreso < $salarioMinimo * 2) {
+                $descuento = 0.08;
+            } else {
+                $descuento = 0.12;
+            }
+        }
+        if (in_array(strtoupper($resultData->pagaduria), ['CASUR'])) {
+            $descuento = 0.04;
+        }
+        if ($valorIngreso > 5694000) {
+            $descuento += 0.01;
+        }
+
+        Log::info('Descuento aplicado', ['descuento' => $descuento]);
+
+        $valorIngresoConDescuento = $valorIngreso - ($valorIngreso * $descuento);
+
+        $rtsfaValue = collect($cupones)->firstWhere('concept', 'RTFSA')['egresos'] ?? 0;
+        if ($valorIngreso > $salarioMinimo * 5) {
+            $valorIngresoConDescuento -= $rtsfaValue;
+            Log::info('RTFSA descontado por ingresos > 5 SMMLV', ['rtsfa' => $rtsfaValue]);
+        }
+
+        Log::info('Valor ingreso con descuento', ['valorIngresoConDescuento' => $valorIngresoConDescuento]);
+
+        if ($valorIngresoConDescuento < $salarioMinimo * 2) {
+            $compraCartera = $valorIngresoConDescuento - $salarioMinimo;
+        } else {
+            $compraCartera = $valorIngresoConDescuento / 2;
+        }
+
+        Log::info('Compra cartera calculada', ['compraCartera' => $compraCartera]);
+
+        $libreInversion = $compraCartera - $totalEgresos;
+
+        Log::info('Cupo libre final calculado', ['libreInversion' => $libreInversion]);
+
+        return [
+            'doc'               => $cedula,
+            'nombre_usuario'    => $resultData->nombre_usuario,
+            'tipo_contrato'     => $resultData->tipo_contrato,
+            'edad'              => $resultData->edad,
+            'fecha_nacimiento'  => $fechaNacimiento,
+            'pagaduria'         => $resultData->pagaduria,
+            'cargo'             => $resultData->cargos,
+            'situacion_laboral' => $resultData->situacion_laboral,
+            'compra_cartera'    => $compraCartera,
+            'cupo_libre'        => $libreInversion,
+            'cupones'           => $cupones,
+            'embargos'          => $embargos->values()->toArray(),
+            'descuentos'        => $descuentos->values()->toArray(),
+            'colpensiones'      => $existsInColpensiones,
+            'fiducidiaria'      => $existsInFiducidiaria,
+            'fopep'             => $existsInFopep,
+        ];
+    } catch (\Exception $e) {
+        Log::error('Error en calcularCupoPorCedula', ['error' => $e->getMessage()]);
+        return null;
     }
+}
+
     
     
     public function uploadPending(Request $r)
