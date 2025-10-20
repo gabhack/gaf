@@ -8,7 +8,9 @@ use App\Http\Controllers\ColpensionesController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DecevalController;
 use App\Http\Controllers\DemograficoController;
+use App\Http\Controllers\DemograficoAvanzadoController;
 use App\Http\Controllers\DescuentosController;
+use App\Http\Controllers\PoliticasPortafolioController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\EmbargosController;
 use App\Http\Controllers\EmpresaController;
@@ -463,13 +465,40 @@ Route::post('/api/situacion-laboral-batch', 'PagaduriasController@getSituacionLa
 Route::post('/descuentos/by-pagaduria', [DescuentosController::class, 'getDescuentosByPagaduria']);
 Route::post('/embargos/by-pagaduria', [EmbargosController::class, 'getEmbargosByPagaduria']);
 
+// Análisis de Cartera (Normal)
 Route::get('/analisis-de-cartera', [DemograficoController::class, 'show'])->name('demografico.show');
 Route::view('/demografico', 'Demographic.IndexDemografico');
 Route::post('/demografico/upload', [DemograficoController::class, 'upload'])->name('demografico.upload');
 Route::get('/demografico/recent-consultations', [DemograficoController::class, 'getRecentConsultations']);
 Route::get('/demografico/fetch-paginated-results', [DemograficoController::class, 'fetchPaginatedResults']);
-Route::get('/demografico/fetch-paginated-results-demografico', [DemograficoController::class, 'fetchPaginatedResultsDemografico']);
 Route::get('/demografico/calcular-cupo/{cedula}/{mes}/{ano}', [DemograficoController::class, 'calcularCupoPorCedula'])->name('demografico.calcularCupo');
+
+// Análisis de Cartera Avanzado (Independiente)
+Route::get('/analisis-de-cartera-avanzado', [DemograficoAvanzadoController::class, 'show'])->name('demografico.avanzado.show');
+Route::post('/demografico-avanzado/upload', [DemograficoAvanzadoController::class, 'upload'])->name('demografico.avanzado.upload');
+Route::get('/demografico-avanzado/fetch-paginated-results', [DemograficoAvanzadoController::class, 'fetchPaginatedResults'])->name('demografico.avanzado.fetch');
+
+// Políticas de Portafolio
+Route::get('/politicas-portafolio', [PoliticasPortafolioController::class, 'index'])->name('politicas.portafolio.index');
+Route::get('/politicas-portafolio/get', [PoliticasPortafolioController::class, 'get'])->name('politicas.portafolio.get');
+Route::post('/politicas-portafolio/store', [PoliticasPortafolioController::class, 'store'])->name('politicas.portafolio.store');
+Route::post('/politicas-portafolio/update', [PoliticasPortafolioController::class, 'update'])->name('politicas.portafolio.update');
+Route::post('/politicas-portafolio/toggle-activo', [PoliticasPortafolioController::class, 'toggleActivo'])->name('politicas.portafolio.toggleActivo');
+Route::post('/politicas-portafolio/delete', [PoliticasPortafolioController::class, 'delete'])->name('politicas.portafolio.delete');
+Route::get('/politicas-portafolio/export-json', [PoliticasPortafolioController::class, 'exportJson'])->name('politicas.portafolio.exportJson');
+Route::post('/politicas-portafolio/import-json', [PoliticasPortafolioController::class, 'importJson'])->name('politicas.portafolio.importJson');
+
+// Políticas del Fondo
+Route::get('/politicas-portafolio/fondos/get', [PoliticasPortafolioController::class, 'getFondos'])->name('politicas.fondo.get');
+Route::post('/politicas-portafolio/fondos/store', [PoliticasPortafolioController::class, 'storeFondo'])->name('politicas.fondo.store');
+Route::post('/politicas-portafolio/fondos/update', [PoliticasPortafolioController::class, 'updateFondo'])->name('politicas.fondo.update');
+Route::post('/politicas-portafolio/fondos/toggle-activo', [PoliticasPortafolioController::class, 'toggleActivoFondo'])->name('politicas.fondo.toggleActivo');
+Route::post('/politicas-portafolio/fondos/delete', [PoliticasPortafolioController::class, 'deleteFondo'])->name('politicas.fondo.delete');
+Route::get('/politicas-portafolio/fondos/export-json', [PoliticasPortafolioController::class, 'exportJsonFondos'])->name('politicas.fondo.exportJson');
+Route::post('/politicas-portafolio/fondos/import-json', [PoliticasPortafolioController::class, 'importJsonFondos'])->name('politicas.fondo.importJson');
+
+// Historial de Análisis de Cartera
+Route::get('/historial-cartera', [App\Http\Controllers\HistorialCarteraController::class, 'index'])->name('historial.cartera');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');

@@ -52,6 +52,7 @@
                     <a class="collapse-item" href="/credit-requests">Historial de solicitudes</a>
                     <div class="bg-green-side py-2 collapse-inner">
                         <a class="collapse-item" href="/analisis-de-cartera">Análisis de Cartera</a>
+                        <a class="collapse-item" href="/analisis-de-cartera-avanzado">Análisis de Cartera Avanzado</a>
                     </div>
                     @can('permission', 'hacer consultas sin visar')
                     <a class="collapse-item" href="{{ url('dataClientDraftwithoutvisa') }}">Consulta sin visar</a>
@@ -105,7 +106,22 @@
             </a>
             <div class="collapse" id="menuRecuperacion" data-parent="#accordionSidebar" aria-labelledby="menuRecuperacion">
                 <div class="bg-green-side py-2 collapse-inner">
-                    <a class="collapse-item" href="/analisis-de-cartera">Análisis de Cartera</a>
+                    <a class="collapse-item d-flex align-items-center" href="/analisis-de-cartera">
+                        <analisis-cartera-icon></analisis-cartera-icon>
+                        <span class="pl-2">Análisis de Cartera</span>
+                    </a>
+                    <a class="collapse-item d-flex align-items-center" href="/analisis-de-cartera-avanzado">
+                        <analisis-avanzado-icon></analisis-avanzado-icon>
+                        <span class="pl-2">Análisis de Cartera Avanzado</span>
+                    </a>
+                    <a class="collapse-item d-flex align-items-center" href="/politicas-portafolio">
+                        <settings-financial-icon></settings-financial-icon>
+                        <span class="pl-2">Políticas</span>
+                    </a>
+                    <a class="collapse-item d-flex align-items-center" href="/historial-cartera">
+                        <historial-icon></historial-icon>
+                        <span class="pl-2">Historial</span>
+                    </a>
                 </div>
             </div>
         </li>

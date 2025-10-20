@@ -30,47 +30,87 @@ class DemograficoController extends Controller
     {
         Log::info('[upload] Iniciando método upload...');
         try {
+            // Limpiar caché anterior del usuario
+            $cacheKey = 'cedulas_data_' . Auth::id();
+            Cache::forget($cacheKey);
+            Log::info('[upload] Caché anterior limpiado para el usuario: ' . Auth::id());
+
             $file = $request->file('file');
             if (!$file || !$file->isValid()) {
                 Log::warning('[upload] Archivo no válido o no encontrado.');
                 return response()->json(['error' => 'Archivo inválido'], 400);
             }
-    
+
             $path = $file->getRealPath();
             Log::info('[upload] Path del archivo: '.$path);
-    
+
             $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader('Xlsx');
             $reader->setReadDataOnly(true);
             $spreadsheet = $reader->load($path);
             Log::info('[upload] Spreadsheet cargado correctamente.');
-    
+
             $worksheet = $spreadsheet->getActiveSheet();
             $highestColumn = $worksheet->getHighestColumn();
             $headerRange = 'A1:' . $highestColumn . '1';
             $header = $worksheet->rangeToArray($headerRange)[0];
             Log::info('[upload] Header extraído: ', $header);
-    
-            $cedulasColumn = array_search('cedulas', array_map('strtolower', $header));
-            if ($cedulasColumn === false) {
+
+            // Mapear nombres de columnas a índices (case-insensitive)
+            $headerMap = [];
+            foreach ($header as $index => $columnName) {
+                $headerMap[strtolower(trim($columnName))] = $index;
+            }
+
+            // Validar que exista la columna cedulas
+            if (!isset($headerMap['cedulas'])) {
                 Log::warning('[upload] No se encontró la columna "cedulas" en el archivo Excel.');
                 return response()->json(['error' => 'No se encontró la columna "cedulas"'], 400);
             }
-    
-            $cedulas = [];
+
+            // Definir las columnas adicionales que queremos extraer
+            $additionalColumns = [
+                'operación',
+                'valor desembolso',
+                'saldo capital original',
+                'intereses corrientes',
+                'intereses de mora',
+                'seguros',
+                'otros conceptos',
+                'tasa pactada',
+                'respetar tasa pactada',
+                'plazo pactado',
+                'cuota pactada',
+                'respetar cuota pactada'
+            ];
+
+            $dataRows = [];
             foreach ($worksheet->getRowIterator(2) as $row) {
-                $cell = $worksheet->getCellByColumnAndRow($cedulasColumn + 1, $row->getRowIndex());
-                $value = trim($cell->getValue());
-                if (!empty($value)) {
-                    $cedulas[] = $value;
+                $rowIndex = $row->getRowIndex();
+                $cedula = trim($worksheet->getCellByColumnAndRow($headerMap['cedulas'] + 1, $rowIndex)->getValue());
+
+                if (empty($cedula)) {
+                    continue;
                 }
+
+                $rowData = ['cedula' => $cedula];
+
+                // Extraer campos adicionales si existen
+                foreach ($additionalColumns as $columnName) {
+                    $columnKey = strtolower($columnName);
+                    if (isset($headerMap[$columnKey])) {
+                        $value = $worksheet->getCellByColumnAndRow($headerMap[$columnKey] + 1, $rowIndex)->getValue();
+                        $rowData[$columnKey] = $value;
+                    }
+                }
+
+                $dataRows[] = $rowData;
             }
-    
-            Log::info('[upload] Total de cédulas extraídas: '.count($cedulas));
-    
-            $cacheKey = 'cedulas_' . Auth::id();
-            Cache::put($cacheKey, $cedulas, 3600);
-            Log::info('[upload] Cédulas almacenadas en caché con key: '.$cacheKey);
-    
+
+            Log::info('[upload] Total de filas extraídas: '.count($dataRows));
+
+            Cache::put($cacheKey, $dataRows, 3600);
+            Log::info('[upload] Datos almacenados en caché con key: '.$cacheKey);
+
             return response()->json(['uploaded' => true], 200);
         } catch (\Exception $e) {
             Log::error('[upload] Error al procesar el archivo: '.$e->getMessage(), [
@@ -86,13 +126,17 @@ class DemograficoController extends Controller
         try {
             $page = (int) $request->query('page', 1);
             $perPage = (int) $request->query('perPage', 30);
-    
-            $cacheKey = 'cedulas_' . Auth::id();
-            $cedulas = Cache::get($cacheKey, []);
-            $total = count($cedulas);
-    
-            Log::info("[fetchPaginatedResultsDemografico] Page: {$page}, PerPage: {$perPage}, Total: {$total}");
-    
+            $mes = $request->query('mes');
+            $año = $request->query('año');
+
+            Log::info("[fetchPaginatedResultsDemografico] Parámetros recibidos - Page: {$page}, PerPage: {$perPage}, Mes: {$mes}, Año: {$año}");
+
+            $cacheKey = 'cedulas_data_' . Auth::id();
+            $cedulasData = Cache::get($cacheKey, []);
+            $total = count($cedulasData);
+
+            Log::info("[fetchPaginatedResultsDemografico] Total cédulas en caché: {$total}");
+
             if ($total < 1) {
                 Log::info('[fetchPaginatedResultsDemografico] No hay cédulas en caché.');
                 return response()->json([
@@ -103,7 +147,7 @@ class DemograficoController extends Controller
                     'hasMore' => false
                 ]);
             }
-    
+
             $offset = ($page - 1) * $perPage;
             if ($offset >= $total) {
                 Log::info("[fetchPaginatedResultsDemografico] Offset {$offset} supera el total ({$total}).");
@@ -115,15 +159,41 @@ class DemograficoController extends Controller
                     'hasMore' => false
                 ]);
             }
-    
-            $cedulasChunk = array_slice($cedulas, $offset, $perPage);
-            Log::info('[fetchPaginatedResultsDemografico] Cédulas chunk size: '.count($cedulasChunk));
-    
-            $results = $this->processCedulasDemografico($cedulasChunk);
-    
+
+            $cedulasDataChunk = array_slice($cedulasData, $offset, $perPage);
+            Log::info('[fetchPaginatedResultsDemografico] Cédulas chunk size: '.count($cedulasDataChunk));
+
+            // Extraer solo las cédulas para la consulta
+            $cedulas = array_column($cedulasDataChunk, 'cedula');
+
+            // Usar processCedulas_vista que consulta fast_aggregate_data con mes y año
+            $results = $this->processCedulas_vista($cedulas, $mes, $año);
+
+            // Merge con los datos adicionales del Excel
+            foreach ($results as &$result) {
+                foreach ($cedulasDataChunk as $excelRow) {
+                    if ($excelRow['cedula'] == $result['doc']) {
+                        // Agregar campos adicionales del Excel
+                        $result['operacion'] = $excelRow['operación'] ?? null;
+                        $result['valor_desembolso'] = $excelRow['valor desembolso'] ?? null;
+                        $result['saldo_capital_original'] = $excelRow['saldo capital original'] ?? null;
+                        $result['intereses_corrientes'] = $excelRow['intereses corrientes'] ?? null;
+                        $result['intereses_de_mora'] = $excelRow['intereses de mora'] ?? null;
+                        $result['seguros'] = $excelRow['seguros'] ?? null;
+                        $result['otros_conceptos'] = $excelRow['otros conceptos'] ?? null;
+                        $result['tasa_pactada'] = $excelRow['tasa pactada'] ?? null;
+                        $result['respetar_tasa_pactada'] = $excelRow['respetar tasa pactada'] ?? null;
+                        $result['plazo_pactado'] = $excelRow['plazo pactado'] ?? null;
+                        $result['cuota_pactada'] = $excelRow['cuota pactada'] ?? null;
+                        $result['respetar_cuota_pactada'] = $excelRow['respetar cuota pactada'] ?? null;
+                        break;
+                    }
+                }
+            }
+
             $hasMore = ($offset + $perPage) < $total;
             Log::info("[fetchPaginatedResultsDemografico] hasMore: ".($hasMore ? 'true' : 'false'));
-    
+
             return response()->json([
                 'data' => $results,
                 'total' => $total,
@@ -909,7 +979,14 @@ private function parseConcatenatedString($concatenatedString)
         return view('Demographic.DemographicData');
     }
 
-   
+    public function showAvanzado()  // ANALISIS DE CARTERA AVANZADO
+    {
+        Log::info('Inicio del proceso de showAvanzado');
+        Log::info('Fin del proceso de showAvanzado');
+        return view('Demographic.DemographicDataAvanzado');
+    }
+
+
     public function getDemograficoPorDoc($doc)
     {
         Log::info('Inicio del proceso de getDemograficoPorDoc', ['doc' => $doc]);

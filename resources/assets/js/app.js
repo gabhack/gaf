@@ -30,7 +30,9 @@ Vue.use(VueSwal)
 
 import DemographicData from './components/pages/Demographic/DemographicData.vue'
 import DemographicData2 from './components/pages/Demographic/DemographicDataFiltroEntidad.vue'
+import DemographicDataAvanzado from './components/pages/Demographic/DemographicDataAvanzado.vue'
 import DemographicIndex from './components/pages/Demographic/IndexDemografico.vue'
+import PoliticasPortafolio from './components/pages/PoliticasPortafolio/Politicas.vue'
 import UploadPensiones from './components/pages/Pensiones/uploadColpensiones.vue'
 import UploadFiducidiaria from './components/pages/Pensiones/upload-fiducidiaria.vue'
 import CreditRequestBulk from './components/pages/CreditRequest/CreditRequestBulk.vue'
@@ -79,6 +81,10 @@ Vue.component('DashIcon', require('./components/icons/DashIcon').default)
 Vue.component('VisadoIcon', require('./components/icons/VisadoIcon').default)
 Vue.component('MercadoIcon', require('./components/icons/MercadoIcon').default)
 Vue.component('CarteraIcon', require('./components/icons/CarteraIcon').default)
+Vue.component('AnalisisCarteraIcon', require('./components/icons/AnalisisCarteraIcon').default)
+Vue.component('AnalisisAvanzadoIcon', require('./components/icons/AnalisisAvanzadoIcon').default)
+Vue.component('SettingsFinancialIcon', require('./components/icons/SettingsFinancialIcon').default)
+Vue.component('HistorialIcon', require('./components/icons/HistorialIcon').default)
 Vue.component('InvestigacionIcon', require('./components/icons/InvestigacionIcon').default)
 Vue.component('LocalizacionIcon', require('./components/icons/LocalizacionIcon').default)
 Vue.component('DownloadIcon', require('./components/icons/DownloadIcon').default)
@@ -107,7 +113,10 @@ Vue.component('CouponsFormConsult', require('./components/pages/Coupons/CouponsF
 
 Vue.component('DemographicData', DemographicData)
 Vue.component('DemographicData2', DemographicData2)
+Vue.component('demographic-data-avanzado', DemographicDataAvanzado)
 Vue.component('DemographicIndex', DemographicIndex)
+Vue.component('politicas-portafolio', PoliticasPortafolio)
+Vue.component('historial-cartera', require('./components/pages/HistorialCartera/HistorialCartera.vue').default)
 Vue.component('UploadPensiones', UploadPensiones)
 Vue.component('UploadFiducidiaria', UploadFiducidiaria)
 Vue.component('join-pensiones', JoinPensiones)

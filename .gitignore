@@ -49,3 +49,11 @@ python/*
 resource/assets/js/app.js
 public/css/styles.css
 yarn.lock
+
+# Claude-specific files
+.claude/
+CLAUDE.md
+nul
+test_excel.js
+test_excel.php
+cedulas para analisis32.xlsx

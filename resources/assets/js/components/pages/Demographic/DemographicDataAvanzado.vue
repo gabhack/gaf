@@ -4,9 +4,33 @@
             <div class="spinner"></div>
         </div>
 
+        <!-- Progress Log -->
+        <div v-if="uploadProgress.show" class="progress-log-overlay">
+            <div class="progress-log-container">
+                <h4 class="progress-title">Procesando Análisis de Cartera</h4>
+                <div class="progress-steps">
+                    <div
+                        v-for="step in uploadProgress.steps"
+                        :key="step.id"
+                        class="progress-step"
+                        :class="{
+                            'step-active': step.status === 'active',
+                            'step-completed': step.status === 'completed',
+                            'step-pending': step.status === 'pending'
+                        }"
+                    >
+                        <span class="step-icon">{{ step.icon }}</span>
+                        <span class="step-text">{{ step.text }}</span>
+                        <span v-if="step.status === 'active'" class="step-loader">...</span>
+                        <span v-if="step.status === 'completed'" class="step-check">✓</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <b-row>
             <b-col cols="12" md="9" style="margin-left: 28px">
-                <h3 class="heading-title">Análisis de Cartera</h3>
+                <h3 class="heading-title">Análisis de Cartera Avanzado</h3>
                 <p>
                     Acceda a información estratégica que facilita la toma de decisiones en la compra de cartera,
                     permitiendo identificar y priorizar a los pensionados y empleados activos del sector público con
@@ -49,8 +73,10 @@
                         </b-col>
                         <b-col cols="11" class="d-flex justify-content-center align-items-center">
                             <p class="modal-text">
-                                Por favor, asegúrese de que el archivo Excel tiene una columna con el encabezado
-                                <strong>'cédulas'</strong> y que contiene los números de cédula.
+                                Por favor, asegúrese de que el archivo Excel contiene la columna <strong>'cédulas'</strong> (obligatoria)
+                                y opcionalmente: <strong>operación, valor desembolso, saldo capital original, intereses corrientes,
+                                intereses de mora, seguros, otros conceptos, tasa pactada, respetar tasa pactada, plazo pactado,
+                                cuota pactada, respetar cuota pactada</strong>.
                             </p>
                         </b-col>
                     </b-row>
@@ -178,89 +204,87 @@
                     <table class="table table-responsive">
                         <thead>
                             <tr>
+                                <th>Operación</th>
                                 <th>Cédula</th>
                                 <th>Nombre del Cliente</th>
-                                <th>Fecha Nacimiento</th>
-                                <th>Edad</th>
-                                <th>Tipo de Contrato</th>
-                                <th>Cargo</th>
-                                <th>Situación Laboral</th>
-                                <th>Pagaduría</th>
-                                <th>Cupo Libre</th>
-                                <th>Detalle de Embargo</th>
-                                <th>Detalle de Egresos</th>
-                                <th>Detalle de Mora</th>
+                                <th>Secretaria (SED - SEM)</th>
                                 <th>Colpensiones</th>
                                 <th>Fiduprevisora</th>
                                 <th>Fopep</th>
+                                <th>Edad</th>
+                                <th>Detalle de Crédito</th>
+                                <th>Detalle Portafolio</th>
+                                <th>Cuota a Incorporar</th>
                             </tr>
                         </thead>
                         <tbody>
                             <!-- Fila Principal -->
                             <tr v-for="(result, index) in filteredResults" :key="result.doc + '-' + index">
+                                <td>{{ result.operacion || 'No disponible' }}</td>
                                 <td>{{ result.doc }}</td>
                                 <td>{{ capitalize(result.nombre_usuario) || 'No disponible' }}</td>
-                                <td>{{ result.fecha_nacimiento || 'No disponible' }}</td>
-                                <td>{{ result.edad || 'No disponible' }}</td>
-                                <td>{{ capitalize(result.tipo_contrato) || 'No disponible' }}</td>
-                                <td>{{ capitalize(result.cargo) || 'No disponible' }}</td>
-                                <td>{{ capitalize(result.situacion_laboral) || 'No disponible' }}</td>
                                 <td>{{ capitalize(result.pagaduria) || 'No disponible' }}</td>
-                                <td>{{ formatCurrency(result.cupo_libre) }}</td>
-                                <td>
-                                    <CustomButton
-                                        v-if="result.embargos && result.embargos.length"
-                                        class="btn btn-link"
-                                        @click="toggleDetails(result, 'embargos')"
-                                        data-toggle="modal"
-                                        data-target="#modalEmbargos"
-                                        :text="isRowExpanded(result, 'embargos') ? 'Ocultar Embargos' : 'Ver Embargos'"
-                                    />
-                                    <span v-else>No hay embargos</span>
-                                </td>
-                                <td>
-                                    <CustomButton
-                                        v-if="result.cupones && result.cupones.length"
-                                        @click="toggleDetails(result, 'cupones')"
-                                        data-toggle="modal"
-                                        data-target="#modalCupones"
-                                        :text="isRowExpanded(result, 'cupones') ? 'Ocultar Cupones' : 'Ver Cupones'"
-                                    />
-                                    <span v-else>No hay cupones</span>
-                                </td>
-
-                                <td>
-                                    <CustomButton
-                                        v-if="result.descuentos && result.descuentos.length"
-                                        class="btn btn-link"
-                                        @click="toggleDetails(result, 'descuentos')"
-                                        data-toggle="modal"
-                                        data-target="#modalDescuentos"
-                                        :text="
-                                            isRowExpanded(result, 'descuentos')
-                                                ? 'Ocultar Descuentos'
-                                                : 'Ver Descuentos'
-                                        "
-                                    />
-                                    <span v-else>No hay descuentos</span>
-                                </td>
                                 <td>{{ result.colpensiones ? 'Sí' : 'No' }}</td>
                                 <td>{{ result.fiducidiaria ? 'Sí' : 'No' }}</td>
                                 <td>{{ result.fopep ? 'Sí' : 'No' }}</td>
+                                <td>{{ result.edad || 'No disponible' }}</td>
+                                <td>
+                                    <CustomButton
+                                        v-if="hasDetalleCredito(result)"
+                                        class="btn btn-link"
+                                        @click="toggleDetails(result, 'credito')"
+                                        data-toggle="modal"
+                                        data-target="#modalCredito"
+                                        :text="
+                                            isRowExpanded(result, 'credito')
+                                                ? 'Ocultar Detalle'
+                                                : 'Ver Detalle'
+                                        "
+                                    />
+                                    <span v-else>No hay información</span>
+                                </td>
+                                <td>
+                                    <CustomButton
+                                        v-if="hasDetallePortafolio(result)"
+                                        class="btn btn-link"
+                                        @click="toggleDetails(result, 'portafolio')"
+                                        data-toggle="modal"
+                                        data-target="#modalPortafolio"
+                                        :text="
+                                            isRowExpanded(result, 'portafolio')
+                                                ? 'Ocultar Detalle'
+                                                : 'Ver Detalle'
+                                        "
+                                    />
+                                    <span v-else>No hay información</span>
+                                </td>
+                                <td>
+                                    <CustomButton
+                                        class="btn btn-link"
+                                        @click="toggleDetails(result, 'cuotaIncorporar')"
+                                        data-toggle="modal"
+                                        data-target="#modalCuotaIncorporar"
+                                        :text="
+                                            isRowExpanded(result, 'cuotaIncorporar')
+                                                ? 'Ocultar Detalle'
+                                                : 'Ver Detalle'
+                                        "
+                                    />
+                                </td>
                             </tr>
                             <!-- Fila para mostrar mensaje si no hay resultados -->
                             <tr v-if="filteredResults.length === 0">
-                                <td colspan="15">No hay resultados</td>
+                                <td colspan="11">No hay resultados</td>
                             </tr>
                         </tbody>
                     </table>
-                    <!-- Modal de Cupones -->
+                    <!-- Modal de Detalle de Crédito -->
                     <div
                         class="modal fade"
-                        id="modalCupones"
+                        id="modalCredito"
                         tabindex="-1"
                         role="dialog"
-                        aria-labelledby="modalCuponesLabel"
+                        aria-labelledby="modalCreditoLabel"
                         aria-hidden="true"
                         data-backdrop="static"
                         data-keyboard="false"
@@ -268,7 +292,7 @@
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="modalCuponesLabel">Cupones</h5>
+                                    <h5 class="modal-title" id="modalCreditoLabel">Detalle de Crédito</h5>
                                     <button
                                         @click="closeExpandedRows"
                                         type="button"
@@ -282,20 +306,44 @@
                                 <div
                                     class="modal-body"
                                     v-for="(result, index) in filteredResults"
-                                    :key="'cupones-' + result.doc + '-' + index"
-                                    v-if="isRowExpanded(result, 'cupones')"
+                                    :key="'credito-' + result.doc + '-' + index"
+                                    v-if="isRowExpanded(result, 'credito')"
                                 >
                                     <table class="table table-sm">
                                         <thead>
                                             <tr>
                                                 <th>Concepto</th>
-                                                <th>Egresos</th>
+                                                <th>Valor</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr v-for="cupon in result.cupones" :key="cupon.id">
-                                                <td>{{ cupon.concept || 'No disponible' }}</td>
-                                                <td>{{ formatCurrency(cupon.egresos) }}</td>
+                                            <tr>
+                                                <td><strong>Valor Desembolso</strong></td>
+                                                <td>{{ formatCurrency(result.valor_desembolso) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Saldo Capital Original</strong></td>
+                                                <td>{{ formatCurrency(result.saldo_capital_original) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Intereses Corrientes</strong></td>
+                                                <td>{{ formatCurrency(result.intereses_corrientes) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Intereses de Mora</strong></td>
+                                                <td>{{ formatCurrency(result.intereses_de_mora) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Seguros</strong></td>
+                                                <td>{{ formatCurrency(result.seguros) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Otros Conceptos</strong></td>
+                                                <td>{{ formatCurrency(result.otros_conceptos) }}</td>
+                                            </tr>
+                                            <tr style="background-color: #2c8c73; color: white; font-weight: bold;">
+                                                <td><strong>Total Obligación</strong></td>
+                                                <td>{{ formatCurrency(result.total_obligacion) }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -306,13 +354,13 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Modal de Embargos -->
+                    <!-- Modal de Detalle Portafolio -->
                     <div
                         class="modal fade"
-                        id="modalEmbargos"
+                        id="modalPortafolio"
                         tabindex="-1"
                         role="dialog"
-                        aria-labelledby="modalEmbargosLabel"
+                        aria-labelledby="modalPortafolioLabel"
                         aria-hidden="true"
                         data-backdrop="static"
                         data-keyboard="false"
@@ -320,7 +368,7 @@
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="modalEmbargosLabel">Detalle de Embargos</h5>
+                                    <h5 class="modal-title" id="modalPortafolioLabel">Detalle Portafolio</h5>
                                     <button
                                         @click="closeExpandedRows"
                                         type="button"
@@ -334,24 +382,52 @@
                                 <div
                                     class="modal-body"
                                     v-for="(result, index) in filteredResults"
-                                    :key="'embargos-' + result.doc + '-' + index"
-                                    v-if="isRowExpanded(result, 'embargos')"
+                                    :key="'portafolio-' + result.doc + '-' + index"
+                                    v-if="isRowExpanded(result, 'portafolio')"
                                 >
                                     <table class="table table-sm">
                                         <thead>
                                             <tr>
-                                                <th>Documento Demandante</th>
-                                                <th>Entidad Demandante</th>
-                                                <th>Fecha Inicio</th>
+                                                <th>Concepto</th>
                                                 <th>Valor</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr v-for="embargo in result.embargos" :key="embargo.id">
-                                                <td>{{ embargo.docdeman || 'No disponible' }}</td>
-                                                <td>{{ embargo.entidaddeman || 'No disponible' }}</td>
-                                                <td>{{ embargo.fembini || 'No disponible' }}</td>
-                                                <td>{{ formatCurrency(embargo.valor || embargo.netoemb) }}</td>
+                                            <tr>
+                                                <td><strong>Costo Compra Portafolio</strong></td>
+                                                <td>{{ formatCurrency(result.costo_compra_portafolio) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Costo Comisión Comercial</strong></td>
+                                                <td>{{ formatCurrency(result.costo_comision_comercial) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Costo Re-Incorporación GAF</strong></td>
+                                                <td>{{ formatCurrency(result.costo_reincorporacion_gaf) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Costo Coadministración (3 Cuotas)</strong></td>
+                                                <td>{{ formatCurrency(result.costo_coadministracion) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Costo Seguro V.D (3 Meses)</strong></td>
+                                                <td>{{ formatCurrency(result.costo_seguro_vd) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Costos Fiduciarios (Fiducoomeva)</strong></td>
+                                                <td>{{ formatCurrency(result.costos_fiduciarios) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Reporte Centrales ($10.000)</strong></td>
+                                                <td>{{ formatCurrency(result.reporte_centrales) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Tecnología ($5.000)</strong></td>
+                                                <td>{{ formatCurrency(result.tecnologia) }}</td>
+                                            </tr>
+                                            <tr style="background-color: #2c8c73; color: white; font-weight: bold;">
+                                                <td><strong>SUB TOTAL Costo Compra + Adm (NPL´S)</strong></td>
+                                                <td>{{ formatCurrency(result.sub_total_costo_compra_adm) }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -362,13 +438,13 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Modal de descuentos -->
+                    <!-- Modal de Cuota a Incorporar -->
                     <div
                         class="modal fade"
-                        id="modalDescuentos"
+                        id="modalCuotaIncorporar"
                         tabindex="-1"
                         role="dialog"
-                        aria-labelledby="modalDescuentosLabel"
+                        aria-labelledby="modalCuotaIncorporarLabel"
                         aria-hidden="true"
                         data-backdrop="static"
                         data-keyboard="false"
@@ -376,7 +452,7 @@
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="modalDescuentosLabel">Obligaciones vigentes en mora</h5>
+                                    <h5 class="modal-title" id="modalCuotaIncorporarLabel">Cuota a Incorporar</h5>
                                     <button
                                         @click="closeExpandedRows"
                                         type="button"
@@ -390,26 +466,70 @@
                                 <div
                                     class="modal-body"
                                     v-for="(result, index) in filteredResults"
-                                    :key="'descuentos-' + result.doc + '-' + index"
-                                    v-if="isRowExpanded(result, 'descuentos')"
+                                    :key="'cuotaIncorporar-' + result.doc + '-' + index"
+                                    v-if="isRowExpanded(result, 'cuotaIncorporar')"
                                 >
                                     <table class="table table-sm">
                                         <thead>
                                             <tr>
-                                                <th>Mliquid</th>
+                                                <th>Concepto</th>
                                                 <th>Valor</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr v-for="descuento in result.descuentos" :key="descuento.id">
-                                                <td>{{ descuento.mliquid || 'No disponible' }}</td>
-                                                <td>{{ formatCurrency(descuento.valor) }}</td>
+                                            <tr style="background-color: #e3f2fd; font-weight: bold;">
+                                                <td><strong>TOTAL CUPO DISPONIBLE</strong></td>
+                                                <td>{{ formatCurrency(result.total_cupo_disponible) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Tasa Pactada</strong></td>
+                                                <td>{{ result.tasa_pactada || 'No disponible' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>RESPETAR TASA PACTADA</strong></td>
+                                                <td>{{ result.respetar_tasa_pactada || 'No disponible' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Tasa Nueva Libranza Ck</strong></td>
+                                                <td>{{ result.tasa_nueva_libranza_ck || 'No disponible' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>PLAZO PACTADO</strong></td>
+                                                <td>{{ result.plazo_pactado || 'No disponible' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>RESPETAR PLAZO PACTADO</strong></td>
+                                                <td>{{ result.respetar_plazo_pactado || 'No disponible' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Plazo Nueva Libranza Ck</strong></td>
+                                                <td>{{ result.plazo_nueva_libranza_ck || 'No disponible' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>CUOTA PACTADA</strong></td>
+                                                <td>{{ formatCurrency(result.cuota_pactada) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>RESPETAR CUOTA PACTADA</strong></td>
+                                                <td>{{ result.respetar_cuota_pactada || 'No disponible' }}</td>
+                                            </tr>
+                                            <tr style="background-color: #2c8c73; color: white; font-weight: bold;">
+                                                <td><strong>CUOTA A INCORPORAR</strong></td>
+                                                <td>{{ formatCurrency(result.cuota_a_incorporar) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Tasa Modificada Conservando plazo 180</strong></td>
+                                                <td>{{ result.tasa_modificada_conservando_plazo_180 || 'No disponible' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Plazo Modificado Conservando Tasa 1,88%</strong></td>
+                                                <td>{{ result.plazo_modificado_conservando_tasa_188 || 'No disponible' }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <div class="modal-footer">
-                                        <CustomButton data-dismiss="modal" @click="closeExpandedRows" text="Cerrar" />
-                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <CustomButton data-dismiss="modal" @click="closeExpandedRows" text="Cerrar" />
                                 </div>
                             </div>
                         </div>
@@ -459,8 +579,10 @@
                             </b-col>
                             <b-col cols="11" class="d-flex justify-content-center align-items-center">
                                 <p class="modal-text">
-                                    Por favor, asegúrese de que el archivo Excel tiene una columna con el encabezado
-                                    <strong>'cédulas'</strong> y que contiene los números de cédula.
+                                    Por favor, asegúrese de que el archivo Excel contiene la columna <strong>'cédulas'</strong> (obligatoria)
+                                    y opcionalmente: <strong>operación, valor desembolso, saldo capital original, intereses corrientes,
+                                    intereses de mora, seguros, otros conceptos, tasa pactada, respetar tasa pactada, plazo pactado,
+                                    cuota pactada, respetar cuota pactada</strong>.
                                 </p>
                             </b-col>
                         </b-row>
@@ -562,7 +684,7 @@ import jsPDF from 'jspdf'; // Si utilizas exportToPDF
 import 'jspdf-autotable'; // Plugin para tablas en jsPDF
 
 export default {
-    name: 'DemographicData',
+    name: 'DemographicDataAvanzado',
     components: {
         CustomButton,
         Lupa,
@@ -583,7 +705,18 @@ export default {
             total: 0,
             mes: '',
             año: '',
-            expandedRows: [] // Lista para rastrear filas expandidas
+            expandedRows: [], // Lista para rastrear filas expandidas
+            uploadProgress: {
+                show: false,
+                steps: [
+                    { id: 1, text: 'Subiendo archivo', status: 'pending', icon: '📤' },
+                    { id: 2, text: 'Validando datos', status: 'pending', icon: '✅' },
+                    { id: 3, text: 'Cruzando AMI', status: 'pending', icon: '🔄' },
+                    { id: 4, text: 'Calculando resultados', status: 'pending', icon: '🧮' },
+                    { id: 5, text: 'Generando salida', status: 'pending', icon: '📊' },
+                    { id: 6, text: 'Listo', status: 'pending', icon: '🎉' }
+                ]
+            }
         };
     },
     created ()   { this.initFromQuery() }   ,
@@ -665,12 +798,42 @@ watch: {
             formData.append('año', this.año);
 
             try {
-                this.isLoading = true;
-                let response = await axios.post('/demografico/upload', formData, {
+                // Mostrar log de progreso
+                this.uploadProgress.show = true;
+                this.resetProgressSteps();
+
+                // Paso 1: Subiendo archivo
+                this.updateProgressStep(1, 'active');
+                await this.delay(800);
+
+                // Limpiar resultados previos
+                this.results = [];
+
+                let response = await axios.post('/demografico-avanzado/upload', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
                 });
+
+                this.updateProgressStep(1, 'completed');
+
+                // Paso 2: Validando datos
+                this.updateProgressStep(2, 'active');
+                await this.delay(1000);
+                this.updateProgressStep(2, 'completed');
+
+                // Paso 3: Cruzando AMI
+                this.updateProgressStep(3, 'active');
+                await this.delay(1200);
+                this.updateProgressStep(3, 'completed');
+
+                // Paso 4: Calculando resultados
+                this.updateProgressStep(4, 'active');
+                await this.delay(1000);
+                this.updateProgressStep(4, 'completed');
+
+                // Paso 5: Generando salida
+                this.updateProgressStep(5, 'active');
                 modal.hide('bv-modal-example');
                 this.error = null;
 
@@ -680,18 +843,43 @@ watch: {
 
                 // Ahora obtener datos de la primera página sin subir archivo nuevamente
                 await this.fetchPaginatedResults(1);
+                this.updateProgressStep(5, 'completed');
+
+                // Paso 6: Listo
+                this.updateProgressStep(6, 'active');
+                await this.delay(800);
+                this.updateProgressStep(6, 'completed');
+
+                // Ocultar el log después de un momento
+                await this.delay(1500);
+                this.uploadProgress.show = false;
             } catch (error) {
+                this.uploadProgress.show = false;
                 this.error = error.response ? error.response.data.error : 'Error subiendo el archivo';
             } finally {
                 this.isLoading = false;
             }
         },
+        resetProgressSteps() {
+            this.uploadProgress.steps.forEach(step => {
+                step.status = 'pending';
+            });
+        },
+        updateProgressStep(stepId, status) {
+            const step = this.uploadProgress.steps.find(s => s.id === stepId);
+            if (step) {
+                step.status = status;
+            }
+        },
+        delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        },
 
         async fetchPaginatedResults (page) {
       this.isLoading = true
       try {
-        console.log('[DemographicData] fetch', { page, mes: this.mes, año: this.año })
-        const { data } = await axios.get('/demografico/fetch-paginated-results', {
+        console.log('[DemographicDataAvanzado] fetch', { page, mes: this.mes, año: this.año })
+        const { data } = await axios.get('/demografico-avanzado/fetch-paginated-results', {
           params: {
             page,
             perPage: this.perPage,
@@ -699,6 +887,18 @@ watch: {
             año: this.año          // ← siempre con tilde
           }
         })
+
+        // LOG COMPLETO DE LA RESPUESTA
+        console.log('========================================')
+        console.log('RESPUESTA COMPLETA DEL SERVIDOR:')
+        console.log(JSON.stringify(data, null, 2))
+        console.log('========================================')
+        console.log('PRIMER REGISTRO (si existe):')
+        if (data.data && data.data.length > 0) {
+          console.log(JSON.stringify(data.data[0], null, 2))
+        }
+        console.log('========================================')
+
         this.results = (data.data || []).map(r => ({
           ...r,
           showCupones: false,
@@ -707,12 +907,15 @@ watch: {
         }))
         this.total = data.total
         this.page  = data.page
+
+        console.log('Total de resultados procesados:', this.results.length)
       } catch (e) {
+        console.error('ERROR en fetchPaginatedResults:', e)
         this.error = e.response?.data?.error || 'Error al cargar datos'
       } finally {
         this.isLoading = false
       }
-    
+
   }
 ,
         isValidMonthYear() {
@@ -756,98 +959,234 @@ watch: {
             this.expandedRows = [];
         },
         exportToPDF() {
-            const doc = new jsPDF();
-            const columns = [
+            const doc = new jsPDF('landscape');
+
+            // Página 1: Información General
+            doc.text('Análisis de Cartera Avanzado - Información General', 14, 15);
+            const columns1 = [
+                'Operación',
                 'Cédula',
-                'Nombre del Cliente',
-                'Fecha Nacimiento',
-                'Edad',
-                'Tipo de Contrato',
-                'Cargo',
-                'Situación Laboral',
-                'Pagaduría',
-                'Cupo Libre',
-                'Colpensiones',
-                'Fiduprevisora',
-                'Fopep'
+                'Nombre',
+                'Secretaria',
+                'Colp.',
+                'Fidu.',
+                'Fopep',
+                'Edad'
             ];
-            const rows = this.filteredResults.map(item => [
+            const rows1 = this.filteredResults.map(item => [
+                item.operacion || 'N/D',
                 item.doc,
-                item.nombre_usuario || 'No disponible',
-                item.fecha_nacimiento || 'No disponible',
-                item.edad || 'No disponible',
-                this.capitalizeFirstLetter(item.tipo_contrato) || 'No disponible',
-                item.cargo || 'No disponible',
-                item.situacion_laboral || 'No disponible',
-                item.pagaduria || 'No disponible',
-                this.formatCurrency(item.cupo_libre),
+                (item.nombre_usuario || 'N/D').substring(0, 25),
+                (item.pagaduria || 'N/D').substring(0, 20),
                 item.colpensiones ? 'Sí' : 'No',
                 item.fiducidiaria ? 'Sí' : 'No',
-                item.fopep ? 'Sí' : 'No'
+                item.fopep ? 'Sí' : 'No',
+                item.edad || 'N/D'
             ]);
             doc.autoTable({
-                head: [columns],
-                body: rows,
-                styles: { fontSize: 8 },
-                headStyles: { fillColor: [32, 160, 233] }
+                head: [columns1],
+                body: rows1,
+                startY: 20,
+                styles: { fontSize: 6, cellPadding: 1.5 },
+                headStyles: { fillColor: [44, 140, 115], fontSize: 7 }
             });
-            doc.save('resultados.pdf');
+
+            // Página 2: Detalle de Crédito
+            doc.addPage();
+            doc.text('Análisis de Cartera Avanzado - Detalle de Crédito', 14, 15);
+            const columns2 = [
+                'Cédula',
+                'Nombre',
+                'Val. Desemb.',
+                'Saldo Cap.',
+                'Int. Corr.',
+                'Int. Mora',
+                'Seguros',
+                'Otros',
+                'Total Oblig.'
+            ];
+            const rows2 = this.filteredResults.map(item => [
+                item.doc,
+                (item.nombre_usuario || 'N/D').substring(0, 25),
+                this.formatCurrency(item.valor_desembolso),
+                this.formatCurrency(item.saldo_capital_original),
+                this.formatCurrency(item.intereses_corrientes),
+                this.formatCurrency(item.intereses_de_mora),
+                this.formatCurrency(item.seguros),
+                this.formatCurrency(item.otros_conceptos),
+                this.formatCurrency(item.total_obligacion)
+            ]);
+            doc.autoTable({
+                head: [columns2],
+                body: rows2,
+                startY: 20,
+                styles: { fontSize: 5.5, cellPadding: 1 },
+                headStyles: { fillColor: [44, 140, 115], fontSize: 6 }
+            });
+
+            // Página 3: Detalle de Portafolio
+            doc.addPage();
+            doc.text('Análisis de Cartera Avanzado - Detalle Portafolio', 14, 15);
+            const columns3 = [
+                'Cédula',
+                'Nombre',
+                'Costo Portaf.',
+                'Comisión',
+                'Re-Inc. GAF',
+                'Coadmin.',
+                'Seguro V.D',
+                'Fiduciarios',
+                'Centrales',
+                'Tecnología',
+                'SUB TOTAL'
+            ];
+            const rows3 = this.filteredResults.map(item => [
+                item.doc,
+                (item.nombre_usuario || 'N/D').substring(0, 20),
+                this.formatCurrency(item.costo_compra_portafolio),
+                this.formatCurrency(item.costo_comision_comercial),
+                this.formatCurrency(item.costo_reincorporacion_gaf),
+                this.formatCurrency(item.costo_coadministracion),
+                this.formatCurrency(item.costo_seguro_vd),
+                this.formatCurrency(item.costos_fiduciarios),
+                this.formatCurrency(item.reporte_centrales),
+                this.formatCurrency(item.tecnologia),
+                this.formatCurrency(item.sub_total_costo_compra_adm)
+            ]);
+            doc.autoTable({
+                head: [columns3],
+                body: rows3,
+                startY: 20,
+                styles: { fontSize: 5, cellPadding: 1 },
+                headStyles: { fillColor: [44, 140, 115], fontSize: 5.5 }
+            });
+
+            // Página 4: Cuota a Incorporar
+            doc.addPage();
+            doc.text('Análisis de Cartera Avanzado - Cuota a Incorporar', 14, 15);
+            const columns4 = [
+                'Cédula',
+                'Nombre',
+                'Total Cupo',
+                'Tasa Pact.',
+                'Resp. Tasa',
+                'Plazo Pact.',
+                'Resp. Plazo',
+                'Cuota Pact.',
+                'Resp. Cuota',
+                'Cuota a Inc.'
+            ];
+            const rows4 = this.filteredResults.map(item => [
+                item.doc,
+                (item.nombre_usuario || 'N/D').substring(0, 20),
+                this.formatCurrency(item.total_cupo_disponible),
+                item.tasa_pactada || 'N/D',
+                item.respetar_tasa_pactada || 'N/D',
+                item.plazo_pactado || 'N/D',
+                item.respetar_plazo_pactado || 'N/D',
+                this.formatCurrency(item.cuota_pactada),
+                item.respetar_cuota_pactada || 'N/D',
+                this.formatCurrency(item.cuota_a_incorporar)
+            ]);
+            doc.autoTable({
+                head: [columns4],
+                body: rows4,
+                startY: 20,
+                styles: { fontSize: 5, cellPadding: 1 },
+                headStyles: { fillColor: [44, 140, 115], fontSize: 5.5 }
+            });
+
+            doc.save('analisis_cartera_avanzado.pdf');
         },
         exportToExcel() {
             const columns = [
+                'Operación',
                 'Cédula',
                 'Nombre del Cliente',
-                'Fecha Nacimiento',
-                'Edad',
-                'Tipo de Contrato',
-                'Cargo',
-                'Situación Laboral',
-                'Pagaduría',
-                'Cupo Libre',
-                'Detalle de Embargos',
-                'Detalle de Cupones',
-                'Detalle de Descuentos',
+                'Secretaria (SED - SEM)',
                 'Colpensiones',
                 'Fiduprevisora',
-                'Fopep'
+                'Fopep',
+                'Edad',
+                // Detalle de Crédito
+                'Valor Desembolso',
+                'Saldo Capital Original',
+                'Intereses Corrientes',
+                'Intereses de Mora',
+                'Seguros',
+                'Otros Conceptos',
+                'Total Obligación',
+                // Detalle Portafolio
+                'Costo Compra Portafolio',
+                'Costo Comisión Comercial',
+                'Costo Re-Incorporación GAF',
+                'Costo Coadministración (3 Cuotas)',
+                'Costo Seguro V.D (3 Meses)',
+                'Costos Fiduciarios (Fiducoomeva)',
+                'Reporte Centrales ($10.000)',
+                'Tecnología ($5.000)',
+                'SUB TOTAL Costo Compra + Adm (NPL´S)',
+                // Cuota a Incorporar
+                'TOTAL CUPO DISPONIBLE',
+                'Tasa Pactada',
+                'RESPETAR TASA PACTADA',
+                'Tasa Nueva Libranza Ck',
+                'PLAZO PACTADO',
+                'RESPETAR PLAZO PACTADO',
+                'Plazo Nueva Libranza Ck',
+                'CUOTA PACTADA',
+                'RESPETAR CUOTA PACTADA',
+                'CUOTA A INCORPORAR',
+                'Tasa Modificada Conservando plazo 180',
+                'Plazo Modificado Conservando Tasa 1,88%'
             ];
 
             const rows = this.results.map(item => [
+                item.operacion || 'No disponible',
                 item.doc || 'No disponible',
                 item.nombre_usuario || 'No disponible',
-                item.fecha_nacimiento || 'No disponible',
-                item.edad || 'No disponible',
-                item.tipo_contrato || 'No disponible',
-                item.cargo || 'No disponible',
-                item.situacion_laboral || 'No disponible',
                 item.pagaduria || 'No disponible',
-                item.cupo_libre || 'No disponible',
-                this.formatEmbargos(item.embargos),
-                this.formatCupones(item.cupones),
-                this.formatDescuentos(item.descuentos),
                 item.colpensiones ? 'Sí' : 'No',
                 item.fiducidiaria ? 'Sí' : 'No',
-                item.fopep ? 'Sí' : 'No'
+                item.fopep ? 'Sí' : 'No',
+                item.edad || 'No disponible',
+                // Detalle de Crédito
+                item.valor_desembolso || 'No disponible',
+                item.saldo_capital_original || 'No disponible',
+                item.intereses_corrientes || 'No disponible',
+                item.intereses_de_mora || 'No disponible',
+                item.seguros || 'No disponible',
+                item.otros_conceptos || 'No disponible',
+                item.total_obligacion || 'No disponible',
+                // Detalle Portafolio
+                item.costo_compra_portafolio || 'No disponible',
+                item.costo_comision_comercial || 'No disponible',
+                item.costo_reincorporacion_gaf || 'No disponible',
+                item.costo_coadministracion || 'No disponible',
+                item.costo_seguro_vd || 'No disponible',
+                item.costos_fiduciarios || 'No disponible',
+                item.reporte_centrales || 'No disponible',
+                item.tecnologia || 'No disponible',
+                item.sub_total_costo_compra_adm || 'No disponible',
+                // Cuota a Incorporar
+                item.total_cupo_disponible || 'No disponible',
+                item.tasa_pactada || 'No disponible',
+                item.respetar_tasa_pactada || 'No disponible',
+                item.tasa_nueva_libranza_ck || 'No disponible',
+                item.plazo_pactado || 'No disponible',
+                item.respetar_plazo_pactado || 'No disponible',
+                item.plazo_nueva_libranza_ck || 'No disponible',
+                item.cuota_pactada || 'No disponible',
+                item.respetar_cuota_pactada || 'No disponible',
+                item.cuota_a_incorporar || 'No disponible',
+                item.tasa_modificada_conservando_plazo_180 || 'No disponible',
+                item.plazo_modificado_conservando_tasa_188 || 'No disponible'
             ]);
 
             const worksheet = XLSX.utils.aoa_to_sheet([columns, ...rows]);
-
-            // Aplicar wrap text a las columnas de detalles
-            const wrapTextColumns = ['J', 'K', 'L']; // Columnas para Embargos, Cupones y Descuentos
-            wrapTextColumns.forEach(col => {
-                for (let row = 2; row <= rows.length + 1; row++) {
-                    // +1 por el encabezado
-                    const cellRef = col + row;
-                    if (worksheet[cellRef]) {
-                        if (!worksheet[cellRef].s) worksheet[cellRef].s = {};
-                        worksheet[cellRef].s.alignment = { wrapText: true };
-                    }
-                }
-            });
-
             const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, 'Datos Demográficos');
-            XLSX.writeFile(workbook, 'datos_demograficos.xlsx');
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Análisis Cartera Avanzado');
+            XLSX.writeFile(workbook, 'analisis_cartera_avanzado.xlsx');
         },
 
         // Helper para formatear embargos
@@ -887,6 +1226,19 @@ watch: {
                 return 'No disponible';
             }
             return new Intl.NumberFormat('es-CO').format(value);
+        },
+        hasDetalleCredito(result) {
+            // Verifica si hay al menos un valor de crédito disponible
+            return result.valor_desembolso != null ||
+                   result.saldo_capital_original != null ||
+                   result.intereses_corrientes != null ||
+                   result.intereses_de_mora != null ||
+                   result.seguros != null ||
+                   result.otros_conceptos != null;
+        },
+        hasDetallePortafolio(result) {
+            // Verifica si hay saldo capital original para calcular portafolio
+            return result.saldo_capital_original != null && result.saldo_capital_original > 0;
         }
     }
 };
@@ -977,5 +1329,99 @@ th {
     display: flex;
     justify-content: center;
     margin-top: 20px;
+}
+
+/* Progress Log Styles */
+.progress-log-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 1100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.progress-log-container {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 30px 40px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.progress-title {
+    color: #2c8c73;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.progress-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.progress-step {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    border-radius: 8px;
+    background: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+.progress-step.step-pending {
+    opacity: 0.5;
+}
+
+.progress-step.step-active {
+    background: #e3f2fd;
+    border-left: 4px solid #2196f3;
+    opacity: 1;
+    box-shadow: 0 2px 8px rgba(33, 150, 243, 0.2);
+}
+
+.progress-step.step-completed {
+    background: #e8f5e9;
+    border-left: 4px solid #2c8c73;
+    opacity: 1;
+}
+
+.step-icon {
+    font-size: 24px;
+    margin-right: 12px;
+    min-width: 30px;
+}
+
+.step-text {
+    flex: 1;
+    font-size: 16px;
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.step-loader {
+    font-size: 18px;
+    color: #2196f3;
+    font-weight: bold;
+    animation: blink 1s infinite;
+}
+
+.step-check {
+    font-size: 20px;
+    color: #2c8c73;
+    font-weight: bold;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
 }
 </style>
