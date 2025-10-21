@@ -75,31 +75,39 @@
                                     variant="outline-primary"
                                     @click="showViewPoliticaModal(data.item)"
                                     class="mr-1"
+                                    v-b-tooltip.hover
+                                    title="Ver detalles"
                                 >
-                                    <i class="fa fa-eye"></i> Ver
+                                    <i class="fa fa-eye"></i>
                                 </b-button>
                                 <b-button
                                     size="sm"
                                     variant="outline-warning"
                                     @click="showEditPoliticaModal(data.item)"
                                     class="mr-1"
+                                    v-b-tooltip.hover
+                                    title="Editar"
                                 >
-                                    <i class="fa fa-edit"></i> Editar
+                                    <i class="fa fa-edit"></i>
                                 </b-button>
                                 <b-button
                                     size="sm"
                                     :variant="data.item.activo ? 'outline-secondary' : 'outline-success'"
                                     @click="toggleActivoPolitica(data.item)"
                                     class="mr-1"
+                                    v-b-tooltip.hover
+                                    :title="data.item.activo ? 'Desactivar' : 'Activar'"
                                 >
-                                    {{ data.item.activo ? 'Desactivar' : 'Activar' }}
+                                    <i :class="data.item.activo ? 'fa fa-toggle-on' : 'fa fa-toggle-off'"></i>
                                 </b-button>
                                 <b-button
                                     size="sm"
                                     variant="outline-danger"
                                     @click="confirmDeletePolitica(data.item)"
+                                    v-b-tooltip.hover
+                                    title="Eliminar"
                                 >
-                                    <i class="fa fa-trash"></i> Eliminar
+                                    <i class="fa fa-trash"></i>
                                 </b-button>
                             </template>
                         </b-table>
@@ -158,31 +166,39 @@
                                     variant="outline-primary"
                                     @click="showViewFondoModal(data.item)"
                                     class="mr-1"
+                                    v-b-tooltip.hover
+                                    title="Ver detalles"
                                 >
-                                    <i class="fa fa-eye"></i> Ver
+                                    <i class="fa fa-eye"></i>
                                 </b-button>
                                 <b-button
                                     size="sm"
                                     variant="outline-warning"
                                     @click="showEditFondoModal(data.item)"
                                     class="mr-1"
+                                    v-b-tooltip.hover
+                                    title="Editar"
                                 >
-                                    <i class="fa fa-edit"></i> Editar
+                                    <i class="fa fa-edit"></i>
                                 </b-button>
                                 <b-button
                                     size="sm"
                                     :variant="data.item.activo ? 'outline-secondary' : 'outline-success'"
                                     @click="toggleActivoFondo(data.item)"
                                     class="mr-1"
+                                    v-b-tooltip.hover
+                                    :title="data.item.activo ? 'Desactivar' : 'Activar'"
                                 >
-                                    {{ data.item.activo ? 'Desactivar' : 'Activar' }}
+                                    <i :class="data.item.activo ? 'fa fa-toggle-on' : 'fa fa-toggle-off'"></i>
                                 </b-button>
                                 <b-button
                                     size="sm"
                                     variant="outline-danger"
                                     @click="confirmDeleteFondo(data.item)"
+                                    v-b-tooltip.hover
+                                    title="Eliminar"
                                 >
-                                    <i class="fa fa-trash"></i> Eliminar
+                                    <i class="fa fa-trash"></i>
                                 </b-button>
                             </template>
                         </b-table>
