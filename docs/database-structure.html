@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAF - Estructura de Base de Datos</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --gaf-green: #2c8c73;
+            --gaf-dark: #2c3e50;
+            --gaf-light: #ecf0f1;
+            --gaf-accent: #3498db;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+
+        .container {
+            max-width: 1400px;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: var(--gaf-green);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .info-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--gaf-light);
+            border-radius: 20px;
+            margin: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--gaf-dark);
+        }
+
+        .info-badge i {
+            margin-right: 0.5rem;
+            color: var(--gaf-green);
+        }
+
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            color: var(--gaf-green);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--gaf-green);
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title i {
+            margin-right: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .table-card {
+            background: #f8f9fa;
+            border-left: 4px solid var(--gaf-green);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .table-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(44, 140, 115, 0.2);
+        }
+
+        .table-name {
+            font-weight: 700;
+            color: var(--gaf-dark);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .table-name code {
+            background: var(--gaf-green);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .table-purpose {
+            color: #7f8c8d;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .field-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .field-list li {
+            padding: 0.4rem 0;
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        .field-list li i {
+            color: var(--gaf-green);
+            margin-right: 0.5rem;
+            width: 20px;
+        }
+
+        .badge-custom {
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge-success { background: #27ae60; color: white; }
+        .badge-danger { background: #e74c3c; color: white; }
+        .badge-warning { background: #f39c12; color: white; }
+        .badge-info { background: #3498db; color: white; }
+
+        .alert-custom {
+            border-left: 4px solid;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        .comparison-table {
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .comparison-table td {
+            padding: 0.8rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .comparison-table td:first-child {
+            font-weight: 600;
+            width: 250px;
+        }
+
+        .roles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .role-card {
+            background: linear-gradient(135deg, var(--gaf-green) 0%, #27ae60 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .role-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .role-card h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .role-card .role-id {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-size: 0.9rem;
+            color: #e74c3c;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 2rem;
+            padding: 1rem;
+        }
+
+        .footer a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem 0;
+            }
+
+            .section {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1><i class="fas fa-database"></i> GAF Solutions</h1>
+            <p class="subtitle">Documentación de Estructura de Base de Datos</p>
+            <div class="mt-3">
+                <span class="info-badge"><i class="fas fa-server"></i> MySQL 8.0+</span>
+                <span class="info-badge"><i class="fas fa-cog"></i> InnoDB Engine</span>
+                <span class="info-badge"><i class="fas fa-code"></i> Laravel Framework</span>
+                <span class="info-badge"><i class="fas fa-table"></i> 50+ Tablas</span>
+            </div>
+        </div>
+
+        <!-- Sistema de Autenticación -->
+        <div class="section">
+            <h2 class="section-title">
+                <i class="fas fa-shield-alt"></i>
+                Sistema de Autenticación
+            </h2>
+
+            <div class="alert-custom alert-danger">
+                <strong><i class="fas fa-exclamation-triangle"></i> Importante:</strong>
+                Este proyecto <strong>NO utiliza Spatie Laravel Permission</strong>.
+                Implementa un sistema personalizado y simplificado de roles.
+            </div>
+
+            <!-- Tabla Users -->
+            <div class="table-card">
+                <div class="table-name">
+                    <code>users</code>
+                    <span class="badge-custom badge-info float-end">Línea: 1453</span>
+                </div>
+                <p class="table-purpose">Tabla principal de usuarios del sistema</p>
+
+                <ul class="field-list">
+                    <li><i class="fas fa-key"></i> <code>id</code> - INT UNSIGNED AUTO_INCREMENT</li>
+                    <li><i class="fas fa-user-tag"></i> <code>roles_id</code> - INT (Relación 1:1 con roles)</li>
+                    <li><i class="fas fa-gem"></i> <code>ami_diamond, ami_gold, ami_silver</code> - Flags de categorías</li>
+                    <li><i class="fas fa-building"></i> <code>id_company</code> - Relación jerárquica (empresa)</li>
+                    <li><i class="fas fa-sitemap"></i> <code>id_padre</code> - Relación jerárquica (padre)</li>
+                    <li><i class="fas fa-user"></i> <code>name</code> - VARCHAR(191)</li>
+                    <li><i class="fas fa-envelope"></i> <code>email</code> - VARCHAR(191) UNIQUE</li>
+                    <li><i class="fas fa-lock"></i> <code>password</code> - VARCHAR(191)</li>
+                    <li><i class="fas fa-trash"></i> <code>deleted_at</code> - Soft Deletes</li>
+                </ul>
+
+                <div class="alert-custom alert-success mt-3">
+                    <strong>Características:</strong> Auto-referencias para jerarquía de usuarios, Soft Deletes,
+                    Flags personalizados para categorización
+                </div>
+            </div>
+
+            <!-- Tabla Roles -->
+            <div class="table-card">
+                <div class="table-name">
+                    <code>roles</code>
+                    <span class="badge-custom badge-info float-end">Línea: 1343</span>
+                </div>
+                <p class="table-purpose">Roles del sistema - Implementación simple sin permisos granulares</p>
+
+                <ul class="field-list">
+                    <li><i class="fas fa-key"></i> <code>id</code> - INT AUTO_INCREMENT</li>
+                    <li><i class="fas fa-tag"></i> <code>rol</code> - VARCHAR(100)</li>
+                    <li><i class="fas fa-clock"></i> <code>created_at, updated_at</code> - Timestamps</li>
+                    <li><i class="fas fa-trash"></i> <code>deleted_at</code> - Soft Deletes</li>
+                </ul>
+
+                <h5 class="mt-3 mb-3">Roles Disponibles:</h5>
+                <div class="roles-grid">
+                    <div class="role-card">
+                        <h4>ADMIN_SISTEMA</h4>
+                        <p class="role-id">ID: 1</p>
+                    </div>
+                    <div class="role-card">
+                        <h4>ADMIN_HEGO</h4>
+                        <p class="role-id">ID: 4</p>
+                    </div>
+                    <div class="role-card">
+                        <h4>ADMIN_AMI</h4>
+                        <p class="role-id">ID: 5</p>
+                    </div>
+                    <div class="role-card">
+                        <h4>USUARIO</h4>
+                        <p class="role-id">ID: 6</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comparación Spatie -->
+            <h4 class="mt-4 mb-3">Comparación con Spatie Laravel Permission:</h4>
+            <table class="comparison-table">
+                <tr>
+                    <td><code>permissions</code></td>
+                    <td><span class="badge-custom badge-danger"><i class="fas fa-times"></i> NO EXISTE</span></td>
+                </tr>
+                <tr>
+                    <td><code>roles</code></td>
+                    <td><span class="badge-custom badge-success"><i class="fas fa-check"></i> EXISTE (Simplificado)</span></td>
+                </tr>
+                <tr>
+                    <td><code>model_has_permissions</code></td>
+                    <td><span class="badge-custom badge-danger"><i class="fas fa-times"></i> NO EXISTE</span></td>
+                </tr>
+                <tr>
+                    <td><code>model_has_roles</code></td>
+                    <td><span class="badge-custom badge-danger"><i class="fas fa-times"></i> NO EXISTE</span></td>
+                </tr>
+                <tr>
+                    <td><code>role_has_permissions</code></td>
+                    <td><span class="badge-custom badge-danger"><i class="fas fa-times"></i> NO EXISTE</span></td>
+                </tr>
+            </table>
+
+            <div class="alert-custom alert-warning mt-3">
+                <strong>Conclusión:</strong> Sistema de roles 1:1 (Un usuario = Un rol).
+                No hay permisos granulares ni relaciones many-to-many.
+            </div>
+        </div>
+
+        <!-- Tablas del Negocio -->
+        <div class="section">
+            <h2 class="section-title">
+                <i class="fas fa-briefcase"></i>
+                Tablas Principales del Negocio
+            </h2>
+
+            <!-- Clientes -->
+            <div class="table-card">
+                <div class="table-name">
+                    <code>clientes</code>
+                    <span class="badge-custom badge-info float-end">Línea: 330</span>
+                </div>
+                <p class="table-purpose">Deudores/Clientes de carteras de cobranza</p>
+
+                <ul class="field-list">
+                    <li><i class="fas fa-key"></i> <code>id</code> - INT PRIMARY KEY</li>
+                    <li><i class="fas fa-user"></i> <code>tipodocumento, documento</code> - Identificación (CC, TI, CE)</li>
+                    <li><i class="fas fa-id-card"></i> <code>nombres, apellidos</code> - Datos personales</li>
+                    <li><i class="fas fa-birthday-cake"></i> <code>fechanto</code> - Fecha de nacimiento</li>
+                    <li><i class="fas fa-venus-mars"></i> <code>sexo</code> - Género (M/F)</li>
+                    <li><i class="fas fa-map-marker-alt"></i> <code>ciudades_id</code> - FK a ciudades</li>
+                    <li><i class="fas fa-briefcase"></i> <code>cargo, centro_costo</code> - Información laboral</li>
+                    <li><i class="fas fa-money-check"></i> <code>pension</code> - Entidad pensional (COLPENSIONES, FOPEP, FIDUPREVISIORA)</li>
+                    <li><i class="fas fa-university"></i> <code>banco, cuenta</code> - Información bancaria</li>
+                    <li><i class="fas fa-dollar-sign"></i> <code>ingresos</code> - BIGINT - Ingresos mensuales</li>
+                    <li><i class="fas fa-user-tie"></i> <code>users_id</code> - FK a users (Usuario asignado)</li>
+                </ul>
+
+                <div class="alert-custom alert-success mt-3">
+                    <strong>Perfil típico:</strong> Pensionados del sector público (militares, policías, docentes)
+                    con ingresos vía pensión y descuentos por nómina.
+                </div>
+            </div>
+
+            <!-- Carteras -->
+            <div class="table-card">
+                <div class="table-name">
+                    <code>carteras</code>
+                    <span class="badge-custom badge-info float-end">Línea: 210</span>
+                </div>
+                <p class="table-purpose">Portafolios de créditos/deudas comprados por GAF</p>
+
+                <ul class="field-list">
+                    <li><i class="fas fa-key"></i> <code>id</code> - INT AUTO_INCREMENT</li>
+                    <li><i class="fas fa-industry"></i> <code>sector_data, sector_cifin</code> - Sectores económicos</li>
+                    <li><i class="fas fa-university"></i> <code>nombre_obligacion</code> - VARCHAR(250) - Entidad acreedora</li>
+                    <li><i class="fas fa-star"></i> <code>calif_wab</code> - Calificación de cartera (A, B, C)</li>
+                    <li><i class="fas fa-handshake"></i> <code>compraAF1_id, compraAF2_id</code> - Aliados compradores</li>
+                    <li><i class="fas fa-file-invoice-dollar"></i> <code>cuota</code> - INT - Cuota mensual</li>
+                    <li><i class="fas fa-money-bill-wave"></i> <code>saldo</code> - INT - Saldo actual</li>
+                    <li><i class="fas fa-chart-line"></i> <code>valor_ini</code> - INT - Valor inicial</li>
+                    <li><i class="fas fa-percentage"></i> <code>dcto_logrado</code> - Descuento logrado</li>
+                    <li><i class="fas fa-calendar"></i> <code>fecha_vence</code> - DATE - Fecha de vencimiento</li>
+                </ul>
+
+                <h5 class="mt-3 mb-2">Entidades Acreedoras Comunes:</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <strong>Bancos:</strong>
+                        <ul class="field-list">
+                            <li><i class="fas fa-university"></i> DAVIVIENDA</li>
+                            <li><i class="fas fa-university"></i> GNB SUDAMERIS</li>
+                            <li><i class="fas fa-university"></i> BANCO POPULAR</li>
+                            <li><i class="fas fa-university"></i> COLPATRIA</li>
+                            <li><i class="fas fa-university"></i> BANCO DE OCCIDENTE</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Cooperativas/Financieras:</strong>
+                        <ul class="field-list">
+                            <li><i class="fas fa-hands-helping"></i> COOPROSOL</li>
+                            <li><i class="fas fa-hands-helping"></i> COOPCOMUNIDAD</li>
+                            <li><i class="fas fa-credit-card"></i> CREDFINANCIERA</li>
+                            <li><i class="fas fa-credit-card"></i> EXCELCREDIT</li>
+                            <li><i class="fas fa-credit-card"></i> BAYPORT</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Embargos -->
+            <div class="table-card">
+                <div class="table-name">
+                    <code>embargos</code>
+                    <span class="badge-custom badge-info float-end">Línea: 704</span>
+                </div>
+                <p class="table-purpose">Embargos judiciales sobre clientes</p>
+
+                <ul class="field-list">
+                    <li><i class="fas fa-key"></i> <code>id</code> - INT AUTO_INCREMENT</li>
+                    <li><i class="fas fa-user"></i> <code>clientes_id</code> - FK a clientes</li>
+                    <li><i class="fas fa-gavel"></i> <code>tiposembargos_id</code> - FK a tipos de embargo</li>
+                    <li><i class="fas fa-question-circle"></i> <code>motivos_id</code> - FK a motivos</li>
+                    <li><i class="fas fa-balance-scale"></i> <code>demandantes_id</code> - FK a demandantes</li>
+                    <li><i class="fas fa-dollar-sign"></i> <code>valorembargo</code> - INT - Valor del embargo</li>
+                    <li><i class="fas fa-toggle-on"></i> <code>estado</code> - CHAR(1) - Estado activo/inactivo</li>
+                </ul>
+
+                <h5 class="mt-3 mb-2">Tipos de Embargos:</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <span class="badge-custom badge-warning">CIVIL</span>
+                        <span class="badge-custom badge-warning">ALIMENTOS/CTA AHORROS</span>
+                    </div>
+                    <div class="col-md-6">
+                        <span class="badge-custom badge-warning">CUENTA AHORROS/CORRIENTE</span>
+                        <span class="badge-custom badge-success">NO TIENE</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tablas de Catálogos -->
+        <div class="section">
+            <h2 class="section-title">
+                <i class="fas fa-list"></i>
+                Tablas de Catálogos y Configuración
+            </h2>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="table-card">
+                        <div class="table-name"><code>sectores</code></div>
+                        <ul class="field-list">
+                            <li><i class="fas fa-industry"></i> FINANCIERO</li>
+                            <li><i class="fas fa-hands-helping"></i> COOPERATIVO</li>
+                            <li><i class="fas fa-building"></i> REAL</li>
+                            <li><i class="fas fa-signal"></i> TELCOS</li>
+                            <li><i class="fas fa-question"></i> NO REGISTRA</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="table-card">
+                        <div class="table-name"><code>pagadurias</code></div>
+                        <p class="table-purpose">Entidades pagadoras de nómina y pensiones</p>
+                        <ul class="field-list">
+                            <li><i class="fas fa-landmark"></i> COLPENSIONES</li>
+                            <li><i class="fas fa-landmark"></i> FOPEP</li>
+                            <li><i class="fas fa-landmark"></i> FIDUPREVISIORA</li>
+                            <li><i class="fas fa-school"></i> SED VALLE / SEM CALI</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="table-card">
+                        <div class="table-name"><code>centrales</code></div>
+                        <p class="table-purpose">Centrales de riesgo crediticio</p>
+                        <ul class="field-list">
+                            <li><i class="fas fa-chart-line"></i> CIFIN</li>
+                            <li><i class="fas fa-chart-line"></i> DATACRÉDITO</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="table-card">
+                        <div class="table-name"><code>aliados</code></div>
+                        <p class="table-purpose">Socios y aliados comerciales</p>
+                        <ul class="field-list">
+                            <li><i class="fas fa-handshake"></i> Aliados de compra de cartera</li>
+                            <li><i class="fas fa-users"></i> Partners comerciales</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="table-card">
+                        <div class="table-name"><code>ciudades</code></div>
+                        <p class="table-purpose">Catálogo de ciudades</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="table-card">
+                        <div class="table-name"><code>departamentos</code></div>
+                        <p class="table-purpose">Catálogo de departamentos</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="table-card">
+                        <div class="table-name"><code>oficinas</code></div>
+                        <p class="table-purpose">Oficinas de atención</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tablas Operacionales -->
+        <div class="section">
+            <h2 class="section-title">
+                <i class="fas fa-cogs"></i>
+                Tablas Operacionales
+            </h2>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="table-card">
+                        <div class="table-name"><code>descuentosaplicados</code></div>
+                        <p class="table-purpose">Descuentos por nómina aplicados exitosamente</p>
+                    </div>
+                    <div class="table-card">
+                        <div class="table-name"><code>descuentosnoaplicados</code></div>
+                        <p class="table-purpose">Descuentos rechazados o no aplicados</p>
+                    </div>
+                    <div class="table-card">
+                        <div class="table-name"><code>consultas</code></div>
+                        <p class="table-purpose">Consultas a centrales de riesgo</p>
+                    </div>
+                    <div class="table-card">
+                        <div class="table-name"><code>planos</code></div>
+                        <p class="table-purpose">Archivos planos de carga masiva</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="table-card">
+                        <div class="table-name"><code>registros_financieros</code></div>
+                        <p class="table-purpose">Registros contables y financieros</p>
+                    </div>
+                    <div class="table-card">
+                        <div class="table-name"><code>factores_x_millon_gnb</code></div>
+                        <p class="table-purpose">Factores financieros GNB</p>
+                    </div>
+                    <div class="table-card">
+                        <div class="table-name"><code>factores_x_millon_kredit</code></div>
+                        <p class="table-purpose">Factores financieros Kredit</p>
+                    </div>
+                    <div class="table-card">
+                        <div class="table-name"><code>carga_archivo</code></div>
+                        <p class="table-purpose">Control de archivos cargados</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tablas del Sistema -->
+        <div class="section">
+            <h2 class="section-title">
+                <i class="fas fa-server"></i>
+                Tablas del Sistema (Laravel)
+            </h2>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="table-card">
+                        <div class="table-name"><code>migrations</code></div>
+                        <p class="table-purpose">Control de migraciones</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="table-card">
+                        <div class="table-name"><code>password_resets</code></div>
+                        <p class="table-purpose">Tokens de reseteo de contraseña</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="table-card">
+                        <div class="table-name"><code>failed_jobs</code></div>
+                        <p class="table-purpose">Jobs fallidos en cola</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="table-card">
+                        <div class="table-name"><code>jobs</code></div>
+                        <p class="table-purpose">Cola de trabajos en background</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="table-card">
+                        <div class="table-name"><code>observaciones</code></div>
+                        <p class="table-purpose">Notas y observaciones del sistema</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resumen del Negocio -->
+        <div class="section">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i>
+                Resumen del Modelo de Negocio
+            </h2>
+
+            <div class="alert-custom alert-success">
+                <h4><i class="fas fa-building"></i> GAF Solutions - Sistema de Gestión de Cartera</h4>
+                <p><strong>Modelo de negocio:</strong> Compra de carteras de créditos en mora y recuperación mediante descuentos directos por nómina (libranzas)</p>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-shopping-cart fa-3x mb-3" style="color: var(--gaf-green);"></i>
+                            <h5>1. Compra de Carteras</h5>
+                            <p class="text-muted">Adquisición de portafolios de créditos en mora de entidades financieras</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-users fa-3x mb-3" style="color: var(--gaf-green);"></i>
+                            <h5>2. Gestión de Deudores</h5>
+                            <p class="text-muted">Principalmente pensionados del sector público con ingresos estables</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-file-invoice-dollar fa-3x mb-3" style="color: var(--gaf-green);"></i>
+                            <h5>3. Descuentos por Nómina</h5>
+                            <p class="text-muted">Recuperación mediante libranzas (descuentos directos)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-search-dollar fa-3x mb-3" style="color: var(--gaf-green);"></i>
+                            <h5>4. Consultas a Centrales</h5>
+                            <p class="text-muted">Verificación de historial crediticio en CIFIN y DATACRÉDITO</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-gavel fa-3x mb-3" style="color: var(--gaf-green);"></i>
+                            <h5>5. Gestión de Embargos</h5>
+                            <p class="text-muted">Control de embargos judiciales que afectan la capacidad de pago</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>
+                <i class="fas fa-code"></i> Documentación generada para
+                <a href="https://gafsolutions.co" target="_blank">GAF Solutions</a>
+            </p>
+            <p style="font-size: 0.9rem; opacity: 0.8;">
+                Archivo: <code style="background: rgba(255,255,255,0.2); color: white;">ckcomerc_ami.sql</code> |
+                Base de datos MySQL | InnoDB Engine
+            </p>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

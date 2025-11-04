@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class PoliticasPortafolioController extends Controller
 {
@@ -18,23 +18,26 @@ class PoliticasPortafolioController extends Controller
     }
 
     /**
-     * Get all politicas from session storage.
+     * Get all politicas from database.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function get(Request $request)
     {
-        $politicas = session('politicas_portafolio', []);
+        $politicas = DB::table('politicas_portafolio')
+            ->whereNull('deleted_at')
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return response()->json([
             'success' => true,
-            'politicas' => array_values($politicas) // Re-index array
+            'politicas' => $politicas
         ]);
     }
 
     /**
-     * Store a new politica in session storage.
+     * Store a new politica in database.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
@@ -45,32 +48,24 @@ class PoliticasPortafolioController extends Controller
             $validated = $request->validate([
                 'politica.nombre' => 'required|string|max:255',
                 'politica.descripcion' => 'nullable|string',
-                'politica.porcentaje_portafolio' => 'required|numeric|min:0',
+                'politica.porcentaje_compra_portafolio' => 'required|numeric|min:0',
                 'politica.porcentaje_comision_comercial' => 'required|numeric|min:0',
                 'politica.porcentaje_reincorporacion_gaf' => 'required|numeric|min:0',
-                'politica.porcentaje_coadministracion' => 'required|numeric|min:0',
+                'politica.costo_administracion' => 'required|numeric|min:0',
                 'politica.porcentaje_costo_seguro_vd' => 'required|numeric|min:0',
+                'politica.costo_reporte_centrales' => 'required|numeric|min:0',
+                'politica.tecnologia' => 'required|numeric|min:0',
                 'politica.activo' => 'nullable|boolean',
             ]);
 
             $politica = $validated['politica'];
-
-            // Get existing politicas from session
-            $politicas = session('politicas_portafolio', []);
-
-            // Generate unique ID
-            $politica['id'] = Str::uuid()->toString();
-            $politica['created_at'] = now()->toIso8601String();
-            $politica['updated_at'] = now()->toIso8601String();
-
-            // Set default value for activo if not provided
             $politica['activo'] = $politica['activo'] ?? true;
+            $politica['created_at'] = now();
+            $politica['updated_at'] = now();
 
-            // Add new politica to array
-            $politicas[$politica['id']] = $politica;
+            $id = DB::table('politicas_portafolio')->insertGetId($politica);
 
-            // Save back to session
-            session(['politicas_portafolio' => $politicas]);
+            $politica['id'] = $id;
 
             return response()->json([
                 'success' => true,
@@ -92,7 +87,7 @@ class PoliticasPortafolioController extends Controller
     }
 
     /**
-     * Update an existing politica in session storage.
+     * Update an existing politica in database.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
@@ -101,39 +96,43 @@ class PoliticasPortafolioController extends Controller
     {
         try {
             $validated = $request->validate([
-                'politica.id' => 'required|string',
+                'politica.id' => 'required|integer',
                 'politica.nombre' => 'required|string|max:255',
                 'politica.descripcion' => 'nullable|string',
-                'politica.porcentaje_portafolio' => 'required|numeric|min:0',
+                'politica.porcentaje_compra_portafolio' => 'required|numeric|min:0',
                 'politica.porcentaje_comision_comercial' => 'required|numeric|min:0',
                 'politica.porcentaje_reincorporacion_gaf' => 'required|numeric|min:0',
-                'politica.porcentaje_coadministracion' => 'required|numeric|min:0',
+                'politica.costo_administracion' => 'required|numeric|min:0',
                 'politica.porcentaje_costo_seguro_vd' => 'required|numeric|min:0',
+                'politica.costo_reporte_centrales' => 'required|numeric|min:0',
+                'politica.tecnologia' => 'required|numeric|min:0',
                 'politica.activo' => 'nullable|boolean',
             ]);
 
             $politica = $validated['politica'];
             $id = $politica['id'];
 
-            // Get existing politicas from session
-            $politicas = session('politicas_portafolio', []);
+            // Check if politica exists
+            $exists = DB::table('politicas_portafolio')
+                ->where('id', $id)
+                ->whereNull('deleted_at')
+                ->exists();
 
-            if (!isset($politicas[$id])) {
+            if (!$exists) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Política no encontrada'
                 ], 404);
             }
 
-            // Preserve creation date
-            $politica['created_at'] = $politicas[$id]['created_at'];
-            $politica['updated_at'] = now()->toIso8601String();
+            unset($politica['id']);
+            $politica['updated_at'] = now();
 
-            // Update politica
-            $politicas[$id] = $politica;
+            DB::table('politicas_portafolio')
+                ->where('id', $id)
+                ->update($politica);
 
-            // Save back to session
-            session(['politicas_portafolio' => $politicas]);
+            $politica['id'] = $id;
 
             return response()->json([
                 'success' => true,
@@ -164,15 +163,18 @@ class PoliticasPortafolioController extends Controller
     {
         try {
             $request->validate([
-                'id' => 'required|string'
+                'id' => 'required|integer'
             ]);
 
             $id = $request->input('id');
 
-            // Get existing politicas from session
-            $politicas = session('politicas_portafolio', []);
+            // Get current politica
+            $politica = DB::table('politicas_portafolio')
+                ->where('id', $id)
+                ->whereNull('deleted_at')
+                ->first();
 
-            if (!isset($politicas[$id])) {
+            if (!$politica) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Política no encontrada'
@@ -180,18 +182,19 @@ class PoliticasPortafolioController extends Controller
             }
 
             // Toggle activo status
-            $politicas[$id]['activo'] = !$politicas[$id]['activo'];
-            $politicas[$id]['updated_at'] = now()->toIso8601String();
+            $newStatus = !$politica->activo;
+            DB::table('politicas_portafolio')
+                ->where('id', $id)
+                ->update([
+                    'activo' => $newStatus,
+                    'updated_at' => now()
+                ]);
 
-            // Save back to session
-            session(['politicas_portafolio' => $politicas]);
-
-            $status = $politicas[$id]['activo'] ? 'activada' : 'desactivada';
+            $status = $newStatus ? 'activada' : 'desactivada';
 
             return response()->json([
                 'success' => true,
-                'message' => "Política {$status} exitosamente",
-                'politica' => $politicas[$id]
+                'message' => "Política {$status} exitosamente"
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -202,7 +205,7 @@ class PoliticasPortafolioController extends Controller
     }
 
     /**
-     * Delete a politica from session storage.
+     * Delete a politica from database (soft delete).
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
@@ -211,26 +214,30 @@ class PoliticasPortafolioController extends Controller
     {
         try {
             $request->validate([
-                'id' => 'required|string'
+                'id' => 'required|integer'
             ]);
 
             $id = $request->input('id');
 
-            // Get existing politicas from session
-            $politicas = session('politicas_portafolio', []);
+            // Check if politica exists
+            $exists = DB::table('politicas_portafolio')
+                ->where('id', $id)
+                ->whereNull('deleted_at')
+                ->exists();
 
-            if (!isset($politicas[$id])) {
+            if (!$exists) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Política no encontrada'
                 ], 404);
             }
 
-            // Remove politica
-            unset($politicas[$id]);
-
-            // Save back to session
-            session(['politicas_portafolio' => $politicas]);
+            // Soft delete
+            DB::table('politicas_portafolio')
+                ->where('id', $id)
+                ->update([
+                    'deleted_at' => now()
+                ]);
 
             return response()->json([
                 'success' => true,
@@ -311,23 +318,26 @@ class PoliticasPortafolioController extends Controller
     // ========================================================================
 
     /**
-     * Get all fondos from session storage.
+     * Get all fondos from database.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function getFondos(Request $request)
     {
-        $fondos = session('politicas_fondo', []);
+        $fondos = DB::table('politicas_fondos')
+            ->whereNull('deleted_at')
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return response()->json([
             'success' => true,
-            'fondos' => array_values($fondos)
+            'fondos' => $fondos
         ]);
     }
 
     /**
-     * Store a new fondo in session storage.
+     * Store a new fondo in database.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
@@ -338,7 +348,7 @@ class PoliticasPortafolioController extends Controller
             $validated = $request->validate([
                 'fondo.nombre_fondo' => 'required|string|max:255',
                 'fondo.descripcion' => 'nullable|string',
-                'fondo.saldo_max' => 'required|numeric|min:0',
+                'fondo.smlv' => 'required|numeric|min:0',
                 'fondo.dias_mora_max' => 'required|integer|min:0',
                 'fondo.plazo_max' => 'required|integer|min:0',
                 'fondo.ta_min_ea' => 'required|numeric|min:0',
@@ -348,28 +358,42 @@ class PoliticasPortafolioController extends Controller
             ]);
 
             $fondo = $validated['fondo'];
-
-            // Get existing fondos from session
-            $fondos = session('politicas_fondo', []);
-
-            // Generate unique ID
-            $fondo['id'] = Str::uuid()->toString();
-            $fondo['created_at'] = now()->toIso8601String();
-            $fondo['updated_at'] = now()->toIso8601String();
             $fondo['activo'] = $fondo['activo'] ?? true;
 
-            // Calculate derived fields (these should be calculated in frontend, but we ensure consistency)
-            $fondo['ta_min_em'] = round($fondo['ta_min_ea'] / 12, 6);
+            // Calculate derived fields
+            // SALDO MAX = SMLV × 90
+            $fondo['saldo_max'] = round($fondo['smlv'] * 90, 2);
+
+            // T.A MIN (EM) = ((1+T.A MIN (EA)/100)^(1/12))-1 * 100
+            // Convertir de % a decimal, aplicar fórmula, volver a %
+            $taMinEADecimal = $fondo['ta_min_ea'] / 100;
+            $taMinEMDecimal = pow(1 + $taMinEADecimal, 1/12) - 1;
+            $fondo['ta_min_em'] = round($taMinEMDecimal * 100, 6);
+
+            // T. USURA -2 (EA) = T. USURA (EA) - 2
             $fondo['t_usura_menos2_ea'] = round($fondo['t_usura_ea'] - 2, 6);
-            $fondo['t_usura_em'] = round($fondo['t_usura_ea'] / 12, 6);
-            $fondo['t_usura_menos2_em'] = round($fondo['t_usura_menos2_ea'] / 12, 6);
+
+            // T. USURA (EM) = ((1+T. USURA (EA)/100)^(1/12))-1 * 100
+            // Convertir de % a decimal, aplicar fórmula, volver a %
+            $tUsuraEADecimal = $fondo['t_usura_ea'] / 100;
+            $tUsuraEMDecimal = pow(1 + $tUsuraEADecimal, 1/12) - 1;
+            $fondo['t_usura_em'] = round($tUsuraEMDecimal * 100, 6);
+
+            // T. USURA -2 (EM) = ((1+T. USURA -2 (EA)/100)^(1/12))-1 * 100
+            // Convertir de % a decimal, aplicar fórmula, volver a %
+            $tUsuraMenos2EADecimal = $fondo['t_usura_menos2_ea'] / 100;
+            $tUsuraMenos2EMDecimal = pow(1 + $tUsuraMenos2EADecimal, 1/12) - 1;
+            $fondo['t_usura_menos2_em'] = round($tUsuraMenos2EMDecimal * 100, 6);
+
+            // T. USURA (DIA) = T. USURA (EA) / 365
             $fondo['t_usura_dia'] = round($fondo['t_usura_ea'] / 365, 6);
 
-            // Add new fondo to array
-            $fondos[$fondo['id']] = $fondo;
+            $fondo['created_at'] = now();
+            $fondo['updated_at'] = now();
 
-            // Save back to session
-            session(['politicas_fondo' => $fondos]);
+            $id = DB::table('politicas_fondos')->insertGetId($fondo);
+
+            $fondo['id'] = $id;
 
             return response()->json([
                 'success' => true,
@@ -391,7 +415,7 @@ class PoliticasPortafolioController extends Controller
     }
 
     /**
-     * Update an existing fondo in session storage.
+     * Update an existing fondo in database.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
@@ -400,10 +424,10 @@ class PoliticasPortafolioController extends Controller
     {
         try {
             $validated = $request->validate([
-                'fondo.id' => 'required|string',
+                'fondo.id' => 'required|integer',
                 'fondo.nombre_fondo' => 'required|string|max:255',
                 'fondo.descripcion' => 'nullable|string',
-                'fondo.saldo_max' => 'required|numeric|min:0',
+                'fondo.smlv' => 'required|numeric|min:0',
                 'fondo.dias_mora_max' => 'required|integer|min:0',
                 'fondo.plazo_max' => 'required|integer|min:0',
                 'fondo.ta_min_ea' => 'required|numeric|min:0',
@@ -415,32 +439,56 @@ class PoliticasPortafolioController extends Controller
             $fondo = $validated['fondo'];
             $id = $fondo['id'];
 
-            // Get existing fondos from session
-            $fondos = session('politicas_fondo', []);
+            // Check if fondo exists
+            $exists = DB::table('politicas_fondos')
+                ->where('id', $id)
+                ->whereNull('deleted_at')
+                ->exists();
 
-            if (!isset($fondos[$id])) {
+            if (!$exists) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Fondo no encontrado'
                 ], 404);
             }
 
-            // Preserve creation date
-            $fondo['created_at'] = $fondos[$id]['created_at'];
-            $fondo['updated_at'] = now()->toIso8601String();
+            unset($fondo['id']);
 
             // Recalculate derived fields
-            $fondo['ta_min_em'] = round($fondo['ta_min_ea'] / 12, 6);
+            // SALDO MAX = SMLV × 90
+            $fondo['saldo_max'] = round($fondo['smlv'] * 90, 2);
+
+            // T.A MIN (EM) = ((1+T.A MIN (EA)/100)^(1/12))-1 * 100
+            // Convertir de % a decimal, aplicar fórmula, volver a %
+            $taMinEADecimal = $fondo['ta_min_ea'] / 100;
+            $taMinEMDecimal = pow(1 + $taMinEADecimal, 1/12) - 1;
+            $fondo['ta_min_em'] = round($taMinEMDecimal * 100, 6);
+
+            // T. USURA -2 (EA) = T. USURA (EA) - 2
             $fondo['t_usura_menos2_ea'] = round($fondo['t_usura_ea'] - 2, 6);
-            $fondo['t_usura_em'] = round($fondo['t_usura_ea'] / 12, 6);
-            $fondo['t_usura_menos2_em'] = round($fondo['t_usura_menos2_ea'] / 12, 6);
+
+            // T. USURA (EM) = ((1+T. USURA (EA)/100)^(1/12))-1 * 100
+            // Convertir de % a decimal, aplicar fórmula, volver a %
+            $tUsuraEADecimal = $fondo['t_usura_ea'] / 100;
+            $tUsuraEMDecimal = pow(1 + $tUsuraEADecimal, 1/12) - 1;
+            $fondo['t_usura_em'] = round($tUsuraEMDecimal * 100, 6);
+
+            // T. USURA -2 (EM) = ((1+T. USURA -2 (EA)/100)^(1/12))-1 * 100
+            // Convertir de % a decimal, aplicar fórmula, volver a %
+            $tUsuraMenos2EADecimal = $fondo['t_usura_menos2_ea'] / 100;
+            $tUsuraMenos2EMDecimal = pow(1 + $tUsuraMenos2EADecimal, 1/12) - 1;
+            $fondo['t_usura_menos2_em'] = round($tUsuraMenos2EMDecimal * 100, 6);
+
+            // T. USURA (DIA) = T. USURA (EA) / 365
             $fondo['t_usura_dia'] = round($fondo['t_usura_ea'] / 365, 6);
 
-            // Update fondo
-            $fondos[$id] = $fondo;
+            $fondo['updated_at'] = now();
 
-            // Save back to session
-            session(['politicas_fondo' => $fondos]);
+            DB::table('politicas_fondos')
+                ->where('id', $id)
+                ->update($fondo);
+
+            $fondo['id'] = $id;
 
             return response()->json([
                 'success' => true,
@@ -471,15 +519,18 @@ class PoliticasPortafolioController extends Controller
     {
         try {
             $request->validate([
-                'id' => 'required|string'
+                'id' => 'required|integer'
             ]);
 
             $id = $request->input('id');
 
-            // Get existing fondos from session
-            $fondos = session('politicas_fondo', []);
+            // Get current fondo
+            $fondo = DB::table('politicas_fondos')
+                ->where('id', $id)
+                ->whereNull('deleted_at')
+                ->first();
 
-            if (!isset($fondos[$id])) {
+            if (!$fondo) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Fondo no encontrado'
@@ -487,18 +538,19 @@ class PoliticasPortafolioController extends Controller
             }
 
             // Toggle activo status
-            $fondos[$id]['activo'] = !$fondos[$id]['activo'];
-            $fondos[$id]['updated_at'] = now()->toIso8601String();
+            $newStatus = !$fondo->activo;
+            DB::table('politicas_fondos')
+                ->where('id', $id)
+                ->update([
+                    'activo' => $newStatus,
+                    'updated_at' => now()
+                ]);
 
-            // Save back to session
-            session(['politicas_fondo' => $fondos]);
-
-            $status = $fondos[$id]['activo'] ? 'activado' : 'desactivado';
+            $status = $newStatus ? 'activado' : 'desactivado';
 
             return response()->json([
                 'success' => true,
-                'message' => "Fondo {$status} exitosamente",
-                'fondo' => $fondos[$id]
+                'message' => "Fondo {$status} exitosamente"
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -509,7 +561,7 @@ class PoliticasPortafolioController extends Controller
     }
 
     /**
-     * Delete a fondo from session storage.
+     * Delete a fondo from database (soft delete).
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
@@ -518,26 +570,30 @@ class PoliticasPortafolioController extends Controller
     {
         try {
             $request->validate([
-                'id' => 'required|string'
+                'id' => 'required|integer'
             ]);
 
             $id = $request->input('id');
 
-            // Get existing fondos from session
-            $fondos = session('politicas_fondo', []);
+            // Check if fondo exists
+            $exists = DB::table('politicas_fondos')
+                ->where('id', $id)
+                ->whereNull('deleted_at')
+                ->exists();
 
-            if (!isset($fondos[$id])) {
+            if (!$exists) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Fondo no encontrado'
                 ], 404);
             }
 
-            // Remove fondo
-            unset($fondos[$id]);
-
-            // Save back to session
-            session(['politicas_fondo' => $fondos]);
+            // Soft delete
+            DB::table('politicas_fondos')
+                ->where('id', $id)
+                ->update([
+                    'deleted_at' => now()
+                ]);
 
             return response()->json([
                 'success' => true,

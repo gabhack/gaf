@@ -43,8 +43,8 @@
                                 <strong>{{ data.item.nombre }}</strong>
                             </template>
 
-                            <template #cell(porcentaje_portafolio)="data">
-                                {{ formatPercent(data.item.porcentaje_portafolio) }}%
+                            <template #cell(porcentaje_compra_portafolio)="data">
+                                {{ formatPercent(data.item.porcentaje_compra_portafolio) }}%
                             </template>
 
                             <template #cell(porcentaje_comision_comercial)="data">
@@ -55,12 +55,20 @@
                                 {{ formatPercent(data.item.porcentaje_reincorporacion_gaf) }}%
                             </template>
 
-                            <template #cell(porcentaje_coadministracion)="data">
-                                {{ formatPercent(data.item.porcentaje_coadministracion) }}%
+                            <template #cell(costo_administracion)="data">
+                                {{ formatPercent(data.item.costo_administracion) }}%
                             </template>
 
                             <template #cell(porcentaje_costo_seguro_vd)="data">
                                 {{ formatPercent(data.item.porcentaje_costo_seguro_vd) }}%
+                            </template>
+
+                            <template #cell(costo_reporte_centrales)="data">
+                                {{ formatCurrency(data.item.costo_reporte_centrales) }}
+                            </template>
+
+                            <template #cell(tecnologia)="data">
+                                {{ formatCurrency(data.item.tecnologia) }}
                             </template>
 
                             <template #cell(activo)="data">
@@ -144,6 +152,10 @@
                         >
                             <template #cell(nombre_fondo)="data">
                                 <strong>{{ data.item.nombre_fondo }}</strong>
+                            </template>
+
+                            <template #cell(smlv)="data">
+                                {{ formatCurrency(data.item.smlv) }}
                             </template>
 
                             <template #cell(saldo_max)="data">
@@ -259,13 +271,13 @@
                 <h5 class="mb-3">Porcentajes de la Política</h5>
 
                 <b-form-group
-                    label="% Portafolio *"
-                    label-for="porcentaje_portafolio"
-                    description="Porcentaje aplicable al portafolio (ej: 8, 0.0003, 1.39494)"
+                    label="% Compra Portafolio *"
+                    label-for="porcentaje_compra_portafolio"
+                    description="Porcentaje de compra del portafolio (ej: 8, 0.0003, 1.39494)"
                 >
                     <b-form-input
-                        id="porcentaje_portafolio"
-                        v-model.number="formDataPolitica.porcentaje_portafolio"
+                        id="porcentaje_compra_portafolio"
+                        v-model.number="formDataPolitica.porcentaje_compra_portafolio"
                         type="number"
                         step="any"
                         min="0"
@@ -310,13 +322,13 @@
                 </b-form-group>
 
                 <b-form-group
-                    label="% Coadministración *"
-                    label-for="porcentaje_coadministracion"
-                    description="Porcentaje de coadministración (ej: 2, 0.0003, 1.39494)"
+                    label="Costo de Administración *"
+                    label-for="costo_administracion"
+                    description="Porcentaje de costo de administración (ej: 2, 0.0003, 1.39494)"
                 >
                     <b-form-input
-                        id="porcentaje_coadministracion"
-                        v-model.number="formDataPolitica.porcentaje_coadministracion"
+                        id="costo_administracion"
+                        v-model.number="formDataPolitica.costo_administracion"
                         type="number"
                         step="any"
                         min="0"
@@ -334,6 +346,40 @@
                     <b-form-input
                         id="porcentaje_costo_seguro_vd"
                         v-model.number="formDataPolitica.porcentaje_costo_seguro_vd"
+                        type="number"
+                        step="any"
+                        min="0"
+                        required
+                        :disabled="isViewModePolitica"
+                        class="input_style_b"
+                    ></b-form-input>
+                </b-form-group>
+
+                <b-form-group
+                    label="Costo Reporte Centrales *"
+                    label-for="costo_reporte_centrales"
+                    description="Costo monetario del reporte de centrales (ej: 5000, 10000, 15000)"
+                >
+                    <b-form-input
+                        id="costo_reporte_centrales"
+                        v-model.number="formDataPolitica.costo_reporte_centrales"
+                        type="number"
+                        step="any"
+                        min="0"
+                        required
+                        :disabled="isViewModePolitica"
+                        class="input_style_b"
+                    ></b-form-input>
+                </b-form-group>
+
+                <b-form-group
+                    label="Tecnología *"
+                    label-for="tecnologia"
+                    description="Costo monetario de tecnología (ej: 3000, 5000, 8000)"
+                >
+                    <b-form-input
+                        id="tecnologia"
+                        v-model.number="formDataPolitica.tecnologia"
                         type="number"
                         step="any"
                         min="0"
@@ -407,10 +453,10 @@
                     <b-col md="6">
                         <h6 class="text-muted mb-3">Campos Fijos</h6>
 
-                        <b-form-group label="SALDO MAX *" label-for="saldo_max">
+                        <b-form-group label="SMLV (Salario Mínimo Legal Vigente) *" label-for="smlv" description="Salario mínimo legal vigente en COP">
                             <b-form-input
-                                id="saldo_max"
-                                v-model.number="formDataFondo.saldo_max"
+                                id="smlv"
+                                v-model.number="formDataFondo.smlv"
                                 type="number"
                                 step="any"
                                 min="0"
@@ -434,7 +480,7 @@
                             ></b-form-input>
                         </b-form-group>
 
-                        <b-form-group label="PLAZO MAX (meses) *" label-for="plazo_max">
+                        <b-form-group label="PLAZO MAX (días) *" label-for="plazo_max">
                             <b-form-input
                                 id="plazo_max"
                                 v-model.number="formDataFondo.plazo_max"
@@ -487,13 +533,62 @@
                                 class="input_style_b"
                             ></b-form-input>
                         </b-form-group>
+
+                        <b-form-group label="COSTO ASEGURABILIDAD MES (%) *" label-for="costo_asegurabilidad_mes" description="Porcentaje mensual del costo de asegurabilidad">
+                            <b-form-input
+                                id="costo_asegurabilidad_mes"
+                                v-model.number="formDataFondo.costo_asegurabilidad_mes"
+                                type="number"
+                                step="any"
+                                min="0"
+                                required
+                                :disabled="isViewModeFondo"
+                                class="input_style_b"
+                            ></b-form-input>
+                        </b-form-group>
+
+                        <b-form-group label="% DESCUENTO MÁXIMO SOBRE SALDO TOTAL *" label-for="descuento_max_saldo_total" description="Porcentaje de descuento máximo sobre saldo total">
+                            <b-form-input
+                                id="descuento_max_saldo_total"
+                                v-model.number="formDataFondo.descuento_max_saldo_total"
+                                type="number"
+                                step="any"
+                                min="0"
+                                required
+                                :disabled="isViewModeFondo"
+                                class="input_style_b"
+                            ></b-form-input>
+                        </b-form-group>
+
+                        <b-form-group label="% DESCUENTO MÁXIMO SOBRE SALDO CAPITAL *" label-for="descuento_max_saldo_capital" description="Porcentaje de descuento máximo sobre saldo capital">
+                            <b-form-input
+                                id="descuento_max_saldo_capital"
+                                v-model.number="formDataFondo.descuento_max_saldo_capital"
+                                type="number"
+                                step="any"
+                                min="0"
+                                required
+                                :disabled="isViewModeFondo"
+                                class="input_style_b"
+                            ></b-form-input>
+                        </b-form-group>
                     </b-col>
 
                     <!-- Columna 2: Campos Calculados -->
                     <b-col md="6">
                         <h6 class="text-muted mb-3">Campos Calculados (Automáticos)</h6>
 
-                        <b-form-group label="T.A MIN (EM)" label-for="ta_min_em" description="T.A MIN (EA) ÷ 12">
+                        <b-form-group label="SALDO MAX" label-for="saldo_max" description="SMLV × 90">
+                            <b-form-input
+                                id="saldo_max"
+                                v-model="formDataFondo.saldo_max"
+                                type="text"
+                                disabled
+                                class="input_style_b input-calculated"
+                            ></b-form-input>
+                        </b-form-group>
+
+                        <b-form-group label="T.A MIN (EM)" label-for="ta_min_em" description="((1+T.A MIN (EA))^(1/12))-1">
                             <b-form-input
                                 id="ta_min_em"
                                 v-model="formDataFondo.ta_min_em"
@@ -513,7 +608,7 @@
                             ></b-form-input>
                         </b-form-group>
 
-                        <b-form-group label="T. USURA (EM)" label-for="t_usura_em" description="T. USURA (EA) ÷ 12">
+                        <b-form-group label="T. USURA (EM)" label-for="t_usura_em" description="((1+T. USURA (EA))^(1/12))-1">
                             <b-form-input
                                 id="t_usura_em"
                                 v-model="formDataFondo.t_usura_em"
@@ -523,7 +618,7 @@
                             ></b-form-input>
                         </b-form-group>
 
-                        <b-form-group label="T. USURA -2 (EM)" label-for="t_usura_menos2_em" description="T. USURA -2 (EA) ÷ 12">
+                        <b-form-group label="T. USURA -2 (EM)" label-for="t_usura_menos2_em" description="((1+T. USURA -2 (EA))^(1/12))-1">
                             <b-form-input
                                 id="t_usura_menos2_em"
                                 v-model="formDataFondo.t_usura_menos2_em"
@@ -570,11 +665,13 @@ export default {
             politicas: [],
             fieldsPoliticas: [
                 { key: 'nombre', label: 'Nombre', sortable: true },
-                { key: 'porcentaje_portafolio', label: '% Portafolio', sortable: true },
+                { key: 'porcentaje_compra_portafolio', label: '% Compra Portafolio', sortable: true },
                 { key: 'porcentaje_comision_comercial', label: '% Comisión', sortable: true },
                 { key: 'porcentaje_reincorporacion_gaf', label: '% Re-Inc. GAF', sortable: true },
-                { key: 'porcentaje_coadministracion', label: '% Coadmin.', sortable: true },
+                { key: 'costo_administracion', label: 'Costo Admin.', sortable: true },
                 { key: 'porcentaje_costo_seguro_vd', label: '% Seguro V.D', sortable: true },
+                { key: 'costo_reporte_centrales', label: 'Reporte Centrales', sortable: true },
+                { key: 'tecnologia', label: 'Tecnología', sortable: true },
                 { key: 'activo', label: 'Estado', sortable: true },
                 { key: 'acciones', label: 'Acciones' }
             ],
@@ -587,6 +684,7 @@ export default {
             fondos: [],
             fieldsFondos: [
                 { key: 'nombre_fondo', label: 'Nombre', sortable: true },
+                { key: 'smlv', label: 'SMLV', sortable: true },
                 { key: 'saldo_max', label: 'Saldo Máx', sortable: true },
                 { key: 'dias_mora_max', label: 'Días Mora Máx', sortable: true },
                 { key: 'plazo_max', label: 'Plazo Máx', sortable: true },
@@ -619,11 +717,13 @@ export default {
                 id: null,
                 nombre: '',
                 descripcion: '',
-                porcentaje_portafolio: 0,
+                porcentaje_compra_portafolio: 0,
                 porcentaje_comision_comercial: 0,
                 porcentaje_reincorporacion_gaf: 0,
-                porcentaje_coadministracion: 0,
+                costo_administracion: 0,
                 porcentaje_costo_seguro_vd: 0,
+                costo_reporte_centrales: 0,
+                tecnologia: 0,
                 activo: true
             };
         },
@@ -757,13 +857,17 @@ export default {
                 nombre_fondo: '',
                 descripcion: '',
                 // Campos fijos
-                saldo_max: 0,
+                smlv: 0,
                 dias_mora_max: 0,
                 plazo_max: 0,
                 ta_min_ea: 0,
                 t_usura_ea: 0,
                 tasa_usura: 0,
+                costo_asegurabilidad_mes: 0,
+                descuento_max_saldo_total: 0,
+                descuento_max_saldo_capital: 0,
                 // Campos calculados
+                saldo_max: 0,
                 ta_min_em: 0,
                 t_usura_menos2_ea: 0,
                 t_usura_em: 0,
@@ -809,17 +913,33 @@ export default {
         calculateFondoFields() {
             const f = this.formDataFondo;
 
-            // T.A MIN (EM) = T.A MIN (EA) / 12
-            f.ta_min_em = (parseFloat(f.ta_min_ea) / 12).toFixed(6);
+            // SALDO MAX = SMLV × 90
+            const smlv = parseFloat(f.smlv) || 0;
+            f.saldo_max = (smlv * 90).toFixed(2);
+
+            // T.A MIN (EM) = ((1+T.A MIN (EA)/100)^(1/12))-1 * 100
+            // Convertir de % a decimal, aplicar fórmula, volver a %
+            const taMinEA = parseFloat(f.ta_min_ea) || 0;
+            const taMinEADecimal = taMinEA / 100;
+            const taMinEMDecimal = Math.pow(1 + taMinEADecimal, 1/12) - 1;
+            f.ta_min_em = (taMinEMDecimal * 100).toFixed(6);
 
             // T. USURA -2 (EA) = T. USURA (EA) - 2
             f.t_usura_menos2_ea = (parseFloat(f.t_usura_ea) - 2).toFixed(6);
 
-            // T. USURA (EM) = T. USURA (EA) / 12
-            f.t_usura_em = (parseFloat(f.t_usura_ea) / 12).toFixed(6);
+            // T. USURA (EM) = ((1+T. USURA (EA)/100)^(1/12))-1 * 100
+            // Convertir de % a decimal, aplicar fórmula, volver a %
+            const tUsuraEA = parseFloat(f.t_usura_ea) || 0;
+            const tUsuraEADecimal = tUsuraEA / 100;
+            const tUsuraEMDecimal = Math.pow(1 + tUsuraEADecimal, 1/12) - 1;
+            f.t_usura_em = (tUsuraEMDecimal * 100).toFixed(6);
 
-            // T. USURA -2 (EM) = T. USURA -2 (EA) / 12
-            f.t_usura_menos2_em = (parseFloat(f.t_usura_menos2_ea) / 12).toFixed(6);
+            // T. USURA -2 (EM) = ((1+T. USURA -2 (EA)/100)^(1/12))-1 * 100
+            // Convertir de % a decimal, aplicar fórmula, volver a %
+            const tUsuraMenos2EA = parseFloat(f.t_usura_menos2_ea) || 0;
+            const tUsuraMenos2EADecimal = tUsuraMenos2EA / 100;
+            const tUsuraMenos2EMDecimal = Math.pow(1 + tUsuraMenos2EADecimal, 1/12) - 1;
+            f.t_usura_menos2_em = (tUsuraMenos2EMDecimal * 100).toFixed(6);
 
             // T. USURA (DIA) = T. USURA (EA) / 365
             f.t_usura_dia = (parseFloat(f.t_usura_ea) / 365).toFixed(6);

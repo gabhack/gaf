@@ -45,14 +45,29 @@
         >
             <div class="d-flex flex-column align-items-center justify-content-center">
                 <Lupa class="mb-3" />
-                <p>
-                    Aún no tienes archivos <br />
-                    cargados, puedes...
+                <p style="font-size: 16px; color: #6c757d; text-align: center;">
+                    Aún no tienes análisis cargados <br />
+                    Comienza creando un nuevo análisis de cartera
                 </p>
-                <CustomButton text="Cargar archivo" @click="$bvModal.show('bv-modal-example')" />
+                <b-button
+                    @click="$bvModal.show('bv-modal-example')"
+                    variant="primary"
+                    size="lg"
+                    style="background-color: #2c8c73; border-color: #2c8c73; padding: 12px 32px; font-weight: 600;"
+                >
+                    <i class="fa fa-plus-circle mr-2"></i> Nuevo Análisis de Cartera
+                </b-button>
             </div>
-            <b-modal id="bv-modal-example" hide-footer style="min-width: 1000px">
-                <template #modal-title><span class="heading-title">Agregar datos demográficos</span></template>
+        </div>
+
+        <!-- MODALES - Movidos fuera del v-if para que siempre estén disponibles -->
+        <b-modal id="bv-modal-example" hide-footer size="xl">
+                <template #modal-title>
+                    <span class="heading-title">
+                        <i class="fa fa-chart-line mr-2" style="color: #2c8c73;"></i>
+                        Nuevo Análisis de Cartera Avanzado
+                    </span>
+                </template>
                 <div class="" style="background-color: #f9fafc; border-left: 4px solid #249fe3; border-radius: 4px">
                     <b-row style="padding: 16px">
                         <b-col cols="1" class="d-flex justify-content-center align-items-center">
@@ -76,14 +91,45 @@
                                 Por favor, asegúrese de que el archivo Excel contiene la columna <strong>'cédulas'</strong> (obligatoria)
                                 y opcionalmente: <strong>operación, valor desembolso, saldo capital original, intereses corrientes,
                                 intereses de mora, seguros, otros conceptos, tasa pactada, respetar tasa pactada, plazo pactado,
-                                cuota pactada, respetar cuota pactada</strong>.
+                                cuota pactada, respetar cuota pactada, cupo colpensiones, cupo fopep, cupo fiduprevisora</strong>.
+                                El sistema calculará automáticamente el Cupo Sem (libre inversión) y la cuota incorporada previamente.
                             </p>
                         </b-col>
                     </b-row>
                 </div>
                 <b-row class="py-3">
-                    <div class="col-md-12">
-                        <b-form-group label="Mes (MM):">
+                    <div class="col-md-6">
+                        <b-form-group label="Política de Portafolio: *" label-for="politica_portafolio">
+                            <b-form-select
+                                id="politica_portafolio"
+                                v-model="selectedPoliticaPortafolio"
+                                :options="politicasPortafolioOptions"
+                                class="input_style_b form-control2"
+                            >
+                                <template #first>
+                                    <b-form-select-option :value="null" disabled>Seleccione una política de portafolio</b-form-select-option>
+                                </template>
+                            </b-form-select>
+                        </b-form-group>
+                    </div>
+
+                    <div class="col-md-6">
+                        <b-form-group label="Política de Fondo: *" label-for="politica_fondo">
+                            <b-form-select
+                                id="politica_fondo"
+                                v-model="selectedPoliticaFondo"
+                                :options="politicasFondoOptions"
+                                class="input_style_b form-control2"
+                            >
+                                <template #first>
+                                    <b-form-select-option :value="null" disabled>Seleccione una política de fondo</b-form-select-option>
+                                </template>
+                            </b-form-select>
+                        </b-form-group>
+                    </div>
+
+                    <div class="col-md-6">
+                        <b-form-group label="Mes (MM): *">
                             <b-form-input
                                 v-model="mes"
                                 placeholder="01"
@@ -93,11 +139,11 @@
                         </b-form-group>
                     </div>
 
-                    <div class="col-md-12">
-                        <b-form-group label="Año (YYYY):">
+                    <div class="col-md-6">
+                        <b-form-group label="Año (YYYY): *">
                             <b-form-input
                                 v-model="año"
-                                placeholder="2024"
+                                placeholder="2025"
                                 maxlength="4"
                                 class="input_style_b form-control2"
                             ></b-form-input>
@@ -152,7 +198,131 @@
                 <CustomButton @click="uploadFile($bvModal)" text="Subir archivo" v-if="file" />
                 <CustomButton @click="$bvModal.hide('bv-modal-example')" :color="'white'" text="Cerrar" />
             </b-modal>
-        </div>
+
+            <!-- Modal para Guardar Análisis -->
+            <b-modal id="modal-guardar-analisis" title="Guardar Análisis de Cartera" hide-footer size="md">
+                <template #modal-title>
+                    <span class="heading-title">
+                        <i class="fa fa-save mr-2" style="color: #2c8c73;"></i>
+                        Guardar Análisis de Cartera
+                    </span>
+                </template>
+
+                <div class="mb-3">
+                    <h6 style="color: #2c8c73;"><strong>Resumen del Análisis</strong></h6>
+                    <table class="table table-sm table-bordered">
+                        <tr>
+                            <td><strong>Archivo:</strong></td>
+                            <td>{{ nombreArchivo || 'Sin archivo' }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Periodo:</strong></td>
+                            <td>{{ mes || '--' }} / {{ año || '----' }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total Registros:</strong></td>
+                            <td>{{ results.length }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Política Portafolio:</strong></td>
+                            <td>{{ getPoliticaPortafolioNombre() }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Política Fondo:</strong></td>
+                            <td>{{ getPoliticaFondoNombre() }}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <b-form-group
+                    label="Descripción (Opcional):"
+                    label-for="descripcion-analisis"
+                    description="Agregue una descripción o nota para identificar este análisis"
+                >
+                    <b-form-textarea
+                        id="descripcion-analisis"
+                        v-model="descripcionAnalisis"
+                        placeholder="Ej: Análisis de cartera para cierre del mes..."
+                        rows="3"
+                        max-rows="6"
+                        maxlength="500"
+                    ></b-form-textarea>
+                    <small class="text-muted">{{ descripcionAnalisis.length }}/500 caracteres</small>
+                </b-form-group>
+
+                <div class="d-flex justify-content-end mt-3">
+                    <b-button
+                        variant="secondary"
+                        @click="$bvModal.hide('modal-guardar-analisis')"
+                        class="mr-2"
+                        :disabled="isSavingAnalisis"
+                    >
+                        <i class="fa fa-times mr-1"></i> Cancelar
+                    </b-button>
+                    <b-button
+                        variant="success"
+                        @click="confirmarGuardarAnalisis"
+                        :disabled="isSavingAnalisis || !results.length"
+                        style="background-color: #2c8c73; border-color: #2c8c73;"
+                    >
+                        <span v-if="!isSavingAnalisis">
+                            <i class="fa fa-save mr-1"></i> Guardar
+                        </span>
+                        <span v-else>
+                            <i class="fa fa-spinner fa-spin mr-1"></i> Guardando...
+                        </span>
+                    </b-button>
+                </div>
+            </b-modal>
+
+            <!-- Modal para Confirmar Nuevo Análisis -->
+            <b-modal
+                id="modal-nuevo-analisis"
+                title="Iniciar Nuevo Análisis"
+                hide-footer
+                size="md"
+            >
+                <template #modal-title>
+                    <span class="heading-title">
+                        <i class="fa fa-exclamation-triangle mr-2" style="color: #f39c12;"></i>
+                        Confirmar Nuevo Análisis
+                    </span>
+                </template>
+
+                <div class="alert alert-warning">
+                    <i class="fa fa-info-circle mr-2"></i>
+                    <strong>¿Está seguro de iniciar un nuevo análisis?</strong>
+                </div>
+
+                <p>Esta acción limpiará todos los datos actuales:</p>
+                <ul>
+                    <li>Resultados del análisis actual ({{ results.length }} registros)</li>
+                    <li>Archivo cargado: <strong>{{ nombreArchivo || 'Ninguno' }}</strong></li>
+                    <li>Periodo: <strong>{{ mes || '--' }} / {{ año || '----' }}</strong></li>
+                    <li>Políticas seleccionadas</li>
+                </ul>
+
+                <p class="text-danger">
+                    <i class="fa fa-warning mr-1"></i>
+                    <strong>Nota:</strong> Asegúrese de haber guardado el análisis actual antes de continuar.
+                </p>
+
+                <div class="d-flex justify-content-end mt-3">
+                    <b-button
+                        variant="secondary"
+                        @click="$bvModal.hide('modal-nuevo-analisis')"
+                        class="mr-2"
+                    >
+                        <i class="fa fa-times mr-1"></i> Cancelar
+                    </b-button>
+                    <b-button
+                        variant="primary"
+                        @click="confirmarNuevoAnalisis"
+                    >
+                        <i class="fa fa-check mr-1"></i> Sí, Iniciar Nuevo
+                    </b-button>
+                </div>
+            </b-modal>
 
         <!-- Card para mostrar las consultas recientes -->
         <div v-if="showRecentConsultations && recentConsultations.length" class="card recent-consultations">
@@ -170,25 +340,46 @@
 
         <!-- Panel de Resultados -->
         <div v-if="results.length" class="panel mb-3 col-md-12">
-            <b-row style="margin-left: 900px">
-                <b-col cols="12" md="3" class="d-flex justify-content-start justify-content-md-end align-items-center">
-                    <CustomButton
-                        text="Cargar archivo"
-                        @click="$bvModal.show('bv-modal-example')"
-                        style="white-space: nowrap; margin-right: 8px"
-                    />
-                    <CustomButton
-                        @click="exportToPDF"
-                        class="btn btn-danger mr-2"
-                        text="Exportar a PDF"
-                        style="white-space: nowrap"
-                    />
-                    <CustomButton
-                        @click="exportToExcel"
-                        class="btn btn-success"
-                        text="Exportar a Excel"
-                        style="white-space: nowrap"
-                    />
+            <b-row class="mb-3" style="margin-left: 15px; margin-right: 15px;">
+                <b-col cols="12" class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <b-badge variant="info" class="mr-2" style="font-size: 14px; padding: 8px 12px;">
+                            Política Portafolio: <strong>{{ getPoliticaPortafolioNombre() }}</strong>
+                        </b-badge>
+                        <b-badge variant="info" style="font-size: 14px; padding: 8px 12px;">
+                            Política Fondo: <strong>{{ getPoliticaFondoNombre() }}</strong>
+                        </b-badge>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <b-button
+                            @click="guardarAnalisis"
+                            variant="success"
+                            class="mr-2"
+                            style="background-color: #2c8c73; border-color: #2c8c73; white-space: nowrap;"
+                        >
+                            <i class="fa fa-save mr-1"></i> Guardar Análisis
+                        </b-button>
+                        <b-button
+                            @click="iniciarNuevoAnalisis"
+                            variant="primary"
+                            class="mr-2"
+                            style="white-space: nowrap;"
+                        >
+                            <i class="fa fa-plus-circle mr-1"></i> Nuevo Análisis
+                        </b-button>
+                        <CustomButton
+                            @click="exportToPDF"
+                            class="btn btn-danger mr-2"
+                            text="Exportar PDF"
+                            style="white-space: nowrap"
+                        />
+                        <CustomButton
+                            @click="exportToExcel"
+                            class="btn btn-success"
+                            text="Exportar Excel"
+                            style="white-space: nowrap"
+                        />
+                    </div>
                 </b-col>
             </b-row>
             <h4 style="margin-left: 16px" class="heading-title">Resultado:</h4>
@@ -200,81 +391,110 @@
                         class="input_style_b form-control2"
                     ></b-form-input>
                 </b-form-group>
-                <div>
-                    <table class="table table-responsive">
-                        <thead>
+                <div class="table-container">
+                    <table class="table table-hover table-striped custom-analysis-table">
+                        <thead class="thead-custom">
                             <tr>
-                                <th>Operación</th>
-                                <th>Cédula</th>
-                                <th>Nombre del Cliente</th>
-                                <th>Secretaria (SED - SEM)</th>
-                                <th>Colpensiones</th>
-                                <th>Fiduprevisora</th>
-                                <th>Fopep</th>
-                                <th>Edad</th>
-                                <th>Detalle de Crédito</th>
-                                <th>Detalle Portafolio</th>
-                                <th>Cuota a Incorporar</th>
+                                <th class="th-operacion">Operación</th>
+                                <th class="th-cedula">Cédula</th>
+                                <th class="th-nombre">Nombre del Cliente</th>
+                                <th class="th-secretaria">Secretaria</th>
+                                <th class="th-colp text-center">Colp.</th>
+                                <th class="th-fidu text-center">Fidu.</th>
+                                <th class="th-fopep text-center">Fopep</th>
+                                <th class="th-edad text-center">Edad</th>
+                                <th class="th-actions text-center">Crédito</th>
+                                <th class="th-actions text-center">Portafolio</th>
+                                <th class="th-actions text-center">AMI</th>
+                                <th class="th-actions text-center">Cuota</th>
                             </tr>
                         </thead>
                         <tbody>
                             <!-- Fila Principal -->
-                            <tr v-for="(result, index) in filteredResults" :key="result.doc + '-' + index">
-                                <td>{{ result.operacion || 'No disponible' }}</td>
-                                <td>{{ result.doc }}</td>
-                                <td>{{ capitalize(result.nombre_usuario) || 'No disponible' }}</td>
-                                <td>{{ capitalize(result.pagaduria) || 'No disponible' }}</td>
-                                <td>{{ result.colpensiones ? 'Sí' : 'No' }}</td>
-                                <td>{{ result.fiducidiaria ? 'Sí' : 'No' }}</td>
-                                <td>{{ result.fopep ? 'Sí' : 'No' }}</td>
-                                <td>{{ result.edad || 'No disponible' }}</td>
-                                <td>
-                                    <CustomButton
+                            <tr v-for="(result, index) in filteredResults" :key="result.doc + '-' + index" class="table-row-custom">
+                                <td class="td-operacion">{{ result.operacion || 'N/D' }}</td>
+                                <td class="td-cedula"><strong>{{ result.doc }}</strong></td>
+                                <td class="td-nombre">{{ capitalize(result.nombre_usuario) || 'No disponible' }}</td>
+                                <td class="td-secretaria">{{ capitalize(result.pagaduria) || 'N/D' }}</td>
+                                <td class="td-badge text-center">
+                                    <b-badge :variant="result.colpensiones ? 'success' : 'secondary'" class="badge-small">
+                                        {{ result.colpensiones ? 'Sí' : 'No' }}
+                                    </b-badge>
+                                </td>
+                                <td class="td-badge text-center">
+                                    <b-badge :variant="result.fiducidiaria ? 'success' : 'secondary'" class="badge-small">
+                                        {{ result.fiducidiaria ? 'Sí' : 'No' }}
+                                    </b-badge>
+                                </td>
+                                <td class="td-badge text-center">
+                                    <b-badge :variant="result.fopep ? 'success' : 'secondary'" class="badge-small">
+                                        {{ result.fopep ? 'Sí' : 'No' }}
+                                    </b-badge>
+                                </td>
+                                <td class="td-edad text-center">{{ result.edad || 'N/D' }}</td>
+                                <td class="td-actions text-center">
+                                    <b-button
                                         v-if="hasDetalleCredito(result)"
-                                        class="btn btn-link"
+                                        size="sm"
+                                        variant="outline-primary"
                                         @click="toggleDetails(result, 'credito')"
                                         data-toggle="modal"
                                         data-target="#modalCredito"
-                                        :text="
-                                            isRowExpanded(result, 'credito')
-                                                ? 'Ocultar Detalle'
-                                                : 'Ver Detalle'
-                                        "
-                                    />
-                                    <span v-else>No hay información</span>
+                                        v-b-tooltip.hover
+                                        title="Ver detalle de crédito"
+                                    >
+                                        <i class="fa fa-eye"></i>
+                                    </b-button>
+                                    <span v-else class="text-muted small">N/D</span>
                                 </td>
-                                <td>
-                                    <CustomButton
+                                <td class="td-actions text-center">
+                                    <b-button
                                         v-if="hasDetallePortafolio(result)"
-                                        class="btn btn-link"
+                                        size="sm"
+                                        variant="outline-warning"
                                         @click="toggleDetails(result, 'portafolio')"
                                         data-toggle="modal"
                                         data-target="#modalPortafolio"
-                                        :text="
-                                            isRowExpanded(result, 'portafolio')
-                                                ? 'Ocultar Detalle'
-                                                : 'Ver Detalle'
-                                        "
-                                    />
-                                    <span v-else>No hay información</span>
+                                        v-b-tooltip.hover
+                                        title="Ver detalle de portafolio"
+                                    >
+                                        <i class="fa fa-briefcase"></i>
+                                    </b-button>
+                                    <span v-else class="text-muted small">N/D</span>
                                 </td>
-                                <td>
-                                    <CustomButton
-                                        class="btn btn-link"
+                                <td class="td-actions text-center">
+                                    <b-button
+                                        v-if="hasDetalleAMI(result)"
+                                        size="sm"
+                                        variant="outline-info"
+                                        @click="toggleDetails(result, 'ami')"
+                                        data-toggle="modal"
+                                        data-target="#modalAMI"
+                                        v-b-tooltip.hover
+                                        title="Ver detalle AMI"
+                                    >
+                                        <i class="fa fa-chart-line"></i>
+                                    </b-button>
+                                    <span v-else class="text-muted small">N/D</span>
+                                </td>
+                                <td class="td-actions text-center">
+                                    <b-button
+                                        size="sm"
+                                        variant="outline-success"
                                         @click="toggleDetails(result, 'cuotaIncorporar')"
                                         data-toggle="modal"
                                         data-target="#modalCuotaIncorporar"
-                                        :text="
-                                            isRowExpanded(result, 'cuotaIncorporar')
-                                                ? 'Ocultar Detalle'
-                                                : 'Ver Detalle'
-                                        "
-                                    />
+                                        v-b-tooltip.hover
+                                        title="Ver cuota a incorporar"
+                                        style="background-color: #2c8c73; border-color: #2c8c73; color: white;"
+                                    >
+                                        <i class="fa fa-calculator"></i>
+                                    </b-button>
                                 </td>
                             </tr>
                             <!-- Fila para mostrar mensaje si no hay resultados -->
                             <tr v-if="filteredResults.length === 0">
-                                <td colspan="11">No hay resultados</td>
+                                <td colspan="12">No hay resultados</td>
                             </tr>
                         </tbody>
                     </table>
@@ -406,7 +626,7 @@
                                                 <td>{{ formatCurrency(result.costo_reincorporacion_gaf) }}</td>
                                             </tr>
                                             <tr>
-                                                <td><strong>Costo Coadministración (3 Cuotas)</strong></td>
+                                                <td><strong>Costo Coadministración</strong></td>
                                                 <td>{{ formatCurrency(result.costo_coadministracion) }}</td>
                                             </tr>
                                             <tr>
@@ -428,6 +648,78 @@
                                             <tr style="background-color: #2c8c73; color: white; font-weight: bold;">
                                                 <td><strong>SUB TOTAL Costo Compra + Adm (NPL´S)</strong></td>
                                                 <td>{{ formatCurrency(result.sub_total_costo_compra_adm) }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <CustomButton data-dismiss="modal" @click="closeExpandedRows" text="Cerrar" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal de Detalle AMI -->
+                    <div
+                        class="modal fade"
+                        id="modalAMI"
+                        tabindex="-1"
+                        role="dialog"
+                        aria-labelledby="modalAMILabel"
+                        aria-hidden="true"
+                        data-backdrop="static"
+                        data-keyboard="false"
+                    >
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalAMILabel">Detalle AMI</h5>
+                                    <button
+                                        @click="closeExpandedRows"
+                                        type="button"
+                                        class="close"
+                                        data-dismiss="modal"
+                                        aria-label="Close"
+                                    >
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div
+                                    class="modal-body"
+                                    v-for="(result, index) in filteredResults"
+                                    :key="'ami-' + result.doc + '-' + index"
+                                    v-if="isRowExpanded(result, 'ami')"
+                                >
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Concepto</th>
+                                                <th>Valor</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Cuota Incorporada Previamente</strong></td>
+                                                <td>{{ formatCurrency(result.cuota_incorporada_previamente) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Cupo Sem</strong></td>
+                                                <td>{{ formatCurrency(result.cupo_sem) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Cupo Colpensiones</strong></td>
+                                                <td>{{ formatCurrency(result.cupo_colpensiones) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Cupo Fopep</strong></td>
+                                                <td>{{ formatCurrency(result.cupo_fopep) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Cupo Fiduprevisora</strong></td>
+                                                <td>{{ formatCurrency(result.cupo_fiduprevisora) }}</td>
+                                            </tr>
+                                            <tr style="background-color: #2c8c73; color: white; font-weight: bold;">
+                                                <td><strong>TOTAL CUPO DISPONIBLE</strong></td>
+                                                <td>{{ formatCurrency(result.total_cupo_disponible) }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -557,8 +849,13 @@
                     </button>
                 </div>
                 <br />
-                <b-modal id="bv-modal-example" hide-footer style="min-width: 1000px">
-                    <template #modal-title><span class="heading-title">Agregar datos demográficos</span></template>
+                <b-modal id="bv-modal-example" hide-footer size="xl">
+                    <template #modal-title>
+                        <span class="heading-title">
+                            <i class="fa fa-chart-line mr-2" style="color: #2c8c73;"></i>
+                            Nuevo Análisis de Cartera Avanzado
+                        </span>
+                    </template>
                     <div class="" style="background-color: #f9fafc; border-left: 4px solid #249fe3; border-radius: 4px">
                         <b-row style="padding: 16px">
                             <b-col cols="1" class="d-flex justify-content-center align-items-center">
@@ -588,8 +885,38 @@
                         </b-row>
                     </div>
                     <b-row class="py-3">
-                        <div class="col-md-12">
-                            <b-form-group label="Mes (MM):">
+                        <div class="col-md-6">
+                            <b-form-group label="Política de Portafolio: *" label-for="politica_portafolio">
+                                <b-form-select
+                                    id="politica_portafolio"
+                                    v-model="selectedPoliticaPortafolio"
+                                    :options="politicasPortafolioOptions"
+                                    class="input_style_b form-control2"
+                                >
+                                    <template #first>
+                                        <b-form-select-option :value="null" disabled>Seleccione una política de portafolio</b-form-select-option>
+                                    </template>
+                                </b-form-select>
+                            </b-form-group>
+                        </div>
+
+                        <div class="col-md-6">
+                            <b-form-group label="Política de Fondo: *" label-for="politica_fondo">
+                                <b-form-select
+                                    id="politica_fondo"
+                                    v-model="selectedPoliticaFondo"
+                                    :options="politicasFondoOptions"
+                                    class="input_style_b form-control2"
+                                >
+                                    <template #first>
+                                        <b-form-select-option :value="null" disabled>Seleccione una política de fondo</b-form-select-option>
+                                    </template>
+                                </b-form-select>
+                            </b-form-group>
+                        </div>
+
+                        <div class="col-md-6">
+                            <b-form-group label="Mes (MM): *">
                                 <b-form-input
                                     v-model="mes"
                                     placeholder="01"
@@ -599,11 +926,11 @@
                             </b-form-group>
                         </div>
 
-                        <div class="col-md-12">
-                            <b-form-group label="Año (YYYY):">
+                        <div class="col-md-6">
+                            <b-form-group label="Año (YYYY): *">
                                 <b-form-input
                                     v-model="año"
-                                    placeholder="2024"
+                                    placeholder="2025"
                                     maxlength="4"
                                     class="input_style_b form-control2"
                                 ></b-form-input>
@@ -705,7 +1032,14 @@ export default {
             total: 0,
             mes: '',
             año: '',
-            expandedRows: [], // Lista para rastrear filas expandidas
+            expandedRows: [],
+
+            // Políticas
+            selectedPoliticaPortafolio: null,
+            selectedPoliticaFondo: null,
+            politicasPortafolio: [],
+            politicasFondo: [],
+
             uploadProgress: {
                 show: false,
                 steps: [
@@ -716,15 +1050,22 @@ export default {
                     { id: 5, text: 'Generando salida', status: 'pending', icon: '📊' },
                     { id: 6, text: 'Listo', status: 'pending', icon: '🎉' }
                 ]
-            }
+            },
+
+            // Variables para guardar análisis
+            nombreArchivo: '',
+            descripcionAnalisis: '',
+            isSavingAnalisis: false
         };
     },
-    created ()   { this.initFromQuery() }   ,
-mounted ()   { this.initFromQuery() }   ,
-activated () { this.initFromQuery() }   ,
-watch: {
-  '$route.query': { immediate: true, handler () { this.initFromQuery() } }
-},
+    watch: {
+        '$route.query': {
+            immediate: true,
+            handler() {
+                this.initFromQuery();
+            }
+        }
+    },
     computed: {
         filteredResults() {
             if (!this.results || !Array.isArray(this.results)) {
@@ -739,6 +1080,22 @@ watch: {
                 }
                 return result.doc.toString().includes(this.searchQuery);
             });
+        },
+        politicasPortafolioOptions() {
+            return this.politicasPortafolio
+                .filter(p => p.activo)
+                .map(p => ({
+                    value: p.id,
+                    text: p.nombre
+                }));
+        },
+        politicasFondoOptions() {
+            return this.politicasFondo
+                .filter(f => f.activo)
+                .map(f => ({
+                    value: f.id,
+                    text: f.nombre_fondo
+                }));
         }
     },
     methods: {
@@ -766,6 +1123,9 @@ watch: {
         },
         handleFileUpload(event) {
             this.file = event.target.files[0];
+            if (this.file) {
+                this.nombreArchivo = this.file.name;
+            }
         },
         handleDragOver(event) {
             this.isDragging = true;
@@ -783,12 +1143,40 @@ watch: {
             this.isDragging = false;
         },
         async uploadFile(modal) {
+            if (!this.selectedPoliticaPortafolio) {
+                this.$bvToast.toast('Debe seleccionar una política de portafolio', {
+                    title: 'Validación',
+                    variant: 'warning',
+                    solid: true,
+                    autoHideDelay: 3000
+                });
+                return;
+            }
+            if (!this.selectedPoliticaFondo) {
+                this.$bvToast.toast('Debe seleccionar una política de fondo', {
+                    title: 'Validación',
+                    variant: 'warning',
+                    solid: true,
+                    autoHideDelay: 3000
+                });
+                return;
+            }
             if (!this.file) {
-                alert('Seleccione un archivo primero');
+                this.$bvToast.toast('Seleccione un archivo primero', {
+                    title: 'Validación',
+                    variant: 'warning',
+                    solid: true,
+                    autoHideDelay: 3000
+                });
                 return;
             }
             if (!this.isValidMonthYear()) {
-                alert('Por favor, ingrese un mes válido (MM) y un año válido (YYYY).');
+                this.$bvToast.toast('Por favor, ingrese un mes válido (MM) y un año válido (YYYY).', {
+                    title: 'Validación',
+                    variant: 'warning',
+                    solid: true,
+                    autoHideDelay: 3000
+                });
                 return;
             }
 
@@ -796,6 +1184,8 @@ watch: {
             formData.append('file', this.file);
             formData.append('mes', this.mes);
             formData.append('año', this.año);
+            formData.append('politica_portafolio_id', this.selectedPoliticaPortafolio);
+            formData.append('politica_fondo_id', this.selectedPoliticaFondo);
 
             try {
                 // Mostrar log de progreso
@@ -960,40 +1350,56 @@ watch: {
         },
         exportToPDF() {
             const doc = new jsPDF('landscape');
+            const greenColor = [44, 140, 115]; // Color verde GAF
 
-            // Página 1: Información General
+            // Página 1: Información General Completa
+            doc.setFontSize(14);
+            doc.setTextColor(44, 140, 115);
             doc.text('Análisis de Cartera Avanzado - Información General', 14, 15);
+
             const columns1 = [
                 'Operación',
                 'Cédula',
                 'Nombre',
-                'Secretaria',
+                'F. Nac.',
+                'Edad',
+                'Contrato',
+                'Cargo',
+                'Situación',
+                'Pagaduría',
+                'Cupo Libre',
                 'Colp.',
                 'Fidu.',
-                'Fopep',
-                'Edad'
+                'Fopep'
             ];
             const rows1 = this.filteredResults.map(item => [
                 item.operacion || 'N/D',
                 item.doc,
                 (item.nombre_usuario || 'N/D').substring(0, 25),
+                item.fecha_nacimiento || 'N/D',
+                item.edad || 'N/D',
+                (item.tipo_contrato || 'N/D').substring(0, 10),
+                (item.cargo || 'N/D').substring(0, 18),
+                (item.situacion_laboral || 'N/D').substring(0, 12),
                 (item.pagaduria || 'N/D').substring(0, 20),
+                this.formatCurrency(item.cupo_libre),
                 item.colpensiones ? 'Sí' : 'No',
                 item.fiducidiaria ? 'Sí' : 'No',
-                item.fopep ? 'Sí' : 'No',
-                item.edad || 'N/D'
+                item.fopep ? 'Sí' : 'No'
             ]);
             doc.autoTable({
                 head: [columns1],
                 body: rows1,
                 startY: 20,
-                styles: { fontSize: 6, cellPadding: 1.5 },
-                headStyles: { fillColor: [44, 140, 115], fontSize: 7 }
+                styles: { fontSize: 5.5, cellPadding: 1.5 },
+                headStyles: { fillColor: greenColor, fontSize: 6, fontStyle: 'bold' }
             });
 
             // Página 2: Detalle de Crédito
             doc.addPage();
+            doc.setFontSize(14);
             doc.text('Análisis de Cartera Avanzado - Detalle de Crédito', 14, 15);
+
             const columns2 = [
                 'Cédula',
                 'Nombre',
@@ -1020,13 +1426,24 @@ watch: {
                 head: [columns2],
                 body: rows2,
                 startY: 20,
-                styles: { fontSize: 5.5, cellPadding: 1 },
-                headStyles: { fillColor: [44, 140, 115], fontSize: 6 }
+                styles: { fontSize: 5.5, cellPadding: 1.5 },
+                headStyles: { fillColor: greenColor, fontSize: 6, fontStyle: 'bold' },
+                columnStyles: {
+                    2: { halign: 'right' },
+                    3: { halign: 'right' },
+                    4: { halign: 'right' },
+                    5: { halign: 'right' },
+                    6: { halign: 'right' },
+                    7: { halign: 'right' },
+                    8: { halign: 'right', fontStyle: 'bold' }
+                }
             });
 
             // Página 3: Detalle de Portafolio
             doc.addPage();
+            doc.setFontSize(14);
             doc.text('Análisis de Cartera Avanzado - Detalle Portafolio', 14, 15);
+
             const columns3 = [
                 'Cédula',
                 'Nombre',
@@ -1057,136 +1474,192 @@ watch: {
                 head: [columns3],
                 body: rows3,
                 startY: 20,
-                styles: { fontSize: 5, cellPadding: 1 },
-                headStyles: { fillColor: [44, 140, 115], fontSize: 5.5 }
+                styles: { fontSize: 5, cellPadding: 1.5 },
+                headStyles: { fillColor: greenColor, fontSize: 5.5, fontStyle: 'bold' },
+                columnStyles: {
+                    2: { halign: 'right' },
+                    3: { halign: 'right' },
+                    4: { halign: 'right' },
+                    5: { halign: 'right' },
+                    6: { halign: 'right' },
+                    7: { halign: 'right' },
+                    8: { halign: 'right' },
+                    9: { halign: 'right' },
+                    10: { halign: 'right', fontStyle: 'bold' }
+                }
             });
 
-            // Página 4: Cuota a Incorporar
+            // Página 4: Detalle de Cupo
             doc.addPage();
-            doc.text('Análisis de Cartera Avanzado - Cuota a Incorporar', 14, 15);
+            doc.setFontSize(14);
+            doc.text('Análisis de Cartera Avanzado - Detalle de Cupo', 14, 15);
+
             const columns4 = [
                 'Cédula',
                 'Nombre',
-                'Total Cupo',
-                'Tasa Pact.',
-                'Resp. Tasa',
-                'Plazo Pact.',
-                'Resp. Plazo',
-                'Cuota Pact.',
-                'Resp. Cuota',
-                'Cuota a Inc.'
+                'Cuota Inc. Prev.',
+                'Cupo Sem',
+                'Cupo Colp.',
+                'Cupo Fopep',
+                'Cupo Fidu.',
+                'TOTAL CUPO'
             ];
             const rows4 = this.filteredResults.map(item => [
                 item.doc,
-                (item.nombre_usuario || 'N/D').substring(0, 20),
-                this.formatCurrency(item.total_cupo_disponible),
-                item.tasa_pactada || 'N/D',
-                item.respetar_tasa_pactada || 'N/D',
-                item.plazo_pactado || 'N/D',
-                item.respetar_plazo_pactado || 'N/D',
-                this.formatCurrency(item.cuota_pactada),
-                item.respetar_cuota_pactada || 'N/D',
-                this.formatCurrency(item.cuota_a_incorporar)
+                (item.nombre_usuario || 'N/D').substring(0, 25),
+                this.formatCurrency(item.cuota_incorporada_previamente),
+                this.formatCurrency(item.cupo_sem),
+                this.formatCurrency(item.cupo_colpensiones),
+                this.formatCurrency(item.cupo_fopep),
+                this.formatCurrency(item.cupo_fiduprevisora),
+                this.formatCurrency(item.total_cupo_disponible)
             ]);
             doc.autoTable({
                 head: [columns4],
                 body: rows4,
                 startY: 20,
-                styles: { fontSize: 5, cellPadding: 1 },
-                headStyles: { fillColor: [44, 140, 115], fontSize: 5.5 }
+                styles: { fontSize: 6, cellPadding: 1.5 },
+                headStyles: { fillColor: greenColor, fontSize: 6.5, fontStyle: 'bold' },
+                columnStyles: {
+                    2: { halign: 'right' },
+                    3: { halign: 'right' },
+                    4: { halign: 'right' },
+                    5: { halign: 'right' },
+                    6: { halign: 'right' },
+                    7: { halign: 'right', fontStyle: 'bold' }
+                }
             });
 
-            doc.save('analisis_cartera_avanzado.pdf');
-        },
-        exportToExcel() {
-            const columns = [
-                'Operación',
+            // Página 5: Cuota a Incorporar (Parte 1)
+            doc.addPage();
+            doc.setFontSize(14);
+            doc.text('Análisis de Cartera Avanzado - Cuota a Incorporar (Parte 1)', 14, 15);
+
+            const columns5 = [
                 'Cédula',
-                'Nombre del Cliente',
-                'Secretaria (SED - SEM)',
-                'Colpensiones',
-                'Fiduprevisora',
-                'Fopep',
-                'Edad',
-                // Detalle de Crédito
-                'Valor Desembolso',
-                'Saldo Capital Original',
-                'Intereses Corrientes',
-                'Intereses de Mora',
-                'Seguros',
-                'Otros Conceptos',
-                'Total Obligación',
-                // Detalle Portafolio
-                'Costo Compra Portafolio',
-                'Costo Comisión Comercial',
-                'Costo Re-Incorporación GAF',
-                'Costo Coadministración (3 Cuotas)',
-                'Costo Seguro V.D (3 Meses)',
-                'Costos Fiduciarios (Fiducoomeva)',
-                'Reporte Centrales ($10.000)',
-                'Tecnología ($5.000)',
-                'SUB TOTAL Costo Compra + Adm (NPL´S)',
-                // Cuota a Incorporar
-                'TOTAL CUPO DISPONIBLE',
-                'Tasa Pactada',
-                'RESPETAR TASA PACTADA',
-                'Tasa Nueva Libranza Ck',
-                'PLAZO PACTADO',
-                'RESPETAR PLAZO PACTADO',
-                'Plazo Nueva Libranza Ck',
-                'CUOTA PACTADA',
-                'RESPETAR CUOTA PACTADA',
-                'CUOTA A INCORPORAR',
-                'Tasa Modificada Conservando plazo 180',
-                'Plazo Modificado Conservando Tasa 1,88%'
+                'Nombre',
+                'Tasa Pact.',
+                'Resp. Tasa',
+                'Tasa Nueva CK',
+                'Plazo Pact.',
+                'Resp. Plazo',
+                'Plazo Nuevo CK',
+                'Cuota Pact.',
+                'Resp. Cuota'
             ];
-
-            const rows = this.results.map(item => [
-                item.operacion || 'No disponible',
-                item.doc || 'No disponible',
-                item.nombre_usuario || 'No disponible',
-                item.pagaduria || 'No disponible',
-                item.colpensiones ? 'Sí' : 'No',
-                item.fiducidiaria ? 'Sí' : 'No',
-                item.fopep ? 'Sí' : 'No',
-                item.edad || 'No disponible',
-                // Detalle de Crédito
-                item.valor_desembolso || 'No disponible',
-                item.saldo_capital_original || 'No disponible',
-                item.intereses_corrientes || 'No disponible',
-                item.intereses_de_mora || 'No disponible',
-                item.seguros || 'No disponible',
-                item.otros_conceptos || 'No disponible',
-                item.total_obligacion || 'No disponible',
-                // Detalle Portafolio
-                item.costo_compra_portafolio || 'No disponible',
-                item.costo_comision_comercial || 'No disponible',
-                item.costo_reincorporacion_gaf || 'No disponible',
-                item.costo_coadministracion || 'No disponible',
-                item.costo_seguro_vd || 'No disponible',
-                item.costos_fiduciarios || 'No disponible',
-                item.reporte_centrales || 'No disponible',
-                item.tecnologia || 'No disponible',
-                item.sub_total_costo_compra_adm || 'No disponible',
-                // Cuota a Incorporar
-                item.total_cupo_disponible || 'No disponible',
-                item.tasa_pactada || 'No disponible',
-                item.respetar_tasa_pactada || 'No disponible',
-                item.tasa_nueva_libranza_ck || 'No disponible',
-                item.plazo_pactado || 'No disponible',
-                item.respetar_plazo_pactado || 'No disponible',
-                item.plazo_nueva_libranza_ck || 'No disponible',
-                item.cuota_pactada || 'No disponible',
-                item.respetar_cuota_pactada || 'No disponible',
-                item.cuota_a_incorporar || 'No disponible',
-                item.tasa_modificada_conservando_plazo_180 || 'No disponible',
-                item.plazo_modificado_conservando_tasa_188 || 'No disponible'
+            const rows5 = this.filteredResults.map(item => [
+                item.doc,
+                (item.nombre_usuario || 'N/D').substring(0, 20),
+                item.tasa_pactada || 'N/D',
+                item.respetar_tasa_pactada || 'N/D',
+                item.tasa_nueva_libranza_ck || 'N/D',
+                item.plazo_pactado || 'N/D',
+                item.respetar_plazo_pactado || 'N/D',
+                item.plazo_nueva_libranza_ck || 'N/D',
+                this.formatCurrency(item.cuota_pactada),
+                item.respetar_cuota_pactada || 'N/D'
             ]);
+            doc.autoTable({
+                head: [columns5],
+                body: rows5,
+                startY: 20,
+                styles: { fontSize: 5.5, cellPadding: 1.5 },
+                headStyles: { fillColor: greenColor, fontSize: 6, fontStyle: 'bold' }
+            });
 
-            const worksheet = XLSX.utils.aoa_to_sheet([columns, ...rows]);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, 'Análisis Cartera Avanzado');
-            XLSX.writeFile(workbook, 'analisis_cartera_avanzado.xlsx');
+            // Página 6: Cuota a Incorporar (Parte 2)
+            doc.addPage();
+            doc.setFontSize(14);
+            doc.text('Análisis de Cartera Avanzado - Cuota a Incorporar (Parte 2)', 14, 15);
+
+            const columns6 = [
+                'Cédula',
+                'Nombre',
+                'CUOTA A INCORP.',
+                'Tasa Modif. (Plazo 180)',
+                'Plazo Modif. (Tasa 1.88%)'
+            ];
+            const rows6 = this.filteredResults.map(item => [
+                item.doc,
+                (item.nombre_usuario || 'N/D').substring(0, 30),
+                this.formatCurrency(item.cuota_a_incorporar),
+                item.tasa_modificada_conservando_plazo_180 ?
+                    (item.tasa_modificada_conservando_plazo_180 + '%') : 'N/D',
+                item.plazo_modificado_conservando_tasa_188 ?
+                    (item.plazo_modificado_conservando_tasa_188 + ' meses') : 'N/D'
+            ]);
+            doc.autoTable({
+                head: [columns6],
+                body: rows6,
+                startY: 20,
+                styles: { fontSize: 7, cellPadding: 2 },
+                headStyles: { fillColor: greenColor, fontSize: 8, fontStyle: 'bold' },
+                columnStyles: {
+                    2: { halign: 'right', fontStyle: 'bold' },
+                    3: { halign: 'center' },
+                    4: { halign: 'center' }
+                }
+            });
+
+            // Guardar PDF con fecha
+            const fecha = new Date().toISOString().slice(0, 10);
+            doc.save(`analisis_cartera_avanzado_${fecha}.pdf`);
+        },
+        async exportToExcel() {
+            try {
+                // Validar que haya datos
+                if (!this.results || this.results.length === 0) {
+                    this.$bvToast.toast('No hay datos para exportar', {
+                        title: 'Advertencia',
+                        variant: 'warning',
+                        solid: true,
+                        autoHideDelay: 3000
+                    });
+                    return;
+                }
+
+                // Mostrar mensaje de carga
+                this.$bvToast.toast('Generando archivo Excel...', {
+                    title: 'Exportando',
+                    variant: 'info',
+                    solid: true,
+                    autoHideDelay: 2000
+                });
+
+                // Enviar datos al backend para generar Excel con formato
+                const response = await axios.post('/demografico-avanzado/exportar-excel', {
+                    datos: this.results
+                }, {
+                    responseType: 'blob' // Importante para recibir el archivo
+                });
+
+                // Crear URL del blob y descargar
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                const fecha = new Date().toISOString().slice(0, 10);
+                link.setAttribute('download', `analisis_cartera_avanzado_${fecha}.xlsx`);
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                window.URL.revokeObjectURL(url);
+
+                this.$bvToast.toast('Archivo Excel generado exitosamente', {
+                    title: 'Éxito',
+                    variant: 'success',
+                    solid: true,
+                    autoHideDelay: 3000
+                });
+
+            } catch (error) {
+                console.error('Error al exportar Excel:', error);
+                this.$bvToast.toast('Error al generar el archivo Excel', {
+                    title: 'Error',
+                    variant: 'danger',
+                    solid: true,
+                    autoHideDelay: 4000
+                });
+            }
         },
 
         // Helper para formatear embargos
@@ -1239,7 +1712,248 @@ watch: {
         hasDetallePortafolio(result) {
             // Verifica si hay saldo capital original para calcular portafolio
             return result.saldo_capital_original != null && result.saldo_capital_original > 0;
+        },
+        hasDetalleAMI(result) {
+            // Verifica si hay datos de cupo disponibles
+            return result.cuota_incorporada_previamente != null ||
+                   result.cupo_sem != null ||
+                   result.cupo_colpensiones != null ||
+                   result.cupo_fopep != null ||
+                   result.cupo_fiduprevisora != null;
+        },
+
+        async loadPoliticasPortafolio() {
+            try {
+                const response = await axios.get('/politicas-portafolio/get');
+                this.politicasPortafolio = response.data.politicas || [];
+            } catch (error) {
+                console.error('Error al cargar políticas de portafolio:', error);
+                this.politicasPortafolio = [];
+            }
+        },
+
+        async loadPoliticasFondo() {
+            try {
+                const response = await axios.get('/politicas-portafolio/fondos/get');
+                this.politicasFondo = response.data.fondos || [];
+            } catch (error) {
+                console.error('Error al cargar políticas de fondo:', error);
+                this.politicasFondo = [];
+            }
+        },
+
+        getPoliticaPortafolioNombre() {
+            if (!this.selectedPoliticaPortafolio) return 'No seleccionada';
+            const politica = this.politicasPortafolio.find(p => p.id === this.selectedPoliticaPortafolio);
+            return politica ? politica.nombre : 'No seleccionada';
+        },
+
+        getPoliticaFondoNombre() {
+            if (!this.selectedPoliticaFondo) return 'No seleccionado';
+            const fondo = this.politicasFondo.find(f => f.id === this.selectedPoliticaFondo);
+            return fondo ? fondo.nombre_fondo : 'No seleccionado';
+        },
+
+        guardarAnalisis() {
+            console.log('=== INICIANDO GUARDADO DE ANÁLISIS ===');
+            console.log('Results:', this.results);
+            console.log('Results length:', this.results ? this.results.length : 0);
+            console.log('Mes:', this.mes);
+            console.log('Año:', this.año);
+            console.log('Política Portafolio:', this.selectedPoliticaPortafolio);
+            console.log('Política Fondo:', this.selectedPoliticaFondo);
+
+            // Validaciones previas
+            if (!this.results || this.results.length === 0) {
+                console.log('FALLO: No hay datos procesados');
+                this.$bvToast.toast('No hay datos para guardar. Por favor, cargue y procese un archivo primero.', {
+                    title: 'Advertencia',
+                    variant: 'warning',
+                    solid: true,
+                    autoHideDelay: 4000
+                });
+                return;
+            }
+
+            if (!this.mes || !this.año) {
+                console.log('FALLO: Falta mes o año');
+                this.$bvToast.toast('Por favor, ingrese el mes y año del análisis antes de guardar.', {
+                    title: 'Advertencia',
+                    variant: 'warning',
+                    solid: true,
+                    autoHideDelay: 4000
+                });
+                return;
+            }
+
+            if (!this.selectedPoliticaPortafolio || !this.selectedPoliticaFondo) {
+                console.log('FALLO: Falta seleccionar políticas');
+                this.$bvToast.toast('Por favor, seleccione las políticas de portafolio y fondo antes de guardar.', {
+                    title: 'Advertencia',
+                    variant: 'warning',
+                    solid: true,
+                    autoHideDelay: 4000
+                });
+                return;
+            }
+
+            console.log('✓ Todas las validaciones pasaron, abriendo modal...');
+            console.log('$bvModal disponible?', this.$bvModal);
+            console.log('Intentando abrir modal con ID: modal-guardar-analisis');
+
+            // Limpiar descripción y abrir modal
+            this.descripcionAnalisis = '';
+
+            // Intentar abrir el modal
+            try {
+                this.$bvModal.show('modal-guardar-analisis');
+                console.log('Comando show() ejecutado');
+            } catch (error) {
+                console.error('Error al abrir modal:', error);
+            }
+
+            // También intentar con $nextTick por si es un problema de timing
+            this.$nextTick(() => {
+                console.log('Intentando abrir modal en nextTick...');
+                this.$bvModal.show('modal-guardar-analisis');
+
+                // Verificar si el modal está en el DOM
+                const modalElement = document.getElementById('modal-guardar-analisis');
+                console.log('Modal element en DOM:', modalElement);
+
+                // Verificar si existe el modal wrapper de Bootstrap
+                const modalBackdrop = document.querySelector('.modal-backdrop');
+                const modalDialog = document.querySelector('.modal-dialog');
+                console.log('Modal backdrop:', modalBackdrop);
+                console.log('Modal dialog:', modalDialog);
+
+                // Verificar clases del modal si existe
+                if (modalElement) {
+                    console.log('Clases del modal:', modalElement.className);
+                    console.log('Estilo display:', window.getComputedStyle(modalElement).display);
+                }
+            });
+        },
+
+        async confirmarGuardarAnalisis() {
+            this.isSavingAnalisis = true;
+
+            try {
+                const response = await axios.post('/demografico-avanzado/guardar-analisis', {
+                    mes: this.mes,
+                    anio: this.año,
+                    politica_portafolio_id: this.selectedPoliticaPortafolio,
+                    politica_fondo_id: this.selectedPoliticaFondo,
+                    nombre_archivo: this.nombreArchivo || `analisis_${Date.now()}.xlsx`,
+                    descripcion: this.descripcionAnalisis || null,
+                    datos_procesados: this.results
+                });
+
+                if (response.data.success) {
+                    this.$bvModal.hide('modal-guardar-analisis');
+
+                    this.$bvToast.toast(
+                        `Análisis guardado exitosamente con ID: ${response.data.estudio_id}. Los datos permanecen cargados. Use "Nuevo Análisis" si desea limpiar.`,
+                        {
+                            title: '✅ Guardado Exitoso',
+                            variant: 'success',
+                            solid: true,
+                            autoHideDelay: 7000
+                        }
+                    );
+
+                    // IMPORTANTE: Solo limpiar el campo de descripción del modal
+                    // NO limpiar los datos del análisis (results, mes, año, etc.)
+                    this.descripcionAnalisis = '';
+
+                    // Los datos permanecen cargados para que el usuario pueda:
+                    // - Exportar a Excel/PDF
+                    // - Revisar los resultados
+                    // - Guardar nuevamente con otra descripción si lo desea
+                    // Para limpiar debe usar el botón "Nuevo Análisis"
+                } else {
+                    throw new Error(response.data.message || 'Error desconocido');
+                }
+            } catch (error) {
+                console.error('Error al guardar análisis:', error);
+
+                const errorMessage = error.response?.data?.error || error.message || 'Error al guardar el análisis';
+
+                this.$bvToast.toast(errorMessage, {
+                    title: 'Error',
+                    variant: 'danger',
+                    solid: true,
+                    autoHideDelay: 5000
+                });
+            } finally {
+                this.isSavingAnalisis = false;
+            }
+        },
+
+        iniciarNuevoAnalisis() {
+            // Si hay datos actuales, mostrar modal de confirmación
+            if (this.results && this.results.length > 0) {
+                this.$bvModal.show('modal-nuevo-analisis');
+            } else {
+                // Si no hay datos, directamente abrir el modal de carga
+                this.$bvModal.show('bv-modal-example');
+            }
+        },
+
+        async confirmarNuevoAnalisis() {
+            try {
+                // Llamar al backend para limpiar caché
+                await axios.post('/demografico-avanzado/limpiar-cache');
+
+                // Limpiar datos del frontend
+                this.results = [];
+                this.file = null;
+                this.nombreArchivo = '';
+                this.mes = '';
+                this.año = '';
+                this.page = 1;
+                this.total = 0;
+                this.searchQuery = '';
+                this.expandedRows = [];
+                this.descripcionAnalisis = '';
+                this.selectedPoliticaPortafolio = null;
+                this.selectedPoliticaFondo = null;
+
+                // Resetear el input de archivo
+                if (this.$refs.fileInput) {
+                    this.$refs.fileInput.value = '';
+                }
+
+                // Cerrar modal de confirmación
+                this.$bvModal.hide('modal-nuevo-analisis');
+
+                // Abrir modal para nuevo análisis
+                this.$bvModal.show('bv-modal-example');
+
+                // Mostrar mensaje de éxito
+                this.$bvToast.toast('Datos limpiados correctamente. Puede cargar un nuevo archivo.', {
+                    title: 'Nuevo Análisis',
+                    variant: 'success',
+                    solid: true,
+                    autoHideDelay: 3000
+                });
+
+            } catch (error) {
+                console.error('Error al limpiar datos:', error);
+
+                this.$bvToast.toast('Error al limpiar los datos. Por favor, recargue la página.', {
+                    title: 'Error',
+                    variant: 'danger',
+                    solid: true,
+                    autoHideDelay: 4000
+                });
+            }
         }
+    },
+    mounted() {
+        this.initFromQuery();
+        this.loadPoliticasPortafolio();
+        this.loadPoliticasFondo();
     }
 };
 </script>
@@ -1423,5 +2137,111 @@ th {
 @keyframes blink {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.3; }
+}
+
+/* Custom Table Styles */
+.table-container {
+    overflow-x: auto;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background: white;
+}
+
+.custom-analysis-table {
+    margin-bottom: 0;
+    font-size: 14px;
+}
+
+.thead-custom {
+    background: linear-gradient(135deg, #2c8c73 0%, #239167 100%);
+    color: white;
+}
+
+.thead-custom th {
+    border: none !important;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 12px 8px;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.thead-custom .th-operacion { min-width: 100px; }
+.thead-custom .th-cedula { min-width: 100px; }
+.thead-custom .th-nombre { min-width: 200px; }
+.thead-custom .th-secretaria { min-width: 150px; }
+.thead-custom .th-colp { min-width: 70px; }
+.thead-custom .th-fidu { min-width: 70px; }
+.thead-custom .th-fopep { min-width: 70px; }
+.thead-custom .th-edad { min-width: 60px; }
+.thead-custom .th-actions { min-width: 90px; }
+
+.table-row-custom {
+    transition: all 0.2s ease;
+}
+
+.table-row-custom:hover {
+    background-color: #f8f9fa !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.table-row-custom td {
+    padding: 10px 8px;
+    vertical-align: middle;
+    border-color: #e9ecef;
+}
+
+.td-cedula {
+    color: #2c8c73;
+    font-weight: 600;
+}
+
+.td-nombre {
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.td-secretaria {
+    color: #6c757d;
+    font-size: 13px;
+}
+
+.td-badge {
+    padding: 4px !important;
+}
+
+.badge-small {
+    font-size: 11px;
+    padding: 4px 8px;
+    font-weight: 600;
+}
+
+.td-actions button {
+    min-width: 32px;
+    padding: 4px 8px;
+}
+
+.td-actions .fa {
+    font-size: 14px;
+}
+
+.input_style_b {
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 8px 12px;
+    background-color: #ffffff;
+    color: #2c3e50;
+    font-weight: 500;
+    transition: border-color 0.2s;
+}
+
+.input_style_b:focus {
+    border-color: #2c8c73;
+    box-shadow: 0 0 0 0.2rem rgba(44, 140, 115, 0.25);
+}
+
+.heading-title {
+    color: #2c3e50;
+    font-weight: 600;
 }
 </style>

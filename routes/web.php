@@ -477,6 +477,9 @@ Route::get('/demografico/calcular-cupo/{cedula}/{mes}/{ano}', [DemograficoContro
 Route::get('/analisis-de-cartera-avanzado', [DemograficoAvanzadoController::class, 'show'])->name('demografico.avanzado.show');
 Route::post('/demografico-avanzado/upload', [DemograficoAvanzadoController::class, 'upload'])->name('demografico.avanzado.upload');
 Route::get('/demografico-avanzado/fetch-paginated-results', [DemograficoAvanzadoController::class, 'fetchPaginatedResults'])->name('demografico.avanzado.fetch');
+Route::post('/demografico-avanzado/guardar-analisis', [DemograficoAvanzadoController::class, 'guardarAnalisis'])->name('demografico.avanzado.guardar');
+Route::post('/demografico-avanzado/limpiar-cache', [DemograficoAvanzadoController::class, 'limpiarCache'])->name('demografico.avanzado.limpiar');
+Route::post('/demografico-avanzado/exportar-excel', [DemograficoAvanzadoController::class, 'exportarExcelConFormato'])->name('demografico.avanzado.exportar.excel');
 
 // Políticas de Portafolio
 Route::get('/politicas-portafolio', [PoliticasPortafolioController::class, 'index'])->name('politicas.portafolio.index');
@@ -499,6 +502,9 @@ Route::post('/politicas-portafolio/fondos/import-json', [PoliticasPortafolioCont
 
 // Historial de Análisis de Cartera
 Route::get('/historial-cartera', [App\Http\Controllers\HistorialCarteraController::class, 'index'])->name('historial.cartera');
+Route::get('/historial-cartera/listar', [App\Http\Controllers\HistorialCarteraController::class, 'listar'])->name('historial.cartera.listar');
+Route::delete('/historial-cartera/eliminar/{id}', [App\Http\Controllers\HistorialCarteraController::class, 'eliminar'])->name('historial.cartera.eliminar');
+Route::get('/historial-cartera/exportar/{id}/{tipo}', [App\Http\Controllers\HistorialCarteraController::class, 'exportar'])->name('historial.cartera.exportar');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
