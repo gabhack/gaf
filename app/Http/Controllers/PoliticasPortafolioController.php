@@ -354,6 +354,9 @@ class PoliticasPortafolioController extends Controller
                 'fondo.ta_min_ea' => 'required|numeric|min:0',
                 'fondo.t_usura_ea' => 'required|numeric|min:0',
                 'fondo.tasa_usura' => 'required|numeric|min:0',
+                'fondo.costo_asegurabilidad_mes' => 'nullable|numeric|min:0',
+                'fondo.descuento_max_saldo_total' => 'nullable|numeric|min:0',
+                'fondo.descuento_max_saldo_capital' => 'nullable|numeric|min:0',
                 'fondo.activo' => 'nullable|boolean',
             ]);
 
@@ -433,6 +436,9 @@ class PoliticasPortafolioController extends Controller
                 'fondo.ta_min_ea' => 'required|numeric|min:0',
                 'fondo.t_usura_ea' => 'required|numeric|min:0',
                 'fondo.tasa_usura' => 'required|numeric|min:0',
+                'fondo.costo_asegurabilidad_mes' => 'nullable|numeric|min:0',
+                'fondo.descuento_max_saldo_total' => 'nullable|numeric|min:0',
+                'fondo.descuento_max_saldo_capital' => 'nullable|numeric|min:0',
                 'fondo.activo' => 'nullable|boolean',
             ]);
 

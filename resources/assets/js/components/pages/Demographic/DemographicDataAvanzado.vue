@@ -809,14 +809,6 @@
                                                 <td><strong>CUOTA A INCORPORAR</strong></td>
                                                 <td>{{ formatCurrency(result.cuota_a_incorporar) }}</td>
                                             </tr>
-                                            <tr>
-                                                <td><strong>Tasa Modificada Conservando plazo 180</strong></td>
-                                                <td>{{ result.tasa_modificada_conservando_plazo_180 || 'No disponible' }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Plazo Modificado Conservando Tasa 1,88%</strong></td>
-                                                <td>{{ result.plazo_modificado_conservando_tasa_188 || 'No disponible' }}</td>
-                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -1575,18 +1567,12 @@ export default {
             const columns6 = [
                 'Cédula',
                 'Nombre',
-                'CUOTA A INCORP.',
-                'Tasa Modif. (Plazo 180)',
-                'Plazo Modif. (Tasa 1.88%)'
+                'CUOTA A INCORP.'
             ];
             const rows6 = this.filteredResults.map(item => [
                 item.doc,
                 (item.nombre_usuario || 'N/D').substring(0, 30),
-                this.formatCurrency(item.cuota_a_incorporar),
-                item.tasa_modificada_conservando_plazo_180 ?
-                    (item.tasa_modificada_conservando_plazo_180 + '%') : 'N/D',
-                item.plazo_modificado_conservando_tasa_188 ?
-                    (item.plazo_modificado_conservando_tasa_188 + ' meses') : 'N/D'
+                this.formatCurrency(item.cuota_a_incorporar)
             ]);
             doc.autoTable({
                 head: [columns6],
@@ -1595,9 +1581,7 @@ export default {
                 styles: { fontSize: 7, cellPadding: 2 },
                 headStyles: { fillColor: greenColor, fontSize: 8, fontStyle: 'bold' },
                 columnStyles: {
-                    2: { halign: 'right', fontStyle: 'bold' },
-                    3: { halign: 'center' },
-                    4: { halign: 'center' }
+                    2: { halign: 'right', fontStyle: 'bold' }
                 }
             });
 

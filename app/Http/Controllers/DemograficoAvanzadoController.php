@@ -110,6 +110,7 @@ class DemograficoAvanzadoController extends Controller
                 'tasa pactada',
                 'respetar tasa pactada',
                 'plazo pactado',
+                'respetar plazo pactado',
                 'cuota pactada',
                 'respetar cuota pactada',
                 'cupo colpensiones',
@@ -117,7 +118,7 @@ class DemograficoAvanzadoController extends Controller
                 'cupo fiduprevisora'
             ];
 
-            // Columnas que contienen valores monetarios
+            // Columnas que contienen valores monetarios y numéricos que requieren limpieza
             $moneyColumns = [
                 'valor desembolso',
                 'saldo capital original',
@@ -125,6 +126,8 @@ class DemograficoAvanzadoController extends Controller
                 'intereses de mora',
                 'seguros',
                 'otros conceptos',
+                'tasa pactada',           // Agregar para limpiar formato de porcentaje
+                'plazo pactado',          // Agregar para limpiar formato numérico
                 'cuota pactada',
                 'cupo colpensiones',
                 'cupo fopep',
@@ -294,6 +297,7 @@ class DemograficoAvanzadoController extends Controller
                     $results[$i]['tasa_pactada'] = $excelRow['tasa pactada'] ?? null;
                     $results[$i]['respetar_tasa_pactada'] = $excelRow['respetar tasa pactada'] ?? null;
                     $results[$i]['plazo_pactado'] = $excelRow['plazo pactado'] ?? null;
+                    $results[$i]['respetar_plazo_pactado'] = $excelRow['respetar plazo pactado'] ?? null;
                     $results[$i]['cuota_pactada'] = $excelRow['cuota pactada'] ?? null;
                     $results[$i]['respetar_cuota_pactada'] = $excelRow['respetar cuota pactada'] ?? null;
 
@@ -1167,11 +1171,11 @@ class DemograficoAvanzadoController extends Controller
     private function calcularValoresFinancierosOptimizado($data, $politicaFondo)
     {
         $resultado = [
-            'tasa_modificada_conservando_plazo_180' => 0,
+            'tasa_modificada_conservando_plazo_180' => 100, // 100% por defecto en caso de error (SI.ERROR del Excel)
             'plazo_modificado_conservando_tasa_188' => 0
         ];
 
-        // Validación temprana: si no hay política o valores críticos son 0, retornar ceros
+        // Validación temprana: si no hay política o valores críticos son 0, retornar valores por defecto
         if (!$politicaFondo) {
             return $resultado;
         }
@@ -1185,16 +1189,22 @@ class DemograficoAvanzadoController extends Controller
         // Cálculo 1: Tasa Modificada Conservando Plazo 180
         // Solo calcular si los valores son válidos
         if ($plazo_nueva_libranza_ck > 0 && $cuota_a_incorporar > 0 && $total_obligacion > 0) {
-            $tasa_calculada = $this->calculateRate(
-                $plazo_nueva_libranza_ck,
-                $cuota_a_incorporar,
-                -$total_obligacion,
-                0,
-                0
-            );
+            try {
+                $tasa_calculada = $this->calculateRate(
+                    $plazo_nueva_libranza_ck,
+                    $cuota_a_incorporar,
+                    -$total_obligacion,
+                    0,
+                    0
+                );
 
-            $resultado['tasa_modificada_conservando_plazo_180'] =
-                ($tasa_calculada - ($costo_asegurabilidad_mes / 100)) * 100;
+                $resultado['tasa_modificada_conservando_plazo_180'] =
+                    ($tasa_calculada - ($costo_asegurabilidad_mes / 100)) * 100;
+            } catch (\Exception $e) {
+                // Si hay error en el cálculo, mantener 100% (comportamiento SI.ERROR del Excel)
+                Log::warning('[calcularValoresFinancierosOptimizado] Error calculando tasa: ' . $e->getMessage());
+                $resultado['tasa_modificada_conservando_plazo_180'] = 100;
+            }
         }
 
         // Cálculo 2: Plazo Modificado Conservando Tasa 1.88%
@@ -1244,7 +1254,7 @@ class DemograficoAvanzadoController extends Controller
             $sheet = $spreadsheet->getActiveSheet();
             $sheet->setTitle('Análisis Cartera Avanzado');
 
-            // Definir headers (41 columnas totales)
+            // Definir headers (39 columnas totales)
             $headers = [
                 'Operación',
                 'Cédula',
@@ -1284,9 +1294,7 @@ class DemograficoAvanzadoController extends Controller
                 'Plazo Nueva Libranza Ck',
                 'Cuota Pactada',
                 'Respetar Cuota Pactada',
-                'Cuota A Incorporar',
-                'Tasa Modificada Conservando Plazo 180)',
-                'Plazo Modificado Conservando Tasa 1,88%)'
+                'Cuota A Incorporar'
             ];
 
             // Escribir headers
@@ -1309,7 +1317,7 @@ class DemograficoAvanzadoController extends Controller
                     'wrapText' => true
                 ]
             ];
-            $sheet->getStyle('A1:AO1')->applyFromArray($headerStyle);
+            $sheet->getStyle('A1:AM1')->applyFromArray($headerStyle);
 
             // Escribir datos
             $row = 2;
@@ -1353,9 +1361,7 @@ class DemograficoAvanzadoController extends Controller
                     $item['plazo_nueva_libranza_ck'] ?? '',
                     $item['cuota_pactada'] ?? 0,
                     $item['respetar_cuota_pactada'] ?? '',
-                    $item['cuota_a_incorporar'] ?? 0,
-                    $item['tasa_modificada_conservando_plazo_180'] ?? '',
-                    $item['plazo_modificado_conservando_tasa_188'] ?? '',
+                    $item['cuota_a_incorporar'] ?? 0
                 ];
 
                 $sheet->fromArray([$rowData], null, 'A' . $row);
@@ -1371,8 +1377,7 @@ class DemograficoAvanzadoController extends Controller
                 'U' => 18,  'V' => 18,  'W' => 12,  'X' => 30,  'Y' => 28,
                 'Z' => 15,  'AA' => 18, 'AB' => 15, 'AC' => 18, 'AD' => 22,
                 'AE' => 15, 'AF' => 22, 'AG' => 22, 'AH' => 15, 'AI' => 22,
-                'AJ' => 22, 'AK' => 15, 'AL' => 22, 'AM' => 20, 'AN' => 38,
-                'AO' => 38
+                'AJ' => 22, 'AK' => 15, 'AL' => 22, 'AM' => 20
             ];
 
             foreach ($columnWidths as $col => $width) {
