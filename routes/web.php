@@ -372,36 +372,7 @@ Route::post('consultaDescnoap', 'DescnoapController@consultaUnitaria');
 Route::post('consultaUnitaria', 'DescapliController@consultaUnitaria');
 Route::post('resultadoAprobacion', 'DescapliController@resultadoAprobacion');
 
-Route::post('consultaDatamessemcali', 'DatamesSemCaliController@consultaUnitaria');
-Route::post('consultaDeduccionessemcali', 'DeduccionesSemCaliController@consultaUnitaria');
-Route::post('consultaSabana', 'SabanaController@consultaUnitaria');
-Route::post('consultaDescuentossedvalle', 'DescuentossedvalleController@consultaUnitaria');
-Route::post('consultaDescuentossedchoco', 'DescuentossedvalleController@consultaUnitaria');
-Route::post('consultaDescuentossemsahagun', 'DescuentossemsahagunController@consultaUnitaria');
-Route::post('consultaDescuentossemquibdo', 'DescuentosSemQuibdoController@consultaUnitaria');
-Route::post('consultaDetalledecliente', 'DetalledeclienteController@consultaUnitaria');
-Route::post('consultaDescuentossemcali', 'DescuentosSemCaliController@consultaUnitaria');
-Route::post('consultaEmbargossemcali', 'EmbargosSemCaliController@consultaUnitaria');
-Route::post('consultaEmbargossedvalle', 'EmbargosSedValleController@consultaUnitaria');
-Route::post('consultaEmbargossedchoco', 'EmbargossedchocoController@consultaUnitaria');
-Route::post('consultaEmbargossedcauca', 'EmbargossedcaucaController@consultaUnitaria');
-Route::post('consultaEmbargossemquibdo', 'EmbargosSemQuibdoController@consultaUnitaria');
 
-Route::resource('datamessemcali', 'DatamesSemCaliController');
-Route::resource('deduccionessemcali', 'DeduccionesSemCaliController');
-Route::resource('sabana', 'SabanaController');
-Route::resource('Descuentossedvalle', 'DescuentosSedValleController');
-Route::resource('Descuentossedchoco', 'DescuentosSedValleController');
-Route::resource('Descuentossemquibdo', 'DescuentosSemQuibdoController');
-Route::resource('Descuentossemsahagun', 'DescuentossemsahagunController');
-Route::resource('Descuentossempopayan', 'DescuentossempopayanController');
-Route::resource('Detalledecliente', 'DetalledeclienteController');
-Route::resource('Descuentossemcali', 'DescuentosSemCaliController');
-Route::resource('embargossemcali', 'EmbargosSemCaliController');
-Route::resource('embargossedvalle', 'EmbargosSedValleController');
-Route::resource('embargossedchoco', 'EmbargossedchocoController');
-Route::resource('embargossedcauca', 'EmbargossedcaucaController');
-Route::resource('embargossemquibdo', 'EmbargosSemQuibdoController');
 
 Route::resource('datamesfopep', 'DataMesController');
 Route::resource('fechavinc', 'FechaVincController');
