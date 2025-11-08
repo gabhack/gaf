@@ -145,4 +145,65 @@ class EmbargosController extends Controller
         }
         return $rows;
     }
+
+
+    //etsaba perdido
+
+    public function getEmbargosByPagaduria(Request $r)
+{
+    Log::info('EmbargosController@getEmbargosByPagaduria start', $r->all());
+
+    if (!$r->has(['month', 'year', 'pagaduria'])) {
+        Log::info('getEmbargosByPagaduria missing', $r->all());
+        return response()->json(['error' => 'month, year y pagaduria son requeridos.'], 400);
+    }
+
+    $month  = str_pad($r->input('month'), 2, '0', STR_PAD_LEFT);
+    $year   = $r->input('year');
+    $name   = trim($r->input('pagaduria'));
+    $entid  = $r->input('entidadDemandante');
+
+    $start = \Illuminate\Support\Carbon::createFromFormat('Y-m', "{$year}-{$month}")->startOfMonth();
+    $end   = \Illuminate\Support\Carbon::createFromFormat('Y-m', "{$year}-{$month}")->endOfMonth();
+
+    // Si existe en panel_pagaduria, usamos idpagaduria; si no, caemos a ILIKE
+    $panel = \Illuminate\Support\Facades\DB::connection('pgsql')
+        ->table('panel_pagaduria')
+        ->where('nombre', 'ILIKE', $name)
+        ->first();
+
+    $q = \App\EmbargosGen::on('pgsql');
+
+    if ($panel) {
+        $q->where('idpagaduria', $panel->id);
+    } else {
+        $q->where('pagaduria', 'ILIKE', "%{$name}%");
+    }
+
+    if (!empty($entid)) {
+        $q->where('entidaddeman', 'ILIKE', "%{$entid}%");
+    }
+
+    // Si nomina es texto YYYY-MM-DD en tu tabla, usa to_date; si es date/timestamp, usa whereBetween simple.
+    $q->whereRaw("to_date(nomina,'YYYY-MM-DD') BETWEEN ? AND ?", [
+        $start->toDateString(),
+        $end->toDateString(),
+    ]);
+
+    $q->select('doc','nomp','docdeman','entidaddeman','motemb','temb','nomina');
+
+    \Illuminate\Support\Facades\Log::info('Embargos by pagaduria SQL', ['sql' => $q->toSql(), 'bindings' => $q->getBindings()]);
+
+    $rows = $q->get()->map(function ($r) {
+        $a = (array) $r;
+        if (!empty($a['nomina'])) {
+            $a['nomina'] = \Illuminate\Support\Carbon::parse($a['nomina'])->toDateString();
+        }
+        return $a;
+    });
+
+    Log::info('EmbargosController@getEmbargosByPagaduria end', ['count' => $rows->count()]);
+    return response()->json($rows, 200);
+}
+
 }
