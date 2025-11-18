@@ -110,10 +110,30 @@ class CouponsController extends Controller
             ->where('doc', $doc)
             ->where('idpagaduria', $idPagaduria);
 
+        /**
+         * 5.1. Agregamos dias_laborados desde couponsgen, usando coincidencia EXACTA
+         *      con la fila de fast_couponsgen_visado.
+         *      - Devolvemos todos los campos originales de fast (*) más dias_laborados.
+         */
+        $query->select([
+            'fast_couponsgen_visado.*',
+            \DB::raw("(
+                SELECT c.dias_laborados
+                FROM couponsgen c
+                WHERE c.doc = fast_couponsgen_visado.doc
+                  AND c.idpagaduria = fast_couponsgen_visado.idpagaduria
+                  AND c.inicioperiodo = fast_couponsgen_visado.inicioperiodo
+                  AND c.finperiodo = fast_couponsgen_visado.finperiodo
+                  AND c.dias_laborados IS NOT NULL
+                ORDER BY c.inicioperiodo
+                LIMIT 1
+            ) AS dias_laborados")
+        ]);
+
         $sql = $query->toSql();
         $bindings = $query->getBindings();
 
-        Log::info('Ejecutando consulta SQL en fast_couponsgen_visado', [
+        Log::info('Ejecutando consulta SQL en fast_couponsgen_visado (con dias_laborados).', [
             'sql' => $sql,
             'bindings' => $bindings,
             'doc' => $doc,
@@ -144,6 +164,7 @@ class CouponsController extends Controller
 
     return response()->json($results, 200);
 }
+
 private function getPagaduriaIdFromString(string $input): ?int
 {
     if (!$input) return null;
