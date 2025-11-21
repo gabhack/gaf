@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Parametro;
 
 class PoliticasPortafolioController extends Controller
 {
@@ -679,6 +680,69 @@ class PoliticasPortafolioController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Error al importar fondos: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    // ========================================================================
+    // PARÁMETROS GENERALES - CRUD METHODS
+    // ========================================================================
+
+    /**
+     * Get parametros generales (tasa_usura) usando esquema llave-valor.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getParametros()
+    {
+        try {
+            $parametro = Parametro::obtenerTasaUsura();
+
+            return response()->json([
+                'tasa_usura' => (float) $parametro->valor,
+                'updated_at' => $parametro->updated_at,
+                'necesita_actualizacion' => Parametro::tasaUsuraNecesitaActualizacion()
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al cargar parámetros: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Update tasa_usura usando esquema llave-valor (TASA_USURA=valor).
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateParametros(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'tasa_usura' => 'required|numeric|min:0'
+            ]);
+
+            $parametro = Parametro::actualizarTasaUsura($validated['tasa_usura']);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Tasa de usura actualizada correctamente',
+                'tasa_usura' => (float) $parametro->valor,
+                'updated_at' => $parametro->updated_at,
+                'necesita_actualizacion' => false
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error de validación',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar la tasa de usura: ' . $e->getMessage()
             ], 500);
         }
     }

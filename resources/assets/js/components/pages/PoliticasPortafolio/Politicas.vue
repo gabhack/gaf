@@ -14,8 +14,78 @@
                 <!-- Pestañas -->
                 <b-tabs content-class="mt-3" active-nav-item-class="font-weight-bold">
 
+                    <!-- PESTAÑA 0: GENERAL (TASA USURA) -->
+                    <b-tab title="General" active>
+                        <b-card class="mb-3" style="border: 1px solid #2c8c73;">
+                            <b-card-header style="background-color: #2c8c73; color: white;">
+                                <h5 class="mb-0">Tasa de Usura</h5>
+                            </b-card-header>
+                            <b-card-body>
+                                <b-alert
+                                    v-if="tasaUsuraNecesitaActualizacion"
+                                    variant="warning"
+                                    show
+                                    class="mb-3"
+                                >
+                                    <i class="fa fa-exclamation-triangle"></i>
+                                    <strong>¡Atención!</strong> La tasa de usura no se ha actualizado en los últimos 30 días.
+                                    Por favor, actualícela para poder cargar archivos en el Análisis de Cartera Avanzado.
+                                </b-alert>
+
+                                <b-row>
+                                    <b-col cols="12" md="6">
+                                        <b-form-group
+                                            label="TASA USURA *"
+                                            label-for="tasa-usura"
+                                            description="Tasa de usura vigente (%). Debe actualizarse al menos cada 30 días."
+                                        >
+                                            <b-form-input
+                                                id="tasa-usura"
+                                                v-model="parametros.tasa_usura"
+                                                type="number"
+                                                step="any"
+                                                :disabled="!editandoTasaUsura"
+                                                class="input_style_b"
+                                                :style="editandoTasaUsura ? 'font-size: 1.1rem; font-weight: bold; background-color: #ffffff; color: #2c3e50;' : 'font-size: 1.1rem; font-weight: bold; background-color: #f8f9fa; color: #2c3e50;'"
+                                            ></b-form-input>
+                                        </b-form-group>
+                                    </b-col>
+                                </b-row>
+
+                                <b-row>
+                                    <b-col cols="12" class="text-right">
+                                        <b-button
+                                            v-if="!editandoTasaUsura"
+                                            variant="warning"
+                                            @click="habilitarEdicionTasaUsura"
+                                            style="background-color: #f39c12; border-color: #f39c12"
+                                        >
+                                            <i class="fa fa-edit"></i> Editar
+                                        </b-button>
+                                        <template v-else>
+                                            <b-button
+                                                variant="success"
+                                                @click="guardarTasaUsura"
+                                                class="mr-2"
+                                                style="background-color: #2c8c73; border-color: #2c8c73"
+                                            >
+                                                <i class="fa fa-save"></i> Guardar
+                                            </b-button>
+                                            <b-button
+                                                variant="secondary"
+                                                @click="cancelarEdicionTasaUsura"
+                                            >
+                                                <i class="fa fa-times"></i> Cancelar
+                                            </b-button>
+                                        </template>
+                                    </b-col>
+                                </b-row>
+                            </b-card-body>
+                        </b-card>
+                    </b-tab>
+
                     <!-- PESTAÑA 1: POLÍTICAS DEL PORTAFOLIO -->
-                    <b-tab title="Políticas del Portafolio" active>
+                    <b-tab title="Políticas del Portafolio">
                         <b-row class="mb-3">
                             <b-col cols="12" class="text-right">
                                 <b-button
@@ -493,84 +563,114 @@
                             ></b-form-input>
                         </b-form-group>
 
-                        <b-form-group label="T.A MIN (EA) *" label-for="ta_min_ea" description="Tasa Anual Mínima Efectiva Anual">
-                            <b-form-input
-                                id="ta_min_ea"
-                                v-model.number="formDataFondo.ta_min_ea"
-                                type="number"
-                                step="any"
-                                min="0"
-                                required
-                                :disabled="isViewModeFondo"
-                                @input="calculateFondoFields"
-                                class="input_style_b"
-                            ></b-form-input>
+                        <b-form-group label="T.A MIN (EA) * (%)" label-for="ta_min_ea" description="Tasa Anual Mínima Efectiva Anual">
+                            <b-input-group>
+                                <b-form-input
+                                    id="ta_min_ea"
+                                    v-model.number="formDataFondo.ta_min_ea"
+                                    type="number"
+                                    step="any"
+                                    min="0"
+                                    required
+                                    :disabled="isViewModeFondo"
+                                    @input="calculateFondoFields"
+                                    class="input_style_b"
+                                ></b-form-input>
+                                <b-input-group-append>
+                                    <b-input-group-text>%</b-input-group-text>
+                                </b-input-group-append>
+                            </b-input-group>
                         </b-form-group>
 
-                        <b-form-group label="T. USURA (EA) *" label-for="t_usura_ea" description="Tasa de Usura Efectiva Anual">
-                            <b-form-input
-                                id="t_usura_ea"
-                                v-model.number="formDataFondo.t_usura_ea"
-                                type="number"
-                                step="any"
-                                min="0"
-                                required
-                                :disabled="isViewModeFondo"
-                                @input="calculateFondoFields"
-                                class="input_style_b"
-                            ></b-form-input>
+                        <b-form-group label="T. USURA (EA) * (%)" label-for="t_usura_ea" description="Tasa de Usura Efectiva Anual">
+                            <b-input-group>
+                                <b-form-input
+                                    id="t_usura_ea"
+                                    v-model.number="formDataFondo.t_usura_ea"
+                                    type="number"
+                                    step="any"
+                                    min="0"
+                                    required
+                                    :disabled="isViewModeFondo"
+                                    @input="calculateFondoFields"
+                                    class="input_style_b"
+                                ></b-form-input>
+                                <b-input-group-append>
+                                    <b-input-group-text>%</b-input-group-text>
+                                </b-input-group-append>
+                            </b-input-group>
                         </b-form-group>
 
-                        <b-form-group label="TASA USURA *" label-for="tasa_usura">
-                            <b-form-input
-                                id="tasa_usura"
-                                v-model.number="formDataFondo.tasa_usura"
-                                type="number"
-                                step="any"
-                                min="0"
-                                required
-                                :disabled="isViewModeFondo"
-                                class="input_style_b"
-                            ></b-form-input>
+                        <b-form-group label="TASA USURA * (%)" label-for="tasa_usura">
+                            <b-input-group>
+                                <b-form-input
+                                    id="tasa_usura"
+                                    v-model.number="formDataFondo.tasa_usura"
+                                    type="number"
+                                    step="any"
+                                    min="0"
+                                    required
+                                    :disabled="isViewModeFondo"
+                                    class="input_style_b"
+                                ></b-form-input>
+                                <b-input-group-append>
+                                    <b-input-group-text>%</b-input-group-text>
+                                </b-input-group-append>
+                            </b-input-group>
                         </b-form-group>
 
                         <b-form-group label="COSTO ASEGURABILIDAD MES (%) *" label-for="costo_asegurabilidad_mes" description="Porcentaje mensual del costo de asegurabilidad">
-                            <b-form-input
-                                id="costo_asegurabilidad_mes"
-                                v-model.number="formDataFondo.costo_asegurabilidad_mes"
-                                type="number"
-                                step="any"
-                                min="0"
-                                required
-                                :disabled="isViewModeFondo"
-                                class="input_style_b"
-                            ></b-form-input>
+                            <b-input-group>
+                                <b-form-input
+                                    id="costo_asegurabilidad_mes"
+                                    v-model.number="formDataFondo.costo_asegurabilidad_mes"
+                                    type="number"
+                                    step="any"
+                                    min="0"
+                                    required
+                                    :disabled="isViewModeFondo"
+                                    class="input_style_b"
+                                ></b-form-input>
+                                <b-input-group-append>
+                                    <b-input-group-text>%</b-input-group-text>
+                                </b-input-group-append>
+                            </b-input-group>
                         </b-form-group>
 
                         <b-form-group label="% DESCUENTO MÁXIMO SOBRE SALDO TOTAL *" label-for="descuento_max_saldo_total" description="Porcentaje de descuento máximo sobre saldo total">
-                            <b-form-input
-                                id="descuento_max_saldo_total"
-                                v-model.number="formDataFondo.descuento_max_saldo_total"
-                                type="number"
-                                step="any"
-                                min="0"
-                                required
-                                :disabled="isViewModeFondo"
-                                class="input_style_b"
-                            ></b-form-input>
+                            <b-input-group>
+                                <b-form-input
+                                    id="descuento_max_saldo_total"
+                                    v-model.number="formDataFondo.descuento_max_saldo_total"
+                                    type="number"
+                                    step="any"
+                                    min="0"
+                                    required
+                                    :disabled="isViewModeFondo"
+                                    class="input_style_b"
+                                ></b-form-input>
+                                <b-input-group-append>
+                                    <b-input-group-text>%</b-input-group-text>
+                                </b-input-group-append>
+                            </b-input-group>
                         </b-form-group>
 
                         <b-form-group label="% DESCUENTO MÁXIMO SOBRE SALDO CAPITAL *" label-for="descuento_max_saldo_capital" description="Porcentaje de descuento máximo sobre saldo capital">
-                            <b-form-input
-                                id="descuento_max_saldo_capital"
-                                v-model.number="formDataFondo.descuento_max_saldo_capital"
-                                type="number"
-                                step="any"
-                                min="0"
-                                required
-                                :disabled="isViewModeFondo"
-                                class="input_style_b"
-                            ></b-form-input>
+                            <b-input-group>
+                                <b-form-input
+                                    id="descuento_max_saldo_capital"
+                                    v-model.number="formDataFondo.descuento_max_saldo_capital"
+                                    type="number"
+                                    step="any"
+                                    min="0"
+                                    required
+                                    :disabled="isViewModeFondo"
+                                    class="input_style_b"
+                                ></b-form-input>
+                                <b-input-group-append>
+                                    <b-input-group-text>%</b-input-group-text>
+                                </b-input-group-append>
+                            </b-input-group>
                         </b-form-group>
                     </b-col>
 
@@ -588,50 +688,50 @@
                             ></b-form-input>
                         </b-form-group>
 
-                        <b-form-group label="T.A MIN (EM)" label-for="ta_min_em" description="((1+T.A MIN (EA))^(1/12))-1">
+                        <b-form-group label="T.A MIN (EM) (%)" label-for="ta_min_em" description="((1+T.A MIN (EA))^(1/12))-1">
                             <b-form-input
                                 id="ta_min_em"
-                                v-model="formDataFondo.ta_min_em"
+                                :value="formDataFondo.ta_min_em ? formDataFondo.ta_min_em + '%' : '0%'"
                                 type="text"
                                 disabled
                                 class="input_style_b input-calculated"
                             ></b-form-input>
                         </b-form-group>
 
-                        <b-form-group label="T. USURA -2 (EA)" label-for="t_usura_menos2_ea" description="T. USURA (EA) - 2">
+                        <b-form-group label="T. USURA -2 (EA) (%)" label-for="t_usura_menos2_ea" description="T. USURA (EA) - 2">
                             <b-form-input
                                 id="t_usura_menos2_ea"
-                                v-model="formDataFondo.t_usura_menos2_ea"
+                                :value="formDataFondo.t_usura_menos2_ea ? formDataFondo.t_usura_menos2_ea + '%' : '0%'"
                                 type="text"
                                 disabled
                                 class="input_style_b input-calculated"
                             ></b-form-input>
                         </b-form-group>
 
-                        <b-form-group label="T. USURA (EM)" label-for="t_usura_em" description="((1+T. USURA (EA))^(1/12))-1">
+                        <b-form-group label="T. USURA (EM) (%)" label-for="t_usura_em" description="((1+T. USURA (EA))^(1/12))-1">
                             <b-form-input
                                 id="t_usura_em"
-                                v-model="formDataFondo.t_usura_em"
+                                :value="formDataFondo.t_usura_em ? formDataFondo.t_usura_em + '%' : '0%'"
                                 type="text"
                                 disabled
                                 class="input_style_b input-calculated"
                             ></b-form-input>
                         </b-form-group>
 
-                        <b-form-group label="T. USURA -2 (EM)" label-for="t_usura_menos2_em" description="((1+T. USURA -2 (EA))^(1/12))-1">
+                        <b-form-group label="T. USURA -2 (EM) (%)" label-for="t_usura_menos2_em" description="((1+T. USURA -2 (EA))^(1/12))-1">
                             <b-form-input
                                 id="t_usura_menos2_em"
-                                v-model="formDataFondo.t_usura_menos2_em"
+                                :value="formDataFondo.t_usura_menos2_em ? formDataFondo.t_usura_menos2_em + '%' : '0%'"
                                 type="text"
                                 disabled
                                 class="input_style_b input-calculated"
                             ></b-form-input>
                         </b-form-group>
 
-                        <b-form-group label="T. USURA (DIA)" label-for="t_usura_dia" description="T. USURA (EA) ÷ 365">
+                        <b-form-group label="T. USURA (DIA) (%)" label-for="t_usura_dia" description="T. USURA (EA) ÷ 365">
                             <b-form-input
                                 id="t_usura_dia"
-                                v-model="formDataFondo.t_usura_dia"
+                                :value="formDataFondo.t_usura_dia ? formDataFondo.t_usura_dia + '%' : '0%'"
                                 type="text"
                                 disabled
                                 class="input_style_b input-calculated"
@@ -661,6 +761,15 @@ export default {
     name: 'PoliticasPortafolio',
     data() {
         return {
+            // Parámetros Generales (esquema llave-valor: TASA_USURA=valor)
+            parametros: {
+                tasa_usura: 0.00,
+                updated_at: null
+            },
+            parametrosOriginales: {},
+            editandoTasaUsura: false,
+            tasaUsuraNecesitaActualizacion: false,
+
             // Políticas de Portafolio
             politicas: [],
             fieldsPoliticas: [
@@ -707,6 +816,7 @@ export default {
         }
     },
     mounted() {
+        this.loadParametros();
         this.loadPoliticas();
         this.loadFondos();
     },
@@ -1034,6 +1144,79 @@ export default {
             } catch (error) {
                 console.error('Error al eliminar fondo:', error);
             }
+        },
+
+        // ========== PARÁMETROS GENERALES (TASA USURA) ==========
+        loadParametros() {
+            axios.get('/politicas-portafolio/parametros')
+                .then(response => {
+                    this.parametros = response.data;
+                    this.parametrosOriginales = { ...response.data };
+                    this.tasaUsuraNecesitaActualizacion = response.data.necesita_actualizacion || false;
+                })
+                .catch(error => {
+                    console.error('Error al cargar parámetros:', error);
+                    this.$bvToast.toast('Error al cargar los parámetros generales', {
+                        title: 'Error',
+                        variant: 'danger',
+                        solid: true
+                    });
+                });
+        },
+        habilitarEdicionTasaUsura() {
+            this.editandoTasaUsura = true;
+            this.parametrosOriginales = { ...this.parametros };
+        },
+        cancelarEdicionTasaUsura() {
+            this.editandoTasaUsura = false;
+            this.parametros = { ...this.parametrosOriginales };
+        },
+        guardarTasaUsura() {
+            if (!this.parametros.tasa_usura || this.parametros.tasa_usura < 0) {
+                this.$bvToast.toast('Por favor ingrese una tasa de usura válida', {
+                    title: 'Error de validación',
+                    variant: 'warning',
+                    solid: true
+                });
+                return;
+            }
+
+            axios.post('/politicas-portafolio/parametros/update', {
+                tasa_usura: this.parametros.tasa_usura
+            })
+                .then(response => {
+                    this.$bvToast.toast('Tasa de usura actualizada correctamente', {
+                        title: 'Éxito',
+                        variant: 'success',
+                        solid: true
+                    });
+                    this.editandoTasaUsura = false;
+                    this.loadParametros(); // Recargar para obtener la nueva fecha
+                })
+                .catch(error => {
+                    console.error('Error al guardar tasa de usura:', error);
+                    let errorMsg = 'Error al guardar la tasa de usura';
+                    if (error.response && error.response.data && error.response.data.message) {
+                        errorMsg = error.response.data.message;
+                    }
+                    this.$bvToast.toast(errorMsg, {
+                        title: 'Error',
+                        variant: 'danger',
+                        solid: true,
+                        autoHideDelay: 5000
+                    });
+                    this.editandoTasaUsura = false;
+                });
+        },
+        formatDate(date) {
+            if (!date) return 'Nunca actualizada';
+            return new Date(date).toLocaleString('es-CO', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
         },
 
         // ========== UTILIDADES ==========

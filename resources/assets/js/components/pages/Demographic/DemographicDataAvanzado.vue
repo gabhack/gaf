@@ -91,7 +91,7 @@
                                 Por favor, asegúrese de que el archivo Excel contiene la columna <strong>'cédulas'</strong> (obligatoria)
                                 y opcionalmente: <strong>operación, valor desembolso, saldo capital original, intereses corrientes,
                                 intereses de mora, seguros, otros conceptos, tasa pactada, respetar tasa pactada, plazo pactado,
-                                cuota pactada, respetar cuota pactada, cupo colpensiones, cupo fopep, cupo fiduprevisora</strong>.
+                                cuota pactada, respetar cuota pactada, cupo colpensiones, cupo fopep, cupo fiduprevisora, cuotas pagas</strong>.
                                 El sistema calculará automáticamente el Cupo Sem (libre inversión) y la cuota incorporada previamente.
                             </p>
                         </b-col>
@@ -407,6 +407,7 @@
                                 <th class="th-actions text-center">Portafolio</th>
                                 <th class="th-actions text-center">AMI</th>
                                 <th class="th-actions text-center">Cuota</th>
+                                <th class="th-actions text-center">Otros</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -491,10 +492,23 @@
                                         <i class="fa fa-calculator"></i>
                                     </b-button>
                                 </td>
+                                <td class="td-actions text-center">
+                                    <b-button
+                                        size="sm"
+                                        variant="outline-secondary"
+                                        @click="toggleDetails(result, 'otrosCampos')"
+                                        data-toggle="modal"
+                                        data-target="#modalOtrosCampos"
+                                        v-b-tooltip.hover
+                                        title="Ver otros campos"
+                                    >
+                                        <i class="fa fa-list-alt"></i>
+                                    </b-button>
+                                </td>
                             </tr>
                             <!-- Fila para mostrar mensaje si no hay resultados -->
                             <tr v-if="filteredResults.length === 0">
-                                <td colspan="12">No hay resultados</td>
+                                <td colspan="13">No hay resultados</td>
                             </tr>
                         </tbody>
                     </table>
@@ -775,7 +789,7 @@
                                             </tr>
                                             <tr>
                                                 <td><strong>Tasa Pactada</strong></td>
-                                                <td>{{ result.tasa_pactada || 'No disponible' }}</td>
+                                                <td>{{ result.tasa_pactada ? result.tasa_pactada + '%' : 'No disponible' }}</td>
                                             </tr>
                                             <tr>
                                                 <td><strong>RESPETAR TASA PACTADA</strong></td>
@@ -783,7 +797,7 @@
                                             </tr>
                                             <tr>
                                                 <td><strong>Tasa Nueva Libranza Ck</strong></td>
-                                                <td>{{ result.tasa_nueva_libranza_ck || 'No disponible' }}</td>
+                                                <td>{{ result.tasa_nueva_libranza_ck ? result.tasa_nueva_libranza_ck + '%' : 'No disponible' }}</td>
                                             </tr>
                                             <tr>
                                                 <td><strong>PLAZO PACTADO</strong></td>
@@ -808,6 +822,426 @@
                                             <tr style="background-color: #2c8c73; color: white; font-weight: bold;">
                                                 <td><strong>CUOTA A INCORPORAR</strong></td>
                                                 <td>{{ formatCurrency(result.cuota_a_incorporar) }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <CustomButton data-dismiss="modal" @click="closeExpandedRows" text="Cerrar" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal de Otros Campos -->
+                    <div
+                        class="modal fade"
+                        id="modalOtrosCampos"
+                        tabindex="-1"
+                        role="dialog"
+                        aria-labelledby="modalOtrosCamposLabel"
+                        aria-hidden="true"
+                        data-backdrop="static"
+                        data-keyboard="false"
+                    >
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalOtrosCamposLabel">Otros Campos</h5>
+                                    <button
+                                        @click="closeExpandedRows"
+                                        type="button"
+                                        class="close"
+                                        data-dismiss="modal"
+                                        aria-label="Close"
+                                    >
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div
+                                    class="modal-body"
+                                    v-for="(result, index) in filteredResults"
+                                    :key="'otrosCampos-' + result.doc + '-' + index"
+                                    v-if="isRowExpanded(result, 'otrosCampos')"
+                                >
+                                    <table class="table table-sm table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Concepto</th>
+                                                <th>Valor</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Tasa Modificada Conservando Plazo</strong></td>
+                                                <td>{{ result.tasa_modificada_conservando_plazo_180 != null ? result.tasa_modificada_conservando_plazo_180.toFixed(2) + '%' : 'N/A' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Plazo Modificado Conservando Tasa</strong></td>
+                                                <td>{{ result.plazo_modificado_conservando_tasa_188 != null ? result.plazo_modificado_conservando_tasa_188 : 'N/A' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Cuotas Pagas</strong></td>
+                                                <td>{{ result.cuotas_pagas != null ? result.cuotas_pagas : 'N/A' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Cuotas Faltantes Condiciones Optimas (Tv)</strong></td>
+                                                <td>{{ result.cuotas_faltantes_condiciones_optimas != null ? result.cuotas_faltantes_condiciones_optimas : 'N/A' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Tasa Corriente Condiciones Optimas</strong></td>
+                                                <td>
+                                                    <span v-if="result.tasa_corriente_condiciones_optimas != null && typeof result.tasa_corriente_condiciones_optimas === 'number'">
+                                                        {{ result.tasa_corriente_condiciones_optimas.toFixed(2) }}%
+                                                    </span>
+                                                    <span v-else>
+                                                        {{ result.tasa_corriente_condiciones_optimas != null ? result.tasa_corriente_condiciones_optimas : 'N/A' }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Tasa De Compra Nmv</strong></td>
+                                                <td>{{ result.tasa_compra_nmv != null && !isNaN(parseFloat(result.tasa_compra_nmv)) ? parseFloat(result.tasa_compra_nmv).toFixed(2) + '%' : 'N/A' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Saldo Contable Del Crédito Al Momento De La Venta</strong></td>
+                                                <td>{{ result.saldo_contable_credito_momento_venta != null ? formatCurrency(result.saldo_contable_credito_momento_venta) : 'N/A' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Precio De Venta (Pv) En Periodo Venta (Tv)</strong></td>
+                                                <td>{{ result.precio_venta_pv_periodo_venta != null ? formatCurrency(result.precio_venta_pv_periodo_venta) : 'N/A' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Condiciones Iniciales Libranza De Venta (T0)</strong></td>
+                                                <td>{{ result.condiciones_iniciales_libranza_venta_t0 != null ? formatCurrency(result.condiciones_iniciales_libranza_venta_t0) : 'N/A' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Saldo Contable (T0) - Precio De Venta</strong></td>
+                                                <td>{{ result.saldo_contable_t0_menos_precio_venta != null ? formatCurrency(result.saldo_contable_t0_menos_precio_venta) : 'N/A' }}</td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>Aplica Descuento</strong></td>
+                                                <td>{{ result.aplica_descuento != null ? result.aplica_descuento : 'N/A' }}</td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>% De Descuento Sobre Total Saldo</strong></td>
+                                                <td>{{ result.porcentaje_descuento_sobre_total_saldo != null ? formatPercent(result.porcentaje_descuento_sobre_total_saldo) : 'N/A' }}</td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>Saldo Venta Aplicando Cuotas (Tv)</strong></td>
+                                                <td>
+                                                    <span v-if="result.saldo_venta_aplicando_cuotas_tv != null && result.saldo_venta_aplicando_cuotas_tv !== '' && result.saldo_venta_aplicando_cuotas_tv !== '-' && !isNaN(parseFloat(result.saldo_venta_aplicando_cuotas_tv))">
+                                                        {{ formatCurrency(result.saldo_venta_aplicando_cuotas_tv) }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>Descuento De Interes</strong></td>
+                                                <td>
+                                                    <span v-if="result.descuento_de_interes != null && result.descuento_de_interes !== '' && result.descuento_de_interes !== '-' && !isNaN(parseFloat(result.descuento_de_interes))">
+                                                        {{ formatCurrency(result.descuento_de_interes) }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>Saldo Inicial Desembolsado Menos Interes Condonados</strong></td>
+                                                <td>
+                                                    <span v-if="result.saldo_inicial_desembolsado_menos_interes_condonados != null && result.saldo_inicial_desembolsado_menos_interes_condonados !== '' && result.saldo_inicial_desembolsado_menos_interes_condonados !== '-' && !isNaN(parseFloat(result.saldo_inicial_desembolsado_menos_interes_condonados))">
+                                                        {{ formatCurrency(result.saldo_inicial_desembolsado_menos_interes_condonados) }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>Saldo Inicial Desembolsado Menos Interes Condonados (Tv)</strong></td>
+                                                <td>
+                                                    <span v-if="result.saldo_inicial_desembolsado_menos_interes_condonados_tv != null && result.saldo_inicial_desembolsado_menos_interes_condonados_tv !== '' && result.saldo_inicial_desembolsado_menos_interes_condonados_tv !== '-' && !isNaN(parseFloat(result.saldo_inicial_desembolsado_menos_interes_condonados_tv))">
+                                                        {{ formatCurrency(result.saldo_inicial_desembolsado_menos_interes_condonados_tv) }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>Efectividad De Condonacion Sobre Intereses</strong></td>
+                                                <td>
+                                                    <span v-if="result.efectividad_condonacion_sobre_intereses != null && result.efectividad_condonacion_sobre_intereses !== '' && result.efectividad_condonacion_sobre_intereses !== '-'">
+                                                        {{ result.efectividad_condonacion_sobre_intereses }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>Plazo Con Descuento En Interes (T0)</strong></td>
+                                                <td>
+                                                    <span v-if="result.plazo_con_descuento_en_interes_t0 != null && result.plazo_con_descuento_en_interes_t0 !== '' && result.plazo_con_descuento_en_interes_t0 !== '-'">
+                                                        {{ result.plazo_con_descuento_en_interes_t0 }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>Tasa Con Descuento En Interes (T0)</strong></td>
+                                                <td>
+                                                    <span v-if="result.tasa_con_descuento_en_interes_t0 != null && result.tasa_con_descuento_en_interes_t0 !== '' && result.tasa_con_descuento_en_interes_t0 !== '-'">
+                                                        <span v-if="result.tasa_con_descuento_en_interes_t0 === 'IRRECUPERABLE'">
+                                                            {{ result.tasa_con_descuento_en_interes_t0 }}
+                                                        </span>
+                                                        <span v-else>
+                                                            {{ parseFloat(result.tasa_con_descuento_en_interes_t0).toFixed(2) }}%
+                                                        </span>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>Plazo Viable Al Aplicar Descuento En Interes</strong></td>
+                                                <td>
+                                                    <span v-if="result.plazo_con_descuento_en_interes_t0 === 'INFINITO'">NO</span>
+                                                    <span v-else-if="result.plazo_con_descuento_en_interes_t0 === '' || result.plazo_con_descuento_en_interes_t0 === null"></span>
+                                                    <span v-else>SI</span>
+                                                </td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>Tasa Viable Al Aplicar Descuento En Interes</strong></td>
+                                                <td>
+                                                    <span v-if="(result.tasa_con_descuento_en_interes_t0 !== null && result.tasa_con_descuento_en_interes_t0 !== '' && !isNaN(parseFloat(result.tasa_con_descuento_en_interes_t0)) && parseFloat(result.tasa_con_descuento_en_interes_t0) < parseFloat(result.tasa_compra_nmv)) || result.tasa_con_descuento_en_interes_t0 === 'IRRECUPERABLE'">NO</span>
+                                                    <span v-else-if="result.tasa_con_descuento_en_interes_t0 === '' || result.tasa_con_descuento_en_interes_t0 === null"></span>
+                                                    <span v-else>SI</span>
+                                                </td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>Valor De Cartera Con Descuento En Interes Y Ajuste En Tasa</strong></td>
+                                                <td>
+                                                    <span v-if="isTasaViableDescuentoInteres(result) && result.plazo_nueva_libranza_ck && result.cuota_a_incorporar">
+                                                        {{ formatCurrency(calculatePV(
+                                                            (parseFloat(result.tasa_con_descuento_en_interes_t0) + parseFloat(result.costo_asegurabilidad_mes || 0)) / 100,
+                                                            parseFloat(result.plazo_nueva_libranza_ck),
+                                                            parseFloat(result.cuota_a_incorporar)
+                                                        )) }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>Aplica Descuento Sobre Capital</strong></td>
+                                                <td>
+                                                    <span v-if="result.aplica_descuento === 'SI' &&
+                                                        (result.plazo_con_descuento_en_interes_t0 === 'INFINITO' || result.plazo_con_descuento_en_interes_t0 === '' || result.plazo_con_descuento_en_interes_t0 === null) &&
+                                                        !isTasaViableDescuentoInteres(result)">SI</span>
+                                                    <span v-else>NO</span>
+                                                </td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>Saldo Maximo A Pagar Con Condiciones Nueva Lbz</strong></td>
+                                                <td>
+                                                    <span v-if="calcularSaldoMaximoPagar(result) !== null">
+                                                        {{ formatCurrency(calcularSaldoMaximoPagar(result)) }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>Condonacion Sobre Capital</strong></td>
+                                                <td>
+                                                    <span v-if="calcularCondonacionSobreCapital(result) !== null">
+                                                        {{ formatCurrency(calcularCondonacionSobreCapital(result)) }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>% De Descuento Sobre Capital</strong></td>
+                                                <td>
+                                                    <span v-if="calcularCondonacionSobreCapital(result) === null || calcularCondonacionSobreCapital(result) === 0">0%</span>
+                                                    <span v-else-if="result.saldo_capital_original && result.saldo_capital_original > 0">
+                                                        {{ (calcularCondonacionSobreCapital(result) / parseFloat(result.saldo_capital_original) * 100).toFixed(2) }}%
+                                                    </span>
+                                                    <span v-else>0%</span>
+                                                </td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>% De Descuento Sobre Saldo Total</strong></td>
+                                                <td>
+                                                    <span v-if="result.total_obligacion && result.total_obligacion > 0">
+                                                        {{ ((((isNaN(parseFloat(result.descuento_de_interes)) ? 0 : parseFloat(result.descuento_de_interes)) + (calcularCondonacionSobreCapital(result) || 0)) / parseFloat(result.total_obligacion)) * 100).toFixed(2) }}%
+                                                    </span>
+                                                    <span v-else>0%</span>
+                                                </td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>Saldo Contable Con Condonacion De Interes Y Capital</strong></td>
+                                                <td>
+                                                    <span v-if="calcularSaldoContableConCondonacion(result) !== null">
+                                                        {{ formatCurrency(calcularSaldoContableConCondonacion(result)) }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>Tasa Con Plazo Maximo</strong></td>
+                                                <td>
+                                                    <span v-if="calcularTasaConPlazoMaximo(result) !== null">
+                                                        {{ parseFloat(calcularTasaConPlazoMaximo(result)).toFixed(2) }}%
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>Plazo Con Tasa Maxima</strong></td>
+                                                <td>
+                                                    <span v-if="calcularPlazoConTasaMaxima(result) === 'INFINITO'">INFINITO</span>
+                                                    <span v-else-if="calcularPlazoConTasaMaxima(result) !== null">
+                                                        {{ Math.round(calcularPlazoConTasaMaxima(result)) }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>Saldo Contable En El Momento De Venta -Con Condonacion (Tv)</strong></td>
+                                                <td>
+                                                    <span v-if="calcularSaldoContableMomentoVentaCondonacion(result) !== null">
+                                                        {{ formatCurrency(calcularSaldoContableMomentoVentaCondonacion(result)) }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>Valor Inicial Lbz Precio De Venta -Desc Capital (T0)</strong></td>
+                                                <td>
+                                                    <span v-if="calcularValorInicialLbzPrecioVentaDescCapital(result) !== null">
+                                                        {{ formatCurrency(calcularValorInicialLbzPrecioVentaDescCapital(result)) }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>Precio De Venta -Desc Capital (Tv)</strong></td>
+                                                <td>
+                                                    <span v-if="calcularPrecioVentaDescCapitalTv(result) !== null">
+                                                        {{ formatCurrency(calcularPrecioVentaDescCapitalTv(result)) }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>Consolidado Precio De Venta (Tv) -Desc Cap Inicial</strong></td>
+                                                <td>
+                                                    <span v-if="calcularConsolidadoPrecioVentaTv(result)">
+                                                        {{ formatCurrency(calcularConsolidadoPrecioVentaTv(result)) }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>Tasa Optima Para Venta</strong></td>
+                                                <td>
+                                                    <span v-if="result.tasa_compra_nmv != null && !isNaN(parseFloat(result.tasa_compra_nmv))">
+                                                        {{ parseFloat(result.tasa_compra_nmv).toFixed(2) }}%
+                                                    </span>
+                                                    <span v-else>N/A</span>
+                                                </td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>Plazo Restante Al Momento De Venta</strong></td>
+                                                <td>
+                                                    <span v-if="calcularPlazoRestanteMomentoVenta(result) !== null">
+                                                        {{ Math.round(calcularPlazoRestanteMomentoVenta(result)) }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>Consolidado Libranza Precio De Venta (T0)</strong></td>
+                                                <td>
+                                                    <span v-if="calcularConsolidadoLibranzaPrecioVentaT0(result) !== null">
+                                                        {{ formatCurrency(calcularConsolidadoLibranzaPrecioVentaT0(result)) }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>Consolidado Libranza Precio De Venta (T0)- Ajustando Cuota</strong></td>
+                                                <td>
+                                                    <span v-if="calcularConsolidadoLibranzaPrecioVentaT0AjustandoCuota(result) !== null">
+                                                        {{ formatCurrency(calcularConsolidadoLibranzaPrecioVentaT0AjustandoCuota(result)) }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>Consolidado Precio De Venta (Tv) -Con Condonacion Cap -Ajustado Por Amortizacion</strong></td>
+                                                <td>
+                                                    <span v-if="calcularConsolidadoPrecioVentaTvCondonacionAjustado(result) !== null">
+                                                        {{ formatCurrency(calcularConsolidadoPrecioVentaTvCondonacionAjustado(result)) }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>Plazo Necesario Para Liquidar Deuda Con Condiciones De Fondeo</strong></td>
+                                                <td>
+                                                    {{ calcularPlazoNecesarioLiquidarDeuda(result) }}
+                                                </td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>Pago Aplicando Descuento Sobre Venta Directa</strong></td>
+                                                <td>
+                                                    <span v-if="calcularPagoAplicandoDescuentoVentaDirecta(result) !== null">
+                                                        {{ formatCurrency(calcularPagoAplicandoDescuentoVentaDirecta(result)) }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>Modelo Mas Rentable</strong></td>
+                                                <td>
+                                                    <span v-if="calcularModeloMasRentable(result)">
+                                                        {{ calcularModeloMasRentable(result) }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr >
+                                                <td><strong>Consolidado Plazo Nueva Libranza</strong></td>
+                                                <td>
+                                                    <span v-if="calcularConsolidadoPlazoNuevaLibranza(result) !== null">
+                                                        {{ Math.round(calcularConsolidadoPlazoNuevaLibranza(result)) }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Consolidado Tasa Nueva Libranza</strong></td>
+                                                <td>
+                                                    <span v-if="calcularConsolidadoTasaNuevaLibranza(result) !== null">
+                                                        {{ calcularConsolidadoTasaNuevaLibranza(result).toFixed(2) }}%
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Consolidado Saldo Nueva Libranza (T0)</strong></td>
+                                                <td>
+                                                    <span v-if="calcularConsolidadoSaldoNuevaLibranzaT0(result) !== null">
+                                                        {{ formatCurrency(calcularConsolidadoSaldoNuevaLibranzaT0(result)) }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Consolidado Saldo Contable (Tv)</strong></td>
+                                                <td>
+                                                    <span v-if="calcularConsolidadoSaldoContableTv(result) !== null">
+                                                        {{ formatCurrency(calcularConsolidadoSaldoContableTv(result)) }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Consolidado Saldo Nueva Libranza (T0) - Ajustando Amortizacion</strong></td>
+                                                <td>
+                                                    <span v-if="calcularConsolidadoSaldoNuevaLibranzaT0AjustandoAmortizacion(result) !== null">
+                                                        {{ formatCurrency(calcularConsolidadoSaldoNuevaLibranzaT0AjustandoAmortizacion(result)) }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Consolidado Saldo Contable (Tv)- Ajustando Amortizacion</strong></td>
+                                                <td>
+                                                    <span v-if="calcularConsolidadoSaldoContableTvAjustandoAmortizacion(result) !== null">
+                                                        {{ formatCurrency(calcularConsolidadoSaldoContableTvAjustandoAmortizacion(result)) }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Excedente Despues De Ultima Cuota Contable</strong></td>
+                                                <td>
+                                                    <span v-if="calcularExcedenteDespuesUltimaCuotaContable(result) !== null">
+                                                        {{ formatCurrency(calcularExcedenteDespuesUltimaCuotaContable(result)) }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Excedente Despues De Ultima Cuota En Venta</strong></td>
+                                                <td>
+                                                    <span v-if="calcularExcedenteDespuesUltimaCuotaEnVenta(result) !== null">
+                                                        {{ formatCurrency(calcularExcedenteDespuesUltimaCuotaEnVenta(result)) }}
+                                                    </span>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -871,7 +1305,7 @@
                                     Por favor, asegúrese de que el archivo Excel contiene la columna <strong>'cédulas'</strong> (obligatoria)
                                     y opcionalmente: <strong>operación, valor desembolso, saldo capital original, intereses corrientes,
                                     intereses de mora, seguros, otros conceptos, tasa pactada, respetar tasa pactada, plazo pactado,
-                                    cuota pactada, respetar cuota pactada</strong>.
+                                    cuota pactada, respetar cuota pactada, cupo colpensiones, cupo fopep, cupo fiduprevisora, cuotas pagas</strong>.
                                 </p>
                             </b-col>
                         </b-row>
@@ -1585,9 +2019,172 @@ export default {
                 }
             });
 
+            // Página 7: Valores de Descuento
+            doc.addPage();
+            doc.setFontSize(14);
+            doc.text('Análisis de Cartera Avanzado - Valores de Descuento', 14, 15);
+
+            const columns7 = [
+                'Cédula',
+                'Nombre',
+                'Aplica',
+                'SALDO VENTA (Tv)',
+                'DESC. INTERES',
+                'SALDO INICIAL - INT. COND.'
+            ];
+            const rows7 = this.filteredResults.map(item => [
+                item.doc,
+                (item.nombre_usuario || 'N/D').substring(0, 18),
+                item.aplica_descuento || 'NO',
+                item.saldo_venta_aplicando_cuotas_tv ? this.formatCurrency(item.saldo_venta_aplicando_cuotas_tv) : '',
+                item.descuento_de_interes ? this.formatCurrency(item.descuento_de_interes) : '',
+                item.saldo_inicial_desembolsado_menos_interes_condonados ? this.formatCurrency(item.saldo_inicial_desembolsado_menos_interes_condonados) : ''
+            ]);
+            doc.autoTable({
+                head: [columns7],
+                body: rows7,
+                startY: 20,
+                styles: { fontSize: 5, cellPadding: 1.5 },
+                headStyles: { fillColor: greenColor, fontSize: 5.5, fontStyle: 'bold' },
+                columnStyles: {
+                    2: { halign: 'center' },
+                    3: { halign: 'right', fontStyle: 'bold' },
+                    4: { halign: 'right', fontStyle: 'bold' },
+                    5: { halign: 'right', fontStyle: 'bold' }
+                }
+            });
+
+            // Página 8: Saldo Inicial Desembolsado - Int. Condonados (Tv), Plazo y Tasa
+            doc.addPage();
+            doc.setFontSize(14);
+            doc.text('Análisis de Cartera Avanzado - Saldo Inicial, Plazo y Tasa con Descuento', 14, 15);
+
+            const columns8 = [
+                'Cédula',
+                'Nombre',
+                'SALDO INI. - INT. COND.',
+                'SALDO INI. (Tv)',
+                'PLAZO DESC. INT. (T0)',
+                'TASA DESC. INT. (T0)'
+            ];
+            const rows8 = this.filteredResults.map(item => [
+                item.doc,
+                (item.nombre_usuario || 'N/D').substring(0, 20),
+                item.saldo_inicial_desembolsado_menos_interes_condonados ? this.formatCurrency(item.saldo_inicial_desembolsado_menos_interes_condonados) : '',
+                item.saldo_inicial_desembolsado_menos_interes_condonados_tv ? this.formatCurrency(item.saldo_inicial_desembolsado_menos_interes_condonados_tv) : '',
+                item.plazo_con_descuento_en_interes_t0 || '',
+                item.tasa_con_descuento_en_interes_t0 !== '' && item.tasa_con_descuento_en_interes_t0 !== 'IRRECUPERABLE'
+                    ? (parseFloat(item.tasa_con_descuento_en_interes_t0).toFixed(2) + '%')
+                    : (item.tasa_con_descuento_en_interes_t0 || '')
+            ]);
+            doc.autoTable({
+                head: [columns8],
+                body: rows8,
+                startY: 20,
+                styles: { fontSize: 5.5, cellPadding: 1.5 },
+                headStyles: { fillColor: greenColor, fontSize: 6, fontStyle: 'bold' },
+                columnStyles: {
+                    2: { halign: 'right', fontStyle: 'bold' },
+                    3: { halign: 'right', fontStyle: 'bold' },
+                    4: { halign: 'center', fontStyle: 'bold' },
+                    5: { halign: 'center', fontStyle: 'bold' }
+                }
+            });
+
             // Guardar PDF con fecha
             const fecha = new Date().toISOString().slice(0, 10);
             doc.save(`analisis_cartera_avanzado_${fecha}.pdf`);
+        },
+        // Método para preparar datos con campos calculados para exportación
+        prepararDatosExportacion() {
+            return this.results.map(result => {
+                // Calcular todos los campos derivados
+                const plazoViable = this.calcularPlazoViableDescuentoInteres(result);
+                const tasaViable = this.isTasaViableDescuentoInteres(result);
+                const valorCarteraDescuento = this.calcularValorCarteraConDescuentoInteres(result);
+                const aplicaDescuentoCapital = this.isAplicaDescuentoSobreCapital(result);
+                const saldoMaximoPagar = this.calcularSaldoMaximoPagar(result);
+                const condonacionCapital = this.calcularCondonacionSobreCapital(result);
+                const porcDescuentoCapital = condonacionCapital && result.saldo_capital_original > 0
+                    ? (condonacionCapital / parseFloat(result.saldo_capital_original) * 100) : 0;
+                const descInteres = isNaN(parseFloat(result.descuento_de_interes)) ? 0 : parseFloat(result.descuento_de_interes);
+                const porcDescuentoSaldoTotal = result.total_obligacion > 0
+                    ? ((descInteres + (condonacionCapital || 0)) / parseFloat(result.total_obligacion) * 100) : 0;
+                const saldoContableCondonacion = this.calcularSaldoContableConCondonacion(result);
+                const tasaConPlazoMaximo = this.calcularTasaConPlazoMaximo(result);
+                const plazoConTasaMaxima = this.calcularPlazoConTasaMaxima(result);
+                const saldoContableMomentoVentaCondonacion = this.calcularSaldoContableMomentoVentaCondonacion(result);
+                const valorInicialLbzPrecioVenta = this.calcularValorInicialLbzPrecioVentaDescCapital(result);
+                const precioVentaDescCapitalTv = this.calcularPrecioVentaDescCapitalTv(result);
+                const consolidadoPrecioVentaTv = this.calcularConsolidadoPrecioVentaTv(result);
+                const plazoRestanteMomentoVenta = this.calcularPlazoRestanteMomentoVenta(result);
+                const consolidadoLibranzaPrecioVentaT0 = this.calcularConsolidadoLibranzaPrecioVentaT0(result);
+                const consolidadoPlazoNuevaLibranza = this.calcularConsolidadoPlazoNuevaLibranza(result);
+                const consolidadoLibranzaT0AjustandoCuota = this.calcularConsolidadoLibranzaPrecioVentaT0AjustandoCuota(result);
+                const consolidadoPrecioVentaTvCondonacionAjustado = this.calcularConsolidadoPrecioVentaTvCondonacionAjustado(result);
+                const plazoNecesarioLiquidarDeuda = this.calcularPlazoNecesarioLiquidarDeuda(result);
+                const pagoDescuentoVentaDirecta = this.calcularPagoAplicandoDescuentoVentaDirecta(result);
+                const modeloMasRentable = this.calcularModeloMasRentable(result);
+                const consolidadoTasaNuevaLibranza = this.calcularConsolidadoTasaNuevaLibranza(result);
+                const consolidadoSaldoNuevaLibranzaT0 = this.calcularConsolidadoSaldoNuevaLibranzaT0(result);
+                const consolidadoSaldoContableTv = this.calcularConsolidadoSaldoContableTv(result);
+                const consolidadoSaldoT0AjustandoAmortizacion = this.calcularConsolidadoSaldoNuevaLibranzaT0AjustandoAmortizacion(result);
+                const consolidadoSaldoContableTvAjustandoAmortizacion = this.calcularConsolidadoSaldoContableTvAjustandoAmortizacion(result);
+                const excedenteUltimaCuotaContable = this.calcularExcedenteDespuesUltimaCuotaContable(result);
+                const excedenteUltimaCuotaEnVenta = this.calcularExcedenteDespuesUltimaCuotaEnVenta(result);
+
+                return {
+                    // Datos originales del result
+                    ...result,
+                    // Campos calculados adicionales
+                    calc_plazo_viable_descuento_interes: plazoViable,
+                    calc_tasa_viable_descuento_interes: tasaViable ? 'SI' : 'NO',
+                    calc_valor_cartera_descuento_interes_ajuste_tasa: valorCarteraDescuento,
+                    calc_aplica_descuento_sobre_capital: aplicaDescuentoCapital ? 'SI' : 'NO',
+                    calc_saldo_maximo_pagar: saldoMaximoPagar,
+                    calc_condonacion_sobre_capital: condonacionCapital,
+                    calc_porcentaje_descuento_capital: porcDescuentoCapital,
+                    calc_porcentaje_descuento_saldo_total: porcDescuentoSaldoTotal,
+                    calc_saldo_contable_con_condonacion: saldoContableCondonacion,
+                    calc_tasa_con_plazo_maximo: tasaConPlazoMaximo,
+                    calc_plazo_con_tasa_maxima: plazoConTasaMaxima,
+                    calc_saldo_contable_momento_venta_condonacion: saldoContableMomentoVentaCondonacion,
+                    calc_valor_inicial_lbz_precio_venta_desc_capital: valorInicialLbzPrecioVenta,
+                    calc_precio_venta_desc_capital_tv: precioVentaDescCapitalTv,
+                    calc_consolidado_precio_venta_tv: consolidadoPrecioVentaTv,
+                    calc_plazo_restante_momento_venta: plazoRestanteMomentoVenta,
+                    calc_consolidado_libranza_precio_venta_t0: consolidadoLibranzaPrecioVentaT0,
+                    calc_consolidado_plazo_nueva_libranza: consolidadoPlazoNuevaLibranza,
+                    calc_consolidado_libranza_t0_ajustando_cuota: consolidadoLibranzaT0AjustandoCuota,
+                    calc_consolidado_precio_venta_tv_condonacion_ajustado: consolidadoPrecioVentaTvCondonacionAjustado,
+                    calc_plazo_necesario_liquidar_deuda: plazoNecesarioLiquidarDeuda,
+                    calc_pago_descuento_venta_directa: pagoDescuentoVentaDirecta,
+                    calc_modelo_mas_rentable: modeloMasRentable,
+                    calc_consolidado_tasa_nueva_libranza: consolidadoTasaNuevaLibranza,
+                    calc_consolidado_saldo_nueva_libranza_t0: consolidadoSaldoNuevaLibranzaT0,
+                    calc_consolidado_saldo_contable_tv: consolidadoSaldoContableTv,
+                    calc_consolidado_saldo_t0_ajustando_amortizacion: consolidadoSaldoT0AjustandoAmortizacion,
+                    calc_consolidado_saldo_contable_tv_ajustando_amortizacion: consolidadoSaldoContableTvAjustandoAmortizacion,
+                    calc_excedente_ultima_cuota_contable: excedenteUltimaCuotaContable,
+                    calc_excedente_ultima_cuota_en_venta: excedenteUltimaCuotaEnVenta
+                };
+            });
+        },
+        // Helper para calcular Plazo Viable Descuento Interes
+        calcularPlazoViableDescuentoInteres(result) {
+            const plazo = result.plazo_con_descuento_en_interes_t0;
+            if (plazo === 'INFINITO') return 'NO';
+            if (plazo === '' || plazo === null) return '';
+            return 'SI';
+        },
+        // Helper para calcular Valor Cartera Con Descuento Interes Y Ajuste En Tasa
+        calcularValorCarteraConDescuentoInteres(result) {
+            if (!this.isTasaViableDescuentoInteres(result)) return null;
+            const tasa = (parseFloat(result.tasa_con_descuento_en_interes_t0) + parseFloat(result.costo_asegurabilidad_mes || 0)) / 100;
+            const plazo = parseFloat(result.plazo_nueva_libranza_ck);
+            const cuota = parseFloat(result.cuota_a_incorporar);
+            if (!plazo || !cuota) return null;
+            return this.calculatePV(tasa, plazo, cuota);
         },
         async exportToExcel() {
             try {
@@ -1610,9 +2207,12 @@ export default {
                     autoHideDelay: 2000
                 });
 
+                // Preparar datos con campos calculados
+                const datosConCalculos = this.prepararDatosExportacion();
+
                 // Enviar datos al backend para generar Excel con formato
                 const response = await axios.post('/demografico-avanzado/exportar-excel', {
-                    datos: this.results
+                    datos: datosConCalculos
                 }, {
                     responseType: 'blob' // Importante para recibir el archivo
                 });
@@ -1683,6 +2283,608 @@ export default {
                 return 'No disponible';
             }
             return new Intl.NumberFormat('es-CO').format(value);
+        },
+        formatPercent(value) {
+            if (value == null || isNaN(value)) {
+                return 'No disponible';
+            }
+            // Convertir a porcentaje (multiplicar por 100) y mostrar con 2 decimales
+            return (value * 100).toFixed(2) + '%';
+        },
+        // Helper para calcular Valor Presente (VA/PV)
+        // Fórmula: PV = PMT * ((1 - (1 + rate)^-nper) / rate) + FV / (1 + rate)^nper
+        calculatePV(rate, nper, pmt, fv = 0) {
+            if (rate === 0) {
+                return pmt * nper + fv;
+            }
+            const factor = Math.pow(1 + rate, -nper);
+            return pmt * ((1 - factor) / rate) + fv * factor;
+        },
+        // Helper para calcular Valor Futuro (VF/FV)
+        // Fórmula: FV = PV * (1 + rate)^nper + PMT * ((1 + rate)^nper - 1) / rate
+        calculateFV(rate, nper, pmt, pv) {
+            if (rate === 0) {
+                return -pv - (pmt * nper);
+            }
+            const factor = Math.pow(1 + rate, nper);
+            return -pv * factor - pmt * ((factor - 1) / rate);
+        },
+        // Helper para calcular NPER (número de períodos)
+        // Fórmula: NPER = ln((PMT - rate*PV) / (PMT + rate*FV)) / ln(1 + rate)
+        calculateNPER(rate, pmt, pv, fv = 0) {
+            if (rate === 0) {
+                return -(pv + fv) / pmt;
+            }
+            const num = pmt - rate * fv;
+            const den = pmt + rate * pv;
+            if (den === 0 || num / den <= 0) return null;
+            return Math.log(num / den) / Math.log(1 + rate);
+        },
+        // Helper para calcular TASA/RATE usando método de Newton-Raphson
+        calculateRATE(nper, pmt, pv, fv = 0, guess = 0.1, maxIterations = 100, tolerance = 1e-7) {
+            let rate = guess;
+            for (let i = 0; i < maxIterations; i++) {
+                // f(rate) = PV + PMT * ((1 - (1+rate)^-nper) / rate) + FV * (1+rate)^-nper
+                const factor = Math.pow(1 + rate, nper);
+                const f = pv + pmt * ((1 - 1/factor) / rate) + fv / factor;
+
+                // f'(rate) - derivada
+                const df = pmt * (((1/factor - 1) / (rate * rate)) + (nper / (rate * factor * (1 + rate)))) - (nper * fv) / (factor * (1 + rate));
+
+                if (Math.abs(df) < 1e-10) break;
+
+                const newRate = rate - f / df;
+                if (Math.abs(newRate - rate) < tolerance) {
+                    return newRate;
+                }
+                rate = newRate;
+            }
+            return rate;
+        },
+        // Helper para verificar si "Tasa Viable Al Aplicar Descuento En Interes" es "SI"
+        isTasaViableDescuentoInteres(result) {
+            const tasaConDescuento = result.tasa_con_descuento_en_interes_t0;
+            const tasaCompraNmv = result.tasa_compra_nmv;
+
+            // Si (tasa < ta_min_em OR tasa = "IRRECUPERABLE"), retorna NO
+            if ((tasaConDescuento !== null && tasaConDescuento !== '' &&
+                 !isNaN(parseFloat(tasaConDescuento)) &&
+                 parseFloat(tasaConDescuento) < parseFloat(tasaCompraNmv)) ||
+                 tasaConDescuento === 'IRRECUPERABLE') {
+                return false;
+            }
+            // Si tasa está vacía, retorna vacío (no es "SI")
+            if (tasaConDescuento === '' || tasaConDescuento === null) {
+                return false;
+            }
+            // En cualquier otro caso, retorna "SI"
+            return true;
+        },
+        // Helper para verificar si "Aplica Descuento Sobre Capital" es "SI"
+        isAplicaDescuentoSobreCapital(result) {
+            // Plazo Viable <> "SI" significa que es "INFINITO", "" o null
+            const plazoViableNoEsSI = result.plazo_con_descuento_en_interes_t0 === 'INFINITO' ||
+                                      result.plazo_con_descuento_en_interes_t0 === '' ||
+                                      result.plazo_con_descuento_en_interes_t0 === null;
+            // Tasa Viable <> "SI"
+            const tasaViableNoEsSI = !this.isTasaViableDescuentoInteres(result);
+
+            // SI(Y(APLICA DESCUENTO="SI", PLAZO VIABLE<>"SI", TASA VIABLE<>"SI"), "SI", "NO")
+            return result.aplica_descuento === 'SI' && plazoViableNoEsSI && tasaViableNoEsSI;
+        },
+        // Helper para calcular "Saldo Maximo A Pagar Con Condiciones Nueva Lbz"
+        calcularSaldoMaximoPagar(result) {
+            // SI(Aplica descuento sobre CAPITAL="NO","",VA(...))
+            if (!this.isAplicaDescuentoSobreCapital(result)) {
+                return null; // Retorna vacío
+            }
+            // VA(Tasa Nueva Libranza Ck + COSTO ASEGURABILIDAD MES, Plazo Nueva Libranza Ck, -CUOTA A INCORPORAR)
+            const tasa = (parseFloat(result.tasa_nueva_libranza_ck || 0) + parseFloat(result.costo_asegurabilidad_mes || 0)) / 100;
+            const plazo = parseFloat(result.plazo_nueva_libranza_ck || 0);
+            const cuota = parseFloat(result.cuota_a_incorporar || 0);
+
+            if (plazo <= 0 || cuota <= 0) return null;
+            return this.calculatePV(tasa, plazo, cuota);
+        },
+        // Helper para calcular "Condonacion Sobre Capital"
+        calcularCondonacionSobreCapital(result) {
+            // SI(Aplica descuento sobre CAPITAL="SI", ..., "")
+            if (!this.isAplicaDescuentoSobreCapital(result)) {
+                return null; // Retorna vacío
+            }
+            const saldoInicialMenosInteres = parseFloat(result.saldo_inicial_desembolsado_menos_interes_condonados || 0);
+            const saldoMaximoPagar = this.calcularSaldoMaximoPagar(result);
+
+            if (saldoMaximoPagar === null) return null;
+
+            // SI(saldoInicialMenosInteres > saldoMaximoPagar, saldoInicialMenosInteres - saldoMaximoPagar, saldoInicialMenosInteres)
+            if (saldoInicialMenosInteres > saldoMaximoPagar) {
+                return saldoInicialMenosInteres - saldoMaximoPagar;
+            }
+            return saldoInicialMenosInteres;
+        },
+        // Helper para calcular "Saldo Contable Con Condonacion De Interes Y Capital"
+        calcularSaldoContableConCondonacion(result) {
+            const condonacion = this.calcularCondonacionSobreCapital(result);
+            // SI(CONDONACION sobre capital="","",SALDO INICIAL - N(CONDONACION))
+            if (condonacion === null) return null;
+
+            const saldoInicialMenosInteres = parseFloat(result.saldo_inicial_desembolsado_menos_interes_condonados || 0);
+            return saldoInicialMenosInteres - (condonacion || 0);
+        },
+        // Helper para calcular "Tasa Con Plazo Maximo"
+        calcularTasaConPlazoMaximo(result) {
+            const condonacion = this.calcularCondonacionSobreCapital(result);
+            const saldoContable = this.calcularSaldoContableConCondonacion(result);
+
+            // SI(O(CONDONACION="",SALDO CONTABLE=0),"",TASA(...)-COSTO ASEGURABILIDAD)
+            if (condonacion === null || saldoContable === 0 || saldoContable === null) return null;
+
+            const plazo = parseFloat(result.plazo_nueva_libranza_ck || 0);
+            const cuota = parseFloat(result.cuota_a_incorporar || 0);
+            const costoAsegurabilidad = parseFloat(result.costo_asegurabilidad_mes || 0) / 100;
+
+            if (plazo <= 0 || cuota <= 0) return null;
+
+            try {
+                const tasa = this.calculateRATE(plazo, cuota, -saldoContable, 0, 0.01);
+                return (tasa - costoAsegurabilidad) * 100; // Retorna como porcentaje
+            } catch (e) {
+                return null;
+            }
+        },
+        // Helper para calcular "Plazo Con Tasa Maxima"
+        calcularPlazoConTasaMaxima(result) {
+            const saldoContable = this.calcularSaldoContableConCondonacion(result);
+
+            // SI.ERROR(SI(O(SALDO=""",SALDO=0),"",NPER(...)),"INFINITO")
+            if (saldoContable === null || saldoContable === 0) return null;
+
+            const tasaNueva = parseFloat(result.tasa_nueva_libranza_ck || 0) / 100;
+            const costoAsegurabilidad = parseFloat(result.costo_asegurabilidad_mes || 0) / 100;
+            const cuota = parseFloat(result.cuota_a_incorporar || 0);
+
+            if (cuota <= 0) return null;
+
+            try {
+                const tasa = tasaNueva + costoAsegurabilidad;
+                const nper = this.calculateNPER(tasa, cuota, -saldoContable, 0);
+                if (nper === null || !isFinite(nper) || nper < 0) return 'INFINITO';
+                return nper;
+            } catch (e) {
+                return 'INFINITO';
+            }
+        },
+        // Helper para calcular "Saldo Contable En El Momento De Venta -Con Condonacion (Tv)"
+        calcularSaldoContableMomentoVentaCondonacion(result) {
+            const saldoContable = this.calcularSaldoContableConCondonacion(result);
+
+            // SI(O(SALDO="",SALDO=0),"",VF(...))
+            if (saldoContable === null || saldoContable === 0) return null;
+
+            const tasaConPlazoMaximo = this.calcularTasaConPlazoMaximo(result);
+            if (tasaConPlazoMaximo === null) return null;
+
+            const tasa = (tasaConPlazoMaximo + parseFloat(result.costo_asegurabilidad_mes || 0)) / 100;
+            const cuotasPagas = parseFloat(result.cuotas_pagas || 0);
+            const cuota = parseFloat(result.cuota_a_incorporar || 0);
+
+            try {
+                return this.calculateFV(tasa, cuotasPagas, cuota, -saldoContable);
+            } catch (e) {
+                return null;
+            }
+        },
+        // Helper para calcular "Valor Inicial Lbz Precio De Venta -Desc Capital (T0)"
+        calcularValorInicialLbzPrecioVentaDescCapital(result) {
+            const saldoMomentoVenta = this.calcularSaldoContableMomentoVentaCondonacion(result);
+
+            // SI(SALDO MOMENTO VENTA="","",VA(...))
+            if (saldoMomentoVenta === null) return null;
+
+            const tasaCompraNmv = parseFloat(result.tasa_compra_nmv || 0) / 100;
+            const costoAsegurabilidad = parseFloat(result.costo_asegurabilidad_mes || 0) / 100;
+            const plazoConTasaMaxima = this.calcularPlazoConTasaMaxima(result);
+            const cuota = parseFloat(result.cuota_a_incorporar || 0);
+
+            if (plazoConTasaMaxima === null || plazoConTasaMaxima === 'INFINITO') return null;
+
+            const tasa = tasaCompraNmv + costoAsegurabilidad;
+            return this.calculatePV(tasa, plazoConTasaMaxima, cuota);
+        },
+        // Helper para calcular "Precio De Venta -Desc Capital (Tv)"
+        calcularPrecioVentaDescCapitalTv(result) {
+            const saldoMomentoVenta = this.calcularSaldoContableMomentoVentaCondonacion(result);
+
+            // SI(SALDO MOMENTO VENTA="","",VA(...))
+            if (saldoMomentoVenta === null) return null;
+
+            const tasaCompraNmv = parseFloat(result.tasa_compra_nmv || 0) / 100;
+            const costoAsegurabilidad = parseFloat(result.costo_asegurabilidad_mes || 0) / 100;
+            const plazoConTasaMaxima = this.calcularPlazoConTasaMaxima(result);
+            const cuotasPagas = parseFloat(result.cuotas_pagas || 0);
+            const cuota = parseFloat(result.cuota_a_incorporar || 0);
+
+            if (plazoConTasaMaxima === null || plazoConTasaMaxima === 'INFINITO') return null;
+
+            const tasa = tasaCompraNmv + costoAsegurabilidad;
+            const plazoRestante = plazoConTasaMaxima - cuotasPagas;
+            if (plazoRestante <= 0) return null;
+
+            return this.calculatePV(tasa, plazoRestante, cuota);
+        },
+        // Helper para calcular "Consolidado Precio De Venta (Tv) -Desc Cap Inicial"
+        calcularConsolidadoPrecioVentaTv(result) {
+            const precioVentaDescCapital = this.calcularPrecioVentaDescCapitalTv(result);
+            const saldoInicialTv = result.saldo_inicial_desembolsado_menos_interes_condonados_tv;
+            const precioVentaPeriodo = result.precio_venta_pv_periodo_venta;
+
+            console.log('=== DEBUG calcularConsolidadoPrecioVentaTv ===');
+            console.log('Precio Venta Desc Capital (Tv):', precioVentaDescCapital);
+            console.log('Saldo Inicial Desembolsado Menos Interes Condonados (Tv):', saldoInicialTv, '| tipo:', typeof saldoInicialTv);
+            console.log('Precio Venta (Pv) Periodo Venta (Tv):', precioVentaPeriodo);
+
+            if (precioVentaDescCapital !== null) {
+                console.log('RESULTADO: Usando Precio Venta Desc Capital (Tv) =', precioVentaDescCapital);
+                return precioVentaDescCapital;
+            }
+
+            // Verificar si saldoInicialTv es vacío, null, undefined, "-" o no es un número válido
+            const saldoInicialTvNumerico = parseFloat(saldoInicialTv);
+            const saldoInicialTvEsVacio = saldoInicialTv === '' || saldoInicialTv === null || saldoInicialTv === undefined || saldoInicialTv === '-' || isNaN(saldoInicialTvNumerico);
+
+            if (saldoInicialTvEsVacio) {
+                console.log('RESULTADO: Saldo Inicial Tv está vacío/inválido, usando Precio Venta Periodo (Tv) =', precioVentaPeriodo);
+                return parseFloat(precioVentaPeriodo || 0);
+            }
+
+            console.log('RESULTADO: Usando Saldo Inicial (Tv) =', saldoInicialTvNumerico);
+            return saldoInicialTvNumerico;
+        },
+        // Helper para calcular "Plazo Restante Al Momento De Venta"
+        calcularPlazoRestanteMomentoVenta(result) {
+            const consolidadoPrecioVenta = this.calcularConsolidadoPrecioVentaTv(result);
+            if (!consolidadoPrecioVenta || consolidadoPrecioVenta === 0) return null;
+
+            const tasaOptima = parseFloat(result.tasa_compra_nmv || 0) / 100;
+            const costoAsegurabilidad = parseFloat(result.costo_asegurabilidad_mes || 0) / 100;
+            const cuota = parseFloat(result.cuota_a_incorporar || 0);
+
+            if (cuota <= 0) return null;
+
+            try {
+                const tasa = tasaOptima + costoAsegurabilidad;
+                const nper = this.calculateNPER(tasa, cuota, -consolidadoPrecioVenta, 0);
+                if (nper === null || !isFinite(nper) || nper < 0) return null;
+                return nper;
+            } catch (e) {
+                return null;
+            }
+        },
+        // Helper para calcular "Consolidado Libranza Precio De Venta (T0)"
+        // Fórmula: VA(TASA OPTIMA PARA VENTA+COSTO ASEGURABILIDAD MES (%),CONSOLIDADO PLAZO NUEVA LIBRANZA,-(CUOTA A INCORPORAR))
+        calcularConsolidadoLibranzaPrecioVentaT0(result) {
+            const consolidadoPlazo = this.calcularConsolidadoPlazoNuevaLibranza(result);
+            if (!consolidadoPlazo || consolidadoPlazo <= 0) return null;
+
+            const tasaOptima = parseFloat(result.tasa_compra_nmv || 0) / 100;
+            const costoAsegurabilidad = parseFloat(result.costo_asegurabilidad_mes || 0) / 100;
+            const cuota = parseFloat(result.cuota_a_incorporar || 0);
+
+            if (cuota <= 0) return null;
+
+            const tasa = tasaOptima + costoAsegurabilidad;
+
+            console.log('=== DEBUG calcularConsolidadoLibranzaPrecioVentaT0 ===');
+            console.log('Tasa Optima (tasa_compra_nmv):', result.tasa_compra_nmv, '% -> decimal:', tasaOptima);
+            console.log('Costo Asegurabilidad:', result.costo_asegurabilidad_mes, '% -> decimal:', costoAsegurabilidad);
+            console.log('Tasa Total (Tasa + Costo Aseg):', tasa);
+            console.log('Consolidado Plazo Nueva Libranza:', consolidadoPlazo);
+            console.log('Cuota a Incorporar:', cuota);
+
+            // VA(tasa, Consolidado Plazo Nueva Libranza, -cuota)
+            // Nota: En Excel VA con pago negativo retorna positivo.
+            // Nuestra función calculatePV no invierte el signo, así que pasamos cuota positiva.
+            const resultado = this.calculatePV(tasa, consolidadoPlazo, cuota);
+            console.log('RESULTADO:', resultado);
+
+            return resultado;
+        },
+        // Helper para calcular "Consolidado Plazo Nueva Libranza"
+        calcularConsolidadoPlazoNuevaLibranza(result) {
+            const plazoModificado = parseFloat(result.plazo_modificado_conservando_tasa_188 || 0);
+            const plazoNuevaLibranza = parseFloat(result.plazo_nueva_libranza_ck || 0);
+
+            if (!plazoModificado && !plazoNuevaLibranza) return null;
+
+            // SI(Plazo Modificado > Plazo Nueva Libranza, Plazo Nueva Libranza, Plazo Modificado)
+            if (plazoModificado > plazoNuevaLibranza) {
+                return plazoNuevaLibranza;
+            }
+            return plazoModificado;
+        },
+        // Helper para calcular "Consolidado Libranza Precio De Venta (T0)- Ajustando Cuota"
+        // Fórmula: VA(TASA OPTIMA PARA VENTA+COSTO ASEGURABILIDAD MES (%),CONSOLIDADO PLAZO NUEVA LIBRANZA,-(CUOTA A INCORPORAR))
+        calcularConsolidadoLibranzaPrecioVentaT0AjustandoCuota(result) {
+            const consolidadoPlazo = this.calcularConsolidadoPlazoNuevaLibranza(result);
+            if (!consolidadoPlazo || consolidadoPlazo <= 0) return null;
+
+            const tasaOptima = parseFloat(result.tasa_compra_nmv || 0) / 100;
+            const costoAsegurabilidad = parseFloat(result.costo_asegurabilidad_mes || 0) / 100;
+            const cuota = parseFloat(result.cuota_a_incorporar || 0);
+
+            if (cuota <= 0) return null;
+
+            const tasa = tasaOptima + costoAsegurabilidad;
+            // VA(tasa, Consolidado Plazo Nueva Libranza, -cuota)
+            // Nota: En Excel VA con pago negativo retorna positivo.
+            // Nuestra función calculatePV no invierte el signo, así que pasamos cuota positiva.
+            return this.calculatePV(tasa, consolidadoPlazo, cuota);
+        },
+        // Helper para calcular "Consolidado Precio De Venta (Tv) -Con Condonacion Cap -Ajustado Por Amortizacion"
+        // Fórmula: VF(TASA OPTIMA+COSTO ASEG, Cuotas Pagas, CUOTA A INCORPORAR, -CONSOLIDADO LIBRANZA PRECIO VENTA T0 AJUSTANDO CUOTA)
+        calcularConsolidadoPrecioVentaTvCondonacionAjustado(result) {
+            const consolidadoLibranzaT0Ajustado = this.calcularConsolidadoLibranzaPrecioVentaT0AjustandoCuota(result);
+            if (!consolidadoLibranzaT0Ajustado) return null;
+
+            const tasaOptima = parseFloat(result.tasa_compra_nmv || 0) / 100;
+            const costoAsegurabilidad = parseFloat(result.costo_asegurabilidad_mes || 0) / 100;
+            const cuotasPagas = parseFloat(result.cuotas_pagas || 0);
+            const cuota = parseFloat(result.cuota_a_incorporar || 0);
+
+            const tasa = tasaOptima + costoAsegurabilidad;
+            // VF(tasa, cuotas_pagas, cuota, -consolidadoLibranzaT0Ajustado)
+            // En Excel VF con PV negativo. Nuestra función usa la convención estándar.
+            return this.calculateFV(tasa, cuotasPagas, cuota, -consolidadoLibranzaT0Ajustado);
+        },
+        // Helper para calcular "Pago Aplicando Descuento Sobre Venta Directa"
+        // Fórmula: VA(Tasa de Compra NMV+COSTO ASEGURABILIDAD, PLAZO NECESARIO LIQUIDAR DEUDA, -CUOTA)
+        calcularPagoAplicandoDescuentoVentaDirecta(result) {
+            const plazoNecesario = this.calcularPlazoNecesarioLiquidarDeuda(result);
+            if (!plazoNecesario || plazoNecesario <= 0) return null;
+
+            const tasaCompra = parseFloat(result.tasa_compra_nmv || 0) / 100;
+            const costoAsegurabilidad = parseFloat(result.costo_asegurabilidad_mes || 0) / 100;
+            const cuota = parseFloat(result.cuota_a_incorporar || 0);
+
+            if (cuota <= 0) return null;
+
+            const tasa = tasaCompra + costoAsegurabilidad;
+            // VA(tasa, plazo, -cuota) - pasamos cuota positiva por convención de nuestra función
+            return this.calculatePV(tasa, plazoNecesario, cuota);
+        },
+        // Helper para calcular "Modelo Mas Rentable"
+        // Fórmula: SI(PAGO DESCUENTO > CONSOLIDADO PRECIO VENTA, "VENTA CON TASA DE FONDO", "VENTA CON TASA MAXIMA")
+        calcularModeloMasRentable(result) {
+            const pagoDescuento = this.calcularPagoAplicandoDescuentoVentaDirecta(result);
+            const consolidadoPrecioVenta = this.calcularConsolidadoPrecioVentaTv(result);
+
+            if (pagoDescuento === null || !consolidadoPrecioVenta) return null;
+
+            if (pagoDescuento > consolidadoPrecioVenta) {
+                return 'VENTA CON TASA DE FONDO';
+            }
+            return 'VENTA CON TASA MAXIMA';
+        },
+        // Helper para calcular "Consolidado Tasa Nueva Libranza"
+        // Fórmula: SI(Tasa Corriente CONDICIONES OPTIMAS="CAPACIDAD INSUFICIENTE",Tasa Nueva Libranza Ck,Tasa Corriente CONDICIONES OPTIMAS)
+        calcularConsolidadoTasaNuevaLibranza(result) {
+            const tasaCorriente = result.tasa_corriente_condiciones_optimas;
+            const tasaNuevaLibranza = parseFloat(result.tasa_nueva_libranza_ck || 0);
+
+            // Si tasa_corriente es string "CAPACIDAD INSUFICIENTE", retornar tasa nueva libranza
+            if (tasaCorriente === 'CAPACIDAD INSUFICIENTE') {
+                return tasaNuevaLibranza;
+            }
+
+            // Si tasa_corriente es un número válido, retornarlo
+            if (typeof tasaCorriente === 'number' && !isNaN(tasaCorriente)) {
+                return tasaCorriente;
+            }
+
+            // Si es string numérico
+            const tasaCorrienteNum = parseFloat(tasaCorriente);
+            if (!isNaN(tasaCorrienteNum)) {
+                return tasaCorrienteNum;
+            }
+
+            // Si no hay datos válidos
+            return null;
+        },
+        // Helper para calcular "Consolidado Saldo Contable (Tv)"
+        // Fórmula: SI(SALDO CONTABLE MOMENTO VENTA CONDONACION<>"", ese valor,
+        //          SI(Y(SALDO INICIAL DESEMB MENOS INT COND<>"", <>0, (Tv)>T0), SALDO INICIAL T0,
+        //          SI(SALDO CONTABLE CREDITO MOMENTO VENTA>0, ese valor, 0)))
+        calcularConsolidadoSaldoContableTv(result) {
+            // Opción 1: Saldo Contable En El Momento De Venta -Con Condonacion (Tv)
+            const saldoCondonacionTv = this.calcularSaldoContableMomentoVentaCondonacion(result);
+            if (saldoCondonacionTv !== null && saldoCondonacionTv !== '') {
+                return saldoCondonacionTv;
+            }
+
+            // Opción 2: Verificar condiciones de Saldo Inicial Desembolsado menos Interes condonados
+            const saldoInicialT0 = result.saldo_inicial_desembolsado_menos_interes_condonados;
+            const saldoInicialTv = result.saldo_inicial_desembolsado_menos_interes_condonados_tv;
+
+            const saldoInicialT0Valid = saldoInicialT0 !== null && saldoInicialT0 !== '' && saldoInicialT0 !== '-' && !isNaN(parseFloat(saldoInicialT0));
+            const saldoInicialT0Num = saldoInicialT0Valid ? parseFloat(saldoInicialT0) : 0;
+            const saldoInicialTvNum = (saldoInicialTv !== null && saldoInicialTv !== '' && saldoInicialTv !== '-' && !isNaN(parseFloat(saldoInicialTv))) ? parseFloat(saldoInicialTv) : 0;
+
+            // SI(Y(saldoInicialT0<>"", saldoInicialT0<>0, saldoInicialTv > saldoInicialT0), saldoInicialT0, ...)
+            if (saldoInicialT0Valid && saldoInicialT0Num !== 0 && saldoInicialTvNum > saldoInicialT0Num) {
+                return saldoInicialT0Num;
+            }
+
+            // Opción 3: Saldo Contable del Crédito al momento de la venta
+            const saldoContableCredito = result.saldo_contable_credito_momento_venta;
+            const saldoContableCreditoNum = (saldoContableCredito !== null && saldoContableCredito !== '' && saldoContableCredito !== '-' && !isNaN(parseFloat(saldoContableCredito))) ? parseFloat(saldoContableCredito) : 0;
+
+            if (saldoContableCreditoNum > 0) {
+                return saldoContableCreditoNum;
+            }
+
+            // Default: 0
+            return 0;
+        },
+        // Helper para calcular "Consolidado Saldo Nueva Libranza (T0)"
+        // Fórmula: VA(CONSOLIDADO TASA NUEVA LIBRANZA+COSTO ASEGURABILIDAD MES (%),Cuotas Pagas,-(CUOTA A INCORPORAR),-(CONSOLIDADO SALDO CONTABLE (TV)))
+        calcularConsolidadoSaldoNuevaLibranzaT0(result) {
+            const consolidadoTasa = this.calcularConsolidadoTasaNuevaLibranza(result);
+            if (consolidadoTasa === null) return null;
+
+            const costoAsegurabilidad = parseFloat(result.costo_asegurabilidad_mes || 0);
+            const cuotasPagas = parseFloat(result.cuotas_pagas || 0);
+            const cuotaAIncorporar = parseFloat(result.cuota_a_incorporar || 0);
+            const consolidadoSaldoContableTv = this.calcularConsolidadoSaldoContableTv(result);
+
+            if (cuotaAIncorporar <= 0 || consolidadoSaldoContableTv === null) return null;
+
+            const tasa = (consolidadoTasa + costoAsegurabilidad) / 100;
+            // VA(tasa, nper, pmt, fv) = VA(tasa, cuotasPagas, -cuotaAIncorporar, -consolidadoSaldoContableTv)
+            // Pasamos cuotaAIncorporar positivo por convención de nuestra función PV
+            return this.calculatePV(tasa, cuotasPagas, cuotaAIncorporar, consolidadoSaldoContableTv);
+        },
+        // Helper para calcular "Consolidado Saldo Nueva Libranza (T0) - Ajustando Amortizacion"
+        // Fórmula: VA(CONSOLIDADO TASA NUEVA LIBRANZA+COSTO ASEGURABILIDAD MES (%),CONSOLIDADO PLAZO NUEVA LIBRANZA,-(CUOTA A INCORPORAR))
+        calcularConsolidadoSaldoNuevaLibranzaT0AjustandoAmortizacion(result) {
+            const consolidadoTasa = this.calcularConsolidadoTasaNuevaLibranza(result);
+            if (consolidadoTasa === null) return null;
+
+            const costoAsegurabilidad = parseFloat(result.costo_asegurabilidad_mes || 0);
+            const consolidadoPlazo = this.calcularConsolidadoPlazoNuevaLibranza(result);
+            const cuotaAIncorporar = parseFloat(result.cuota_a_incorporar || 0);
+
+            if (!consolidadoPlazo || consolidadoPlazo <= 0 || cuotaAIncorporar <= 0) return null;
+
+            const tasa = (consolidadoTasa + costoAsegurabilidad) / 100;
+            // VA(tasa, consolidadoPlazo, -cuotaAIncorporar)
+            return this.calculatePV(tasa, consolidadoPlazo, cuotaAIncorporar);
+        },
+        // Helper para calcular "Consolidado Saldo Contable (Tv)- Ajustando Amortizacion"
+        // Fórmula: VF(CONSOLIDADO TASA NUEVA LIBRANZA+COSTO ASEGURABILIDAD MES (%),Cuotas Pagas,CUOTA A INCORPORAR,-(CONSOLIDADO SALDO NUEVA LIBRANZA (T0) - AJUSTANDO AMORTIZACION))
+        calcularConsolidadoSaldoContableTvAjustandoAmortizacion(result) {
+            const consolidadoSaldoT0Ajustado = this.calcularConsolidadoSaldoNuevaLibranzaT0AjustandoAmortizacion(result);
+            if (consolidadoSaldoT0Ajustado === null) return null;
+
+            const consolidadoTasa = this.calcularConsolidadoTasaNuevaLibranza(result);
+            const costoAsegurabilidad = parseFloat(result.costo_asegurabilidad_mes || 0);
+            const cuotasPagas = parseFloat(result.cuotas_pagas || 0);
+            const cuotaAIncorporar = parseFloat(result.cuota_a_incorporar || 0);
+
+            const tasa = (consolidadoTasa + costoAsegurabilidad) / 100;
+            // VF(tasa, cuotasPagas, cuotaAIncorporar, -consolidadoSaldoT0Ajustado)
+            return this.calculateFV(tasa, cuotasPagas, cuotaAIncorporar, -consolidadoSaldoT0Ajustado);
+        },
+        // Helper para calcular "Excedente Despues De Ultima Cuota Contable"
+        // Fórmula: VF(CONSOLIDADO TASA NUEVA LIBRANZA+COSTO ASEGURABILIDAD MES (%),CONSOLIDADO PLAZO NUEVA LIBRANZA,CUOTA A INCORPORAR,-(CONSOLIDADO SALDO NUEVA LIBRANZA (T0)))
+        calcularExcedenteDespuesUltimaCuotaContable(result) {
+            const consolidadoSaldoT0 = this.calcularConsolidadoSaldoNuevaLibranzaT0(result);
+            if (consolidadoSaldoT0 === null) return null;
+
+            const consolidadoTasa = this.calcularConsolidadoTasaNuevaLibranza(result);
+            const costoAsegurabilidad = parseFloat(result.costo_asegurabilidad_mes || 0);
+            const consolidadoPlazo = this.calcularConsolidadoPlazoNuevaLibranza(result);
+            const cuotaAIncorporar = parseFloat(result.cuota_a_incorporar || 0);
+
+            if (!consolidadoPlazo || consolidadoPlazo <= 0) return null;
+
+            const tasa = (consolidadoTasa + costoAsegurabilidad) / 100;
+            // VF(tasa, consolidadoPlazo, cuotaAIncorporar, -consolidadoSaldoT0)
+            return this.calculateFV(tasa, consolidadoPlazo, cuotaAIncorporar, -consolidadoSaldoT0);
+        },
+        // Helper para calcular "Excedente Despues De Ultima Cuota En Venta"
+        // Fórmula: VF(TASA OPTIMA PARA VENTA+COSTO ASEGURABILIDAD MES (%),CONSOLIDADO PLAZO NUEVA LIBRANZA,CUOTA A INCORPORAR,-(CONSOLIDADO LIBRANZA PRECIO DE VENTA (T0)))
+        calcularExcedenteDespuesUltimaCuotaEnVenta(result) {
+            const consolidadoLibranzaT0 = this.calcularConsolidadoLibranzaPrecioVentaT0(result);
+            if (consolidadoLibranzaT0 === null) return null;
+
+            const tasaOptima = parseFloat(result.tasa_compra_nmv || 0);
+            const costoAsegurabilidad = parseFloat(result.costo_asegurabilidad_mes || 0);
+            const consolidadoPlazo = this.calcularConsolidadoPlazoNuevaLibranza(result);
+            const cuotaAIncorporar = parseFloat(result.cuota_a_incorporar || 0);
+
+            if (!consolidadoPlazo || consolidadoPlazo <= 0) return null;
+
+            const tasa = (tasaOptima + costoAsegurabilidad) / 100;
+            // VF(tasa, consolidadoPlazo, cuotaAIncorporar, -consolidadoLibranzaT0)
+            return this.calculateFV(tasa, consolidadoPlazo, cuotaAIncorporar, -consolidadoLibranzaT0);
+        },
+        // Helper para calcular "Plazo Necesario Para Liquidar Deuda Con Condiciones De Fondeo"
+        // Fórmula: SI(valor1>0, valor2, 0)
+        // valor1 = SI.ERROR(SI(NPER>plazo-3, plazo-3, ROUND(NPER-cuotasPagas,0)), plazo-3)
+        // valor2 = SI.ERROR(SI(NPER>plazo-3, plazo-3, ROUND(NPER-3,0)), plazo-cuotasPagas)
+        // NPER = NPER(tasa+costoAseg, cuota, -totalObligacion)
+        calcularPlazoNecesarioLiquidarDeuda(result) {
+            const tasaCompra = parseFloat(result.tasa_compra_nmv || 0) / 100;
+            const costoAsegurabilidad = parseFloat(result.costo_asegurabilidad_mes || 0) / 100;
+            const cuota = parseFloat(result.cuota_a_incorporar || 0);
+            // CORRECCIÓN: Usar Total Obligacion en lugar de Saldo Capital Original
+            const totalObligacion = parseFloat(result.total_obligacion || 0);
+            const plazoNuevaLibranza = parseFloat(result.plazo_nueva_libranza_ck || 0);
+            const cuotasPagas = parseFloat(result.cuotas_pagas || 0);
+
+            console.log('=== DEBUG calcularPlazoNecesarioLiquidarDeuda ===');
+            console.log('Tasa Compra NMV (%):', result.tasa_compra_nmv);
+            console.log('Costo Asegurabilidad Mes (%):', result.costo_asegurabilidad_mes);
+            console.log('Cuota A Incorporar:', cuota);
+            console.log('Total Obligacion:', totalObligacion);
+            console.log('Plazo Nueva Libranza Ck:', plazoNuevaLibranza);
+            console.log('Cuotas Pagas:', cuotasPagas);
+
+            if (cuota <= 0 || totalObligacion <= 0) {
+                console.log('RESULTADO: 0 (cuota o totalObligacion <= 0)');
+                return 0;
+            }
+
+            const tasa = tasaCompra + costoAsegurabilidad;
+            const plazoMaxMenos3 = plazoNuevaLibranza - 3;
+
+            console.log('Tasa calculada (decimal):', tasa);
+            console.log('Plazo Max - 3:', plazoMaxMenos3);
+
+            // Calcular NPER base: NPER(tasa, cuota, -totalObligacion)
+            let nperBase = null;
+            try {
+                nperBase = this.calculateNPER(tasa, cuota, -totalObligacion, 0);
+                console.log('NPER calculado:', nperBase);
+            } catch (e) {
+                console.log('NPER ERROR:', e.message);
+                nperBase = null;
+            }
+
+            // Primera evaluación (valor1): para verificar si > 0
+            // SI.ERROR(SI(NPER>plazo-3, plazo-3, ROUND(NPER-cuotasPagas,0)), plazo-3)
+            let valor1;
+            if (nperBase === null || !isFinite(nperBase)) {
+                valor1 = plazoMaxMenos3; // SI.ERROR -> plazo_max - 3
+                console.log('valor1 (SI.ERROR):', valor1);
+            } else if (nperBase > plazoMaxMenos3) {
+                valor1 = plazoMaxMenos3;
+                console.log('valor1 (NPER > plazo-3):', valor1);
+            } else {
+                valor1 = Math.round(nperBase - cuotasPagas);
+                console.log('valor1 (ROUND(NPER-cuotasPagas)):', valor1);
+            }
+
+            // Si valor1 > 0, calcular valor2
+            if (valor1 > 0) {
+                // SI.ERROR(SI(NPER>plazo-3, plazo-3, ROUND(NPER-3,0)), plazo-cuotasPagas)
+                let valor2;
+                if (nperBase === null || !isFinite(nperBase)) {
+                    valor2 = plazoNuevaLibranza - cuotasPagas; // SI.ERROR -> plazo - cuotas_pagas
+                    console.log('valor2 (SI.ERROR):', valor2);
+                } else if (nperBase > plazoMaxMenos3) {
+                    valor2 = plazoMaxMenos3;
+                    console.log('valor2 (NPER > plazo-3):', valor2);
+                } else {
+                    valor2 = Math.round(nperBase - 3);
+                    console.log('valor2 (ROUND(NPER-3)):', valor2);
+                }
+                console.log('RESULTADO FINAL:', valor2);
+                return valor2;
+            }
+
+            return 0;
         },
         hasDetalleCredito(result) {
             // Verifica si hay al menos un valor de crédito disponible
@@ -1823,6 +3025,9 @@ export default {
             this.isSavingAnalisis = true;
 
             try {
+                // Preparar datos con campos calculados para guardar completos
+                const datosConCalculos = this.prepararDatosExportacion();
+
                 const response = await axios.post('/demografico-avanzado/guardar-analisis', {
                     mes: this.mes,
                     anio: this.año,
@@ -1830,7 +3035,7 @@ export default {
                     politica_fondo_id: this.selectedPoliticaFondo,
                     nombre_archivo: this.nombreArchivo || `analisis_${Date.now()}.xlsx`,
                     descripcion: this.descripcionAnalisis || null,
-                    datos_procesados: this.results
+                    datos_procesados: datosConCalculos
                 });
 
                 if (response.data.success) {
@@ -2227,5 +3432,10 @@ th {
 .heading-title {
     color: #2c3e50;
     font-weight: 600;
+}
+
+/* Estilo para campos pendientes */
+.campo-pendiente td {
+    color: #dc3545;
 }
 </style>

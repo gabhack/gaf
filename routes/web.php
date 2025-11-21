@@ -500,6 +500,10 @@ Route::post('/politicas-portafolio/fondos/delete', [PoliticasPortafolioControlle
 Route::get('/politicas-portafolio/fondos/export-json', [PoliticasPortafolioController::class, 'exportJsonFondos'])->name('politicas.fondo.exportJson');
 Route::post('/politicas-portafolio/fondos/import-json', [PoliticasPortafolioController::class, 'importJsonFondos'])->name('politicas.fondo.importJson');
 
+// Parámetros Generales (Tasa Usura)
+Route::get('/politicas-portafolio/parametros', [PoliticasPortafolioController::class, 'getParametros'])->name('politicas.parametros.get');
+Route::post('/politicas-portafolio/parametros/update', [PoliticasPortafolioController::class, 'updateParametros'])->name('politicas.parametros.update');
+
 // Historial de Análisis de Cartera
 Route::get('/historial-cartera', [App\Http\Controllers\HistorialCarteraController::class, 'index'])->name('historial.cartera');
 Route::get('/historial-cartera/listar', [App\Http\Controllers\HistorialCarteraController::class, 'listar'])->name('historial.cartera.listar');
